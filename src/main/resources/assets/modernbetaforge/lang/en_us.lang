@@ -1,0 +1,30 @@
+# WorldType
+
+generator.modernBeta=Modern Beta
+
+# World Customization
+
+createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
+
+createWorld.customize.custom.betaLabel=Beta Settings
+createWorld.customize.custom.otherLabel=Other Settings
+
+createWorld.customize.custom.chunkSource=Chunk Source
+createWorld.customize.custom.biomeSource=Biome Source
+
+createWorld.customize.custom.replaceOceanBiomes=Replace Ocean Biomes
+createWorld.customize.custom.replaceBeachBiomes=Replace Beach Biomes
+
+createWorld.customize.custom.useNewFlowers=New Flowers
+createWorld.customize.custom.useLilyPads=Lily Pads
+createWorld.customize.custom.useMelons=Melons
+createWorld.customize.custom.useDesertWells=Desert Wells
+createWorld.customize.custom.useFossils=Fossils
+
+# World Customization Presets
+
+createWorld.customize.custom.preset.beta=Classic Beta
+createWorld.customize.custom.preset.alpha=Classic Alpha
+createWorld.customize.custom.preset.alphaWinter=Classic Alpha Winter
+createWorld.customize.custom.preset.infdev=Classic Infdev 20100415
+createWorld.customize.custom.preset.skylands=Beta Skylands

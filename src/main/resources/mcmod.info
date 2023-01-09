@@ -1,0 +1,16 @@
+[
+{
+  "modid": "modernbetaforge",
+  "name": "Modern Beta Forge",
+  "description": "Modern Beta for Forge 1.12.2.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/b3spectacled/modernbetaforge",
+  "updateUrl": "",
+  "authorList": ["b3spectacled"],
+  "credits": "Thanks to mrburgerUS, SuperCoder7979, Arenovas, Amb0s, PaulEvs, and comp500",
+  "logoFile": "assets/modernbetaforge/textures/gui/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
