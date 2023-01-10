@@ -157,12 +157,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             null,
             new GuiPageButtonList.GuiButtonEntry(500, I18n.format("createWorld.customize.custom." + NbtTags.REPLACE_OCEAN_BIOMES), true, this.settings.replaceOceanBiomes),
             new GuiPageButtonList.GuiButtonEntry(501, I18n.format("createWorld.customize.custom." + NbtTags.REPLACE_BEACH_BIOMES), true, this.settings.replaceBeachBiomes),
-            new GuiPageButtonList.GuiButtonEntry(502, I18n.format("createWorld.customize.custom." + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
-            new GuiPageButtonList.GuiButtonEntry(503, I18n.format("createWorld.customize.custom." + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
-            new GuiPageButtonList.GuiButtonEntry(504, I18n.format("createWorld.customize.custom." + NbtTags.USE_MELONS), true, this.settings.useMelons),
-            new GuiPageButtonList.GuiButtonEntry(505, I18n.format("createWorld.customize.custom." + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
-            new GuiPageButtonList.GuiButtonEntry(506, I18n.format("createWorld.customize.custom." + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
-            null,
+            new GuiPageButtonList.GuiButtonEntry(502, I18n.format("createWorld.customize.custom." + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
+            new GuiPageButtonList.GuiButtonEntry(503, I18n.format("createWorld.customize.custom." + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
+            new GuiPageButtonList.GuiButtonEntry(504, I18n.format("createWorld.customize.custom." + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
+            new GuiPageButtonList.GuiButtonEntry(505, I18n.format("createWorld.customize.custom." + NbtTags.USE_MELONS), true, this.settings.useMelons),
+            new GuiPageButtonList.GuiButtonEntry(506, I18n.format("createWorld.customize.custom." + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
+            new GuiPageButtonList.GuiButtonEntry(507, I18n.format("createWorld.customize.custom." + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
             
             new GuiPageButtonList.GuiLabelEntry(511, I18n.format("createWorld.customize.custom.otherLabel"), true),
             null,
@@ -521,19 +521,23 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case 501:
                 this.settings.replaceBeachBiomes = entryValue;
                 break;
+                
             case 502:
-                this.settings.useNewFlowers = entryValue;
+                this.settings.useTallGrass = entryValue;
                 break;
             case 503:
-                this.settings.useLilyPads = entryValue;
+                this.settings.useNewFlowers = entryValue;
                 break;
             case 504:
-                this.settings.useMelons = entryValue;
+                this.settings.useLilyPads = entryValue;
                 break;
             case 505:
-                this.settings.useDesertWells = entryValue;
+                this.settings.useMelons = entryValue;
                 break;
             case 506:
+                this.settings.useDesertWells = entryValue;
+                break;
+            case 507:
                 this.settings.useFossils = entryValue;
                 break;
             

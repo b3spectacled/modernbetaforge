@@ -15,6 +15,7 @@ createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.replaceOceanBiomes=Replace Ocean Biomes
 createWorld.customize.custom.replaceBeachBiomes=Replace Beach Biomes
 
+createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=New Flowers
 createWorld.customize.custom.useLilyPads=Lily Pads
 createWorld.customize.custom.useMelons=Melons

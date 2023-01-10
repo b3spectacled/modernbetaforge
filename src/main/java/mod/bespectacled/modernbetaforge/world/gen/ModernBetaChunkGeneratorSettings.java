@@ -118,7 +118,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final int lapisCount;
     public final int lapisCenterHeight;
     public final int lapisSpread;
-    
+
+    public final boolean useTallGrass;
     public final boolean useNewFlowers;
     public final boolean useLilyPads;
     public final boolean useMelons;
@@ -225,7 +226,8 @@ public class ModernBetaChunkGeneratorSettings {
         this.lapisCount = factory.lapisCount;
         this.lapisCenterHeight = factory.lapisCenterHeight;
         this.lapisSpread = factory.lapisSpread;
-        
+
+        this.useTallGrass = factory.useTallGrass;
         this.useNewFlowers = factory.useNewFlowers;
         this.useLilyPads = factory.useLilyPads;
         this.useMelons = factory.useMelons;
@@ -336,6 +338,7 @@ public class ModernBetaChunkGeneratorSettings {
         public int lapisCenterHeight;
         public int lapisSpread;
         
+        public boolean useTallGrass;
         public boolean useNewFlowers;
         public boolean useLilyPads;
         public boolean useMelons;
@@ -459,6 +462,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.lapisCenterHeight = 16;
             this.lapisSpread = 16;
             
+            this.useTallGrass = true;
             this.useNewFlowers = true;
             this.useLilyPads = true;
             this.useMelons = true;
@@ -569,6 +573,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.lapisCenterHeight = 16;
             this.lapisSpread = 16;
             
+            this.useTallGrass = true;
             this.useNewFlowers = true;
             this.useLilyPads = true;
             this.useMelons = true;
@@ -695,6 +700,7 @@ public class ModernBetaChunkGeneratorSettings {
                 this.clayMinHeight == factory.clayMinHeight &&
                 this.clayCount == factory.clayCount &&
                 
+                this.useTallGrass == factory.useTallGrass &&
                 this.useNewFlowers == factory.useNewFlowers &&
                 this.useLilyPads == factory.useLilyPads &&
                 this.useMelons == factory.useMelons &&
@@ -805,7 +811,8 @@ public class ModernBetaChunkGeneratorSettings {
             
             hashCode = 31 * hashCode + this.chunkSource.hashCode();
             hashCode = 31 * hashCode + this.biomeSource.hashCode();
-            
+
+            hashCode = 31 * hashCode + (this.useTallGrass ? 1 : 0);
             hashCode = 31 * hashCode + (this.useNewFlowers ? 1 : 0);
             hashCode = 31 * hashCode + (this.useLilyPads ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMelons ? 1 : 0);
@@ -930,7 +937,8 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.lapisCount = JsonUtils.getInt(jsonObject, "lapisCount", factory.lapisCount);
                 factory.lapisCenterHeight = JsonUtils.getInt(jsonObject, "lapisCenterHeight", factory.lapisCenterHeight);
                 factory.lapisSpread = JsonUtils.getInt(jsonObject, "lapisSpread", factory.lapisSpread);
-                
+
+                factory.useTallGrass = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TALL_GRASS, factory.useTallGrass);
                 factory.useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
                 factory.useLilyPads = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LILY_PADS, factory.useLilyPads);
                 factory.useMelons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MELONS, factory.useMelons);
@@ -1045,7 +1053,8 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("lapisCount", factory.lapisCount);
             jsonObject.addProperty("lapisCenterHeight", factory.lapisCenterHeight);
             jsonObject.addProperty("lapisSpread", factory.lapisSpread);
-            
+
+            jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
             jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
             jsonObject.addProperty(NbtTags.USE_LILY_PADS, factory.useLilyPads);
             jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);

@@ -13,6 +13,7 @@ public class NbtTags {
     public static final String CLAY_MAX_HEIGHT = "clayMaxHeight";
     
     public static final String USE_NEW_FLOWERS = "useNewFlowers";
+    public static final String USE_TALL_GRASS = "useTallGrass";
     public static final String USE_LILY_PADS = "useLilyPads";
     public static final String USE_MELONS = "useMelons";
     public static final String USE_DESERT_WELLS = "useDesertWells";

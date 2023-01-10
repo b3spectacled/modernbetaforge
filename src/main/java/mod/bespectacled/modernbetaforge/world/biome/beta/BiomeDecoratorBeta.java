@@ -307,7 +307,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             plantCount = 10;
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
+        if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
             for (int i = 0; i < plantCount; ++i) {
                 BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
                 if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
@@ -322,7 +322,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             }
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
+        if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
             if (biome instanceof BiomeBetaDesert) {
                 for (int i = 0; i < 2; ++i) {
                     int x = startX + random.nextInt(16) + 8;
