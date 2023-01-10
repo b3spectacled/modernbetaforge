@@ -25,18 +25,18 @@ public class BiomeBetaTundra extends BiomeBeta {
             this.spawnableCreatureList.clear();
             this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 10, 2, 3));
             this.spawnableCreatureList.add(new SpawnListEntry(EntityPolarBear.class, 1, 1, 2));
-        }
-        
-        Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
-        while (monsterIterator.hasNext()) {
-            SpawnListEntry spawnListEntry = monsterIterator.next();
-            if (spawnListEntry.entityClass == EntitySkeleton.class) {
-                monsterIterator.remove();
+            
+            Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
+            while (monsterIterator.hasNext()) {
+                SpawnListEntry spawnListEntry = monsterIterator.next();
+                if (spawnListEntry.entityClass == EntitySkeleton.class) {
+                    monsterIterator.remove();
+                }
             }
+            
+            this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 20, 4, 4));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityStray.class, 80, 4, 4));
         }
-        
-        this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 20, 4, 4));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityStray.class, 80, 4, 4));
 
         this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
     }
