@@ -22,6 +22,8 @@ createWorld.customize.custom.useMelons=Melons
 createWorld.customize.custom.useDesertWells=Desert Wells
 createWorld.customize.custom.useFossils=Fossils
 
+createWorld.customize.custom.height=Height
+
 # World Customization Presets
 
 createWorld.customize.custom.preset.beta=Classic Beta
@@ -29,3 +31,6 @@ createWorld.customize.custom.preset.alpha=Classic Alpha
 createWorld.customize.custom.preset.alphaWinter=Classic Alpha Winter
 createWorld.customize.custom.preset.infdev=Classic Infdev 20100415
 createWorld.customize.custom.preset.skylands=Beta Skylands
+createWorld.customize.custom.preset.isleLandBeta=Beta Isle Land
+createWorld.customize.custom.preset.caveDelightBeta=Beta Caver's Delight
+createWorld.customize.custom.preset.caveChaosBeta=Beta Caves of Chaos

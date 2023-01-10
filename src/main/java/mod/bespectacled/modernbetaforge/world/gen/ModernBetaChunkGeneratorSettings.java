@@ -38,6 +38,7 @@ public class ModernBetaChunkGeneratorSettings {
     public final float baseSize;
     public final float stretchY;
     public final int seaLevel;
+    public final int height;
     
     public final boolean useCaves;
     public final boolean useDungeons;
@@ -146,6 +147,7 @@ public class ModernBetaChunkGeneratorSettings {
         this.baseSize = factory.baseSize;
         this.stretchY = factory.stretchY;
         this.seaLevel = factory.seaLevel;
+        this.height = factory.height;
         
         this.useCaves = factory.useCaves;
         this.useDungeons = factory.useDungeons;
@@ -257,6 +259,7 @@ public class ModernBetaChunkGeneratorSettings {
         public float baseSize;
         public float stretchY;
         public int seaLevel;
+        public int height;
         
         public boolean useCaves;
         public boolean useDungeons;
@@ -382,6 +385,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.baseSize = 8.5f;
             this.stretchY = 12.0f;
             this.seaLevel = 64;
+            this.height = 128;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -492,6 +496,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.baseSize = 8.5f;
             this.stretchY = 12.0f;
             this.seaLevel = 64;
+            this.height = 128;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -670,6 +675,7 @@ public class ModernBetaChunkGeneratorSettings {
                 this.redstoneSize == factory.redstoneSize &&
                 
                 this.seaLevel == factory.seaLevel &&
+                this.height == factory.height &&
                 
                 Float.compare(factory.stretchY, this.stretchY) == 0 &&
                 Float.compare(factory.upperLimitScale, this.upperLimitScale) == 0 &&
@@ -725,6 +731,7 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.baseSize == 0.0f) ? 0 : Float.floatToIntBits(this.baseSize));
             hashCode = 31 * hashCode + ((this.stretchY == 0.0f) ? 0 : Float.floatToIntBits(this.stretchY));
             hashCode = 31 * hashCode + this.seaLevel;
+            hashCode = 31 * hashCode + this.height;
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
@@ -857,6 +864,7 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.baseSize = JsonUtils.getFloat(jsonObject, "baseSize", factory.baseSize);
                 factory.stretchY = JsonUtils.getFloat(jsonObject, "stretchY", factory.stretchY);
                 factory.seaLevel = JsonUtils.getInt(jsonObject, "seaLevel", factory.seaLevel);
+                factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
                 
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, "useCaves", factory.useCaves);
                 factory.useDungeons = JsonUtils.getBoolean(jsonObject, "useDungeons", factory.useDungeons);
@@ -973,6 +981,7 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("baseSize", factory.baseSize);
             jsonObject.addProperty("stretchY", factory.stretchY);
             jsonObject.addProperty("seaLevel", factory.seaLevel);
+            jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
             
             jsonObject.addProperty("useCaves", factory.useCaves);
             jsonObject.addProperty("useDungeons", factory.useDungeons);

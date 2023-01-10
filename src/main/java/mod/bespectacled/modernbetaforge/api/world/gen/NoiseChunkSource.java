@@ -82,7 +82,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
         
         this.worldMinY = 0;
-        this.worldHeight = 128;
+        this.worldHeight = settings.height;
         this.worldTopY = this.worldMinY + this.worldHeight;
         this.seaLevel = settings.seaLevel;
         

@@ -18,4 +18,6 @@ public class NbtTags {
     public static final String USE_MELONS = "useMelons";
     public static final String USE_DESERT_WELLS = "useDesertWells";
     public static final String USE_FOSSILS = "useFossils";
+    
+    public static final String HEIGHT = "height";
 }
