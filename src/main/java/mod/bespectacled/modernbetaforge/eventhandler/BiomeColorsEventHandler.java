@@ -27,8 +27,6 @@ public class BiomeColorsEventHandler {
                     ModernBetaBiomeLists.resetBetaClimateSamplers();
                 }
             }
-        } else {
-            ModernBetaBiomeLists.resetBetaClimateSamplers();
         }
     }
 }
