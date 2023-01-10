@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge;
 import java.util.Random;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
@@ -12,8 +13,10 @@ import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
 import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBetaDesert;
 import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.gen.ModernBetaWorldType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -32,10 +35,10 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.0.0.0";
+    public static final String VERSION = "1.0.0.1";
     public static final String MCVERSION = "1.12.2";
 
-    private static Logger logger;
+    private static Logger logger = LogManager.getLogger(MODID);
     
     public static void log(Level level, String message) {
         logger.log(level, "{}", message);
@@ -43,26 +46,25 @@ public class ModernBeta {
     
     @SidedProxy(
         clientSide = "mod.bespectacled.modernbetaforge.ModernBetaClientProxy",
-        serverSide = "mod.bespectacled.modernbetaforge.ModernBetaServerProxy"
+        serverSide = "mod.bespectacled.modernbetaforge.ModernBetaCommonProxy"
     )
-    public static ModernBetaCommonProxy proxy;
+    public static ModernBetaProxy proxy;
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
-        
-        proxy.preInit(event);
-    }
+    public void preInit(FMLPreInitializationEvent event) { }
 
     @EventHandler
     public void init(FMLInitializationEvent event)  {
-        proxy.init(event);
+        ModernBetaWorldType.register();
+        
+        ModernBetaBiomeStructures.registerStructures();
+        ModernBetaBiomeStructures.registerStructureBiomes();
+        
+        proxy.init();
     }
     
     @EventHandler
-    public static void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
-    }
+    public static void postInit(FMLPostInitializationEvent event) { }
     
     /*
      * Modify player spawning algorithm

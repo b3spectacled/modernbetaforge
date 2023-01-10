@@ -1,19 +1,13 @@
 package mod.bespectacled.modernbetaforge;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import mod.bespectacled.modernbetaforge.eventhandler.BiomeColorsEventHandler;
+import mod.bespectacled.modernbetaforge.eventhandler.DebugInfoEventHandler;
+import net.minecraftforge.common.MinecraftForge;
 
-public class ModernBetaClientProxy extends ModernBetaCommonProxy {
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
-    }
-
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
-    }
-
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
+public class ModernBetaClientProxy implements ModernBetaProxy {
+    @Override
+    public void init() {
+        MinecraftForge.EVENT_BUS.register(new DebugInfoEventHandler());
+        MinecraftForge.EVENT_BUS.register(new BiomeColorsEventHandler());
     }
 }
