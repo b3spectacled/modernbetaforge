@@ -13,7 +13,6 @@ public class BiomeBetaSeasonalForest extends BiomeBeta {
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
 
-
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
     

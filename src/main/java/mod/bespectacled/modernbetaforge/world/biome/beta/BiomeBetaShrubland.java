@@ -13,7 +13,6 @@ public class BiomeBetaShrubland extends BiomeBeta {
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
 
-
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
     }
     

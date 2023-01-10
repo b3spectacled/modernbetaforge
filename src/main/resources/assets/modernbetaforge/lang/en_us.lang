@@ -34,3 +34,21 @@ createWorld.customize.custom.preset.skylands=Beta Skylands
 createWorld.customize.custom.preset.isleLandBeta=Beta Isle Land
 createWorld.customize.custom.preset.caveDelightBeta=Beta Caver's Delight
 createWorld.customize.custom.preset.caveChaosBeta=Beta Caves of Chaos
+
+# Config
+
+modernbetaforge.general.generatoroptions=Generator Options
+modernbetaforge.general.moboptions=Mob Options
+modernbetaforge.general.spawnoptions=Spawn Options
+modernbetaforge.general.visualoptions=Visual Options
+
+modernbetaforge.general.generatoroptions.defaultgeneratoroptions=Default Generator Options
+modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Custom Surfaces
+
+modernbetaforge.general.moboptions.usenewmobs=Use New Mobs
+
+modernbetaforge.general.spawnoptions.usespawnfuzz=Use Spawn Fuzz
+
+modernbetaforge.general.visualoptions.usebetabiomecolors=Use Beta Biome Colors
+modernbetaforge.general.visualoptions.usebetaskycolors=Use Beta Sky Colors
+modernbetaforge.general.visualoptions.cloudheight=Modern Beta Cloud Height

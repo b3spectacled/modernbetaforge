@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.config;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
-import net.minecraftforge.common.config.Config.Name;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.Config.RequiresWorldRestart;
@@ -14,48 +13,60 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = ModernBeta.MODID)
 public class ModernBetaConfig {
+    public static CategoryGenerator generatorOptions = new CategoryGenerator();
+    public static CategoryVisual visualOptions = new CategoryVisual();
+    public static CategoryMob mobOptions = new CategoryMob();
+    public static CategorySpawn spawnOptions = new CategorySpawn();
     
-    @Name("Default Generator Options")
-    @Comment({
-        "Default Modern Beta world generation options"
-    })
-    public static String defaultGeneratorOptions = "";
+    public static class CategoryGenerator {
+        @Comment({
+            "Default Modern Beta world generation options"
+        })
+        public String defaultGeneratorOptions = "";
+        
+        @Comment({
+            "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
+        })
+        @RequiresMcRestart
+        public String[] biomesWithCustomSurfaces = {};
+    }
 
-    @Name("Use Beta Biome Colors")
-    @Comment({
-        "Render Beta-accurate biome colors"
-    })
-    @RequiresWorldRestart
-    public static boolean useBetaBiomeColors = true;
+    public static class CategoryVisual {
+        @Comment({
+            "Render Beta-accurate biome colors"
+        })
+        @RequiresWorldRestart
+        public boolean useBetaBiomeColors = true;
+        
+        @Comment({
+            "Render Beta-accurate sky colors"
+        })
+        @RequiresWorldRestart
+        public boolean useBetaSkyColors = true;
+        
+        @Comment({
+            "Modern Beta world cloud height",
+        })
+        @RangeInt(min = 0, max = 255)
+        @RequiresMcRestart
+        public int cloudHeight = 108;
+    }
     
-    @Name("Use Beta Sky Colors")
-    @Comment({
-        "Render Beta-accurate sky colors"
-    })
-    @RequiresWorldRestart
-    public static boolean useBetaSkyColors = true;
-
-    @Name("Modern Beta Cloud Height")
-    @Comment({
-        "Modern Beta world cloud height",
-    })
-    @RangeInt(min = 0, max = 128)
-    @RequiresMcRestart
-    public static int cloudHeight = 108;
-
-    @Name("Use Spawn Fuzz")
-    @Comment({
-        "Use spawn fuzz for players who join the world"
-    })
-    @RequiresMcRestart
-    public static boolean useSpawnFuzz = false;
+    public static class CategoryMob {
+        @Comment({
+            "Use new mobs when initializing Beta biomes"
+        })
+        @RequiresMcRestart
+        public boolean useNewMobs = true;
+    }
     
-    @Name("Biomes with Custom Surfaces")
-    @Comment({
-        "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
-    })
-    @RequiresMcRestart
-    public static String[] biomesWithCustomSurfaces = {};
+    public static class CategorySpawn {
+        @Comment({
+            "Use spawn fuzz for players who join the world"
+        })
+        @RequiresMcRestart
+        public boolean useSpawnFuzz = false;
+    }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)
     private static class EventHandler {

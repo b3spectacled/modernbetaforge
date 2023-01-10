@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 
 import java.util.Iterator;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import net.minecraft.entity.monster.EntityPolarBear;
@@ -20,9 +21,11 @@ public class BiomeBetaTundra extends BiomeBeta {
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
         
-        this.spawnableCreatureList.clear();
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 10, 2, 3));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityPolarBear.class, 1, 1, 2));
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableCreatureList.clear();
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 10, 2, 3));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityPolarBear.class, 1, 1, 2));
+        }
         
         Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
         while (monsterIterator.hasNext()) {

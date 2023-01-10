@@ -16,7 +16,6 @@ public class BiomeBetaSnowyBeach extends BiomeBeta {
         
         this.spawnableCreatureList.clear();
 
-
         this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
     }
     

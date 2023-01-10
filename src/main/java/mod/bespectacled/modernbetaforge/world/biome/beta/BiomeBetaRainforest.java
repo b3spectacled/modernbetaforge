@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
@@ -26,8 +27,10 @@ public class BiomeBetaRainforest extends BiomeBeta {
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
         
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityOcelot.class, 2, 1, 1));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityParrot.class, 40, 1, 2));
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityOcelot.class, 2, 1, 1));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityParrot.class, 40, 1, 2));
+        }
 
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }

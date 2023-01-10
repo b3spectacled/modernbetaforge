@@ -500,7 +500,7 @@ public abstract class ChunkSource {
     
     static {
         BIOMES_WITH_CUSTOM_SURFACES.addAll(
-            Arrays.asList(ModernBetaConfig.biomesWithCustomSurfaces)
+            Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
                 .stream()
                 .map(str -> ForgeRegistries.BIOMES.getValue(new ResourceLocation(str)))
                 .collect(Collectors.toList())

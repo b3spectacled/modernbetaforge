@@ -71,12 +71,12 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     
     @Override
     public boolean sampleSkyColor() {
-        return ModernBetaConfig.useBetaSkyColors;
+        return ModernBetaConfig.visualOptions.useBetaSkyColors;
     }
     
     @Override
     public boolean sampleBiomeColor() {
-        return ModernBetaConfig.useBetaBiomeColors;
+        return ModernBetaConfig.visualOptions.useBetaBiomeColors;
     }
     
     private static class BetaClimateSampler {

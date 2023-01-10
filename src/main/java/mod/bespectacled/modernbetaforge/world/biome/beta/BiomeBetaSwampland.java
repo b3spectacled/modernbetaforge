@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
@@ -28,7 +29,9 @@ public class BiomeBetaSwampland extends BiomeBeta {
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
         
-        this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 1, 1, 1));
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 1, 1, 1));
+        }
 
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
     }

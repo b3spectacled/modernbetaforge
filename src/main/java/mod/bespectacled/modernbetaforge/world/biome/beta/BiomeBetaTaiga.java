@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import net.minecraft.entity.passive.EntityRabbit;
@@ -20,8 +21,11 @@ public class BiomeBetaTaiga extends BiomeBeta {
         this.fillerBlock = BlockStates.DIRT;
         
         this.spawnableCreatureList.add(new SpawnListEntry(EntityWolf.class, 8, 4, 4));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
-
+        
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
+        }
+            
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
     }
     

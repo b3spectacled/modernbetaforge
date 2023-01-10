@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
@@ -26,9 +27,11 @@ public class BiomeBetaPlains extends BiomeBeta {
         
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
-        
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 5, 2, 6));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityDonkey.class, 1, 1, 3));
+
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 5, 2, 6));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityDonkey.class, 1, 1, 3));
+        }
 
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }

@@ -36,7 +36,7 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public float getCloudHeight() {
-        return (float)ModernBetaConfig.cloudHeight;
+        return (float)ModernBetaConfig.visualOptions.cloudHeight;
     }
     
     @Override
@@ -51,7 +51,7 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public int getSpawnFuzz(WorldServer world, MinecraftServer server) {
-        return ModernBetaConfig.useSpawnFuzz ? Math.max(0, server.getSpawnRadius(world)) : 0;
+        return ModernBetaConfig.spawnOptions.useSpawnFuzz ? Math.max(0, server.getSpawnRadius(world)) : 0;
     }
     
     @SideOnly(Side.CLIENT)

@@ -94,7 +94,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        this.defaultSettings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.defaultGeneratorOptions);
+        this.defaultSettings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.generatorOptions.defaultGeneratorOptions);
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
         
@@ -732,7 +732,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         if (string != null && !string.isEmpty()) {
             this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(string);
         } else {
-            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.defaultGeneratorOptions);
+            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.generatorOptions.defaultGeneratorOptions);
         }
     }
 

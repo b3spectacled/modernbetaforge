@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.world.biome.beta;
 import java.util.Iterator;
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
@@ -28,22 +29,26 @@ public class BiomeBetaDesert extends BiomeBeta {
         
         this.topBlock = BlockStates.SAND;
         this.fillerBlock = BlockStates.SAND;
-        
+
+        // Should always clear to prevent passive mobs from spawning in desert
         this.spawnableCreatureList.clear();
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
         
-        Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
-        while (monsterIterator.hasNext()) {
-            SpawnListEntry spawnListEntry = monsterIterator.next();
+        if (ModernBetaConfig.mobOptions.useNewMobs) {
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
             
-            if (spawnListEntry.entityClass == EntityZombie.class || spawnListEntry.entityClass == EntityZombieVillager.class) {
-                monsterIterator.remove();
+            Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
+            while (monsterIterator.hasNext()) {
+                SpawnListEntry spawnListEntry = monsterIterator.next();
+                
+                if (spawnListEntry.entityClass == EntityZombie.class || spawnListEntry.entityClass == EntityZombieVillager.class) {
+                    monsterIterator.remove();
+                }
             }
+            
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
         }
-        
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
         
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
