@@ -172,24 +172,21 @@ public class AlphaChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
 
-        //double depthNoiseScaleX = this.depthNoiseScaleX; // Default: 100
-        //double depthNoiseScaleZ = this.depthNoiseScaleZ;
+        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 100
+        double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         
-        double depthNoiseScaleX = 100; // Default: 100
-        double depthNoiseScaleZ = 100;
+        double coordinateScale = this.settings.coordinateScale;
+        double heightScale = this.settings.heightScale;
         
-        double coordinateScale = this.coordinateScale;
-        double heightScale = this.heightScale;
-        
-        double mainNoiseScaleX = this.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.mainNoiseScaleY; // Default: 160
-        double mainNoiseScaleZ = this.mainNoiseScaleZ;
+        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
+        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
+        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
 
-        double lowerLimitScale = this.lowerLimitScale;
-        double upperLimitScale = this.upperLimitScale;
+        double lowerLimitScale = this.settings.lowerLimitScale;
+        double upperLimitScale = this.settings.upperLimitScale;
         
-        double baseSize = this.baseSize;
-        double heightStretch = this.heightStretch;
+        double baseSize = this.settings.baseSize;
+        double heightStretch = this.settings.stretchY;
         
         double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, 1.0, 0.0, 1.0);
         scale = (scale + 256D) / 512D;

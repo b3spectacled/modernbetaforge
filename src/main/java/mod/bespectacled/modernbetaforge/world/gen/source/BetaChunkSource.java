@@ -195,21 +195,21 @@ public class BetaChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
-        double depthNoiseScaleX = this.depthNoiseScaleX; // Default: 200
-        double depthNoiseScaleZ = this.depthNoiseScaleZ;
+        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 200
+        double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         
-        double coordinateScale = this.coordinateScale;
-        double heightScale = this.heightScale;
+        double coordinateScale = this.settings.coordinateScale;
+        double heightScale = this.settings.heightScale;
         
-        double mainNoiseScaleX = this.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.mainNoiseScaleY; // Default: 160
-        double mainNoiseScaleZ = this.mainNoiseScaleZ;
+        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
+        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
+        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
 
-        double lowerLimitScale = this.lowerLimitScale;
-        double upperLimitScale = this.upperLimitScale;
+        double lowerLimitScale = this.settings.lowerLimitScale;
+        double upperLimitScale = this.settings.upperLimitScale;
         
-        double baseSize = this.baseSize;
-        double heightStretch = this.heightStretch;
+        double baseSize = this.settings.baseSize;
+        double heightStretch = this.settings.stretchY;
         
         Clime clime = this.climateSampler.sample(x, z);
         double temp = clime.temp();

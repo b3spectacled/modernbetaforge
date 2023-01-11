@@ -155,15 +155,15 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
 
-        double coordinateScale = this.coordinateScale;
-        double heightScale = this.heightScale;
+        double coordinateScale = this.settings.coordinateScale;
+        double heightScale = this.settings.heightScale;
         
-        double mainNoiseScaleX = this.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.mainNoiseScaleY; // Default: 400
-        double mainNoiseScaleZ = this.mainNoiseScaleZ;
+        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
+        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 400
+        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
         
-        double lowerLimitScale = this.lowerLimitScale;
-        double upperLimitScale = this.upperLimitScale;
+        double lowerLimitScale = this.settings.lowerLimitScale;
+        double upperLimitScale = this.settings.upperLimitScale;
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;

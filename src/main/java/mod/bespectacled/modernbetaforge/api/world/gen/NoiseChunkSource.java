@@ -42,23 +42,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final int noiseSizeY; // Number of vertical subchunks
     protected final int noiseTopY;  // Number of positive (y >= 0) vertical subchunks
     
-    protected final double depthNoiseScaleExponent;
-    protected final double depthNoiseScaleX;
-    protected final double depthNoiseScaleZ;
-    
-    protected final double coordinateScale;
-    protected final double heightScale;
-    
-    protected final double mainNoiseScaleX;
-    protected final double mainNoiseScaleY;
-    protected final double mainNoiseScaleZ;
-    
-    protected final double lowerLimitScale;
-    protected final double upperLimitScale;
-    
-    protected final double baseSize;
-    protected final double heightStretch;
-    
     protected final SlideSettings topSlide;
     protected final SlideSettings bottomSlide;
     
@@ -96,23 +79,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.noiseSizeZ = 16 / this.horizontalNoiseResolution;
         this.noiseSizeY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         this.noiseTopY = Math.floorDiv(this.worldTopY, this.verticalNoiseResolution);
-        
-        this.depthNoiseScaleExponent = this.settings.depthNoiseScaleExponent; // Unused
-        this.depthNoiseScaleX = this.settings.depthNoiseScaleX;
-        this.depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
-        
-        this.coordinateScale = this.settings.coordinateScale;
-        this.heightScale = this.settings.heightScale;
-        
-        this.mainNoiseScaleX = this.settings.mainNoiseScaleX;
-        this.mainNoiseScaleY = this.settings.mainNoiseScaleY;
-        this.mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
-        
-        this.lowerLimitScale = this.settings.lowerLimitScale;
-        this.upperLimitScale = this.settings.upperLimitScale;
-        
-        this.baseSize = this.settings.baseSize;
-        this.heightStretch = this.settings.stretchY;
         
         this.topSlide = noiseSettings.topSlideSettings;
         this.bottomSlide = noiseSettings.bottomSlideSettings;
