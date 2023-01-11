@@ -11,7 +11,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBeta;
@@ -235,7 +234,6 @@ public abstract class ChunkSource {
         // Generate lakes, dungeons
         
         if (!hasVillageGenerated &&
-            biome instanceof ModernBetaBiome &&
             this.settings.useWaterLakes && 
             TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
         ) {
@@ -249,7 +247,6 @@ public abstract class ChunkSource {
         }
         
         if (!hasVillageGenerated &&
-            biome instanceof ModernBetaBiome &&
             this.settings.useLavaLakes &&
             TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
         ) {
@@ -264,8 +261,7 @@ public abstract class ChunkSource {
             }
         }
         
-        if (biome instanceof ModernBetaBiome &&
-            this.settings.useDungeons && 
+        if (this.settings.useDungeons && 
             TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
         ) {
             for (int i = 0; i < this.settings.dungeonChance; i++) {
