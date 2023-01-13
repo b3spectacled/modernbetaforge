@@ -1,10 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.biome.beta;
 
-import java.util.Optional;
-
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
+import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -13,9 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeDecorator;
@@ -31,31 +24,11 @@ public class BiomeBeta extends ModernBetaBiome {
     protected static final WorldGenTaiga2 PINE_FEATURE_2 = new WorldGenTaiga2(false);
     
     protected int skyColor;
-
-    private Optional<ClimateSampler> climateSampler;
-    private Optional<SkyClimateSampler> skyClimateSampler;
     
     public BiomeBeta(BiomeProperties properties) {
         super(properties);
-
-        this.climateSampler = Optional.empty();
-        this.skyClimateSampler = Optional.empty();
         
         this.skyColor = -1;
-    }
-    
-    public void resetClimateSamplers() {
-        this.climateSampler = Optional.empty();
-        this.skyClimateSampler = Optional.empty();
-    }
-    
-    public void setClimateSamplers(ClimateSampler climateSampler, SkyClimateSampler skyClimateSampler) {
-        this.climateSampler = Optional.ofNullable(climateSampler);
-        this.skyClimateSampler = Optional.ofNullable(skyClimateSampler);
-    }
-    
-    public Optional<ClimateSampler> getClimateSampler() {
-        return this.climateSampler;
     }
     
     @Override
@@ -64,30 +37,24 @@ public class BiomeBeta extends ModernBetaBiome {
     }
     
     @SideOnly(Side.CLIENT)
-    public int getSkyColorByTemp(float originalTemp) {
+    public int getSkyColorByTemp(float temp) {
         BlockPos blockPos = Minecraft.getMinecraft().player.getPosition();
         
-        if (this.skyClimateSampler.isPresent() && this.skyClimateSampler.get().sampleSkyColor()) {
-            float temp = (float)this.skyClimateSampler.get().sampleSkyTemp(blockPos.getX(), blockPos.getZ());
-            temp /= 3F;
-            temp = MathHelper.clamp(temp, -1F, 1F);
-            
-            return MathHelper.hsvToRGB(0.6222222F - temp * 0.05F, 0.5F + temp * 0.1F, 1.0F);
+        if (BetaColorSampler.INSTANCE.canSampleSkyColor()) {
+            return BetaColorSampler.INSTANCE.getSkyColor(blockPos);
         }
         
         if (this.skyColor != -1) {
             return this.skyColor;
         }
         
-        return super.getSkyColorByTemp(originalTemp);
+        return super.getSkyColorByTemp(temp);
     }
     
     @SideOnly(Side.CLIENT)
     public int getGrassColorAtPos(BlockPos blockPos) {
-        if (this.climateSampler.isPresent() && this.climateSampler.get().sampleBiomeColor()) {
-            Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-            
-            return ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+        if (BetaColorSampler.INSTANCE.canSampleBiomeColor()) {
+            return BetaColorSampler.INSTANCE.getGrassColor(blockPos);
         }
         
         return super.getGrassColorAtPos(blockPos);
@@ -95,10 +62,8 @@ public class BiomeBeta extends ModernBetaBiome {
     
     @SideOnly(Side.CLIENT)
     public int getFoliageColorAtPos(BlockPos blockPos) {
-        if (this.climateSampler.isPresent() && this.climateSampler.get().sampleBiomeColor()) {
-            Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-            
-            return ColorizerFoliage.getFoliageColor(clime.temp(), clime.rain());
+        if (BetaColorSampler.INSTANCE.canSampleBiomeColor()) {
+            return BetaColorSampler.INSTANCE.getFoliageColor(blockPos);
         }
         
         return super.getFoliageColorAtPos(blockPos);

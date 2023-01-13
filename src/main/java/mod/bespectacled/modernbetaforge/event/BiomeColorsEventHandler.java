@@ -1,6 +1,6 @@
-package mod.bespectacled.modernbetaforge.eventhandler;
+package mod.bespectacled.modernbetaforge.event;
 
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
+import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import net.minecraft.client.Minecraft;
@@ -31,14 +31,14 @@ public class BiomeColorsEventHandler {
                 if (modernBetaBiomeProvider.getBiomeSource() instanceof BetaBiomeSource) {
                     BetaBiomeSource betaBiomeSource = (BetaBiomeSource)modernBetaBiomeProvider.getBiomeSource();
                     
-                    ModernBetaBiomeLists.setBetaClimateSamplers(betaBiomeSource, betaBiomeSource);
+                    BetaColorSampler.INSTANCE.setClimateSamplers(betaBiomeSource, betaBiomeSource);
                 } else {
-                    ModernBetaBiomeLists.resetBetaClimateSamplers();
+                    BetaColorSampler.INSTANCE.resetClimateSamplers();
                 }
             }
             
         } else if (!Minecraft.getMinecraft().isSingleplayer()) {
-            ModernBetaBiomeLists.resetBetaClimateSamplers();
+            BetaColorSampler.INSTANCE.resetClimateSamplers();
         }
     }
 }

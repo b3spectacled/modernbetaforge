@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
-import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBeta;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
@@ -17,22 +14,6 @@ public class ModernBetaBiomeLists {
     public static final List<Biome> INFDEV_BIOMES;
     
     public static final List<Biome> BIOMES_WITH_CUSTOM_SURFACES;
-    
-    public static void setBetaClimateSamplers(ClimateSampler climateSampler, SkyClimateSampler skyClimateSampler) {
-        for (Biome biome : BETA_BIOMES) {
-            BiomeBeta biomeBeta = (BiomeBeta)biome;
-            
-            biomeBeta.setClimateSamplers(climateSampler, skyClimateSampler);
-        }
-    }
-    
-    public static void resetBetaClimateSamplers() {
-        for (Biome biome : BETA_BIOMES) {
-            BiomeBeta biomeBeta = (BiomeBeta)biome;
-            
-            biomeBeta.resetClimateSamplers();
-        }
-    }
     
     static {
         BETA_BIOMES = Arrays.asList(

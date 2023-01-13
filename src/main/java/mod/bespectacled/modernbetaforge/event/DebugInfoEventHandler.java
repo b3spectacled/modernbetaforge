@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.eventhandler;
+package mod.bespectacled.modernbetaforge.event;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
