@@ -31,7 +31,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     @Override
     public Biome[] getBiomesForGeneration(Biome[] biomes, int x, int z, int sizeX, int sizeZ) {
         // Unused for the mod, used for just terrain gen in vanilla
-        return this.getBiomes(biomes, x, z, sizeX, sizeZ, true);
+        return this.getBiomes(biomes, x >> 2, z >> 2, sizeX, sizeZ, true);
     }
     
     @Override
