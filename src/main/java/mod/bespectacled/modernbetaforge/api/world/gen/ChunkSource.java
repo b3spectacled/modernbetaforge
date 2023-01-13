@@ -66,6 +66,7 @@ public abstract class ChunkSource {
     private final MapGenStronghold strongholdGenerator;
     private final MapGenVillage villageGenerator;
     private final MapGenMineshaft mineshaftGenerator;
+    
     private final ModernBetaMapGenScatteredFeature scatteredFeatureGenerator;
     private final ModernBetaStructureOceanMonument oceanMonumentGenerator;
     private final ModernBetaWoodlandMansion woodlandMansionGenerator;
@@ -89,9 +90,16 @@ public abstract class ChunkSource {
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.mineshaftGenerator = (MapGenMineshaft)TerrainGen.getModdedMapGen(new MapGenMineshaft(), InitMapGenEvent.EventType.MINESHAFT);
-        this.scatteredFeatureGenerator = (ModernBetaMapGenScatteredFeature)TerrainGen.getModdedMapGen(new ModernBetaMapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
-        this.oceanMonumentGenerator = (ModernBetaStructureOceanMonument)TerrainGen.getModdedMapGen(new ModernBetaStructureOceanMonument(this), InitMapGenEvent.EventType.OCEAN_MONUMENT);
-        this.woodlandMansionGenerator = (ModernBetaWoodlandMansion)TerrainGen.getModdedMapGen(new ModernBetaWoodlandMansion(chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
+        
+        //this.scatteredFeatureGenerator = (ModernBetaMapGenScatteredFeature)TerrainGen.getModdedMapGen(new ModernBetaMapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
+        //this.oceanMonumentGenerator = (ModernBetaStructureOceanMonument)TerrainGen.getModdedMapGen(new ModernBetaStructureOceanMonument(this), InitMapGenEvent.EventType.OCEAN_MONUMENT);
+        //this.woodlandMansionGenerator = (ModernBetaWoodlandMansion)TerrainGen.getModdedMapGen(new ModernBetaWoodlandMansion(chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
+        
+        // To avoid mod incompatibilities, do not replace with modded structures
+        // TODO: Figure out a better way to handle this, maybe event handlers.
+        this.scatteredFeatureGenerator = new ModernBetaMapGenScatteredFeature();
+        this.oceanMonumentGenerator = new ModernBetaStructureOceanMonument(this);
+        this.woodlandMansionGenerator = new ModernBetaWoodlandMansion(chunkGenerator);
         
         this.biomes = new Biome[256];
         this.biomeInjector = world.getBiomeProvider() instanceof ModernBetaBiomeProvider ? 

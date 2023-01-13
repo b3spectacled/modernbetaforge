@@ -38,7 +38,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     public Biome[] getBiomes(@Nullable Biome[] biomes, int x, int z, int sizeX, int sizeZ) {
         return this.getBiomes(biomes, x, z, sizeX, sizeZ, true);
     }
-    
+
+    @Override
     public Biome[] getBiomes(@Nullable Biome[] biomes, int x, int z, int sizeX, int sizeZ, boolean cacheFlag) {
         if (biomes == null || biomes.length != sizeX * sizeZ) {
             biomes = new Biome[sizeX * sizeZ];
