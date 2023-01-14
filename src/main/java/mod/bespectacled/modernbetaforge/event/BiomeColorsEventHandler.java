@@ -16,12 +16,15 @@ public class BiomeColorsEventHandler {
         
         boolean isRemote = world.isRemote;
         boolean isSinglePlayer = Minecraft.getMinecraft().isSingleplayer();
-        boolean isModernBetaWorldType = world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType;
+        
+        boolean isModernBeta = world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType;
+        boolean isOverworld = world.provider.isSurfaceWorld();
         
         /*
          * Climate samplers should only be set on the logical server (!isRemote) on world load,
          * but reset every time the logical client loads a world,
          * except if logical server is on the physical client (i.e. single player world).
+         * Climate samplers should be set once for all dimensions loaded in a save file.
          * 
          * isRemote --> checks if logical server
          * isSinglePlayer --> checks if physical client (logical client + logical server) 
@@ -29,24 +32,26 @@ public class BiomeColorsEventHandler {
          */
         
         // Logical server on physical client (SP),
-        // filter out non-Modern Beta world types
-        if (!isRemote && isSinglePlayer && isModernBetaWorldType) {
+        // filter for Modern Beta world type / save files
+        if (!isRemote && isSinglePlayer && isModernBeta) {
             
-            // Filter out other dimensions
-            if (world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
+            // Filter for overworld dimension
+            if (isOverworld && world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
                 ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
                 
-                // Filter out non-Beta biome sources
+                // Filter for Beta biome source
                 if (biomeProvider.getBiomeSource() instanceof BetaBiomeSource) {
                     ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
                     BetaBiomeSource betaBiomeSource = (BetaBiomeSource)modernBetaBiomeProvider.getBiomeSource();
-                    
+
                     BetaColorSampler.INSTANCE.setClimateSamplers(betaBiomeSource, betaBiomeSource);
                 } else {
                     BetaColorSampler.INSTANCE.resetClimateSamplers();
                 }
             }
             
+            // Return early so we do not reset climate samplers
+            // when checking other dimensions in a Modern Beta save file
             return;
         }
 
