@@ -63,10 +63,8 @@ public class BetaColorSampler {
         z = (int) ((long) z + (shift >> 24 & 31L));
         
         Clime clime = this.climateSampler.get().sample(x, z);
-        double temp = MathHelper.clamp(clime.temp(), 0.0, 1.0);
-        double rain = clime.rain();
 
-        return ColorizerGrass.getGrassColor(temp, rain);
+        return ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
     }
     
     public boolean canSampleSkyColor() {
