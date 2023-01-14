@@ -6,7 +6,7 @@ package mod.bespectacled.modernbetaforge.util.chunk;
  * == Heightmap Reference ==
  * SURFACE: The highest block that blocks motion.
  * OCEAN: The highest non-air block, solid block.
- * VOID: The highest block non-air block, solid block, if any.
+ * FLOOR: The highest block non-air block, solid block, if any.
  * 
  */
 public class HeightmapChunk {

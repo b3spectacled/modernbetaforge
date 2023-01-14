@@ -2,18 +2,16 @@ package mod.bespectacled.modernbetaforge.api.world.gen.noise;
 
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 
-public abstract class NoiseProvider {
-    protected final int noiseSizeX;
-    protected final int noiseSizeY;
-    protected final int noiseSizeZ;
+public class NoiseSource {
+    private final NoiseColumnSampler noiseColumnSampler;
+
+    private final int noiseResX;
+    private final int noiseResY;
+    private final int noiseResZ;
     
-    protected final int noiseResX;
-    protected final int noiseResY;
-    protected final int noiseResZ;
+    private final int noiseSize;
     
-    protected final int noiseSize;
-    
-    protected double[] noise;
+    private double[] noise;
 
     private double lowerNW;
     private double lowerSW;
@@ -35,14 +33,13 @@ public abstract class NoiseProvider {
     
     private double density;
     
-    public NoiseProvider(
+    public NoiseSource(
+        NoiseColumnSampler noiseColumnSampler,
         int noiseSizeX, 
         int noiseSizeY, 
         int noiseSizeZ
     ) {
-        this.noiseSizeX = noiseSizeX;
-        this.noiseSizeY = noiseSizeY;
-        this.noiseSizeZ = noiseSizeZ;
+        this.noiseColumnSampler = noiseColumnSampler;
         
         this.noiseResX = noiseSizeX + 1;
         this.noiseResY = noiseSizeY + 1;
@@ -89,6 +86,29 @@ public abstract class NoiseProvider {
     public double sample() {
         return this.density;
     }
-    
-    protected abstract double[] sampleNoise(int startNoiseX, int startNoiseZ);
+
+    private double[] sampleNoise(int startNoiseX, int startNoiseZ) {
+        double[] buffer = new double[this.noiseResY];
+        double[] noise = new double[this.noiseSize];
+        
+        int ndx = 0;
+        for (int localNoiseX = 0; localNoiseX < this.noiseResX; ++localNoiseX) {
+            for (int localNoiseZ = 0; localNoiseZ < this.noiseResZ; ++localNoiseZ) {
+                this.noiseColumnSampler.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+                
+                for (int nY = 0; nY < this.noiseResY; ++nY) {
+                    noise[ndx] = buffer[nY];
+                    
+                    ndx++;
+                }
+            }
+        }
+        
+        return noise;
+    }
+
+    @FunctionalInterface
+    public static interface NoiseColumnSampler {
+        public void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+    }
 }
