@@ -85,7 +85,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.baseNoiseCache = new ChunkCache<>(
             "base_noise",
-            1536,
+            512,
             true,
             (chunkX, chunkZ) -> {
                 NoiseProvider baseNoiseProvider = new BaseNoiseProvider(
@@ -102,8 +102,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
         );
         
         this.heightmapCache = new ChunkCache<>(
-            "heightmap", 
-            1536, 
+            "heightmap",
+            512, 
             true, 
             this::sampleHeightmap
         );

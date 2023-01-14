@@ -101,7 +101,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
             
             this.climateCache = new ChunkCache<>(
                 "climate", 
-                1536, 
+                512, 
                 true, 
                 (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise)
             );
