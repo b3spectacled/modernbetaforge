@@ -21,7 +21,7 @@ public class SingleBiomeSource extends BiomeSource {
     }
 
     @Override
-    public Biome getBiome(int x, int y, int z) {
+    public Biome getBiome(int x, int z) {
         return this.biome;
     }
 }

@@ -4,7 +4,7 @@ import net.minecraft.world.biome.Biome;
 
 @FunctionalInterface
 public interface BiomeInjectionResolver {
-    public static final BiomeInjectionResolver DEFAULT = (x, y, z) -> null;
+    public static final BiomeInjectionResolver DEFAULT = (x, z) -> null;
     
-    public Biome apply(int x, int y, int z);
+    public Biome apply(int x, int z);
 }

@@ -33,7 +33,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     }
 
     @Override
-    public Biome getBiome(int x, int y, int z) {
+    public Biome getBiome(int x, int z) {
         Clime clime = this.climateSampler.sampleClime(x, z);
         double temp = clime.temp();
         double rain = clime.rain();
@@ -42,7 +42,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     }
 
     @Override
-    public Biome getOceanBiome(int x, int y, int z) {
+    public Biome getOceanBiome(int x, int z) {
         Clime clime = this.climateSampler.sampleClime(x, z);
         double temp = clime.temp();
         double rain = clime.rain();
@@ -51,7 +51,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     }
 
     @Override
-    public Biome getBeachBiome(int x, int y, int z) {
+    public Biome getBeachBiome(int x, int z) {
         Clime clime = this.climateSampler.sampleClime(x, z);
         double temp = clime.temp();
         double rain = clime.rain();

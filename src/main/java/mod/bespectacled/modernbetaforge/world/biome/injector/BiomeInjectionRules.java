@@ -14,9 +14,9 @@ public class BiomeInjectionRules {
         this.rules = rules;
     }
     
-    public Biome test(BiomeInjectionContext context, int x, int y, int z) {
+    public Biome test(BiomeInjectionContext context, int x, int z) {
         for (BiomeInjectionRule rule : this.rules) {
-            Biome biome = rule.test(context).apply(x, y, z);
+            Biome biome = rule.test(context).apply(x, z);
             
             if (biome != null)
                 return biome;

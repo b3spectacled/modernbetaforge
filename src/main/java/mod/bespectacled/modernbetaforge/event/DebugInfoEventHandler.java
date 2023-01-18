@@ -56,7 +56,7 @@ public class DebugInfoEventHandler {
                     double rain = clime.rain();
                     
                     String climateText = String.format("[Modern Beta] Climate Temp: %.3f Rainfall: %.3f", temp, rain);
-                    String originalBiomeText = String.format("[Modern Beta] Original biome: %s", biomeSource.getBiome(x, 0, z).getBiomeName());
+                    String originalBiomeText = String.format("[Modern Beta] Original biome: %s", biomeSource.getBiome(x, z).getBiomeName());
 
                     event.getLeft().add(climateText);
                     event.getLeft().add(originalBiomeText);

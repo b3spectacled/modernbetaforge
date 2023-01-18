@@ -21,10 +21,8 @@ public abstract class BiomeSource {
      * Gets a biome for biome source at given coordinates.
      * 
      * @param x x-coordinate.
-     * @param y y-coordinate.
      * @param z z-coordinate.
-     * 
      * @return A biome at given biome coordinates.
      */
-    public abstract Biome getBiome(int x, int y, int z);
+    public abstract Biome getBiome(int x, int z);
 }

@@ -127,7 +127,7 @@ public class ModernBeta {
         int seaLevel = chunkSource.getSeaLevel();
         int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
         
-        Biome biome = biomeSource.getBiome(x, y, z);
+        Biome biome = biomeSource.getBiome(x, z);
         
         return (biome instanceof BiomeBetaDesert && y >= seaLevel - 1) || (beachOctaveNoise.sample(x * 0.03125, z * 0.03125, 0.0) > 0.0 && y >= seaLevel - 1 && y < seaLevel + 2);
     }

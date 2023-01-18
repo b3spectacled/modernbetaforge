@@ -67,7 +67,7 @@ public class BiomeInjector {
                 IBlockState topState = chunkPrimer.getBlockState(localX, topHeight, localZ);
                 
                 BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
-                Biome newBiome = this.sample(context, x, 0, z);
+                Biome newBiome = this.sample(context, x, z);
                 
                 if (newBiome != null) {
                     biomes[localX + localZ * 16] = newBiome;
@@ -82,11 +82,11 @@ public class BiomeInjector {
         
         BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
         
-        return this.sample(context, x, 0, z);
+        return this.sample(context, x, z);
     }
     
-    private Biome sample(BiomeInjectionContext context, int x, int y, int z) {
-        return this.rules.test(context, x, y, z);
+    private Biome sample(BiomeInjectionContext context, int x, int z) {
+        return this.rules.test(context, x, z);
     }
 
     private boolean atOceanDepth(int topHeight, int oceanDepth) {

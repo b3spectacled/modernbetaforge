@@ -48,7 +48,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         // Accesses done as x + z * 16, due to how vanilla biome array is stored.
         for (int localZ = 0; localZ < 16; ++localZ) {
             for (int localX = 0; localX < 16; ++localX) {
-                biomes[localX + localZ * 16] = this.biomeSource.getBiome(x + localX, 0, z + localZ);
+                biomes[localX + localZ * 16] = this.biomeSource.getBiome(x + localX, z + localZ);
             }
         }
         
@@ -72,7 +72,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         for (int i = 0; i < sizeX * sizeZ; ++i) {
             int startX = minX + i % sizeX << 2;
             int startZ = minZ + i / sizeX << 2;
-            Biome biome = this.biomeSource.getBiome(startX, 0, startZ);
+            Biome biome = this.biomeSource.getBiome(startX, startZ);
             
             if (allowed.contains(biome) && (blockPos == null || random.nextInt(j + 1) == 0)) {
                 blockPos = new BlockPos(startX, 0, startZ);
@@ -89,7 +89,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     @Override
     public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed) {
         if (radius == 0) {
-            return allowed.contains(this.biomeSource.getBiome(x, 0, z));
+            return allowed.contains(this.biomeSource.getBiome(x, z));
         } else {
             double r2 = radius * radius;
             
@@ -98,7 +98,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                     double distance = MathUtil.distance(x, z, dX, dZ);
                     
                     if (distance < r2) {
-                        Biome biome = this.biomeSource.getBiome(dX, 0, dZ);
+                        Biome biome = this.biomeSource.getBiome(dX, dZ);
                         
                         if (!allowed.contains(biome))
                             return false;
