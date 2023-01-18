@@ -127,6 +127,10 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useDesertWells;
     public final boolean useFossils;
     
+    public final float tempNoiseScale;
+    public final float rainNoiseScale;
+    public final float detailNoiseScale;
+    
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
@@ -235,6 +239,10 @@ public class ModernBetaChunkGeneratorSettings {
         this.useMelons = factory.useMelons;
         this.useDesertWells = factory.useDesertWells;
         this.useFossils = factory.useFossils;
+        
+        this.tempNoiseScale = factory.tempNoiseScale;
+        this.rainNoiseScale = factory.rainNoiseScale;
+        this.detailNoiseScale = factory.detailNoiseScale;
     }
     
     public static class Factory {
@@ -347,6 +355,10 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useMelons;
         public boolean useDesertWells;
         public boolean useFossils;
+        
+        public float tempNoiseScale;
+        public float rainNoiseScale;
+        public float detailNoiseScale;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -473,6 +485,10 @@ public class ModernBetaChunkGeneratorSettings {
             this.useDesertWells = true;
             this.useFossils = true;
             
+            this.tempNoiseScale = 1.0f;
+            this.rainNoiseScale = 1.0f;
+            this.detailNoiseScale = 1.0f;
+            
             this.setDefaults();
         }
         
@@ -584,6 +600,10 @@ public class ModernBetaChunkGeneratorSettings {
             this.useMelons = true;
             this.useDesertWells = true;
             this.useFossils = true;
+            
+            this.tempNoiseScale = 1.0f;
+            this.rainNoiseScale = 1.0f;
+            this.detailNoiseScale = 1.0f;
         }
         
         @Override
@@ -711,7 +731,11 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useLilyPads == factory.useLilyPads &&
                 this.useMelons == factory.useMelons &&
                 this.useDesertWells == factory.useDesertWells &&
-                this.useFossils == factory.useFossils
+                this.useFossils == factory.useFossils &&
+                
+                this.tempNoiseScale == factory.tempNoiseScale &&
+                this.rainNoiseScale == factory.rainNoiseScale &&
+                this.detailNoiseScale == factory.detailNoiseScale
                 
                 ;
         }
@@ -825,6 +849,10 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useMelons ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDesertWells ? 1 : 0);
             hashCode = 31 * hashCode + (this.useFossils ? 1 : 0);
+            
+            hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
+            hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
+            hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
             
             return hashCode;
         }
@@ -952,6 +980,10 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useMelons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MELONS, factory.useMelons);
                 factory.useDesertWells = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
                 factory.useFossils = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FOSSILS, factory.useFossils);
+
+                factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
+                factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
+                factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 
             } catch (Exception e) {}
             
@@ -1069,6 +1101,10 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
             jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
             jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
+
+            jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
+            jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
+            jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
             
             return jsonObject;
         }

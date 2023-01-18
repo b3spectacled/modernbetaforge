@@ -108,7 +108,7 @@ public abstract class ChunkSource {
         this.surfaceOctaveNoise = new SimplexOctaveNoise(new Random(seed), 4);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
-        world.setSeaLevel(this.settings.seaLevel);
+        this.world.setSeaLevel(this.settings.seaLevel);
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
@@ -117,7 +117,7 @@ public abstract class ChunkSource {
     
     public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
     
-    public Chunk provideChunk(World world, int chunkX, int chunkZ) {
+    public Chunk provideChunk(int chunkX, int chunkZ) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
@@ -127,7 +127,7 @@ public abstract class ChunkSource {
         this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
         
         // Generate biome map
-        world.getBiomeProvider().getBiomes(this.biomes, startX, startZ, 16, 16);
+        this.world.getBiomeProvider().getBiomes(this.biomes, startX, startZ, 16, 16);
         
         // Populate biome-specific surface
         this.provideSurface(this.biomes, chunkPrimer, chunkX, chunkZ);
@@ -139,42 +139,42 @@ public abstract class ChunkSource {
         
         // Carve terrain
         if (this.settings.useCaves) {
-            this.caveCarver.generate(world, chunkX, chunkZ, chunkPrimer);
+            this.caveCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
         }
         
         if (this.settings.useRavines) {
-            this.ravineCarver.generate(world, chunkX, chunkZ, chunkPrimer);
+            this.ravineCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
         }
         
         // Generate map feature placements
         if (this.mapFeaturesEnabled) {
             if (this.settings.useMineShafts) {
-                this.mineshaftGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             if (this.settings.useVillages) {
-                this.villageGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             if (this.settings.useStrongholds) {
-                this.strongholdGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.strongholdGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             if (this.settings.useTemples) {
-                this.scatteredFeatureGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             if (this.settings.useMonuments) {
-                this.oceanMonumentGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             if (this.settings.useMansions) {
-                this.woodlandMansionGenerator.generate(world, chunkX, chunkZ, chunkPrimer);
+                this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
         }
         
         // Generate final chunk
-        Chunk chunk = new Chunk(world, chunkPrimer, chunkX, chunkZ);
+        Chunk chunk = new Chunk(this.world, chunkPrimer, chunkX, chunkZ);
         
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
@@ -186,7 +186,7 @@ public abstract class ChunkSource {
         return chunk;
     }
     
-    public void populateChunk(World world, int chunkX, int chunkZ) {
+    public void populateChunk(int chunkX, int chunkZ) {
         BlockFalling.fallInstantly = true;
         
         int startX = chunkX * 16;
@@ -197,60 +197,60 @@ public abstract class ChunkSource {
         ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
-        Biome biome = world.getBiome(new BlockPos(startX + 16, 0, startZ + 16));
+        Biome biome = this.world.getBiome(new BlockPos(startX + 16, 0, startZ + 16));
         
-        this.random.setSeed(world.getSeed());
+        this.random.setSeed(this.world.getSeed());
         long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
         long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
-        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ world.getSeed());
+        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
 
-        ForgeEventFactory.onChunkPopulate(true, this.chunkGenerator, world, this.random, chunkX, chunkZ, false);
+        ForgeEventFactory.onChunkPopulate(true, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
         
         // Actually generate map features here
         if (this.mapFeaturesEnabled) {
             if (this.settings.useMineShafts) {
-                this.mineshaftGenerator.generateStructure(world, this.random, chunkPos);
+                this.mineshaftGenerator.generateStructure(this.world, this.random, chunkPos);
             }
             
             if (this.settings.useVillages) {
-                hasVillageGenerated = this.villageGenerator.generateStructure(world, this.random, chunkPos);
+                hasVillageGenerated = this.villageGenerator.generateStructure(this.world, this.random, chunkPos);
             }
             
             if (this.settings.useStrongholds) {
-                this.strongholdGenerator.generateStructure(world, this.random, chunkPos);
+                this.strongholdGenerator.generateStructure(this.world, this.random, chunkPos);
             }
             
             if (this.settings.useTemples) {
-                this.scatteredFeatureGenerator.generateStructure(world, this.random, chunkPos);
+                this.scatteredFeatureGenerator.generateStructure(this.world, this.random, chunkPos);
             }
             
             if (this.settings.useMonuments) {
-                this.oceanMonumentGenerator.generateStructure(world, this.random, chunkPos);
+                this.oceanMonumentGenerator.generateStructure(this.world, this.random, chunkPos);
             }
             
             if (this.settings.useMansions) {
-                this.woodlandMansionGenerator.generateStructure(world, this.random, chunkPos);
+                this.woodlandMansionGenerator.generateStructure(this.world, this.random, chunkPos);
             }
         }
         
         // Reset seed for generation accuracy
-        this.random.setSeed(world.getSeed());
+        this.random.setSeed(this.world.getSeed());
         randomLong0 = (this.random.nextLong() / 2L) * 2L + 1L;
         randomLong1 = (this.random.nextLong() / 2L) * 2L + 1L;
-        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ world.getSeed());
+        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
         
         // Generate lakes, dungeons
         
         if (!hasVillageGenerated &&
             this.settings.useWaterLakes && 
-            TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
+            TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
         ) {
             if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
                 int x = startX + this.random.nextInt(16) + 8;
                 int y = this.random.nextInt(128);
                 int z = startZ + this.random.nextInt(16) + 8;
                 
-                (new WorldGenLakes(Blocks.WATER)).generate(world, this.random, mutablePos.setPos(x, y, z));
+                (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
             }
         }
         
@@ -264,7 +264,7 @@ public abstract class ChunkSource {
                 int z = startZ + this.random.nextInt(16) + 8;
                 
                 if (y < 64 || this.random.nextInt(10) == 0) {
-                    (new WorldGenLakes(Blocks.LAVA)).generate(world, this.random, mutablePos.setPos(x, y, z));
+                    (new WorldGenLakes(Blocks.LAVA)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
                 }
             }
         }
@@ -277,29 +277,29 @@ public abstract class ChunkSource {
                 int y = this.random.nextInt(128);
                 int z = startZ + this.random.nextInt(16) + 8;
                 
-                new WorldGenDungeons().generate(world, this.random, mutablePos.setPos(x, y, z));
+                new WorldGenDungeons().generate(this.world, this.random, mutablePos.setPos(x, y, z));
             }
         }
         
         // Generate biome decorations
-        biome.decorate(world, this.random, new BlockPos(startX, 0, startZ));
+        biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
         
         // Generate animals
-        if (TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
-            WorldEntitySpawner.performWorldGenSpawning(world, biome, startX + 8, startZ + 8, 16, 16, this.random);
+        if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+            WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
         }
         
         // Get biome provider to check for climate sampler
-        ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
+        ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
 
         // Generate snow / ice
-        if (TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
+        if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
             for(int dX = 0; dX < 16; dX++) {
                 for(int dZ = 0; dZ < 16; dZ++) {
                     // Adding 8 is important to prevent runaway chunk loading
                     int x = dX + startX + 8; 
                     int z = dZ + startZ + 8;
-                    int y = world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
+                    int y = this.world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
 
                     BlockPos blockPosDown = mutablePos.setPos(x, y, z).down();
                     
@@ -309,43 +309,44 @@ public abstract class ChunkSource {
                         double temp = climateSampler.sample(x, z).temp();
                         temp = temp - ((double)(y - 64) / 64D) * 0.3D;
                         
-                        if (BiomeBeta.canSetIce(world, blockPosDown, false, temp)) {
-                            world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
+                        if (BiomeBeta.canSetIce(this.world, blockPosDown, false, temp)) {
+                            this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
                         }
                         
-                        if (BiomeBeta.canSetSnow(world, mutablePos, temp)) {
-                            world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
+                        if (BiomeBeta.canSetSnow(this.world, mutablePos, temp)) {
+                            this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
                         }
                     } else {
-                        if (world.canBlockFreezeWater(blockPosDown)) {
-                            world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
+                        if (this.world.canBlockFreezeWater(blockPosDown)) {
+                            this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
                         }
                         
-                        if (world.canSnowAt(mutablePos, true)) {
-                            world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
+                        if (this.world.canSnowAt(mutablePos, true)) {
+                            this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
                         }
                     }
                 }
             }
         }
         
-        ForgeEventFactory.onChunkPopulate(false, this.chunkGenerator, world, this.random, chunkX, chunkZ, false);
+        ForgeEventFactory.onChunkPopulate(false, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
         
         BlockFalling.fallInstantly = false;
     }
     
-    public boolean generateStructures(World world, Chunk chunk, int chunkX, int chunkZ) {
+    public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
         boolean generated = false;
         
         if (this.settings.useMonuments && this.mapFeaturesEnabled && chunk.getInhabitedTime() < 3600L) {
-            generated |= this.oceanMonumentGenerator.generateStructure(world, this.random, new ChunkPos(chunkX, chunkZ));
+            generated |= this.oceanMonumentGenerator.generateStructure(this.world, this.random, new ChunkPos(chunkX, chunkZ));
         }
         
         return generated;
     }
     
-    public List<Biome.SpawnListEntry> getPossibleCreatures(World world, EnumCreatureType enumCreatureType, BlockPos blockPos) {
-        Biome biome = world.getBiome(blockPos);
+    public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType enumCreatureType, BlockPos blockPos) {
+        Biome biome = this.world.getBiome(blockPos);
+        
         if (this.mapFeaturesEnabled) {
             if (enumCreatureType == EnumCreatureType.MONSTER && this.scatteredFeatureGenerator.isSwampHut(blockPos)) {
                 return this.scatteredFeatureGenerator.getMonsters();
@@ -353,7 +354,7 @@ public abstract class ChunkSource {
             
             if (enumCreatureType == EnumCreatureType.MONSTER &&
                 this.settings.useMonuments &&
-                this.oceanMonumentGenerator.isPositionInStructure(world, blockPos)
+                this.oceanMonumentGenerator.isPositionInStructure(this.world, blockPos)
             ) {
                 return this.oceanMonumentGenerator.getMonsters();
             }
@@ -414,33 +415,35 @@ public abstract class ChunkSource {
             return this.mineshaftGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
         }
         
-        return ("Temple".equals(structureName) && this.scatteredFeatureGenerator != null) ? this.scatteredFeatureGenerator.getNearestStructurePos(world, blockPos, findUnexplored) : null;
+        return ("Temple".equals(structureName) && this.scatteredFeatureGenerator != null) ?
+            this.scatteredFeatureGenerator.getNearestStructurePos(world, blockPos, findUnexplored) :
+            null;
     }
     
-    public void recreateStructures(World world, Chunk chunk, int chunkX, int chunkZ) {
+    public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {
         if (this.mapFeaturesEnabled) {
             if (this.settings.useMineShafts) {
-                this.mineshaftGenerator.generate(world, chunkX, chunkZ, null);
+                this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, null);
             }
             
             if (this.settings.useVillages) {
-                this.villageGenerator.generate(world, chunkX, chunkZ, null);
+                this.villageGenerator.generate(this.world, chunkX, chunkZ, null);
             }
             
             if (this.settings.useStrongholds) {
-                this.strongholdGenerator.generate(world, chunkX, chunkZ, null);
+                this.strongholdGenerator.generate(this.world, chunkX, chunkZ, null);
             }
             
             if (this.settings.useTemples) {
-                this.scatteredFeatureGenerator.generate(world, chunkX, chunkZ, null);
+                this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, null);
             }
             
             if (this.settings.useMonuments) {
-                this.oceanMonumentGenerator.generate(world, chunkX, chunkZ, null);
+                this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, null);
             }
             
             if (this.settings.useMansions) {
-                this.woodlandMansionGenerator.generate(world, chunkX, chunkZ, null);
+                this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, null);
             }
         }
     }

@@ -40,6 +40,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
     private static final float MAX_HEIGHT = 255.0f;
+    private static final float MIN_BIOME_SCALE = 0.1f;
+    private static final float MAX_BIOME_SCALE = 8.0f;
     
     private final GuiCreateWorld parent;
     
@@ -234,7 +236,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(109, I18n.format("createWorld.customize.custom.stretchY"), false, this, 0.01f, 50.0f, this.settings.stretchY),
             new GuiPageButtonList.GuiSlideEntry(110, I18n.format("createWorld.customize.custom.upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
             new GuiPageButtonList.GuiSlideEntry(111, I18n.format("createWorld.customize.custom.lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
-            new GuiPageButtonList.GuiSlideEntry(112, I18n.format("createWorld.customize.custom." + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height)    
+            new GuiPageButtonList.GuiSlideEntry(113, I18n.format("createWorld.customize.custom." + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(114, I18n.format("createWorld.customize.custom." + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(115, I18n.format("createWorld.customize.custom." + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(112, I18n.format("createWorld.customize.custom." + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList3 = {
@@ -263,6 +268,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.EditBoxEntry(142, String.format("%5.3f", this.settings.upperLimitScale), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(411, I18n.format("createWorld.customize.custom.lowerLimitScale") + ":", false),
             new GuiPageButtonList.EditBoxEntry(143, String.format("%5.3f", this.settings.lowerLimitScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(413, I18n.format("createWorld.customize.custom." + NbtTags.TEMP_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(145, String.format("%2.3f", this.settings.tempNoiseScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(414, I18n.format("createWorld.customize.custom." + NbtTags.RAIN_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(146, String.format("%2.3f", this.settings.rainNoiseScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(415, I18n.format("createWorld.customize.custom." + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(147, String.format("%2.3f", this.settings.detailNoiseScale), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(412, I18n.format("createWorld.customize.custom." + NbtTags.HEIGHT) + ":", false),
             new GuiPageButtonList.EditBoxEntry(144, String.format("%d", this.settings.height), false, this.intFilter)
         };
@@ -381,6 +392,18 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 case 144:
                     this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
                     newEntryValue = this.settings.height;
+                    break;
+                case 145:
+                    this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.tempNoiseScale;
+                    break;
+                case 146:
+                    this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.rainNoiseScale;
+                    break;
+                case 147:
+                    this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.detailNoiseScale;
                     break;
                 case 135:
                     this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
@@ -518,6 +541,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case 112:
                 this.settings.height = (int)entryValue;
+                break;
+            case 113:
+                this.settings.tempNoiseScale = entryValue;
+                break;
+            case 114:
+                this.settings.rainNoiseScale = entryValue;
+                break;
+            case 115:
+                this.settings.detailNoiseScale = entryValue;
                 break;
             case 103:
                 this.settings.depthNoiseScaleX = entryValue;

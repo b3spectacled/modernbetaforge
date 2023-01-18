@@ -24,6 +24,10 @@ createWorld.customize.custom.useFossils=Fossils
 
 createWorld.customize.custom.height=Height
 
+createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
+createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
+createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
+
 # World Customization Presets
 
 createWorld.customize.custom.preset.beta=Classic Beta

@@ -8,7 +8,7 @@ public class BiomeBetaOcean extends BiomeBeta {
         super(new BiomeProperties("Beta Ocean")
             .setTemperature(0.5F)
             .setRainfall(0.5F)
-            //.setWaterColor(0)
+            .setWaterColor(0)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

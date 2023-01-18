@@ -136,7 +136,6 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return true;
     }
     
-    
     public BiomeSource getBiomeSource() {
         return this.biomeSource;
     }

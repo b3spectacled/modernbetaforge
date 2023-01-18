@@ -24,5 +24,4 @@ public class SingleBiomeSource extends BiomeSource {
     public Biome getBiome(int x, int y, int z) {
         return this.biome;
     }
-
 }

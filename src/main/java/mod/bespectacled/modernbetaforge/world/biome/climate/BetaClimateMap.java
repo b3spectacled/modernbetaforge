@@ -4,56 +4,40 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
-import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMapping.ClimateType;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
 public class BetaClimateMap {
-    private final Map<String, ClimateMapping> climateMap;
-    private final ClimateMapping[] climateTable;
+    private final Map<String, BetaClimateMapping> climateMap;
+    private final BetaClimateMapping[] climateTable;
     
     public BetaClimateMap() {
         this.climateMap = new LinkedHashMap<>();
-        this.climateTable = new ClimateMapping[4096];
+        this.climateTable = new BetaClimateMapping[4096];
         
-        this.populateMapBeta();
-        //this.populateMapBetaPlus();
+
+        this.populateBiomeMap();
         this.generateBiomeLookup();
     }
     
-    public void populateMapBeta() {
-        this.climateMap.put("ice_desert", new ClimateMapping(ModernBetaBiomeHolders.BETA_TUNDRA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
-        this.climateMap.put("tundra", new ClimateMapping(ModernBetaBiomeHolders.BETA_TUNDRA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
-        this.climateMap.put("savanna", new ClimateMapping(ModernBetaBiomeHolders.BETA_SAVANNA, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("desert", new ClimateMapping(ModernBetaBiomeHolders.BETA_DESERT, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_DESERT));
-        this.climateMap.put("swampland", new ClimateMapping(ModernBetaBiomeHolders.BETA_SWAMPLAND, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("taiga", new ClimateMapping(ModernBetaBiomeHolders.BETA_TAIGA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
-        this.climateMap.put("shrubland", new ClimateMapping(ModernBetaBiomeHolders.BETA_SHRUBLAND, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("forest", new ClimateMapping(ModernBetaBiomeHolders.BETA_FOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("plains", new ClimateMapping(ModernBetaBiomeHolders.BETA_PLAINS, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("seasonal_forest", new ClimateMapping(ModernBetaBiomeHolders.BETA_SEASONAL_FOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
-        this.climateMap.put("rainforest", new ClimateMapping(ModernBetaBiomeHolders.BETA_RAINFOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+    public void populateBiomeMap() {
+        this.climateMap.put("ice_desert", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_TUNDRA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
+        this.climateMap.put("tundra", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_TUNDRA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
+        this.climateMap.put("savanna", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_SAVANNA, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("desert", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_DESERT, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_DESERT));
+        this.climateMap.put("swampland", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_SWAMPLAND, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("taiga", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_TAIGA, ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_SNOWY_BEACH));
+        this.climateMap.put("shrubland", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_SHRUBLAND, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("forest", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_FOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("plains", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_PLAINS, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("seasonal_forest", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_SEASONAL_FOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
+        this.climateMap.put("rainforest", new BetaClimateMapping(ModernBetaBiomeHolders.BETA_RAINFOREST, ModernBetaBiomeHolders.BETA_OCEAN, ModernBetaBiomeHolders.BETA_BEACH));
     }
     
-    public void populateMapBetaPlus() {
-        this.climateMap.put("ice_desert", new ClimateMapping(Biomes.ICE_PLAINS, Biomes.FROZEN_OCEAN, Biomes.COLD_BEACH));
-        this.climateMap.put("tundra", new ClimateMapping(Biomes.ICE_PLAINS, Biomes.FROZEN_OCEAN, Biomes.COLD_BEACH));
-        this.climateMap.put("savanna", new ClimateMapping(Biomes.MESA, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("desert", new ClimateMapping(Biomes.DESERT, Biomes.OCEAN, Biomes.DESERT));
-        this.climateMap.put("swampland", new ClimateMapping(Biomes.SWAMPLAND, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("taiga", new ClimateMapping(Biomes.COLD_TAIGA, Biomes.FROZEN_OCEAN, Biomes.COLD_BEACH));
-        this.climateMap.put("shrubland", new ClimateMapping(Biomes.PLAINS, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("forest", new ClimateMapping(Biomes.FOREST, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("plains", new ClimateMapping(Biomes.PLAINS, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("seasonal_forest", new ClimateMapping(Biomes.ROOFED_FOREST, Biomes.OCEAN, Biomes.BEACH));
-        this.climateMap.put("rainforest", new ClimateMapping(Biomes.JUNGLE, Biomes.OCEAN, Biomes.BEACH));
-    }
-    
-    public Map<String, ClimateMapping> getMap() {
+    public Map<String, BetaClimateMapping> getMap() {
         return new LinkedHashMap<>(this.climateMap);
     }
     
-    public Biome getBiome(double temp, double rain, ClimateType type) {
+    public Biome getBiome(double temp, double rain, BetaClimateType type) {
         int t = (int) (temp * 63D);
         int r = (int) (rain * 63D);
 
@@ -68,7 +52,7 @@ public class BetaClimateMap {
         }
     }
     
-    private ClimateMapping getBiome(float temp, float rain) {
+    private BetaClimateMapping getBiome(float temp, float rain) {
         rain *= temp;
 
         if (temp < 0.1F) {
@@ -110,6 +94,27 @@ public class BetaClimateMap {
             return this.climateMap.get("seasonal_forest");
         } else {
             return this.climateMap.get("rainforest");
+        }
+    }
+    
+    public static class BetaClimateMapping {
+        private final Biome biome;
+        private final Biome oceanBiome;
+        private final Biome beachBiome;
+        
+        public BetaClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
+            this.biome = biome;
+            this.oceanBiome = oceanBiome;
+            this.beachBiome = beachBiome;
+        }
+        
+        public Biome biomeByClimateType(BetaClimateType type) {
+            switch(type) {
+                case LAND: return this.biome;
+                case OCEAN: return this.oceanBiome;
+                case BEACH: return this.beachBiome;
+                default: return this.biome;
+            }
         }
     }
 }

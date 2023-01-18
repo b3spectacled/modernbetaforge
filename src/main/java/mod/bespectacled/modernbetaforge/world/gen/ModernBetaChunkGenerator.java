@@ -14,29 +14,18 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
-    
-    private final World world;
-    private final long seed;  
-    private final boolean mapFeaturesEnabled;
-    
-    private final ModernBetaChunkGeneratorSettings settings;
-    
     private final ChunkSource chunkSource;
     
     public ModernBetaChunkGenerator(World world, long seed, boolean mapFeaturesEnabled, String generatorOptions) {
         super(world, seed, mapFeaturesEnabled, generatorOptions);
         
-        this.world = world;
-        this.seed = seed;
-        this.mapFeaturesEnabled = mapFeaturesEnabled;
-        
-        this.settings = generatorOptions != null ?
+        ModernBetaChunkGeneratorSettings settings = generatorOptions != null ?
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
         this.chunkSource = ChunkSourceType
-            .fromId(this.settings.chunkSource)
-            .create(this.world, this, this.settings, this.seed, this.mapFeaturesEnabled);
+            .fromId(settings.chunkSource)
+            .create(world, this, settings, seed, mapFeaturesEnabled);
     }
     
     /*
@@ -50,12 +39,12 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
     @Override
     public Chunk generateChunk(int chunkX, int chunkZ) {
-        return this.chunkSource.provideChunk(this.world, chunkX, chunkZ);
+        return this.chunkSource.provideChunk(chunkX, chunkZ);
     }
 
     @Override
     public void populate(int chunkX, int chunkZ) {
-        this.chunkSource.populateChunk(this.world, chunkX, chunkZ);
+        this.chunkSource.populateChunk(chunkX, chunkZ);
     }
     
     /*
@@ -68,12 +57,12 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
     @Override
     public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
-        return this.chunkSource.generateStructures(this.world, chunk, chunkX, chunkZ);
+        return this.chunkSource.generateStructures(chunk, chunkX, chunkZ);
     }
 
     @Override
     public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
-        return this.chunkSource.getPossibleCreatures(this.world, creatureType, pos);
+        return this.chunkSource.getPossibleCreatures(creatureType, pos);
     }
 
     @Override
@@ -83,7 +72,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
     @Override
     public void recreateStructures(Chunk chunk, int x, int z) {
-        this.chunkSource.recreateStructures(this.world, chunk, x, z);
+        this.chunkSource.recreateStructures(chunk, x, z);
     }
 
     @Override
