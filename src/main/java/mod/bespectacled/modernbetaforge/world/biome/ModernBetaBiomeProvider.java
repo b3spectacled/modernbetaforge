@@ -61,17 +61,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                 // Initial injection should prevent certain structures, i.e. Temples,
                 // from generating over open ocean.
                 
-                Biome biome = this.chunkSource != null ?
-                    this.chunkSource.getInjectedBiomeFast(x, z) :
-                    this.biomeSource.getBiome(x, z);
-                
-                // Biome may be null if sampling injected biome,
-                // in this case null means that the default biome should be used.
-                if (biome == null) {
-                    biome = this.biomeSource.getBiome(x, z);
-                }
-                
-                biomes[localX + localZ * 16] = biome;
+                biomes[localX + localZ * 16] = this.getBiome(x, z);
             }
         }
         
@@ -114,17 +104,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     @Override
     public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed) {
         if (radius == 0) {
-            Biome biome = this.chunkSource != null ?
-                this.chunkSource.getInjectedBiomeFast(x, z) :
-                this.biomeSource.getBiome(x, z);
-            
-            // Biome may be null if sampling injected biome,
-            // in this case null means that the default biome should be used.
-            if (biome == null) {
-                biome = this.biomeSource.getBiome(x, z);
-            }
-            
-            return allowed.contains(biome);
+            return allowed.contains(this.getBiome(x, z));
         } else {
             double r2 = radius * radius;
             
@@ -133,15 +113,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                     double distance = MathUtil.distance(x, z, dX, dZ);
                     
                     if (distance < r2) {
-                        Biome biome = this.chunkSource != null ?
-                            this.chunkSource.getInjectedBiomeFast(dX, dZ) :
-                            this.biomeSource.getBiome(dX, dZ);
-                        
-                        // Biome may be null if sampling injected biome,
-                        // in this case null means that the default biome should be used.
-                        if (biome == null) {
-                            biome = this.biomeSource.getBiome(dX, dZ);
-                        }
+                        Biome biome = this.getBiome(dX, dZ);
                         
                         if (!allowed.contains(biome))
                             return false;
@@ -159,5 +131,19 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     
     public void setChunkSource(ChunkSource chunkSource) {
         this.chunkSource = chunkSource;
+    }
+    
+    private Biome getBiome(int x, int z) {
+        Biome biome = this.chunkSource != null ?
+            this.chunkSource.getInjectedBiomeFast(x, z) :
+            this.biomeSource.getBiome(x, z);
+        
+        // Biome may be null if sampling injected biome,
+        // in this case null means that the default biome should be used.
+        if (biome == null) {
+            biome = this.biomeSource.getBiome(x, z);
+        }
+        
+        return biome;
     }
 }
