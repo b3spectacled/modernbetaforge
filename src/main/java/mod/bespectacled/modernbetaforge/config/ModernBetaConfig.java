@@ -20,11 +20,6 @@ public class ModernBetaConfig {
     
     public static class CategoryGenerator {
         @Comment({
-            "Default Modern Beta world generation options"
-        })
-        public String defaultGeneratorOptions = "";
-        
-        @Comment({
             "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
         })
         @RequiresMcRestart

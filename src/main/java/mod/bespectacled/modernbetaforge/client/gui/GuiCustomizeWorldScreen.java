@@ -12,7 +12,6 @@ import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
 import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSourceType;
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.gui.Gui;
@@ -96,7 +95,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        this.defaultSettings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.generatorOptions.defaultGeneratorOptions);
+        this.defaultSettings = new ModernBetaChunkGeneratorSettings.Factory();
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
         
@@ -764,7 +763,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         if (string != null && !string.isEmpty()) {
             this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(string);
         } else {
-            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(ModernBetaConfig.generatorOptions.defaultGeneratorOptions);
+            this.settings = new ModernBetaChunkGeneratorSettings.Factory();
         }
     }
 
