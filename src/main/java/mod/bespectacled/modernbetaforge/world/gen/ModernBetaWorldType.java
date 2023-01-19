@@ -28,15 +28,15 @@ public class ModernBetaWorldType extends WorldType {
     public boolean isCustomizable() {
         return true;
     }
-
-    @Override
-    public boolean hasInfoNotice() {
-        return true;
-    }
     
     @Override
     public float getCloudHeight() {
         return (float)ModernBetaConfig.visualOptions.cloudHeight;
+    }
+    
+    @Override
+    public double getHorizon(World world) {
+        return 0.0;
     }
     
     @Override
@@ -52,6 +52,12 @@ public class ModernBetaWorldType extends WorldType {
     @Override
     public int getSpawnFuzz(WorldServer world, MinecraftServer server) {
         return ModernBetaConfig.spawnOptions.useSpawnFuzz ? Math.max(0, server.getSpawnRadius(world)) : 0;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean hasInfoNotice() {
+        return true;
     }
     
     @SideOnly(Side.CLIENT)
