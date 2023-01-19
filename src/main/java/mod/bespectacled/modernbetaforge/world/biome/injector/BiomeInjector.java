@@ -55,14 +55,14 @@ public class BiomeInjector {
         
         this.rules = builder.build();
         this.biomeCache = new ChunkCache<>(
-            "injected_biomes",
+            "injected_biomes_fast",
             512,
             true,
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this::sample)
+            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this::getInjectedBiome)
         );
     }
     
-    public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void getInjectedBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
 
@@ -73,25 +73,24 @@ public class BiomeInjector {
                 
                 int topHeight = this.chunkSource.getHeight(x, z, Type.SURFACE);
                 IBlockState topState = chunkPrimer.getBlockState(localX, topHeight, localZ);
-                
                 BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
-                Biome newBiome = this.sample(context, x, z);
                 
-                if (newBiome != null) {
-                    biomes[localX + localZ * 16] = newBiome;
+                Biome biome = this.getInjectedBiome(context, x, z);
+                if (biome != null) {
+                    biomes[localX + localZ * 16] = biome;
                 }
             }
         }
     }
     
-    public Biome sample(int x, int z) {
+    public Biome getInjectedBiomeFast(int x, int z) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
         return this.biomeCache.get(chunkX, chunkZ).sampleBiome(x, z);
     }
     
-    private Biome sample(BiomeInjectionContext context, int x, int z) {
+    private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z) {
         return this.rules.test(context, x, z);
     }
 

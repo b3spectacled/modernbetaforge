@@ -141,7 +141,7 @@ public abstract class ChunkSource {
         
         // Post-process biome map
         if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(this.biomes, chunkPrimer, chunkX, chunkZ);
+            this.biomeInjector.getInjectedBiomes(this.biomes, chunkPrimer, chunkX, chunkZ);
         }
         
         // Carve terrain
@@ -459,9 +459,9 @@ public abstract class ChunkSource {
         return this.settings.seaLevel;
     }
     
-    public Biome getInjectedBiomeAtBlock(int x, int z) {
+    public Biome getInjectedBiomeFast(int x, int z) {
         if (this.biomeInjector != null) {
-            return this.biomeInjector.sample(x, z);
+            return this.biomeInjector.getInjectedBiomeFast(x, z);
         }
         
         return null;

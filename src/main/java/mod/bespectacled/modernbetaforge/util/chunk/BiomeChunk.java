@@ -20,7 +20,6 @@ public class BiomeChunk {
             for (int z = startZ; z < startZ + 16; ++z) {
                 int topHeight = chunkSource.getHeight(x, z, Type.SURFACE);
                 IBlockState topState = topHeight < chunkSource.getSeaLevel() ? BlockStates.WATER : BlockStates.AIR;
-                
                 BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
                 
                 this.biomes[ndx++] = chunkFunc.apply(context, x, z);
