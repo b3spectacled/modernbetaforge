@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.util.chunk;
 import java.util.function.BiFunction;
 
 public class SkyClimateChunk {
-    private final double temp[] = new double[256];
+    private final double temps[] = new double[256];
     
     public SkyClimateChunk(int chunkX, int chunkZ, BiFunction<Integer, Integer, Double> chunkFunc) {
         int startX = chunkX << 4;
@@ -12,7 +12,7 @@ public class SkyClimateChunk {
         int ndx = 0;
         for (int x = startX; x < startX + 16; ++x) {
             for (int z = startZ; z < startZ + 16; ++z) {    
-                this.temp[ndx] = chunkFunc.apply(x, z);
+                this.temps[ndx] = chunkFunc.apply(x, z);
                 
                 ndx++;
             }
@@ -20,6 +20,6 @@ public class SkyClimateChunk {
     }
     
     public double sampleTemp(int x, int z) {
-        return temp[(z & 0xF) + (x & 0xF) * 16];
+        return this.temps[(z & 0xF) + (x & 0xF) * 16];
     }
 }

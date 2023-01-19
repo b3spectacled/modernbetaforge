@@ -98,7 +98,7 @@ public abstract class ChunkSource {
         // To avoid mod incompatibilities, do not replace with modded structures
         // TODO: Figure out a better way to handle this, maybe event handlers.
         this.scatteredFeatureGenerator = new ModernBetaMapGenScatteredFeature();
-        this.oceanMonumentGenerator = new ModernBetaStructureOceanMonument(this);
+        this.oceanMonumentGenerator = new ModernBetaStructureOceanMonument();
         this.woodlandMansionGenerator = new ModernBetaWoodlandMansion(chunkGenerator);
         
         this.biomes = new Biome[256];
@@ -109,6 +109,13 @@ public abstract class ChunkSource {
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
+        
+        // Pass chunk source to biome provider so it can be used to sample injected biomes
+        if (this.world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
+            ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
+            
+            biomeProvider.setChunkSource(this);
+        }
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);

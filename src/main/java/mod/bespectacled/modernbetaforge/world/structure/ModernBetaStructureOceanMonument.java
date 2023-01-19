@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSource;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.init.Biomes;
@@ -16,14 +15,12 @@ public class ModernBetaStructureOceanMonument extends StructureOceanMonument {
     public static final List<Biome> WATER_BIOMES;
     public static final List<Biome> SPAWN_BIOMES;
     
-    private final ChunkSource chunkSource;
     private final int spacing;
     private final int separation;
     
-    public ModernBetaStructureOceanMonument(ChunkSource chunkSource) {
+    public ModernBetaStructureOceanMonument() {
         super();
         
-        this.chunkSource = chunkSource;
         this.spacing = 32;
         this.separation = 5;
     }
@@ -61,11 +58,11 @@ public class ModernBetaStructureOceanMonument extends StructureOceanMonument {
             ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
             
             if (chunkX == structureX && chunkZ == structureZ) {
-                if (!modernBetaBiomeProvider.areInjectedBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 16, SPAWN_BIOMES, this.chunkSource)) {
+                if (!modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 16, SPAWN_BIOMES)) {
                     return false;
                 }
                 
-                boolean validBiome = modernBetaBiomeProvider.areInjectedBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 29, WATER_BIOMES, this.chunkSource);
+                boolean validBiome = modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 29, WATER_BIOMES);
                 
                 if (validBiome) {
                     return true;

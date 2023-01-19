@@ -6,7 +6,8 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSource;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.Block;
@@ -23,6 +24,7 @@ public class BiomeInjector {
     private final BiomeSource biomeSource;
     
     private final BiomeInjectionRules rules;
+    private final ChunkCache<BiomeChunk> biomeCache;
     
     public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource) {
         this.chunkSource = chunkSource;
@@ -52,6 +54,12 @@ public class BiomeInjector {
         }
         
         this.rules = builder.build();
+        this.biomeCache = new ChunkCache<>(
+            "injected_biomes",
+            512,
+            true,
+            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this::sample)
+        );
     }
     
     public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
@@ -77,12 +85,10 @@ public class BiomeInjector {
     }
     
     public Biome sample(int x, int z) {
-        int topHeight = this.chunkSource.getHeight(x, z, Type.SURFACE);
-        IBlockState topState = topHeight < this.chunkSource.getSeaLevel() ? BlockStates.WATER : BlockStates.AIR;
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
         
-        BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
-        
-        return this.sample(context, x, z);
+        return this.biomeCache.get(chunkX, chunkZ).sampleBiome(x, z);
     }
     
     private Biome sample(BiomeInjectionContext context, int x, int z) {
