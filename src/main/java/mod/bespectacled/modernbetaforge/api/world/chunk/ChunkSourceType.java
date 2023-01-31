@@ -1,12 +1,12 @@
-package mod.bespectacled.modernbetaforge.api.world.gen;
+package mod.bespectacled.modernbetaforge.api.world.chunk;
 
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.gen.source.AlphaChunkSource;
-import mod.bespectacled.modernbetaforge.world.gen.source.BetaChunkSource;
-import mod.bespectacled.modernbetaforge.world.gen.source.Infdev415ChunkSource;
-import mod.bespectacled.modernbetaforge.world.gen.source.SkylandsChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import net.minecraft.world.World;
 
 public enum ChunkSourceType {

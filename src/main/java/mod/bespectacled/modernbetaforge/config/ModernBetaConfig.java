@@ -43,7 +43,7 @@ public class ModernBetaConfig {
             "Render old sugar cane colors"
         })
         @RequiresWorldRestart
-        public boolean useOldSugarCaneColor = false;
+        public boolean useOldSugarCaneColor = true;
         
         @Comment({
             "Modern Beta world cloud height",

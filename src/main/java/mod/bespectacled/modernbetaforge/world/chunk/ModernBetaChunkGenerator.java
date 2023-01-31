@@ -1,9 +1,9 @@
-package mod.bespectacled.modernbetaforge.world.gen;
+package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.util.List;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSourceType;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

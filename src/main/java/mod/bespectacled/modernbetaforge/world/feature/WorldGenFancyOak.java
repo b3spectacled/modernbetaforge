@@ -19,11 +19,9 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 public class WorldGenFancyOak extends WorldGenAbstractTree {
     private static final Set<Block> DIRT_REPLACEABLE = Stream.of(
         BlockStates.DIRT.getBlock(),
-        BlockStates.GRASS_BLOCK.getBlock(), 
-        BlockStates.PODZOL.getBlock()
+        BlockStates.GRASS_BLOCK.getBlock()
     ).collect(Collectors.toCollection(HashSet::new));
     
-    private static final IBlockState OAK_LEAVES = Blocks.LEAVES.getDefaultState();
     private static final byte[] AXIS_LOOKUP = new byte[] {2, 0, 0, 1, 2, 1};
     private static final int FOLIAGE_BLOB_HEIGHT = 5;
     private static final int TREE_MAX_HEIGHT = 12;
@@ -303,7 +301,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             // Note: VERY IMPORTANT to attach CHECK_DECAY flag,
             // tree leaves will start massively decaying if not present.
             // Also tested vanilla big oak trees exhibiting the same behavior.
-            this.placeLayer(world, x, curY, z, radius, (byte) 1, OAK_LEAVES.withProperty(BlockLeaves.CHECK_DECAY, false));
+            this.placeLayer(world, x, curY, z, radius, (byte) 1, BlockStates.OAK_LEAVES.withProperty(BlockLeaves.CHECK_DECAY, false));
             
             curY++;
         }

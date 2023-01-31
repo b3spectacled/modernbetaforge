@@ -6,7 +6,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.util.math.BlockPos;

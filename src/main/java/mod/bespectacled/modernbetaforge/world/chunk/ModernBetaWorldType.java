@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.gen;
+package mod.bespectacled.modernbetaforge.world.chunk;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizeWorldScreen;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;

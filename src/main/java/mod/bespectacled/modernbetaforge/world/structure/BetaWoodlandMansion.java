@@ -10,10 +10,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 
-public class ModernBetaWoodlandMansion extends WoodlandMansion {
+public class BetaWoodlandMansion extends WoodlandMansion {
     public static final List<Biome> ALLOWED_BIOMES;
 
-    public ModernBetaWoodlandMansion(ChunkGeneratorOverworld chunkGeneratorOverworld) {
+    public BetaWoodlandMansion(ChunkGeneratorOverworld chunkGeneratorOverworld) {
         super(chunkGeneratorOverworld);
     }
     

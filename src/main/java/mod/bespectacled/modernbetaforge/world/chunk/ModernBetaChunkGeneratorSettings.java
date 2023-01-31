@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.gen;
+package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.lang.reflect.Type;
 
@@ -13,7 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSourceType;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;

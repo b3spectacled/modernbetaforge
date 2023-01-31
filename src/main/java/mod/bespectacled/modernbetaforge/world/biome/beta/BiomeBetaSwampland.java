@@ -5,7 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;

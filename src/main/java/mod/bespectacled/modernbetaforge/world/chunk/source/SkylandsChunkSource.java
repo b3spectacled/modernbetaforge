@@ -1,13 +1,13 @@
-package mod.bespectacled.modernbetaforge.world.gen.source;
+package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;

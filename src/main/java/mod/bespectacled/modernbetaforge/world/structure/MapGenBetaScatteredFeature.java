@@ -13,12 +13,12 @@ import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureStart;
 
-public class ModernBetaMapGenScatteredFeature extends MapGenScatteredFeature {
+public class MapGenBetaScatteredFeature extends MapGenScatteredFeature {
     private static final List<Biome> ALLOWED_BIOMES;
     
     private final int maxDistanceBetweenScatteredFeatures;
 
-    public ModernBetaMapGenScatteredFeature() {
+    public MapGenBetaScatteredFeature() {
         this.maxDistanceBetweenScatteredFeatures = 32;
     }
     

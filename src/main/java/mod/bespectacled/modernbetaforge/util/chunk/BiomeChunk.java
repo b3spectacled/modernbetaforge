@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.util.chunk;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.function.TriFunction;

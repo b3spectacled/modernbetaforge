@@ -2,13 +2,13 @@ package mod.bespectacled.modernbetaforge.world.biome.alpha;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
-import net.minecraft.block.BlockStone;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -44,19 +44,19 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
         
         // Ore generators
         WorldGenerator worldGenClay = new WorldGenClay(settings.claySize);
-        WorldGenerator worldGenDirt = new WorldGenMinable(Blocks.DIRT.getDefaultState(), settings.dirtSize);
-        WorldGenerator worldGenGravel = new WorldGenMinable(Blocks.GRAVEL.getDefaultState(), settings.gravelSize);
-        WorldGenerator worldGenCoal = new WorldGenMinable(Blocks.COAL_ORE.getDefaultState(), settings.coalSize);
-        WorldGenerator worldGenIron = new WorldGenMinable(Blocks.IRON_ORE.getDefaultState(), settings.ironSize);
-        WorldGenerator worldGenGold = new WorldGenMinable(Blocks.GOLD_ORE.getDefaultState(), settings.goldSize);
-        WorldGenerator worldGenRedstone = new WorldGenMinable(Blocks.REDSTONE_ORE.getDefaultState(), settings.redstoneSize);
-        WorldGenerator worldGenDiamond = new WorldGenMinable(Blocks.DIAMOND_ORE.getDefaultState(), settings.diamondSize);
-        WorldGenerator worldGenLapis = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), settings.lapisSize);
+        WorldGenerator worldGenDirt = new WorldGenMinable(BlockStates.DIRT, settings.dirtSize);
+        WorldGenerator worldGenGravel = new WorldGenMinable(BlockStates.GRAVEL, settings.gravelSize);
+        WorldGenerator worldGenCoal = new WorldGenMinable(BlockStates.COAL_ORE, settings.coalSize);
+        WorldGenerator worldGenIron = new WorldGenMinable(BlockStates.IRON_ORE, settings.ironSize);
+        WorldGenerator worldGenGold = new WorldGenMinable(BlockStates.GOLD_ORE, settings.goldSize);
+        WorldGenerator worldGenRedstone = new WorldGenMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize);
+        WorldGenerator worldGenDiamond = new WorldGenMinable(BlockStates.DIAMOND_ORE, settings.diamondSize);
+        WorldGenerator worldGenLapis = new WorldGenMinable(BlockStates.LAPIS_ORE, settings.lapisSize);
         
         // New mineable generators
-        WorldGenerator worldGenGranite = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE), settings.graniteSize);
-        WorldGenerator worldGenDiorite = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE), settings.dioriteSize);
-        WorldGenerator worldGenAndesite = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE), settings.andesiteSize);
+        WorldGenerator worldGenGranite = new WorldGenMinable(BlockStates.GRANITE, settings.graniteSize);
+        WorldGenerator worldGenDiorite = new WorldGenMinable(BlockStates.DIORITE, settings.dioriteSize);
+        WorldGenerator worldGenAndesite = new WorldGenMinable(BlockStates.ANDESITE, settings.andesiteSize);
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(world, random, chunkPos));
         

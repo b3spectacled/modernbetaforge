@@ -8,17 +8,16 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 
-public class ModernBetaStructureOceanMonument extends StructureOceanMonument {
+public class BetaStructureOceanMonument extends StructureOceanMonument {
     public static final List<Biome> WATER_BIOMES;
     public static final List<Biome> SPAWN_BIOMES;
     
     private final int spacing;
     private final int separation;
     
-    public ModernBetaStructureOceanMonument() {
+    public BetaStructureOceanMonument() {
         super();
         
         this.spacing = 32;
@@ -52,21 +51,17 @@ public class ModernBetaStructureOceanMonument extends StructureOceanMonument {
         chunkX = originalChunkX;
         chunkZ = originalChunkZ;
         
-        BiomeProvider biomeProvider = this.world.getBiomeProvider();
+        ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
         
-        if (biomeProvider instanceof ModernBetaBiomeProvider) {
-            ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
+        if (chunkX == structureX && chunkZ == structureZ) {
+            if (!modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 16, SPAWN_BIOMES)) {
+                return false;
+            }
             
-            if (chunkX == structureX && chunkZ == structureZ) {
-                if (!modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 16, SPAWN_BIOMES)) {
-                    return false;
-                }
-                
-                boolean validBiome = modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 29, WATER_BIOMES);
-                
-                if (validBiome) {
-                    return true;
-                }
+            boolean validBiome = modernBetaBiomeProvider.areBiomesViable(chunkX * 16 + 8, chunkZ * 16 + 8, 29, WATER_BIOMES);
+            
+            if (validBiome) {
+                return true;
             }
         }
         

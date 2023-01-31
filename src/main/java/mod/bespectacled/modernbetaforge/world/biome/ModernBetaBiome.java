@@ -2,11 +2,11 @@ package mod.bespectacled.modernbetaforge.world.biome;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.gen.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenFancyOak;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkProviderServer;

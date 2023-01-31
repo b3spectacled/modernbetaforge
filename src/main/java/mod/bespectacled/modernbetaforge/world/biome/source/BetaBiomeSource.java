@@ -11,7 +11,7 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateType;
 import mod.bespectacled.modernbetaforge.world.biome.climate.BetaSkyClimateSampler;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 

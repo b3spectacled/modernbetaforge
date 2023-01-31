@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.gen.noise;
+package mod.bespectacled.modernbetaforge.api.world.chunk.noise;
 
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 

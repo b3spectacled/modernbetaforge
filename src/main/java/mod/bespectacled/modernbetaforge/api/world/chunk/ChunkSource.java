@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.gen;
+package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,11 +16,11 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.structure.ModernBetaMapGenScatteredFeature;
-import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructureOceanMonument;
-import mod.bespectacled.modernbetaforge.world.structure.ModernBetaWoodlandMansion;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.structure.MapGenBetaScatteredFeature;
+import mod.bespectacled.modernbetaforge.world.structure.BetaStructureOceanMonument;
+import mod.bespectacled.modernbetaforge.world.structure.BetaWoodlandMansion;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
@@ -54,6 +54,7 @@ public abstract class ChunkSource {
     
     protected final ModernBetaChunkGenerator chunkGenerator;
     protected final ModernBetaChunkGeneratorSettings settings;
+    protected final ModernBetaBiomeProvider biomeProvider;
     
     protected final World world;
     protected final long seed;
@@ -67,9 +68,9 @@ public abstract class ChunkSource {
     private final MapGenVillage villageGenerator;
     private final MapGenMineshaft mineshaftGenerator;
     
-    private final ModernBetaMapGenScatteredFeature scatteredFeatureGenerator;
-    private final ModernBetaStructureOceanMonument oceanMonumentGenerator;
-    private final ModernBetaWoodlandMansion woodlandMansionGenerator;
+    private final MapGenBetaScatteredFeature scatteredFeatureGenerator;
+    private final BetaStructureOceanMonument oceanMonumentGenerator;
+    private final BetaWoodlandMansion woodlandMansionGenerator;
     
     private final Biome[] biomes;
     private final BiomeInjector biomeInjector;
@@ -78,6 +79,7 @@ public abstract class ChunkSource {
     public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, long seed, boolean mapFeaturesEnabled) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
+        this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         
         this.world = world;
         this.seed = seed;
@@ -97,25 +99,19 @@ public abstract class ChunkSource {
         
         // To avoid mod incompatibilities, do not replace with modded structures
         // TODO: Figure out a better way to handle this, maybe event handlers.
-        this.scatteredFeatureGenerator = new ModernBetaMapGenScatteredFeature();
-        this.oceanMonumentGenerator = new ModernBetaStructureOceanMonument();
-        this.woodlandMansionGenerator = new ModernBetaWoodlandMansion(chunkGenerator);
+        this.scatteredFeatureGenerator = new MapGenBetaScatteredFeature();
+        this.oceanMonumentGenerator = new BetaStructureOceanMonument();
+        this.woodlandMansionGenerator = new BetaWoodlandMansion(chunkGenerator);
         
         this.biomes = new Biome[256];
-        this.biomeInjector = world.getBiomeProvider() instanceof ModernBetaBiomeProvider ? 
-            new BiomeInjector(this, ((ModernBetaBiomeProvider)world.getBiomeProvider()).getBiomeSource()) :
-            null;
         this.surfaceOctaveNoise = new SimplexOctaveNoise(new Random(seed), 4);
+
+        // Init biome injector
+        this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource());
+        this.biomeProvider.setChunkSource(this);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
-        
-        // Pass chunk source to biome provider so it can be used to sample injected biomes
-        if (this.world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
-            ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
-            
-            biomeProvider.setChunkSource(this);
-        }
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);

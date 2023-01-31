@@ -1,23 +1,24 @@
-package mod.bespectacled.modernbetaforge.api.world.gen;
+package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import mod.bespectacled.modernbetaforge.api.world.gen.noise.NoiseSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaNoiseSettings.SlideSettings;
-import mod.bespectacled.modernbetaforge.world.gen.blocksource.BlockSource;
-import mod.bespectacled.modernbetaforge.world.gen.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSource;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -175,12 +176,29 @@ public abstract class NoiseChunkSource extends ChunkSource {
         return density;
     }
     
-    protected void setForestOctaveNoise(PerlinOctaveNoise forestNoiseOctaves) {
-        this.forestOctaveNoise = Optional.ofNullable(forestNoiseOctaves);
+    protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
+        this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
     }
     
     protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
+    }
+    
+    protected double getIslandOffset(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+        double noiseX = startNoiseX + localNoiseX;
+        double noiseZ = startNoiseZ + localNoiseZ;
+        
+        double absNoiseX = Math.abs(noiseX);
+        double absNoiseZ = Math.abs(noiseZ);
+        
+        double islandRadius = 25.0 * this.noiseSizeX; // Map radius 27 chunks
+        double islandOffset = 0.0;
+        
+        if (absNoiseX > islandRadius || absNoiseZ > islandRadius) {
+            islandOffset = islandRadius - Math.max(absNoiseZ, absNoiseX);
+        }
+        
+        return MathHelper.clamp(islandOffset * 25.0, -200.0, 0.0);
     }
     
     /**

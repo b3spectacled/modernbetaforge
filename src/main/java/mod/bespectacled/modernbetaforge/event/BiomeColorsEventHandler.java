@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.event;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
-import mod.bespectacled.modernbetaforge.world.gen.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaWorldType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
