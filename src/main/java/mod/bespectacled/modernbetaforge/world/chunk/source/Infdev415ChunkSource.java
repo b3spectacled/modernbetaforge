@@ -165,6 +165,8 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
         
+        double islandOffset = this.getIslandOffset(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, 75.0);
+        
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
             
@@ -186,6 +188,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 ) / lowerLimitScale;
                 
                 density -= densityOffset;
+                density += islandOffset;
                 
                 density = this.clampNoise(density);
                 
@@ -197,6 +200,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 ) / upperLimitScale;
 
                 density -= densityOffset;
+                density += islandOffset;
                 
                 density = this.clampNoise(density);
                 
@@ -215,6 +219,9 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 
                 minLimitVal -= densityOffset;
                 maxLimitVal -= densityOffset;
+                
+                minLimitVal += islandOffset;
+                maxLimitVal += islandOffset;
                 
                 minLimitVal = this.clampNoise(minLimitVal);
                 maxLimitVal = this.clampNoise(maxLimitVal);

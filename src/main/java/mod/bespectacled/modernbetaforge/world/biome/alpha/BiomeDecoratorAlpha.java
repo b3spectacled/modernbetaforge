@@ -4,7 +4,6 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
@@ -31,7 +30,6 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
-        ModernBetaBiome modernBetaBiome = (ModernBetaBiome)biome;
         
         int startX = startPos.getX();
         int startZ = startPos.getZ();
@@ -64,7 +62,9 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
          * Lake and dungeon generation handled in chunk source populate method.
          */
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY)) {
+        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, random, startPos));
+        
+        if (TerrainGen.generateOre(world, random, worldGenClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
             for (int i = 0; i < settings.clayCount; i++) {
                 int x = startX + random.nextInt(16);
                 int y = this.getOreHeight(random, settings.clayMinHeight, settings.clayMaxHeight);
@@ -73,8 +73,6 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
                 worldGenClay.generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
-
-        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, random, startPos));
         
         if (TerrainGen.generateOre(world, random, worldGenDirt, startPos, OreGenEvent.GenerateMinable.EventType.DIRT)) {
             for (int i = 0; i < settings.dirtCount; i++) {
@@ -85,6 +83,7 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
                 worldGenDirt.generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
+
 
         if (TerrainGen.generateOre(world, random, worldGenGravel, startPos, OreGenEvent.GenerateMinable.EventType.GRAVEL)) {
             for (int i = 0; i < settings.gravelCount; i++) {
@@ -188,7 +187,7 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
         
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, random, startPos));
         
-        PerlinOctaveNoise forestOctaveNoise = modernBetaBiome.getForestOctaveNoise(world);
+        PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world);
         
         double scale = 0.5D;
         int noiseCount = (int) ((forestOctaveNoise.sampleXY(startX * scale, startZ * scale) / 8D + random.nextDouble() * 4D + 4D) / 3D);

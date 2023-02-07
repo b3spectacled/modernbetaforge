@@ -226,6 +226,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
         depth = depth * baseSize / 8D;
         depth = baseSize + depth * 4D;
         
+        double islandOffset = this.getIslandOffset(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, 200.0);
+        
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             
             double density;
@@ -273,6 +275,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
             }
 
             density -= densityOffset;
+            density += islandOffset;
             density = this.applySlides(density, noiseY);
             
             buffer[noiseY] = density;

@@ -48,6 +48,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final ChunkCache<NoiseSource> noiseCache;
     protected final ChunkCache<HeightmapChunk> heightmapCache;
     
+    private final boolean useIslands;
+    
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
 
@@ -107,6 +109,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
             true, 
             this::sampleHeightmap
         );
+        
+        this.useIslands = false;
         
         this.forestOctaveNoise = Optional.empty();
         this.beachOctaveNoise = Optional.empty();
@@ -184,21 +188,31 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
     }
     
-    protected double getIslandOffset(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+    protected double getIslandOffset(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ, double depth) {
+        if (!this.useIslands) {
+            return 0.0;
+        }
+            
         double noiseX = startNoiseX + localNoiseX;
         double noiseZ = startNoiseZ + localNoiseZ;
         
         double absNoiseX = Math.abs(noiseX);
         double absNoiseZ = Math.abs(noiseZ);
         
+        double falloff = 10.0;
+        
         double islandRadius = 25.0 * this.noiseSizeX; // Map radius 27 chunks
         double islandOffset = 0.0;
         
-        if (absNoiseX > islandRadius || absNoiseZ > islandRadius) {
+        boolean round = true;
+        
+        if (round) {
+            islandOffset = islandRadius - MathHelper.sqrt(noiseX * noiseX + noiseZ * noiseZ);
+        } else {
             islandOffset = islandRadius - Math.max(absNoiseZ, absNoiseX);
         }
         
-        return MathHelper.clamp(islandOffset * 25.0, -200.0, 0.0);
+        return MathHelper.clamp(islandOffset * falloff, -depth, 0.0);
     }
     
     /**
