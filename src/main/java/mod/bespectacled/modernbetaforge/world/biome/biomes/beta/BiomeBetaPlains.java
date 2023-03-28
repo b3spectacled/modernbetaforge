@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.beta;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
@@ -9,36 +9,49 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.passive.EntityDonkey;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenFossils;
-import net.minecraft.world.gen.feature.WorldGenWaterlily;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-public class BiomeBetaSwampland extends BiomeBeta {
-    public BiomeBetaSwampland() {
-        super(new BiomeProperties("Beta Swampland")
-            .setTemperature(0.5F)
-            .setRainfall(1.0F)
+public class BiomeBetaPlains extends BiomeBeta {
+    public BiomeBetaPlains() {
+        super(new BiomeProperties("Beta Plains")
+            .setTemperature(1.0F)
+            .setRainfall(0.4F)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;
         this.fillerBlock = BlockStates.DIRT;
-        
+
         if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 1, 1, 1));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 5, 2, 6));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityDonkey.class, 1, 1, 3));
         }
 
-        this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
+        this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
     
     @Override
     public EnumFlowerType pickRandomFlower(Random random, BlockPos blockPos) {
-        return EnumFlowerType.BLUE_ORCHID;
+        double flowerNoise = Biome.GRASS_COLOR_NOISE.getValue(blockPos.getX() / 200.0, blockPos.getZ() / 200.0);
+        
+        if (flowerNoise > -0.2) {
+            int randFlower = random.nextInt(4);
+            
+            switch (randFlower) {
+                case 0: return BlockFlower.EnumFlowerType.ORANGE_TULIP;
+                case 1: return BlockFlower.EnumFlowerType.RED_TULIP;
+                case 2: return BlockFlower.EnumFlowerType.PINK_TULIP;
+                default: return BlockFlower.EnumFlowerType.WHITE_TULIP;
+            }
+        } else {
+            return random.nextInt(3) == 1 ? EnumFlowerType.HOUSTONIA : EnumFlowerType.OXEYE_DAISY;
+        }
     }
     
     @Override
@@ -47,37 +60,9 @@ public class BiomeBetaSwampland extends BiomeBeta {
         
         ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
         ChunkPos chunkPos = new ChunkPos(startPos);
-        WorldGenerator waterLilyGen = new WorldGenWaterlily();
         
-        if (settings.useFossils && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FOSSIL) && random.nextInt(64) == 0) {
-            new WorldGenFossils().generate(world, random, startPos);
-        }
-        
-        if (settings.useLilyPads && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LILYPAD)) {
-            for (int i = 0; i < 4; ++i) {
-                int dX = random.nextInt(16) + 8;
-                int dZ = random.nextInt(16) + 8;
-                
-                int height = world.getHeight(startPos.add(dX, 0, dZ)).getY() * 2;
-                if (height > 0) {
-                    int dY = random.nextInt(height);
-                    BlockPos blockPos;
-                    BlockPos blockPosDown;
-                    
-                    for (blockPos = startPos.add(dX, dY, dZ); blockPos.getY() > 0; blockPos = blockPosDown) {
-                        blockPosDown = blockPos.down();
-                        if (!world.isAirBlock(blockPosDown)) {
-                            break;
-                        }
-                    }
-                    
-                    waterLilyGen.generate(world, random, blockPos);
-                }
-            }
-        }
-
         if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            for (int i = 0; i < 1; ++i) {
+            for (int i = 0; i < 4; ++i) {
                 int dX = random.nextInt(16) + 8;
                 int dZ = random.nextInt(16) + 8;
                 

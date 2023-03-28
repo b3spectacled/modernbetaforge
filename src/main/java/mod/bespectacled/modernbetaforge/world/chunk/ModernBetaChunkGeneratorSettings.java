@@ -15,6 +15,7 @@ import com.google.gson.JsonSerializer;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.world.chunk.source.island.IslandShape;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 
@@ -130,6 +131,21 @@ public class ModernBetaChunkGeneratorSettings {
     public final float tempNoiseScale;
     public final float rainNoiseScale;
     public final float detailNoiseScale;
+
+    public final boolean useIslands;
+    public final boolean useOuterIslands;
+    
+    public final float oceanSlideTarget;
+    
+    public final String centerIslandShape;
+    public final int centerIslandRadius;
+    public final int centerIslandFalloffDistance;
+    
+    public final int centerOceanRadius;
+    public final int centerOceanFalloffDistance;
+    
+    public final float outerIslandNoiseScale;
+    public final float outerIslandNoiseOffset;
     
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
@@ -243,6 +259,21 @@ public class ModernBetaChunkGeneratorSettings {
         this.tempNoiseScale = factory.tempNoiseScale;
         this.rainNoiseScale = factory.rainNoiseScale;
         this.detailNoiseScale = factory.detailNoiseScale;
+        
+        this.useIslands = factory.useIslands;
+        this.useOuterIslands = factory.useOuterIslands;
+        
+        this.oceanSlideTarget = factory.oceanSlideTarget;
+        
+        this.centerIslandShape = factory.centerIslandShape;
+        this.centerIslandRadius = factory.centerIslandRadius;
+        this.centerIslandFalloffDistance = factory.centerIslandFalloffDistance;
+        
+        this.centerOceanRadius = factory.centerOceanRadius;
+        this.centerOceanFalloffDistance = factory.centerOceanFalloffDistance;
+        
+        this.outerIslandNoiseScale = factory.outerIslandNoiseScale;
+        this.outerIslandNoiseOffset = factory.outerIslandNoiseOffset;
     }
     
     public static class Factory {
@@ -359,6 +390,21 @@ public class ModernBetaChunkGeneratorSettings {
         public float tempNoiseScale;
         public float rainNoiseScale;
         public float detailNoiseScale;
+        
+        public boolean useIslands;
+        public boolean useOuterIslands;
+        
+        public float oceanSlideTarget;
+        
+        public String centerIslandShape;
+        public int centerIslandRadius;
+        public int centerIslandFalloffDistance;
+        
+        public int centerOceanRadius;
+        public int centerOceanFalloffDistance;
+        
+        public float outerIslandNoiseScale;
+        public float outerIslandNoiseOffset;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -489,6 +535,21 @@ public class ModernBetaChunkGeneratorSettings {
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
             
+            this.useIslands = false;
+            this.useOuterIslands = false;
+            
+            this.oceanSlideTarget = -200.0f;
+            
+            this.centerIslandShape = IslandShape.CIRCLE.getId();
+            this.centerIslandRadius = 16;
+            this.centerIslandFalloffDistance = 8;
+            
+            this.centerOceanRadius = 64;
+            this.centerOceanFalloffDistance = 16;
+            
+            this.outerIslandNoiseScale = 300.0f;
+            this.outerIslandNoiseOffset = 0.25f;
+            
             this.setDefaults();
         }
         
@@ -604,6 +665,21 @@ public class ModernBetaChunkGeneratorSettings {
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
+            
+            this.useIslands = false;
+            this.useOuterIslands = false;
+            
+            this.oceanSlideTarget = -200.0f;
+            
+            this.centerIslandShape = IslandShape.CIRCLE.getId();
+            this.centerIslandRadius = 16;
+            this.centerIslandFalloffDistance = 8;
+            
+            this.centerOceanRadius = 64;
+            this.centerOceanFalloffDistance = 16;
+            
+            this.outerIslandNoiseScale = 300.0f;
+            this.outerIslandNoiseOffset = 0.25f;
         }
         
         @Override
@@ -735,7 +811,22 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.tempNoiseScale == factory.tempNoiseScale &&
                 this.rainNoiseScale == factory.rainNoiseScale &&
-                this.detailNoiseScale == factory.detailNoiseScale
+                this.detailNoiseScale == factory.detailNoiseScale &&
+                
+                this.useIslands == factory.useIslands &&
+                this.useOuterIslands == factory.useOuterIslands &&
+                
+                this.oceanSlideTarget == factory.oceanSlideTarget &&
+                
+                this.centerIslandShape == factory.centerIslandShape &&
+                this.centerIslandRadius == factory.centerIslandRadius &&
+                this.centerIslandFalloffDistance == factory.centerIslandFalloffDistance &&
+                
+                this.centerOceanRadius == factory.centerOceanRadius &&
+                this.centerOceanFalloffDistance == factory.centerOceanFalloffDistance &&
+                
+                this.outerIslandNoiseScale == factory.outerIslandNoiseScale &&
+                this.outerIslandNoiseOffset == factory.outerIslandNoiseOffset 
                 
                 ;
         }
@@ -853,6 +944,21 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
             hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
+            
+            hashCode = 31 * hashCode + (this.useIslands ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useOuterIslands ? 1 : 0);
+
+            hashCode = 31 * hashCode + ((this.oceanSlideTarget == 0.0f) ? 0 : Float.floatToIntBits(this.oceanSlideTarget));
+            
+            hashCode = 31 * hashCode + this.centerIslandShape.hashCode();
+            hashCode = 31 * hashCode + this.centerIslandRadius;
+            hashCode = 31 * hashCode + this.centerIslandFalloffDistance;
+            
+            hashCode = 31 * hashCode + this.centerOceanRadius;
+            hashCode = 31 * hashCode + this.centerOceanFalloffDistance;
+
+            hashCode = 31 * hashCode + ((this.outerIslandNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.outerIslandNoiseScale));
+            hashCode = 31 * hashCode + ((this.outerIslandNoiseOffset == 0.0f) ? 0 : Float.floatToIntBits(this.outerIslandNoiseOffset));
             
             return hashCode;
         }
@@ -985,6 +1091,21 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 
+                factory.useIslands = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ISLANDS, factory.useIslands);
+                factory.useOuterIslands = JsonUtils.getBoolean(jsonObject, NbtTags.USE_OUTER_ISLANDS, factory.useOuterIslands);
+
+                factory.oceanSlideTarget = JsonUtils.getFloat(jsonObject, NbtTags.OCEAN_SLIDE_TARGET, factory.oceanSlideTarget);
+                
+                factory.centerIslandShape = JsonUtils.getString(jsonObject, NbtTags.CENTER_ISLAND_SHAPE, factory.centerIslandShape);
+                factory.centerIslandRadius = JsonUtils.getInt(jsonObject, NbtTags.CENTER_ISLAND_RADIUS, factory.centerIslandRadius);
+                factory.centerIslandFalloffDistance = JsonUtils.getInt(jsonObject, NbtTags.CENTER_ISLAND_FALLOFF_DIST, factory.centerIslandFalloffDistance);
+
+                factory.centerOceanRadius = JsonUtils.getInt(jsonObject, NbtTags.CENTER_OCEAN_RADIUS, factory.centerOceanRadius);
+                factory.centerOceanFalloffDistance = JsonUtils.getInt(jsonObject, NbtTags.CENTER_OCEAN_FALLOFF_DIST, factory.centerOceanFalloffDistance);
+                
+                factory.outerIslandNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.OUTER_ISLAND_NOISE_SCALE, factory.outerIslandNoiseScale);
+                factory.outerIslandNoiseOffset = JsonUtils.getFloat(jsonObject, NbtTags.OUTER_ISLAND_NOISE_OFFSET, factory.outerIslandNoiseOffset);
+                
             } catch (Exception e) {}
             
             return factory;
@@ -1105,6 +1226,21 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
+
+            jsonObject.addProperty(NbtTags.USE_ISLANDS, factory.useIslands);
+            jsonObject.addProperty(NbtTags.USE_OUTER_ISLANDS, factory.useOuterIslands);
+            
+            jsonObject.addProperty(NbtTags.OCEAN_SLIDE_TARGET, factory.oceanSlideTarget);
+            
+            jsonObject.addProperty(NbtTags.CENTER_ISLAND_SHAPE, factory.centerIslandShape);
+            jsonObject.addProperty(NbtTags.CENTER_ISLAND_RADIUS, factory.centerIslandRadius);
+            jsonObject.addProperty(NbtTags.CENTER_ISLAND_FALLOFF_DIST, factory.centerIslandFalloffDistance);
+
+            jsonObject.addProperty(NbtTags.CENTER_OCEAN_RADIUS, factory.centerOceanRadius);
+            jsonObject.addProperty(NbtTags.CENTER_OCEAN_FALLOFF_DIST, factory.centerOceanFalloffDistance);
+
+            jsonObject.addProperty(NbtTags.OUTER_ISLAND_NOISE_SCALE, factory.outerIslandNoiseScale);
+            jsonObject.addProperty(NbtTags.OUTER_ISLAND_NOISE_OFFSET, factory.outerIslandNoiseOffset);
             
             return jsonObject;
         }

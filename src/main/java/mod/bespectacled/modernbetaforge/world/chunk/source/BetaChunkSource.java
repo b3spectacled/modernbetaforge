@@ -207,6 +207,11 @@ public class BetaChunkSource extends NoiseChunkSource {
         
         double baseSize = this.settings.baseSize;
         double heightStretch = this.settings.stretchY;
+
+        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121D, 1.121D);
+        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
+
+        double islandOffset = this.getIslandOffset(noiseX, noiseZ);
         
         Clime clime = this.climateSampler.sample(x, z);
         double temp = clime.temp();
@@ -217,7 +222,6 @@ public class BetaChunkSource extends NoiseChunkSource {
         rain *= rain;
         rain = 1.0D - rain;
 
-        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121D, 1.121D);
         scale = (scale + 256D) / 512D;
         scale *= rain;
         
@@ -225,7 +229,6 @@ public class BetaChunkSource extends NoiseChunkSource {
             scale = 1.0D;
         }
         
-        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         depth /= 8000D;
 
         if (depth < 0.0D) {
@@ -260,8 +263,6 @@ public class BetaChunkSource extends NoiseChunkSource {
         scale += 0.5D;
         depth = depth * baseSize / 8D;
         depth = baseSize + depth * 4D;
-        
-        double islandOffset = this.getIslandOffset(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, 200.0);
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             

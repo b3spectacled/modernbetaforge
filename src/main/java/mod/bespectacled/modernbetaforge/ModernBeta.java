@@ -14,7 +14,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
-import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBetaDesert;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaDesert;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaWorldType;
 import net.minecraft.server.MinecraftServer;

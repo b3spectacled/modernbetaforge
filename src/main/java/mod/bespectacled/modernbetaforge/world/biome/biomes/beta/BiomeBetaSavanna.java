@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.beta;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;

@@ -24,4 +24,19 @@ public class NbtTags {
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
+    
+    public static final String USE_ISLANDS = "useIslands";
+    public static final String USE_OUTER_ISLANDS = "useOuterIslands";
+    
+    public static final String OCEAN_SLIDE_TARGET = "oceanSlideTarget";
+    
+    public static final String CENTER_ISLAND_SHAPE = "centerIslandShape";
+    public static final String CENTER_ISLAND_RADIUS = "centerIslandRadius";
+    public static final String CENTER_ISLAND_FALLOFF_DIST = "centerIslandFalloffDistance";
+    
+    public static final String CENTER_OCEAN_RADIUS = "centerOceanRadius";
+    public static final String CENTER_OCEAN_FALLOFF_DIST = "centerOceanFalloffDistance";
+    
+    public static final String OUTER_ISLAND_NOISE_SCALE = "outerIslandNoiseScale";
+    public static final String OUTER_ISLAND_NOISE_OFFSET = "outerIslandNoiseOffset";
 }

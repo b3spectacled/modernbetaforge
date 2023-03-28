@@ -165,7 +165,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
         
-        double islandOffset = this.getIslandOffset(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, 75.0);
+        double islandOffset = this.getIslandOffset(noiseX, noiseZ);
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;

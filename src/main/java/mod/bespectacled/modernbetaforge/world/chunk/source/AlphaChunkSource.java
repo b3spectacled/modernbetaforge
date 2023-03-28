@@ -189,13 +189,16 @@ public class AlphaChunkSource extends NoiseChunkSource {
         double heightStretch = this.settings.stretchY;
         
         double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, 1.0, 0.0, 1.0);
+        double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
+        
+        double islandOffset = this.getIslandOffset(noiseX, noiseZ);
+        
         scale = (scale + 256D) / 512D;
         
         if (scale > 1.0D) {
             scale = 1.0D; 
         }
 
-        double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
         depth /= 8000D;
         
         if (depth < 0.0D) {
@@ -226,7 +229,6 @@ public class AlphaChunkSource extends NoiseChunkSource {
         depth = depth * baseSize / 8D;
         depth = baseSize + depth * 4D;
         
-        double islandOffset = this.getIslandOffset(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, 200.0);
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             

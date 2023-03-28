@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.function.Function;
 
+import mod.bespectacled.modernbetaforge.util.noise.SimplexNoise;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -17,6 +20,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.chunk.source.island.IslandShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -48,7 +52,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final ChunkCache<NoiseSource> noiseCache;
     protected final ChunkCache<HeightmapChunk> heightmapCache;
     
-    private final boolean useIslands;
+    private final SimplexNoise islandNoise;
     
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
@@ -110,7 +114,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             this::sampleHeightmap
         );
         
-        this.useIslands = false;
+        this.islandNoise = new SimplexNoise(new Random(this.seed));
         
         this.forestOctaveNoise = Optional.empty();
         this.beachOctaveNoise = Optional.empty();
@@ -188,31 +192,50 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
     }
     
-    protected double getIslandOffset(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ, double depth) {
-        if (!this.useIslands) {
+    protected double getIslandOffset(int noiseX, int noiseZ) {
+        if (!this.settings.useIslands) {
             return 0.0;
         }
             
-        double noiseX = startNoiseX + localNoiseX;
-        double noiseZ = startNoiseZ + localNoiseZ;
+        Function<Integer, Integer> toNoiseCoord = chunkCoord -> chunkCoord * this.noiseSizeX;
+        IslandShape islandShape = IslandShape.fromId(this.settings.centerIslandShape);
         
-        double absNoiseX = Math.abs(noiseX);
-        double absNoiseZ = Math.abs(noiseZ);
+        double distance = islandShape.getDistance(noiseX, noiseZ);
+        double oceanSlideTarget = this.settings.oceanSlideTarget;
+
+        int centerIslandRadius = toNoiseCoord.apply(this.settings.centerIslandRadius);
+        int centerIslandFalloffDistance = toNoiseCoord.apply(this.settings.centerIslandFalloffDistance);
+
+        int centerOceanRadius = toNoiseCoord.apply(this.settings.centerOceanRadius);
+        int centerOceanFalloffDistance = toNoiseCoord.apply(this.settings.centerOceanFalloffDistance);
         
-        double falloff = 10.0;
+        double outerIslandNoiseScale = this.settings.outerIslandNoiseScale;
+        double outerIslandNoiseOffset = this.settings.outerIslandNoiseOffset;
         
-        double islandRadius = 25.0 * this.noiseSizeX; // Map radius 27 chunks
-        double islandOffset = 0.0;
-        
-        boolean round = true;
-        
-        if (round) {
-            islandOffset = islandRadius - MathHelper.sqrt(noiseX * noiseX + noiseZ * noiseZ);
-        } else {
-            islandOffset = islandRadius - Math.max(absNoiseZ, absNoiseX);
+        double islandDelta = (distance - centerIslandRadius) / centerIslandFalloffDistance;
+        double islandOffset = MathHelper.clampedLerp(0.0, oceanSlideTarget, islandDelta);
+            
+        if (this.settings.useOuterIslands && distance > centerOceanRadius) {
+            double islandAddition = (float)this.islandNoise.sample(
+                noiseX / outerIslandNoiseScale,
+                noiseZ / outerIslandNoiseScale,
+                1.0,
+                1.0
+            ) + outerIslandNoiseOffset;
+            
+            // 0.885539 = Simplex upper range, but scale a little higher to ensure island centers have untouched terrain.
+            islandAddition /= 0.8F;
+            islandAddition = MathHelper.clamp(islandAddition, 0.0F, 1.0F);
+            
+            // Interpolate noise addition so there isn't a sharp cutoff at start of ocean ring edge.
+            double oceanDelta = (distance - centerOceanRadius) / centerOceanFalloffDistance;
+            islandAddition = (double)MathHelper.clampedLerp(0.0F, islandAddition, oceanDelta);
+            
+            islandOffset += islandAddition * -oceanSlideTarget;
+            islandOffset = MathHelper.clamp(islandOffset, oceanSlideTarget, 0.0F);
         }
         
-        return MathHelper.clamp(islandOffset * falloff, -depth, 0.0);
+        return islandOffset;
     }
     
     /**

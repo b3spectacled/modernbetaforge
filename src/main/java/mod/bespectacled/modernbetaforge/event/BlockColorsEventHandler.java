@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
-import mod.bespectacled.modernbetaforge.world.biome.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;

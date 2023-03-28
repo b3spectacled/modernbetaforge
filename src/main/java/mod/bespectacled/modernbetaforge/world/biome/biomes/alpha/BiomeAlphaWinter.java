@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.alpha;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.alpha;
 
 public class BiomeAlphaWinter extends BiomeAlphaBase {
     public BiomeAlphaWinter() {

@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.infdev;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.infdev;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;

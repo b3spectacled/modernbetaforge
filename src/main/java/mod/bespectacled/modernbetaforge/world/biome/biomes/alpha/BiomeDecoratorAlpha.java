@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.beta;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.alpha;
 
 import java.util.Random;
 
@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
-import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -17,20 +16,17 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenCactus;
-import net.minecraft.world.gen.feature.WorldGenDeadBush;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
-import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
+public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
@@ -65,7 +61,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         /*
          * Lake and dungeon generation handled in chunk source populate method.
          */
-
+        
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, random, startPos));
         
         if (TerrainGen.generateOre(world, random, worldGenClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
@@ -87,6 +83,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
                 worldGenDirt.generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
+
 
         if (TerrainGen.generateOre(world, random, worldGenGravel, startPos, OreGenEvent.GenerateMinable.EventType.GRAVEL)) {
             for (int i = 0; i < settings.gravelCount; i++) {
@@ -192,45 +189,20 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         
         PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world);
         
-        double scale = 0.5D;        
+        double scale = 0.5D;
         int noiseCount = (int) ((forestOctaveNoise.sampleXY(startX * scale, startZ * scale) / 8D + random.nextDouble() * 4D + 4D) / 3D);
+        
+        if (noiseCount < 0) {
+            noiseCount = 0;
+        }
+        
         int treeCount = 0;
         
         if (random.nextInt(10) == 0) {
             treeCount++;
         }
         
-        if (biome instanceof BiomeBetaForest) {
-            treeCount += noiseCount + 5;
-        }
-        
-        if (biome instanceof BiomeBetaRainforest) {
-            treeCount += noiseCount + 5;
-        }
-        
-        if (biome instanceof BiomeBetaSeasonalForest) {
-            treeCount += noiseCount + 2;
-        }
-        
-        if (biome instanceof BiomeBetaTaiga) {
-            treeCount += noiseCount + 5;
-        }
-        
-        if (biome instanceof BiomeBetaDesert) {
-            treeCount -= 20;
-        }
-        
-        if (biome instanceof BiomeBetaTundra) {
-            treeCount -= 20;
-        }
-        
-        if (biome instanceof BiomeBetaPlains) {
-            treeCount -= 20;
-        }
-        
-        if (biome instanceof BiomeBetaIceDesert) {
-            treeCount -= 20;
-        }
+        treeCount += noiseCount;
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.TREE)) {
             for (int i = 0; i < treeCount; ++i) {
@@ -247,26 +219,8 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             }
         }
         
-        int plantCount = 0;
-        
-        if (biome instanceof BiomeBetaForest) {
-            plantCount = 2;
-        }
-        
-        if (biome instanceof BiomeBetaSeasonalForest) {
-            plantCount = 4;
-        }
-        
-        if (biome instanceof BiomeBetaTaiga) {
-            plantCount = 2;
-        }
-        
-        if (biome instanceof BiomeBetaPlains) {
-            plantCount = 3;
-        }
-
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            for (int i = 0; i < plantCount; ++i) {
+            for (int i = 0; i < 2; ++i) {
                 int x = startX + random.nextInt(16) + 8;
                 int y = random.nextInt(128);
                 int z = startZ + random.nextInt(16) + 8;
@@ -280,55 +234,6 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
                 int z = startZ + random.nextInt(16) + 8;
                 
                 new WorldGenFlowers(Blocks.RED_FLOWER, EnumFlowerType.POPPY).generate(world, random, mutablePos.setPos(x, y, z));
-            }
-        }
-        
-        plantCount = 0;
-        
-        if (biome instanceof BiomeBetaForest) {
-            plantCount = 2;
-        }
-
-        if (biome instanceof BiomeBetaRainforest) {
-            plantCount = 10;
-        }
-        
-        if (biome instanceof BiomeBetaSeasonalForest) {
-            plantCount = 2;
-        }
-        
-        if (biome instanceof BiomeBetaTaiga) {
-            plantCount = 1;
-        }
-        
-        if (biome instanceof BiomeBetaPlains) {
-            plantCount = 10;
-        }
-        
-        if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            for (int i = 0; i < plantCount; ++i) {
-                BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
-                if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
-                    tallGrassType = BlockTallGrass.EnumType.FERN;
-                }
-                
-                int x = startX + random.nextInt(16) + 8;
-                int y = random.nextInt(128);
-                int z = startZ + random.nextInt(16) + 8;
-                
-                new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
-            }
-        }
-        
-        if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
-            if (biome instanceof BiomeBetaDesert) {
-                for (int i = 0; i < 2; ++i) {
-                    int x = startX + random.nextInt(16) + 8;
-                    int y = random.nextInt(128);
-                    int z = startZ + random.nextInt(16) + 8;
-                    
-                    new WorldGenDeadBush().generate(world, random, mutablePos.setPos(x, y, z));
-                }
             }
         }
         
@@ -360,18 +265,8 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             }
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.PUMPKIN)) {
-            if (random.nextInt(32) == 0) {
-                int x = startX + random.nextInt(16) + 8;
-                int y = random.nextInt(128);
-                int z = startZ + random.nextInt(16) + 8;
-                
-                new WorldGenPumpkin().generate(world, random, mutablePos.setPos(x, y, z));
-            }
-        }
-        
-        if (biome instanceof BiomeBetaDesert && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CACTUS)) {
-            for (int i = 0; i < 10; ++i) {
+        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CACTUS)) {
+            for (int i = 0; i < 1; ++i) {
                 int x = startX + random.nextInt(16) + 8;
                 int y = random.nextInt(128);
                 int z = startZ + random.nextInt(16) + 8;
@@ -399,11 +294,6 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
                 new WorldGenLiquids(Blocks.FLOWING_LAVA).generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
-        
-        /*
-         *  Snow / ice generation handled in chunk source population method,
-         *  if put here massive amounts of lag then crash will occur.
-         */
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));
     }

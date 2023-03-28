@@ -1,13 +1,14 @@
-package mod.bespectacled.modernbetaforge.world.biome.beta;
+package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 
-public class BiomeBetaOcean extends BiomeBeta {
-    public BiomeBetaOcean() {
-        super(new BiomeProperties("Beta Ocean")
-            .setTemperature(0.5F)
+public class BiomeBetaFrozenOcean extends BiomeBeta {
+    public BiomeBetaFrozenOcean() {
+        super(new BiomeProperties("Beta Frozen Ocean")
+            .setTemperature(0.0F)
             .setRainfall(0.5F)
+            .setSnowEnabled()
             //.setWaterColor(0)
         );
         
@@ -15,7 +16,8 @@ public class BiomeBetaOcean extends BiomeBeta {
         this.fillerBlock = BlockStates.DIRT;
         
         this.spawnableCreatureList.clear();
-
-        this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
+        
+        this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
     }
+    
 }
