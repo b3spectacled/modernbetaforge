@@ -49,7 +49,7 @@ public abstract class ChunkSource {
     // Set for specifying which biomes should use their vanilla surface builders.
     // Done on per-biome basis for best mod compatibility.
     private static final Set<Biome> BIOMES_WITH_CUSTOM_SURFACES = new HashSet<Biome>(
-        ModernBetaBiomeLists.BIOMES_WITH_CUSTOM_SURFACES
+        ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
     protected final ModernBetaChunkGenerator chunkGenerator;

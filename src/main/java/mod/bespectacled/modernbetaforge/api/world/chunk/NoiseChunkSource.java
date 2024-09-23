@@ -5,24 +5,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.function.Function;
 
-import mod.bespectacled.modernbetaforge.util.noise.SimplexNoise;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.util.noise.SimplexNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
-import mod.bespectacled.modernbetaforge.world.chunk.source.island.IslandShape;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -193,6 +190,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     protected double getIslandOffset(int noiseX, int noiseZ) {
+        /*
         if (!this.settings.useIslands) {
             return 0.0;
         }
@@ -236,6 +234,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
         }
         
         return islandOffset;
+        */
+        
+        return 0.0;
     }
     
     /**

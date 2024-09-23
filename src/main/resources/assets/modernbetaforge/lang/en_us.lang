@@ -28,17 +28,39 @@ createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
 
+# World Customization Beta Biomes
+
+createWorld.customize.custom.page4=Beta Biome Source Biomes (Expert Users Only!)
+
+createWorld.customize.custom.desertBiomes=Desert
+createWorld.customize.custom.forestBiomes=Forest
+createWorld.customize.custom.iceDesertBiomes=Ice Desert
+createWorld.customize.custom.plainsBiomes=Plains
+createWorld.customize.custom.rainforestBiomes=Rainforest
+createWorld.customize.custom.savannaBiomes=Savanna
+createWorld.customize.custom.shrublandBiomes=Shrubland
+createWorld.customize.custom.seasonalForestBiomes=Seasonal Forest
+createWorld.customize.custom.swamplandBiomes=Swampland
+createWorld.customize.custom.taigaBiomes=Taiga
+createWorld.customize.custom.tundraBiomes=Tundra
+
+createWorld.customize.custom.landBiome=Land Biome
+createWorld.customize.custom.oceanBiome=Ocean Biome
+createWorld.customize.custom.beachBiome=Beach Biome
+
 # World Customization Presets
 
 createWorld.customize.custom.preset.beta=Classic Beta
 createWorld.customize.custom.preset.alpha=Classic Alpha
 createWorld.customize.custom.preset.alphaWinter=Classic Alpha Winter
 createWorld.customize.custom.preset.infdev=Classic Infdev 20100415
+createWorld.customize.custom.preset.sky=Classic Skylands
 createWorld.customize.custom.preset.skylands=Beta Skylands
 createWorld.customize.custom.preset.isleLandBeta=Beta Isle Land
 createWorld.customize.custom.preset.caveDelightBeta=Beta Caver's Delight
 createWorld.customize.custom.preset.caveChaosBeta=Beta Caves of Chaos
 createWorld.customize.custom.preset.realisticBeta=Beta Realistic
+createWorld.customize.custom.preset.plusBeta=Beta Plus
 
 # Config
 

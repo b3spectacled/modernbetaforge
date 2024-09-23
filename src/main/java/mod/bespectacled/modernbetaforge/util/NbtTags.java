@@ -25,6 +25,7 @@ public class NbtTags {
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
     
+    /*
     public static final String USE_ISLANDS = "useIslands";
     public static final String USE_OUTER_ISLANDS = "useOuterIslands";
     
@@ -39,4 +40,21 @@ public class NbtTags {
     
     public static final String OUTER_ISLAND_NOISE_SCALE = "outerIslandNoiseScale";
     public static final String OUTER_ISLAND_NOISE_OFFSET = "outerIslandNoiseOffset";
+    */
+    
+    public static final String DESERT_BIOMES = "desertBiomes";
+    public static final String FOREST_BIOMES = "forestBiomes";
+    public static final String ICE_DESERT_BIOMES = "iceDesertBiomes";
+    public static final String PLAINS_BIOMES = "plainsBiomes";
+    public static final String RAINFOREST_BIOMES = "rainforestBiomes";
+    public static final String SAVANNA_BIOMES = "savannaBiomes";
+    public static final String SHRUBLAND_BIOMES = "shrublandBiomes";
+    public static final String SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
+    public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
+    public static final String TAIGA_BIOMES = "taigaBiomes";
+    public static final String TUNDRA_BIOMES = "tundraBiomes";
+    
+    public static final String LAND_BIOME = "landBiome";
+    public static final String OCEAN_BIOME = "oceanBiome";
+    public static final String BEACH_BIOME = "beachBiome";
 }

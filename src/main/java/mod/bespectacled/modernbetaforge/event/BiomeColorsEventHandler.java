@@ -39,10 +39,12 @@ public class BiomeColorsEventHandler {
             if (isOverworld && world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
                 ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
                 
-                // Filter for Beta biome source
-                if (biomeProvider.getBiomeSource() instanceof BetaBiomeSource) {
-                    ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
-                    BetaBiomeSource betaBiomeSource = (BetaBiomeSource)modernBetaBiomeProvider.getBiomeSource();
+                // Filter for Beta biome source and check if using all Beta biomes
+                if (
+                    biomeProvider.getBiomeSource() instanceof BetaBiomeSource &&
+                    !((BetaBiomeSource)biomeProvider.getBiomeSource()).isModifiedMap()
+                ) {
+                    BetaBiomeSource betaBiomeSource = (BetaBiomeSource)biomeProvider.getBiomeSource();
 
                     BetaColorSampler.INSTANCE.setClimateSamplers(betaBiomeSource, betaBiomeSource);
                 } else {

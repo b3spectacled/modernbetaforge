@@ -13,7 +13,7 @@ public class ModernBetaBiomeLists {
     public static final List<Biome> ALPHA_BIOMES;
     public static final List<Biome> INFDEV_BIOMES;
     
-    public static final List<Biome> BIOMES_WITH_CUSTOM_SURFACES;
+    public static final List<Biome> BUILTIN_BIOMES_WITH_CUSTOM_SURFACES;
     
     static {
         BETA_BIOMES = Arrays.asList(
@@ -33,7 +33,9 @@ public class ModernBetaBiomeLists {
             ModernBetaBiomeHolders.BETA_FROZEN_OCEAN,
             
             ModernBetaBiomeHolders.BETA_BEACH,
-            ModernBetaBiomeHolders.BETA_SNOWY_BEACH
+            ModernBetaBiomeHolders.BETA_SNOWY_BEACH,
+            
+            ModernBetaBiomeHolders.BETA_SKY
         );
         
         ALPHA_BIOMES = Arrays.asList(
@@ -50,7 +52,7 @@ public class ModernBetaBiomeLists {
         ALL_BIOMES.addAll(ALPHA_BIOMES);
         ALL_BIOMES.addAll(INFDEV_BIOMES);
         
-        BIOMES_WITH_CUSTOM_SURFACES = Arrays.asList(
+        BUILTIN_BIOMES_WITH_CUSTOM_SURFACES = Arrays.asList(
             // Badlands
             Biomes.MESA,
             Biomes.MESA_CLEAR_ROCK,

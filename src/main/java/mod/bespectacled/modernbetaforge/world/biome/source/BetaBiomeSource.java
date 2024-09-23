@@ -27,7 +27,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
-        this.climateMap = new BetaClimateMap();
+        this.climateMap = new BetaClimateMap(settings);
         this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings.tempNoiseScale, settings.rainNoiseScale, settings.detailNoiseScale);
         this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings.tempNoiseScale);
     }
@@ -77,5 +77,9 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     @Override
     public boolean sampleBiomeColor() {
         return ModernBetaConfig.visualOptions.useBetaBiomeColors;
+    }
+    
+    public boolean isModifiedMap() {
+        return this.climateMap.isModifiedMap();
     }
 }

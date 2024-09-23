@@ -60,4 +60,7 @@ public class ModernBetaBiomeHolders {
     
     @ObjectHolder("infdev_415")
     public static final Biome INFDEV_415 = null;
+    
+    @ObjectHolder("beta_sky")
+    public static final Biome BETA_SKY = null;
 }

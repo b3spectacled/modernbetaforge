@@ -38,9 +38,17 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
+    private static final String PREFIX = "createWorld.customize.custom.";
+    
+    private static final int MAX_TEXT_LENGTH = 120;
+    private static final int PAGELIST_ADDITIONAL_WIDTH = 96;
+    private static final int BIOME_FIELD_ADDITIONAL_WIDTH = 36;
+    
     private static final float MAX_HEIGHT = 255.0f;
     private static final float MIN_BIOME_SCALE = 0.1f;
     private static final float MAX_BIOME_SCALE = 8.0f;
+    //private static final float MIN_OCEAN_SLIDE_TARGET = -1000.0f;
+    //private static final float MAX_OCEAN_SLIDE_TARGET = 0.0f;
     
     private final GuiCreateWorld parent;
     
@@ -65,6 +73,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private final Predicate<String> floatFilter;
     private final Predicate<String> intFilter;
+    private final Predicate<String> stringFilter;
     
     private final ModernBetaChunkGeneratorSettings.Factory defaultSettings;
     private ModernBetaChunkGeneratorSettings.Factory settings;
@@ -73,9 +82,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     public GuiCustomizeWorldScreen(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
-        this.subtitle = "Page 1 of 3";
+        this.subtitle = "Page 1 of 5";
         this.pageTitle = "Basic Settings";
-        this.pageNames = new String[4];
+        this.pageNames = new String[5];
         
         this.floatFilter = new Predicate<String>() {
             @Override
@@ -95,6 +104,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         };
         
+        this.stringFilter = new Predicate<String>() {
+            @Override
+            public boolean apply(@Nullable String entryString) {
+                return entryString.isEmpty() || entryString != null;
+            }
+        };
+        
         this.defaultSettings = new ModernBetaChunkGeneratorSettings.Factory();
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
@@ -110,171 +126,271 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int biomeSourceId = Arrays.asList(BiomeSourceType.values()).indexOf(BiomeSourceType.fromId(this.settings.biomeSource));
         
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            new GuiPageButtonList.GuiSlideEntry(700, I18n.format("createWorld.customize.custom." + NbtTags.CHUNK_SOURCE), true, this, 0f, ChunkSourceType.values().length - 1, chunkSourceId),
-            new GuiPageButtonList.GuiSlideEntry(701, I18n.format("createWorld.customize.custom." + NbtTags.BIOME_SOURCE), true, this, 0f, BiomeSourceType.values().length - 1, biomeSourceId),
+            new GuiPageButtonList.GuiSlideEntry(700, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ChunkSourceType.values().length - 1, chunkSourceId),
+            new GuiPageButtonList.GuiSlideEntry(701, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, BiomeSourceType.values().length - 1, biomeSourceId),
             
-            new GuiPageButtonList.GuiLabelEntry(702, I18n.format("createWorld.customize.custom.fixedBiomeLabel"), true),
-            new GuiPageButtonList.GuiSlideEntry(162, I18n.format("createWorld.customize.custom.fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),            
+            new GuiPageButtonList.GuiLabelEntry(702, I18n.format(PREFIX + "fixedBiomeLabel"), true),
+            new GuiPageButtonList.GuiSlideEntry(162, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),            
     
-            new GuiPageButtonList.GuiLabelEntry(510, I18n.format("createWorld.customize.custom.betaLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(510, I18n.format(PREFIX + "betaLabel"), true),
             null,
-            new GuiPageButtonList.GuiButtonEntry(500, I18n.format("createWorld.customize.custom." + NbtTags.REPLACE_OCEAN_BIOMES), true, this.settings.replaceOceanBiomes),
-            new GuiPageButtonList.GuiButtonEntry(501, I18n.format("createWorld.customize.custom." + NbtTags.REPLACE_BEACH_BIOMES), true, this.settings.replaceBeachBiomes),
-            new GuiPageButtonList.GuiButtonEntry(502, I18n.format("createWorld.customize.custom." + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
-            new GuiPageButtonList.GuiButtonEntry(503, I18n.format("createWorld.customize.custom." + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
-            new GuiPageButtonList.GuiButtonEntry(504, I18n.format("createWorld.customize.custom." + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
-            new GuiPageButtonList.GuiButtonEntry(505, I18n.format("createWorld.customize.custom." + NbtTags.USE_MELONS), true, this.settings.useMelons),
-            new GuiPageButtonList.GuiButtonEntry(506, I18n.format("createWorld.customize.custom." + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
-            new GuiPageButtonList.GuiButtonEntry(507, I18n.format("createWorld.customize.custom." + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
+            new GuiPageButtonList.GuiButtonEntry(500, I18n.format(PREFIX + NbtTags.REPLACE_OCEAN_BIOMES), true, this.settings.replaceOceanBiomes),
+            new GuiPageButtonList.GuiButtonEntry(501, I18n.format(PREFIX + NbtTags.REPLACE_BEACH_BIOMES), true, this.settings.replaceBeachBiomes),
+            new GuiPageButtonList.GuiButtonEntry(502, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
+            new GuiPageButtonList.GuiButtonEntry(503, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
+            new GuiPageButtonList.GuiButtonEntry(504, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
+            new GuiPageButtonList.GuiButtonEntry(505, I18n.format(PREFIX + NbtTags.USE_MELONS), true, this.settings.useMelons),
+            new GuiPageButtonList.GuiButtonEntry(506, I18n.format(PREFIX + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
+            new GuiPageButtonList.GuiButtonEntry(507, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
             
-            new GuiPageButtonList.GuiLabelEntry(511, I18n.format("createWorld.customize.custom.otherLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(511, I18n.format(PREFIX + "otherLabel"), true),
             null,
-            new GuiPageButtonList.GuiSlideEntry(160, I18n.format("createWorld.customize.custom.seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
-            new GuiPageButtonList.GuiButtonEntry(148, I18n.format("createWorld.customize.custom.useCaves"), true, this.settings.useCaves),
-            new GuiPageButtonList.GuiButtonEntry(150, I18n.format("createWorld.customize.custom.useStrongholds"), true, this.settings.useStrongholds),
-            new GuiPageButtonList.GuiButtonEntry(151, I18n.format("createWorld.customize.custom.useVillages"), true, this.settings.useVillages),
-            new GuiPageButtonList.GuiButtonEntry(152, I18n.format("createWorld.customize.custom.useMineShafts"), true, this.settings.useMineShafts),
-            new GuiPageButtonList.GuiButtonEntry(153, I18n.format("createWorld.customize.custom.useTemples"), true, this.settings.useTemples),
-            new GuiPageButtonList.GuiButtonEntry(210, I18n.format("createWorld.customize.custom.useMonuments"), true, this.settings.useMonuments),
-            new GuiPageButtonList.GuiButtonEntry(211, I18n.format("createWorld.customize.custom.useMansions"), true, this.settings.useMansions),
-            new GuiPageButtonList.GuiButtonEntry(154, I18n.format("createWorld.customize.custom.useRavines"), true, this.settings.useRavines),
-            new GuiPageButtonList.GuiButtonEntry(149, I18n.format("createWorld.customize.custom.useDungeons"), true, this.settings.useDungeons),
-            new GuiPageButtonList.GuiSlideEntry(157, I18n.format("createWorld.customize.custom.dungeonChance"), true, this, 1.0f, 100.0f, (float)this.settings.dungeonChance),
-            new GuiPageButtonList.GuiButtonEntry(155, I18n.format("createWorld.customize.custom.useWaterLakes"), true, this.settings.useWaterLakes),
-            new GuiPageButtonList.GuiSlideEntry(158, I18n.format("createWorld.customize.custom.waterLakeChance"), true, this, 1.0f, 100.0f, (float)this.settings.waterLakeChance),
-            new GuiPageButtonList.GuiButtonEntry(156, I18n.format("createWorld.customize.custom.useLavaLakes"), true, this.settings.useLavaLakes),
-            new GuiPageButtonList.GuiSlideEntry(159, I18n.format("createWorld.customize.custom.lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
-            new GuiPageButtonList.GuiButtonEntry(161, I18n.format("createWorld.customize.custom.useLavaOceans"), true, this.settings.useLavaOceans)
+            new GuiPageButtonList.GuiSlideEntry(160, I18n.format(PREFIX + "seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
+            new GuiPageButtonList.GuiButtonEntry(148, I18n.format(PREFIX + "useCaves"), true, this.settings.useCaves),
+            new GuiPageButtonList.GuiButtonEntry(150, I18n.format(PREFIX + "useStrongholds"), true, this.settings.useStrongholds),
+            new GuiPageButtonList.GuiButtonEntry(151, I18n.format(PREFIX + "useVillages"), true, this.settings.useVillages),
+            new GuiPageButtonList.GuiButtonEntry(152, I18n.format(PREFIX + "useMineShafts"), true, this.settings.useMineShafts),
+            new GuiPageButtonList.GuiButtonEntry(153, I18n.format(PREFIX + "useTemples"), true, this.settings.useTemples),
+            new GuiPageButtonList.GuiButtonEntry(210, I18n.format(PREFIX + "useMonuments"), true, this.settings.useMonuments),
+            new GuiPageButtonList.GuiButtonEntry(211, I18n.format(PREFIX + "useMansions"), true, this.settings.useMansions),
+            new GuiPageButtonList.GuiButtonEntry(154, I18n.format(PREFIX + "useRavines"), true, this.settings.useRavines),
+            new GuiPageButtonList.GuiButtonEntry(149, I18n.format(PREFIX + "useDungeons"), true, this.settings.useDungeons),
+            new GuiPageButtonList.GuiSlideEntry(157, I18n.format(PREFIX + "dungeonChance"), true, this, 1.0f, 100.0f, (float)this.settings.dungeonChance),
+            new GuiPageButtonList.GuiButtonEntry(155, I18n.format(PREFIX + "useWaterLakes"), true, this.settings.useWaterLakes),
+            new GuiPageButtonList.GuiSlideEntry(158, I18n.format(PREFIX + "waterLakeChance"), true, this, 1.0f, 100.0f, (float)this.settings.waterLakeChance),
+            new GuiPageButtonList.GuiButtonEntry(156, I18n.format(PREFIX + "useLavaLakes"), true, this.settings.useLavaLakes),
+            new GuiPageButtonList.GuiSlideEntry(159, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
+            new GuiPageButtonList.GuiButtonEntry(161, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
             new GuiPageButtonList.GuiLabelEntry(600, I18n.format("tile.clay.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(601, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.claySize),
-            new GuiPageButtonList.GuiSlideEntry(602, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.clayCount),
-            new GuiPageButtonList.GuiSlideEntry(603, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(604, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(601, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.claySize),
+            new GuiPageButtonList.GuiSlideEntry(602, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.clayCount),
+            new GuiPageButtonList.GuiSlideEntry(603, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(604, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(416, I18n.format("tile.dirt.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(165, I18n.format("createWorld.customize.custom.size"),false, this, 1.0f, 50.0f, (float)this.settings.dirtSize),
-            new GuiPageButtonList.GuiSlideEntry(166, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.dirtCount),
-            new GuiPageButtonList.GuiSlideEntry(167, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(168, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(165, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dirtSize),
+            new GuiPageButtonList.GuiSlideEntry(166, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dirtCount),
+            new GuiPageButtonList.GuiSlideEntry(167, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(168, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(417, I18n.format("tile.gravel.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(169, I18n.format("createWorld.customize.custom.size"),false, this, 1.0f, 50.0f, (float)this.settings.gravelSize),
-            new GuiPageButtonList.GuiSlideEntry(170, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.gravelCount),
-            new GuiPageButtonList.GuiSlideEntry(171, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(172, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(169, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.gravelSize),
+            new GuiPageButtonList.GuiSlideEntry(170, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.gravelCount),
+            new GuiPageButtonList.GuiSlideEntry(171, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(172, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(418, I18n.format("tile.stone.granite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(173, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.graniteSize),
-            new GuiPageButtonList.GuiSlideEntry(174, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.graniteCount),
-            new GuiPageButtonList.GuiSlideEntry(175, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(176, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(173, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.graniteSize),
+            new GuiPageButtonList.GuiSlideEntry(174, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.graniteCount),
+            new GuiPageButtonList.GuiSlideEntry(175, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(176, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(419, I18n.format("tile.stone.diorite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(177, I18n.format("createWorld.customize.custom.size"),false, this, 1.0f, 50.0f, (float)this.settings.dioriteSize),
-            new GuiPageButtonList.GuiSlideEntry(178, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.dioriteCount),
-            new GuiPageButtonList.GuiSlideEntry(179, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(180, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(177, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dioriteSize),
+            new GuiPageButtonList.GuiSlideEntry(178, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dioriteCount),
+            new GuiPageButtonList.GuiSlideEntry(179, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(180, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(420, I18n.format("tile.stone.andesite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(181, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.andesiteSize),
-            new GuiPageButtonList.GuiSlideEntry(182, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.andesiteCount),
-            new GuiPageButtonList.GuiSlideEntry(183, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(184, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(181, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.andesiteSize),
+            new GuiPageButtonList.GuiSlideEntry(182, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.andesiteCount),
+            new GuiPageButtonList.GuiSlideEntry(183, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(184, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(421, I18n.format("tile.oreCoal.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(185, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.coalSize),
-            new GuiPageButtonList.GuiSlideEntry(186, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.coalCount),
-            new GuiPageButtonList.GuiSlideEntry(187, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(189, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(185, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.coalSize),
+            new GuiPageButtonList.GuiSlideEntry(186, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.coalCount),
+            new GuiPageButtonList.GuiSlideEntry(187, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(189, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(422, I18n.format("tile.oreIron.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(190, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.ironSize),
-            new GuiPageButtonList.GuiSlideEntry(191, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.ironCount),
-            new GuiPageButtonList.GuiSlideEntry(192, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(193, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(190, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.ironSize),
+            new GuiPageButtonList.GuiSlideEntry(191, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.ironCount),
+            new GuiPageButtonList.GuiSlideEntry(192, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(193, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(423, I18n.format("tile.oreGold.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(194, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.goldSize),
-            new GuiPageButtonList.GuiSlideEntry(195, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.goldCount),
-            new GuiPageButtonList.GuiSlideEntry(196, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(197, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(194, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.goldSize),
+            new GuiPageButtonList.GuiSlideEntry(195, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.goldCount),
+            new GuiPageButtonList.GuiSlideEntry(196, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(197, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(424, I18n.format("tile.oreRedstone.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(198, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.redstoneSize),
-            new GuiPageButtonList.GuiSlideEntry(199, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.redstoneCount),
-            new GuiPageButtonList.GuiSlideEntry(200, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(201, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(198, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.redstoneSize),
+            new GuiPageButtonList.GuiSlideEntry(199, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.redstoneCount),
+            new GuiPageButtonList.GuiSlideEntry(200, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(201, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(425, I18n.format("tile.oreDiamond.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(202, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.diamondSize),
-            new GuiPageButtonList.GuiSlideEntry(203, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.diamondCount),
-            new GuiPageButtonList.GuiSlideEntry(204, I18n.format("createWorld.customize.custom.minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(205, I18n.format("createWorld.customize.custom.maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(202, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.diamondSize),
+            new GuiPageButtonList.GuiSlideEntry(203, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.diamondCount),
+            new GuiPageButtonList.GuiSlideEntry(204, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(205, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight),
             new GuiPageButtonList.GuiLabelEntry(426, I18n.format("tile.oreLapis.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(206, I18n.format("createWorld.customize.custom.size"), false, this, 1.0f, 50.0f, (float)this.settings.lapisSize),
-            new GuiPageButtonList.GuiSlideEntry(207, I18n.format("createWorld.customize.custom.count"), false, this, 0.0f, 40.0f, (float)this.settings.lapisCount),
-            new GuiPageButtonList.GuiSlideEntry(208, I18n.format("createWorld.customize.custom.center"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
-            new GuiPageButtonList.GuiSlideEntry(209, I18n.format("createWorld.customize.custom.spread"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisSpread)
+            new GuiPageButtonList.GuiSlideEntry(206, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.lapisSize),
+            new GuiPageButtonList.GuiSlideEntry(207, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.lapisCount),
+            new GuiPageButtonList.GuiSlideEntry(208, I18n.format(PREFIX + "center"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
+            new GuiPageButtonList.GuiSlideEntry(209, I18n.format(PREFIX + "spread"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisSpread)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
-            new GuiPageButtonList.GuiSlideEntry(100, I18n.format("createWorld.customize.custom.mainNoiseScaleX"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
-            new GuiPageButtonList.GuiSlideEntry(101, I18n.format("createWorld.customize.custom.mainNoiseScaleY"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
-            new GuiPageButtonList.GuiSlideEntry(102, I18n.format("createWorld.customize.custom.mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
-            new GuiPageButtonList.GuiSlideEntry(103, I18n.format("createWorld.customize.custom.depthNoiseScaleX"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
-            new GuiPageButtonList.GuiSlideEntry(104, I18n.format("createWorld.customize.custom.depthNoiseScaleZ"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
-            new GuiPageButtonList.GuiSlideEntry(105, I18n.format("createWorld.customize.custom.depthNoiseScaleExponent"), false, this, 0.01f, 20.0f, this.settings.depthNoiseScaleExponent),
-            new GuiPageButtonList.GuiSlideEntry(106, I18n.format("createWorld.customize.custom.baseSize"), false, this, 1.0f, 25.0f, this.settings.baseSize),
-            new GuiPageButtonList.GuiSlideEntry(107, I18n.format("createWorld.customize.custom.coordinateScale"), false, this, 1.0f, 6000.0f, this.settings.coordinateScale),
-            new GuiPageButtonList.GuiSlideEntry(108, I18n.format("createWorld.customize.custom.heightScale"), false, this, 1.0f, 6000.0f, this.settings.heightScale),
-            new GuiPageButtonList.GuiSlideEntry(109, I18n.format("createWorld.customize.custom.stretchY"), false, this, 0.01f, 50.0f, this.settings.stretchY),
-            new GuiPageButtonList.GuiSlideEntry(110, I18n.format("createWorld.customize.custom.upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
-            new GuiPageButtonList.GuiSlideEntry(111, I18n.format("createWorld.customize.custom.lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
-            new GuiPageButtonList.GuiSlideEntry(113, I18n.format("createWorld.customize.custom." + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
-            new GuiPageButtonList.GuiSlideEntry(114, I18n.format("createWorld.customize.custom." + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
-            new GuiPageButtonList.GuiSlideEntry(115, I18n.format("createWorld.customize.custom." + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
-            new GuiPageButtonList.GuiSlideEntry(112, I18n.format("createWorld.customize.custom." + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height)
+            new GuiPageButtonList.GuiSlideEntry(100, I18n.format(PREFIX + "mainNoiseScaleX"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
+            new GuiPageButtonList.GuiSlideEntry(101, I18n.format(PREFIX + "mainNoiseScaleY"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
+            new GuiPageButtonList.GuiSlideEntry(102, I18n.format(PREFIX + "mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
+            new GuiPageButtonList.GuiSlideEntry(103, I18n.format(PREFIX + "depthNoiseScaleX"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
+            new GuiPageButtonList.GuiSlideEntry(104, I18n.format(PREFIX + "depthNoiseScaleZ"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
+            new GuiPageButtonList.GuiSlideEntry(105, I18n.format(PREFIX + "depthNoiseScaleExponent"), false, this, 0.01f, 20.0f, this.settings.depthNoiseScaleExponent),
+            new GuiPageButtonList.GuiSlideEntry(106, I18n.format(PREFIX + "baseSize"), false, this, 1.0f, 25.0f, this.settings.baseSize),
+            new GuiPageButtonList.GuiSlideEntry(107, I18n.format(PREFIX + "coordinateScale"), false, this, 1.0f, 6000.0f, this.settings.coordinateScale),
+            new GuiPageButtonList.GuiSlideEntry(108, I18n.format(PREFIX + "heightScale"), false, this, 1.0f, 6000.0f, this.settings.heightScale),
+            new GuiPageButtonList.GuiSlideEntry(109, I18n.format(PREFIX + "stretchY"), false, this, 0.01f, 50.0f, this.settings.stretchY),
+            new GuiPageButtonList.GuiSlideEntry(110, I18n.format(PREFIX + "upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
+            new GuiPageButtonList.GuiSlideEntry(111, I18n.format(PREFIX + "lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
+            new GuiPageButtonList.GuiSlideEntry(113, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(114, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(115, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(112, I18n.format(PREFIX + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList3 = {
-    
-            new GuiPageButtonList.GuiLabelEntry(400, I18n.format("createWorld.customize.custom.mainNoiseScaleX") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(400, I18n.format(PREFIX + "mainNoiseScaleX") + ":", false),
             new GuiPageButtonList.EditBoxEntry(132, String.format("%5.3f", this.settings.mainNoiseScaleX), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(401, I18n.format("createWorld.customize.custom.mainNoiseScaleY") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(401, I18n.format(PREFIX + "mainNoiseScaleY") + ":", false),
             new GuiPageButtonList.EditBoxEntry(133, String.format("%5.3f", this.settings.mainNoiseScaleY), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(402, I18n.format("createWorld.customize.custom.mainNoiseScaleZ") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(402, I18n.format(PREFIX + "mainNoiseScaleZ") + ":", false),
             new GuiPageButtonList.EditBoxEntry(134, String.format("%5.3f", this.settings.mainNoiseScaleZ), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(403, I18n.format("createWorld.customize.custom.depthNoiseScaleX") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(403, I18n.format(PREFIX + "depthNoiseScaleX") + ":", false),
             new GuiPageButtonList.EditBoxEntry(135, String.format("%5.3f", this.settings.depthNoiseScaleX), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(404, I18n.format("createWorld.customize.custom.depthNoiseScaleZ") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(404, I18n.format(PREFIX + "depthNoiseScaleZ") + ":", false),
             new GuiPageButtonList.EditBoxEntry(136, String.format("%5.3f", this.settings.depthNoiseScaleZ), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(405, I18n.format("createWorld.customize.custom.depthNoiseScaleExponent") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(405, I18n.format(PREFIX + "depthNoiseScaleExponent") + ":", false),
             new GuiPageButtonList.EditBoxEntry(137, String.format("%2.3f", this.settings.depthNoiseScaleExponent), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(406, I18n.format("createWorld.customize.custom.baseSize") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(406, I18n.format(PREFIX + "baseSize") + ":", false),
             new GuiPageButtonList.EditBoxEntry(138, String.format("%2.3f", this.settings.baseSize), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(407, I18n.format("createWorld.customize.custom.coordinateScale") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(407, I18n.format(PREFIX + "coordinateScale") + ":", false),
             new GuiPageButtonList.EditBoxEntry(139, String.format("%5.3f", this.settings.coordinateScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(408, I18n.format("createWorld.customize.custom.heightScale") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(408, I18n.format(PREFIX + "heightScale") + ":", false),
             new GuiPageButtonList.EditBoxEntry(140, String.format("%5.3f", this.settings.heightScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(409, I18n.format("createWorld.customize.custom.stretchY") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(409, I18n.format(PREFIX + "stretchY") + ":", false),
             new GuiPageButtonList.EditBoxEntry(141, String.format("%2.3f", this.settings.stretchY), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(410, I18n.format("createWorld.customize.custom.upperLimitScale") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(410, I18n.format(PREFIX + "upperLimitScale") + ":", false),
             new GuiPageButtonList.EditBoxEntry(142, String.format("%5.3f", this.settings.upperLimitScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(411, I18n.format("createWorld.customize.custom.lowerLimitScale") + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(411, I18n.format(PREFIX + "lowerLimitScale") + ":", false),
             new GuiPageButtonList.EditBoxEntry(143, String.format("%5.3f", this.settings.lowerLimitScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(413, I18n.format("createWorld.customize.custom." + NbtTags.TEMP_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(413, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":", false),
             new GuiPageButtonList.EditBoxEntry(145, String.format("%2.3f", this.settings.tempNoiseScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(414, I18n.format("createWorld.customize.custom." + NbtTags.RAIN_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(414, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":", false),
             new GuiPageButtonList.EditBoxEntry(146, String.format("%2.3f", this.settings.rainNoiseScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(415, I18n.format("createWorld.customize.custom." + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(415, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
             new GuiPageButtonList.EditBoxEntry(147, String.format("%2.3f", this.settings.detailNoiseScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(412, I18n.format("createWorld.customize.custom." + NbtTags.HEIGHT) + ":", false),
+            new GuiPageButtonList.GuiLabelEntry(412, I18n.format(PREFIX + NbtTags.HEIGHT) + ":", false),
             new GuiPageButtonList.EditBoxEntry(144, String.format("%d", this.settings.height), false, this.intFilter)
+        };
+        
+        GuiPageButtonList.GuiListEntry[] pageList4 = {
+            new GuiPageButtonList.GuiLabelEntry(512, I18n.format(PREFIX + NbtTags.DESERT_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(900, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(800, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(901, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(801, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(902, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(802, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(513, I18n.format(PREFIX + NbtTags.FOREST_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(903, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(803, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(904, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(804, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(905, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(805, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(514, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(906, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(806, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(907, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(807, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(908, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(808, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(515, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(909, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(809, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(910, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(810, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(911, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(811, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(516, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(912, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(812, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(913, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(813, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(914, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(814, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(517, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(915, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(815, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(916, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(816, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(917, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(817, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(518, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(918, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(818, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(919, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(819, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(920, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(820, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(519, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(921, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(821, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(922, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(822, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(923, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(823, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(520, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(924, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(824, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(925, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(825, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(926, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(826, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(521, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(927, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(827, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(928, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(828, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(929, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(829, "", false, this.stringFilter),
+            
+            new GuiPageButtonList.GuiLabelEntry(522, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES), true),
+            null,
+            new GuiPageButtonList.GuiLabelEntry(930, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(830, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(931, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(831, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(932, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(832, "", false, this.stringFilter)
         };
         
         this.pageList = new GuiPageButtonList(
@@ -289,12 +405,105 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 pageList0,
                 pageList1,
                 pageList2,
-                pageList3
+                pageList3,
+                pageList4
             }
         );
         
-        for (int page = 0; page < 4; ++page) {
-            this.pageNames[page] = I18n.format("createWorld.customize.custom.page" + page);
+        this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
+        
+        // Increase text length for biome fields
+        this.increaseMaxTextLength(this.pageList, 800);
+        this.increaseMaxTextLength(this.pageList, 801);
+        this.increaseMaxTextLength(this.pageList, 802);
+        
+        this.increaseMaxTextLength(this.pageList, 803);
+        this.increaseMaxTextLength(this.pageList, 804);
+        this.increaseMaxTextLength(this.pageList, 805);
+        
+        this.increaseMaxTextLength(this.pageList, 806);
+        this.increaseMaxTextLength(this.pageList, 807);
+        this.increaseMaxTextLength(this.pageList, 808);
+        
+        this.increaseMaxTextLength(this.pageList, 809);
+        this.increaseMaxTextLength(this.pageList, 810);
+        this.increaseMaxTextLength(this.pageList, 811);
+        
+        this.increaseMaxTextLength(this.pageList, 812);
+        this.increaseMaxTextLength(this.pageList, 813);
+        this.increaseMaxTextLength(this.pageList, 814);
+        
+        this.increaseMaxTextLength(this.pageList, 815);
+        this.increaseMaxTextLength(this.pageList, 816);
+        this.increaseMaxTextLength(this.pageList, 817);
+        
+        this.increaseMaxTextLength(this.pageList, 818);
+        this.increaseMaxTextLength(this.pageList, 819);
+        this.increaseMaxTextLength(this.pageList, 820);
+        
+        this.increaseMaxTextLength(this.pageList, 821);
+        this.increaseMaxTextLength(this.pageList, 822);
+        this.increaseMaxTextLength(this.pageList, 823);
+        
+        this.increaseMaxTextLength(this.pageList, 824);
+        this.increaseMaxTextLength(this.pageList, 825);
+        this.increaseMaxTextLength(this.pageList, 826);
+        
+        this.increaseMaxTextLength(this.pageList, 827);
+        this.increaseMaxTextLength(this.pageList, 828);
+        this.increaseMaxTextLength(this.pageList, 829);
+        
+        this.increaseMaxTextLength(this.pageList, 830);
+        this.increaseMaxTextLength(this.pageList, 831);
+        this.increaseMaxTextLength(this.pageList, 832);
+        
+        // Set text here instead of at instantiation, so updated text length is utilized
+        this.setInitialText(this.pageList, 800, this.settings.desertBiomes.landBiome);
+        this.setInitialText(this.pageList, 801, this.settings.desertBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 802, this.settings.desertBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 803, this.settings.forestBiomes.landBiome);
+        this.setInitialText(this.pageList, 804, this.settings.forestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 805, this.settings.forestBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 806, this.settings.iceDesertBiomes.landBiome);
+        this.setInitialText(this.pageList, 807, this.settings.iceDesertBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 808, this.settings.iceDesertBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 809, this.settings.plainsBiomes.landBiome);
+        this.setInitialText(this.pageList, 810, this.settings.plainsBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 811, this.settings.plainsBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 812, this.settings.rainforestBiomes.landBiome);
+        this.setInitialText(this.pageList, 813, this.settings.rainforestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 814, this.settings.rainforestBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 815, this.settings.savannaBiomes.landBiome);
+        this.setInitialText(this.pageList, 816, this.settings.savannaBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 817, this.settings.savannaBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 818, this.settings.shrublandBiomes.landBiome);
+        this.setInitialText(this.pageList, 819, this.settings.shrublandBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 820, this.settings.shrublandBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 821, this.settings.seasonalForestBiomes.landBiome);
+        this.setInitialText(this.pageList, 822, this.settings.seasonalForestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 823, this.settings.seasonalForestBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 824, this.settings.swamplandBiomes.landBiome);
+        this.setInitialText(this.pageList, 825, this.settings.swamplandBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 826, this.settings.swamplandBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 827, this.settings.taigaBiomes.landBiome);
+        this.setInitialText(this.pageList, 828, this.settings.taigaBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 829, this.settings.taigaBiomes.beachBiome);
+        
+        this.setInitialText(this.pageList, 830, this.settings.tundraBiomes.landBiome);
+        this.setInitialText(this.pageList, 831, this.settings.tundraBiomes.oceanBiome);
+        this.setInitialText(this.pageList, 832, this.settings.tundraBiomes.beachBiome);
+        
+        for (int page = 0; page < 5; ++page) {
+            this.pageNames[page] = I18n.format(PREFIX + "page" + page);
         }
         
         this.updatePageControls();
@@ -313,11 +522,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.title = I18n.format("options.customizeTitle");
         this.buttonList.clear();
         
-        this.previousPage = this.<GuiButton>addButton(new GuiButton(302, 20, 5, 80, 20, I18n.format("createWorld.customize.custom.prev")));
-        this.nextPage = this.<GuiButton>addButton(new GuiButton(303, this.width - 100, 5, 80, 20, I18n.format("createWorld.customize.custom.next")));
-        this.defaults = this.<GuiButton>addButton(new GuiButton(304, this.width / 2 - 187, this.height - 27, 90, 20, I18n.format("createWorld.customize.custom.defaults")));
-        this.randomize = this.<GuiButton>addButton(new GuiButton(301, this.width / 2 - 92, this.height - 27, 90, 20, I18n.format("createWorld.customize.custom.randomize")));
-        this.presets = this.<GuiButton>addButton(new GuiButton(305, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format("createWorld.customize.custom.presets")));
+        this.previousPage = this.<GuiButton>addButton(new GuiButton(302, 20, 5, 80, 20, I18n.format(PREFIX + "prev")));
+        this.nextPage = this.<GuiButton>addButton(new GuiButton(303, this.width - 100, 5, 80, 20, I18n.format(PREFIX + "next")));
+        this.defaults = this.<GuiButton>addButton(new GuiButton(304, this.width / 2 - 187, this.height - 27, 90, 20, I18n.format(PREFIX + "defaults")));
+        this.randomize = this.<GuiButton>addButton(new GuiButton(301, this.width / 2 - 92, this.height - 27, 90, 20, I18n.format(PREFIX + "randomize")));
+        this.presets = this.<GuiButton>addButton(new GuiButton(305, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "presets")));
         this.done = this.<GuiButton>addButton(new GuiButton(300, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.done")));
         
         this.defaults.enabled = this.settingsModified;
@@ -358,10 +567,158 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, String string) {
-        // Handle fixedBiome first
-        if (entry == 801) {
-            this.settings.fixedBiome = string;
+        if (entry >= 800 && entry <= 832) {
+            String entryBiome = string;
             
+            String newEntryBiome = "";
+            switch (entry) {
+                case 800:
+                    this.settings.desertBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.desertBiomes.landBiome;
+                    break;
+                case 801:
+                    this.settings.desertBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.desertBiomes.oceanBiome;
+                    break;
+                case 802:
+                    this.settings.desertBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.desertBiomes.beachBiome;
+                    break;
+                    
+                case 803:
+                    this.settings.forestBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.forestBiomes.landBiome;
+                    break;
+                case 804:
+                    this.settings.forestBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.forestBiomes.oceanBiome;
+                    break;
+                case 805:
+                    this.settings.forestBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.forestBiomes.beachBiome;
+                    break;
+                    
+                case 806:
+                    this.settings.iceDesertBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.iceDesertBiomes.landBiome;
+                    break;
+                case 807:
+                    this.settings.iceDesertBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.iceDesertBiomes.oceanBiome;
+                    break;
+                case 808:
+                    this.settings.iceDesertBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.iceDesertBiomes.beachBiome;
+                    break;
+                    
+                case 809:
+                    this.settings.plainsBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.plainsBiomes.landBiome;
+                    break;
+                case 810:
+                    this.settings.plainsBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.plainsBiomes.oceanBiome;
+                    break;
+                case 811:
+                    this.settings.plainsBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.plainsBiomes.beachBiome;
+                    break;
+                    
+                case 812:
+                    this.settings.rainforestBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.rainforestBiomes.landBiome;
+                    break;
+                case 813:
+                    this.settings.rainforestBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.rainforestBiomes.oceanBiome;
+                    break;
+                case 814:
+                    this.settings.rainforestBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.rainforestBiomes.beachBiome;
+                    break;
+                    
+                case 815:
+                    this.settings.savannaBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.savannaBiomes.landBiome;
+                    break;
+                case 816:
+                    this.settings.savannaBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.savannaBiomes.oceanBiome;
+                    break;
+                case 817:
+                    this.settings.savannaBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.savannaBiomes.beachBiome;
+                    break;
+                    
+                case 818:
+                    this.settings.shrublandBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.shrublandBiomes.landBiome;
+                    break;
+                case 819:
+                    this.settings.shrublandBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.shrublandBiomes.oceanBiome;
+                    break;
+                case 820:
+                    this.settings.shrublandBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.shrublandBiomes.beachBiome;
+                    break;
+                    
+                case 821:
+                    this.settings.seasonalForestBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.seasonalForestBiomes.landBiome;
+                    break;
+                case 822:
+                    this.settings.seasonalForestBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.seasonalForestBiomes.oceanBiome;
+                    break;
+                case 823:
+                    this.settings.seasonalForestBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.seasonalForestBiomes.beachBiome;
+                    break;
+                    
+                case 824:
+                    this.settings.swamplandBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.swamplandBiomes.landBiome;
+                    break;
+                case 825:
+                    this.settings.swamplandBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.swamplandBiomes.oceanBiome;
+                    break;
+                case 826:
+                    this.settings.swamplandBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.swamplandBiomes.beachBiome;
+                    break;
+                    
+                case 827:
+                    this.settings.taigaBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.taigaBiomes.landBiome;
+                    break;
+                case 828:
+                    this.settings.taigaBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.taigaBiomes.oceanBiome;
+                    break;
+                case 829:
+                    this.settings.taigaBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.taigaBiomes.beachBiome;
+                    break;
+                    
+                case 830:
+                    this.settings.tundraBiomes.landBiome = entryBiome;
+                    newEntryBiome = this.settings.tundraBiomes.landBiome;
+                    break;
+                case 831:
+                    this.settings.tundraBiomes.oceanBiome = entryBiome;
+                    newEntryBiome = this.settings.tundraBiomes.oceanBiome;
+                    break;
+                case 832:
+                    this.settings.tundraBiomes.beachBiome = entryBiome;
+                    newEntryBiome = this.settings.tundraBiomes.beachBiome;
+                    break;
+            }
+            
+            if (newEntryBiome.equals(entryBiome)) {
+                ((GuiTextField)this.pageList.getComponent(entry)).setText(newEntryBiome);
+            }
         } else {
             float entryValue = 0.0f;
             
@@ -1016,6 +1373,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setEntryValue(integer7, string8);
     }
     
+    private void increaseMaxTextLength(GuiPageButtonList pageList, int id) {
+        ((GuiTextField)pageList.getComponent(id)).setMaxStringLength(MAX_TEXT_LENGTH);
+        ((GuiTextField)pageList.getComponent(id)).width += BIOME_FIELD_ADDITIONAL_WIDTH;
+    }
+    
+    private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
+        ((GuiTextField)pageList.getComponent(id)).setText(initial);
+    }
+    
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
@@ -1052,9 +1418,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             
             tessellator.draw();
             
-            this.drawCenteredString(this.fontRenderer, I18n.format("createWorld.customize.custom.confirmTitle"), this.width / 2, 105, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format("createWorld.customize.custom.confirm1"), this.width / 2, 125, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format("createWorld.customize.custom.confirm2"), this.width / 2, 135, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, 105, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
             
             this.confirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
             this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
