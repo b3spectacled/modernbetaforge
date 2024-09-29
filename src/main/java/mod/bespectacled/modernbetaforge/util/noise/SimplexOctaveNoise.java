@@ -14,7 +14,7 @@ public class SimplexOctaveNoise {
     public SimplexOctaveNoise(Random random, int octaves) {
         this.noises = new SimplexNoise[octaves];
         this.octaves = octaves;
-        this.noiseScale = 1.5D;
+        this.noiseScale = 1.5;
         
         for (int i = 0; i < octaves; ++i) {
             this.noises[i] = new SimplexNoise(random);

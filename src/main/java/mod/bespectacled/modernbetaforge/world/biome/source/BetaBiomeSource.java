@@ -28,8 +28,8 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
         this.climateMap = new BetaClimateMap(settings);
-        this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings.tempNoiseScale, settings.rainNoiseScale, settings.detailNoiseScale);
-        this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings.tempNoiseScale);
+        this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings);
+        this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings);
     }
 
     @Override

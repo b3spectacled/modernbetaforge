@@ -33,13 +33,13 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
         
         // Noise Generators
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(random, 8, true);
-        this.beachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.surfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        new PerlinOctaveNoise(random, 5, true); // Unused in original source
-        this.forestOctaveNoise = new PerlinOctaveNoise(random, 5, true);
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        new PerlinOctaveNoise(this.random, 5, true); // Unused in original source
+        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 5, true);
 
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
@@ -47,7 +47,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        double scale = 0.03125D;
+        double scale = 0.03125;
         
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
@@ -237,7 +237,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
     }
     
     private double clampNoise(double density) {
-        return MathHelper.clamp(density, -10D, 10D);
+        return MathHelper.clamp(density, -10.0, 10.0);
     }
     
     private double getOffset(int noiseY) {

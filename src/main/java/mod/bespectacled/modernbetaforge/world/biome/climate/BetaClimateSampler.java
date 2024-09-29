@@ -6,12 +6,13 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ClimateChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.math.MathHelper;
 
 public class BetaClimateSampler {
-    private final SimplexOctaveNoise tempNoiseOctaves;
-    private final SimplexOctaveNoise rainNoiseOctaves;
-    private final SimplexOctaveNoise detailNoiseOctaves;
+    private final SimplexOctaveNoise tempOctaveNoise;
+    private final SimplexOctaveNoise rainOctaveNoise;
+    private final SimplexOctaveNoise detailOctaveNoise;
     
     private final ChunkCache<ClimateChunk> climateCache;
     
@@ -20,13 +21,13 @@ public class BetaClimateSampler {
     private final double detailScale;
     
     public BetaClimateSampler(long seed) {
-        this(seed, 1D, 1D, 1D);
+        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
     }
     
-    public BetaClimateSampler(long seed, double tempScale, double rainScale, double detailScale) {
-        this.tempNoiseOctaves = new SimplexOctaveNoise(new Random(seed * 9871L), 4);
-        this.rainNoiseOctaves = new SimplexOctaveNoise(new Random(seed * 39811L), 4);
-        this.detailNoiseOctaves = new SimplexOctaveNoise(new Random(seed * 543321L), 2);
+    public BetaClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+        this.tempOctaveNoise = new SimplexOctaveNoise(new Random(seed * 9871L), 4);
+        this.rainOctaveNoise = new SimplexOctaveNoise(new Random(seed * 39811L), 4);
+        this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * 543321L), 2);
         
         this.climateCache = new ChunkCache<>(
             "climate", 
@@ -35,9 +36,9 @@ public class BetaClimateSampler {
             (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise)
         );
         
-        this.tempScale = 0.02500000037252903D / tempScale;
-        this.rainScale = 0.05000000074505806D / rainScale;
-        this.detailScale = 0.25D / detailScale;
+        this.tempScale = 0.025 / settings.tempNoiseScale;
+        this.rainScale = 0.050 / settings.rainNoiseScale;
+        this.detailScale = 0.25 / settings.detailNoiseScale;
     }
 
     public Clime sampleClime(int x, int z) {
@@ -48,16 +49,16 @@ public class BetaClimateSampler {
     }
     
     public Clime sampleClimateNoise(int x, int z) {
-        double temp = this.tempNoiseOctaves.sample(x, z, this.tempScale, this.tempScale, 0.25D);
-        double rain = this.rainNoiseOctaves.sample(x, z, this.rainScale, this.rainScale, 0.33333333333333331D);
-        double detail = this.detailNoiseOctaves.sample(x, z, this.detailScale, this.detailScale, 0.58823529411764708D);
+        double temp = this.tempOctaveNoise.sample(x, z, this.tempScale, this.tempScale, 0.25);
+        double rain = this.rainOctaveNoise.sample(x, z, this.rainScale, this.rainScale, 0.33333333333333331);
+        double detail = this.detailOctaveNoise.sample(x, z, this.detailScale, this.detailScale, 0.58823529411764708);
 
-        detail = detail * 1.1D + 0.5D;
+        detail = detail * 1.1 + 0.5;
 
-        temp = (temp * 0.15D + 0.7D) * 0.99D + detail * 0.01D;
-        rain = (rain * 0.15D + 0.5D) * 0.998D + detail * 0.002D;
+        temp = (temp * 0.15 + 0.7) * 0.99 + detail * 0.01;
+        rain = (rain * 0.15 + 0.5) * 0.998 + detail * 0.002;
 
-        temp = 1.0D - (1.0D - temp) * (1.0D - temp);
+        temp = 1.0 - (1.0 - temp) * (1.0 - temp);
         
         return new Clime(MathHelper.clamp(temp, 0.0, 1.0), MathHelper.clamp(rain, 0.0, 1.0));
     }

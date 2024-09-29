@@ -31,14 +31,14 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
 
         // Noise Generators
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(random, 8, true);
-        new PerlinOctaveNoise(random, 4, true);
-        this.surfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        new PerlinOctaveNoise(random, 10, true);
-        new PerlinOctaveNoise(random, 16, true);
-        this.forestOctaveNoise = new PerlinOctaveNoise(random, 8, true);
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        new PerlinOctaveNoise(this.random, 4, true);
+        this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        new PerlinOctaveNoise(this.random, 10, true);
+        new PerlinOctaveNoise(this.random, 16, true);
+        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(null);
@@ -54,9 +54,9 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
         double[] surfaceNoise = surfaceOctaveNoise.sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0D, 
+            chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
-            scale * 2D, scale * 2D, scale * 2D
+            scale * 2.0, scale * 2.0, scale * 2.0
         );
         
         for (int localZ = 0; localZ < 16; localZ++) {
@@ -64,7 +64,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
                 int x = startX + localX; 
                 int z = startZ + localZ;
 
-                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3D + 3D + rand.nextDouble() * 0.25D);
+                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + rand.nextDouble() * 0.25D);
                 
                 int runDepth = -1;
                 
@@ -152,9 +152,9 @@ public class SkylandsChunkSource extends NoiseChunkSource {
                 coordinateScale / mainNoiseScaleX, 
                 heightScale / mainNoiseScaleY, 
                 coordinateScale / mainNoiseScaleZ
-            ) / 10D + 1.0D) / 2D;
+            ) / 10.0 + 1.0) / 2.0;
             
-            if (mainNoise < 0.0D) {
+            if (mainNoise < 0.0) {
                 density = this.minLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -162,7 +162,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
                     coordinateScale
                 ) / lowerLimitScale;
                 
-            } else if (mainNoise > 1.0D) {
+            } else if (mainNoise > 1.0) {
                 density = this.maxLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -196,6 +196,6 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     }
     
     private double getOffset() {
-        return 8D;
+        return 8.0;
     }
 }

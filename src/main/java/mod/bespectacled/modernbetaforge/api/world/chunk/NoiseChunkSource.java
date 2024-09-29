@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -12,7 +11,6 @@ import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.util.noise.SimplexNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -49,7 +47,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final ChunkCache<NoiseSource> noiseCache;
     protected final ChunkCache<HeightmapChunk> heightmapCache;
     
-    private final SimplexNoise islandNoise;
+    //private final SimplexNoise islandNoise;
     
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
@@ -111,7 +109,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             this::sampleHeightmap
         );
         
-        this.islandNoise = new SimplexNoise(new Random(this.seed));
+        //this.islandNoise = new SimplexNoise(new Random(this.seed));
         
         this.forestOctaveNoise = Optional.empty();
         this.beachOctaveNoise = Optional.empty();

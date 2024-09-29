@@ -38,14 +38,14 @@ public class BetaChunkSource extends NoiseChunkSource {
     ) {
         super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
         
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(random, 8, true);
-        this.beachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.surfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.scaleOctaveNoise = new PerlinOctaveNoise(random, 10, true);
-        this.depthOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.forestOctaveNoise = new PerlinOctaveNoise(random, 8, true);
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
+        this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         
         this.climateSampler = this.biomeProvider.getBiomeSource() instanceof BetaBiomeSource ?
             (BetaBiomeSource)this.biomeProvider.getBiomeSource() :
@@ -67,21 +67,21 @@ public class BetaChunkSource extends NoiseChunkSource {
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
         double[] sandNoise = beachOctaveNoise.sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0D, 
+            chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
-            scale, scale, 1.0D
+            scale, scale, 1.0
         );
         
         double[] gravelNoise = beachOctaveNoise.sampleBeta(
-            chunkX * 16, 109.0134D, chunkZ * 16, 
+            chunkX * 16, 109.0134, chunkZ * 16, 
             16, 1, 16, 
-            scale, 1.0D, scale
+            scale, 1.0, scale
         );
         
         double[] surfaceNoise = surfaceOctaveNoise.sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0D, 
+            chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
-            scale * 2D, scale * 2D, scale * 2D
+            scale * 2.0, scale * 2.0, scale * 2.0
         );
 
         for (int localZ = 0; localZ < 16; localZ++) {
@@ -89,10 +89,10 @@ public class BetaChunkSource extends NoiseChunkSource {
                 int x = startX + localX;
                 int z = startZ + localZ;
                 
-                boolean genSandBeach = sandNoise[localZ + localX * 16] + rand.nextDouble() * 0.2D > 0.0D;
-                boolean genGravelBeach = gravelNoise[localZ + localX * 16] + rand.nextDouble() * 0.2D > 3D;
+                boolean genSandBeach = sandNoise[localZ + localX * 16] + rand.nextDouble() * 0.2 > 0.0;
+                boolean genGravelBeach = gravelNoise[localZ + localX * 16] + rand.nextDouble() * 0.2 > 3.0;
                 
-                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3D + 3D + rand.nextDouble() * 0.25D);
+                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + rand.nextDouble() * 0.25);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
@@ -208,7 +208,7 @@ public class BetaChunkSource extends NoiseChunkSource {
         double baseSize = this.settings.baseSize;
         double heightStretch = this.settings.stretchY;
 
-        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121D, 1.121D);
+        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121, 1.121);
         double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
 
         double islandOffset = this.getIslandOffset(noiseX, noiseZ);
@@ -217,52 +217,52 @@ public class BetaChunkSource extends NoiseChunkSource {
         double temp = clime.temp();
         double rain = clime.rain() * temp;
         
-        rain = 1.0D - rain;
+        rain = 1.0 - rain;
         rain *= rain;
         rain *= rain;
-        rain = 1.0D - rain;
+        rain = 1.0 - rain;
 
-        scale = (scale + 256D) / 512D;
+        scale = (scale + 256.0) / 512.0;
         scale *= rain;
         
-        if (scale > 1.0D) {
-            scale = 1.0D;
+        if (scale > 1.0) {
+            scale = 1.0;
         }
         
-        depth /= 8000D;
+        depth /= 8000.0;
 
-        if (depth < 0.0D) {
-            depth = -depth * 0.3D;
+        if (depth < 0.0) {
+            depth = -depth * 0.3;
         }
 
-        depth = depth * 3D - 2D;
+        depth = depth * 3.0 - 2.0;
 
-        if (depth < 0.0D) {
-            depth /= 2D;
+        if (depth < 0.0) {
+            depth /= 2.0;
 
-            if (depth < -1D) {
-                depth = -1D;
+            if (depth < -1.0) {
+                depth = -1.0;
             }
 
-            depth /= 1.4D;
-            depth /= 2D;
+            depth /= 1.4;
+            depth /= 2.0;
 
-            scale = 0.0D;
+            scale = 0.0;
 
         } else {
-            if (depth > 1.0D) {
-                depth = 1.0D;
+            if (depth > 1.0) {
+                depth = 1.0;
             }
-            depth /= 8D;
+            depth /= 8.0;
         }
 
-        if (scale < 0.0D) {
-            scale = 0.0D;
+        if (scale < 0.0) {
+            scale = 0.0;
         }
 
-        scale += 0.5D;
-        depth = depth * baseSize / 8D;
-        depth = baseSize + depth * 4D;
+        scale += 0.5;
+        depth = depth * baseSize / 8.0;
+        depth = baseSize + depth * 4.0;
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             
@@ -274,9 +274,9 @@ public class BetaChunkSource extends NoiseChunkSource {
                 coordinateScale / mainNoiseScaleX, 
                 heightScale / mainNoiseScaleY, 
                 coordinateScale / mainNoiseScaleZ
-            ) / 10D + 1.0D) / 2D;
+            ) / 10.0 + 1.0) / 2.0;
             
-            if (mainNoise < 0.0D) {
+            if (mainNoise < 0.0) {
                 density = this.minLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -284,7 +284,7 @@ public class BetaChunkSource extends NoiseChunkSource {
                     coordinateScale
                 ) / lowerLimitScale;
                 
-            } else if (mainNoise > 1.0D) {
+            } else if (mainNoise > 1.0) {
                 density = this.maxLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -321,8 +321,8 @@ public class BetaChunkSource extends NoiseChunkSource {
     private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
         double offset = (((double)noiseY - depth) * heightStretch) / scale;
         
-        if (offset < 0D)
-            offset *= 4D;
+        if (offset < 0.0)
+            offset *= 4.0;
         
         return offset;
     }

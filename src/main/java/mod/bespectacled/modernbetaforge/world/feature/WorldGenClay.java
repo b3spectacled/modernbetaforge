@@ -48,24 +48,24 @@ public class WorldGenClay extends WorldGenerator {
             
             double d9 = (random.nextDouble() * (double)numberOfBlocks) / 16D;
             
-            double d10 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0D;
-            double d11 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0D;
+            double d10 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0;
+            double d11 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0;
             
-            int minX = MathHelper.floor(d6 - d10 / 2D);
-            int maxX = MathHelper.floor(d6 + d10 / 2D);
-            int minY = MathHelper.floor(d7 - d11 / 2D);
-            int maxY = MathHelper.floor(d7 + d11 / 2D);
-            int minZ = MathHelper.floor(d8 - d10 / 2D);
-            int maxZ = MathHelper.floor(d8 + d10 / 2D);
+            int minX = MathHelper.floor(d6 - d10 / 2.0);
+            int maxX = MathHelper.floor(d6 + d10 / 2.0);
+            int minY = MathHelper.floor(d7 - d11 / 2.0);
+            int maxY = MathHelper.floor(d7 + d11 / 2.0);
+            int minZ = MathHelper.floor(d8 - d10 / 2.0);
+            int maxZ = MathHelper.floor(d8 + d10 / 2.0);
             
             for(int x = minX; x <= maxX; x++) {
                 for(int y = minY; y <= maxY; y++) {
                     for(int z = minZ; z <= maxZ; z++) {
-                        double dX = (((double)x + 0.5D) - d6) / (d10 / 2D);
-                        double dY = (((double)y + 0.5D) - d7) / (d11 / 2D);
-                        double dZ = (((double)z + 0.5D) - d8) / (d10 / 2D);
+                        double dX = (((double)x + 0.5D) - d6) / (d10 / 2.0);
+                        double dY = (((double)y + 0.5D) - d7) / (d11 / 2.0);
+                        double dZ = (((double)z + 0.5D) - d8) / (d10 / 2.0);
                         
-                        if(dX * dX + dY * dY + dZ * dZ >= 1.0D) {
+                        if(dX * dX + dY * dY + dZ * dZ >= 1.0) {
                             continue;
                         }
                         

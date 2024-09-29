@@ -54,13 +54,13 @@ public class MapGenBetaCave extends MapGenBase {
                 float f1 = ((this.rand.nextFloat() - 0.5F) * 2.0F) / 8F;
                 float tunnelSysWidth = getTunnelSystemWidth(this.rand);
 
-                carveTunnels(chunkPrimer, originChunkX, originChunkZ, x, y, z, tunnelSysWidth, f, f1, 0, 0, 1.0D);
+                carveTunnels(chunkPrimer, originChunkX, originChunkZ, x, y, z, tunnelSysWidth, f, f1, 0, 0, 1.0);
             }
         }
     }
     
     private void carveCave(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
-        carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, 1.0F + this.rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5D);
+        carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, 1.0F + this.rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5);
     }
     
     private void carveTunnels(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z, float tunnelSysWidth, float f1, float f2, int branch, int branchCount, double tunnelWHRatio) {
@@ -84,7 +84,7 @@ public class MapGenBetaCave extends MapGenBase {
         boolean vary = newRandom.nextInt(6) == 0;
 
         for (; branch < branchCount; branch++) {
-            double yaw = 1.5D + (double) (MathHelper.sin(((float) branch * 3.141593F) / (float) branchCount) * tunnelSysWidth * 1.0F);
+            double yaw = 1.5 + (double) (MathHelper.sin(((float) branch * 3.141593F) / (float) branchCount) * tunnelSysWidth * 1.0F);
             double pitch = yaw * tunnelWHRatio;
 
             float f5 = MathHelper.cos(f2);
@@ -106,8 +106,8 @@ public class MapGenBetaCave extends MapGenBase {
             f3 += (newRandom.nextFloat() - newRandom.nextFloat()) * newRandom.nextFloat() * 4F;
 
             if (!noStarts && branch == randBranch && tunnelSysWidth > 1.0F) {
-                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, f1 - 1.570796F, f2 / 3F, branch, branchCount, 1.0D);
-                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, f1 + 1.570796F, f2 / 3F, branch, branchCount, 1.0D);
+                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, f1 - 1.570796F, f2 / 3F, branch, branchCount, 1.0);
+                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, f1 + 1.570796F, f2 / 3F, branch, branchCount, 1.0);
                 return;
             }
 
@@ -132,7 +132,7 @@ public class MapGenBetaCave extends MapGenBase {
         double ctrZ = chunkZ * 16 + 8;
 
         if ( // Check for valid tunnel starts, I guess? Or to prevent overlap?
-        x < ctrX - 16D - yaw * 2D || z < ctrZ - 16D - yaw * 2D || x > ctrX + 16D + yaw * 2D || z > ctrZ + 16D + yaw * 2D) {
+        x < ctrX - 16.0 - yaw * 2.0 || z < ctrZ - 16.0 - yaw * 2.0 || x > ctrX + 16.0 + yaw * 2.0 || z > ctrZ + 16.0 + yaw * 2.0) {
             return false;
         }
 
@@ -172,14 +172,14 @@ public class MapGenBetaCave extends MapGenBase {
         }
 
         for (int relX = minX; relX < maxX; relX++) {
-            double scaledRelX = (((double) (relX + chunkX * 16) + 0.5D) - x) / yaw;
+            double scaledRelX = (((double) (relX + chunkX * 16) + 0.5) - x) / yaw;
 
             for (int relZ = minZ; relZ < maxZ; relZ++) {
-                double scaledRelZ = (((double) (relZ + chunkZ * 16) + 0.5D) - z) / yaw;
+                double scaledRelZ = (((double) (relZ + chunkZ * 16) + 0.5) - z) / yaw;
                 boolean isGrassBlock = false;
                 
                 for (int relY = maxY; relY >= minY; relY--) {
-                    double scaledRelY = (((double) relY - 1 + 0.5D) - y) / pitch;
+                    double scaledRelY = (((double) relY - 1 + 0.5) - y) / pitch;
 
                     if (isPositionExcluded(scaledRelX, scaledRelY, scaledRelZ)) {
                         Block block = chunkPrimer.getBlockState(relX, relY, relZ).getBlock();
@@ -252,7 +252,7 @@ public class MapGenBetaCave extends MapGenBase {
     }
 
     private boolean isPositionExcluded(double scaledRelativeX, double scaledRelativeY, double scaledRelativeZ) {
-        return scaledRelativeY > -0.69999999999999996D && scaledRelativeX * scaledRelativeX + scaledRelativeY * scaledRelativeY + scaledRelativeZ * scaledRelativeZ < 1.0D;
+        return scaledRelativeY > -0.7 && scaledRelativeX * scaledRelativeX + scaledRelativeY * scaledRelativeY + scaledRelativeZ * scaledRelativeZ < 1.0;
     }
 
     private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int relX, int relZ) {

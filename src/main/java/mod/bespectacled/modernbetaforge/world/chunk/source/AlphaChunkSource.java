@@ -34,14 +34,14 @@ public class AlphaChunkSource extends NoiseChunkSource {
         super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
 
         // Noise Generators
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(random, 8, true);
-        this.beachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.surfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.scaleOctaveNoise = new PerlinOctaveNoise(random, 10, true);
-        this.depthOctaveNoise = new PerlinOctaveNoise(random, 16, true);
-        this.forestOctaveNoise = new PerlinOctaveNoise(random, 8, true);
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
+        this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
+        this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
@@ -59,21 +59,21 @@ public class AlphaChunkSource extends NoiseChunkSource {
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
         double[] sandNoise = beachOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0D,
+            chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
-            scale, scale, 1.0D
+            scale, scale, 1.0
         );
         
         double[] gravelNoise = beachOctaveNoise.sampleAlpha(
-            chunkZ * 16, 109.0134D, chunkX * 16,
+            chunkZ * 16, 109.0134, chunkX * 16,
             16, 1, 16,
-            scale, 1.0D, scale
+            scale, 1.0, scale
         );
         
         double[] surfaceNoise = surfaceOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0D,
+            chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
-            scale * 2D, scale * 2D, scale * 2D
+            scale * 2.0, scale * 2.0, scale * 2.0
         );
         
         for (int localX = 0; localX < 16; localX++) {
@@ -193,41 +193,41 @@ public class AlphaChunkSource extends NoiseChunkSource {
         
         double islandOffset = this.getIslandOffset(noiseX, noiseZ);
         
-        scale = (scale + 256D) / 512D;
+        scale = (scale + 256.0) / 512.0;
         
-        if (scale > 1.0D) {
-            scale = 1.0D; 
+        if (scale > 1.0) {
+            scale = 1.0; 
         }
 
-        depth /= 8000D;
+        depth /= 8000.0;
         
-        if (depth < 0.0D) {
+        if (depth < 0.0) {
             depth = -depth;
         }
 
-        depth = depth * 3D - 3D;
+        depth = depth * 3.0 - 3.0;
 
-        if (depth < 0.0D) {
-            depth /= 2D;
-            if (depth < -1D) {
-                depth = -1D;
+        if (depth < 0.0) {
+            depth /= 2.0;
+            if (depth < -1.0) {
+                depth = -1.0;
             }
 
-            depth /= 1.4D;
-            depth /= 2D; // Omitting this creates the Infdev 20100611 generator.
+            depth /= 1.4;
+            depth /= 2.0; // Omitting this creates the Infdev 20100611 generator.
 
-            scale = 0.0D;
+            scale = 0.0;
 
         } else {
-            if (depth > 1.0D) {
-                depth = 1.0D;
+            if (depth > 1.0) {
+                depth = 1.0;
             }
-            depth /= 6D;
+            depth /= 6.0;
         }
 
-        scale += 0.5D;
-        depth = depth * baseSize / 8D;
-        depth = baseSize + depth * 4D;
+        scale += 0.5;
+        depth = depth * baseSize / 8.0;
+        depth = baseSize + depth * 4.0;
         
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
@@ -240,9 +240,9 @@ public class AlphaChunkSource extends NoiseChunkSource {
                 coordinateScale / mainNoiseScaleX, 
                 heightScale / mainNoiseScaleY, 
                 coordinateScale / mainNoiseScaleZ
-            ) / 10D + 1.0D) / 2D;
+            ) / 10.0 + 1.0) / 2.0;
             
-            if (mainNoise < 0.0D) {
+            if (mainNoise < 0.0) {
                 density = this.minLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -250,7 +250,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
                     coordinateScale
                 ) / lowerLimitScale;
                 
-            } else if (mainNoise > 1.0D) {
+            } else if (mainNoise > 1.0) {
                 density = this.maxLimitOctaveNoise.sample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
@@ -287,8 +287,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
     private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
         double offset = (((double)noiseY - depth) * heightStretch) / scale;
         
-        if (offset < 0D)
-            offset *= 4D;
+        if (offset < 0.0)
+            offset *= 4.0;
         
         return offset;
     }

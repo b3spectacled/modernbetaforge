@@ -94,7 +94,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         }
     
         // Foliage blob count per y level
-        int foliageBlobCount = (int) (1.382D + Math.pow((double) treeInfo.getHeight() / 13.0D, 2.0D));
+        int foliageBlobCount = (int) (1.382 + Math.pow((double) treeInfo.getHeight() / 13.0, 2.0));
         if (foliageBlobCount <= 0) {
             foliageBlobCount = 1;
         }
@@ -120,11 +120,11 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             // If foliage distance given, generate foliage
             if (foliageDistance >= 0.0F) {
                 while (currentBlobCount < foliageBlobCount) {
-                    double randRadius = (double) foliageDistance * ((double) random.nextFloat() + 0.328D);
-                    double randAngle = (double) random.nextFloat() * 2.0D * 3.14159D;
+                    double randRadius = (double) foliageDistance * ((double) random.nextFloat() + 0.328);
+                    double randAngle = (double) random.nextFloat() * 2.0 * 3.14159;
                     
-                    int randX = (int) (randRadius * Math.sin(randAngle) + (double) basePos.getX() + 0.5D);
-                    int randZ = (int) (randRadius * Math.cos(randAngle) + (double) basePos.getZ() + 0.5D);
+                    int randX = (int) (randRadius * Math.sin(randAngle) + (double) basePos.getX() + 0.5);
+                    int randZ = (int) (randRadius * Math.cos(randAngle) + (double) basePos.getZ() + 0.5);
                     
                     int[] startPos = new int[] { randX, foliageBaseY, randZ };
                     int[] endPos = new int[] { randX, foliageBaseY + FOLIAGE_BLOB_HEIGHT, randZ };
@@ -133,9 +133,9 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
                         endPos = new int[] { basePos.getX(), basePos.getY(), basePos.getZ() };
                         
                         double distance = Math.sqrt(
-                            Math.pow((double) Math.abs(basePos.getX() - startPos[0]), 2.0D) + 
-                            Math.pow((double) Math.abs(basePos.getZ() - startPos[2]), 2.0D)
-                        ) * 0.381D;
+                            Math.pow((double) Math.abs(basePos.getX() - startPos[0]), 2.0) + 
+                            Math.pow((double) Math.abs(basePos.getZ() - startPos[2]), 2.0)
+                        ) * 0.381;
                         
                         if ((double) startPos[1] - distance > (double) treeTopY) {
                             endPos[1] = treeTopY;
@@ -209,7 +209,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             branchStartPos[1] = foliageBlobPos[3];
             
             int relY = branchStartPos[1] - basePos.getY();
-            if (relY >= treeInfo.getHeight() * 0.2D) {
+            if (relY >= treeInfo.getHeight() * 0.2) {
                 this.placeBranch(world, branchStartPos, branchEndPos, BlockStates.OAK_LOG);
             }
             
@@ -247,9 +247,9 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             int endOffset = distance[longestSideNdx] + branchDir;
             
             while(offset != endOffset) {
-                pos[longestSideNdx] = MathHelper.floor((startPos[longestSideNdx] + offset) + 0.5D);
-                pos[ndx0] = MathHelper.floor(startPos[ndx0] + offset * branchStep0 + 0.5D);
-                pos[ndx1] = MathHelper.floor(startPos[ndx1] + offset * branchStep1 + 0.5D);
+                pos[longestSideNdx] = MathHelper.floor((startPos[longestSideNdx] + offset) + 0.5);
+                pos[ndx0] = MathHelper.floor(startPos[ndx0] + offset * branchStep0 + 0.5);
+                pos[ndx1] = MathHelper.floor(startPos[ndx1] + offset * branchStep1 + 0.5);
                 
                 world.setBlockState(mutable.setPos(pos[0], pos[1], pos[2]), state);
                 
@@ -260,7 +260,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
 
     private void placeLayer(World world, int x, int y, int z, float radius, byte axis, IBlockState state) {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-        int layerRadius = (int) (radius + 0.618D);
+        int layerRadius = (int) (radius + 0.618);
         
         byte ndx0 = AXIS_LOOKUP[axis];
         byte ndx1 = AXIS_LOOKUP[axis + 3];
@@ -271,8 +271,8 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         for (int off1 = -layerRadius; off1 <= layerRadius; ++off1) {
             for (int off2 = -layerRadius; off2 <= layerRadius; ++off2) {
                 double foliageDist = Math.sqrt(
-                    Math.pow((double) Math.abs(off1) + 0.5D, 2.0D) + 
-                    Math.pow((double) Math.abs(off2) + 0.5D, 2.0D));
+                    Math.pow((double) Math.abs(off1) + 0.5, 2.0) + 
+                    Math.pow((double) Math.abs(off2) + 0.5, 2.0));
                 
                 if (foliageDist > radius)
                     continue;
@@ -322,7 +322,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         float distance;
         
         // Check to generate branch
-        if ((double) treeRelY < (double) ((float) treeInfo.getHeight()) * 0.3D) {
+        if ((double) treeRelY < (double) ((float) treeInfo.getHeight()) * 0.3) {
             distance = -1.618F;
             
         } else {

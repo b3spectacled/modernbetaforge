@@ -26,9 +26,9 @@ public class PerlinNoise {
         this.offsetX = this.offsetY = this.offsetZ = 0;
         
         if (useOffset) {
-            this.offsetX = random.nextDouble() * 256D;
-            this.offsetY = random.nextDouble() * 256D;
-            this.offsetZ = random.nextDouble() * 256D; 
+            this.offsetX = random.nextDouble() * 256.0;
+            this.offsetY = random.nextDouble() * 256.0;
+            this.offsetZ = random.nextDouble() * 256.0; 
         } 
         
         for (int i = 0; i < 256; i++) {
@@ -116,13 +116,13 @@ public class PerlinNoise {
         double frequency
     ) {
         int ndx = 0;
-        frequency = 1.0D / frequency;
+        frequency = 1.0 / frequency;
         int flagY = -1;
         
-        double lerp0 = 0.0D;
-        double lerp1 = 0.0D;
-        double lerp2 = 0.0D;
-        double lerp3 = 0.0D;
+        double lerp0 = 0.0;
+        double lerp1 = 0.0;
+        double lerp2 = 0.0;
+        double lerp3 = 0.0;
         
         // Iterate over a collection of noise points
         for (int sX = 0; sX < sizeX; sX++) {
@@ -164,25 +164,25 @@ public class PerlinNoise {
                         lerp0 = MathUtil.lerp(
                             u,
                             grad(this.permutations[AA], curX, curY, curZ),
-                            grad(this.permutations[BA], curX - 1.0D, curY, curZ)
+                            grad(this.permutations[BA], curX - 1.0, curY, curZ)
                         );
                         
                         lerp1 = MathUtil.lerp(
                             u,
-                            grad(this.permutations[AB], curX, curY - 1.0D, curZ),
-                            grad(this.permutations[BB], curX - 1.0D, curY - 1.0D, curZ)
+                            grad(this.permutations[AB], curX, curY - 1.0, curZ),
+                            grad(this.permutations[BB], curX - 1.0, curY - 1.0, curZ)
                         );
                         
                         lerp2 = MathUtil.lerp(
                             u,
-                            grad(this.permutations[AA + 1], curX, curY, curZ - 1.0D),
-                            grad(this.permutations[BA + 1], curX - 1.0D, curY, curZ - 1.0D)
+                            grad(this.permutations[AA + 1], curX, curY, curZ - 1.0),
+                            grad(this.permutations[BA + 1], curX - 1.0, curY, curZ - 1.0)
                         );
                         
                         lerp3 = MathUtil.lerp(
                             u,
-                            grad(this.permutations[AB + 1], curX, curY - 1.0D, curZ - 1.0D),
-                            grad(this.permutations[BB + 1], curX - 1.0D, curY - 1.0D, curZ - 1.0D)
+                            grad(this.permutations[AB + 1], curX, curY - 1.0, curZ - 1.0),
+                            grad(this.permutations[BB + 1], curX - 1.0, curY - 1.0, curZ - 1.0)
                         );
                     }
                     
@@ -217,7 +217,7 @@ public class PerlinNoise {
     }
     
     public double sampleXZ(double x, double z, double frequency) {
-        frequency = 1.0D / frequency;
+        frequency = 1.0 / frequency;
         
         x = x + this.offsetX;
         z = z + this.offsetZ;
@@ -244,12 +244,12 @@ public class PerlinNoise {
         
         double lerp0 = MathUtil.lerp(
             u,
-            grad(this.permutations[AA], x, 0.0D, z),
-            grad(this.permutations[BA], x - 1.0D, 0.0D, z));
+            grad(this.permutations[AA], x, 0.0, z),
+            grad(this.permutations[BA], x - 1.0, 0.0, z));
         double lerp1 = MathUtil.lerp(
             u, 
-            grad(this.permutations[AA + 1], x, 0.0D, z - 1.0D),
-            grad(this.permutations[BA + 1], x - 1.0D, 0.0D, z - 1.0D));
+            grad(this.permutations[AA + 1], x, 0.0, z - 1.0),
+            grad(this.permutations[BA + 1], x - 1.0, 0.0, z - 1.0));
         
         double res = MathUtil.lerp(w, lerp0, lerp1);
         
