@@ -310,7 +310,7 @@ public abstract class ChunkSource {
                         ClimateSampler climateSampler = (ClimateSampler)biomeProvider.getBiomeSource();
                         
                         double temp = climateSampler.sample(x, z).temp();
-                        temp = temp - ((double)(y - 64) / 64D) * 0.3D;
+                        temp = temp - ((double)(y - 64) / 64.0) * 0.3;
                         
                         if (BiomeBeta.canSetIce(this.world, blockPosDown, false, temp)) {
                             this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);

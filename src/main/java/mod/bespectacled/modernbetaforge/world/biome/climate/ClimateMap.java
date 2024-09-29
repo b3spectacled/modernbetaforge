@@ -4,21 +4,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings.BetaClimateMappingSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings.ClimateMappingSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class BetaClimateMap {
-    private final Map<String, BetaClimateMapping> climateMap;
-    private final Map<String, BetaClimateMapping> defaultMap;
-    private final BetaClimateMapping[] climateTable;
+public class ClimateMap {
+    private final Map<String, ClimateMapping> climateMap;
+    private final Map<String, ClimateMapping> defaultMap;
+    private final ClimateMapping[] climateTable;
     private final boolean modifiedMap;
     
-    public BetaClimateMap(ModernBetaChunkGeneratorSettings settings) {
+    public ClimateMap(ModernBetaChunkGeneratorSettings settings) {
         this.climateMap = new LinkedHashMap<>();
         this.defaultMap = new LinkedHashMap<>();
-        this.climateTable = new BetaClimateMapping[4096];
+        this.climateTable = new ClimateMapping[4096];
         
         this.populateBiomeMap(this.climateMap, settings);
         this.populateBiomeMap(this.defaultMap, new ModernBetaChunkGeneratorSettings.Factory().build());
@@ -27,25 +27,25 @@ public class BetaClimateMap {
         this.modifiedMap = !this.climateMap.equals(this.defaultMap);
     }
     
-    public void populateBiomeMap(Map<String, BetaClimateMapping> climateMap, ModernBetaChunkGeneratorSettings settings) {
-        climateMap.put("ice_desert", new BetaClimateMapping(settings.iceDesertBiomes));
-        climateMap.put("tundra", new BetaClimateMapping(settings.tundraBiomes));
-        climateMap.put("savanna", new BetaClimateMapping(settings.savannaBiomes));
-        climateMap.put("desert", new BetaClimateMapping(settings.desertBiomes));
-        climateMap.put("swampland", new BetaClimateMapping(settings.swamplandBiomes));
-        climateMap.put("taiga", new BetaClimateMapping(settings.taigaBiomes));
-        climateMap.put("shrubland", new BetaClimateMapping(settings.shrublandBiomes));
-        climateMap.put("forest", new BetaClimateMapping(settings.forestBiomes));
-        climateMap.put("plains", new BetaClimateMapping(settings.plainsBiomes));
-        climateMap.put("seasonal_forest", new BetaClimateMapping(settings.seasonalForestBiomes));
-        climateMap.put("rainforest", new BetaClimateMapping(settings.rainforestBiomes));
+    public void populateBiomeMap(Map<String, ClimateMapping> climateMap, ModernBetaChunkGeneratorSettings settings) {
+        climateMap.put("ice_desert", new ClimateMapping(settings.iceDesertBiomes));
+        climateMap.put("tundra", new ClimateMapping(settings.tundraBiomes));
+        climateMap.put("savanna", new ClimateMapping(settings.savannaBiomes));
+        climateMap.put("desert", new ClimateMapping(settings.desertBiomes));
+        climateMap.put("swampland", new ClimateMapping(settings.swamplandBiomes));
+        climateMap.put("taiga", new ClimateMapping(settings.taigaBiomes));
+        climateMap.put("shrubland", new ClimateMapping(settings.shrublandBiomes));
+        climateMap.put("forest", new ClimateMapping(settings.forestBiomes));
+        climateMap.put("plains", new ClimateMapping(settings.plainsBiomes));
+        climateMap.put("seasonal_forest", new ClimateMapping(settings.seasonalForestBiomes));
+        climateMap.put("rainforest", new ClimateMapping(settings.rainforestBiomes));
     }
     
-    public Map<String, BetaClimateMapping> getMap() {
+    public Map<String, ClimateMapping> getMap() {
         return new LinkedHashMap<>(this.climateMap);
     }
     
-    public Biome getBiome(double temp, double rain, BetaClimateType type) {
+    public Biome getBiome(double temp, double rain, ClimateType type) {
         int t = (int) (temp * 63D);
         int r = (int) (rain * 63D);
 
@@ -64,7 +64,7 @@ public class BetaClimateMap {
         }
     }
     
-    private BetaClimateMapping getBiome(float temp, float rain) {
+    private ClimateMapping getBiome(float temp, float rain) {
         rain *= temp;
 
         if (temp < 0.1F) {
@@ -109,24 +109,24 @@ public class BetaClimateMap {
         }
     }
     
-    public static class BetaClimateMapping {
+    public static class ClimateMapping {
         public final Biome landBiome;
         public final Biome oceanBiome;
         public final Biome beachBiome;
         
-        public BetaClimateMapping(BetaClimateMappingSettings settings) {
+        public ClimateMapping(ClimateMappingSettings settings) {
             this.landBiome = this.fetchBiome(settings.landBiome);
             this.oceanBiome = this.fetchBiome(settings.oceanBiome);
             this.beachBiome = this.fetchBiome(settings.beachBiome);
         }
         
-        public BetaClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
+        public ClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
             this.landBiome = biome;
             this.oceanBiome = oceanBiome;
             this.beachBiome = beachBiome;
         }
         
-        public Biome biomeByClimateType(BetaClimateType type) {
+        public Biome biomeByClimateType(ClimateType type) {
             switch(type) {
                 case LAND: return this.landBiome;
                 case OCEAN: return this.oceanBiome;
@@ -141,11 +141,11 @@ public class BetaClimateMap {
                 return true;
             }
             
-            if (!(o instanceof BetaClimateMapping)) {
+            if (!(o instanceof ClimateMapping)) {
                 return false;
             }
             
-            BetaClimateMapping other = (BetaClimateMapping) o;
+            ClimateMapping other = (ClimateMapping) o;
             
             return
                 this.landBiome.equals(other.landBiome) &&

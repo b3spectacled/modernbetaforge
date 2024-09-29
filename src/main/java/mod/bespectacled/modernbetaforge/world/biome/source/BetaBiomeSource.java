@@ -7,16 +7,16 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
-import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateSampler;
-import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateType;
-import mod.bespectacled.modernbetaforge.world.biome.climate.BetaSkyClimateSampler;
+import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
+import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
+import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaClimateSampler;
+import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateSampler;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
 public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
-    private final BetaClimateMap climateMap;
+    private final ClimateMap climateMap;
     private final BetaClimateSampler climateSampler;
     private final BetaSkyClimateSampler skyClimateSampler;
     
@@ -27,7 +27,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
-        this.climateMap = new BetaClimateMap(settings);
+        this.climateMap = new ClimateMap(settings);
         this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings);
         this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings);
     }
@@ -38,7 +38,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
         double temp = clime.temp();
         double rain = clime.rain();
         
-        return this.climateMap.getBiome(temp, rain, BetaClimateType.LAND);
+        return this.climateMap.getBiome(temp, rain, ClimateType.LAND);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
         double temp = clime.temp();
         double rain = clime.rain();
         
-        return this.climateMap.getBiome(temp, rain, BetaClimateType.OCEAN);
+        return this.climateMap.getBiome(temp, rain, ClimateType.OCEAN);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
         double temp = clime.temp();
         double rain = clime.rain();
         
-        return this.climateMap.getBiome(temp, rain, BetaClimateType.BEACH);
+        return this.climateMap.getBiome(temp, rain, ClimateType.BEACH);
     }
 
     @Override

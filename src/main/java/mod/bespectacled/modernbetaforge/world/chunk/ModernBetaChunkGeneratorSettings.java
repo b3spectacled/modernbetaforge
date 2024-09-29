@@ -152,17 +152,17 @@ public class ModernBetaChunkGeneratorSettings {
     public final float outerIslandNoiseOffset;
     */
     
-    public final BetaClimateMappingSettings desertBiomes;
-    public final BetaClimateMappingSettings forestBiomes;
-    public final BetaClimateMappingSettings iceDesertBiomes;
-    public final BetaClimateMappingSettings plainsBiomes;
-    public final BetaClimateMappingSettings rainforestBiomes;
-    public final BetaClimateMappingSettings savannaBiomes;
-    public final BetaClimateMappingSettings shrublandBiomes;
-    public final BetaClimateMappingSettings seasonalForestBiomes;
-    public final BetaClimateMappingSettings swamplandBiomes;
-    public final BetaClimateMappingSettings taigaBiomes;
-    public final BetaClimateMappingSettings tundraBiomes;
+    public final ClimateMappingSettings desertBiomes;
+    public final ClimateMappingSettings forestBiomes;
+    public final ClimateMappingSettings iceDesertBiomes;
+    public final ClimateMappingSettings plainsBiomes;
+    public final ClimateMappingSettings rainforestBiomes;
+    public final ClimateMappingSettings savannaBiomes;
+    public final ClimateMappingSettings shrublandBiomes;
+    public final ClimateMappingSettings seasonalForestBiomes;
+    public final ClimateMappingSettings swamplandBiomes;
+    public final ClimateMappingSettings taigaBiomes;
+    public final ClimateMappingSettings tundraBiomes;
     
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
@@ -439,17 +439,17 @@ public class ModernBetaChunkGeneratorSettings {
         public float outerIslandNoiseOffset;
         */
         
-        public BetaClimateMappingSettings desertBiomes;
-        public BetaClimateMappingSettings forestBiomes;
-        public BetaClimateMappingSettings iceDesertBiomes;
-        public BetaClimateMappingSettings plainsBiomes;
-        public BetaClimateMappingSettings rainforestBiomes;
-        public BetaClimateMappingSettings savannaBiomes;
-        public BetaClimateMappingSettings shrublandBiomes;
-        public BetaClimateMappingSettings seasonalForestBiomes;
-        public BetaClimateMappingSettings swamplandBiomes;
-        public BetaClimateMappingSettings taigaBiomes;
-        public BetaClimateMappingSettings tundraBiomes;
+        public ClimateMappingSettings desertBiomes;
+        public ClimateMappingSettings forestBiomes;
+        public ClimateMappingSettings iceDesertBiomes;
+        public ClimateMappingSettings plainsBiomes;
+        public ClimateMappingSettings rainforestBiomes;
+        public ClimateMappingSettings savannaBiomes;
+        public ClimateMappingSettings shrublandBiomes;
+        public ClimateMappingSettings seasonalForestBiomes;
+        public ClimateMappingSettings swamplandBiomes;
+        public ClimateMappingSettings taigaBiomes;
+        public ClimateMappingSettings tundraBiomes;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -597,67 +597,67 @@ public class ModernBetaChunkGeneratorSettings {
             this.outerIslandNoiseOffset = 0.25f;
             */
             
-            this.desertBiomes = new BetaClimateMappingSettings(
+            this.desertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString()
             );
             
-            this.forestBiomes = new BetaClimateMappingSettings(
+            this.forestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.iceDesertBiomes = new BetaClimateMappingSettings(
+            this.iceDesertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
             );
             
-            this.plainsBiomes = new BetaClimateMappingSettings(
+            this.plainsBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.rainforestBiomes = new BetaClimateMappingSettings(
+            this.rainforestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.savannaBiomes = new BetaClimateMappingSettings(
+            this.savannaBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.shrublandBiomes = new BetaClimateMappingSettings(
+            this.shrublandBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.seasonalForestBiomes = new BetaClimateMappingSettings(
+            this.seasonalForestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.swamplandBiomes = new BetaClimateMappingSettings(
+            this.swamplandBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.taigaBiomes = new BetaClimateMappingSettings(
+            this.taigaBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
             );
             
-            this.tundraBiomes = new BetaClimateMappingSettings(
+            this.tundraBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
@@ -796,67 +796,67 @@ public class ModernBetaChunkGeneratorSettings {
             this.outerIslandNoiseOffset = 0.25f;
             */
             
-            this.desertBiomes = new BetaClimateMappingSettings(
+            this.desertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString()
             );
             
-            this.forestBiomes = new BetaClimateMappingSettings(
+            this.forestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.iceDesertBiomes = new BetaClimateMappingSettings(
+            this.iceDesertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
             );
             
-            this.plainsBiomes = new BetaClimateMappingSettings(
+            this.plainsBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.rainforestBiomes = new BetaClimateMappingSettings(
+            this.rainforestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.savannaBiomes = new BetaClimateMappingSettings(
+            this.savannaBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.shrublandBiomes = new BetaClimateMappingSettings(
+            this.shrublandBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.seasonalForestBiomes = new BetaClimateMappingSettings(
+            this.seasonalForestBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.swamplandBiomes = new BetaClimateMappingSettings(
+            this.swamplandBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
             );
             
-            this.taigaBiomes = new BetaClimateMappingSettings(
+            this.taigaBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
             );
             
-            this.tundraBiomes = new BetaClimateMappingSettings(
+            this.tundraBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
@@ -1482,17 +1482,17 @@ public class ModernBetaChunkGeneratorSettings {
             return jsonObject;
         }
         
-        private BetaClimateMappingSettings deserializeBiomes(JsonObject jsonObject, String tag, BetaClimateMappingSettings fallback) {
-            return GSON.fromJson(JsonUtils.getString(jsonObject, tag, GSON.toJson(fallback)), BetaClimateMappingSettings.class);
+        private ClimateMappingSettings deserializeBiomes(JsonObject jsonObject, String tag, ClimateMappingSettings fallback) {
+            return GSON.fromJson(JsonUtils.getString(jsonObject, tag, GSON.toJson(fallback)), ClimateMappingSettings.class);
         }
     }
     
-    public static class BetaClimateMappingSettings {
+    public static class ClimateMappingSettings {
         public String landBiome;
         public String oceanBiome;
         public String beachBiome;
         
-        public BetaClimateMappingSettings(String landBiome, String oceanBiome, String beachBiome) {
+        public ClimateMappingSettings(String landBiome, String oceanBiome, String beachBiome) {
             this.landBiome = landBiome;
             this.oceanBiome = oceanBiome;
             this.beachBiome = beachBiome;
@@ -1504,11 +1504,11 @@ public class ModernBetaChunkGeneratorSettings {
                 return true;
             }
             
-            if (!(o instanceof BetaClimateMappingSettings)) {
+            if (!(o instanceof ClimateMappingSettings)) {
                 return false;
             }
             
-            BetaClimateMappingSettings other = (BetaClimateMappingSettings) o;
+            ClimateMappingSettings other = (ClimateMappingSettings) o;
             
             return
                 this.landBiome.equals(other.landBiome) &&

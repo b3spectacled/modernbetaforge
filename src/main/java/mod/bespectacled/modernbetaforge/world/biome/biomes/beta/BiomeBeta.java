@@ -70,7 +70,7 @@ public abstract class BiomeBeta extends ModernBetaBiome {
     }
     
     public static boolean canSetIce(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
-        if (temp >= 0.5D) {
+        if (temp >= 0.5) {
             return false;
         }
         if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
@@ -99,7 +99,7 @@ public abstract class BiomeBeta extends ModernBetaBiome {
     }
 
     public static boolean canSetSnow(World world, BlockPos blockPos, double temp) {
-        if (temp >= 0.5D) {
+        if (temp >= 0.5) {
             return false;
         }
         if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {

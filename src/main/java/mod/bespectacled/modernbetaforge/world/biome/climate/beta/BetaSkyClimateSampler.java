@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.climate;
+package mod.bespectacled.modernbetaforge.world.biome.climate.beta;
 
 import java.util.Random;
 

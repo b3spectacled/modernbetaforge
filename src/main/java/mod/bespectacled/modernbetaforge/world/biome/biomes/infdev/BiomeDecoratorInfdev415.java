@@ -183,7 +183,7 @@ public class BiomeDecoratorInfdev415 extends ModernBetaBiomeDecorator {
         
         PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world);
         
-        double scale = 0.25D;
+        double scale = 0.25;
         int treeCount = (int) forestOctaveNoise.sampleXY(startX * scale, startZ * scale) << 3;
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.TREE)) {

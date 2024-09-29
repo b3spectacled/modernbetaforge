@@ -189,8 +189,8 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
         
         PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world);
         
-        double scale = 0.5D;
-        int noiseCount = (int) ((forestOctaveNoise.sampleXY(startX * scale, startZ * scale) / 8D + random.nextDouble() * 4D + 4D) / 3D);
+        double scale = 0.5;
+        int noiseCount = (int) ((forestOctaveNoise.sampleXY(startX * scale, startZ * scale) / 8.0 + random.nextDouble() * 4.0 + 4.0) / 3.0);
         
         if (noiseCount < 0) {
             noiseCount = 0;
