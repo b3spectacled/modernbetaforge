@@ -1,12 +1,14 @@
 package mod.bespectacled.modernbetaforge.api.world.biome;
 
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
+import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import net.minecraft.world.storage.WorldInfo;
 
 public enum BiomeSourceType {
     BETA("beta", "Beta"),
-    SINGLE("single", "Single")
+    SINGLE("single", "Single"),
+    PE("pe", "Pocket Edition")
     ;
     
     private final String id;
@@ -29,6 +31,7 @@ public enum BiomeSourceType {
         switch(this) {
             case BETA: return new BetaBiomeSource(worldInfo);
             case SINGLE: return new SingleBiomeSource(worldInfo);
+            case PE: return new PEBiomeSource(worldInfo);
             default: return new BetaBiomeSource(worldInfo);
         }
     }

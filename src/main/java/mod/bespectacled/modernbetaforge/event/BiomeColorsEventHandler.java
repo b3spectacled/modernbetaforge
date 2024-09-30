@@ -1,8 +1,9 @@
 package mod.bespectacled.modernbetaforge.event;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
-import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaWorldType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
@@ -35,21 +36,16 @@ public class BiomeColorsEventHandler {
         // filter for Modern Beta world type / save files
         if (!isRemote && isSinglePlayer && isModernBeta) {
             
-            // Filter for overworld dimension
+            // Filter for overworld dimension and whether Modern Beta biome provider is used
             if (isOverworld && world.getBiomeProvider() instanceof ModernBetaBiomeProvider) {
                 ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
+                BetaColorSampler.INSTANCE.resetClimateSamplers();
                 
-                // Filter for Beta biome source and check if using all Beta biomes
-                if (
-                    biomeProvider.getBiomeSource() instanceof BetaBiomeSource &&
-                    !((BetaBiomeSource)biomeProvider.getBiomeSource()).isModifiedMap()
-                ) {
-                    BetaBiomeSource betaBiomeSource = (BetaBiomeSource)biomeProvider.getBiomeSource();
-
-                    BetaColorSampler.INSTANCE.setClimateSamplers(betaBiomeSource, betaBiomeSource);
-                } else {
-                    BetaColorSampler.INSTANCE.resetClimateSamplers();
-                }
+                if (biomeProvider.getBiomeSource() instanceof ClimateSampler)
+                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeProvider.getBiomeSource());  
+                
+                if (biomeProvider.getBiomeSource() instanceof SkyClimateSampler)
+                    BetaColorSampler.INSTANCE.setSkyClimateSampler((SkyClimateSampler)biomeProvider.getBiomeSource());
             }
             
             // Return early so we do not reset climate samplers

@@ -18,6 +18,10 @@ public class SingleBiomeSource extends BiomeSource {
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
         this.biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.fixedBiome));
+        
+        if (this.biome == null) {
+            throw new IllegalArgumentException("[Modern Beta] Biome '" + settings.fixedBiome + "' does not exist! Please check your generator settings.");
+        }
     }
 
     @Override

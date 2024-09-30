@@ -115,9 +115,9 @@ public class ClimateMap {
         public final Biome beachBiome;
         
         public ClimateMapping(ClimateMappingSettings settings) {
-            this.landBiome = this.fetchBiome(settings.landBiome);
-            this.oceanBiome = this.fetchBiome(settings.oceanBiome);
-            this.beachBiome = this.fetchBiome(settings.beachBiome);
+            this.landBiome = this.loadBiome(settings.landBiome);
+            this.oceanBiome = this.loadBiome(settings.oceanBiome);
+            this.beachBiome = this.loadBiome(settings.beachBiome);
         }
         
         public ClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
@@ -153,7 +153,7 @@ public class ClimateMap {
                 this.beachBiome.equals(other.beachBiome);
         }
         
-        private Biome fetchBiome(String biomeString) {
+        private Biome loadBiome(String biomeString) {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeString));
             
             if (biome == null) {

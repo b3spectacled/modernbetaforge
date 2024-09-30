@@ -1,0 +1,43 @@
+package mod.bespectacled.modernbetaforge.world.biome.climate.pe;
+
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.util.chunk.SkyClimateChunk;
+import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
+import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+
+public class PESkyClimateSampler {
+    private final PerlinOctaveNoise tempOctaveNoise;
+    
+    private final ChunkCache<SkyClimateChunk> skyClimateCache;
+    
+    private final double tempScale;
+    
+    public PESkyClimateSampler(long seed) {
+        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
+    }
+    
+    public PESkyClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+        this.tempOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 9871L), 4, true);
+        
+        this.skyClimateCache = new ChunkCache<>(
+            "sky", 
+            256, 
+            true, 
+            (chunkX, chunkZ) -> new SkyClimateChunk(chunkX, chunkZ, this::sampleSkyTempNoise)
+        );
+        
+        this.tempScale = 0.025 / settings.tempNoiseScale;
+    }
+    
+    public double sampleSkyTemp(int x, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        
+        return this.skyClimateCache.get(chunkX, chunkZ).sampleTemp(x, z);
+    }
+    
+    private double sampleSkyTempNoise(int x, int z) {
+        return this.tempOctaveNoise.sampleXZ(x, z, this.tempScale, this.tempScale);
+    }
+}

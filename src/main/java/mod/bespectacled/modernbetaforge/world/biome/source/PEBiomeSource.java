@@ -9,18 +9,18 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSample
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
-import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaClimateSampler;
-import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateSampler;
+import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PEClimateSampler;
+import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PESkyClimateSampler;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
-public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
+public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
     private final ClimateMap climateMap;
-    private final BetaClimateSampler climateSampler;
-    private final BetaSkyClimateSampler skyClimateSampler;
+    private final PEClimateSampler climateSampler;
+    private final PESkyClimateSampler skyClimateSampler;
     
-    public BetaBiomeSource(WorldInfo worldInfo) {
+    public PEBiomeSource(WorldInfo worldInfo) {
         super(worldInfo);
         
         ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
@@ -28,8 +28,8 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
         this.climateMap = new ClimateMap(settings);
-        this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings);
-        this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings);
+        this.climateSampler = new PEClimateSampler(worldInfo.getSeed(), settings);
+        this.skyClimateSampler = new PESkyClimateSampler(worldInfo.getSeed(), settings);
     }
 
     @Override

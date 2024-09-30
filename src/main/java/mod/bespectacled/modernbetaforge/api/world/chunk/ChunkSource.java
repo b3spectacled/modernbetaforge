@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
@@ -465,6 +466,10 @@ public abstract class ChunkSource {
     
     public ModernBetaChunkGeneratorSettings getChunkGeneratorSettings() {
         return this.settings;
+    }
+    
+    public SpawnLocator getSpawnLocator() {
+        return SpawnLocator.DEFAULT;
     }
     
     /**

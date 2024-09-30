@@ -26,8 +26,11 @@ public class BetaColorSampler {
         this.skyClimateSampler = Optional.empty();
     }
     
-    public void setClimateSamplers(ClimateSampler climateSampler, SkyClimateSampler skyClimateSampler) {
+    public void setClimateSampler(ClimateSampler climateSampler) {
         this.climateSampler = Optional.ofNullable(climateSampler);
+    }
+    
+    public void setSkyClimateSampler(SkyClimateSampler skyClimateSampler) {
         this.skyClimateSampler = Optional.ofNullable(skyClimateSampler);
     }
     

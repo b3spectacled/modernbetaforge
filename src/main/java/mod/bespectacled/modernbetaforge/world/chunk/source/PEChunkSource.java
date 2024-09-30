@@ -2,20 +2,24 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.PESpawnLocator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
-public class AlphaChunkSource extends NoiseChunkSource {
+public class PEChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
     private final PerlinOctaveNoise maxLimitOctaveNoise;
     private final PerlinOctaveNoise mainOctaveNoise;
@@ -25,7 +29,10 @@ public class AlphaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    public AlphaChunkSource(
+    private final ClimateSampler climateSampler;
+    private final Random random;
+
+    public PEChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaChunkGeneratorSettings settings,
@@ -34,8 +41,10 @@ public class AlphaChunkSource extends NoiseChunkSource {
         ModernBetaNoiseSettings noiseSettings
     ) {
         super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
-
-        // Noise Generators
+        
+        // Use Mersenne Twister random instead of Java random
+        this.random = new MTRandom(seed);
+        
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
@@ -44,20 +53,24 @@ public class AlphaChunkSource extends NoiseChunkSource {
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-
+        
+        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof BetaBiomeSource ?
+            (BetaBiomeSource)this.biomeProvider.getBiomeSource() :
+            new BetaBiomeSource(world.getWorldInfo());
+        
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
     }
 
     @Override
     public SpawnLocator getSpawnLocator() {
-        return new BetaSpawnLocator();
+        return new PESpawnLocator();
     }
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
-
+        
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
@@ -65,50 +78,51 @@ public class AlphaChunkSource extends NoiseChunkSource {
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] sandNoise = beachOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0,
+        double[] sandNoise = beachOctaveNoise.sampleBeta(
+            chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale, scale, 1.0
         );
         
-        double[] gravelNoise = beachOctaveNoise.sampleAlpha(
-            chunkZ * 16, 109.0134, chunkX * 16,
-            16, 1, 16,
+        double[] gravelNoise = beachOctaveNoise.sampleBeta(
+            chunkX * 16, 109.0134, chunkZ * 16, 
+            16, 1, 16, 
             scale, 1.0, scale
         );
         
-        double[] surfaceNoise = surfaceOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0,
+        double[] surfaceNoise = surfaceOctaveNoise.sampleBeta(
+            chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0
         );
-        
-        for (int localX = 0; localX < 16; localX++) {
-            for (int localZ = 0; localZ < 16; localZ++) {
+
+        for (int localZ = 0; localZ < 16; localZ++) {
+            for (int localX = 0; localX < 16; localX++) {
                 int x = startX + localX;
                 int z = startZ + localZ;
 
-                boolean genSandBeach = sandNoise[localX + localZ * 16] + rand.nextDouble() * 0.2 > 0.0;
-                boolean genGravelBeach = gravelNoise[localX + localZ * 16] + rand.nextDouble() * 0.2 > 3.0;
+                // MCPE uses nextFloat() instead of nextDouble()
+                boolean genSandBeach = sandNoise[localZ + localX * 16] + rand.nextFloat() * 0.2 > 0.0;
+                boolean genGravelBeach = gravelNoise[localZ + localX * 16] + rand.nextFloat() * 0.2 > 3.0;
                 
-                int surfaceDepth = (int) (surfaceNoise[localX + localZ * 16] / 3.0 + 3.0 + rand.nextDouble() * 0.25);
+                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + rand.nextFloat() * 0.25);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
-                
+
                 IBlockState topBlock = biome.topBlock;
                 IBlockState fillerBlock = biome.fillerBlock;
                 
-                // Skip if used custom surface generation or if below minimum surface level.
+                // Skip if used custom surface generation
                 if (this.useCustomSurfaceBuilder(biome, chunkPrimer, rand, x, z)) {
                     continue;
                 }
-                
+
                 // Generate from top to bottom of world
                 for (int y = this.worldTopY - 1; y >= this.worldMinY; y--) {
-                    
-                    // Place bedrock
-                    if (y <= bedrockFloor + rand.nextInt(6) - 1) {
+
+                    // Randomly place bedrock from y=0 (or minHeight) to y=5
+                    if (y <= bedrockFloor + rand.nextInt(5)) {
                         chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                         continue;
                     }
@@ -143,8 +157,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
                                 fillerBlock = BlockStates.SAND;
                             }
                         }
-                        
-                        if (y < this.seaLevel && BlockStates.isAir(topBlock)) {
+
+                        if (y < this.seaLevel && BlockStates.isAir(topBlock)) { // Generate water bodies
                             topBlock = this.defaultFluid;
                         }
 
@@ -158,10 +172,18 @@ public class AlphaChunkSource extends NoiseChunkSource {
 
                         continue;
                     }
-                    
-                    if (runDepth > 0) { 
-                        runDepth--;
-                        chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
+
+                    if (runDepth <= 0) {
+                        continue;
+                    }
+
+                    runDepth--;
+                    chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
+
+                    // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
+                    if (runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
+                        runDepth = rand.nextInt(4);
+                        fillerBlock = BlockStates.SANDSTONE;
                     }
                 }
             }
@@ -176,10 +198,14 @@ public class AlphaChunkSource extends NoiseChunkSource {
         int localNoiseX,
         int localNoiseZ
     ) {
+        int horizNoiseResolution = 16 / (this.noiseSizeX + 1);
+        int x = (startNoiseX / this.noiseSizeX * 16) + localNoiseX * horizNoiseResolution + horizNoiseResolution / 2;
+        int z = (startNoiseZ / this.noiseSizeZ * 16) + localNoiseZ * horizNoiseResolution + horizNoiseResolution / 2;
+        
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
-
-        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 100
+        
+        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 200
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         
         double coordinateScale = this.settings.coordinateScale;
@@ -194,34 +220,45 @@ public class AlphaChunkSource extends NoiseChunkSource {
         
         double baseSize = this.settings.baseSize;
         double heightStretch = this.settings.stretchY;
-        
-        double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, 1.0, 0.0, 1.0);
-        double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
-        
+
+        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121, 1.121);
+        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
+
         double islandOffset = this.getIslandOffset(noiseX, noiseZ);
         
+        Clime clime = this.climateSampler.sample(x, z);
+        double temp = clime.temp();
+        double rain = clime.rain() * temp;
+        
+        rain = 1.0 - rain;
+        rain *= rain;
+        rain *= rain;
+        rain = 1.0 - rain;
+
         scale = (scale + 256.0) / 512.0;
+        scale *= rain;
         
         if (scale > 1.0) {
-            scale = 1.0; 
+            scale = 1.0;
         }
-
-        depth /= 8000.0;
         
+        depth /= 8000.0;
+
         if (depth < 0.0) {
-            depth = -depth;
+            depth = -depth * 0.3;
         }
 
-        depth = depth * 3.0 - 3.0;
+        depth = depth * 3.0 - 2.0;
 
         if (depth < 0.0) {
             depth /= 2.0;
+
             if (depth < -1.0) {
                 depth = -1.0;
             }
 
             depth /= 1.4;
-            depth /= 2.0; // Omitting this creates the Infdev 20100611 generator.
+            depth /= 2.0;
 
             scale = 0.0;
 
@@ -229,19 +266,22 @@ public class AlphaChunkSource extends NoiseChunkSource {
             if (depth > 1.0) {
                 depth = 1.0;
             }
-            depth /= 6.0;
+            depth /= 8.0;
+        }
+
+        if (scale < 0.0) {
+            scale = 0.0;
         }
 
         scale += 0.5;
         depth = depth * baseSize / 8.0;
         depth = baseSize + depth * 4.0;
         
-        
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             
             double density;
             double densityOffset = this.getOffset(noiseY, heightStretch, depth, scale);
-
+                 
             double mainNoise = (this.mainOctaveNoise.sample(
                 noiseX, noiseY, noiseZ,
                 coordinateScale / mainNoiseScaleX, 
@@ -289,6 +329,16 @@ public class AlphaChunkSource extends NoiseChunkSource {
             
             buffer[noiseY] = density;
         }
+    }
+    
+    /*
+     * MCPE uses different values to seed random surface generation.
+     */
+    @Override
+    protected Random createSurfaceRandom(int chunkX, int chunkZ) {
+        long seed = (long)chunkX * 0x14609048 + (long)chunkZ * 0x7ebe2d5;
+        
+        return new MTRandom(seed);
     }
     
     private double getOffset(int noiseY, double heightStretch, double depth, double scale) {

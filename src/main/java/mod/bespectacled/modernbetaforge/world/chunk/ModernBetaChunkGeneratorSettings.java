@@ -571,7 +571,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useTallGrass = true;
             this.useNewFlowers = true;
-            this.useLilyPads = true;
+            this.useLilyPads = false;
             this.useMelons = true;
             this.useDesertWells = true;
             this.useFossils = true;
@@ -770,7 +770,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useTallGrass = true;
             this.useNewFlowers = true;
-            this.useLilyPads = true;
+            this.useLilyPads = false;
             this.useMelons = true;
             this.useDesertWells = true;
             this.useFossils = true;
