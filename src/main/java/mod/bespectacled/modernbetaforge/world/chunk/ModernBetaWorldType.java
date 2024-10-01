@@ -15,7 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModernBetaWorldType extends WorldType {
-
     public ModernBetaWorldType(String name) {
         super(name);
     }

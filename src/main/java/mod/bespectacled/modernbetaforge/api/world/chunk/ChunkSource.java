@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
@@ -25,7 +26,6 @@ import mod.bespectacled.modernbetaforge.world.structure.MapGenBetaScatteredFeatu
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -44,15 +44,8 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ChunkSource {
-    // Set for specifying which biomes should use their vanilla surface builders.
-    // Done on per-biome basis for best mod compatibility.
-    private static final Set<Biome> BIOMES_WITH_CUSTOM_SURFACES = new HashSet<Biome>(
-        ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
-    );
-    
     protected final ModernBetaChunkGenerator chunkGenerator;
     protected final ModernBetaChunkGeneratorSettings settings;
     protected final ModernBetaBiomeProvider biomeProvider;
@@ -73,9 +66,15 @@ public abstract class ChunkSource {
     private final BetaStructureOceanMonument oceanMonumentGenerator;
     private final BetaWoodlandMansion woodlandMansionGenerator;
     
-    private final Biome[] biomes;
+    private final Biome[] biomes = new Biome[256];
     private final BiomeInjector biomeInjector;
     private final SimplexOctaveNoise surfaceOctaveNoise;
+
+    // Set for specifying which biomes should use their vanilla surface builders.
+    // Done on per-biome basis for best mod compatibility.
+    private final Set<Biome> biomesWithCustomSurfaces = new HashSet<Biome>(
+        ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
+    );
     
     public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, long seed, boolean mapFeaturesEnabled) {
         this.chunkGenerator = chunkGenerator;
@@ -104,8 +103,14 @@ public abstract class ChunkSource {
         this.oceanMonumentGenerator = new BetaStructureOceanMonument();
         this.woodlandMansionGenerator = new BetaWoodlandMansion(chunkGenerator);
         
-        this.biomes = new Biome[256];
+        // Init custom/vanilla surface info
         this.surfaceOctaveNoise = new SimplexOctaveNoise(new Random(seed), 4);
+        this.biomesWithCustomSurfaces.addAll(
+            Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
+                .stream()
+                .map(id -> BiomeUtil.getBiome(id, "custom surface config"))
+                .collect(Collectors.toList())
+        );
 
         // Init biome injector
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource());
@@ -456,9 +461,9 @@ public abstract class ChunkSource {
         return this.settings.seaLevel;
     }
     
-    public Biome getInjectedBiomeFast(int x, int z) {
+    public Biome getCachedInjectedBiome(int x, int z) {
         if (this.biomeInjector != null) {
-            return this.biomeInjector.getInjectedBiomeFast(x, z);
+            return this.biomeInjector.getCachedInjectedBiome(x, z);
         }
         
         return null;
@@ -500,7 +505,7 @@ public abstract class ChunkSource {
      * @return True if biome is included in valid biomes set and has run surface builder. False if not included and not run.
      */
     protected boolean useCustomSurfaceBuilder(Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z) {
-        if (BIOMES_WITH_CUSTOM_SURFACES.contains(biome)) {
+        if (this.biomesWithCustomSurfaces.contains(biome)) {
             double surfaceNoise = this.surfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
             
             // Reverse x/z because ??? why is it done this way in the surface gen code ????
@@ -511,14 +516,5 @@ public abstract class ChunkSource {
         }
         
         return false;
-    }
-    
-    static {
-        BIOMES_WITH_CUSTOM_SURFACES.addAll(
-            Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
-                .stream()
-                .map(str -> ForgeRegistries.BIOMES.getValue(new ResourceLocation(str)))
-                .collect(Collectors.toList())
-        );
     }
 }

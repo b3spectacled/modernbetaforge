@@ -3,11 +3,10 @@ package mod.bespectacled.modernbetaforge.world.biome.climate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings.ClimateMappingSettings;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ClimateMap {
     private final Map<String, ClimateMapping> climateMap;
@@ -115,9 +114,9 @@ public class ClimateMap {
         public final Biome beachBiome;
         
         public ClimateMapping(ClimateMappingSettings settings) {
-            this.landBiome = this.loadBiome(settings.landBiome);
-            this.oceanBiome = this.loadBiome(settings.oceanBiome);
-            this.beachBiome = this.loadBiome(settings.beachBiome);
+            this.landBiome = BiomeUtil.getBiome(settings.landBiome, "landBiome");
+            this.oceanBiome = BiomeUtil.getBiome(settings.oceanBiome, "oceanBiome");
+            this.beachBiome = BiomeUtil.getBiome(settings.beachBiome, "beachBiome");
         }
         
         public ClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
@@ -151,16 +150,6 @@ public class ClimateMap {
                 this.landBiome.equals(other.landBiome) &&
                 this.oceanBiome.equals(other.oceanBiome) &&
                 this.beachBiome.equals(other.beachBiome);
-        }
-        
-        private Biome loadBiome(String biomeString) {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeString));
-            
-            if (biome == null) {
-                throw new IllegalArgumentException("[Modern Beta] Biome '" + biomeString + "' does not exist! Please check your generator settings.");
-            }
-            
-            return biome;
         }
     }
 }

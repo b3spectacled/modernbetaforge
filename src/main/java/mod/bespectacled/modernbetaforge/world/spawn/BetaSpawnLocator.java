@@ -8,9 +8,10 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaDesert;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class BetaSpawnLocator implements SpawnLocator {
     @Override
@@ -50,7 +51,8 @@ public class BetaSpawnLocator implements SpawnLocator {
         int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
         
         Biome biome = biomeSource.getBiome(x, z);
+        boolean isSandy = BiomeDictionary.getBiomes(Type.SANDY).contains(biome);
         
-        return (biome instanceof BiomeBetaDesert && y >= seaLevel - 1) || (beachOctaveNoise.sample(x * 0.03125, z * 0.03125, 0.0) > 0.0 && y >= seaLevel - 1 && y < seaLevel + 2);
+        return (isSandy && y >= seaLevel - 1) || (beachOctaveNoise.sample(x * 0.03125, z * 0.03125, 0.0) > 0.0 && y >= seaLevel - 1 && y < seaLevel + 2);
     }
 }

@@ -56,10 +56,10 @@ public class DebugInfoEventHandler {
                     double rain = clime.rain();
                     
                     String climateText = String.format("[Modern Beta] Climate Temp: %.3f Rainfall: %.3f", temp, rain);
-                    String originalBiomeText = String.format("[Modern Beta] Original biome: %s", biomeSource.getBiome(x, z).getBiomeName());
+                    String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
 
                     event.getLeft().add(climateText);
-                    event.getLeft().add(originalBiomeText);
+                    event.getLeft().add(baseBiomeText);
                 }
             }
             
@@ -72,7 +72,6 @@ public class DebugInfoEventHandler {
                     chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
                     chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
                 );
-                
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 event.getLeft().add(heightmapText);

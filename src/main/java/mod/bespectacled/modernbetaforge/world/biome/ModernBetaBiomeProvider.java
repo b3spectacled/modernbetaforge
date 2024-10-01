@@ -135,7 +135,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     
     private Biome getBiome(int x, int z) {
         Biome biome = this.chunkSource != null ?
-            this.chunkSource.getInjectedBiomeFast(x, z) :
+            this.chunkSource.getCachedInjectedBiome(x, z) :
             this.biomeSource.getBiome(x, z);
         
         // Biome may be null if sampling injected biome,

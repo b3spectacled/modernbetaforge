@@ -44,13 +44,13 @@ public class BiomeInjector {
         if (replaceBeaches && this.biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeSource;
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome);
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
         }
         
         if (replaceOceans && this.biomeSource instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeSource;
             
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
         }
         
         this.rules = builder.build();
@@ -83,7 +83,7 @@ public class BiomeInjector {
         }
     }
     
-    public Biome getInjectedBiomeFast(int x, int z) {
+    public Biome getCachedInjectedBiome(int x, int z) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         

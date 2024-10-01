@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -28,7 +29,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.0.4.0";
+    public static final String VERSION = "1.0.4.1";
     public static final String MCVERSION = "1.12.2";
 
     private static Logger logger = LogManager.getLogger(MODID);
@@ -78,12 +79,16 @@ public class ModernBeta {
         BiomeProvider biomeProvider = worldServer.getBiomeProvider();
         
         BlockPos currentSpawnPos = worldServer.getSpawnPoint();
+        boolean useOldSpawns = ModernBetaConfig.spawnOptions.useOldSpawns;
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
             BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
             
-            BlockPos newSpawnPos = chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource);
+            BlockPos newSpawnPos = useOldSpawns ?
+                chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
+                null;
+            
             if (newSpawnPos != null) {
                 worldServer.setSpawnPoint(newSpawnPos);
             }

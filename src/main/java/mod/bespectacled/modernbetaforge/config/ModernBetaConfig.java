@@ -22,7 +22,7 @@ public class ModernBetaConfig {
         @Comment({
             "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
         })
-        @RequiresMcRestart
+        @RequiresWorldRestart
         public String[] biomesWithCustomSurfaces = {};
     }
 
@@ -49,7 +49,6 @@ public class ModernBetaConfig {
             "Modern Beta world cloud height",
         })
         @RangeInt(min = 0, max = 255)
-        @RequiresMcRestart
         public int cloudHeight = 108;
     }
     
@@ -65,13 +64,18 @@ public class ModernBetaConfig {
         @Comment({
             "Use spawn fuzz for players who join the world"
         })
-        @RequiresMcRestart
+        @RequiresWorldRestart
         public boolean useSpawnFuzz = false;
+        
+        @Comment({
+            "Use old spawn algorithm for initial player spawns"
+        })
+        @RequiresWorldRestart
+        public boolean useOldSpawns = true;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)
     private static class EventHandler {
-        
         @SubscribeEvent
         public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(ModernBeta.MODID)) {

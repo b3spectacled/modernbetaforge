@@ -32,8 +32,8 @@ public class BiomeInjectionRules {
             this.rules = new ArrayList<>();
         }
         
-        public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver) {
-            this.rules.add(new BiomeInjectionRule(rule, resolver));
+        public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
+            this.rules.add(new BiomeInjectionRule(rule, resolver, id));
             
             return this;
         }
@@ -46,10 +46,12 @@ public class BiomeInjectionRules {
     private static class BiomeInjectionRule {
         private final Predicate<BiomeInjectionContext> rule;
         private final BiomeInjectionResolver resolver;
+        private final String id;
         
-        public BiomeInjectionRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver) {
+        public BiomeInjectionRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
             this.rule = rule;
             this.resolver = resolver;
+            this.id = id;
         }
         
         public BiomeInjectionResolver test(BiomeInjectionContext context) {
@@ -57,6 +59,10 @@ public class BiomeInjectionRules {
                 return this.resolver;
             
             return BiomeInjectionResolver.DEFAULT;
+        }
+        
+        public String getId() {
+            return this.id;
         }
     }
     

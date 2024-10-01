@@ -12,8 +12,8 @@ createWorld.customize.custom.otherLabel=Other Settings
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 
-createWorld.customize.custom.replaceOceanBiomes=Replace Ocean Biomes
-createWorld.customize.custom.replaceBeachBiomes=Replace Beach Biomes
+createWorld.customize.custom.replaceOceanBiomes=Use Ocean Biomes
+createWorld.customize.custom.replaceBeachBiomes=Use Beach Biomes
 
 createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=New Flowers
@@ -76,6 +76,7 @@ modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Cu
 modernbetaforge.general.moboptions.usenewmobs=Use New Mobs
 
 modernbetaforge.general.spawnoptions.usespawnfuzz=Use Spawn Fuzz
+modernbetaforge.general.spawnoptions.useoldspawns=Use Old Spawns
 
 modernbetaforge.general.visualoptions.usebetabiomecolors=Use Beta Biome Colors
 modernbetaforge.general.visualoptions.usebetaskycolors=Use Beta Sky Colors
