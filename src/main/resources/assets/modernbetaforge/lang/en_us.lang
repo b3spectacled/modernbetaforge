@@ -6,8 +6,10 @@ generator.modernbeta=Modern Beta
 
 createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
 
-createWorld.customize.custom.betaLabel=Beta Settings
-createWorld.customize.custom.otherLabel=Other Settings
+createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
+createWorld.customize.custom.otherFeaturesLabel=Other Feature Settings
+createWorld.customize.custom.betaLabel=Beta Noise Settings
+createWorld.customize.custom.releaseLabel=Release Noise Settings
 
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
@@ -62,6 +64,7 @@ createWorld.customize.custom.preset.caveChaosBeta=Beta Caves of Chaos
 createWorld.customize.custom.preset.realisticBeta=Beta Realistic
 createWorld.customize.custom.preset.plusBeta=Beta Plus
 createWorld.customize.custom.preset.peBeta=Beta Pocket Edition
+createWorld.customize.custom.preset.releaseBeta=Beta 1.12.2
 
 # Config
 

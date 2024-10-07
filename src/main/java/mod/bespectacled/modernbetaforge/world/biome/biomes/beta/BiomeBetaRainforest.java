@@ -20,8 +20,10 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class BiomeBetaRainforest extends BiomeBeta {
     public BiomeBetaRainforest() {
         super(new BiomeProperties("Beta Rainforest")
-            .setTemperature(1.0F)
-            .setRainfall(1.0F)
+            .setTemperature(1.0f)
+            .setRainfall(1.0f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

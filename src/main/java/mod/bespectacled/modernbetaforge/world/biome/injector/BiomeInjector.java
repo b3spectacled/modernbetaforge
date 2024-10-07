@@ -2,67 +2,45 @@ package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 import java.util.function.Predicate;
 
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeInjector {
-    public static final int OCEAN_MIN_DEPTH = 4;
-    public static final int DEEP_OCEAN_MIN_DEPTH = 16;
-    
-    private final ChunkSource chunkSource;
-    private final BiomeSource biomeSource;
-    
-    private final BiomeInjectionRules rules;
+    private final BiomeInjectionRules.Builder builder;
     private final ChunkCache<BiomeChunk> biomeCache;
+
+    private BiomeInjectionRules rules;
     
     public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource) {
-        this.chunkSource = chunkSource;
-        this.biomeSource = biomeSource;
+        this.builder = new BiomeInjectionRules.Builder();
         
-        boolean replaceOceans = chunkSource.getChunkGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = chunkSource.getChunkGeneratorSettings().replaceBeachBiomes;
-        
-        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.topHeight, OCEAN_MIN_DEPTH);
-            
-        Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.topHeight) && this.isBeachBlock(context.topState);
-        
-        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
-        
-        if (replaceBeaches && this.biomeSource instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeSource;
-            
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
-        }
-        
-        if (replaceOceans && this.biomeSource instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeSource;
-            
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
-        }
-        
-        this.rules = builder.build();
         this.biomeCache = new ChunkCache<>(
-            "injected_biomes_fast",
+            "cached_injected_biomes",
             512,
             true,
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this.biomeSource, this::getInjectedBiome)
+            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome)
         );
+        
+        this.rules = this.builder.build();
     }
     
-    public void getInjectedBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void addRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
+        this.builder.add(rule, resolver, id);
+    }
+    
+    public void buildRules() {
+        this.rules = this.builder.build();
+    }
+    
+    public void getInjectedBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
 
@@ -72,11 +50,12 @@ public class BiomeInjector {
                 int z = localZ + startZ;
                 int ndx = localX + localZ * 16;
                 
-                int topHeight = this.chunkSource.getHeight(x, z, Type.SURFACE);
+                int topHeight = chunkSource.getHeight(x, z, Type.SURFACE);
+                BlockPos topPos = new BlockPos(x, topHeight, z);
                 IBlockState topState = chunkPrimer.getBlockState(localX, topHeight, localZ);
                 Biome biome = biomes[ndx];
                 
-                BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState, biome);
+                BiomeInjectionContext context = new BiomeInjectionContext(topPos, topState, biome);
                 
                 Biome injectedBiome = this.getInjectedBiome(context, x, z);
                 if (injectedBiome != null) {
@@ -95,23 +74,5 @@ public class BiomeInjector {
     
     private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z) {
         return this.rules.test(context, x, z);
-    }
-
-    private boolean atOceanDepth(int topHeight, int oceanDepth) {
-        return topHeight < this.chunkSource.getSeaLevel() - oceanDepth;
-    }
-
-    private boolean atBeachDepth(int topHeight) {
-        int seaLevel = this.chunkSource.getSeaLevel();
-        
-        return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
-    }
-    
-    private boolean isBeachBlock(IBlockState blockState) {
-        Block block = blockState.getBlock();
-        
-        // Only handle sand beaches,
-        // due to limitation of heightmap cache.
-        return block == Blocks.SAND;
     }
 }

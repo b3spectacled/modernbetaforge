@@ -5,8 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -16,6 +19,8 @@ import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionResolver;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -23,7 +28,9 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import mod.bespectacled.modernbetaforge.world.structure.BetaStructureOceanMonument;
 import mod.bespectacled.modernbetaforge.world.structure.BetaWoodlandMansion;
 import mod.bespectacled.modernbetaforge.world.structure.MapGenBetaScatteredFeature;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +53,9 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class ChunkSource {
+    protected static final int OCEAN_MIN_DEPTH = 4;
+    protected static final int DEEP_OCEAN_MIN_DEPTH = 16;
+    
     protected final ModernBetaChunkGenerator chunkGenerator;
     protected final ModernBetaChunkGeneratorSettings settings;
     protected final ModernBetaBiomeProvider biomeProvider;
@@ -67,8 +77,8 @@ public abstract class ChunkSource {
     private final BetaWoodlandMansion woodlandMansionGenerator;
     
     private final Biome[] biomes = new Biome[256];
-    private final BiomeInjector biomeInjector;
     private final SimplexOctaveNoise surfaceOctaveNoise;
+    private final BiomeInjector biomeInjector;
 
     // Set for specifying which biomes should use their vanilla surface builders.
     // Done on per-biome basis for best mod compatibility.
@@ -114,6 +124,9 @@ public abstract class ChunkSource {
 
         // Init biome injector
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource());
+        this.initBiomeInjector();
+        this.biomeInjector.buildRules();
+        
         this.biomeProvider.setChunkSource(this);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
@@ -143,7 +156,7 @@ public abstract class ChunkSource {
         
         // Post-process biome map
         if (this.biomeInjector != null) {
-            this.biomeInjector.getInjectedBiomes(this.biomes, chunkPrimer, chunkX, chunkZ);
+            this.biomeInjector.getInjectedBiomes(this.biomes, chunkPrimer, this, chunkX, chunkZ);
         }
         
         // Carve terrain
@@ -516,5 +529,50 @@ public abstract class ChunkSource {
         }
         
         return false;
+    }
+    
+    protected void initBiomeInjector() {
+        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        
+        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
+            this.atOceanDepth(context.topPos.getY(), OCEAN_MIN_DEPTH);
+            
+        Predicate<BiomeInjectionContext> beachPredicate = context ->
+            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
+            
+        if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
+            
+            this.addBiomeInjectorRule(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+        }
+        
+        if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
+            
+            this.addBiomeInjectorRule(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+        }
+    }
+    
+    protected void addBiomeInjectorRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
+        this.biomeInjector.addRule(rule, resolver, id);
+    }
+
+    protected boolean atBeachDepth(int topHeight) {
+        int seaLevel = this.getSeaLevel();
+        
+        return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
+    }
+    
+    protected boolean isBeachBlock(IBlockState blockState) {
+        Block block = blockState.getBlock();
+        
+        // Only handle sand beaches,
+        // due to limitation of heightmap cache.
+        return block == Blocks.SAND;
+    }
+    
+    private boolean atOceanDepth(int topHeight, int oceanDepth) {
+        return topHeight < this.getSeaLevel() - oceanDepth;
     }
 }

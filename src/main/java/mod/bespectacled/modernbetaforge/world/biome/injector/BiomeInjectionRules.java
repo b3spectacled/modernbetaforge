@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeInjectionRules {
@@ -61,18 +62,19 @@ public class BiomeInjectionRules {
             return BiomeInjectionResolver.DEFAULT;
         }
         
+        @SuppressWarnings("unused")
         public String getId() {
             return this.id;
         }
     }
     
     public static class BiomeInjectionContext {
-        protected final int topHeight;
-        protected final IBlockState topState;
-        protected final Biome biome;
+        public final BlockPos topPos;
+        public final IBlockState topState;
+        public final Biome biome;
         
-        public BiomeInjectionContext(int topHeight, IBlockState topState, Biome biome) {
-            this.topHeight = topHeight;
+        public BiomeInjectionContext(BlockPos topPos, IBlockState topState, Biome biome) {
+            this.topPos = topPos;
             this.topState = topState;
             this.biome = biome;
         }

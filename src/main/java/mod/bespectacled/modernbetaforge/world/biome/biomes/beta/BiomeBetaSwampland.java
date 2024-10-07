@@ -22,8 +22,10 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class BiomeBetaSwampland extends BiomeBeta {
     public BiomeBetaSwampland() {
         super(new BiomeProperties("Beta Swampland")
-            .setTemperature(0.5F)
-            .setRainfall(1.0F)
+            .setTemperature(0.5f)
+            .setRainfall(1.0f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

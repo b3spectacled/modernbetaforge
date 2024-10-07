@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.PEChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import net.minecraft.world.World;
 
@@ -15,7 +16,8 @@ public enum ChunkSourceType {
     ALPHA("alpha", "Alpha"),
     SKYLANDS("skylands", "Skylands"),
     INFDEV_415("infdev_415", "Infdev 415"),
-    PE("pe", "Pocket Edition");
+    PE("pe", "Pocket Edition"),
+    RELEASE("release", "Release");
 
     private final String id;
     private final String name;
@@ -40,6 +42,7 @@ public enum ChunkSourceType {
             case SKYLANDS: return new SkylandsChunkSource(world, chunkGenerator, chunkGeneratorSettings, seed, mapFeaturesEnabled, ModernBetaNoiseSettings.SKYLANDS);
             case INFDEV_415: return new Infdev415ChunkSource(world, chunkGenerator, chunkGeneratorSettings, seed, mapFeaturesEnabled, ModernBetaNoiseSettings.INFDEV_415);
             case PE: return new PEChunkSource(world, chunkGenerator, chunkGeneratorSettings, seed, mapFeaturesEnabled, ModernBetaNoiseSettings.PE);
+            case RELEASE: return new ReleaseChunkSource(world, chunkGenerator, chunkGeneratorSettings, seed, mapFeaturesEnabled, ModernBetaNoiseSettings.BETA);
             default: return new BetaChunkSource(world, chunkGenerator, chunkGeneratorSettings, seed, mapFeaturesEnabled, ModernBetaNoiseSettings.BETA);
         }
     }

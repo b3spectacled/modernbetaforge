@@ -87,7 +87,6 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 );
                 
                 int surfaceDepth = (int)(surfaceNoise / 3.0 + 3.0 + rand.nextDouble() * 0.25);
-                
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];

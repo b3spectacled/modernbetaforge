@@ -6,8 +6,10 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 public class BiomeBetaFrozenOcean extends BiomeBeta {
     public BiomeBetaFrozenOcean() {
         super(new BiomeProperties("Beta Frozen Ocean")
-            .setTemperature(0.0F)
-            .setRainfall(0.5F)
+            .setTemperature(0.0f)
+            .setRainfall(0.5f)
+            .setBaseHeight(-1.0f)
+            .setHeightVariation(0.1f)
             .setSnowEnabled()
             //.setWaterColor(0)
         );

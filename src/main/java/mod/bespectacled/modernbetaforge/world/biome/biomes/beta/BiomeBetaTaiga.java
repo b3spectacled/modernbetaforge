@@ -12,8 +12,10 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 public class BiomeBetaTaiga extends BiomeBeta {
     public BiomeBetaTaiga() {
         super(new BiomeProperties("Beta Taiga")
-            .setTemperature(0.0F)
-            .setRainfall(0.5F)
+            .setTemperature(0.0f)
+            .setRainfall(0.5f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
             .setSnowEnabled()
         );
         

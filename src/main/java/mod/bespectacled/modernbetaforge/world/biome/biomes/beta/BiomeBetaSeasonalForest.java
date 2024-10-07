@@ -6,8 +6,10 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 public class BiomeBetaSeasonalForest extends BiomeBeta {
     public BiomeBetaSeasonalForest() {
         super(new BiomeProperties("Beta Seasonal Forest")
-            .setTemperature(1.0F)
-            .setRainfall(0.7F)
+            .setTemperature(1.0f)
+            .setRainfall(0.7f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

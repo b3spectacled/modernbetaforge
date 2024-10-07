@@ -13,8 +13,10 @@ import net.minecraft.entity.passive.EntityRabbit;
 public class BiomeBetaIceDesert extends BiomeBeta {
     public BiomeBetaIceDesert() {
         super(new BiomeProperties("Beta Ice Desert")
-            .setTemperature(0.0F)
-            .setRainfall(0.5F)
+            .setTemperature(0.0f)
+            .setRainfall(0.5f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
             .setSnowEnabled()
         );
         

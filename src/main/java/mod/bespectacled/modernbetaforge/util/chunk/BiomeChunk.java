@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.function.TriFunction;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeChunk {
@@ -20,10 +21,11 @@ public class BiomeChunk {
         for (int x = startX; x < startX + 16; ++x) {
             for (int z = startZ; z < startZ + 16; ++z) {
                 int topHeight = chunkSource.getHeight(x, z, Type.SURFACE);
+                BlockPos topPos = new BlockPos(x, topHeight, z);
                 IBlockState topState = topHeight < chunkSource.getSeaLevel() ? BlockStates.WATER : BlockStates.AIR;
                 Biome biome = biomeSource.getBiome(x, z);
                 
-                BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState, biome);
+                BiomeInjectionContext context = new BiomeInjectionContext(topPos, topState, biome);
                 
                 this.biomes[ndx++] = chunkFunc.apply(context, x, z);
             }

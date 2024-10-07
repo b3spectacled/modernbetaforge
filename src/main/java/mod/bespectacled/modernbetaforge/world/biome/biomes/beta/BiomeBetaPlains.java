@@ -21,8 +21,10 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class BiomeBetaPlains extends BiomeBeta {
     public BiomeBetaPlains() {
         super(new BiomeProperties("Beta Plains")
-            .setTemperature(1.0F)
-            .setRainfall(0.4F)
+            .setTemperature(1.0f)
+            .setRainfall(0.4f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

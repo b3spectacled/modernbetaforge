@@ -10,8 +10,10 @@ import net.minecraft.entity.passive.EntityLlama;
 public class BiomeBetaSavanna extends BiomeBeta {
     public BiomeBetaSavanna() {
         super(new BiomeProperties("Beta Savanna")
-            .setTemperature(0.7F)
-            .setRainfall(0.1F)
+            .setTemperature(0.7f)
+            .setRainfall(0.1f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

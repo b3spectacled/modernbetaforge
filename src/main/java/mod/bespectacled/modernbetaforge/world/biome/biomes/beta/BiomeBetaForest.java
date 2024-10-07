@@ -11,8 +11,10 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 public class BiomeBetaForest extends BiomeBeta {
     public BiomeBetaForest() {
         super(new BiomeProperties("Beta Forest")
-            .setTemperature(0.7F)
-            .setRainfall(0.8F)
+            .setTemperature(0.7f)
+            .setRainfall(0.8f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

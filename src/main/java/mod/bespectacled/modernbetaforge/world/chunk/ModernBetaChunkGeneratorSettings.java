@@ -44,6 +44,11 @@ public class ModernBetaChunkGeneratorSettings {
     public final int seaLevel;
     public final int height;
     
+    public final float biomeDepthWeight;
+    public final float biomeDepthOffset;
+    public final float biomeScaleWeight;
+    public final float biomeScaleOffset;
+    
     public final boolean useCaves;
     public final boolean useDungeons;
     public final int dungeonChance;
@@ -185,6 +190,11 @@ public class ModernBetaChunkGeneratorSettings {
         this.stretchY = factory.stretchY;
         this.seaLevel = factory.seaLevel;
         this.height = factory.height;
+        
+        this.biomeDepthWeight = factory.biomeDepthWeight;
+        this.biomeDepthOffset = factory.biomeDepthOffset;
+        this.biomeScaleWeight = factory.biomeScaleWeight;
+        this.biomeScaleOffset = factory.biomeScaleOffset;
         
         this.useCaves = factory.useCaves;
         this.useDungeons = factory.useDungeons;
@@ -330,6 +340,11 @@ public class ModernBetaChunkGeneratorSettings {
         public float stretchY;
         public int seaLevel;
         public int height;
+        
+        public float biomeDepthWeight;
+        public float biomeDepthOffset;
+        public float biomeScaleWeight;
+        public float biomeScaleOffset;
         
         public boolean useCaves;
         public boolean useDungeons;
@@ -489,6 +504,11 @@ public class ModernBetaChunkGeneratorSettings {
             this.stretchY = 12.0f;
             this.seaLevel = 64;
             this.height = 128;
+            
+            this.biomeDepthWeight = 1.0f;
+            this.biomeDepthOffset = 0.0f;
+            this.biomeScaleWeight = 1.0f;
+            this.biomeScaleOffset = 0.0f;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -687,6 +707,11 @@ public class ModernBetaChunkGeneratorSettings {
             this.stretchY = 12.0f;
             this.seaLevel = 64;
             this.height = 128;
+            
+            this.biomeDepthWeight = 1.0f;
+            this.biomeDepthOffset = 0.0f;
+            this.biomeScaleWeight = 1.0f;
+            this.biomeScaleOffset = 0.0f;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -957,6 +982,11 @@ public class ModernBetaChunkGeneratorSettings {
                 Float.compare(factory.stretchY, this.stretchY) == 0 &&
                 Float.compare(factory.upperLimitScale, this.upperLimitScale) == 0 &&
                 
+                Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
+                Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
+                Float.compare(factory.biomeScaleWeight, this.biomeScaleWeight) == 0 &&
+                Float.compare(factory.biomeScaleOffset, this.biomeScaleOffset) == 0 &&
+                
                 this.useCaves == factory.useCaves &&
                 this.useDungeons == factory.useDungeons &&
                 this.useLavaLakes == factory.useLavaLakes &&
@@ -1042,6 +1072,11 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.stretchY == 0.0f) ? 0 : Float.floatToIntBits(this.stretchY));
             hashCode = 31 * hashCode + this.seaLevel;
             hashCode = 31 * hashCode + this.height;
+            
+            hashCode = 31 * hashCode + ((this.biomeDepthWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthWeight));
+            hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
+            hashCode = 31 * hashCode + ((this.biomeScaleWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeScaleWeight));
+            hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
@@ -1209,6 +1244,11 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.seaLevel = JsonUtils.getInt(jsonObject, "seaLevel", factory.seaLevel);
                 factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
                 
+                factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, "biomeDepthWeight", factory.biomeDepthWeight);
+                factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, "biomeDepthOffset", factory.biomeDepthOffset);
+                factory.biomeScaleWeight = JsonUtils.getFloat(jsonObject, "biomeScaleWeight", factory.biomeScaleWeight);
+                factory.biomeScaleOffset = JsonUtils.getFloat(jsonObject, "biomeScaleOffset", factory.biomeScaleOffset);
+                
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, "useCaves", factory.useCaves);
                 factory.useDungeons = JsonUtils.getBoolean(jsonObject, "useDungeons", factory.useDungeons);
                 factory.dungeonChance = JsonUtils.getInt(jsonObject, "dungeonChance", factory.dungeonChance);
@@ -1358,6 +1398,11 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("stretchY", factory.stretchY);
             jsonObject.addProperty("seaLevel", factory.seaLevel);
             jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
+
+            jsonObject.addProperty("biomeDepthWeight", factory.biomeDepthWeight);
+            jsonObject.addProperty("biomeDepthOffset", factory.biomeDepthOffset);
+            jsonObject.addProperty("biomeScaleWeight", factory.biomeScaleWeight);
+            jsonObject.addProperty("biomeScaleOffset", factory.biomeScaleOffset);
             
             jsonObject.addProperty("useCaves", factory.useCaves);
             jsonObject.addProperty("useDungeons", factory.useDungeons);

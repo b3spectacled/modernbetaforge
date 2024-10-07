@@ -9,7 +9,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BiomeAlphaBase extends ModernBetaBiome {
     public BiomeAlphaBase(BiomeProperties properties) {
-        super(properties);
+        super(properties
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
+        );
     }
     
     @Override

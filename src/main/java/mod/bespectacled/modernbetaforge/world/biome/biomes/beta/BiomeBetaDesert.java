@@ -22,8 +22,10 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class BiomeBetaDesert extends BiomeBeta {
     public BiomeBetaDesert() {
         super(new BiomeProperties("Beta Desert")
-            .setTemperature(1.0F)
-            .setRainfall(0.0F)
+            .setTemperature(1.0f)
+            .setRainfall(0.0f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
             .setRainDisabled()
         );
         

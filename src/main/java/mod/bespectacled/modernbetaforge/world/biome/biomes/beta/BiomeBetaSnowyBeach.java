@@ -6,8 +6,10 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 public class BiomeBetaSnowyBeach extends BiomeBeta {
     public BiomeBetaSnowyBeach() {
         super(new BiomeProperties("Beta Snowy Beach")
-            .setTemperature(0.0F)
-            .setRainfall(0.5F)
+            .setTemperature(0.0f)
+            .setRainfall(0.5f)
+            .setBaseHeight(0.0f)
+            .setHeightVariation(0.025f)
             .setSnowEnabled()
         );
         

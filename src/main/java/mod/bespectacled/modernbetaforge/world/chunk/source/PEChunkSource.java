@@ -9,7 +9,7 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
+import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -54,9 +54,9 @@ public class PEChunkSource extends NoiseChunkSource {
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         
-        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof BetaBiomeSource ?
-            (BetaBiomeSource)this.biomeProvider.getBiomeSource() :
-            new BetaBiomeSource(world.getWorldInfo());
+        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
+            (ClimateSampler)this.biomeProvider.getBiomeSource() :
+            new PEBiomeSource(world.getWorldInfo());
         
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
@@ -278,7 +278,6 @@ public class PEChunkSource extends NoiseChunkSource {
         depth = baseSize + depth * 4.0;
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-            
             double density;
             double densityOffset = this.getOffset(noiseY, heightStretch, depth, scale);
                  

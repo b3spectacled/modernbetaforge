@@ -2,6 +2,9 @@ package mod.bespectacled.modernbetaforge.client.color;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
@@ -27,10 +30,12 @@ public class BetaColorSampler {
     }
     
     public void setClimateSampler(ClimateSampler climateSampler) {
+        ModernBeta.log(Level.INFO, "Set climate sampler");
         this.climateSampler = Optional.ofNullable(climateSampler);
     }
     
     public void setSkyClimateSampler(SkyClimateSampler skyClimateSampler) {
+        ModernBeta.log(Level.INFO, "Set sky climate sampler");
         this.skyClimateSampler = Optional.ofNullable(skyClimateSampler);
     }
     

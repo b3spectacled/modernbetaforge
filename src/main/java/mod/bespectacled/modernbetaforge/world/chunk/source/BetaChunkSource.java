@@ -49,8 +49,8 @@ public class BetaChunkSource extends NoiseChunkSource {
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         
-        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof BetaBiomeSource ?
-            (BetaBiomeSource)this.biomeProvider.getBiomeSource() :
+        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
+            (ClimateSampler)this.biomeProvider.getBiomeSource() :
             new BetaBiomeSource(world.getWorldInfo());
         
         this.setForestOctaveNoise(this.forestOctaveNoise);
@@ -272,7 +272,6 @@ public class BetaChunkSource extends NoiseChunkSource {
         depth = baseSize + depth * 4.0;
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-            
             double density;
             double densityOffset = this.getOffset(noiseY, heightStretch, depth, scale);
                  

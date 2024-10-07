@@ -142,7 +142,6 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         double upperLimitScale = this.settings.upperLimitScale;
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-
             double density;
             double densityOffset = this.getOffset();
             

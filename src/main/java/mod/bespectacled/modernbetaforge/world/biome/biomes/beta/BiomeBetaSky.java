@@ -7,8 +7,10 @@ import net.minecraft.entity.passive.EntityChicken;
 public class BiomeBetaSky extends BiomeBeta {
     public BiomeBetaSky() {
         super(new BiomeProperties("Beta Sky")
-            .setTemperature(0.5F)
-            .setRainfall(0.0F)
+            .setTemperature(0.5f)
+            .setRainfall(0.0f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

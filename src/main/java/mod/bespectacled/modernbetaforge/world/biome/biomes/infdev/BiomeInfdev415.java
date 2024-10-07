@@ -12,6 +12,8 @@ public class BiomeInfdev415 extends ModernBetaBiome {
         super(new BiomeProperties("Infdev 415")
             .setTemperature(0.5f)
             .setRainfall(0.5f)
+            .setBaseHeight(0.37f)
+            .setHeightVariation(0.5f)
         );
     }
     

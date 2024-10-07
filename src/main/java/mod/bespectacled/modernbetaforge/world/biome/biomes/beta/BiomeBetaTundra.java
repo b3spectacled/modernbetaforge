@@ -13,8 +13,10 @@ import net.minecraft.entity.passive.EntityRabbit;
 public class BiomeBetaTundra extends BiomeBeta {
     public BiomeBetaTundra() {
         super(new BiomeProperties("Beta Tundra")
-            .setTemperature(0.0F)
-            .setRainfall(0.5F)
+            .setTemperature(0.0f)
+            .setRainfall(0.5f)
+            .setBaseHeight(0.2f)
+            .setHeightVariation(0.3f)
             .setSnowEnabled()
         );
         
