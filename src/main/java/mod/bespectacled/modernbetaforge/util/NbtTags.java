@@ -25,8 +25,6 @@ public class NbtTags {
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
     
-    //public static final String BETA_SETTINGS = 
-    
     /*
     public static final String USE_ISLANDS = "useIslands";
     public static final String USE_OUTER_ISLANDS = "useOuterIslands";
