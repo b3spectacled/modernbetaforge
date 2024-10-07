@@ -58,7 +58,7 @@ public class BiomeInjector {
             "injected_biomes_fast",
             512,
             true,
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this::getInjectedBiome)
+            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this.chunkSource, this.biomeSource, this::getInjectedBiome)
         );
     }
     
@@ -70,14 +70,17 @@ public class BiomeInjector {
             for (int localX = 0; localX < 16; ++localX) {
                 int x = localX + startX;
                 int z = localZ + startZ;
+                int ndx = localX + localZ * 16;
                 
                 int topHeight = this.chunkSource.getHeight(x, z, Type.SURFACE);
                 IBlockState topState = chunkPrimer.getBlockState(localX, topHeight, localZ);
-                BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState);
+                Biome biome = biomes[ndx];
                 
-                Biome biome = this.getInjectedBiome(context, x, z);
-                if (biome != null) {
-                    biomes[localX + localZ * 16] = biome;
+                BiomeInjectionContext context = new BiomeInjectionContext(topHeight, topState, biome);
+                
+                Biome injectedBiome = this.getInjectedBiome(context, x, z);
+                if (injectedBiome != null) {
+                    biomes[ndx] = injectedBiome;
                 }
             }
         }

@@ -69,10 +69,12 @@ public class BiomeInjectionRules {
     public static class BiomeInjectionContext {
         protected final int topHeight;
         protected final IBlockState topState;
+        protected final Biome biome;
         
-        public BiomeInjectionContext(int topHeight, IBlockState topState) {
+        public BiomeInjectionContext(int topHeight, IBlockState topState, Biome biome) {
             this.topHeight = topHeight;
             this.topState = topState;
+            this.biome = biome;
         }
     }
 }
