@@ -25,9 +25,10 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.structure.BetaMapGenScatteredFeature;
 import mod.bespectacled.modernbetaforge.world.structure.BetaStructureOceanMonument;
 import mod.bespectacled.modernbetaforge.world.structure.BetaWoodlandMansion;
-import mod.bespectacled.modernbetaforge.world.structure.MapGenBetaScatteredFeature;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -72,7 +73,7 @@ public abstract class ChunkSource {
     private final MapGenVillage villageGenerator;
     private final MapGenMineshaft mineshaftGenerator;
     
-    private final MapGenBetaScatteredFeature scatteredFeatureGenerator;
+    private final BetaMapGenScatteredFeature scatteredFeatureGenerator;
     private final BetaStructureOceanMonument oceanMonumentGenerator;
     private final BetaWoodlandMansion woodlandMansionGenerator;
     
@@ -86,7 +87,7 @@ public abstract class ChunkSource {
         ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
-    public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, long seed, boolean mapFeaturesEnabled) {
+    public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, ModernBetaNoiseSettings noiseSettings, long seed, boolean mapFeaturesEnabled) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
@@ -109,7 +110,7 @@ public abstract class ChunkSource {
         
         // To avoid mod incompatibilities, do not replace with modded structures
         // TODO: Figure out a better way to handle this, maybe event handlers.
-        this.scatteredFeatureGenerator = new MapGenBetaScatteredFeature();
+        this.scatteredFeatureGenerator = new BetaMapGenScatteredFeature();
         this.oceanMonumentGenerator = new BetaStructureOceanMonument();
         this.woodlandMansionGenerator = new BetaWoodlandMansion(chunkGenerator);
         

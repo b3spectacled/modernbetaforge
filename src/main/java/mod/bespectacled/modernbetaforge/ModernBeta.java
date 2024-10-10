@@ -7,10 +7,11 @@ import org.apache.logging.log4j.Logger;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistry;
+import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaWorldType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -59,6 +60,10 @@ public class ModernBeta {
         
         ModernBetaBiomeStructures.registerStructures();
         ModernBetaBiomeStructures.registerStructureBiomes();
+        
+        ModernBetaBuiltInRegistry.registerChunkSources();
+        ModernBetaBuiltInRegistry.registerBiomeSources();
+        ModernBetaBuiltInRegistry.registerNoiseSettings();
         
         proxy.init();
     }

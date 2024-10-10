@@ -1,17 +1,17 @@
 package mod.bespectacled.modernbetaforge.world.structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 
 public class BetaWoodlandMansion extends WoodlandMansion {
-    public static final List<Biome> ALLOWED_BIOMES;
+    private static final List<Biome> ALLOWED_BIOMES;
 
     public BetaWoodlandMansion(ChunkGeneratorOverworld chunkGeneratorOverworld) {
         super(chunkGeneratorOverworld);
@@ -53,10 +53,7 @@ public class BetaWoodlandMansion extends WoodlandMansion {
     }
 
     static {
-        ALLOWED_BIOMES = Arrays.<Biome>asList(
-            ModernBetaBiomeHolders.BETA_SEASONAL_FOREST,
-            Biomes.ROOFED_FOREST,
-            Biomes.MUTATED_ROOFED_FOREST
-        );
+        ALLOWED_BIOMES = new ArrayList<>(Arrays.asList(ModernBetaBiomeHolders.BETA_SEASONAL_FOREST));
+        ALLOWED_BIOMES.addAll(WoodlandMansion.ALLOWED_BIOMES);
     }
 }

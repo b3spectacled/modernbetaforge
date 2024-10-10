@@ -2,8 +2,8 @@ package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.util.List;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,9 +23,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
-        this.chunkSource = ChunkSourceType
-            .fromId(settings.chunkSource)
-            .create(world, this, settings, seed, mapFeaturesEnabled);
+        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTINGS.getOrElse(settings.chunkSource, ModernBetaNoiseSettings.BETA);
+        this.chunkSource = ModernBetaRegistries.CHUNK
+            .get(settings.chunkSource)
+            .apply(world, this, settings, noiseSettings, seed, mapFeaturesEnabled);
     }
     
     /*

@@ -1,8 +1,9 @@
-package mod.bespectacled.modernbetaforge.world.chunk;
+package mod.bespectacled.modernbetaforge.world;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizeWorldScreen;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.server.MinecraftServer;

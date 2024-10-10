@@ -34,11 +34,11 @@ public class BetaChunkSource extends NoiseChunkSource {
         World world,
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaChunkGeneratorSettings settings,
+        ModernBetaNoiseSettings noiseSettings,
         long seed,
-        boolean mapFeaturesEnabled,
-        ModernBetaNoiseSettings noiseSettings
+        boolean mapFeaturesEnabled
     ) {
-        super(world, chunkGenerator, settings, seed, mapFeaturesEnabled, noiseSettings);
+        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

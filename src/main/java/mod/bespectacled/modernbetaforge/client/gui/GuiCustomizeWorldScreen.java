@@ -1,7 +1,6 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -10,8 +9,8 @@ import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.gui.Gui;
@@ -126,12 +125,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         IForgeRegistry<Biome> biomes = ForgeRegistries.BIOMES;
         int biomeId = biomes.getValues().indexOf(biomes.getValue(new ResourceLocation(this.settings.fixedBiome)));
         
-        int chunkSourceId = Arrays.asList(ChunkSourceType.values()).indexOf(ChunkSourceType.fromId(this.settings.chunkSource));
-        int biomeSourceId = Arrays.asList(BiomeSourceType.values()).indexOf(BiomeSourceType.fromId(this.settings.biomeSource));
+        int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
+        int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
         
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            new GuiPageButtonList.GuiSlideEntry(700, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ChunkSourceType.values().length - 1, chunkSourceId),
-            new GuiPageButtonList.GuiSlideEntry(701, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, BiomeSourceType.values().length - 1, biomeSourceId),
+            new GuiPageButtonList.GuiSlideEntry(700, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId),
+            new GuiPageButtonList.GuiSlideEntry(701, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
             
             new GuiPageButtonList.GuiLabelEntry(702, I18n.format(PREFIX + "fixedBiomeLabel"), true),
             new GuiPageButtonList.GuiSlideEntry(162, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),            
@@ -1152,10 +1151,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
                 
             case 700:
-                this.settings.chunkSource = ChunkSourceType.values()[(int)entryValue].getId();
+                this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
                 break;
             case 701:
-                this.settings.biomeSource = BiomeSourceType.values()[(int)entryValue].getId();
+                this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 break;
         }
         
@@ -1336,12 +1335,20 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case 146:
             case 147: return String.format("%2.3f", entryValue);
             
-            case 162:
+            case 162: {
                 Biome biome = ForgeRegistries.BIOMES.getValues().get((int)entryValue);
                 return (biome != null) ? biome.getBiomeName() : "?";
-                
-            case 700: return ChunkSourceType.values()[(int)entryValue].getName();
-            case 701: return BiomeSourceType.values()[(int)entryValue].getName();
+            }
+            case 700: {
+                String key = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
+                String name = ModernBetaBuiltInTypes.Chunk.valueOf(key.toUpperCase()).name;
+                return name;
+            }
+            case 701: {
+                String key = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+                String name = ModernBetaBuiltInTypes.Biome.valueOf(key.toUpperCase()).name;
+                return name;
+            }
             
             default: return String.format("%d", (int)entryValue);
         }

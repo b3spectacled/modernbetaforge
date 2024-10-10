@@ -1,18 +1,18 @@
 package mod.bespectacled.modernbetaforge.world.structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 
 public class BetaStructureOceanMonument extends StructureOceanMonument {
-    public static final List<Biome> WATER_BIOMES;
-    public static final List<Biome> SPAWN_BIOMES;
+    private static final List<Biome> WATER_BIOMES;
+    private static final List<Biome> SPAWN_BIOMES;
     
     private final int spacing;
     private final int separation;
@@ -69,20 +69,10 @@ public class BetaStructureOceanMonument extends StructureOceanMonument {
     }
     
     static {
-        WATER_BIOMES = Arrays.<Biome>asList(
-            ModernBetaBiomeHolders.BETA_FROZEN_OCEAN,
-            ModernBetaBiomeHolders.BETA_OCEAN,
-            Biomes.OCEAN,
-            Biomes.DEEP_OCEAN,
-            Biomes.RIVER,
-            Biomes.FROZEN_OCEAN,
-            Biomes.FROZEN_RIVER
-        );
+        WATER_BIOMES = new ArrayList<>(Arrays.asList(ModernBetaBiomeHolders.BETA_FROZEN_OCEAN, ModernBetaBiomeHolders.BETA_OCEAN));
+        WATER_BIOMES.addAll(StructureOceanMonument.WATER_BIOMES);
         
-        SPAWN_BIOMES = Arrays.<Biome>asList(
-            ModernBetaBiomeHolders.BETA_OCEAN,
-            Biomes.OCEAN,
-            Biomes.DEEP_OCEAN
-        );
+        SPAWN_BIOMES = new ArrayList<>(Arrays.asList(ModernBetaBiomeHolders.BETA_OCEAN));
+        SPAWN_BIOMES.addAll(StructureOceanMonument.SPAWN_BIOMES);
     }
 }

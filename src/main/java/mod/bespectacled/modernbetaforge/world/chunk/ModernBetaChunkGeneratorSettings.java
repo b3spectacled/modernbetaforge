@@ -13,8 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSourceType;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import net.minecraft.init.Biomes;
@@ -484,8 +483,8 @@ public class ModernBetaChunkGeneratorSettings {
         }
         
         public Factory() {
-            this.chunkSource = ChunkSourceType.BETA.getId();
-            this.biomeSource = BiomeSourceType.BETA.getId();
+            this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
+            this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
             
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;
@@ -687,8 +686,8 @@ public class ModernBetaChunkGeneratorSettings {
         }
         
         public void setDefaults() {
-            this.chunkSource = ChunkSourceType.BETA.getId();
-            this.biomeSource = BiomeSourceType.BETA.getId();
+            this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
+            this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
             
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;

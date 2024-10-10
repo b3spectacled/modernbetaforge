@@ -1,13 +1,13 @@
 package mod.bespectacled.modernbetaforge.world.biome;
 
-import mod.bespectacled.modernbetaforge.world.structure.MapGenBetaScatteredFeature;
+import mod.bespectacled.modernbetaforge.world.structure.BetaMapGenScatteredFeature;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.BiomeManager;
 
 public class ModernBetaBiomeStructures {
     public static void registerStructures() {
-        MapGenStructureIO.registerStructure(MapGenBetaScatteredFeature.Start.class, "Temple");
+        MapGenStructureIO.registerStructure(BetaMapGenScatteredFeature.Start.class, "Temple");
     }
     
     public static void registerStructureBiomes() {

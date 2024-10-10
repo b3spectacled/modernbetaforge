@@ -13,12 +13,12 @@ import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureStart;
 
-public class MapGenBetaScatteredFeature extends MapGenScatteredFeature {
+public class BetaMapGenScatteredFeature extends MapGenScatteredFeature {
     private static final List<Biome> ALLOWED_BIOMES;
     
     private final int maxDistanceBetweenScatteredFeatures;
 
-    public MapGenBetaScatteredFeature() {
+    public BetaMapGenScatteredFeature() {
         this.maxDistanceBetweenScatteredFeatures = 32;
     }
     
@@ -72,7 +72,7 @@ public class MapGenBetaScatteredFeature extends MapGenScatteredFeature {
     }
     
     public static class Start extends MapGenScatteredFeature.Start {
-        public Start() { }
+        public Start() {}
 
         public Start(World world, Random random, int chunkX, int chunkZ) {
             this(world, random, chunkX, chunkZ, world.getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8)));

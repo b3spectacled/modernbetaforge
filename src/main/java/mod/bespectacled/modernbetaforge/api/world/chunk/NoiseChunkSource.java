@@ -56,11 +56,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         World world,
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaChunkGeneratorSettings settings,
+        ModernBetaNoiseSettings noiseSettings,
         long seed,
-        boolean mapFeaturesEnabled,
-        ModernBetaNoiseSettings noiseSettings
+        boolean mapFeaturesEnabled
     ) {
-        super(world, chunkGenerator, settings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
         
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;

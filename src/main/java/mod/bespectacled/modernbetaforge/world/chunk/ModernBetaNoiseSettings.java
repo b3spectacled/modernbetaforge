@@ -6,6 +6,7 @@ public class ModernBetaNoiseSettings {
     public static final ModernBetaNoiseSettings SKYLANDS = new ModernBetaNoiseSettings(1, 2, new SlideSettings(-30, 31, 0), new SlideSettings(-30, 7, 1));
     public static final ModernBetaNoiseSettings INFDEV_415 = new ModernBetaNoiseSettings(1, 1, new SlideSettings(0, 0, 0), new SlideSettings(0, 0, 0));
     public static final ModernBetaNoiseSettings PE = new ModernBetaNoiseSettings(2, 1, new SlideSettings(-10, 3, 0), new SlideSettings(15, 3, 0));
+    public static final ModernBetaNoiseSettings RELEASE = new ModernBetaNoiseSettings(2, 1, new SlideSettings(-10, 3, 0), new SlideSettings(15, 3, 0));
     
     public final int sizeVertical;
     public final int sizeHorizontal;

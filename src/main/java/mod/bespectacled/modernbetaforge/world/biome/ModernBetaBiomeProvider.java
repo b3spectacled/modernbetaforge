@@ -5,8 +5,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSourceType;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -26,7 +26,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
 
-        this.biomeSource = BiomeSourceType.fromId(settings.biomeSource).create(worldInfo);
+        this.biomeSource = ModernBetaRegistries.BIOME.get(settings.biomeSource).apply(worldInfo);
         this.chunkSource = null;
     }
     
