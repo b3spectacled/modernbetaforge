@@ -269,7 +269,7 @@ public abstract class ChunkSource {
         ) {
             if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
                 int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(128);
+                int y = this.random.nextInt(this.settings.height);
                 int z = startZ + this.random.nextInt(16) + 8;
                 
                 (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
@@ -282,7 +282,7 @@ public abstract class ChunkSource {
         ) {
             if (random.nextInt(this.settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
                 int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(this.random.nextInt(120) + 8);
+                int y = this.random.nextInt(this.random.nextInt(this.settings.height - 8) + 8);
                 int z = startZ + this.random.nextInt(16) + 8;
                 
                 if (y < 64 || this.random.nextInt(10) == 0) {
@@ -296,7 +296,7 @@ public abstract class ChunkSource {
         ) {
             for (int i = 0; i < this.settings.dungeonChance; i++) {
                 int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(128);
+                int y = this.random.nextInt(this.settings.height);
                 int z = startZ + this.random.nextInt(16) + 8;
                 
                 new WorldGenDungeons().generate(this.world, this.random, mutablePos.setPos(x, y, z));
