@@ -217,8 +217,6 @@ public class BetaChunkSource extends NoiseChunkSource {
 
         double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121, 1.121);
         double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
-
-        double islandOffset = this.getIslandOffset(noiseX, noiseZ);
         
         Clime clime = this.climateSampler.sample(x, z);
         double temp = clime.temp();
@@ -317,7 +315,6 @@ public class BetaChunkSource extends NoiseChunkSource {
             }
 
             density -= densityOffset;
-            density += islandOffset;
             density = this.applySlides(density, noiseY);
             
             buffer[noiseY] = density;

@@ -30,13 +30,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     }
     
     /*
-     * Provided for when game needs it; handled in generateChunk
+     * Handled in generateChunk, but also used by WoodlandMansion.
+     * 
      */
     @Override
     public void setBlocksInChunk(int x, int z, ChunkPrimer primer) {
         this.chunkSource.provideBaseChunk(primer, x, z);
     }
-    
 
     @Override
     public Chunk generateChunk(int chunkX, int chunkZ) {
@@ -49,12 +49,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     }
     
     /*
-     * Provided for when game needs it; handled in generateChunk
+     * Handled in generateChunk
      */
     @Override
-    public void replaceBiomeBlocks(int chunkX, int chunkZ, ChunkPrimer chunkPrimer, Biome[] biomes) {
-        this.chunkSource.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
-    }
+    public void replaceBiomeBlocks(int chunkX, int chunkZ, ChunkPrimer chunkPrimer, Biome[] biomes) {}
 
     @Override
     public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {

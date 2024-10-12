@@ -65,7 +65,6 @@ public class BiomeColorsEventHandler {
         
         BetaColorSampler.INSTANCE.resetClimateSamplers();
     }
-    
 
     @SubscribeEvent
     public void onFogColorsEvent(EntityViewRenderEvent.FogColors event) {

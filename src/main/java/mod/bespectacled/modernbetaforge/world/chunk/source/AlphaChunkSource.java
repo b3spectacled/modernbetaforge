@@ -198,8 +198,6 @@ public class AlphaChunkSource extends NoiseChunkSource {
         double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, 1.0, 0.0, 1.0);
         double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
         
-        double islandOffset = this.getIslandOffset(noiseX, noiseZ);
-        
         scale = (scale + 256.0) / 512.0;
         
         if (scale > 1.0) {
@@ -283,7 +281,6 @@ public class AlphaChunkSource extends NoiseChunkSource {
             }
 
             density -= densityOffset;
-            density += islandOffset;
             density = this.applySlides(density, noiseY);
             
             buffer[noiseY] = density;

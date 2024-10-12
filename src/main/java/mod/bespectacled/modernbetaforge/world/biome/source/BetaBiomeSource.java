@@ -34,29 +34,17 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
 
     @Override
     public Biome getBiome(int x, int z) {
-        Clime clime = this.climateSampler.sampleClime(x, z);
-        double temp = clime.temp();
-        double rain = clime.rain();
-        
-        return this.climateMap.getBiome(temp, rain, ClimateType.LAND);
+        return this.getBiomeByType(x, z, ClimateType.LAND);
     }
 
     @Override
     public Biome getOceanBiome(int x, int z) {
-        Clime clime = this.climateSampler.sampleClime(x, z);
-        double temp = clime.temp();
-        double rain = clime.rain();
-        
-        return this.climateMap.getBiome(temp, rain, ClimateType.OCEAN);
+        return this.getBiomeByType(x, z, ClimateType.OCEAN);
     }
 
     @Override
     public Biome getBeachBiome(int x, int z) {
-        Clime clime = this.climateSampler.sampleClime(x, z);
-        double temp = clime.temp();
-        double rain = clime.rain();
-        
-        return this.climateMap.getBiome(temp, rain, ClimateType.BEACH);
+        return this.getBiomeByType(x, z, ClimateType.BEACH);
     }
 
     @Override
@@ -77,5 +65,13 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     @Override
     public boolean sampleBiomeColor() {
         return ModernBetaConfig.visualOptions.useBetaBiomeColors && !this.climateMap.isModifiedMap();
+    }
+    
+    private Biome getBiomeByType(int x, int z, ClimateType type) {
+        Clime clime = this.climateSampler.sampleClime(x, z);
+        double temp = clime.temp();
+        double rain = clime.rain();
+        
+        return this.climateMap.getMapping(temp, rain).biomeByClimateType(type);
     }
 }

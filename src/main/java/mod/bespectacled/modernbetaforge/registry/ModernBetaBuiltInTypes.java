@@ -22,7 +22,8 @@ public class ModernBetaBuiltInTypes {
     public enum Biome {
         BETA("beta", "Beta"),
         SINGLE("single", "Single"),
-        PE("pe", "Pocket Edition")
+        PE("pe", "Pocket Edition"),
+        RELEASE("release", "Release")
         ;
         
         public final String id;

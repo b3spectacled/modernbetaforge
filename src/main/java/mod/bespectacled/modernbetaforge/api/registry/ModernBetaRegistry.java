@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
+
 public final class ModernBetaRegistry<T> {
     private final String name;
     private final Map<String, T> map; // Use LinkedHashMap so entries are displayed in order if retrieved as list.
@@ -31,6 +35,9 @@ public final class ModernBetaRegistry<T> {
     
     public T getOrElse(String key, String alternate) {
         if (!this.contains(key)) {
+            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", key, this.name);
+            ModernBeta.log(Level.WARN, warning);
+            
             return this.get(alternate);
         }
         
@@ -39,6 +46,9 @@ public final class ModernBetaRegistry<T> {
     
     public T getOrElse(String key, T alternate) {
         if (!this.contains(key)) {
+            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", key, this.name);
+            ModernBeta.log(Level.WARN, warning);
+            
             return alternate;
         }
         

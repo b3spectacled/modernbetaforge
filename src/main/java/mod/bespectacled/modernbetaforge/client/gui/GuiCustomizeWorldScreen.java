@@ -50,8 +50,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private static final float MAX_BIOME_WEIGHT = 20.0f;
     private static final float MIN_BIOME_OFFSET = 0.0f;
     private static final float MAX_BIOME_OFFSET = 20.0f;
-    //private static final float MIN_OCEAN_SLIDE_TARGET = -1000.0f;
-    //private static final float MAX_OCEAN_SLIDE_TARGET = 0.0f;
     
     private final GuiCreateWorld parent;
     

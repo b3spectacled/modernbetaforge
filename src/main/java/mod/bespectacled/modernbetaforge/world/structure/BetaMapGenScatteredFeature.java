@@ -1,11 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.structure;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -14,56 +11,8 @@ import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureStart;
 
 public class BetaMapGenScatteredFeature extends MapGenScatteredFeature {
-    private static final List<Biome> ALLOWED_BIOMES;
-    
-    private final int maxDistanceBetweenScatteredFeatures;
-
     public BetaMapGenScatteredFeature() {
-        this.maxDistanceBetweenScatteredFeatures = 32;
-    }
-    
-    @Override
-    protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-        int originalChunkX = chunkX;
-        int originalChunkZ = chunkZ;
-
-        if (chunkX < 0) {
-            chunkX -= this.maxDistanceBetweenScatteredFeatures - 1;
-        }
-
-        if (chunkZ < 0) {
-            chunkZ -= this.maxDistanceBetweenScatteredFeatures - 1;
-        }
-
-        int structureX = chunkX / this.maxDistanceBetweenScatteredFeatures;
-        int structureZ = chunkZ / this.maxDistanceBetweenScatteredFeatures;
-        
-        Random random = this.world.setRandomSeed(structureX, structureZ, 14357617);
-        
-        structureX = structureX * this.maxDistanceBetweenScatteredFeatures;
-        structureZ = structureZ * this.maxDistanceBetweenScatteredFeatures;
-        structureX = structureX + random.nextInt(this.maxDistanceBetweenScatteredFeatures - 8);
-        structureZ = structureZ + random.nextInt(this.maxDistanceBetweenScatteredFeatures - 8);
-
-        if (originalChunkX == structureX && originalChunkZ == structureZ) {
-            int x = originalChunkX * 16 + 8;
-            int z = originalChunkZ * 16 + 8;
-
-            // Biome biome = this.chunkSource.getInjectedBiomeAtBlock(x, z); Really laggy for some reason, let's just not do this.
-            Biome biome = this.world.getBiomeProvider().getBiome(new BlockPos(x, 0, z));
-
-            if (biome == null) {
-                return false;
-            }
-
-            for (Biome allowedBiome : ALLOWED_BIOMES) {
-                if (biome == allowedBiome) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        super();
     }
 
     @Override
@@ -97,22 +46,5 @@ public class BetaMapGenScatteredFeature extends MapGenScatteredFeature {
 
             this.updateBoundingBox();
         }
-    }
-    
-    static {
-        ALLOWED_BIOMES = Arrays.<Biome>asList(
-            ModernBetaBiomeHolders.BETA_DESERT,
-            ModernBetaBiomeHolders.BETA_RAINFOREST,
-            ModernBetaBiomeHolders.BETA_SWAMPLAND,
-            ModernBetaBiomeHolders.BETA_TUNDRA,
-            ModernBetaBiomeHolders.BETA_TAIGA,
-            Biomes.DESERT,
-            Biomes.DESERT_HILLS,
-            Biomes.JUNGLE,
-            Biomes.JUNGLE_HILLS,
-            Biomes.SWAMPLAND,
-            Biomes.ICE_PLAINS,
-            Biomes.COLD_TAIGA
-        );
     }
 }

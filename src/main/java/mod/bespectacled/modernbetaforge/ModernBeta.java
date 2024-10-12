@@ -64,7 +64,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistry.registerChunkSources();
         ModernBetaBuiltInRegistry.registerBiomeSources();
         ModernBetaBuiltInRegistry.registerNoiseSettings();
-        
+
         proxy.init();
     }
     

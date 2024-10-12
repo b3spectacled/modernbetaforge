@@ -27,8 +27,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.structure.BetaMapGenScatteredFeature;
-import mod.bespectacled.modernbetaforge.world.structure.BetaStructureOceanMonument;
-import mod.bespectacled.modernbetaforge.world.structure.BetaWoodlandMansion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -48,6 +46,8 @@ import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraft.world.gen.structure.StructureOceanMonument;
+import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
@@ -74,8 +74,8 @@ public abstract class ChunkSource {
     private final MapGenMineshaft mineshaftGenerator;
     
     private final BetaMapGenScatteredFeature scatteredFeatureGenerator;
-    private final BetaStructureOceanMonument oceanMonumentGenerator;
-    private final BetaWoodlandMansion woodlandMansionGenerator;
+    private final StructureOceanMonument oceanMonumentGenerator;
+    private final WoodlandMansion woodlandMansionGenerator;
     
     private final Biome[] biomes = new Biome[256];
     private final SimplexOctaveNoise surfaceOctaveNoise;
@@ -104,15 +104,14 @@ public abstract class ChunkSource {
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.mineshaftGenerator = (MapGenMineshaft)TerrainGen.getModdedMapGen(new MapGenMineshaft(), InitMapGenEvent.EventType.MINESHAFT);
         
-        //this.scatteredFeatureGenerator = (ModernBetaMapGenScatteredFeature)TerrainGen.getModdedMapGen(new ModernBetaMapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
-        //this.oceanMonumentGenerator = (ModernBetaStructureOceanMonument)TerrainGen.getModdedMapGen(new ModernBetaStructureOceanMonument(this), InitMapGenEvent.EventType.OCEAN_MONUMENT);
-        //this.woodlandMansionGenerator = (ModernBetaWoodlandMansion)TerrainGen.getModdedMapGen(new ModernBetaWoodlandMansion(chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
-        
+        this.oceanMonumentGenerator = (StructureOceanMonument)TerrainGen.getModdedMapGen(new StructureOceanMonument(), InitMapGenEvent.EventType.OCEAN_MONUMENT);
+        this.woodlandMansionGenerator = (WoodlandMansion)TerrainGen.getModdedMapGen(new WoodlandMansion(this.chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
+
         // To avoid mod incompatibilities, do not replace with modded structures
         // TODO: Figure out a better way to handle this, maybe event handlers.
+        
+        //this.scatteredFeatureGenerator = (ModernBetaMapGenScatteredFeature)TerrainGen.getModdedMapGen(new ModernBetaMapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
         this.scatteredFeatureGenerator = new BetaMapGenScatteredFeature();
-        this.oceanMonumentGenerator = new BetaStructureOceanMonument();
-        this.woodlandMansionGenerator = new BetaWoodlandMansion(chunkGenerator);
         
         // Init custom/vanilla surface info
         this.surfaceOctaveNoise = new SimplexOctaveNoise(new Random(seed), 4);

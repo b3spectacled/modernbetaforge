@@ -44,11 +44,11 @@ public class ClimateMap {
         return new LinkedHashMap<>(this.climateMap);
     }
     
-    public Biome getBiome(double temp, double rain, ClimateType type) {
-        int t = (int) (temp * 63D);
-        int r = (int) (rain * 63D);
+    public ClimateMapping getMapping(double temp, double rain) {
+        int t = (int) (temp * 63.0);
+        int r = (int) (rain * 63.0);
 
-        return this.climateTable[t + r * 64].biomeByClimateType(type);
+        return this.climateTable[t + r * 64];
     }
     
     public boolean isModifiedMap() {

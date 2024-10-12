@@ -97,9 +97,7 @@ public class NoiseSource {
                 this.noiseColumnSampler.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
                 
                 for (int nY = 0; nY < this.noiseResY; ++nY) {
-                    noise[ndx] = buffer[nY];
-                    
-                    ndx++;
+                    noise[ndx++] = buffer[nY];
                 }
             }
         }

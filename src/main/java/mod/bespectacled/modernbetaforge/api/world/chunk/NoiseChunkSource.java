@@ -187,56 +187,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
     }
     
-    protected double getIslandOffset(int noiseX, int noiseZ) {
-        /*
-        if (!this.settings.useIslands) {
-            return 0.0;
-        }
-            
-        Function<Integer, Integer> toNoiseCoord = chunkCoord -> chunkCoord * this.noiseSizeX;
-        IslandShape islandShape = IslandShape.fromId(this.settings.centerIslandShape);
-        
-        double distance = islandShape.getDistance(noiseX, noiseZ);
-        double oceanSlideTarget = this.settings.oceanSlideTarget;
-
-        int centerIslandRadius = toNoiseCoord.apply(this.settings.centerIslandRadius);
-        int centerIslandFalloffDistance = toNoiseCoord.apply(this.settings.centerIslandFalloffDistance);
-
-        int centerOceanRadius = toNoiseCoord.apply(this.settings.centerOceanRadius);
-        int centerOceanFalloffDistance = toNoiseCoord.apply(this.settings.centerOceanFalloffDistance);
-        
-        double outerIslandNoiseScale = this.settings.outerIslandNoiseScale;
-        double outerIslandNoiseOffset = this.settings.outerIslandNoiseOffset;
-        
-        double islandDelta = (distance - centerIslandRadius) / centerIslandFalloffDistance;
-        double islandOffset = MathHelper.clampedLerp(0.0, oceanSlideTarget, islandDelta);
-            
-        if (this.settings.useOuterIslands && distance > centerOceanRadius) {
-            double islandAddition = (float)this.islandNoise.sample(
-                noiseX / outerIslandNoiseScale,
-                noiseZ / outerIslandNoiseScale,
-                1.0,
-                1.0
-            ) + outerIslandNoiseOffset;
-            
-            // 0.885539 = Simplex upper range, but scale a little higher to ensure island centers have untouched terrain.
-            islandAddition /= 0.8F;
-            islandAddition = MathHelper.clamp(islandAddition, 0.0F, 1.0F);
-            
-            // Interpolate noise addition so there isn't a sharp cutoff at start of ocean ring edge.
-            double oceanDelta = (distance - centerOceanRadius) / centerOceanFalloffDistance;
-            islandAddition = (double)MathHelper.clampedLerp(0.0F, islandAddition, oceanDelta);
-            
-            islandOffset += islandAddition * -oceanSlideTarget;
-            islandOffset = MathHelper.clamp(islandOffset, oceanSlideTarget, 0.0F);
-        }
-        
-        return islandOffset;
-        */
-        
-        return 0.0;
-    }
-    
     /**
      * Generates the base terrain for a given chunk.
      * 
