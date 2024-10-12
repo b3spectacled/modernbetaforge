@@ -256,7 +256,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.lapisSize),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.lapisCount),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_CTR, I18n.format(PREFIX + "center"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_SPR, I18n.format(PREFIX + "spread"), false, this, 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread)
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_SPR, I18n.format(PREFIX + "spread"), false, this, 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread),
+            
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_EMER_NAME, I18n.format("tile.oreEmerald.name"), false),
+            null,
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.emeraldSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.emeraldCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
@@ -1171,6 +1178,18 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG1_S_LAPS_SPR:
                 this.settings.lapisSpread = (int)entryValue;
+                break;
+            case GuiTags.PG1_S_EMER_SIZE:
+                this.settings.emeraldSize = (int)entryValue;
+                break;
+            case GuiTags.PG1_S_EMER_CNT:
+                this.settings.emeraldCount = (int)entryValue;
+                break;
+            case GuiTags.PG1_S_EMER_MIN:
+                this.settings.emeraldMinHeight = (int)entryValue;
+                break;
+            case GuiTags.PG1_S_EMER_MAX:
+                this.settings.emeraldMaxHeight = (int)entryValue;
                 break;
         }
         

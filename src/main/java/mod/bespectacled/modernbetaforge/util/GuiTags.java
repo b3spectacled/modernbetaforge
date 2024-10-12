@@ -114,6 +114,11 @@ public class GuiTags {
     public static final int PG1_S_LAPS_CTR = 246;
     public static final int PG1_S_LAPS_SPR = 247;
     
+    public static final int PG1_S_EMER_SIZE = 248;
+    public static final int PG1_S_EMER_CNT = 249;
+    public static final int PG1_S_EMER_MIN = 250;
+    public static final int PG1_S_EMER_MAX = 251;
+    
     // Labels
     public static final int PG1_L_CLAY_NAME = 1200;
     public static final int PG1_L_DIRT_NAME = 1201;
@@ -127,6 +132,7 @@ public class GuiTags {
     public static final int PG1_L_REDS_NAME = 1209;
     public static final int PG1_L_DIAM_NAME = 1210;
     public static final int PG1_L_LAPS_NAME = 1211;
+    public static final int PG1_L_EMER_NAME = 1212;
     
     /* Page 3 */
     

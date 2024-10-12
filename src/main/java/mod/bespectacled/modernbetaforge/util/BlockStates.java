@@ -33,6 +33,7 @@ public class BlockStates {
     public static final IBlockState REDSTONE_ORE = Blocks.REDSTONE_ORE.getDefaultState();
     public static final IBlockState DIAMOND_ORE = Blocks.DIAMOND_ORE.getDefaultState();
     public static final IBlockState LAPIS_ORE = Blocks.LAPIS_ORE.getDefaultState();
+    public static final IBlockState EMERALD_ORE = Blocks.EMERALD_ORE.getDefaultState();
     
     public static final IBlockState GRANITE = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE);
     public static final IBlockState DIORITE = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE);

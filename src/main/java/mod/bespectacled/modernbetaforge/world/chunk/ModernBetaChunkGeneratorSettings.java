@@ -25,6 +25,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final String chunkSource;
     public final String biomeSource;
     
+    public final String fixedBiome;
+    
     public final boolean replaceOceanBiomes;
     public final boolean replaceBeachBiomes;
     
@@ -65,8 +67,6 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useLavaLakes;
     public final int lavaLakeChance;
     public final boolean useLavaOceans;
-    
-    public final String fixedBiome;
     
     public final int claySize;
     public final int clayCount;
@@ -127,6 +127,11 @@ public class ModernBetaChunkGeneratorSettings {
     public final int lapisCount;
     public final int lapisCenterHeight;
     public final int lapisSpread;
+    
+    public final int emeraldSize;
+    public final int emeraldCount;
+    public final int emeraldMinHeight;
+    public final int emeraldMaxHeight;
 
     public final boolean useTallGrass;
     public final boolean useNewFlowers;
@@ -138,23 +143,6 @@ public class ModernBetaChunkGeneratorSettings {
     public final float tempNoiseScale;
     public final float rainNoiseScale;
     public final float detailNoiseScale;
-
-    /*
-    public final boolean useIslands;
-    public final boolean useOuterIslands;
-    
-    public final float oceanSlideTarget;
-    
-    public final String centerIslandShape;
-    public final int centerIslandRadius;
-    public final int centerIslandFalloffDistance;
-    
-    public final int centerOceanRadius;
-    public final int centerOceanFalloffDistance;
-    
-    public final float outerIslandNoiseScale;
-    public final float outerIslandNoiseOffset;
-    */
     
     public final ClimateMappingSettings desertBiomes;
     public final ClimateMappingSettings forestBiomes;
@@ -171,6 +159,8 @@ public class ModernBetaChunkGeneratorSettings {
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
+        
+        this.fixedBiome = factory.fixedBiome;
         
         this.replaceOceanBiomes = factory.replaceOceanBiomes;
         this.replaceBeachBiomes = factory.replaceBeachBiomes;
@@ -212,8 +202,6 @@ public class ModernBetaChunkGeneratorSettings {
         this.useLavaLakes = factory.useLavaLakes;
         this.lavaLakeChance = factory.lavaLakeChance;
         this.useLavaOceans = factory.useLavaOceans;
-        
-        this.fixedBiome = factory.fixedBiome;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -274,6 +262,11 @@ public class ModernBetaChunkGeneratorSettings {
         this.lapisCount = factory.lapisCount;
         this.lapisCenterHeight = factory.lapisCenterHeight;
         this.lapisSpread = factory.lapisSpread;
+        
+        this.emeraldSize = factory.emeraldSize;
+        this.emeraldCount = factory.emeraldCount;
+        this.emeraldMinHeight = factory.emeraldMinHeight;
+        this.emeraldMaxHeight = factory.emeraldMaxHeight;
 
         this.useTallGrass = factory.useTallGrass;
         this.useNewFlowers = factory.useNewFlowers;
@@ -285,23 +278,6 @@ public class ModernBetaChunkGeneratorSettings {
         this.tempNoiseScale = factory.tempNoiseScale;
         this.rainNoiseScale = factory.rainNoiseScale;
         this.detailNoiseScale = factory.detailNoiseScale;
-        
-        /*
-        this.useIslands = factory.useIslands;
-        this.useOuterIslands = factory.useOuterIslands;
-        
-        this.oceanSlideTarget = factory.oceanSlideTarget;
-        
-        this.centerIslandShape = factory.centerIslandShape;
-        this.centerIslandRadius = factory.centerIslandRadius;
-        this.centerIslandFalloffDistance = factory.centerIslandFalloffDistance;
-        
-        this.centerOceanRadius = factory.centerOceanRadius;
-        this.centerOceanFalloffDistance = factory.centerOceanFalloffDistance;
-        
-        this.outerIslandNoiseScale = factory.outerIslandNoiseScale;
-        this.outerIslandNoiseOffset = factory.outerIslandNoiseOffset;
-        */
         
         this.desertBiomes = factory.desertBiomes;
         this.forestBiomes = factory.forestBiomes;
@@ -321,6 +297,8 @@ public class ModernBetaChunkGeneratorSettings {
         
         public String chunkSource;
         public String biomeSource;
+        
+        public String fixedBiome;
 
         public boolean replaceOceanBiomes;
         public boolean replaceBeachBiomes;
@@ -362,8 +340,6 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useLavaLakes;
         public int lavaLakeChance;
         public boolean useLavaOceans;
-        
-        public String fixedBiome;
         
         public int claySize;
         public int clayCount;
@@ -425,6 +401,11 @@ public class ModernBetaChunkGeneratorSettings {
         public int lapisCenterHeight;
         public int lapisSpread;
         
+        public int emeraldSize;
+        public int emeraldCount;
+        public int emeraldMinHeight;
+        public int emeraldMaxHeight;
+        
         public boolean useTallGrass;
         public boolean useNewFlowers;
         public boolean useLilyPads;
@@ -435,23 +416,6 @@ public class ModernBetaChunkGeneratorSettings {
         public float tempNoiseScale;
         public float rainNoiseScale;
         public float detailNoiseScale;
-        
-        /*
-        public boolean useIslands;
-        public boolean useOuterIslands;
-        
-        public float oceanSlideTarget;
-        
-        public String centerIslandShape;
-        public int centerIslandRadius;
-        public int centerIslandFalloffDistance;
-        
-        public int centerOceanRadius;
-        public int centerOceanFalloffDistance;
-        
-        public float outerIslandNoiseScale;
-        public float outerIslandNoiseOffset;
-        */
         
         public ClimateMappingSettings desertBiomes;
         public ClimateMappingSettings forestBiomes;
@@ -485,6 +449,8 @@ public class ModernBetaChunkGeneratorSettings {
         public Factory() {
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
+            
+            this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
             
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;
@@ -525,8 +491,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.waterLakeChance = 4;
             this.useLavaLakes = true;
             this.lavaLakeChance = 80;
-            
-            this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -588,6 +552,11 @@ public class ModernBetaChunkGeneratorSettings {
             this.lapisCenterHeight = 16;
             this.lapisSpread = 16;
             
+            this.emeraldSize = 3;
+            this.emeraldCount = 1;
+            this.emeraldMinHeight = 95;
+            this.emeraldMaxHeight = 128;
+            
             this.useTallGrass = true;
             this.useNewFlowers = true;
             this.useLilyPads = false;
@@ -598,23 +567,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
-            
-            /*
-            this.useIslands = false;
-            this.useOuterIslands = false;
-            
-            this.oceanSlideTarget = -200.0f;
-            
-            this.centerIslandShape = IslandShape.CIRCLE.getId();
-            this.centerIslandRadius = 16;
-            this.centerIslandFalloffDistance = 8;
-            
-            this.centerOceanRadius = 64;
-            this.centerOceanFalloffDistance = 16;
-            
-            this.outerIslandNoiseScale = 300.0f;
-            this.outerIslandNoiseOffset = 0.25f;
-            */
             
             this.desertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
@@ -689,6 +641,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
             
+            this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
+            
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;
             
@@ -729,8 +683,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.useLavaLakes = true;
             this.lavaLakeChance = 80;
             this.useLavaOceans = false;
-            
-            this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -792,6 +744,11 @@ public class ModernBetaChunkGeneratorSettings {
             this.lapisCenterHeight = 16;
             this.lapisSpread = 16;
             
+            this.emeraldSize = 3;
+            this.emeraldCount = 1;
+            this.emeraldMinHeight = 95;
+            this.emeraldMaxHeight = 128;
+            
             this.useTallGrass = true;
             this.useNewFlowers = true;
             this.useLilyPads = false;
@@ -802,23 +759,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
-            
-            /*
-            this.useIslands = false;
-            this.useOuterIslands = false;
-            
-            this.oceanSlideTarget = -200.0f;
-            
-            this.centerIslandShape = IslandShape.CIRCLE.getId();
-            this.centerIslandRadius = 16;
-            this.centerIslandFalloffDistance = 8;
-            
-            this.centerOceanRadius = 64;
-            this.centerOceanFalloffDistance = 16;
-            
-            this.outerIslandNoiseScale = 300.0f;
-            this.outerIslandNoiseOffset = 0.25f;
-            */
             
             this.desertBiomes = new ClimateMappingSettings(
                 ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
@@ -899,87 +839,30 @@ public class ModernBetaChunkGeneratorSettings {
             
             Factory factory = (Factory)object;
             
-            return 
-                this.andesiteCount == factory.andesiteCount &&
-                this.andesiteMaxHeight == factory.andesiteMaxHeight &&
-                this.andesiteMinHeight == factory.andesiteMinHeight &&
-                this.andesiteSize == factory.andesiteSize &&
-                
-                Float.compare(factory.baseSize, this.baseSize) == 0 &&
-                
-                this.coalCount == factory.coalCount &&
-                this.coalMaxHeight == factory.coalMaxHeight &&
-                this.coalMinHeight == factory.coalMinHeight &&
-                this.coalSize == factory.coalSize &&
-                
-                Float.compare(factory.coordinateScale, this.coordinateScale) == 0 &&
-                Float.compare(factory.depthNoiseScaleExponent, this.depthNoiseScaleExponent) == 0 &&
-                Float.compare(factory.depthNoiseScaleX, this.depthNoiseScaleX) == 0 &&
-                Float.compare(factory.depthNoiseScaleZ, this.depthNoiseScaleZ) == 0 &&
-                
-                this.diamondCount == factory.diamondCount &&
-                this.diamondMaxHeight == factory.diamondMaxHeight &&
-                this.diamondMinHeight == factory.diamondMinHeight &&
-                this.diamondSize == factory.diamondSize &&
-                
-                this.dioriteCount == factory.dioriteCount &&
-                this.dioriteMaxHeight == factory.dioriteMaxHeight &&
-                this.dioriteMinHeight == factory.dioriteMinHeight &&
-                this.dioriteSize == factory.dioriteSize &&
-                
-                this.dirtCount == factory.dirtCount &&
-                this.dirtMaxHeight == factory.dirtMaxHeight &&
-                this.dirtMinHeight == factory.dirtMinHeight &&
-                this.dirtSize == factory.dirtSize &&
-                
-                this.dungeonChance == factory.dungeonChance &&
+            return
+                this.chunkSource.equals(factory.chunkSource) &&
+                this.biomeSource.equals(factory.biomeSource) &&
                 
                 this.fixedBiome.equals(factory.fixedBiome) &&
                 
-                this.goldCount == factory.goldCount &&
-                this.goldMaxHeight == factory.goldMaxHeight &&
-                this.goldMinHeight == factory.goldMinHeight &&
-                this.goldSize == factory.goldSize &&
-                
-                this.graniteCount == factory.graniteCount &&
-                this.graniteMaxHeight == factory.graniteMaxHeight &&
-                this.graniteMinHeight == factory.graniteMinHeight &&
-                this.graniteSize == factory.graniteSize &&
-                
-                this.gravelCount == factory.gravelCount &&
-                this.gravelMaxHeight == factory.gravelMaxHeight &&
-                this.gravelMinHeight == factory.gravelMinHeight &&
-                this.gravelSize == factory.gravelSize &&
-                
+                this.replaceOceanBiomes == factory.replaceOceanBiomes &&
+                this.replaceBeachBiomes == factory.replaceBeachBiomes &&
+                        
+                Float.compare(factory.coordinateScale, this.coordinateScale) == 0 &&        
                 Float.compare(factory.heightScale, this.heightScale) == 0 &&
-                
-                this.ironCount == factory.ironCount &&
-                this.ironMaxHeight == factory.ironMaxHeight &&
-                this.ironMinHeight == factory.ironMinHeight &&
-                this.ironSize == factory.ironSize &&
-                
-                this.lapisCenterHeight == factory.lapisCenterHeight &&
-                this.lapisCount == factory.lapisCount &&
-                this.lapisSize == factory.lapisSize &&
-                this.lapisSpread == factory.lapisSpread &&
-                
-                this.lavaLakeChance == factory.lavaLakeChance &&
-                
+                Float.compare(factory.upperLimitScale, this.upperLimitScale) == 0 &&
                 Float.compare(factory.lowerLimitScale, this.lowerLimitScale) == 0 &&
+                Float.compare(factory.depthNoiseScaleX, this.depthNoiseScaleX) == 0 &&
+                Float.compare(factory.depthNoiseScaleZ, this.depthNoiseScaleZ) == 0 &&
+                Float.compare(factory.depthNoiseScaleExponent, this.depthNoiseScaleExponent) == 0 &&
                 Float.compare(factory.mainNoiseScaleX, this.mainNoiseScaleX) == 0 &&
                 Float.compare(factory.mainNoiseScaleY, this.mainNoiseScaleY) == 0 &&
                 Float.compare(factory.mainNoiseScaleZ, this.mainNoiseScaleZ) == 0 &&
-                
-                this.redstoneCount == factory.redstoneCount &&
-                this.redstoneMaxHeight == factory.redstoneMaxHeight &&
-                this.redstoneMinHeight == factory.redstoneMinHeight &&
-                this.redstoneSize == factory.redstoneSize &&
+                Float.compare(factory.baseSize, this.baseSize) == 0 &&
+                Float.compare(factory.stretchY, this.stretchY) == 0 &&
                 
                 this.seaLevel == factory.seaLevel &&
                 this.height == factory.height &&
-                
-                Float.compare(factory.stretchY, this.stretchY) == 0 &&
-                Float.compare(factory.upperLimitScale, this.upperLimitScale) == 0 &&
                 
                 Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
@@ -988,29 +871,86 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.useCaves == factory.useCaves &&
                 this.useDungeons == factory.useDungeons &&
-                this.useLavaLakes == factory.useLavaLakes &&
-                this.useLavaOceans == factory.useLavaOceans &&
-                this.useMineShafts == factory.useMineShafts &&
-                this.useRavines == factory.useRavines &&
+                this.dungeonChance == factory.dungeonChance &&
+                
                 this.useStrongholds == factory.useStrongholds &&
+                this.useVillages == factory.useVillages &&
+                this.useMineShafts == factory.useMineShafts &&
                 this.useTemples == factory.useTemples &&
                 this.useMonuments == factory.useMonuments &&
                 this.useMansions == factory.useMansions &&
-                this.useVillages == factory.useVillages &&
-                
+                this.useRavines == factory.useRavines &&
+
                 this.useWaterLakes == factory.useWaterLakes &&
                 this.waterLakeChance == factory.waterLakeChance &&
-                
-                this.chunkSource.equals(factory.chunkSource) &&
-                this.biomeSource.equals(factory.biomeSource) &&
-                
-                this.replaceOceanBiomes == factory.replaceOceanBiomes &&
-                this.replaceBeachBiomes == factory.replaceBeachBiomes &&
+                this.useLavaLakes == factory.useLavaLakes &&
+                this.lavaLakeChance == factory.lavaLakeChance &&
+                this.useLavaOceans == factory.useLavaOceans &&
                 
                 this.claySize == factory.claySize &&
-                this.clayMaxHeight == factory.clayMaxHeight &&
-                this.clayMinHeight == factory.clayMinHeight &&
                 this.clayCount == factory.clayCount &&
+                this.clayMinHeight == factory.clayMinHeight &&
+                this.clayMaxHeight == factory.clayMaxHeight &&
+
+                this.dirtSize == factory.dirtSize &&
+                this.dirtCount == factory.dirtCount &&
+                this.dirtMinHeight == factory.dirtMinHeight &&
+                this.dirtMaxHeight == factory.dirtMaxHeight &&
+
+                this.gravelSize == factory.gravelSize &&
+                this.gravelCount == factory.gravelCount &&
+                this.gravelMinHeight == factory.gravelMinHeight &&
+                this.gravelMaxHeight == factory.gravelMaxHeight &&
+
+                this.graniteSize == factory.graniteSize &&
+                this.graniteCount == factory.graniteCount &&
+                this.graniteMinHeight == factory.graniteMinHeight &&
+                this.graniteMaxHeight == factory.graniteMaxHeight &&
+
+                this.dioriteSize == factory.dioriteSize &&
+                this.dioriteCount == factory.dioriteCount &&
+                this.dioriteMinHeight == factory.dioriteMinHeight &&
+                this.dioriteMaxHeight == factory.dioriteMaxHeight &&
+
+                this.andesiteSize == factory.andesiteSize &&
+                this.andesiteCount == factory.andesiteCount &&
+                this.andesiteMinHeight == factory.andesiteMinHeight &&
+                this.andesiteMaxHeight == factory.andesiteMaxHeight &&
+
+                this.coalSize == factory.coalSize &&
+                this.coalCount == factory.coalCount &&
+                this.coalMinHeight == factory.coalMinHeight &&
+                this.coalMaxHeight == factory.coalMaxHeight &&
+
+                this.ironSize == factory.ironSize &&
+                this.ironCount == factory.ironCount &&
+                this.ironMinHeight == factory.ironMinHeight &&
+                this.ironMaxHeight == factory.ironMaxHeight &&
+
+                this.goldSize == factory.goldSize &&
+                this.goldCount == factory.goldCount &&
+                this.goldMinHeight == factory.goldMinHeight &&
+                this.goldMaxHeight == factory.goldMaxHeight &&
+
+                this.redstoneSize == factory.redstoneSize &&
+                this.redstoneCount == factory.redstoneCount &&
+                this.redstoneMinHeight == factory.redstoneMinHeight &&
+                this.redstoneMaxHeight == factory.redstoneMaxHeight &&
+
+                this.diamondSize == factory.diamondSize &&
+                this.diamondCount == factory.diamondCount &&
+                this.diamondMinHeight == factory.diamondMinHeight &&
+                this.diamondMaxHeight == factory.diamondMaxHeight &&
+
+                this.lapisSize == factory.lapisSize &&
+                this.lapisCount == factory.lapisCount &&
+                this.lapisCenterHeight == factory.lapisCenterHeight &&
+                this.lapisSpread == factory.lapisSpread &&
+
+                this.emeraldSize == factory.emeraldSize &&
+                this.emeraldCount == factory.emeraldCount &&
+                this.emeraldMinHeight == factory.emeraldMinHeight &&
+                this.emeraldMaxHeight == factory.emeraldMaxHeight &&
                 
                 this.useTallGrass == factory.useTallGrass &&
                 this.useNewFlowers == factory.useNewFlowers &&
@@ -1022,23 +962,6 @@ public class ModernBetaChunkGeneratorSettings {
                 this.tempNoiseScale == factory.tempNoiseScale &&
                 this.rainNoiseScale == factory.rainNoiseScale &&
                 this.detailNoiseScale == factory.detailNoiseScale &&
-                
-                /*
-                this.useIslands == factory.useIslands &&
-                this.useOuterIslands == factory.useOuterIslands &&
-                
-                this.oceanSlideTarget == factory.oceanSlideTarget &&
-                
-                this.centerIslandShape == factory.centerIslandShape &&
-                this.centerIslandRadius == factory.centerIslandRadius &&
-                this.centerIslandFalloffDistance == factory.centerIslandFalloffDistance &&
-                
-                this.centerOceanRadius == factory.centerOceanRadius &&
-                this.centerOceanFalloffDistance == factory.centerOceanFalloffDistance &&
-                
-                this.outerIslandNoiseScale == factory.outerIslandNoiseScale &&
-                this.outerIslandNoiseOffset == factory.outerIslandNoiseOffset &&
-                */
                 
                 this.desertBiomes.equals(factory.desertBiomes) &&
                 this.forestBiomes.equals(factory.forestBiomes) &&
@@ -1057,7 +980,15 @@ public class ModernBetaChunkGeneratorSettings {
         
         @Override
         public int hashCode() {
-            int hashCode = (this.coordinateScale == 0.0f) ? 0 : Float.floatToIntBits(this.coordinateScale);
+            int hashCode = this.chunkSource.hashCode();
+            hashCode = 31 * hashCode + this.biomeSource.hashCode();
+            
+            hashCode = 31 * hashCode + this.fixedBiome.hashCode();
+            
+            hashCode = 31 * hashCode + (this.replaceOceanBiomes ? 1 : 0);
+            hashCode = 31 * hashCode + (this.replaceBeachBiomes ? 1 : 0);
+            
+            hashCode = 31 * hashCode + ((this.coordinateScale == 0.0f) ? 0 : Float.floatToIntBits(this.coordinateScale));
             hashCode = 31 * hashCode + ((this.heightScale == 0.0f) ? 0 : Float.floatToIntBits(this.heightScale));
             hashCode = 31 * hashCode + ((this.upperLimitScale == 0.0f) ? 0 : Float.floatToIntBits(this.upperLimitScale));
             hashCode = 31 * hashCode + ((this.lowerLimitScale == 0.0f) ? 0 : Float.floatToIntBits(this.lowerLimitScale));
@@ -1094,8 +1025,6 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useLavaLakes ? 1 : 0);
             hashCode = 31 * hashCode + this.lavaLakeChance;
             hashCode = 31 * hashCode + (this.useLavaOceans ? 1 : 0);
-            
-            hashCode = 31 * hashCode + this.fixedBiome.hashCode();
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1157,11 +1086,10 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.lapisCenterHeight;
             hashCode = 31 * hashCode + this.lapisSpread;
             
-            hashCode = 31 * hashCode + (this.replaceOceanBiomes ? 1 : 0);
-            hashCode = 31 * hashCode + (this.replaceBeachBiomes ? 1 : 0);
-            
-            hashCode = 31 * hashCode + this.chunkSource.hashCode();
-            hashCode = 31 * hashCode + this.biomeSource.hashCode();
+            hashCode = 31 * hashCode + this.emeraldSize;
+            hashCode = 31 * hashCode + this.emeraldCount;
+            hashCode = 31 * hashCode + this.emeraldMinHeight;
+            hashCode = 31 * hashCode + this.emeraldMaxHeight;
 
             hashCode = 31 * hashCode + (this.useTallGrass ? 1 : 0);
             hashCode = 31 * hashCode + (this.useNewFlowers ? 1 : 0);
@@ -1173,23 +1101,6 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
             hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
-            
-            /*
-            hashCode = 31 * hashCode + (this.useIslands ? 1 : 0);
-            hashCode = 31 * hashCode + (this.useOuterIslands ? 1 : 0);
-
-            hashCode = 31 * hashCode + ((this.oceanSlideTarget == 0.0f) ? 0 : Float.floatToIntBits(this.oceanSlideTarget));
-            
-            hashCode = 31 * hashCode + this.centerIslandShape.hashCode();
-            hashCode = 31 * hashCode + this.centerIslandRadius;
-            hashCode = 31 * hashCode + this.centerIslandFalloffDistance;
-            
-            hashCode = 31 * hashCode + this.centerOceanRadius;
-            hashCode = 31 * hashCode + this.centerOceanFalloffDistance;
-
-            hashCode = 31 * hashCode + ((this.outerIslandNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.outerIslandNoiseScale));
-            hashCode = 31 * hashCode + ((this.outerIslandNoiseOffset == 0.0f) ? 0 : Float.floatToIntBits(this.outerIslandNoiseOffset));
-            */
             
             hashCode = 31 * hashCode + this.desertBiomes.hashCode();
             hashCode = 31 * hashCode + this.forestBiomes.hashCode();
@@ -1224,6 +1135,8 @@ public class ModernBetaChunkGeneratorSettings {
             try {
                 factory.chunkSource = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
                 factory.biomeSource = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource);
+                
+                factory.fixedBiome = JsonUtils.getString(jsonObject, "fixedBiome", factory.fixedBiome);
                 
                 factory.replaceOceanBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
                 factory.replaceBeachBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
@@ -1265,8 +1178,6 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, "useLavaLakes", factory.useLavaLakes);
                 factory.lavaLakeChance = JsonUtils.getInt(jsonObject, "lavaLakeChance", factory.lavaLakeChance);
                 factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, "useLavaOceans", factory.useLavaOceans);
-                
-                factory.fixedBiome = JsonUtils.getString(jsonObject, "fixedBiome", factory.fixedBiome);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1327,6 +1238,11 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.lapisCount = JsonUtils.getInt(jsonObject, "lapisCount", factory.lapisCount);
                 factory.lapisCenterHeight = JsonUtils.getInt(jsonObject, "lapisCenterHeight", factory.lapisCenterHeight);
                 factory.lapisSpread = JsonUtils.getInt(jsonObject, "lapisSpread", factory.lapisSpread);
+                
+                factory.emeraldSize = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_SIZE, factory.emeraldSize);
+                factory.emeraldCount = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_COUNT, factory.emeraldCount);
+                factory.emeraldMinHeight = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
+                factory.emeraldMaxHeight = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
 
                 factory.useTallGrass = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TALL_GRASS, factory.useTallGrass);
                 factory.useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
@@ -1339,23 +1255,6 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 
-                /*
-                factory.useIslands = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ISLANDS, factory.useIslands);
-                factory.useOuterIslands = JsonUtils.getBoolean(jsonObject, NbtTags.USE_OUTER_ISLANDS, factory.useOuterIslands);
-
-                factory.oceanSlideTarget = JsonUtils.getFloat(jsonObject, NbtTags.OCEAN_SLIDE_TARGET, factory.oceanSlideTarget);
-                
-                factory.centerIslandShape = JsonUtils.getString(jsonObject, NbtTags.CENTER_ISLAND_SHAPE, factory.centerIslandShape);
-                factory.centerIslandRadius = JsonUtils.getInt(jsonObject, NbtTags.CENTER_ISLAND_RADIUS, factory.centerIslandRadius);
-                factory.centerIslandFalloffDistance = JsonUtils.getInt(jsonObject, NbtTags.CENTER_ISLAND_FALLOFF_DIST, factory.centerIslandFalloffDistance);
-
-                factory.centerOceanRadius = JsonUtils.getInt(jsonObject, NbtTags.CENTER_OCEAN_RADIUS, factory.centerOceanRadius);
-                factory.centerOceanFalloffDistance = JsonUtils.getInt(jsonObject, NbtTags.CENTER_OCEAN_FALLOFF_DIST, factory.centerOceanFalloffDistance);
-                
-                factory.outerIslandNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.OUTER_ISLAND_NOISE_SCALE, factory.outerIslandNoiseScale);
-                factory.outerIslandNoiseOffset = JsonUtils.getFloat(jsonObject, NbtTags.OUTER_ISLAND_NOISE_OFFSET, factory.outerIslandNoiseOffset);  
-                */
-
                 factory.desertBiomes = this.deserializeBiomes(jsonObject, NbtTags.DESERT_BIOMES, factory.desertBiomes);
                 factory.forestBiomes = this.deserializeBiomes(jsonObject, NbtTags.FOREST_BIOMES, factory.forestBiomes);
                 factory.iceDesertBiomes = this.deserializeBiomes(jsonObject, NbtTags.ICE_DESERT_BIOMES, factory.iceDesertBiomes);
@@ -1482,6 +1381,11 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("lapisCount", factory.lapisCount);
             jsonObject.addProperty("lapisCenterHeight", factory.lapisCenterHeight);
             jsonObject.addProperty("lapisSpread", factory.lapisSpread);
+            
+            jsonObject.addProperty(NbtTags.EMERALD_SIZE, factory.emeraldSize);
+            jsonObject.addProperty(NbtTags.EMERALD_COUNT, factory.emeraldCount);
+            jsonObject.addProperty(NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
+            jsonObject.addProperty(NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
 
             jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
             jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
@@ -1493,23 +1397,6 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
-
-            /*
-            jsonObject.addProperty(NbtTags.USE_ISLANDS, factory.useIslands);
-            jsonObject.addProperty(NbtTags.USE_OUTER_ISLANDS, factory.useOuterIslands);
-            
-            jsonObject.addProperty(NbtTags.OCEAN_SLIDE_TARGET, factory.oceanSlideTarget);
-            
-            jsonObject.addProperty(NbtTags.CENTER_ISLAND_SHAPE, factory.centerIslandShape);
-            jsonObject.addProperty(NbtTags.CENTER_ISLAND_RADIUS, factory.centerIslandRadius);
-            jsonObject.addProperty(NbtTags.CENTER_ISLAND_FALLOFF_DIST, factory.centerIslandFalloffDistance);
-
-            jsonObject.addProperty(NbtTags.CENTER_OCEAN_RADIUS, factory.centerOceanRadius);
-            jsonObject.addProperty(NbtTags.CENTER_OCEAN_FALLOFF_DIST, factory.centerOceanFalloffDistance);
-
-            jsonObject.addProperty(NbtTags.OUTER_ISLAND_NOISE_SCALE, factory.outerIslandNoiseScale);
-            jsonObject.addProperty(NbtTags.OUTER_ISLAND_NOISE_OFFSET, factory.outerIslandNoiseOffset);
-            */
             
             jsonObject.addProperty(NbtTags.DESERT_BIOMES, GSON.toJson(factory.desertBiomes));
             jsonObject.addProperty(NbtTags.FOREST_BIOMES, GSON.toJson(factory.forestBiomes));

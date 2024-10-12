@@ -45,6 +45,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     private WorldGenerator worldGenGranite;
     private WorldGenerator worldGenDiorite;
     private WorldGenerator worldGenAndesite;
+    private WorldGenerator worldGenEmerald;
     
     protected abstract int getTreeCount(World world, Random random, Biome biome, BlockPos startPos);
     
@@ -66,6 +67,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         this.worldGenGranite = new WorldGenMinable(BlockStates.GRANITE, settings.graniteSize);
         this.worldGenDiorite = new WorldGenMinable(BlockStates.DIORITE, settings.dioriteSize);
         this.worldGenAndesite = new WorldGenMinable(BlockStates.ANDESITE, settings.andesiteSize);
+        this.worldGenEmerald = new WorldGenMinable(BlockStates.EMERALD_ORE, settings.emeraldSize);
         
         if (TerrainGen.generateOre(world, random, this.worldGenClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
             this.populateOreStandard(world, random, startPos, this.worldGenClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
@@ -113,6 +115,10 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
 
         if (TerrainGen.generateOre(world, random, this.worldGenLapis, startPos, OreGenEvent.GenerateMinable.EventType.LAPIS)) {
             this.populateOreSpread(world, random, startPos, this.worldGenLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
+        }
+
+        if (TerrainGen.generateOre(world, random, this.worldGenDiamond, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
+            this.populateOreStandard(world, random, startPos, this.worldGenEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
         }
     }
     
