@@ -864,7 +864,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
             }
             
-            ((GuiSlider)this.pageList.getComponent(GuiTags.offsetB(entry))).setSliderValue(newEntryValue, false);
+            ((GuiSlider)this.pageList.getComponent(GuiTags.offsetBackward(entry))).setSliderValue(newEntryValue, false);
         }
         
         if (!this.settings.equals(this.defaultSettings)) {
@@ -1175,7 +1175,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
         
         if (entry >= GuiTags.PG2_S_MAIN_NS_X && entry <= GuiTags.PG2_S_B_SCL_OF) {
-            Gui gui = this.pageList.getComponent(GuiTags.offsetF(entry));
+            Gui gui = this.pageList.getComponent(GuiTags.offsetForward(entry));
             if (gui != null) {
                 ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
             }
