@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenFancyOak;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
@@ -18,5 +19,9 @@ public abstract class ModernBetaBiome extends Biome {
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random) {
         return (random.nextInt(10) == 0) ? BIG_TREE_FEATURE : Biome.TREE_FEATURE;
+    }
+    
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+        return this.getRandomTreeFeature(random);
     }
 }

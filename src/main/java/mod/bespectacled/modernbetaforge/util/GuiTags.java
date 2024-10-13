@@ -47,6 +47,9 @@ public class GuiTags {
     public static final int PG0_S_LAVA_LAKE_CHANGE = 126;
     public static final int PG0_B_USE_LAVA_OCEANS = 127;
     
+    public static final int PG0_B_USE_BIRCH = 128;
+    public static final int PG0_B_USE_PINE = 129;
+    
     // Labels
     public static final int PG0_L_BETA_FEATURES = 1001;
     public static final int PG0_L_OTHER_FEATURES = 1002;

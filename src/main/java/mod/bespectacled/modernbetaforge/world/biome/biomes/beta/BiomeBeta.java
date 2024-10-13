@@ -12,17 +12,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeDecorator;
-import net.minecraft.world.gen.feature.WorldGenBirchTree;
-import net.minecraft.world.gen.feature.WorldGenTaiga1;
-import net.minecraft.world.gen.feature.WorldGenTaiga2;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BiomeBeta extends ModernBetaBiome {
-    protected static final WorldGenBirchTree BIRCH_TREE_FEATURE = new WorldGenBirchTree(false, false);
-    protected static final WorldGenTaiga1 PINE_FEATURE_1 = new WorldGenTaiga1();
-    protected static final WorldGenTaiga2 PINE_FEATURE_2 = new WorldGenTaiga2(false);
-    
     protected int skyColor;
     
     public BiomeBeta(BiomeProperties properties) {

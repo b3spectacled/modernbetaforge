@@ -5,11 +5,17 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenTaiga1;
+import net.minecraft.world.gen.feature.WorldGenTaiga2;
 
 public class BiomeBetaTaiga extends BiomeBeta {
+    private static final WorldGenTaiga1 PINE_TREE_FEATURE_1 = new WorldGenTaiga1();
+    private static final WorldGenTaiga2 PINE_TREE_FEATURE_2 = new WorldGenTaiga2(false);
+    
     public BiomeBetaTaiga() {
         super(new BiomeProperties("Beta Taiga")
             .setTemperature(0.0f)
@@ -34,9 +40,17 @@ public class BiomeBetaTaiga extends BiomeBeta {
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random) {
         if (random.nextInt(3) == 0) {
-            return BiomeBeta.PINE_FEATURE_1;
+            return PINE_TREE_FEATURE_1;
         }
         
-        return BiomeBeta.PINE_FEATURE_2;
+        return PINE_TREE_FEATURE_2;
+    }
+    
+    @Override
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+        if (!settings.usePineTrees)
+            return super.getRandomTreeFeature(random);
+        
+        return this.getRandomTreeFeature(random);
     }
 }

@@ -140,6 +140,9 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useDesertWells;
     public final boolean useFossils;
     
+    public final boolean useBirchTrees;
+    public final boolean usePineTrees;
+    
     public final float tempNoiseScale;
     public final float rainNoiseScale;
     public final float detailNoiseScale;
@@ -196,6 +199,9 @@ public class ModernBetaChunkGeneratorSettings {
         this.useMonuments = factory.useMonuments;
         this.useMansions = factory.useMansions;
         this.useRavines = factory.useRavines;
+        
+        this.useBirchTrees = factory.useBirchTrees;
+        this.usePineTrees = factory.usePineTrees;
         
         this.useWaterLakes = factory.useWaterLakes;
         this.waterLakeChance = factory.waterLakeChance;
@@ -413,6 +419,9 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useDesertWells;
         public boolean useFossils;
         
+        public boolean useBirchTrees;
+        public boolean usePineTrees;
+        
         public float tempNoiseScale;
         public float rainNoiseScale;
         public float detailNoiseScale;
@@ -563,6 +572,9 @@ public class ModernBetaChunkGeneratorSettings {
             this.useMelons = true;
             this.useDesertWells = true;
             this.useFossils = true;
+            
+            this.useBirchTrees = true;
+            this.usePineTrees = true;
             
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
@@ -756,6 +768,9 @@ public class ModernBetaChunkGeneratorSettings {
             this.useDesertWells = true;
             this.useFossils = true;
             
+            this.useBirchTrees = true;
+            this.usePineTrees = true;
+            
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
@@ -880,7 +895,7 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useMonuments == factory.useMonuments &&
                 this.useMansions == factory.useMansions &&
                 this.useRavines == factory.useRavines &&
-
+                
                 this.useWaterLakes == factory.useWaterLakes &&
                 this.waterLakeChance == factory.waterLakeChance &&
                 this.useLavaLakes == factory.useLavaLakes &&
@@ -958,6 +973,9 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useMelons == factory.useMelons &&
                 this.useDesertWells == factory.useDesertWells &&
                 this.useFossils == factory.useFossils &&
+                        
+                this.useBirchTrees == factory.useBirchTrees &&
+                this.usePineTrees == factory.usePineTrees &&
                 
                 this.tempNoiseScale == factory.tempNoiseScale &&
                 this.rainNoiseScale == factory.rainNoiseScale &&
@@ -1097,6 +1115,9 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useMelons ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDesertWells ? 1 : 0);
             hashCode = 31 * hashCode + (this.useFossils ? 1 : 0);
+
+            hashCode = 31 * hashCode + (this.useBirchTrees ? 1 : 0);
+            hashCode = 31 * hashCode + (this.usePineTrees ? 1 : 0);
             
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
@@ -1250,6 +1271,9 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useMelons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MELONS, factory.useMelons);
                 factory.useDesertWells = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
                 factory.useFossils = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FOSSILS, factory.useFossils);
+                
+                factory.useBirchTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
+                factory.usePineTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_PINE_TREES, factory.usePineTrees);
 
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
@@ -1394,6 +1418,9 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
             jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
 
+            jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
+            jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
+            
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);

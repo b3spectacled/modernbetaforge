@@ -1,8 +1,10 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
@@ -11,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenCactus;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
@@ -52,8 +55,12 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         this.populateOres(world, random, biome, startPos, mutablePos);
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, random, startPos));
         
+        Supplier<WorldGenAbstractTree> treeSupplier = biome instanceof ModernBetaBiome ?
+            () -> ((ModernBetaBiome)biome).getRandomTreeFeature(random, settings) :
+            () -> biome.getRandomTreeFeature(random);
+        
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.TREE)) {
-            this.populateTrees(world, random, biome, startPos, mutablePos, () -> biome.getRandomTreeFeature(random));
+            this.populateTrees(world, random, biome, startPos, mutablePos, treeSupplier);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {

@@ -14,8 +14,8 @@ createWorld.customize.custom.releaseLabel=Release Noise Settings
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 
-createWorld.customize.custom.replaceOceanBiomes=Use Ocean Biomes
-createWorld.customize.custom.replaceBeachBiomes=Use Beach Biomes
+createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
+createWorld.customize.custom.replaceBeachBiomes=Beach Biomes
 
 createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=New Flowers
@@ -23,6 +23,8 @@ createWorld.customize.custom.useLilyPads=Lily Pads
 createWorld.customize.custom.useMelons=Melons
 createWorld.customize.custom.useDesertWells=Desert Wells
 createWorld.customize.custom.useFossils=Fossils
+createWorld.customize.custom.useBirchTrees=Birch Trees
+createWorld.customize.custom.usePineTrees=Pine Trees
 
 createWorld.customize.custom.height=Height
 
@@ -53,6 +55,7 @@ createWorld.customize.custom.beachBiome=Beach Biome
 # World Customization Presets
 
 createWorld.customize.custom.preset.beta=Classic Beta
+createWorld.customize.custom.preset.alpha12=Classic Alpha 1.2
 createWorld.customize.custom.preset.alpha=Classic Alpha
 createWorld.customize.custom.preset.alphaWinter=Classic Alpha Winter
 createWorld.customize.custom.preset.infdev=Classic Infdev 20100415
