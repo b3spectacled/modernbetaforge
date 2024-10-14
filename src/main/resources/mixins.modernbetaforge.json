@@ -1,0 +1,19 @@
+{
+    "package": "mod.bespectacled.modernbetaforge.mixin",
+    "refmap": "refmap.modernbetaforge.json",
+    "compatibilityLevel": "JAVA_8",
+  	"minVersion": "0.8",
+  	"required": true,
+    "injectors": {
+    	"defaultRequire": 1
+  	},
+    "mixins": [
+		"MixinMapGenScatteredFeatureStart",
+		"accessor.AccessorStructureStart"
+	],
+    "client": [
+		"client.MixinEntityRenderer",
+		"accessor.AccessorEntityRenderer"
+	],
+    "server": []
+}

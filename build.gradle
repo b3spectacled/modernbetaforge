@@ -1,19 +1,21 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
         mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:4.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
         
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
-version = '1.12.2-1.0.6.1'
+version = '1.12.2-1.1.0.0'
 group = 'mod.bespectacled.modernbetaforge'
 archivesBaseName = 'modernbetaforge'
 
@@ -30,21 +32,24 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            arg '-torg.spongepowered.asm.launch.MixinTweaker'
         }
 
         server {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            arg '-torg.spongepowered.asm.launch.MixinTweaker'
         }
     }
 }
 
-def commonManifest = {
-    attributes 'FMLAT': 'accesstransformer.cfg'
+repositories {
+    maven { url = 'https://repo.spongepowered.org/maven' }
 }
 
-jar {
-    manifest commonManifest
+configurations {
+    library
+    implementation.extendsFrom library
 }
 
 dependencies {
@@ -52,7 +57,14 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
-
+    
+    library "com.google.guava:guava:21.0"
+    library "org.spongepowered:mixin:0.8.5-SNAPSHOT"
+    
+    annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT"
+    annotationProcessor "com.google.code.gson:gson:2.8.9"
+    annotationProcessor "com.google.guava:guava:21.0"
+    annotationProcessor "org.ow2.asm:asm-debug-all:5.2"
 }
 
 processResources {
@@ -72,4 +84,18 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+mixin {
+	add sourceSets.main, 'refmap.modernbetaforge.json'
+    config 'mixins.modernbetaforge.json'
+}
+
+jar {
+    manifest.attributes(
+        'FMLAT': 'accesstransformer.cfg',
+        "ForceLoadAsMod": true,
+        'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+    	'TweakOrder': '0'
+    )
 }

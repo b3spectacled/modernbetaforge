@@ -21,9 +21,6 @@ public final class ModernBetaBiomeColors {
     
     public static final int SKYLANDS_SKY_COLOR = 12632319;
     public static final int SKYLANDS_FOG_COLOR = 8421536;
-    public static final int SKYLANDS_FOG_COLOR_R = 128;
-    public static final int SKYLANDS_FOG_COLOR_G = 128;
-    public static final int SKYLANDS_FOG_COLOR_B = 160;
     
     public static final int ALPHA_SKY_COLOR = 8961023;
     public static final int ALPHA_FOG_COLOR = 12638463;

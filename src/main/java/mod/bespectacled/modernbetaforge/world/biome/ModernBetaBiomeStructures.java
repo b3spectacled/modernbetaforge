@@ -3,18 +3,14 @@ package mod.bespectacled.modernbetaforge.world.biome;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import mod.bespectacled.modernbetaforge.world.structure.BetaMapGenScatteredFeature;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.common.BiomeManager;
 
 public class ModernBetaBiomeStructures {
-    public static void registerStructures() {
-        MapGenStructureIO.registerStructure(BetaMapGenScatteredFeature.Start.class, "Temple");
-    }
+    public static void registerStructures() {}
     
     public static void registerStructureBiomes() {
         /* Beta */
