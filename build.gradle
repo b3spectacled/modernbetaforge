@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.12.2-1.0.6.0'
+version = '1.12.2-1.0.6.1'
 group = 'mod.bespectacled.modernbetaforge'
 archivesBaseName = 'modernbetaforge'
 
