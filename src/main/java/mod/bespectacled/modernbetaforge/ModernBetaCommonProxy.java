@@ -5,5 +5,5 @@ public class ModernBetaCommonProxy implements ModernBetaProxy {
     public void init() {}
 
     @Override
-    public void initColors() {}
+    public void preInit() {}
 }

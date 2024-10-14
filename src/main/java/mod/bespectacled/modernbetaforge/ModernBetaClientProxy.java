@@ -13,7 +13,7 @@ public class ModernBetaClientProxy implements ModernBetaProxy {
     }
 
     @Override
-    public void initColors() {
+    public void preInit() {
         MinecraftForge.EVENT_BUS.register(new BlockColorsEventHandler());
     }
 }

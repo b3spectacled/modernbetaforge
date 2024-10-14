@@ -4,14 +4,9 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -64,21 +59,5 @@ public class BiomeColorsEventHandler {
         }
         
         BetaColorSampler.INSTANCE.resetClimateSamplers();
-    }
-
-    @SubscribeEvent
-    public void onFogColorsEvent(EntityViewRenderEvent.FogColors event) {
-        float fogR = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR_R / 255f;
-        float fogG = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR_G / 255f;
-        float fogB = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR_B / 255f;
-        
-        BlockPos blockPos = event.getEntity().getPosition();
-        Biome biome = event.getEntity().world.getBiome(blockPos);
-        
-        if (biome instanceof BiomeBetaSky) {
-            event.setRed(fogR);
-            event.setGreen(fogG);
-            event.setBlue(fogB);
-        }
     }
 }

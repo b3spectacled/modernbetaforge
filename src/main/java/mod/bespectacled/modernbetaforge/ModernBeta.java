@@ -51,7 +51,7 @@ public class ModernBeta {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        proxy.initColors();
+        proxy.preInit();
     }
 
     @EventHandler

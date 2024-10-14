@@ -117,7 +117,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             this.populateOreSpread(world, random, startPos, this.worldGenLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenDiamond, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
+        if (TerrainGen.generateOre(world, random, this.worldGenEmerald, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
             this.populateOreStandard(world, random, startPos, this.worldGenEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
         }
     }
