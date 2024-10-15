@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge;
 
-public class ModernBetaCommonProxy implements ModernBetaProxy {
+public class ModernBetaServerProxy implements ModernBetaProxy {
     @Override
     public void init() {}
 

@@ -45,7 +45,7 @@ public class ModernBeta {
     
     @SidedProxy(
         clientSide = "mod.bespectacled.modernbetaforge.ModernBetaClientProxy",
-        serverSide = "mod.bespectacled.modernbetaforge.ModernBetaCommonProxy"
+        serverSide = "mod.bespectacled.modernbetaforge.ModernBetaServerProxy"
     )
     public static ModernBetaProxy proxy;
 
