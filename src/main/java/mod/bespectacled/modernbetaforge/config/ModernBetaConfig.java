@@ -46,6 +46,11 @@ public class ModernBetaConfig {
         public boolean useOldSugarCaneColor = true;
         
         @Comment({
+            "Render fog with old fog color blending algorithm"
+        })
+        public boolean useOldFogColorBlending = true;
+        
+        @Comment({
             "Modern Beta world cloud height",
         })
         @RangeInt(min = 0, max = 255)

@@ -47,8 +47,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final ChunkCache<NoiseSource> noiseCache;
     protected final ChunkCache<HeightmapChunk> heightmapCache;
     
-    //private final SimplexNoise islandNoise;
-    
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
 
@@ -108,8 +106,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
             true, 
             this::sampleHeightmap
         );
-        
-        //this.islandNoise = new SimplexNoise(new Random(this.seed));
         
         this.forestOctaveNoise = Optional.empty();
         this.beachOctaveNoise = Optional.empty();

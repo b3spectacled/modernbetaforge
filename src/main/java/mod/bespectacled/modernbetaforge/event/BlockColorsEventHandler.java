@@ -42,7 +42,7 @@ public class BlockColorsEventHandler {
                 @Override
                 public int colorMultiplier(IBlockState blockState, @Nullable IBlockAccess blockAccess, @Nullable BlockPos blockPos, int tintNdx) {
                     if (blockAccess != null && blockPos != null) {
-                        if (blockAccess.getBiome(blockPos) instanceof ModernBetaBiome && ModernBetaConfig.visualOptions.useOldSugarCaneColor) {
+                        if (blockAccess.getBiome(blockPos) instanceof ModernBetaBiome && ModernBetaConfig.visualOptions.useOldFogColorBlending) {
                             return 16777215;
                         }
                         

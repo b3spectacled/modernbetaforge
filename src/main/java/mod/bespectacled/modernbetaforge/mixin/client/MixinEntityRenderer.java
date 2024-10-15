@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorEntityRenderer;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -43,7 +44,7 @@ public abstract class MixinEntityRenderer {
     private float modifyFogWeighting(float weight) {
         Minecraft mc = ((AccessorEntityRenderer)this).getMC();
         
-        if (mc.world.getWorldType() instanceof ModernBetaWorldType) { 
+        if (mc.world.getWorldType() instanceof ModernBetaWorldType && ModernBetaConfig.visualOptions.useOldFogColorBlending) { 
             return modernBeta_fogWeight;
         }
         

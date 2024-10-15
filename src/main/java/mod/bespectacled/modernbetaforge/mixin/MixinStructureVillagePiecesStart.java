@@ -13,6 +13,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaDesert;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaIceDesert;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSavanna;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTaiga;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTundra;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -44,7 +45,7 @@ public abstract class MixinStructureVillagePiecesStart {
     	} else if (biome instanceof BiomeBetaSavanna) {
             village.setStructureType(2);
             
-    	} else if (biome instanceof BiomeBetaTaiga) {
+    	} else if (biome instanceof BiomeBetaTaiga || biome instanceof BiomeBetaTundra) {
             village.setStructureType(3);
             
     	}

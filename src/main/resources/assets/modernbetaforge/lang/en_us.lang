@@ -84,7 +84,8 @@ modernbetaforge.general.moboptions.usenewmobs=Use New Mobs
 modernbetaforge.general.spawnoptions.usespawnfuzz=Use Spawn Fuzz
 modernbetaforge.general.spawnoptions.useoldspawns=Use Old Spawns
 
-modernbetaforge.general.visualoptions.usebetabiomecolors=Use Beta Biome Colors
-modernbetaforge.general.visualoptions.usebetaskycolors=Use Beta Sky Colors
-modernbetaforge.general.visualoptions.useoldsugarcanecolor=Use Old Sugar Cane Color
+modernbetaforge.general.visualoptions.usebetabiomecolors=Beta Biome Colors
+modernbetaforge.general.visualoptions.usebetaskycolors=Beta Sky Colors
+modernbetaforge.general.visualoptions.useoldsugarcanecolor=Old Sugar Cane Color
+modernbetaforge.general.visualoptions.useoldfogcolorblending=Old Fog Color Blending
 modernbetaforge.general.visualoptions.cloudheight=Modern Beta Cloud Height
