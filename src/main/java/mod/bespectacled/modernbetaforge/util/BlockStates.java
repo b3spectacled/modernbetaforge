@@ -1,5 +1,9 @@
 package mod.bespectacled.modernbetaforge.util;
 
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -23,9 +27,12 @@ public class BlockStates {
     
     public static final IBlockState GRASS = Blocks.TALLGRASS.getDefaultState();
     public static final IBlockState FERN = Blocks.TALLGRASS.getStateFromMeta(2);
+
+    public static final IBlockState OAK_LOG = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK);
+    public static final IBlockState OAK_LEAVES = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     
-    public static final IBlockState OAK_LEAVES = Blocks.LEAVES.getDefaultState();
-    public static final IBlockState OAK_LOG = Blocks.LOG.getDefaultState();
+    public static final IBlockState JUNGLE_LOG = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE);
+    public static final IBlockState JUNGLE_LEAF = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     
     public static final IBlockState COAL_ORE = Blocks.COAL_ORE.getDefaultState();
     public static final IBlockState IRON_ORE = Blocks.IRON_ORE.getDefaultState();

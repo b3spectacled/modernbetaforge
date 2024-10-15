@@ -142,6 +142,8 @@ public class ModernBetaChunkGeneratorSettings {
     
     public final boolean useBirchTrees;
     public final boolean usePineTrees;
+    public final boolean useJungleTrees;
+    public final boolean useAcaciaTrees;
     
     public final float tempNoiseScale;
     public final float rainNoiseScale;
@@ -202,6 +204,8 @@ public class ModernBetaChunkGeneratorSettings {
         
         this.useBirchTrees = factory.useBirchTrees;
         this.usePineTrees = factory.usePineTrees;
+        this.useJungleTrees = factory.useJungleTrees;
+        this.useAcaciaTrees = factory.useAcaciaTrees;
         
         this.useWaterLakes = factory.useWaterLakes;
         this.waterLakeChance = factory.waterLakeChance;
@@ -421,6 +425,8 @@ public class ModernBetaChunkGeneratorSettings {
         
         public boolean useBirchTrees;
         public boolean usePineTrees;
+        public boolean useJungleTrees;
+        public boolean useAcaciaTrees;
         
         public float tempNoiseScale;
         public float rainNoiseScale;
@@ -575,6 +581,8 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
+            this.useJungleTrees = false;
+            this.useAcaciaTrees = false;
             
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
@@ -770,6 +778,8 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
+            this.useJungleTrees = false;
+            this.useAcaciaTrees = false;
             
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
@@ -976,6 +986,8 @@ public class ModernBetaChunkGeneratorSettings {
                         
                 this.useBirchTrees == factory.useBirchTrees &&
                 this.usePineTrees == factory.usePineTrees &&
+                this.useJungleTrees == factory.useJungleTrees &&
+                this.useAcaciaTrees == factory.useAcaciaTrees &&
                 
                 this.tempNoiseScale == factory.tempNoiseScale &&
                 this.rainNoiseScale == factory.rainNoiseScale &&
@@ -1118,6 +1130,8 @@ public class ModernBetaChunkGeneratorSettings {
 
             hashCode = 31 * hashCode + (this.useBirchTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.usePineTrees ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useJungleTrees ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useAcaciaTrees ? 1 : 0);
             
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
@@ -1274,6 +1288,8 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 factory.useBirchTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
                 factory.usePineTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_PINE_TREES, factory.usePineTrees);
+                factory.useJungleTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
+                factory.useAcaciaTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
 
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
@@ -1420,6 +1436,8 @@ public class ModernBetaChunkGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
             jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
+            jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
+            jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
             
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);

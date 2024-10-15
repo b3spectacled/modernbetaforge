@@ -14,10 +14,13 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenMelon;
+import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeBetaRainforest extends BiomeBeta {
+    private static final WorldGenTrees JUNGLE_TREE_FEATURE = new WorldGenTrees(false, 4, BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAF, false);
+    
     public BiomeBetaRainforest() {
         super(new BiomeProperties("Beta Rainforest")
             .setTemperature(1.0f)
@@ -39,6 +42,22 @@ public class BiomeBetaRainforest extends BiomeBeta {
     
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random) {
+        if (random.nextInt(3) == 0) {
+            return ModernBetaBiome.BIG_TREE_FEATURE;
+        }
+        
+        return ModernBetaBiome.TREE_FEATURE;
+    }
+    
+    @Override
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+        if (!settings.useJungleTrees)
+            return super.getRandomTreeFeature(random);
+        
+        if (random.nextInt(5) == 0) {
+            return JUNGLE_TREE_FEATURE;
+        }
+        
         if (random.nextInt(3) == 0) {
             return ModernBetaBiome.BIG_TREE_FEATURE;
         }

@@ -25,6 +25,8 @@ createWorld.customize.custom.useDesertWells=Desert Wells
 createWorld.customize.custom.useFossils=Fossils
 createWorld.customize.custom.useBirchTrees=Birch Trees
 createWorld.customize.custom.usePineTrees=Pine Trees
+createWorld.customize.custom.useAcaciaTrees=Acacia Trees
+createWorld.customize.custom.useJungleTrees=Jungle Trees
 
 createWorld.customize.custom.height=Height
 

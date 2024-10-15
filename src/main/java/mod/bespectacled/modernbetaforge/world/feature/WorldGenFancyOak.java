@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -301,7 +300,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             // Note: VERY IMPORTANT to attach CHECK_DECAY flag,
             // tree leaves will start massively decaying if not present.
             // Also tested vanilla big oak trees exhibiting the same behavior.
-            this.placeLayer(world, x, curY, z, radius, (byte) 1, BlockStates.OAK_LEAVES.withProperty(BlockLeaves.CHECK_DECAY, false));
+            this.placeLayer(world, x, curY, z, radius, (byte) 1, BlockStates.OAK_LEAVES);
             
             curY++;
         }

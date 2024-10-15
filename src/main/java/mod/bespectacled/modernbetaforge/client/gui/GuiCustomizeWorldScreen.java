@@ -154,6 +154,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FOSSILS, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BIRCH, I18n.format(PREFIX + NbtTags.USE_BIRCH_TREES), true, this.settings.useBirchTrees),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees),
             
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_OTHER_FEATURES, I18n.format(PREFIX + "otherFeaturesLabel"), true),
             null,
@@ -913,6 +915,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_B_USE_PINE:
                 this.settings.usePineTrees = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_JUNGLE:
+                this.settings.useJungleTrees = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_ACACIA:
+                this.settings.useAcaciaTrees = entryValue;
                 break;
                 
             case GuiTags.PG0_B_USE_CAVES:

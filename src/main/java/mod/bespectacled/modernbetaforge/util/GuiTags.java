@@ -49,6 +49,8 @@ public class GuiTags {
     
     public static final int PG0_B_USE_BIRCH = 128;
     public static final int PG0_B_USE_PINE = 129;
+    public static final int PG0_B_USE_JUNGLE = 130;
+    public static final int PG0_B_USE_ACACIA = 131;
     
     // Labels
     public static final int PG0_L_BETA_FEATURES = 1001;
