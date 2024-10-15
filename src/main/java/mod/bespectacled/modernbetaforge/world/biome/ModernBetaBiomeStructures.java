@@ -24,6 +24,8 @@ public class ModernBetaBiomeStructures {
         addVillageBiome(ModernBetaBiomeHolders.BETA_DESERT);
         addVillageBiome(ModernBetaBiomeHolders.BETA_SAVANNA);
         addVillageBiome(ModernBetaBiomeHolders.BETA_SHRUBLAND);
+        addVillageBiome(ModernBetaBiomeHolders.BETA_TAIGA);
+        addVillageBiome(ModernBetaBiomeHolders.BETA_ICE_DESERT);
         
         /* Alpha */
         
