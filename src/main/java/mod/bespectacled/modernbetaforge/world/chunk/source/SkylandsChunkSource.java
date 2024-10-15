@@ -53,7 +53,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
 
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] surfaceNoise = surfaceOctaveNoise.sampleBeta(
+        double[] surfaceNoise = this.surfaceOctaveNoise.sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0

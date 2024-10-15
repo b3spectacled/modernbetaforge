@@ -16,12 +16,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BiomeBeta extends ModernBetaBiome {
-    protected int skyColor;
-    
     public BiomeBeta(BiomeProperties properties) {
         super(properties);
-        
-        this.skyColor = -1;
     }
     
     @Override
@@ -36,11 +32,7 @@ public abstract class BiomeBeta extends ModernBetaBiome {
         if (BetaColorSampler.INSTANCE.canSampleSkyColor()) {
             return BetaColorSampler.INSTANCE.getSkyColor(blockPos);
         }
-        
-        if (this.skyColor != -1) {
-            return this.skyColor;
-        }
-        
+
         return super.getSkyColorByTemp(temp);
     }
     

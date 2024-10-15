@@ -78,19 +78,19 @@ public class PEChunkSource extends NoiseChunkSource {
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] sandNoise = beachOctaveNoise.sampleBeta(
+        double[] sandNoise = this.beachOctaveNoise.sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale, scale, 1.0
         );
         
-        double[] gravelNoise = beachOctaveNoise.sampleBeta(
+        double[] gravelNoise = this.beachOctaveNoise.sampleBeta(
             chunkX * 16, 109.0134, chunkZ * 16, 
             16, 1, 16, 
             scale, 1.0, scale
         );
         
-        double[] surfaceNoise = surfaceOctaveNoise.sampleBeta(
+        double[] surfaceNoise = this.surfaceOctaveNoise.sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0

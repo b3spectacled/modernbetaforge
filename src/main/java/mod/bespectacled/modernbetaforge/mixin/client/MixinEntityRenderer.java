@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.mixin.client;
 
+import java.util.Optional;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,9 +13,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorEntityRenderer;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
@@ -62,12 +62,11 @@ public abstract class MixinEntityRenderer {
         Entity playerEntity = mc.getRenderViewEntity();
         Biome biome = mc.world.getBiome(playerEntity.getPosition());
         
-        if (biome instanceof BiomeBetaSky) {
-            return MathUtil.convertColorIntToVec3d(ModernBetaBiomeColors.SKYLANDS_FOG_COLOR);
-        }
-        
-        if (biome instanceof BiomeInfdev415) {
-            return MathUtil.convertColorIntToVec3d(ModernBetaBiomeColors.INFDEV_415_FOG_COLOR);
+        if (biome instanceof ModernBetaBiome) {
+            Optional<Integer> biomeFogColor = ((ModernBetaBiome)biome).getFogColor();
+
+            if (biomeFogColor.isPresent())
+                return MathUtil.convertColorIntToVec3d(biomeFogColor.get());
         }
         
         return fogColor;

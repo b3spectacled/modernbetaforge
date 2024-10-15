@@ -24,5 +24,6 @@ public class BiomeBetaSky extends BiomeBeta {
         this.spawnableCaveCreatureList.clear();
 
         this.skyColor = ModernBetaBiomeColors.SKYLANDS_SKY_COLOR;
+        this.fogColor = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR;
     }
 }

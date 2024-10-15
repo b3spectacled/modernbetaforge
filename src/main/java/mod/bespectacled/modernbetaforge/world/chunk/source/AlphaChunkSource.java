@@ -65,19 +65,19 @@ public class AlphaChunkSource extends NoiseChunkSource {
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] sandNoise = beachOctaveNoise.sampleAlpha(
+        double[] sandNoise = this.beachOctaveNoise.sampleAlpha(
             chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
             scale, scale, 1.0
         );
         
-        double[] gravelNoise = beachOctaveNoise.sampleAlpha(
+        double[] gravelNoise = this.beachOctaveNoise.sampleAlpha(
             chunkZ * 16, 109.0134, chunkX * 16,
             16, 1, 16,
             scale, 1.0, scale
         );
         
-        double[] surfaceNoise = surfaceOctaveNoise.sampleAlpha(
+        double[] surfaceNoise = this.surfaceOctaveNoise.sampleAlpha(
             chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0
