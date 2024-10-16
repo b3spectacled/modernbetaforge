@@ -3,14 +3,14 @@ package mod.bespectacled.modernbetaforge.util;
 public class GuiTags {
     /* Function Buttons */
     
-    public static final int FUNC_DONE = 50;
-    public static final int FUNC_RAND = 51;
-    public static final int FUNC_PREV = 52;
-    public static final int FUNC_NEXT = 53;
-    public static final int FUNC_DFLT = 54;
-    public static final int FUNC_PRST = 55;
-    public static final int FUNC_CONF = 56;
-    public static final int FUNC_CNCL = 57;
+    public static final int FUNC_DONE = 60;
+    public static final int FUNC_RAND = 61;
+    public static final int FUNC_PREV = 62;
+    public static final int FUNC_NEXT = 63;
+    public static final int FUNC_DFLT = 64;
+    public static final int FUNC_PRST = 65;
+    public static final int FUNC_CONF = 66;
+    public static final int FUNC_CNCL = 67;
     
     /* Page 1 */
     
@@ -23,265 +23,269 @@ public class GuiTags {
     
     public static final int PG0_B_USE_OCEAN = 104;
     public static final int PG0_B_USE_BEACH = 105;
-    public static final int PG0_B_USE_GRASS = 106;
-    public static final int PG0_B_USE_FLOWERS = 107;
-    public static final int PG0_B_USE_PADS = 108;
-    public static final int PG0_B_USE_MELONS = 109;
-    public static final int PG0_B_USE_WELLS = 110;
-    public static final int PG0_B_USE_FOSSILS = 111;
     
-    public static final int PG0_S_SEA_LEVEL = 112;
-    public static final int PG0_B_USE_CAVES = 113;
-    public static final int PG0_B_USE_HOLDS = 114;
-    public static final int PG0_B_USE_VILLAGES = 115;
-    public static final int PG0_B_USE_SHAFTS = 116;
-    public static final int PG0_B_USE_TEMPLES = 117;
-    public static final int PG0_B_USE_MONUMENTS = 118;
-    public static final int PG0_B_USE_MANSIONS = 119;
-    public static final int PG0_B_USE_RAVINES = 120;
-    public static final int PG0_B_USE_DUNGEONS = 121;
-    public static final int PG0_S_DUNGEON_CHANCE = 122;
-    public static final int PG0_B_USE_WATER_LAKES = 123;
-    public static final int PG0_S_WATER_LAKE_CHANCE = 124;
-    public static final int PG0_B_USE_LAVA_LAKES = 125;
-    public static final int PG0_S_LAVA_LAKE_CHANGE = 126;
-    public static final int PG0_B_USE_LAVA_OCEANS = 127;
-    
-    public static final int PG0_B_USE_BIRCH = 128;
-    public static final int PG0_B_USE_PINE = 129;
-    public static final int PG0_B_USE_JUNGLE = 130;
-    public static final int PG0_B_USE_ACACIA = 131;
+    public static final int PG0_S_SEA_LEVEL = 106;
+    public static final int PG0_B_USE_CAVES = 107;
+    public static final int PG0_B_USE_HOLDS = 108;
+    public static final int PG0_B_USE_VILLAGES = 109;
+    public static final int PG0_B_USE_SHAFTS = 110;
+    public static final int PG0_B_USE_TEMPLES = 111;
+    public static final int PG0_B_USE_MONUMENTS = 112;
+    public static final int PG0_B_USE_MANSIONS = 113;
+    public static final int PG0_B_USE_RAVINES = 114;
+    public static final int PG0_B_USE_DUNGEONS = 115;
+    public static final int PG0_S_DUNGEON_CHANCE = 116;
+    public static final int PG0_B_USE_WATER_LAKES = 117;
+    public static final int PG0_S_WATER_LAKE_CHANCE = 118;
+    public static final int PG0_B_USE_LAVA_LAKES = 119;
+    public static final int PG0_S_LAVA_LAKE_CHANGE = 120;
+    public static final int PG0_B_USE_LAVA_OCEANS = 121;
     
     // Labels
-    public static final int PG0_L_BETA_FEATURES = 1001;
-    public static final int PG0_L_OTHER_FEATURES = 1002;
+    public static final int PG0_L_BIOME_REPLACEMENT = 1000;
+    public static final int PG0_L_BASIC_FEATURES = 1001;
     
     /* Page 2 */
     
-    // Entries
-    public static final int PG1_S_CLAY_SIZE = 200;
-    public static final int PG1_S_CLAY_CNT = 201;
-    public static final int PG1_S_CLAY_MIN = 202;
-    public static final int PG1_S_CLAY_MAX = 203;
-
-    public static final int PG1_S_DIRT_SIZE = 204;
-    public static final int PG1_S_DIRT_CNT = 205;
-    public static final int PG1_S_DIRT_MIN = 206;
-    public static final int PG1_S_DIRT_MAX = 207;
-
-    public static final int PG1_S_GRAV_SIZE = 208;
-    public static final int PG1_S_GRAV_CNT = 209;
-    public static final int PG1_S_GRAV_MIN = 210;
-    public static final int PG1_S_GRAV_MAX = 211;
-
-    public static final int PG1_S_GRAN_SIZE = 212;
-    public static final int PG1_S_GRAN_CNT = 213;
-    public static final int PG1_S_GRAN_MIN = 214;
-    public static final int PG1_S_GRAN_MAX = 215;
-
-    public static final int PG1_S_DIOR_SIZE = 216;
-    public static final int PG1_S_DIOR_CNT = 217;
-    public static final int PG1_S_DIOR_MIN = 218;
-    public static final int PG1_S_DIOR_MAX = 219;
-
-    public static final int PG1_S_ANDE_SIZE = 220;
-    public static final int PG1_S_ANDE_CNT = 221;
-    public static final int PG1_S_ANDE_MIN = 222;
-    public static final int PG1_S_ANDE_MAX = 223;
-
-    public static final int PG1_S_COAL_SIZE = 224;
-    public static final int PG1_S_COAL_CNT = 225;
-    public static final int PG1_S_COAL_MIN = 226;
-    public static final int PG1_S_COAL_MAX = 227;
+    public static final int PG0_B_USE_GRASS = 200;
+    public static final int PG0_B_USE_FLOWERS = 201;
+    public static final int PG0_B_USE_PADS = 202;
+    public static final int PG0_B_USE_MELONS = 203;
+    public static final int PG0_B_USE_WELLS = 204;
+    public static final int PG0_B_USE_FOSSILS = 205;
     
-    public static final int PG1_S_IRON_SIZE = 228;
-    public static final int PG1_S_IRON_CNT = 229;
-    public static final int PG1_S_IRON_MIN = 230;
-    public static final int PG1_S_IRON_MAX = 231;
-
-    public static final int PG1_S_GOLD_SIZE = 232;
-    public static final int PG1_S_GOLD_CNT = 233;
-    public static final int PG1_S_GOLD_MIN = 234;
-    public static final int PG1_S_GOLD_MAX = 235;
-
-    public static final int PG1_S_REDS_SIZE = 236;
-    public static final int PG1_S_REDS_CNT = 237;
-    public static final int PG1_S_REDS_MIN = 238;
-    public static final int PG1_S_REDS_MAX = 239;
-
-    public static final int PG1_S_DIAM_SIZE = 240;
-    public static final int PG1_S_DIAM_CNT = 241;
-    public static final int PG1_S_DIAM_MIN = 242;
-    public static final int PG1_S_DIAM_MAX = 243;
-
-    public static final int PG1_S_LAPS_SIZE = 244;
-    public static final int PG1_S_LAPS_CNT = 245;
-    public static final int PG1_S_LAPS_CTR = 246;
-    public static final int PG1_S_LAPS_SPR = 247;
-    
-    public static final int PG1_S_EMER_SIZE = 248;
-    public static final int PG1_S_EMER_CNT = 249;
-    public static final int PG1_S_EMER_MIN = 250;
-    public static final int PG1_S_EMER_MAX = 251;
-    
-    // Labels
-    public static final int PG1_L_CLAY_NAME = 1200;
-    public static final int PG1_L_DIRT_NAME = 1201;
-    public static final int PG1_L_GRAV_NAME = 1202;
-    public static final int PG1_L_GRAN_NAME = 1203;
-    public static final int PG1_L_DIOR_NAME = 1204;
-    public static final int PG1_L_ANDE_NAME = 1205;
-    public static final int PG1_L_COAL_NAME = 1206;
-    public static final int PG1_L_IRON_NAME = 1207;
-    public static final int PG1_L_GOLD_NAME = 1208;
-    public static final int PG1_L_REDS_NAME = 1209;
-    public static final int PG1_L_DIAM_NAME = 1210;
-    public static final int PG1_L_LAPS_NAME = 1211;
-    public static final int PG1_L_EMER_NAME = 1212;
+    public static final int PG0_B_USE_BIRCH = 206;
+    public static final int PG0_B_USE_PINE = 207;
+    public static final int PG0_B_USE_SWAMP = 208;
+    public static final int PG0_B_USE_JUNGLE = 209;
+    public static final int PG0_B_USE_ACACIA = 210;
     
     /* Page 3 */
     
     // Entries
-    public static final int PG2_S_MAIN_NS_X = 300;
-    public static final int PG2_S_MAIN_NS_Y = 301;
-    public static final int PG2_S_MAIN_NS_Z = 302;
-    public static final int PG2_S_DPTH_NS_X = 303;
-    public static final int PG2_S_DPTH_NS_Z = 304;
-    public static final int PG2_S_DPTH_EXPT = 305;
-    public static final int PG2_S_BASE_SIZE = 306;
-    public static final int PG2_S_COORD_SCL = 307;
-    public static final int PG2_S_HEIGH_SCL = 308;
-    public static final int PG2_S_STRETCH_Y = 309;
-    public static final int PG2_S_UPPER_LIM = 310;
-    public static final int PG2_S_LOWER_LIM = 311;
-    public static final int PG2_S_HEIGH_LIM = 312;
+    public static final int PG1_S_CLAY_SIZE = 300;
+    public static final int PG1_S_CLAY_CNT = 301;
+    public static final int PG1_S_CLAY_MIN = 302;
+    public static final int PG1_S_CLAY_MAX = 303;
+
+    public static final int PG1_S_DIRT_SIZE = 304;
+    public static final int PG1_S_DIRT_CNT = 305;
+    public static final int PG1_S_DIRT_MIN = 306;
+    public static final int PG1_S_DIRT_MAX = 307;
+
+    public static final int PG1_S_GRAV_SIZE = 308;
+    public static final int PG1_S_GRAV_CNT = 309;
+    public static final int PG1_S_GRAV_MIN = 310;
+    public static final int PG1_S_GRAV_MAX = 311;
+
+    public static final int PG1_S_GRAN_SIZE = 312;
+    public static final int PG1_S_GRAN_CNT = 313;
+    public static final int PG1_S_GRAN_MIN = 314;
+    public static final int PG1_S_GRAN_MAX = 315;
+
+    public static final int PG1_S_DIOR_SIZE = 316;
+    public static final int PG1_S_DIOR_CNT = 317;
+    public static final int PG1_S_DIOR_MIN = 318;
+    public static final int PG1_S_DIOR_MAX = 319;
+
+    public static final int PG1_S_ANDE_SIZE = 320;
+    public static final int PG1_S_ANDE_CNT = 321;
+    public static final int PG1_S_ANDE_MIN = 322;
+    public static final int PG1_S_ANDE_MAX = 323;
+
+    public static final int PG1_S_COAL_SIZE = 324;
+    public static final int PG1_S_COAL_CNT = 325;
+    public static final int PG1_S_COAL_MIN = 326;
+    public static final int PG1_S_COAL_MAX = 327;
     
-    public static final int PG2_S_TEMP_SCL = 313;
-    public static final int PG2_S_RAIN_SCL = 314;
-    public static final int PG2_S_DETL_SCL = 315;
+    public static final int PG1_S_IRON_SIZE = 328;
+    public static final int PG1_S_IRON_CNT = 329;
+    public static final int PG1_S_IRON_MIN = 330;
+    public static final int PG1_S_IRON_MAX = 331;
+
+    public static final int PG1_S_GOLD_SIZE = 332;
+    public static final int PG1_S_GOLD_CNT = 333;
+    public static final int PG1_S_GOLD_MIN = 334;
+    public static final int PG1_S_GOLD_MAX = 335;
+
+    public static final int PG1_S_REDS_SIZE = 336;
+    public static final int PG1_S_REDS_CNT = 337;
+    public static final int PG1_S_REDS_MIN = 338;
+    public static final int PG1_S_REDS_MAX = 339;
+
+    public static final int PG1_S_DIAM_SIZE = 340;
+    public static final int PG1_S_DIAM_CNT = 341;
+    public static final int PG1_S_DIAM_MIN = 342;
+    public static final int PG1_S_DIAM_MAX = 343;
+
+    public static final int PG1_S_LAPS_SIZE = 344;
+    public static final int PG1_S_LAPS_CNT = 345;
+    public static final int PG1_S_LAPS_CTR = 346;
+    public static final int PG1_S_LAPS_SPR = 347;
     
-    public static final int PG2_S_B_DPTH_WT = 316;
-    public static final int PG2_S_B_DPTH_OF = 317;
-    public static final int PG2_S_B_SCL_WT = 318;
-    public static final int PG2_S_B_SCL_OF = 319;
+    public static final int PG1_S_EMER_SIZE = 348;
+    public static final int PG1_S_EMER_CNT = 349;
+    public static final int PG1_S_EMER_MIN = 350;
+    public static final int PG1_S_EMER_MAX = 351;
     
     // Labels
-    public static final int PG2_L_BETA_LABL = 1300;
-    public static final int PG2_L_RELE_LABL = 1301;
+    public static final int PG1_L_CLAY_NAME = 1300;
+    public static final int PG1_L_DIRT_NAME = 1301;
+    public static final int PG1_L_GRAV_NAME = 1302;
+    public static final int PG1_L_GRAN_NAME = 1303;
+    public static final int PG1_L_DIOR_NAME = 1304;
+    public static final int PG1_L_ANDE_NAME = 1305;
+    public static final int PG1_L_COAL_NAME = 1306;
+    public static final int PG1_L_IRON_NAME = 1307;
+    public static final int PG1_L_GOLD_NAME = 1308;
+    public static final int PG1_L_REDS_NAME = 1309;
+    public static final int PG1_L_DIAM_NAME = 1310;
+    public static final int PG1_L_LAPS_NAME = 1311;
+    public static final int PG1_L_EMER_NAME = 1312;
     
     /* Page 4 */
     
     // Entries
-    public static final int PG3_F_MAIN_NS_X = 400;
-    public static final int PG3_F_MAIN_NS_Y = 401;
-    public static final int PG3_F_MAIN_NS_Z = 402;
-    public static final int PG3_F_DPTH_NS_X = 403;
-    public static final int PG3_F_DPTH_NS_Z = 404;
-    public static final int PG3_F_DPTH_EXPT = 405;
-    public static final int PG3_F_BASE_SIZE = 406;
-    public static final int PG3_F_COORD_SCL = 407;
-    public static final int PG3_F_HEIGH_SCL = 408;
-    public static final int PG3_F_STRETCH_Y = 409;
-    public static final int PG3_F_UPPER_LIM = 410;
-    public static final int PG3_F_LOWER_LIM = 411;
-    public static final int PG3_F_HEIGH_LIM = 412;
+    public static final int PG2_S_MAIN_NS_X = 400;
+    public static final int PG2_S_MAIN_NS_Y = 401;
+    public static final int PG2_S_MAIN_NS_Z = 402;
+    public static final int PG2_S_DPTH_NS_X = 403;
+    public static final int PG2_S_DPTH_NS_Z = 404;
+    public static final int PG2_S_DPTH_EXPT = 405;
+    public static final int PG2_S_BASE_SIZE = 406;
+    public static final int PG2_S_COORD_SCL = 407;
+    public static final int PG2_S_HEIGH_SCL = 408;
+    public static final int PG2_S_STRETCH_Y = 409;
+    public static final int PG2_S_UPPER_LIM = 410;
+    public static final int PG2_S_LOWER_LIM = 411;
+    public static final int PG2_S_HEIGH_LIM = 412;
     
-    public static final int PG3_F_TEMP_SCL = 413;
-    public static final int PG3_F_RAIN_SCL = 414;
-    public static final int PG3_F_DETL_SCL = 415;
+    public static final int PG2_S_TEMP_SCL = 413;
+    public static final int PG2_S_RAIN_SCL = 414;
+    public static final int PG2_S_DETL_SCL = 415;
     
-    public static final int PG3_F_B_DPTH_WT = 416;
-    public static final int PG3_F_B_DPTH_OF = 417;
-    public static final int PG3_F_B_SCL_WT = 418;
-    public static final int PG3_F_B_SCL_OF = 419;
+    public static final int PG2_S_B_DPTH_WT = 416;
+    public static final int PG2_S_B_DPTH_OF = 417;
+    public static final int PG2_S_B_SCL_WT = 418;
+    public static final int PG2_S_B_SCL_OF = 419;
     
     // Labels
-    public static final int PG3_L_MAIN_NS_X = 1400;
-    public static final int PG3_L_MAIN_NS_Y = 1401;
-    public static final int PG3_L_MAIN_NS_Z = 1402;
-    public static final int PG3_L_DPTH_NS_X = 1403;
-    public static final int PG3_L_DPTH_NS_Z = 1404;
-    public static final int PG3_L_DPTH_EXPT = 1405;
-    public static final int PG3_L_BASE_SIZE = 1406;
-    public static final int PG3_L_COORD_SCL = 1407;
-    public static final int PG3_L_HEIGH_SCL = 1408;
-    public static final int PG3_L_STRETCH_Y = 1409;
-    public static final int PG3_L_UPPER_LIM = 1410;
-    public static final int PG3_L_LOWER_LIM = 1411;
-    public static final int PG3_L_HEIGH_LIM = 1412;
-    
-    public static final int PG3_L_TEMP_SCL = 1413;
-    public static final int PG3_L_RAIN_SCL = 1414;
-    public static final int PG3_L_DETL_SCL = 1415;
-    
-    public static final int PG3_L_B_DPTH_WT = 1416;
-    public static final int PG3_L_B_DPTH_OF = 1417;
-    public static final int PG3_L_B_SCL_WT = 1418;
-    public static final int PG3_L_B_SCL_OF = 1419;
+    public static final int PG2_L_BETA_LABL = 1400;
+    public static final int PG2_L_RELE_LABL = 1401;
     
     /* Page 5 */
     
     // Entries
-    public static final int PG4_DSRT_LAND = 500;
-    public static final int PG4_DSRT_OCEAN = 501;
-    public static final int PG4_DSRT_BEACH = 502;
+    public static final int PG3_F_MAIN_NS_X = 500;
+    public static final int PG3_F_MAIN_NS_Y = 501;
+    public static final int PG3_F_MAIN_NS_Z = 502;
+    public static final int PG3_F_DPTH_NS_X = 503;
+    public static final int PG3_F_DPTH_NS_Z = 504;
+    public static final int PG3_F_DPTH_EXPT = 505;
+    public static final int PG3_F_BASE_SIZE = 506;
+    public static final int PG3_F_COORD_SCL = 507;
+    public static final int PG3_F_HEIGH_SCL = 508;
+    public static final int PG3_F_STRETCH_Y = 509;
+    public static final int PG3_F_UPPER_LIM = 510;
+    public static final int PG3_F_LOWER_LIM = 511;
+    public static final int PG3_F_HEIGH_LIM = 512;
     
-    public static final int PG4_FRST_LAND = 503;
-    public static final int PG4_FRST_OCEAN = 504;
-    public static final int PG4_FRST_BEACH = 505;
+    public static final int PG3_F_TEMP_SCL = 513;
+    public static final int PG3_F_RAIN_SCL = 514;
+    public static final int PG3_F_DETL_SCL = 515;
     
-    public static final int PG4_ICED_LAND = 506;
-    public static final int PG4_ICED_OCEAN = 507;
-    public static final int PG4_ICED_BEACH = 508;
-    
-    public static final int PG4_PLNS_LAND = 509;
-    public static final int PG4_PLNS_OCEAN = 510;
-    public static final int PG4_PLNS_BEACH = 511;
-    
-    public static final int PG4_RAIN_LAND = 512;
-    public static final int PG4_RAIN_OCEAN = 513;
-    public static final int PG4_RAIN_BEACH = 514;
-    
-    public static final int PG4_SAVA_LAND = 515;
-    public static final int PG4_SAVA_OCEAN = 516;
-    public static final int PG4_SAVA_BEACH = 517;
-    
-    public static final int PG4_SHRB_LAND = 518;
-    public static final int PG4_SHRB_OCEAN = 519;
-    public static final int PG4_SHRB_BEACH = 520;
-    
-    public static final int PG4_SEAS_LAND = 521;
-    public static final int PG4_SEAS_OCEAN = 522;
-    public static final int PG4_SEAS_BEACH = 523;
-    
-    public static final int PG4_SWMP_LAND = 524;
-    public static final int PG4_SWMP_OCEAN = 525;
-    public static final int PG4_SWMP_BEACH = 526;
-    
-    public static final int PG4_TAIG_LAND = 527;
-    public static final int PG4_TAIG_OCEAN = 528;
-    public static final int PG4_TAIG_BEACH = 529;
-    
-    public static final int PG4_TUND_LAND = 530;
-    public static final int PG4_TUND_OCEAN = 531;
-    public static final int PG4_TUND_BEACH = 532;
+    public static final int PG3_F_B_DPTH_WT = 516;
+    public static final int PG3_F_B_DPTH_OF = 517;
+    public static final int PG3_F_B_SCL_WT = 518;
+    public static final int PG3_F_B_SCL_OF = 519;
     
     // Labels
-    public static final int PG4_LAND_LABL = 1500;
-    public static final int PG4_OCEAN_LABL = 1501;
-    public static final int PG4_BEACH_LABL = 1502;
+    public static final int PG3_L_MAIN_NS_X = 1500;
+    public static final int PG3_L_MAIN_NS_Y = 1501;
+    public static final int PG3_L_MAIN_NS_Z = 1502;
+    public static final int PG3_L_DPTH_NS_X = 1503;
+    public static final int PG3_L_DPTH_NS_Z = 1504;
+    public static final int PG3_L_DPTH_EXPT = 1505;
+    public static final int PG3_L_BASE_SIZE = 1506;
+    public static final int PG3_L_COORD_SCL = 1507;
+    public static final int PG3_L_HEIGH_SCL = 1508;
+    public static final int PG3_L_STRETCH_Y = 1509;
+    public static final int PG3_L_UPPER_LIM = 1510;
+    public static final int PG3_L_LOWER_LIM = 1511;
+    public static final int PG3_L_HEIGH_LIM = 1512;
     
-    public static final int PG4_DSRT_LABL = 1503;
-    public static final int PG4_FRST_LABL = 1504;
-    public static final int PG4_ICED_LABL = 1505;
-    public static final int PG4_PLNS_LABL = 1506;
-    public static final int PG4_RAIN_LABL = 1507;
-    public static final int PG4_SAVA_LABL = 1508;
-    public static final int PG4_SHRB_LABL = 1509;
-    public static final int PG4_SEAS_LABL = 1510;
-    public static final int PG4_SWMP_LABL = 1511;
-    public static final int PG4_TAIG_LABL = 1512;
-    public static final int PG4_TUND_LABL = 1513;
+    public static final int PG3_L_TEMP_SCL = 1513;
+    public static final int PG3_L_RAIN_SCL = 1514;
+    public static final int PG3_L_DETL_SCL = 1515;
+    
+    public static final int PG3_L_B_DPTH_WT = 1516;
+    public static final int PG3_L_B_DPTH_OF = 1517;
+    public static final int PG3_L_B_SCL_WT = 1518;
+    public static final int PG3_L_B_SCL_OF = 1519;
+    
+    /* Page 6 */
+    
+    // Entries
+    public static final int PG4_DSRT_LAND = 600;
+    public static final int PG4_DSRT_OCEAN = 601;
+    public static final int PG4_DSRT_BEACH = 602;
+    
+    public static final int PG4_FRST_LAND = 603;
+    public static final int PG4_FRST_OCEAN = 604;
+    public static final int PG4_FRST_BEACH = 605;
+    
+    public static final int PG4_ICED_LAND = 606;
+    public static final int PG4_ICED_OCEAN = 607;
+    public static final int PG4_ICED_BEACH = 608;
+    
+    public static final int PG4_PLNS_LAND = 609;
+    public static final int PG4_PLNS_OCEAN = 610;
+    public static final int PG4_PLNS_BEACH = 611;
+    
+    public static final int PG4_RAIN_LAND = 612;
+    public static final int PG4_RAIN_OCEAN = 613;
+    public static final int PG4_RAIN_BEACH = 614;
+    
+    public static final int PG4_SAVA_LAND = 615;
+    public static final int PG4_SAVA_OCEAN = 616;
+    public static final int PG4_SAVA_BEACH = 617;
+    
+    public static final int PG4_SHRB_LAND = 618;
+    public static final int PG4_SHRB_OCEAN = 619;
+    public static final int PG4_SHRB_BEACH = 620;
+    
+    public static final int PG4_SEAS_LAND = 621;
+    public static final int PG4_SEAS_OCEAN = 622;
+    public static final int PG4_SEAS_BEACH = 623;
+    
+    public static final int PG4_SWMP_LAND = 624;
+    public static final int PG4_SWMP_OCEAN = 625;
+    public static final int PG4_SWMP_BEACH = 626;
+    
+    public static final int PG4_TAIG_LAND = 627;
+    public static final int PG4_TAIG_OCEAN = 628;
+    public static final int PG4_TAIG_BEACH = 629;
+    
+    public static final int PG4_TUND_LAND = 630;
+    public static final int PG4_TUND_OCEAN = 631;
+    public static final int PG4_TUND_BEACH = 632;
+    
+    // Labels
+    public static final int PG4_LAND_LABL = 1600;
+    public static final int PG4_OCEAN_LABL = 1601;
+    public static final int PG4_BEACH_LABL = 1602;
+    
+    public static final int PG4_DSRT_LABL = 1603;
+    public static final int PG4_FRST_LABL = 1604;
+    public static final int PG4_ICED_LABL = 1605;
+    public static final int PG4_PLNS_LABL = 1606;
+    public static final int PG4_RAIN_LABL = 1607;
+    public static final int PG4_SAVA_LABL = 1608;
+    public static final int PG4_SHRB_LABL = 1609;
+    public static final int PG4_SEAS_LABL = 1610;
+    public static final int PG4_SWMP_LABL = 1611;
+    public static final int PG4_TAIG_LABL = 1612;
+    public static final int PG4_TUND_LABL = 1613;
     
     public static int offsetForward(int entry) {
         return entry + 100;

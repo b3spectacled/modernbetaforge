@@ -142,6 +142,7 @@ public class ModernBetaChunkGeneratorSettings {
     
     public final boolean useBirchTrees;
     public final boolean usePineTrees;
+    public final boolean useSwampTrees;
     public final boolean useJungleTrees;
     public final boolean useAcaciaTrees;
     
@@ -204,6 +205,7 @@ public class ModernBetaChunkGeneratorSettings {
         
         this.useBirchTrees = factory.useBirchTrees;
         this.usePineTrees = factory.usePineTrees;
+        this.useSwampTrees = factory.useSwampTrees;
         this.useJungleTrees = factory.useJungleTrees;
         this.useAcaciaTrees = factory.useAcaciaTrees;
         
@@ -425,6 +427,7 @@ public class ModernBetaChunkGeneratorSettings {
         
         public boolean useBirchTrees;
         public boolean usePineTrees;
+        public boolean useSwampTrees;
         public boolean useJungleTrees;
         public boolean useAcaciaTrees;
         
@@ -581,6 +584,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
+            this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
             
@@ -778,6 +782,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
+            this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
             
@@ -986,6 +991,7 @@ public class ModernBetaChunkGeneratorSettings {
                         
                 this.useBirchTrees == factory.useBirchTrees &&
                 this.usePineTrees == factory.usePineTrees &&
+                this.useSwampTrees == factory.useSwampTrees &&
                 this.useJungleTrees == factory.useJungleTrees &&
                 this.useAcaciaTrees == factory.useAcaciaTrees &&
                 
@@ -1130,6 +1136,7 @@ public class ModernBetaChunkGeneratorSettings {
 
             hashCode = 31 * hashCode + (this.useBirchTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.usePineTrees ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useSwampTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useJungleTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useAcaciaTrees ? 1 : 0);
             
@@ -1288,6 +1295,7 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 factory.useBirchTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
                 factory.usePineTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_PINE_TREES, factory.usePineTrees);
+                factory.useSwampTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
                 factory.useJungleTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
                 factory.useAcaciaTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
 
@@ -1436,6 +1444,7 @@ public class ModernBetaChunkGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
             jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
+            jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
             jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
             jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
             

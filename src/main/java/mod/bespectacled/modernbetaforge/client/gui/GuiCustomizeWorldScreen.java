@@ -88,9 +88,16 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     public GuiCustomizeWorldScreen(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
-        this.subtitle = "Page 1 of 5";
+        this.subtitle = "Page 1 of 6";
         this.pageTitle = "Basic Settings";
-        this.pageNames = new String[5];
+        this.pageNames = new String[]{
+            I18n.format(PREFIX + "page0"),
+            I18n.format(PREFIX + "page5"),
+            I18n.format(PREFIX + "page1"),
+            I18n.format(PREFIX + "page2"),
+            I18n.format(PREFIX + "page3"),
+            I18n.format(PREFIX + "page4")
+        };
         
         this.floatFilter = new Predicate<String>() {
             @Override
@@ -138,26 +145,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         GuiPageButtonList.GuiListEntry[] pageList0 = {
             this.chunkSlider,
             this.biomeSlider,
-            
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_FIXED, I18n.format(PREFIX + "fixedBiomeLabel"), true),
-            this.fixedSlider,            
-    
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BETA_FEATURES, I18n.format(PREFIX + "betaFeaturesLabel"), true),
+            this.fixedSlider,
+
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BIOME_REPLACEMENT, I18n.format(PREFIX + "biomeReplacementLabel"), true),
             null,
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_OCEAN, I18n.format(PREFIX + NbtTags.REPLACE_OCEAN_BIOMES), true, this.settings.replaceOceanBiomes),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BEACH, I18n.format(PREFIX + NbtTags.REPLACE_BEACH_BIOMES), true, this.settings.replaceBeachBiomes),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_GRASS, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FLOWERS, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PADS, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MELONS, I18n.format(PREFIX + NbtTags.USE_MELONS), true, this.settings.useMelons),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_WELLS, I18n.format(PREFIX + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FOSSILS, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BIRCH, I18n.format(PREFIX + NbtTags.USE_BIRCH_TREES), true, this.settings.useBirchTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_OTHER_FEATURES, I18n.format(PREFIX + "otherFeaturesLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BASIC_FEATURES, I18n.format(PREFIX + "basicFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SEA_LEVEL, I18n.format(PREFIX + "seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_CAVES, I18n.format(PREFIX + "useCaves"), true, this.settings.useCaves),
@@ -178,6 +174,20 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_GRASS, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FLOWERS, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PADS, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MELONS, I18n.format(PREFIX + NbtTags.USE_MELONS), true, this.settings.useMelons),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_WELLS, I18n.format(PREFIX + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FOSSILS, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BIRCH, I18n.format(PREFIX + NbtTags.USE_BIRCH_TREES), true, this.settings.useBirchTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SWAMP, I18n.format(PREFIX + NbtTags.USE_SWAMP_TREES), true, this.settings.useSwampTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees)
+        };
+        
+        GuiPageButtonList.GuiListEntry[] pageList2 = {
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_CLAY_NAME, I18n.format("tile.clay.name"), false),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_CLAY_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.claySize),
@@ -270,7 +280,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageList2 = {
+        GuiPageButtonList.GuiListEntry[] pageList3 = {
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
@@ -301,7 +311,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageList3 = {
+        GuiPageButtonList.GuiListEntry[] pageList4 = {
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":", false),
@@ -351,7 +361,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             
         };
         
-        GuiPageButtonList.GuiListEntry[] pageList4 = {
+        GuiPageButtonList.GuiListEntry[] pageList5 = {
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
@@ -465,7 +475,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 pageList1,
                 pageList2,
                 pageList3,
-                pageList4
+                pageList4,
+                pageList5
             }
         );
         
@@ -560,11 +571,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setInitialText(this.pageList, GuiTags.PG4_TUND_LAND, this.settings.tundraBiomes.landBiome);
         this.setInitialText(this.pageList, GuiTags.PG4_TUND_OCEAN, this.settings.tundraBiomes.oceanBiome);
         this.setInitialText(this.pageList, GuiTags.PG4_TUND_BEACH, this.settings.tundraBiomes.beachBiome);
-        
-        for (int page = 0; page < 5; ++page) {
-            this.pageNames[page] = I18n.format(PREFIX + "page" + page);
-        }
-        
+
         this.updatePageControls();
     }
 
@@ -915,6 +922,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_B_USE_PINE:
                 this.settings.usePineTrees = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_SWAMP:
+                this.settings.useSwampTrees = entryValue;
                 break;
             case GuiTags.PG0_B_USE_JUNGLE:
                 this.settings.useJungleTrees = entryValue;

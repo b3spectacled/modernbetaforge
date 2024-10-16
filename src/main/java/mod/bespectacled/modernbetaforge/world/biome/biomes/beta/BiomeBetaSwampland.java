@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower;
@@ -13,13 +14,17 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenFossils;
+import net.minecraft.world.gen.feature.WorldGenSwamp;
 import net.minecraft.world.gen.feature.WorldGenWaterlily;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeBetaSwampland extends BiomeBeta {
+    private static final WorldGenSwamp SWAMP_TREE_FEATURE = new WorldGenSwamp();
+    
     public BiomeBetaSwampland() {
         super(new BiomeProperties("Beta Swampland")
             .setTemperature(0.5f)
@@ -36,6 +41,18 @@ public class BiomeBetaSwampland extends BiomeBeta {
         }
 
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
+    }
+    
+    @Override
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+        if (!settings.useSwampTrees)
+            return super.getRandomTreeFeature(random);
+        
+        if (random.nextInt(5) == 0) {
+            return ModernBetaBiome.TREE_FEATURE;
+        }
+        
+        return SWAMP_TREE_FEATURE;
     }
     
     @Override

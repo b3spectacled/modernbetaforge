@@ -26,6 +26,7 @@ public class NbtTags {
     
     public static final String USE_BIRCH_TREES = "useBirchTrees";
     public static final String USE_PINE_TREES = "usePineTrees";
+    public static final String USE_SWAMP_TREES = "useSwampTrees";
     public static final String USE_JUNGLE_TREES = "useJungleTrees";
     public static final String USE_ACACIA_TREES = "useAcaciaTrees";
     
