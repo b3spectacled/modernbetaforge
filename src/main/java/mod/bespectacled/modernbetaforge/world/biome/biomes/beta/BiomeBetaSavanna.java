@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.entity.passive.EntityDonkey;
@@ -39,6 +40,10 @@ public class BiomeBetaSavanna extends BiomeBeta {
     public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
         if (!settings.useAcaciaTrees)
             return super.getRandomTreeFeature(random);
+        
+        if (random.nextInt(5) == 0) {
+            return ModernBetaBiome.TREE_FEATURE;
+        }
         
         return ACACIA_TREE_FEATURE;
     }
