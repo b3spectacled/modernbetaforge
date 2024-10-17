@@ -1,6 +1,13 @@
 package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,12 +22,18 @@ import com.google.gson.JsonSerializer;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.util.VersionUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 
 public class ModernBetaChunkGeneratorSettings {
+    public static final Set<String> DATA_FIX_PRINTS = new HashSet<>();
+    
     private static final Gson GSON = new Gson();
+    private static final String DEFAULT_OLD_VERSION = "1.0.0.0";
+    
+    public final String generatorVersion;
     
     public final String chunkSource;
     public final String biomeSource;
@@ -164,6 +177,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final ClimateMappingSettings tundraBiomes;
     
     private ModernBetaChunkGeneratorSettings(Factory factory) {
+        this.generatorVersion = factory.generatorVersion;
+        
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
         
@@ -308,6 +323,8 @@ public class ModernBetaChunkGeneratorSettings {
     
     public static class Factory {
         static final Gson JSON_ADAPTER;
+        
+        public String generatorVersion;
         
         public String chunkSource;
         public String biomeSource;
@@ -468,6 +485,8 @@ public class ModernBetaChunkGeneratorSettings {
         }
         
         public Factory() {
+            this.generatorVersion = ModernBeta.VERSION;
+            
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
             
@@ -666,6 +685,8 @@ public class ModernBetaChunkGeneratorSettings {
         }
         
         public void setDefaults() {
+            this.generatorVersion = ModernBeta.VERSION;
+            
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
             
@@ -875,6 +896,8 @@ public class ModernBetaChunkGeneratorSettings {
             Factory factory = (Factory)object;
             
             return
+                this.generatorVersion.equals(factory.generatorVersion) &&    
+                    
                 this.chunkSource.equals(factory.chunkSource) &&
                 this.biomeSource.equals(factory.biomeSource) &&
                 
@@ -1022,7 +1045,8 @@ public class ModernBetaChunkGeneratorSettings {
         
         @Override
         public int hashCode() {
-            int hashCode = this.chunkSource.hashCode();
+            int hashCode = this.generatorVersion.hashCode();
+            hashCode = 31 * hashCode + this.chunkSource.hashCode();
             hashCode = 31 * hashCode + this.biomeSource.hashCode();
             
             hashCode = 31 * hashCode + this.fixedBiome.hashCode();
@@ -1176,12 +1200,16 @@ public class ModernBetaChunkGeneratorSettings {
     }
     
     public static class Serializer implements JsonDeserializer<Factory>, JsonSerializer<Factory> {
+        private final Map<String, DataFixer> dataFixers = new LinkedHashMap<>();
+        
         @Override
         public Factory deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Factory factory = new Factory();
             
             try {
+                factory.generatorVersion = JsonUtils.getString(jsonObject, NbtTags.GENERATOR_VERSION, DEFAULT_OLD_VERSION);
+                
                 factory.chunkSource = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
                 factory.biomeSource = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource);
                 
@@ -1323,6 +1351,9 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.taigaBiomes = this.deserializeBiomes(jsonObject, NbtTags.TAIGA_BIOMES, factory.taigaBiomes);
                 factory.tundraBiomes = this.deserializeBiomes(jsonObject, NbtTags.TUNDRA_BIOMES, factory.tundraBiomes);
                 
+                this.populateDataFixers(factory.generatorVersion);
+                this.runDataFixers(jsonObject, factory.generatorVersion);
+                
             } catch (Exception e) {}
             
             return factory;
@@ -1331,6 +1362,8 @@ public class ModernBetaChunkGeneratorSettings {
         @Override
         public JsonElement serialize(Factory factory, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject jsonObject = new JsonObject();
+            
+            jsonObject.addProperty(NbtTags.GENERATOR_VERSION, factory.generatorVersion);
             
             jsonObject.addProperty(NbtTags.CHUNK_SOURCE, factory.chunkSource);
             jsonObject.addProperty(NbtTags.BIOME_SOURCE, factory.biomeSource);
@@ -1478,6 +1511,45 @@ public class ModernBetaChunkGeneratorSettings {
         
         private ClimateMappingSettings deserializeBiomes(JsonObject jsonObject, String tag, ClimateMappingSettings fallback) {
             return GSON.fromJson(JsonUtils.getString(jsonObject, tag, GSON.toJson(fallback)), ClimateMappingSettings.class);
+        }
+        
+        private void populateDataFixers(String version) {
+            // Example: this.dataFixers.put(NbtTags.USE_NEW_FLOWERS, new DataFixer(VersionUtil.isLowerVersion(version), (jsonObject) -> {}));
+            // this.dataFixers.put(NbtTags.USE_NEW_FLOWERS, new DataFixer(VersionUtil.isLowerVersion(version), (jsonObject) -> {}));
+        }
+        
+        private void runDataFixers(JsonObject jsonObject, String version) {
+            this.dataFixers.entrySet().stream().forEach(entry -> {
+                String key = entry.getKey();
+                DataFixer dataFixer = entry.getValue();
+                
+                if (jsonObject.has(key)) {
+                    if (!DATA_FIX_PRINTS.contains(key)) {
+                        DATA_FIX_PRINTS.add(key);
+                        
+                        String dataFixStr = String.format("[DataFix] Found old property '%s' for target version '%s', fixing..", key, version);
+                        ModernBeta.log(Level.INFO, dataFixStr);
+                    }
+                    
+                    dataFixer.tryFix(jsonObject);
+                }
+            });
+        }
+        
+        private static class DataFixer {
+            private final boolean shouldDataFix;
+            private final Consumer<JsonObject> dataFix;
+            
+            private DataFixer(boolean shouldDataFix, Consumer<JsonObject> dataFix) {
+                this.shouldDataFix = shouldDataFix;
+                this.dataFix = dataFix;
+            }
+            
+            private void tryFix(JsonObject jsonObject) {
+                if (this.shouldDataFix) {
+                    this.dataFix.accept(jsonObject);
+                }
+            }
         }
     }
     

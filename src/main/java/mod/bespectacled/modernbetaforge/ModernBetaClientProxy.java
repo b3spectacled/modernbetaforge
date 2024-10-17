@@ -1,15 +1,15 @@
 package mod.bespectacled.modernbetaforge;
 
-import mod.bespectacled.modernbetaforge.event.BiomeColorsEventHandler;
 import mod.bespectacled.modernbetaforge.event.BlockColorsEventHandler;
 import mod.bespectacled.modernbetaforge.event.DebugInfoEventHandler;
+import mod.bespectacled.modernbetaforge.event.WorldLoadEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ModernBetaClientProxy implements ModernBetaProxy {
     @Override
     public void init() {
         MinecraftForge.EVENT_BUS.register(new DebugInfoEventHandler());
-        MinecraftForge.EVENT_BUS.register(new BiomeColorsEventHandler());
+        MinecraftForge.EVENT_BUS.register(new WorldLoadEventHandler());
     }
 
     @Override

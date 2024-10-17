@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.util;
 
 public class NbtTags {
+    public static final String GENERATOR_VERSION = "generatorVersion";
+    
     public static final String CHUNK_SOURCE = "chunkSource";
     public static final String BIOME_SOURCE = "biomeSource";
     

@@ -5,12 +5,13 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSample
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class BiomeColorsEventHandler {
+public class WorldLoadEventHandler {
     @SubscribeEvent
     public void onWorldEventLoad(WorldEvent.Load event) {
         World world = event.getWorld();
@@ -59,5 +60,8 @@ public class BiomeColorsEventHandler {
         }
         
         BetaColorSampler.INSTANCE.resetClimateSamplers();
+        
+        // Clear datafixer print set
+        ModernBetaChunkGeneratorSettings.DATA_FIX_PRINTS.clear();
     }
 }
