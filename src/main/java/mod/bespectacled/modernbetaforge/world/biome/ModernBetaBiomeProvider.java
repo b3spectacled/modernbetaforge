@@ -16,13 +16,15 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.storage.WorldInfo;
 
 public class ModernBetaBiomeProvider extends BiomeProvider {
+    private final ModernBetaChunkGeneratorSettings settings;
+    
     private final BiomeSource biomeSource;
     private ChunkSource chunkSource;
     
     public ModernBetaBiomeProvider(WorldInfo worldInfo) {
         super(worldInfo);
         
-        ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
+        this.settings = worldInfo.getGeneratorOptions() != null ?
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
 
@@ -131,6 +133,10 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     
     public void setChunkSource(ChunkSource chunkSource) {
         this.chunkSource = chunkSource;
+    }
+    
+    public boolean useVillageVariants() {
+        return this.settings.useVillageVariants;
     }
     
     private Biome getBiome(int x, int z) {

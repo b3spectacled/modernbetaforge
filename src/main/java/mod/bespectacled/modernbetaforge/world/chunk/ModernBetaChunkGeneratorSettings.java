@@ -56,6 +56,7 @@ public class ModernBetaChunkGeneratorSettings {
     
     public final boolean useStrongholds;
     public final boolean useVillages;
+    public final boolean useVillageVariants;
     public final boolean useMineShafts;
     public final boolean useTemples;
     public final boolean useMonuments;
@@ -197,6 +198,7 @@ public class ModernBetaChunkGeneratorSettings {
         
         this.useStrongholds = factory.useStrongholds;
         this.useVillages = factory.useVillages;
+        this.useVillageVariants = factory.useVillageVariants;
         this.useMineShafts = factory.useMineShafts;
         this.useTemples = factory.useTemples;
         this.useMonuments = factory.useMonuments;
@@ -341,6 +343,7 @@ public class ModernBetaChunkGeneratorSettings {
         
         public boolean useStrongholds;
         public boolean useVillages;
+        public boolean useVillageVariants;
         public boolean useMineShafts;
         public boolean useTemples;
         public boolean useMonuments;
@@ -499,6 +502,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useStrongholds = true;
             this.useVillages = true;
+            this.useVillageVariants = false;
             this.useMineShafts = true;
             this.useTemples = true;
             this.useMonuments = true;
@@ -696,6 +700,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useStrongholds = true;
             this.useVillages = true;
+            this.useVillageVariants = false;
             this.useMineShafts = true;
             this.useTemples = true;
             this.useMonuments = true;
@@ -905,6 +910,7 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.useStrongholds == factory.useStrongholds &&
                 this.useVillages == factory.useVillages &&
+                this.useVillageVariants == factory.useVillageVariants &&
                 this.useMineShafts == factory.useMineShafts &&
                 this.useTemples == factory.useTemples &&
                 this.useMonuments == factory.useMonuments &&
@@ -1050,6 +1056,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             hashCode = 31 * hashCode + (this.useStrongholds ? 1 : 0);
             hashCode = 31 * hashCode + (this.useVillages ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useVillageVariants ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMineShafts ? 1 : 0);
             hashCode = 31 * hashCode + (this.useTemples ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMonuments ? 1 : 0);
@@ -1209,6 +1216,7 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 factory.useStrongholds = JsonUtils.getBoolean(jsonObject, "useStrongholds", factory.useStrongholds);
                 factory.useVillages = JsonUtils.getBoolean(jsonObject, "useVillages", factory.useVillages);
+                factory.useVillageVariants = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
                 factory.useMineShafts = JsonUtils.getBoolean(jsonObject, "useMineShafts", factory.useMineShafts);
                 factory.useTemples = JsonUtils.getBoolean(jsonObject, "useTemples", factory.useTemples);
                 factory.useMonuments = JsonUtils.getBoolean(jsonObject, "useMonuments", factory.useMonuments);
@@ -1356,6 +1364,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             jsonObject.addProperty("useStrongholds", factory.useStrongholds);
             jsonObject.addProperty("useVillages", factory.useVillages);
+            jsonObject.addProperty(NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
             jsonObject.addProperty("useMineShafts", factory.useMineShafts);
             jsonObject.addProperty("useTemples", factory.useTemples);
             jsonObject.addProperty("useMonuments", factory.useMonuments);

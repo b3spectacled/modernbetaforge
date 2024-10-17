@@ -157,13 +157,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SEA_LEVEL, I18n.format(PREFIX + "seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_CAVES, I18n.format(PREFIX + "useCaves"), true, this.settings.useCaves),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_HOLDS, I18n.format(PREFIX + "useStrongholds"), true, this.settings.useStrongholds),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VILLAGES, I18n.format(PREFIX + "useVillages"), true, this.settings.useVillages),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_RAVINES, I18n.format(PREFIX + "useRavines"), true, this.settings.useRavines),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SHAFTS, I18n.format(PREFIX + "useMineShafts"), true, this.settings.useMineShafts),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VILLAGES, I18n.format(PREFIX + "useVillages"), true, this.settings.useVillages),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VARIANTS, I18n.format(PREFIX + NbtTags.USE_VILLAGE_VARIANTS), true, this.settings.useVillageVariants),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_HOLDS, I18n.format(PREFIX + "useStrongholds"), true, this.settings.useStrongholds),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_TEMPLES, I18n.format(PREFIX + "useTemples"), true, this.settings.useTemples),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MONUMENTS, I18n.format(PREFIX + "useMonuments"), true, this.settings.useMonuments),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MANSIONS, I18n.format(PREFIX + "useMansions"), true, this.settings.useMansions),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_RAVINES, I18n.format(PREFIX + "useRavines"), true, this.settings.useRavines),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_DUNGEONS, I18n.format(PREFIX + "useDungeons"), true, this.settings.useDungeons),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_DUNGEON_CHANCE, I18n.format(PREFIX + "dungeonChance"), true, this, 1.0f, 100.0f, (float)this.settings.dungeonChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_WATER_LAKES, I18n.format(PREFIX + "useWaterLakes"), true, this.settings.useWaterLakes),
@@ -174,292 +175,294 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_GRASS, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FLOWERS, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PADS, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MELONS, I18n.format(PREFIX + NbtTags.USE_MELONS), true, this.settings.useMelons),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_WELLS, I18n.format(PREFIX + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FOSSILS, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BIRCH, I18n.format(PREFIX + NbtTags.USE_BIRCH_TREES), true, this.settings.useBirchTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SWAMP, I18n.format(PREFIX + NbtTags.USE_SWAMP_TREES), true, this.settings.useSwampTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees)
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_GRASS, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_FLOWERS, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_PADS, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_MELONS, I18n.format(PREFIX + NbtTags.USE_MELONS), true, this.settings.useMelons),
+
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_WELLS, I18n.format(PREFIX + NbtTags.USE_DESERT_WELLS), true, this.settings.useDesertWells),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_FOSSILS, I18n.format(PREFIX + NbtTags.USE_FOSSILS), true, this.settings.useFossils),
+
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_BIRCH, I18n.format(PREFIX + NbtTags.USE_BIRCH_TREES), true, this.settings.useBirchTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_SWAMP, I18n.format(PREFIX + NbtTags.USE_SWAMP_TREES), true, this.settings.useSwampTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_CLAY_NAME, I18n.format("tile.clay.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_CLAY_NAME, I18n.format("tile.clay.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_CLAY_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.claySize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_CLAY_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.clayCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_CLAY_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_CLAY_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_CLAY_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.claySize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_CLAY_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.clayCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_CLAY_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_CLAY_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_DIRT_NAME, I18n.format("tile.dirt.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_DIRT_NAME, I18n.format("tile.dirt.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIRT_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dirtSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIRT_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dirtCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIRT_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIRT_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIRT_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dirtSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIRT_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dirtCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIRT_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIRT_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_GRAV_NAME, I18n.format("tile.gravel.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_GRAV_NAME, I18n.format("tile.gravel.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAV_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.gravelSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAV_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.gravelCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAV_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAV_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAV_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.gravelSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAV_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.gravelCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAV_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAV_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_GRAN_NAME, I18n.format("tile.stone.granite.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_GRAN_NAME, I18n.format("tile.stone.granite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAN_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.graniteSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAN_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.graniteCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAN_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GRAN_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAN_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.graniteSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAN_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.graniteCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAN_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GRAN_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_DIOR_NAME, I18n.format("tile.stone.diorite.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_DIOR_NAME, I18n.format("tile.stone.diorite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIOR_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dioriteSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIOR_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dioriteCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIOR_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIOR_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIOR_SIZE, I18n.format(PREFIX + "size"),false, this, 1.0f, 50.0f, (float)this.settings.dioriteSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIOR_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.dioriteCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIOR_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIOR_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_ANDE_NAME, I18n.format("tile.stone.andesite.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_ANDE_NAME, I18n.format("tile.stone.andesite.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_ANDE_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.andesiteSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_ANDE_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.andesiteCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_ANDE_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_ANDE_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_ANDE_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.andesiteSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_ANDE_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.andesiteCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_ANDE_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_ANDE_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_COAL_NAME, I18n.format("tile.oreCoal.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_COAL_NAME, I18n.format("tile.oreCoal.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_COAL_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.coalSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_COAL_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.coalCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_COAL_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_COAL_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_COAL_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.coalSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_COAL_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.coalCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_COAL_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_COAL_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_IRON_NAME, I18n.format("tile.oreIron.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_IRON_NAME, I18n.format("tile.oreIron.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_IRON_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.ironSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_IRON_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.ironCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_IRON_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_IRON_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_IRON_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.ironSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_IRON_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.ironCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_IRON_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_IRON_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_GOLD_NAME, I18n.format("tile.oreGold.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_GOLD_NAME, I18n.format("tile.oreGold.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GOLD_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.goldSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GOLD_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.goldCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GOLD_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_GOLD_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GOLD_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.goldSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GOLD_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.goldCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GOLD_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_GOLD_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_REDS_NAME, I18n.format("tile.oreRedstone.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_REDS_NAME, I18n.format("tile.oreRedstone.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_REDS_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.redstoneSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_REDS_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.redstoneCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_REDS_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_REDS_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_REDS_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.redstoneSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_REDS_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.redstoneCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_REDS_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_REDS_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_DIAM_NAME, I18n.format("tile.oreDiamond.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_DIAM_NAME, I18n.format("tile.oreDiamond.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIAM_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.diamondSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIAM_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.diamondCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIAM_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_DIAM_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIAM_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.diamondSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIAM_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.diamondCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIAM_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DIAM_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_LAPS_NAME, I18n.format("tile.oreLapis.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_LAPS_NAME, I18n.format("tile.oreLapis.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.lapisSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.lapisCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_CTR, I18n.format(PREFIX + "center"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_LAPS_SPR, I18n.format(PREFIX + "spread"), false, this, 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_LAPS_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.lapisSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_LAPS_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.lapisCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_LAPS_CTR, I18n.format(PREFIX + "center"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_LAPS_SPR, I18n.format(PREFIX + "spread"), false, this, 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_EMER_NAME, I18n.format("tile.oreEmerald.name"), false),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_EMER_NAME, I18n.format("tile.oreEmerald.name"), false),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.emeraldSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.emeraldCount),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG1_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight)
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.emeraldSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.emeraldCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList3 = {
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent"), false, this, 0.01f, 20.0f, this.settings.depthNoiseScaleExponent),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_BASE_SIZE, I18n.format(PREFIX + "baseSize"), false, this, 1.0f, 25.0f, this.settings.baseSize),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_COORD_SCL, I18n.format(PREFIX + "coordinateScale"), false, this, 1.0f, 6000.0f, this.settings.coordinateScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_HEIGH_SCL, I18n.format(PREFIX + "heightScale"), false, this, 1.0f, 6000.0f, this.settings.heightScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_STRETCH_Y, I18n.format(PREFIX + "stretchY"), false, this, 0.01f, 50.0f, this.settings.stretchY),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent"), false, this, 0.01f, 20.0f, this.settings.depthNoiseScaleExponent),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_BASE_SIZE, I18n.format(PREFIX + "baseSize"), false, this, 1.0f, 25.0f, this.settings.baseSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_COORD_SCL, I18n.format(PREFIX + "coordinateScale"), false, this, 1.0f, 6000.0f, this.settings.coordinateScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_HEIGH_SCL, I18n.format(PREFIX + "heightScale"), false, this, 1.0f, 6000.0f, this.settings.heightScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_STRETCH_Y, I18n.format(PREFIX + "stretchY"), false, this, 0.01f, 50.0f, this.settings.stretchY),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height),
             null,
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
             null,
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
             null,
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset)
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList4 = {
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_DPTH_EXPT, String.format("%2.3f", this.settings.depthNoiseScaleExponent), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_HEIGH_SCL, I18n.format(PREFIX + "heightScale") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_STRETCH_Y, I18n.format(PREFIX + "stretchY") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_HEIGH_LIM, String.format("%d", this.settings.height), false, this.intFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_EXPT, String.format("%2.3f", this.settings.depthNoiseScaleExponent), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_HEIGH_SCL, I18n.format(PREFIX + "heightScale") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_STRETCH_Y, I18n.format(PREFIX + "stretchY") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), false, this.intFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), false, this.floatFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG3_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), false, this.floatFilter)
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), false, this.floatFilter)
             
         };
         
         GuiPageButtonList.GuiListEntry[] pageList5 = {
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_DSRT_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_DSRT_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_DSRT_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_DSRT_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_DSRT_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_DSRT_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_FRST_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_FRST_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_FRST_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_FRST_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_FRST_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_FRST_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_ICED_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_ICED_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_ICED_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_ICED_OCEAN, "", false, this.stringFilter),
             new GuiPageButtonList.GuiLabelEntry(908, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_ICED_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_ICED_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_PLNS_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_PLNS_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_PLNS_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_PLNS_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_PLNS_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_PLNS_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_RAIN_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_RAIN_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_RAIN_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_RAIN_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_RAIN_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_RAIN_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SAVA_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SAVA_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SAVA_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SAVA_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SAVA_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SAVA_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SHRB_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SHRB_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SHRB_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SHRB_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SHRB_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SHRB_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SEAS_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SEAS_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SEAS_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SEAS_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SEAS_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SEAS_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SWMP_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SWMP_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_SWMP_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SWMP_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SWMP_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_SWMP_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TAIG_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TAIG_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TAIG_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TAIG_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TAIG_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TAIG_BEACH, "", false, this.stringFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES), true),
             null,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TUND_LAND, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TUND_OCEAN, "", false, this.stringFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_TUND_BEACH, "", false, this.stringFilter)
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.LAND_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TUND_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TUND_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TUND_BEACH, "", false, this.stringFilter)
         };
         
         this.pageList = new GuiPageButtonList(
@@ -483,94 +486,94 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
         
         // Increase text length for biome fields
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_DSRT_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_DSRT_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_DSRT_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_DSRT_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_DSRT_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_DSRT_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_FRST_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_FRST_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_FRST_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_FRST_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_FRST_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_FRST_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_ICED_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_ICED_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_ICED_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_ICED_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_ICED_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_ICED_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_PLNS_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_PLNS_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_PLNS_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_PLNS_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_PLNS_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_PLNS_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_RAIN_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_RAIN_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_RAIN_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_RAIN_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_RAIN_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_RAIN_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SAVA_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SAVA_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SAVA_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SAVA_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SAVA_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SAVA_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SHRB_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SHRB_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SHRB_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SHRB_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SHRB_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SHRB_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SEAS_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SEAS_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SEAS_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SEAS_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SEAS_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SEAS_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SWMP_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SWMP_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_SWMP_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SWMP_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SWMP_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_SWMP_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TAIG_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TAIG_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TAIG_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TAIG_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TAIG_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TAIG_BEACH);
         
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TUND_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TUND_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiTags.PG4_TUND_BEACH);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TUND_LAND);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TUND_OCEAN);
+        this.increaseMaxTextLength(this.pageList, GuiTags.PG5_TUND_BEACH);
         
         // Set text here instead of at instantiation, so updated text length is utilized
-        this.setInitialText(this.pageList, GuiTags.PG4_DSRT_LAND, this.settings.desertBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_DSRT_OCEAN, this.settings.desertBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_DSRT_BEACH, this.settings.desertBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_DSRT_LAND, this.settings.desertBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_DSRT_OCEAN, this.settings.desertBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_DSRT_BEACH, this.settings.desertBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_FRST_LAND, this.settings.forestBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_FRST_OCEAN, this.settings.forestBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_FRST_BEACH, this.settings.forestBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_FRST_LAND, this.settings.forestBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_FRST_OCEAN, this.settings.forestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_FRST_BEACH, this.settings.forestBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_ICED_LAND, this.settings.iceDesertBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_ICED_OCEAN, this.settings.iceDesertBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_ICED_BEACH, this.settings.iceDesertBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_ICED_LAND, this.settings.iceDesertBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_ICED_OCEAN, this.settings.iceDesertBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_ICED_BEACH, this.settings.iceDesertBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_PLNS_LAND, this.settings.plainsBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_PLNS_OCEAN, this.settings.plainsBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_PLNS_BEACH, this.settings.plainsBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_PLNS_LAND, this.settings.plainsBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_PLNS_OCEAN, this.settings.plainsBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_PLNS_BEACH, this.settings.plainsBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_RAIN_LAND, this.settings.rainforestBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_RAIN_OCEAN, this.settings.rainforestBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_RAIN_BEACH, this.settings.rainforestBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_RAIN_LAND, this.settings.rainforestBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_RAIN_OCEAN, this.settings.rainforestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_RAIN_BEACH, this.settings.rainforestBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_SAVA_LAND, this.settings.savannaBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SAVA_OCEAN, this.settings.savannaBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SAVA_BEACH, this.settings.savannaBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SAVA_LAND, this.settings.savannaBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SAVA_OCEAN, this.settings.savannaBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SAVA_BEACH, this.settings.savannaBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_SHRB_LAND, this.settings.shrublandBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SHRB_OCEAN, this.settings.shrublandBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SHRB_BEACH, this.settings.shrublandBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SHRB_LAND, this.settings.shrublandBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SHRB_OCEAN, this.settings.shrublandBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SHRB_BEACH, this.settings.shrublandBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_SEAS_LAND, this.settings.seasonalForestBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SEAS_OCEAN, this.settings.seasonalForestBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SEAS_BEACH, this.settings.seasonalForestBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SEAS_LAND, this.settings.seasonalForestBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SEAS_OCEAN, this.settings.seasonalForestBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SEAS_BEACH, this.settings.seasonalForestBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_SWMP_LAND, this.settings.swamplandBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SWMP_OCEAN, this.settings.swamplandBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_SWMP_BEACH, this.settings.swamplandBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SWMP_LAND, this.settings.swamplandBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SWMP_OCEAN, this.settings.swamplandBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_SWMP_BEACH, this.settings.swamplandBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_TAIG_LAND, this.settings.taigaBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_TAIG_OCEAN, this.settings.taigaBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_TAIG_BEACH, this.settings.taigaBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TAIG_LAND, this.settings.taigaBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TAIG_OCEAN, this.settings.taigaBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TAIG_BEACH, this.settings.taigaBiomes.beachBiome);
         
-        this.setInitialText(this.pageList, GuiTags.PG4_TUND_LAND, this.settings.tundraBiomes.landBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_TUND_OCEAN, this.settings.tundraBiomes.oceanBiome);
-        this.setInitialText(this.pageList, GuiTags.PG4_TUND_BEACH, this.settings.tundraBiomes.beachBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TUND_LAND, this.settings.tundraBiomes.landBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TUND_OCEAN, this.settings.tundraBiomes.oceanBiome);
+        this.setInitialText(this.pageList, GuiTags.PG5_TUND_BEACH, this.settings.tundraBiomes.beachBiome);
 
         this.updatePageControls();
     }
@@ -634,150 +637,150 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, String string) {
-        if (entry >= GuiTags.PG4_DSRT_LAND && entry <= GuiTags.PG4_TUND_BEACH) {
+        if (entry >= GuiTags.PG5_DSRT_LAND && entry <= GuiTags.PG5_TUND_BEACH) {
             String entryBiome = string;
             
             String newEntryBiome = "";
             switch (entry) {
-                case GuiTags.PG4_DSRT_LAND:
+                case GuiTags.PG5_DSRT_LAND:
                     this.settings.desertBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.desertBiomes.landBiome;
                     break;
-                case GuiTags.PG4_DSRT_OCEAN:
+                case GuiTags.PG5_DSRT_OCEAN:
                     this.settings.desertBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.desertBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_DSRT_BEACH:
+                case GuiTags.PG5_DSRT_BEACH:
                     this.settings.desertBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.desertBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_FRST_LAND:
+                case GuiTags.PG5_FRST_LAND:
                     this.settings.forestBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.forestBiomes.landBiome;
                     break;
-                case GuiTags.PG4_FRST_OCEAN:
+                case GuiTags.PG5_FRST_OCEAN:
                     this.settings.forestBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.forestBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_FRST_BEACH:
+                case GuiTags.PG5_FRST_BEACH:
                     this.settings.forestBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.forestBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_ICED_LAND:
+                case GuiTags.PG5_ICED_LAND:
                     this.settings.iceDesertBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.iceDesertBiomes.landBiome;
                     break;
-                case GuiTags.PG4_ICED_OCEAN:
+                case GuiTags.PG5_ICED_OCEAN:
                     this.settings.iceDesertBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.iceDesertBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_ICED_BEACH:
+                case GuiTags.PG5_ICED_BEACH:
                     this.settings.iceDesertBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.iceDesertBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_PLNS_LAND:
+                case GuiTags.PG5_PLNS_LAND:
                     this.settings.plainsBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.plainsBiomes.landBiome;
                     break;
-                case GuiTags.PG4_PLNS_OCEAN:
+                case GuiTags.PG5_PLNS_OCEAN:
                     this.settings.plainsBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.plainsBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_PLNS_BEACH:
+                case GuiTags.PG5_PLNS_BEACH:
                     this.settings.plainsBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.plainsBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_RAIN_LAND:
+                case GuiTags.PG5_RAIN_LAND:
                     this.settings.rainforestBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.rainforestBiomes.landBiome;
                     break;
-                case GuiTags.PG4_RAIN_OCEAN:
+                case GuiTags.PG5_RAIN_OCEAN:
                     this.settings.rainforestBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.rainforestBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_RAIN_BEACH:
+                case GuiTags.PG5_RAIN_BEACH:
                     this.settings.rainforestBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.rainforestBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_SAVA_LAND:
+                case GuiTags.PG5_SAVA_LAND:
                     this.settings.savannaBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.savannaBiomes.landBiome;
                     break;
-                case GuiTags.PG4_SAVA_OCEAN:
+                case GuiTags.PG5_SAVA_OCEAN:
                     this.settings.savannaBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.savannaBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_SAVA_BEACH:
+                case GuiTags.PG5_SAVA_BEACH:
                     this.settings.savannaBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.savannaBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_SHRB_LAND:
+                case GuiTags.PG5_SHRB_LAND:
                     this.settings.shrublandBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.shrublandBiomes.landBiome;
                     break;
-                case GuiTags.PG4_SHRB_OCEAN:
+                case GuiTags.PG5_SHRB_OCEAN:
                     this.settings.shrublandBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.shrublandBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_SHRB_BEACH:
+                case GuiTags.PG5_SHRB_BEACH:
                     this.settings.shrublandBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.shrublandBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_SEAS_LAND:
+                case GuiTags.PG5_SEAS_LAND:
                     this.settings.seasonalForestBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.seasonalForestBiomes.landBiome;
                     break;
-                case GuiTags.PG4_SEAS_OCEAN:
+                case GuiTags.PG5_SEAS_OCEAN:
                     this.settings.seasonalForestBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.seasonalForestBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_SEAS_BEACH:
+                case GuiTags.PG5_SEAS_BEACH:
                     this.settings.seasonalForestBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.seasonalForestBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_SWMP_LAND:
+                case GuiTags.PG5_SWMP_LAND:
                     this.settings.swamplandBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.swamplandBiomes.landBiome;
                     break;
-                case GuiTags.PG4_SWMP_OCEAN:
+                case GuiTags.PG5_SWMP_OCEAN:
                     this.settings.swamplandBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.swamplandBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_SWMP_BEACH:
+                case GuiTags.PG5_SWMP_BEACH:
                     this.settings.swamplandBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.swamplandBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_TAIG_LAND:
+                case GuiTags.PG5_TAIG_LAND:
                     this.settings.taigaBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.taigaBiomes.landBiome;
                     break;
-                case GuiTags.PG4_TAIG_OCEAN:
+                case GuiTags.PG5_TAIG_OCEAN:
                     this.settings.taigaBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.taigaBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_TAIG_BEACH:
+                case GuiTags.PG5_TAIG_BEACH:
                     this.settings.taigaBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.taigaBiomes.beachBiome;
                     break;
                     
-                case GuiTags.PG4_TUND_LAND:
+                case GuiTags.PG5_TUND_LAND:
                     this.settings.tundraBiomes.landBiome = entryBiome;
                     newEntryBiome = this.settings.tundraBiomes.landBiome;
                     break;
-                case GuiTags.PG4_TUND_OCEAN:
+                case GuiTags.PG5_TUND_OCEAN:
                     this.settings.tundraBiomes.oceanBiome = entryBiome;
                     newEntryBiome = this.settings.tundraBiomes.oceanBiome;
                     break;
-                case GuiTags.PG4_TUND_BEACH:
+                case GuiTags.PG5_TUND_BEACH:
                     this.settings.tundraBiomes.beachBiome = entryBiome;
                     newEntryBiome = this.settings.tundraBiomes.beachBiome;
                     break;
@@ -796,83 +799,83 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             
             float newEntryValue = 0.0f;
             switch (entry) {
-                case GuiTags.PG3_F_MAIN_NS_X:
+                case GuiTags.PG4_F_MAIN_NS_X:
                     this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
                     newEntryValue = this.settings.mainNoiseScaleX;
                     break;
-                case GuiTags.PG3_F_MAIN_NS_Y:
+                case GuiTags.PG4_F_MAIN_NS_Y:
                     this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
                     newEntryValue = this.settings.mainNoiseScaleY;
                     break;
-                case GuiTags.PG3_F_MAIN_NS_Z:
+                case GuiTags.PG4_F_MAIN_NS_Z:
                     this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
                     newEntryValue = this.settings.mainNoiseScaleZ;
                     break;
-                case GuiTags.PG3_F_DPTH_NS_X:
+                case GuiTags.PG4_F_DPTH_NS_X:
                     this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
                     newEntryValue = this.settings.depthNoiseScaleX;
                     break;
-                case GuiTags.PG3_F_DPTH_NS_Z:
+                case GuiTags.PG4_F_DPTH_NS_Z:
                     this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
                     newEntryValue = this.settings.depthNoiseScaleZ;
                     break;
-                case GuiTags.PG3_F_DPTH_EXPT:
+                case GuiTags.PG4_F_DPTH_EXPT:
                     this.settings.depthNoiseScaleExponent = MathHelper.clamp(entryValue, 0.01f, 20.0f);
                     newEntryValue = this.settings.depthNoiseScaleExponent;
                     break;
-                case GuiTags.PG3_F_BASE_SIZE:
+                case GuiTags.PG4_F_BASE_SIZE:
                     this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
                     newEntryValue = this.settings.baseSize;
                     break;
-                case GuiTags.PG3_F_COORD_SCL:
+                case GuiTags.PG4_F_COORD_SCL:
                     this.settings.coordinateScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
                     newEntryValue = this.settings.coordinateScale;
                     break;
-                case GuiTags.PG3_F_HEIGH_SCL:
+                case GuiTags.PG4_F_HEIGH_SCL:
                     this.settings.heightScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
                     newEntryValue = this.settings.heightScale;
                     break;
-                case GuiTags.PG3_F_STRETCH_Y:
+                case GuiTags.PG4_F_STRETCH_Y:
                     this.settings.stretchY = MathHelper.clamp(entryValue, 0.01f, 50.0f);
                     newEntryValue = this.settings.stretchY;
                     break;
-                case GuiTags.PG3_F_UPPER_LIM:
+                case GuiTags.PG4_F_UPPER_LIM:
                     this.settings.upperLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
                     newEntryValue = this.settings.upperLimitScale;
                     break;
-                case GuiTags.PG3_F_LOWER_LIM:
+                case GuiTags.PG4_F_LOWER_LIM:
                     this.settings.lowerLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
                     newEntryValue = this.settings.lowerLimitScale;
                     break;
-                case GuiTags.PG3_F_HEIGH_LIM:
+                case GuiTags.PG4_F_HEIGH_LIM:
                     this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
                     newEntryValue = this.settings.height;
                     break;
-                case GuiTags.PG3_F_TEMP_SCL:
+                case GuiTags.PG4_F_TEMP_SCL:
                     this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
                     newEntryValue = this.settings.tempNoiseScale;
                     break;
-                case GuiTags.PG3_F_RAIN_SCL:
+                case GuiTags.PG4_F_RAIN_SCL:
                     this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
                     newEntryValue = this.settings.rainNoiseScale;
                     break;
-                case GuiTags.PG3_F_DETL_SCL:
+                case GuiTags.PG4_F_DETL_SCL:
                     this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
                     newEntryValue = this.settings.detailNoiseScale;
                     break;
-                case GuiTags.PG3_F_B_DPTH_WT:
+                case GuiTags.PG4_F_B_DPTH_WT:
                     this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
                     newEntryValue = this.settings.biomeDepthWeight;
                     break;
-                case GuiTags.PG3_F_B_DPTH_OF:
+                case GuiTags.PG4_F_B_DPTH_OF:
                     this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeDepthOffset;
                     break;
-                case GuiTags.PG3_F_B_SCL_WT:
+                case GuiTags.PG4_F_B_SCL_WT:
                     this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
                     newEntryValue = this.settings.biomeScaleWeight;
                     break;
-                case GuiTags.PG3_F_B_SCL_OF:
+                case GuiTags.PG4_F_B_SCL_OF:
                     this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeScaleOffset;
                     break;
@@ -899,37 +902,37 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_B_USE_BEACH:
                 this.settings.replaceBeachBiomes = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_GRASS:
+            case GuiTags.PG1_B_USE_GRASS:
                 this.settings.useTallGrass = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_FLOWERS:
+            case GuiTags.PG1_B_USE_FLOWERS:
                 this.settings.useNewFlowers = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_PADS:
+            case GuiTags.PG1_B_USE_PADS:
                 this.settings.useLilyPads = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_MELONS:
+            case GuiTags.PG1_B_USE_MELONS:
                 this.settings.useMelons = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_WELLS:
+            case GuiTags.PG1_B_USE_WELLS:
                 this.settings.useDesertWells = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_FOSSILS:
+            case GuiTags.PG1_B_USE_FOSSILS:
                 this.settings.useFossils = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_BIRCH:
+            case GuiTags.PG1_B_USE_BIRCH:
                 this.settings.useBirchTrees = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_PINE:
+            case GuiTags.PG1_B_USE_PINE:
                 this.settings.usePineTrees = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_SWAMP:
+            case GuiTags.PG1_B_USE_SWAMP:
                 this.settings.useSwampTrees = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_JUNGLE:
+            case GuiTags.PG1_B_USE_JUNGLE:
                 this.settings.useJungleTrees = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_ACACIA:
+            case GuiTags.PG1_B_USE_ACACIA:
                 this.settings.useAcaciaTrees = entryValue;
                 break;
                 
@@ -941,6 +944,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_B_USE_VILLAGES:
                 this.settings.useVillages = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_VARIANTS:
+                this.settings.useVillageVariants = entryValue;
                 break;
             case GuiTags.PG0_B_USE_SHAFTS:
                 this.settings.useMineShafts = entryValue;
@@ -979,64 +985,64 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     @Override
     public void setEntryValue(int entry, float entryValue) {
         switch (entry) {
-            case GuiTags.PG2_S_MAIN_NS_X:
+            case GuiTags.PG3_S_MAIN_NS_X:
                 this.settings.mainNoiseScaleX = entryValue;
                 break;
-            case GuiTags.PG2_S_MAIN_NS_Y:
+            case GuiTags.PG3_S_MAIN_NS_Y:
                 this.settings.mainNoiseScaleY = entryValue;
                 break;
-            case GuiTags.PG2_S_MAIN_NS_Z:
+            case GuiTags.PG3_S_MAIN_NS_Z:
                 this.settings.mainNoiseScaleZ = entryValue;
                 break;
-            case GuiTags.PG2_S_DPTH_NS_X:
+            case GuiTags.PG3_S_DPTH_NS_X:
                 this.settings.depthNoiseScaleX = entryValue;
                 break;
-            case GuiTags.PG2_S_DPTH_NS_Z:
+            case GuiTags.PG3_S_DPTH_NS_Z:
                 this.settings.depthNoiseScaleZ = entryValue;
                 break;
-            case GuiTags.PG2_S_DPTH_EXPT:
+            case GuiTags.PG3_S_DPTH_EXPT:
                 this.settings.depthNoiseScaleExponent = entryValue;
                 break;
-            case GuiTags.PG2_S_BASE_SIZE:
+            case GuiTags.PG3_S_BASE_SIZE:
                 this.settings.baseSize = entryValue;
                 break;    
-            case GuiTags.PG2_S_COORD_SCL:
+            case GuiTags.PG3_S_COORD_SCL:
                 this.settings.coordinateScale = entryValue;
                 break;
-            case GuiTags.PG2_S_HEIGH_SCL:
+            case GuiTags.PG3_S_HEIGH_SCL:
                 this.settings.heightScale = entryValue;
                 break;
-            case GuiTags.PG2_S_STRETCH_Y:
+            case GuiTags.PG3_S_STRETCH_Y:
                 this.settings.stretchY = entryValue;
                 break;
-            case GuiTags.PG2_S_UPPER_LIM:
+            case GuiTags.PG3_S_UPPER_LIM:
                 this.settings.upperLimitScale = entryValue;
                 break;
-            case GuiTags.PG2_S_LOWER_LIM:
+            case GuiTags.PG3_S_LOWER_LIM:
                 this.settings.lowerLimitScale = entryValue;
                 break;
-            case GuiTags.PG2_S_HEIGH_LIM:
+            case GuiTags.PG3_S_HEIGH_LIM:
                 this.settings.height = (int)entryValue;
                 break;
-            case GuiTags.PG2_S_TEMP_SCL:
+            case GuiTags.PG3_S_TEMP_SCL:
                 this.settings.tempNoiseScale = entryValue;
                 break;
-            case GuiTags.PG2_S_RAIN_SCL:
+            case GuiTags.PG3_S_RAIN_SCL:
                 this.settings.rainNoiseScale = entryValue;
                 break;
-            case GuiTags.PG2_S_DETL_SCL:
+            case GuiTags.PG3_S_DETL_SCL:
                 this.settings.detailNoiseScale = entryValue;
                 break;
-            case GuiTags.PG2_S_B_DPTH_WT:
+            case GuiTags.PG3_S_B_DPTH_WT:
                 this.settings.biomeDepthWeight = entryValue;
                 break;
-            case GuiTags.PG2_S_B_DPTH_OF:
+            case GuiTags.PG3_S_B_DPTH_OF:
                 this.settings.biomeDepthOffset = entryValue;
                 break;
-            case GuiTags.PG2_S_B_SCL_WT:
+            case GuiTags.PG3_S_B_SCL_WT:
                 this.settings.biomeScaleWeight = entryValue;
                 break;
-            case GuiTags.PG2_S_B_SCL_OF:
+            case GuiTags.PG3_S_B_SCL_OF:
                 this.settings.biomeScaleOffset = entryValue;
                 break;
                 
@@ -1062,165 +1068,165 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.settings.fixedBiome = ForgeRegistries.BIOMES.getValues().get((int)entryValue).getRegistryName().toString();
                 break;
 
-            case GuiTags.PG1_S_CLAY_SIZE:
+            case GuiTags.PG2_S_CLAY_SIZE:
                 this.settings.claySize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_CLAY_CNT:
+            case GuiTags.PG2_S_CLAY_CNT:
                 this.settings.clayCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_CLAY_MIN:
+            case GuiTags.PG2_S_CLAY_MIN:
                 this.settings.clayMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_CLAY_MAX:
+            case GuiTags.PG2_S_CLAY_MAX:
                 this.settings.clayMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIRT_SIZE:
+            case GuiTags.PG2_S_DIRT_SIZE:
                 this.settings.dirtSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIRT_CNT:
+            case GuiTags.PG2_S_DIRT_CNT:
                 this.settings.dirtCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIRT_MIN:
+            case GuiTags.PG2_S_DIRT_MIN:
                 this.settings.dirtMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIRT_MAX:
+            case GuiTags.PG2_S_DIRT_MAX:
                 this.settings.dirtMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAV_SIZE:
+            case GuiTags.PG2_S_GRAV_SIZE:
                 this.settings.gravelSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAV_CNT:
+            case GuiTags.PG2_S_GRAV_CNT:
                 this.settings.gravelCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAV_MIN:
+            case GuiTags.PG2_S_GRAV_MIN:
                 this.settings.gravelMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAV_MAX:
+            case GuiTags.PG2_S_GRAV_MAX:
                 this.settings.gravelMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAN_SIZE:
+            case GuiTags.PG2_S_GRAN_SIZE:
                 this.settings.graniteSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAN_CNT:
+            case GuiTags.PG2_S_GRAN_CNT:
                 this.settings.graniteCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAN_MIN:
+            case GuiTags.PG2_S_GRAN_MIN:
                 this.settings.graniteMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GRAN_MAX:
+            case GuiTags.PG2_S_GRAN_MAX:
                 this.settings.graniteMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIOR_SIZE:
+            case GuiTags.PG2_S_DIOR_SIZE:
                 this.settings.dioriteSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIOR_CNT:
+            case GuiTags.PG2_S_DIOR_CNT:
                 this.settings.dioriteCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIOR_MIN:
+            case GuiTags.PG2_S_DIOR_MIN:
                 this.settings.dioriteMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIOR_MAX:
+            case GuiTags.PG2_S_DIOR_MAX:
                 this.settings.dioriteMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_ANDE_SIZE:
+            case GuiTags.PG2_S_ANDE_SIZE:
                 this.settings.andesiteSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_ANDE_CNT:
+            case GuiTags.PG2_S_ANDE_CNT:
                 this.settings.andesiteCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_ANDE_MIN:
+            case GuiTags.PG2_S_ANDE_MIN:
                 this.settings.andesiteMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_ANDE_MAX:
+            case GuiTags.PG2_S_ANDE_MAX:
                 this.settings.andesiteMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_COAL_SIZE:
+            case GuiTags.PG2_S_COAL_SIZE:
                 this.settings.coalSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_COAL_CNT:
+            case GuiTags.PG2_S_COAL_CNT:
                 this.settings.coalCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_COAL_MIN:
+            case GuiTags.PG2_S_COAL_MIN:
                 this.settings.coalMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_COAL_MAX:
+            case GuiTags.PG2_S_COAL_MAX:
                 this.settings.coalMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_IRON_SIZE:
+            case GuiTags.PG2_S_IRON_SIZE:
                 this.settings.ironSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_IRON_CNT:
+            case GuiTags.PG2_S_IRON_CNT:
                 this.settings.ironCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_IRON_MIN:
+            case GuiTags.PG2_S_IRON_MIN:
                 this.settings.ironMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_IRON_MAX:
+            case GuiTags.PG2_S_IRON_MAX:
                 this.settings.ironMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GOLD_SIZE:
+            case GuiTags.PG2_S_GOLD_SIZE:
                 this.settings.goldSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GOLD_CNT:
+            case GuiTags.PG2_S_GOLD_CNT:
                 this.settings.goldCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GOLD_MIN:
+            case GuiTags.PG2_S_GOLD_MIN:
                 this.settings.goldMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_GOLD_MAX:
+            case GuiTags.PG2_S_GOLD_MAX:
                 this.settings.goldMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_REDS_SIZE:
+            case GuiTags.PG2_S_REDS_SIZE:
                 this.settings.redstoneSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_REDS_CNT:
+            case GuiTags.PG2_S_REDS_CNT:
                 this.settings.redstoneCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_REDS_MIN:
+            case GuiTags.PG2_S_REDS_MIN:
                 this.settings.redstoneMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_REDS_MAX:
+            case GuiTags.PG2_S_REDS_MAX:
                 this.settings.redstoneMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIAM_SIZE:
+            case GuiTags.PG2_S_DIAM_SIZE:
                 this.settings.diamondSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIAM_CNT:
+            case GuiTags.PG2_S_DIAM_CNT:
                 this.settings.diamondCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIAM_MIN:
+            case GuiTags.PG2_S_DIAM_MIN:
                 this.settings.diamondMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_DIAM_MAX:
+            case GuiTags.PG2_S_DIAM_MAX:
                 this.settings.diamondMaxHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_LAPS_SIZE:
+            case GuiTags.PG2_S_LAPS_SIZE:
                 this.settings.lapisSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_LAPS_CNT:
+            case GuiTags.PG2_S_LAPS_CNT:
                 this.settings.lapisCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_LAPS_CTR:
+            case GuiTags.PG2_S_LAPS_CTR:
                 this.settings.lapisCenterHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_LAPS_SPR:
+            case GuiTags.PG2_S_LAPS_SPR:
                 this.settings.lapisSpread = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_EMER_SIZE:
+            case GuiTags.PG2_S_EMER_SIZE:
                 this.settings.emeraldSize = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_EMER_CNT:
+            case GuiTags.PG2_S_EMER_CNT:
                 this.settings.emeraldCount = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_EMER_MIN:
+            case GuiTags.PG2_S_EMER_MIN:
                 this.settings.emeraldMinHeight = (int)entryValue;
                 break;
-            case GuiTags.PG1_S_EMER_MAX:
+            case GuiTags.PG2_S_EMER_MAX:
                 this.settings.emeraldMaxHeight = (int)entryValue;
                 break;
         }
         
-        if (entry >= GuiTags.PG2_S_MAIN_NS_X && entry <= GuiTags.PG2_S_B_SCL_OF) {
+        if (entry >= GuiTags.PG3_S_MAIN_NS_X && entry <= GuiTags.PG3_S_B_SCL_OF) {
             Gui gui = this.pageList.getComponent(GuiTags.offsetForward(entry));
             if (gui != null) {
                 ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
@@ -1365,47 +1371,47 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     private String getFormattedValue(int entry, float entryValue) {
         switch (entry) {
-            case GuiTags.PG2_S_MAIN_NS_X:
-            case GuiTags.PG2_S_MAIN_NS_Y:
-            case GuiTags.PG2_S_MAIN_NS_Z:
-            case GuiTags.PG2_S_DPTH_NS_X:
-            case GuiTags.PG2_S_DPTH_NS_Z:
-            case GuiTags.PG2_S_COORD_SCL:
-            case GuiTags.PG2_S_HEIGH_SCL:
-            case GuiTags.PG2_S_UPPER_LIM:
-            case GuiTags.PG2_S_LOWER_LIM:
+            case GuiTags.PG3_S_MAIN_NS_X:
+            case GuiTags.PG3_S_MAIN_NS_Y:
+            case GuiTags.PG3_S_MAIN_NS_Z:
+            case GuiTags.PG3_S_DPTH_NS_X:
+            case GuiTags.PG3_S_DPTH_NS_Z:
+            case GuiTags.PG3_S_COORD_SCL:
+            case GuiTags.PG3_S_HEIGH_SCL:
+            case GuiTags.PG3_S_UPPER_LIM:
+            case GuiTags.PG3_S_LOWER_LIM:
                 
-            case GuiTags.PG3_F_MAIN_NS_X:
-            case GuiTags.PG3_F_MAIN_NS_Y:
-            case GuiTags.PG3_F_MAIN_NS_Z:
-            case GuiTags.PG3_F_DPTH_NS_X:
-            case GuiTags.PG3_F_DPTH_NS_Z:
-            case GuiTags.PG3_F_COORD_SCL:
-            case GuiTags.PG3_F_HEIGH_SCL:
-            case GuiTags.PG3_F_UPPER_LIM:
-            case GuiTags.PG3_F_LOWER_LIM: return String.format("%5.3f", entryValue);
+            case GuiTags.PG4_F_MAIN_NS_X:
+            case GuiTags.PG4_F_MAIN_NS_Y:
+            case GuiTags.PG4_F_MAIN_NS_Z:
+            case GuiTags.PG4_F_DPTH_NS_X:
+            case GuiTags.PG4_F_DPTH_NS_Z:
+            case GuiTags.PG4_F_COORD_SCL:
+            case GuiTags.PG4_F_HEIGH_SCL:
+            case GuiTags.PG4_F_UPPER_LIM:
+            case GuiTags.PG4_F_LOWER_LIM: return String.format("%5.3f", entryValue);
             
-            case GuiTags.PG2_S_DPTH_EXPT:
-            case GuiTags.PG2_S_BASE_SIZE:
-            case GuiTags.PG2_S_STRETCH_Y:
-            case GuiTags.PG2_S_TEMP_SCL:
-            case GuiTags.PG2_S_RAIN_SCL:
-            case GuiTags.PG2_S_DETL_SCL:
-            case GuiTags.PG2_S_B_DPTH_WT:
-            case GuiTags.PG2_S_B_DPTH_OF:
-            case GuiTags.PG2_S_B_SCL_WT:
-            case GuiTags.PG2_S_B_SCL_OF:
+            case GuiTags.PG3_S_DPTH_EXPT:
+            case GuiTags.PG3_S_BASE_SIZE:
+            case GuiTags.PG3_S_STRETCH_Y:
+            case GuiTags.PG3_S_TEMP_SCL:
+            case GuiTags.PG3_S_RAIN_SCL:
+            case GuiTags.PG3_S_DETL_SCL:
+            case GuiTags.PG3_S_B_DPTH_WT:
+            case GuiTags.PG3_S_B_DPTH_OF:
+            case GuiTags.PG3_S_B_SCL_WT:
+            case GuiTags.PG3_S_B_SCL_OF:
                 
-            case GuiTags.PG3_F_DPTH_EXPT:
-            case GuiTags.PG3_F_BASE_SIZE:
-            case GuiTags.PG3_F_STRETCH_Y:
-            case GuiTags.PG3_F_TEMP_SCL:
-            case GuiTags.PG3_F_RAIN_SCL:
-            case GuiTags.PG3_F_DETL_SCL:
-            case GuiTags.PG3_F_B_DPTH_WT:
-            case GuiTags.PG3_F_B_DPTH_OF:
-            case GuiTags.PG3_F_B_SCL_WT:
-            case GuiTags.PG3_F_B_SCL_OF: return String.format("%2.3f", entryValue);
+            case GuiTags.PG4_F_DPTH_EXPT:
+            case GuiTags.PG4_F_BASE_SIZE:
+            case GuiTags.PG4_F_STRETCH_Y:
+            case GuiTags.PG4_F_TEMP_SCL:
+            case GuiTags.PG4_F_RAIN_SCL:
+            case GuiTags.PG4_F_DETL_SCL:
+            case GuiTags.PG4_F_B_DPTH_WT:
+            case GuiTags.PG4_F_B_DPTH_OF:
+            case GuiTags.PG4_F_B_SCL_WT:
+            case GuiTags.PG4_F_B_SCL_OF: return String.format("%2.3f", entryValue);
             
             case GuiTags.PG0_S_FIXED: {
                 Biome biome = ForgeRegistries.BIOMES.getValues().get((int)entryValue);

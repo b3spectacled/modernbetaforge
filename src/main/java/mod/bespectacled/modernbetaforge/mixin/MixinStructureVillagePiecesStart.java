@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorVillage;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaDesert;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaIceDesert;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSavanna;
@@ -38,6 +39,10 @@ public abstract class MixinStructureVillagePiecesStart {
     ) {
     	Biome biome = biomeProvider.getBiome(new BlockPos(x, 0, z), Biomes.DEFAULT);
     	AccessorVillage village = (AccessorVillage)this;
+    	
+    	if (biomeProvider instanceof ModernBetaBiomeProvider && !((ModernBetaBiomeProvider)biomeProvider).useVillageVariants()) {
+    	    return;
+    	}
     	
     	if (biome instanceof BiomeBetaDesert || biome instanceof BiomeBetaIceDesert) {
     	    village.setStructureType(1);
