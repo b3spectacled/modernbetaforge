@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge;
 
+import java.io.File;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,6 +10,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistry;
+import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
@@ -24,6 +27,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = ModernBeta.MODID, name = ModernBeta.NAME, version = ModernBeta.VERSION, acceptedMinecraftVersions = ModernBeta.MCVERSION)
@@ -64,19 +68,32 @@ public class ModernBeta {
         ModernBetaBuiltInRegistry.registerChunkSources();
         ModernBetaBuiltInRegistry.registerBiomeSources();
         ModernBetaBuiltInRegistry.registerNoiseSettings();
-
+        ModernBetaBuiltInRegistry.registerDataFixers();
+        
         proxy.init();
     }
     
     @EventHandler
     public static void postInit(FMLPostInitializationEvent event) { }
+
+    /*
+     * Update datafixers based on save file mod version
+     */
+    
+    @EventHandler
+    private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) {
+        MinecraftServer server = event.getServer();
+        File savesFolder = new File(server.getDataDirectory(), "saves");
+        
+        DataFixer.readModVersion(new File(savesFolder, server.getFolderName()));
+    }
     
     /*
      * Modify player spawning algorithm
      */
     
     @EventHandler
-    public void onFMLServerStartingEvent(FMLServerStartingEvent event) {
+    private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
         MinecraftServer server = event.getServer();
         WorldServer worldServer = server.getServer().getWorld(0);
 

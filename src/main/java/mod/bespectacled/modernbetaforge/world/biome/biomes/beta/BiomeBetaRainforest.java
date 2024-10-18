@@ -19,7 +19,7 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeBetaRainforest extends BiomeBeta {
-    private static final WorldGenTrees JUNGLE_TREE_FEATURE = new WorldGenTrees(false, 4, BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAF, false);
+    private static final WorldGenTrees JUNGLE_TREE_FEATURE = new WorldGenTrees(false, 4, BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, false);
     
     public BiomeBetaRainforest() {
         super(new BiomeProperties("Beta Rainforest")
@@ -55,7 +55,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
             return super.getRandomTreeFeature(random);
         
         if (random.nextInt(5) == 0) {
-            return JUNGLE_TREE_FEATURE;
+            return new WorldGenTrees(false, 4 + random.nextInt(4), BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, false);
         }
         
         if (random.nextInt(3) == 0) {

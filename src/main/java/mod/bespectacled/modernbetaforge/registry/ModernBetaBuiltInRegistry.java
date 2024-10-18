@@ -1,6 +1,9 @@
 package mod.bespectacled.modernbetaforge.registry;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.util.VersionUtil;
+import mod.bespectacled.modernbetaforge.util.datafix.DataFixer.DataFix;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
@@ -36,5 +39,9 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, ModernBetaNoiseSettings.INFDEV_415);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.PE.id, ModernBetaNoiseSettings.PE);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
+    }
+    
+    public static void registerDataFixers() {
+        // ModernBetaRegistries.DATA_FIX.register(NbtTags.USE_NEW_FLOWERS, new DataFix(version -> VersionUtil.isSameVersion(version), (jsonObject) -> {}));
     }
 }
