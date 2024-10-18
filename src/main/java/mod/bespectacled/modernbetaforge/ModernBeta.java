@@ -83,9 +83,11 @@ public class ModernBeta {
     @EventHandler
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) {
         MinecraftServer server = event.getServer();
-        File savesFolder = new File(server.getDataDirectory(), "saves");
         
-        DataFixer.readModVersion(new File(savesFolder, server.getFolderName()));
+        // Try client, then server save file directories
+        DataFixer.readModVersion(new File(new File(server.getDataDirectory(), "saves"), server.getFolderName()));
+        DataFixer.readModVersion(new File(server.getDataDirectory(), server.getFolderName()));
+        DataFixer.clearLoggedDataFixes();
     }
     
     /*

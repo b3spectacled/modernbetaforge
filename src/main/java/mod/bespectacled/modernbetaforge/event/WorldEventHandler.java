@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.event;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.client.Minecraft;
@@ -21,9 +20,6 @@ public class WorldEventHandler {
         
         boolean isModernBeta = world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType;
         boolean isOverworld = world.provider.isSurfaceWorld();
-        
-        // Reset list of datafixes that have been logged on world load.
-        DataFixer.resetLoggedDataFixes();
         
         /*
          * Climate samplers should only be set on the logical server (!isRemote) on world load,

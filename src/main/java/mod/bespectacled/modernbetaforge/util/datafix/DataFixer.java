@@ -61,7 +61,7 @@ public class DataFixer {
         }
     }
     
-    public static void resetLoggedDataFixes() {
+    public static void clearLoggedDataFixes() {
         LOGGED_DATA_FIXES.clear();
     }
     
