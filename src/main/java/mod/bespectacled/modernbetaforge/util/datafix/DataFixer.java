@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
@@ -21,13 +22,19 @@ public class DataFixer {
     private static final Set<String> LOGGED_DATA_FIXES = new HashSet<>();
     private static ComparableVersion version = new ComparableVersion(ModernBeta.VERSION);
     
-    public static void runDataFixer(JsonObject jsonObject) {
+    public static void runDataFixer(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        if (!LOGGED_DATA_FIXES.contains("versionLogger")) {
+            LOGGED_DATA_FIXES.add("versionLogger");
+            
+            ModernBeta.log(Level.INFO, String.format("[DataFix] Applying fixes for version '%s'..", version.toString()));
+        }
+        
         ModernBetaRegistries.DATA_FIX.getKeys().stream().forEach(key -> {
             if (jsonObject.has(key)) {
                 DataFix dataFix = ModernBetaRegistries.DATA_FIX.get(key);
                 
                 logDataFix(key, version);
-                dataFix.tryFix(jsonObject, version);
+                dataFix.tryFix(factory, jsonObject, version);
             }
         });
     }
@@ -78,16 +85,16 @@ public class DataFixer {
     
     public static class DataFix {
         private final Predicate<ComparableVersion> dataFixPredicate;
-        private final Consumer<JsonObject> dataFix;
+        private final BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFix;
         
-        public DataFix(Predicate<ComparableVersion> dataFixPredicate, Consumer<JsonObject> dataFix) {
+        public DataFix(Predicate<ComparableVersion> dataFixPredicate, BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFix) {
             this.dataFixPredicate = dataFixPredicate;
             this.dataFix = dataFix;
         }
         
-        private void tryFix(JsonObject jsonObject, ComparableVersion version) {
+        private void tryFix(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject, ComparableVersion version) {
             if (this.dataFixPredicate.test(version)) {
-                this.dataFix.accept(jsonObject);
+                this.dataFix.accept(factory, jsonObject);
             }
         }
     }

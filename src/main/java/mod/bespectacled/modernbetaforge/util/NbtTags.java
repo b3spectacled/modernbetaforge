@@ -40,19 +40,65 @@ public class NbtTags {
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
     
-    public static final String DESERT_BIOMES = "desertBiomes";
-    public static final String FOREST_BIOMES = "forestBiomes";
-    public static final String ICE_DESERT_BIOMES = "iceDesertBiomes";
-    public static final String PLAINS_BIOMES = "plainsBiomes";
-    public static final String RAINFOREST_BIOMES = "rainforestBiomes";
-    public static final String SAVANNA_BIOMES = "savannaBiomes";
-    public static final String SHRUBLAND_BIOMES = "shrublandBiomes";
-    public static final String SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
-    public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
-    public static final String TAIGA_BIOMES = "taigaBiomes";
-    public static final String TUNDRA_BIOMES = "tundraBiomes";
+    public static final String DESERT_BIOME_BASE = "desertBiomeBase";
+    public static final String DESERT_BIOME_OCEAN = "desertBiomeOcean";
+    public static final String DESERT_BIOME_BEACH = "desertBiomeBeach";
     
-    public static final String LAND_BIOME = "landBiome";
-    public static final String OCEAN_BIOME = "oceanBiome";
-    public static final String BEACH_BIOME = "beachBiome";
+    public static final String FOREST_BIOME_BASE = "forestBiomeBase";
+    public static final String FOREST_BIOME_OCEAN = "forestBiomeOcean";
+    public static final String FOREST_BIOME_BEACH = "forestBiomeBeach";
+    
+    public static final String ICE_DESERT_BIOME_BASE = "iceDesertBiomeBase";
+    public static final String ICE_DESERT_BIOME_OCEAN = "iceDesertBiomeOcean";
+    public static final String ICE_DESERT_BIOME_BEACH = "iceDesertBiomeBeach";
+    
+    public static final String PLAINS_BIOME_BASE = "plainsBiomeBase";
+    public static final String PLAINS_BIOME_OCEAN = "plainsBiomeOcean";
+    public static final String PLAINS_BIOME_BEACH = "plainsBiomeBeach";
+    
+    public static final String RAINFOREST_BIOME_BASE = "rainforestBiomeBase";
+    public static final String RAINFOREST_BIOME_OCEAN = "rainforestBiomeOcean";
+    public static final String RAINFOREST_BIOME_BEACH = "rainforestBiomeBeach";
+    
+    public static final String SAVANNA_BIOME_BASE = "savannaBiomeBase";
+    public static final String SAVANNA_BIOME_OCEAN = "savannaBiomeOcean";
+    public static final String SAVANNA_BIOME_BEACH = "savannaBiomeBeach";
+    
+    public static final String SHRUBLAND_BIOME_BASE = "shrublandBiomeBase";
+    public static final String SHRUBLAND_BIOME_OCEAN = "shrublandBiomeOcean";
+    public static final String SHRUBLAND_BIOME_BEACH = "shrublandBiomeBeach";
+    
+    public static final String SEASONAL_FOREST_BIOME_BASE = "seasonalForestBiomeBase";
+    public static final String SEASONAL_FOREST_BIOME_OCEAN = "seasonalForestBiomeOcean";
+    public static final String SEASONAL_FOREST_BIOME_BEACH = "seasonalForestBiomeBeach";
+    
+    public static final String SWAMPLAND_BIOME_BASE = "swamplandBiomeBase";
+    public static final String SWAMPLAND_BIOME_OCEAN = "swamplandBiomeOcean";
+    public static final String SWAMPLAND_BIOME_BEACH = "swamplandBiomeBeach";
+    
+    public static final String TAIGA_BIOME_BASE = "taigaBiomeBase";
+    public static final String TAIGA_BIOME_OCEAN = "taigaBiomeOcean";
+    public static final String TAIGA_BIOME_BEACH = "taigaBiomeBeach";
+    
+    public static final String TUNDRA_BIOME_BASE = "tundraBiomeBase";
+    public static final String TUNDRA_BIOME_OCEAN = "tundraBiomeOcean";
+    public static final String TUNDRA_BIOME_BEACH = "tundraBiomeBeach";
+
+    /* OLD */
+    
+    public static final String DEPR_DESERT_BIOMES = "desertBiomes";
+    public static final String DEPR_FOREST_BIOMES = "forestBiomes";
+    public static final String DEPR_ICE_DESERT_BIOMES = "iceDesertBiomes";
+    public static final String DEPR_PLAINS_BIOMES = "plainsBiomes";
+    public static final String DEPR_RAINFOREST_BIOMES = "rainforestBiomes";
+    public static final String DEPR_SAVANNA_BIOMES = "savannaBiomes";
+    public static final String DEPR_SHRUBLAND_BIOMES = "shrublandBiomes";
+    public static final String DEPR_SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
+    public static final String DEPR_SWAMPLAND_BIOMES = "swamplandBiomes";
+    public static final String DEPR_TAIGA_BIOMES = "taigaBiomes";
+    public static final String DEPR_TUNDRA_BIOMES = "tundraBiomes";
+    
+    public static final String DEPR_LAND_BIOME = "landBiome";
+    public static final String DEPR_OCEAN_BIOME = "oceanBiome";
+    public static final String DEPR_BEACH_BIOME = "beachBiome";
 }

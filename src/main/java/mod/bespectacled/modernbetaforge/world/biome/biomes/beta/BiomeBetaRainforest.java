@@ -19,8 +19,6 @@ import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeBetaRainforest extends BiomeBeta {
-    private static final WorldGenTrees JUNGLE_TREE_FEATURE = new WorldGenTrees(false, 4, BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, false);
-    
     public BiomeBetaRainforest() {
         super(new BiomeProperties("Beta Rainforest")
             .setTemperature(1.0f)

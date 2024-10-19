@@ -21,8 +21,6 @@ import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 
 public class ModernBetaChunkGeneratorSettings {
-    private static final Gson GSON = new Gson();
-    
     public final String chunkSource;
     public final String biomeSource;
     
@@ -152,17 +150,49 @@ public class ModernBetaChunkGeneratorSettings {
     public final float rainNoiseScale;
     public final float detailNoiseScale;
     
-    public final ClimateMappingSettings desertBiomes;
-    public final ClimateMappingSettings forestBiomes;
-    public final ClimateMappingSettings iceDesertBiomes;
-    public final ClimateMappingSettings plainsBiomes;
-    public final ClimateMappingSettings rainforestBiomes;
-    public final ClimateMappingSettings savannaBiomes;
-    public final ClimateMappingSettings shrublandBiomes;
-    public final ClimateMappingSettings seasonalForestBiomes;
-    public final ClimateMappingSettings swamplandBiomes;
-    public final ClimateMappingSettings taigaBiomes;
-    public final ClimateMappingSettings tundraBiomes;
+    public final String desertBiomeBase;
+    public final String desertBiomeOcean;
+    public final String desertBiomeBeach;
+    
+    public final String forestBiomeBase;
+    public final String forestBiomeOcean;
+    public final String forestBiomeBeach;
+    
+    public final String iceDesertBiomeBase;
+    public final String iceDesertBiomeOcean;
+    public final String iceDesertBiomeBeach;
+    
+    public final String plainsBiomeBase;
+    public final String plainsBiomeOcean;
+    public final String plainsBiomeBeach;
+    
+    public final String rainforestBiomeBase;
+    public final String rainforestBiomeOcean;
+    public final String rainforestBiomeBeach;
+    
+    public final String savannaBiomeBase;
+    public final String savannaBiomeOcean;
+    public final String savannaBiomeBeach;
+    
+    public final String shrublandBiomeBase;
+    public final String shrublandBiomeOcean;
+    public final String shrublandBiomeBeach;
+    
+    public final String seasonalForestBiomeBase;
+    public final String seasonalForestBiomeOcean;
+    public final String seasonalForestBiomeBeach;
+    
+    public final String swamplandBiomeBase;
+    public final String swamplandBiomeOcean;
+    public final String swamplandBiomeBeach;
+    
+    public final String taigaBiomeBase;
+    public final String taigaBiomeOcean;
+    public final String taigaBiomeBeach;
+    
+    public final String tundraBiomeBase;
+    public final String tundraBiomeOcean;
+    public final String tundraBiomeBeach;
     
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
@@ -294,17 +324,49 @@ public class ModernBetaChunkGeneratorSettings {
         this.rainNoiseScale = factory.rainNoiseScale;
         this.detailNoiseScale = factory.detailNoiseScale;
         
-        this.desertBiomes = factory.desertBiomes;
-        this.forestBiomes = factory.forestBiomes;
-        this.iceDesertBiomes = factory.iceDesertBiomes;
-        this.plainsBiomes = factory.plainsBiomes;
-        this.rainforestBiomes = factory.rainforestBiomes;
-        this.savannaBiomes = factory.savannaBiomes;
-        this.shrublandBiomes = factory.shrublandBiomes;
-        this.seasonalForestBiomes = factory.seasonalForestBiomes;
-        this.swamplandBiomes = factory.swamplandBiomes;
-        this.taigaBiomes = factory.taigaBiomes;
-        this.tundraBiomes = factory.tundraBiomes;
+        this.desertBiomeBase = factory.desertBiomeBase;
+        this.desertBiomeOcean = factory.desertBiomeOcean;
+        this.desertBiomeBeach = factory.desertBiomeBeach;
+        
+        this.forestBiomeBase = factory.forestBiomeBase;
+        this.forestBiomeOcean = factory.forestBiomeOcean;
+        this.forestBiomeBeach = factory.forestBiomeBeach;
+        
+        this.iceDesertBiomeBase = factory.iceDesertBiomeBase;
+        this.iceDesertBiomeOcean = factory.iceDesertBiomeOcean;
+        this.iceDesertBiomeBeach = factory.iceDesertBiomeBeach;
+        
+        this.plainsBiomeBase = factory.plainsBiomeBase;
+        this.plainsBiomeOcean = factory.plainsBiomeOcean;
+        this.plainsBiomeBeach = factory.plainsBiomeBeach;
+        
+        this.rainforestBiomeBase = factory.rainforestBiomeBase;
+        this.rainforestBiomeOcean = factory.rainforestBiomeOcean;
+        this.rainforestBiomeBeach = factory.rainforestBiomeBeach;
+        
+        this.savannaBiomeBase = factory.savannaBiomeBase;
+        this.savannaBiomeOcean = factory.savannaBiomeOcean;
+        this.savannaBiomeBeach = factory.savannaBiomeBeach;
+        
+        this.shrublandBiomeBase = factory.shrublandBiomeBase;
+        this.shrublandBiomeOcean = factory.shrublandBiomeOcean;
+        this.shrublandBiomeBeach = factory.shrublandBiomeBeach;
+        
+        this.seasonalForestBiomeBase = factory.seasonalForestBiomeBase;
+        this.seasonalForestBiomeOcean = factory.seasonalForestBiomeOcean;
+        this.seasonalForestBiomeBeach = factory.seasonalForestBiomeBeach;
+        
+        this.swamplandBiomeBase = factory.swamplandBiomeBase;
+        this.swamplandBiomeOcean = factory.swamplandBiomeOcean;
+        this.swamplandBiomeBeach = factory.swamplandBiomeBeach;
+        
+        this.taigaBiomeBase = factory.taigaBiomeBase;
+        this.taigaBiomeOcean = factory.taigaBiomeOcean;
+        this.taigaBiomeBeach = factory.taigaBiomeBeach;
+        
+        this.tundraBiomeBase = factory.tundraBiomeBase;
+        this.tundraBiomeOcean = factory.tundraBiomeOcean;
+        this.tundraBiomeBeach = factory.tundraBiomeBeach;
     }
     
     public static class Factory {
@@ -439,17 +501,49 @@ public class ModernBetaChunkGeneratorSettings {
         public float rainNoiseScale;
         public float detailNoiseScale;
         
-        public ClimateMappingSettings desertBiomes;
-        public ClimateMappingSettings forestBiomes;
-        public ClimateMappingSettings iceDesertBiomes;
-        public ClimateMappingSettings plainsBiomes;
-        public ClimateMappingSettings rainforestBiomes;
-        public ClimateMappingSettings savannaBiomes;
-        public ClimateMappingSettings shrublandBiomes;
-        public ClimateMappingSettings seasonalForestBiomes;
-        public ClimateMappingSettings swamplandBiomes;
-        public ClimateMappingSettings taigaBiomes;
-        public ClimateMappingSettings tundraBiomes;
+        public String desertBiomeBase;
+        public String desertBiomeOcean;
+        public String desertBiomeBeach;
+        
+        public String forestBiomeBase;
+        public String forestBiomeOcean;
+        public String forestBiomeBeach;
+        
+        public String iceDesertBiomeBase;
+        public String iceDesertBiomeOcean;
+        public String iceDesertBiomeBeach;
+        
+        public String plainsBiomeBase;
+        public String plainsBiomeOcean;
+        public String plainsBiomeBeach;
+        
+        public String rainforestBiomeBase;
+        public String rainforestBiomeOcean;
+        public String rainforestBiomeBeach;
+        
+        public String savannaBiomeBase;
+        public String savannaBiomeOcean;
+        public String savannaBiomeBeach;
+        
+        public String shrublandBiomeBase;
+        public String shrublandBiomeOcean;
+        public String shrublandBiomeBeach;
+        
+        public String seasonalForestBiomeBase;
+        public String seasonalForestBiomeOcean;
+        public String seasonalForestBiomeBeach;
+        
+        public String swamplandBiomeBase;
+        public String swamplandBiomeOcean;
+        public String swamplandBiomeBeach;
+        
+        public String taigaBiomeBase;
+        public String taigaBiomeOcean;
+        public String taigaBiomeBeach;
+        
+        public String tundraBiomeBase;
+        public String tundraBiomeOcean;
+        public String tundraBiomeBeach;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -597,72 +691,50 @@ public class ModernBetaChunkGeneratorSettings {
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
             
-            this.desertBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString()
-            );
+            this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
+            this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.desertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             
-            this.forestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.forestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString();
+            this.forestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.forestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.iceDesertBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
+            this.iceDesertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.iceDesertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.iceDesertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.plainsBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.plainsBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString();
+            this.plainsBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.plainsBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.rainforestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.rainforestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString();
+            this.rainforestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.rainforestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.savannaBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.savannaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString();
+            this.savannaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.savannaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.shrublandBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.shrublandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString();
+            this.shrublandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.shrublandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.seasonalForestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.seasonalForestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString();
+            this.seasonalForestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.seasonalForestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.swamplandBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.swamplandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString();
+            this.swamplandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.swamplandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.taigaBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
+            this.taigaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString();
+            this.taigaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.taigaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.tundraBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
-            
+            this.tundraBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.tundraBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.tundraBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
+
             this.setDefaults();
         }
         
@@ -795,72 +867,50 @@ public class ModernBetaChunkGeneratorSettings {
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
+
+            this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
+            this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.desertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             
-            this.desertBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString()
-            );
+            this.forestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString();
+            this.forestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.forestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.forestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.iceDesertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.iceDesertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.iceDesertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.iceDesertBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
+            this.plainsBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString();
+            this.plainsBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.plainsBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.plainsBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.rainforestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString();
+            this.rainforestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.rainforestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.rainforestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.savannaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString();
+            this.savannaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.savannaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.savannaBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.shrublandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString();
+            this.shrublandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.shrublandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.shrublandBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.seasonalForestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString();
+            this.seasonalForestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.seasonalForestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.seasonalForestBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.swamplandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString();
+            this.swamplandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.swamplandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.swamplandBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString()
-            );
+            this.taigaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString();
+            this.taigaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.taigaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.taigaBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
-            
-            this.tundraBiomes = new ClimateMappingSettings(
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString(),
-                ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString()
-            );
+            this.tundraBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.tundraBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.tundraBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
         }
         
         @Override
@@ -1006,17 +1056,49 @@ public class ModernBetaChunkGeneratorSettings {
                 this.rainNoiseScale == factory.rainNoiseScale &&
                 this.detailNoiseScale == factory.detailNoiseScale &&
                 
-                this.desertBiomes.equals(factory.desertBiomes) &&
-                this.forestBiomes.equals(factory.forestBiomes) &&
-                this.iceDesertBiomes.equals(factory.iceDesertBiomes) &&
-                this.plainsBiomes.equals(factory.plainsBiomes) &&
-                this.rainforestBiomes.equals(factory.rainforestBiomes) &&
-                this.savannaBiomes.equals(factory.savannaBiomes) &&
-                this.shrublandBiomes.equals(factory.shrublandBiomes) &&
-                this.seasonalForestBiomes.equals(factory.seasonalForestBiomes) &&
-                this.swamplandBiomes.equals(factory.swamplandBiomes) &&
-                this.taigaBiomes.equals(factory.taigaBiomes) &&
-                this.tundraBiomes.equals(factory.tundraBiomes)
+                this.desertBiomeBase.equals(factory.desertBiomeBase) &&
+                this.desertBiomeOcean.equals(factory.desertBiomeOcean) &&
+                this.desertBiomeBeach.equals(factory.desertBiomeBeach) &&
+                
+                this.forestBiomeBase.equals(factory.forestBiomeBase) &&
+                this.forestBiomeOcean.equals(factory.forestBiomeOcean) &&
+                this.forestBiomeBeach.equals(factory.forestBiomeBeach) &&
+                
+                this.iceDesertBiomeBase.equals(factory.iceDesertBiomeBase) &&
+                this.iceDesertBiomeOcean.equals(factory.iceDesertBiomeOcean) &&
+                this.iceDesertBiomeBeach.equals(factory.iceDesertBiomeBeach) &&
+                
+                this.plainsBiomeBase.equals(factory.plainsBiomeBase) &&
+                this.plainsBiomeOcean.equals(factory.plainsBiomeOcean) &&
+                this.plainsBiomeBeach.equals(factory.plainsBiomeBeach) &&
+                
+                this.rainforestBiomeBase.equals(factory.rainforestBiomeBase) &&
+                this.rainforestBiomeOcean.equals(factory.rainforestBiomeOcean) &&
+                this.rainforestBiomeBeach.equals(factory.rainforestBiomeBeach) &&
+                
+                this.savannaBiomeBase.equals(factory.savannaBiomeBase) &&
+                this.savannaBiomeOcean.equals(factory.savannaBiomeOcean) &&
+                this.savannaBiomeBeach.equals(factory.savannaBiomeBeach) &&
+                
+                this.shrublandBiomeBase.equals(factory.shrublandBiomeBase) &&
+                this.shrublandBiomeOcean.equals(factory.shrublandBiomeOcean) &&
+                this.shrublandBiomeBeach.equals(factory.shrublandBiomeBeach) &&
+                
+                this.seasonalForestBiomeBase.equals(factory.seasonalForestBiomeBase) &&
+                this.seasonalForestBiomeOcean.equals(factory.seasonalForestBiomeOcean) &&
+                this.seasonalForestBiomeBeach.equals(factory.seasonalForestBiomeBeach) &&
+                
+                this.swamplandBiomeBase.equals(factory.swamplandBiomeBase) &&
+                this.swamplandBiomeOcean.equals(factory.swamplandBiomeOcean) &&
+                this.swamplandBiomeBeach.equals(factory.swamplandBiomeBeach) &&
+                
+                this.taigaBiomeBase.equals(factory.taigaBiomeBase) &&
+                this.taigaBiomeOcean.equals(factory.taigaBiomeOcean) &&
+                this.taigaBiomeBeach.equals(factory.taigaBiomeBeach) &&
+                
+                this.tundraBiomeBase.equals(factory.tundraBiomeBase) &&
+                this.tundraBiomeOcean.equals(factory.tundraBiomeOcean) &&
+                this.tundraBiomeBeach.equals(factory.tundraBiomeBeach)
                 
                 ;
         }
@@ -1152,17 +1234,49 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
             hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
             
-            hashCode = 31 * hashCode + this.desertBiomes.hashCode();
-            hashCode = 31 * hashCode + this.forestBiomes.hashCode();
-            hashCode = 31 * hashCode + this.iceDesertBiomes.hashCode();
-            hashCode = 31 * hashCode + this.plainsBiomes.hashCode();
-            hashCode = 31 * hashCode + this.rainforestBiomes.hashCode();
-            hashCode = 31 * hashCode + this.savannaBiomes.hashCode();
-            hashCode = 31 * hashCode + this.shrublandBiomes.hashCode();
-            hashCode = 31 * hashCode + this.seasonalForestBiomes.hashCode();
-            hashCode = 31 * hashCode + this.swamplandBiomes.hashCode();
-            hashCode = 31 * hashCode + this.taigaBiomes.hashCode();
-            hashCode = 31 * hashCode + this.tundraBiomes.hashCode();
+            hashCode = 31 * hashCode + this.desertBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.desertBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.desertBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.forestBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.forestBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.forestBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.iceDesertBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.iceDesertBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.iceDesertBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.plainsBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.plainsBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.plainsBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.rainforestBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.rainforestBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.rainforestBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.savannaBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.savannaBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.savannaBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.shrublandBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.shrublandBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.shrublandBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.seasonalForestBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.seasonalForestBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.seasonalForestBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.swamplandBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.swamplandBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.swamplandBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.taigaBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.taigaBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.taigaBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.tundraBiomeBase.hashCode();
+            hashCode = 31 * hashCode + this.tundraBiomeOcean.hashCode();
+            hashCode = 31 * hashCode + this.tundraBiomeBeach.hashCode();
             
             return hashCode;
         }
@@ -1311,20 +1425,52 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
+
+                factory.desertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
+                factory.desertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
+                factory.desertBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BEACH, factory.desertBiomeBeach);
+
+                factory.forestBiomeBase = JsonUtils.getString(jsonObject, NbtTags.FOREST_BIOME_BASE, factory.forestBiomeBase);
+                factory.forestBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.FOREST_BIOME_OCEAN, factory.forestBiomeOcean);
+                factory.forestBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.FOREST_BIOME_BEACH, factory.forestBiomeBeach);
+
+                factory.iceDesertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.ICE_DESERT_BIOME_BASE, factory.iceDesertBiomeBase);
+                factory.iceDesertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.ICE_DESERT_BIOME_OCEAN, factory.iceDesertBiomeOcean);
+                factory.iceDesertBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.ICE_DESERT_BIOME_BEACH, factory.iceDesertBiomeBeach);
+
+                factory.plainsBiomeBase = JsonUtils.getString(jsonObject, NbtTags.PLAINS_BIOME_BASE, factory.plainsBiomeBase);
+                factory.plainsBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.PLAINS_BIOME_OCEAN, factory.plainsBiomeOcean);
+                factory.plainsBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.PLAINS_BIOME_BEACH, factory.plainsBiomeBeach);
+
+                factory.rainforestBiomeBase = JsonUtils.getString(jsonObject, NbtTags.RAINFOREST_BIOME_BASE, factory.rainforestBiomeBase);
+                factory.rainforestBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.RAINFOREST_BIOME_OCEAN, factory.rainforestBiomeOcean);
+                factory.rainforestBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.RAINFOREST_BIOME_BEACH, factory.rainforestBiomeBeach);
+
+                factory.savannaBiomeBase = JsonUtils.getString(jsonObject, NbtTags.SAVANNA_BIOME_BASE, factory.savannaBiomeBase);
+                factory.savannaBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.SAVANNA_BIOME_OCEAN, factory.savannaBiomeOcean);
+                factory.savannaBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.SAVANNA_BIOME_BEACH, factory.savannaBiomeBeach);
+
+                factory.shrublandBiomeBase = JsonUtils.getString(jsonObject, NbtTags.SHRUBLAND_BIOME_BASE, factory.shrublandBiomeBase);
+                factory.shrublandBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.SHRUBLAND_BIOME_OCEAN, factory.shrublandBiomeOcean);
+                factory.shrublandBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.SHRUBLAND_BIOME_BEACH, factory.shrublandBiomeBeach);
+
+                factory.seasonalForestBiomeBase = JsonUtils.getString(jsonObject, NbtTags.SEASONAL_FOREST_BIOME_BASE, factory.seasonalForestBiomeBase);
+                factory.seasonalForestBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.SEASONAL_FOREST_BIOME_OCEAN, factory.seasonalForestBiomeOcean);
+                factory.seasonalForestBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.SEASONAL_FOREST_BIOME_BEACH, factory.seasonalForestBiomeBeach);
+
+                factory.swamplandBiomeBase = JsonUtils.getString(jsonObject, NbtTags.SWAMPLAND_BIOME_BASE, factory.swamplandBiomeBase);
+                factory.swamplandBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.SWAMPLAND_BIOME_OCEAN, factory.swamplandBiomeOcean);
+                factory.swamplandBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.SWAMPLAND_BIOME_BEACH, factory.swamplandBiomeBeach);
+
+                factory.taigaBiomeBase = JsonUtils.getString(jsonObject, NbtTags.TAIGA_BIOME_BASE, factory.taigaBiomeBase);
+                factory.taigaBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TAIGA_BIOME_OCEAN, factory.taigaBiomeOcean);
+                factory.taigaBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TAIGA_BIOME_BEACH, factory.taigaBiomeBeach);
+
+                factory.tundraBiomeBase = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
+                factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
+                factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
                 
-                factory.desertBiomes = this.deserializeBiomes(jsonObject, NbtTags.DESERT_BIOMES, factory.desertBiomes);
-                factory.forestBiomes = this.deserializeBiomes(jsonObject, NbtTags.FOREST_BIOMES, factory.forestBiomes);
-                factory.iceDesertBiomes = this.deserializeBiomes(jsonObject, NbtTags.ICE_DESERT_BIOMES, factory.iceDesertBiomes);
-                factory.plainsBiomes = this.deserializeBiomes(jsonObject, NbtTags.PLAINS_BIOMES, factory.plainsBiomes);
-                factory.rainforestBiomes = this.deserializeBiomes(jsonObject, NbtTags.RAINFOREST_BIOMES, factory.rainforestBiomes);
-                factory.savannaBiomes = this.deserializeBiomes(jsonObject, NbtTags.SAVANNA_BIOMES, factory.savannaBiomes);
-                factory.shrublandBiomes = this.deserializeBiomes(jsonObject, NbtTags.SHRUBLAND_BIOMES, factory.shrublandBiomes);
-                factory.seasonalForestBiomes = this.deserializeBiomes(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES, factory.seasonalForestBiomes);
-                factory.swamplandBiomes = this.deserializeBiomes(jsonObject, NbtTags.SWAMPLAND_BIOMES, factory.swamplandBiomes);
-                factory.taigaBiomes = this.deserializeBiomes(jsonObject, NbtTags.TAIGA_BIOMES, factory.taigaBiomes);
-                factory.tundraBiomes = this.deserializeBiomes(jsonObject, NbtTags.TUNDRA_BIOMES, factory.tundraBiomes);
-                
-                DataFixer.runDataFixer(jsonObject);
+                DataFixer.runDataFixer(factory, jsonObject);
                 
             } catch (Exception e) {}
             
@@ -1464,53 +1610,51 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
             
-            jsonObject.addProperty(NbtTags.DESERT_BIOMES, GSON.toJson(factory.desertBiomes));
-            jsonObject.addProperty(NbtTags.FOREST_BIOMES, GSON.toJson(factory.forestBiomes));
-            jsonObject.addProperty(NbtTags.ICE_DESERT_BIOMES, GSON.toJson(factory.iceDesertBiomes));
-            jsonObject.addProperty(NbtTags.PLAINS_BIOMES, GSON.toJson(factory.plainsBiomes));
-            jsonObject.addProperty(NbtTags.RAINFOREST_BIOMES, GSON.toJson(factory.rainforestBiomes));
-            jsonObject.addProperty(NbtTags.SAVANNA_BIOMES, GSON.toJson(factory.savannaBiomes));
-            jsonObject.addProperty(NbtTags.SHRUBLAND_BIOMES, GSON.toJson(factory.shrublandBiomes));
-            jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOMES, GSON.toJson(factory.seasonalForestBiomes));
-            jsonObject.addProperty(NbtTags.SWAMPLAND_BIOMES, GSON.toJson(factory.swamplandBiomes));
-            jsonObject.addProperty(NbtTags.TAIGA_BIOMES, GSON.toJson(factory.taigaBiomes));
-            jsonObject.addProperty(NbtTags.TUNDRA_BIOMES, GSON.toJson(factory.tundraBiomes));
+            jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
+            jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
+            jsonObject.addProperty(NbtTags.DESERT_BIOME_BEACH, factory.desertBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.FOREST_BIOME_BASE, factory.forestBiomeBase);
+            jsonObject.addProperty(NbtTags.FOREST_BIOME_OCEAN, factory.forestBiomeOcean);
+            jsonObject.addProperty(NbtTags.FOREST_BIOME_BEACH, factory.forestBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_BASE, factory.iceDesertBiomeBase);
+            jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_OCEAN, factory.iceDesertBiomeOcean);
+            jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_BEACH, factory.iceDesertBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.PLAINS_BIOME_BASE, factory.plainsBiomeBase);
+            jsonObject.addProperty(NbtTags.PLAINS_BIOME_OCEAN, factory.plainsBiomeOcean);
+            jsonObject.addProperty(NbtTags.PLAINS_BIOME_BEACH, factory.plainsBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_BASE, factory.rainforestBiomeBase);
+            jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_OCEAN, factory.rainforestBiomeOcean);
+            jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_BEACH, factory.rainforestBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BASE, factory.savannaBiomeBase);
+            jsonObject.addProperty(NbtTags.SAVANNA_BIOME_OCEAN, factory.savannaBiomeOcean);
+            jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BEACH, factory.savannaBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_BASE, factory.shrublandBiomeBase);
+            jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_OCEAN, factory.shrublandBiomeOcean);
+            jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_BEACH, factory.shrublandBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_BASE, factory.seasonalForestBiomeBase);
+            jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, factory.seasonalForestBiomeOcean);
+            jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_BEACH, factory.seasonalForestBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_BASE, factory.swamplandBiomeBase);
+            jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_OCEAN, factory.swamplandBiomeOcean);
+            jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_BEACH, factory.swamplandBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.TAIGA_BIOME_BASE, factory.taigaBiomeBase);
+            jsonObject.addProperty(NbtTags.TAIGA_BIOME_OCEAN, factory.taigaBiomeOcean);
+            jsonObject.addProperty(NbtTags.TAIGA_BIOME_BEACH, factory.taigaBiomeBeach);
+            
+            jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
+            jsonObject.addProperty(NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
+            jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
             
             return jsonObject;
-        }
-        
-        private ClimateMappingSettings deserializeBiomes(JsonObject jsonObject, String tag, ClimateMappingSettings fallback) {
-            return GSON.fromJson(JsonUtils.getString(jsonObject, tag, GSON.toJson(fallback)), ClimateMappingSettings.class);
-        }
-    }
-    
-    public static class ClimateMappingSettings {
-        public String landBiome;
-        public String oceanBiome;
-        public String beachBiome;
-        
-        public ClimateMappingSettings(String landBiome, String oceanBiome, String beachBiome) {
-            this.landBiome = landBiome;
-            this.oceanBiome = oceanBiome;
-            this.beachBiome = beachBiome;
-        }
-        
-        @Override
-        public boolean equals(Object o) {
-            if (o == this) {
-                return true;
-            }
-            
-            if (!(o instanceof ClimateMappingSettings)) {
-                return false;
-            }
-            
-            ClimateMappingSettings other = (ClimateMappingSettings) o;
-            
-            return
-                this.landBiome.equals(other.landBiome) &&
-                this.oceanBiome.equals(other.oceanBiome) &&
-                this.beachBiome.equals(other.beachBiome);
         }
     }
 }

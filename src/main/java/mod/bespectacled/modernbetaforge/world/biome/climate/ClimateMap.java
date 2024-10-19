@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings.ClimateMappingSettings;
 import net.minecraft.world.biome.Biome;
 
 public class ClimateMap {
@@ -27,17 +27,73 @@ public class ClimateMap {
     }
     
     public void populateBiomeMap(Map<String, ClimateMapping> climateMap, ModernBetaChunkGeneratorSettings settings) {
-        climateMap.put("ice_desert", new ClimateMapping(settings.iceDesertBiomes));
-        climateMap.put("tundra", new ClimateMapping(settings.tundraBiomes));
-        climateMap.put("savanna", new ClimateMapping(settings.savannaBiomes));
-        climateMap.put("desert", new ClimateMapping(settings.desertBiomes));
-        climateMap.put("swampland", new ClimateMapping(settings.swamplandBiomes));
-        climateMap.put("taiga", new ClimateMapping(settings.taigaBiomes));
-        climateMap.put("shrubland", new ClimateMapping(settings.shrublandBiomes));
-        climateMap.put("forest", new ClimateMapping(settings.forestBiomes));
-        climateMap.put("plains", new ClimateMapping(settings.plainsBiomes));
-        climateMap.put("seasonal_forest", new ClimateMapping(settings.seasonalForestBiomes));
-        climateMap.put("rainforest", new ClimateMapping(settings.rainforestBiomes));
+        ClimateMapping iceDesert = new ClimateMapping(
+            settings.iceDesertBiomeBase,
+            settings.iceDesertBiomeOcean,
+            settings.iceDesertBiomeBeach
+        );
+        ClimateMapping tundra = new ClimateMapping(
+            settings.tundraBiomeBase,
+            settings.tundraBiomeOcean,
+            settings.tundraBiomeBeach
+        );
+        ClimateMapping savanna = new ClimateMapping(
+            settings.savannaBiomeBase,
+            settings.savannaBiomeOcean,
+            settings.savannaBiomeBeach
+        );
+        ClimateMapping desert = new ClimateMapping(
+            settings.desertBiomeBase,
+            settings.desertBiomeOcean,
+            settings.desertBiomeBeach
+        );
+        ClimateMapping swampland = new ClimateMapping(
+            settings.swamplandBiomeBase,
+            settings.swamplandBiomeOcean,
+            settings.swamplandBiomeBeach
+        );
+        ClimateMapping taiga = new ClimateMapping(
+            settings.taigaBiomeBase,
+            settings.taigaBiomeOcean,
+            settings.taigaBiomeBeach
+        );
+        ClimateMapping shrubland = new ClimateMapping(
+            settings.shrublandBiomeBase,
+            settings.shrublandBiomeOcean,
+            settings.shrublandBiomeBeach
+        );
+        ClimateMapping forest = new ClimateMapping(
+            settings.forestBiomeBase,
+            settings.forestBiomeOcean,
+            settings.forestBiomeBeach
+        );
+        ClimateMapping plains = new ClimateMapping(
+            settings.plainsBiomeBase,
+            settings.plainsBiomeOcean,
+            settings.plainsBiomeBeach
+        );
+        ClimateMapping seasonal_forest = new ClimateMapping(
+            settings.seasonalForestBiomeBase,
+            settings.seasonalForestBiomeBeach,
+            settings.seasonalForestBiomeBeach
+        );
+        ClimateMapping rainforest = new ClimateMapping(
+            settings.rainforestBiomeBase,
+            settings.rainforestBiomeOcean,
+            settings.rainforestBiomeBeach
+        );
+        
+        climateMap.put("ice_desert", iceDesert);
+        climateMap.put("tundra", tundra);
+        climateMap.put("savanna", savanna);
+        climateMap.put("desert", desert);
+        climateMap.put("swampland", swampland);
+        climateMap.put("taiga", taiga);
+        climateMap.put("shrubland", shrubland);
+        climateMap.put("forest", forest);
+        climateMap.put("plains", plains);
+        climateMap.put("seasonal_forest", seasonal_forest);
+        climateMap.put("rainforest", rainforest);
     }
     
     public Map<String, ClimateMapping> getMap() {
@@ -109,28 +165,28 @@ public class ClimateMap {
     }
     
     public static class ClimateMapping {
-        public final Biome landBiome;
+        public final Biome baseBiome;
         public final Biome oceanBiome;
         public final Biome beachBiome;
         
-        public ClimateMapping(ClimateMappingSettings settings) {
-            this.landBiome = BiomeUtil.getBiome(settings.landBiome, "landBiome");
-            this.oceanBiome = BiomeUtil.getBiome(settings.oceanBiome, "oceanBiome");
-            this.beachBiome = BiomeUtil.getBiome(settings.beachBiome, "beachBiome");
+        public ClimateMapping(Map<String, String> settings) {
+            this.baseBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_LAND_BIOME), "landBiome");
+            this.oceanBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_OCEAN_BIOME), "oceanBiome");
+            this.beachBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_BEACH_BIOME), "beachBiome");
         }
         
-        public ClimateMapping(Biome biome, Biome oceanBiome, Biome beachBiome) {
-            this.landBiome = biome;
-            this.oceanBiome = oceanBiome;
-            this.beachBiome = beachBiome;
+        public ClimateMapping(String baseBiome, String oceanBiome, String beachBiome) {
+            this.baseBiome = BiomeUtil.getBiome(baseBiome, "landBiome");
+            this.oceanBiome = BiomeUtil.getBiome(oceanBiome, "oceanBiome");
+            this.beachBiome = BiomeUtil.getBiome(beachBiome, "beachBiome");
         }
         
         public Biome biomeByClimateType(ClimateType type) {
             switch(type) {
-                case LAND: return this.landBiome;
+                case LAND: return this.baseBiome;
                 case OCEAN: return this.oceanBiome;
                 case BEACH: return this.beachBiome;
-                default: return this.landBiome;
+                default: return this.baseBiome;
             }
         }
         
@@ -147,7 +203,7 @@ public class ClimateMap {
             ClimateMapping other = (ClimateMapping) o;
             
             return
-                this.landBiome.equals(other.landBiome) &&
+                this.baseBiome.equals(other.baseBiome) &&
                 this.oceanBiome.equals(other.oceanBiome) &&
                 this.beachBiome.equals(other.beachBiome);
         }
