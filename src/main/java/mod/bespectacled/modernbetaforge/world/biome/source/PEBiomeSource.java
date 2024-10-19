@@ -34,7 +34,7 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
 
     @Override
     public Biome getBiome(int x, int z) {
-        return this.getBiomeByType(x, z, ClimateType.LAND);
+        return this.getBiomeByType(x, z, ClimateType.BASE);
     }
 
     @Override

@@ -169,6 +169,7 @@ public class ClimateMap {
         public final Biome oceanBiome;
         public final Biome beachBiome;
         
+        // Used by datafixer
         public ClimateMapping(Map<String, String> settings) {
             this.baseBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_LAND_BIOME), "landBiome");
             this.oceanBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_OCEAN_BIOME), "oceanBiome");
@@ -183,7 +184,7 @@ public class ClimateMap {
         
         public Biome biomeByClimateType(ClimateType type) {
             switch(type) {
-                case LAND: return this.baseBiome;
+                case BASE: return this.baseBiome;
                 case OCEAN: return this.oceanBiome;
                 case BEACH: return this.beachBiome;
                 default: return this.baseBiome;

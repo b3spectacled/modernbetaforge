@@ -83,20 +83,24 @@ public class NbtTags {
     public static final String TUNDRA_BIOME_BASE = "tundraBiomeBase";
     public static final String TUNDRA_BIOME_OCEAN = "tundraBiomeOcean";
     public static final String TUNDRA_BIOME_BEACH = "tundraBiomeBeach";
+    
+    public static final String BASE_BIOME = "baseBiome";
+    public static final String OCEAN_BIOME = "oceanBiome";
+    public static final String BEACH_BIOME = "beachBiome";
+    
+    public static final String DESERT_BIOMES = "desertBiomes";
+    public static final String FOREST_BIOMES = "forestBiomes";
+    public static final String ICE_DESERT_BIOMES = "iceDesertBiomes";
+    public static final String PLAINS_BIOMES = "plainsBiomes";
+    public static final String RAINFOREST_BIOMES = "rainforestBiomes";
+    public static final String SAVANNA_BIOMES = "savannaBiomes";
+    public static final String SHRUBLAND_BIOMES = "shrublandBiomes";
+    public static final String SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
+    public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
+    public static final String TAIGA_BIOMES = "taigaBiomes";
+    public static final String TUNDRA_BIOMES = "tundraBiomes";
 
     /* OLD */
-    
-    public static final String DEPR_DESERT_BIOMES = "desertBiomes";
-    public static final String DEPR_FOREST_BIOMES = "forestBiomes";
-    public static final String DEPR_ICE_DESERT_BIOMES = "iceDesertBiomes";
-    public static final String DEPR_PLAINS_BIOMES = "plainsBiomes";
-    public static final String DEPR_RAINFOREST_BIOMES = "rainforestBiomes";
-    public static final String DEPR_SAVANNA_BIOMES = "savannaBiomes";
-    public static final String DEPR_SHRUBLAND_BIOMES = "shrublandBiomes";
-    public static final String DEPR_SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
-    public static final String DEPR_SWAMPLAND_BIOMES = "swamplandBiomes";
-    public static final String DEPR_TAIGA_BIOMES = "taigaBiomes";
-    public static final String DEPR_TUNDRA_BIOMES = "tundraBiomes";
     
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";

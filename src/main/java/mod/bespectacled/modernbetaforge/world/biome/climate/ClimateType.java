@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome.climate;
 
 public enum ClimateType {
-    LAND,
+    BASE,
     OCEAN,
     BEACH
 }

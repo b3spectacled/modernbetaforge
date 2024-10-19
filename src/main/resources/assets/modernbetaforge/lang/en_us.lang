@@ -54,7 +54,7 @@ createWorld.customize.custom.swamplandBiomes=Swampland
 createWorld.customize.custom.taigaBiomes=Taiga
 createWorld.customize.custom.tundraBiomes=Tundra
 
-createWorld.customize.custom.landBiome=Base Biome
+createWorld.customize.custom.baseBiome=Base Biome
 createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 

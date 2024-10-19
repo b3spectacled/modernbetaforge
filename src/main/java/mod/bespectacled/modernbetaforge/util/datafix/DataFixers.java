@@ -20,7 +20,7 @@ public class DataFixers {
     public static ComparableVersion v1_1_0_0 = new ComparableVersion("1.1.0.0");  
     
     public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_DESERT_BIOMES);
+         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
          factory.desertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.desertBiomeBase);
          factory.desertBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.desertBiomeOcean);
@@ -28,7 +28,7 @@ public class DataFixers {
     }
     
     public static void fixForestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_FOREST_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.FOREST_BIOMES);
         
         factory.forestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.forestBiomeBase);
         factory.forestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.forestBiomeOcean);
@@ -36,7 +36,7 @@ public class DataFixers {
    }
     
     public static void fixIceDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_ICE_DESERT_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.ICE_DESERT_BIOMES);
         
         factory.iceDesertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.iceDesertBiomeBase);
         factory.iceDesertBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.iceDesertBiomeOcean);
@@ -44,7 +44,7 @@ public class DataFixers {
    }
     
     public static void fixPlainsBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_PLAINS_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.PLAINS_BIOMES);
         
         factory.plainsBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.plainsBiomeBase);
         factory.plainsBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.plainsBiomeOcean);
@@ -52,7 +52,7 @@ public class DataFixers {
    }
     
     public static void fixRainforestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_RAINFOREST_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.RAINFOREST_BIOMES);
         
         factory.rainforestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.rainforestBiomeBase);
         factory.rainforestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.rainforestBiomeOcean);
@@ -60,7 +60,7 @@ public class DataFixers {
    }
     
     public static void fixSavannaBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_SAVANNA_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SAVANNA_BIOMES);
         
         factory.savannaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.savannaBiomeBase);
         factory.savannaBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.savannaBiomeOcean);
@@ -68,7 +68,7 @@ public class DataFixers {
    }
     
     public static void fixShrublandBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_SHRUBLAND_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SHRUBLAND_BIOMES);
         
         factory.shrublandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.shrublandBiomeBase);
         factory.shrublandBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.shrublandBiomeOcean);
@@ -76,7 +76,7 @@ public class DataFixers {
    }
     
     public static void fixSeasonalForestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_SEASONAL_FOREST_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
         
         factory.seasonalForestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.seasonalForestBiomeBase);
         factory.seasonalForestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.seasonalForestBiomeOcean);
@@ -84,7 +84,7 @@ public class DataFixers {
    }
     
     public static void fixSwamplandBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_SEASONAL_FOREST_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
         
         factory.swamplandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.swamplandBiomeBase);
         factory.swamplandBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.swamplandBiomeOcean);
@@ -92,7 +92,7 @@ public class DataFixers {
    }
     
     public static void fixTaigaBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_TAIGA_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TAIGA_BIOMES);
         
         factory.taigaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.taigaBiomeBase);
         factory.taigaBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.taigaBiomeOcean);
@@ -100,7 +100,7 @@ public class DataFixers {
    }
     
     public static void fixTundraBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DEPR_TUNDRA_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TUNDRA_BIOMES);
         
         factory.tundraBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.tundraBiomeBase);
         factory.tundraBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.tundraBiomeOcean);
