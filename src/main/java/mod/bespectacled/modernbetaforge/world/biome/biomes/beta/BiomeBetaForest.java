@@ -45,6 +45,7 @@ public class BiomeBetaForest extends BiomeBeta {
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
         if (!settings.useBirchTrees)
+            // Revert to pre-Beta behavior of spawning fancy oaks with 1/10 chance instead of 1/3
             return super.getRandomTreeFeature(random);
         
         return this.getRandomTreeFeature(random);

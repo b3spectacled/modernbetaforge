@@ -50,7 +50,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
         if (!settings.useJungleTrees)
-            return super.getRandomTreeFeature(random);
+            return this.getRandomTreeFeature(random);
         
         if (random.nextInt(5) == 0) {
             return new WorldGenTrees(false, 4 + random.nextInt(4), BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, false);
