@@ -14,7 +14,7 @@ import net.minecraft.util.datafix.IFixType;
 import net.minecraft.util.datafix.IFixableData;
 
 public class ModDataFixers {
-    private static final int BIOME_MAP_FIX_ID = 1;
+    private static final int DATA_VERSION_V1_1_0_0 = 1100;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -37,7 +37,7 @@ public class ModDataFixers {
         new IFixableData() {
             @Override
             public int getFixVersion() {
-                return BIOME_MAP_FIX_ID;
+                return DATA_VERSION_V1_1_0_0;
             }
 
             @Override
