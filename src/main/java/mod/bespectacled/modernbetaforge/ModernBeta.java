@@ -78,14 +78,8 @@ public class ModernBeta {
     @EventHandler
     public static void postInit(FMLPostInitializationEvent event) { }
 
-    /*
-     * Clear logged datafixes
-     */
-    
     @EventHandler
-    private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) {
-        DataFixer.clearLoggedDataFixes();
-    }
+    private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) { }
     
     /*
      * Modify player spawning algorithm

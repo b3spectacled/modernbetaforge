@@ -26,10 +26,6 @@ public class DataFixer {
         });
     }
     
-    public static void clearLoggedDataFixes() {
-        LOGGED_DATA_FIXES.clear();
-    }
-    
     private static void logDataFix(String key) {
         ModernBeta.log(Level.INFO, String.format("[DataFix] Found old property '%s', fixing..", key));
     }
