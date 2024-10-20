@@ -3,9 +3,12 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,6 +43,11 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                String worldName = getWorldName(compound);
+                
+                if (!isModernBetaWorld(compound))
+                    return compound;
+                
                 if (compound.hasKey("generatorOptions")) {
                     String generatorOptions = compound.getString("generatorOptions");
                     ModernBetaChunkGeneratorSettings.Factory factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions);
@@ -66,7 +74,7 @@ public class ModDataFixers {
                     );
                     
                     for (String key : dataFixKeys) {
-                        DataFixer.runDataFixer(key, factory, jsonObject);
+                        DataFixer.runDataFixer(key, factory, jsonObject, worldName);
                     }
                     
                     compound.setString("generatorOptions", factory.toString().replace("\n", ""));
@@ -76,6 +84,22 @@ public class ModDataFixers {
             }
         }
     );
+    
+    private static boolean isModernBetaWorld(NBTTagCompound compound) {
+        if (compound.hasKey("generatorName")) {
+            return compound.getString("generatorName").equals("modernbeta");
+        }
+        
+        return false;
+    }
+    
+    private static String getWorldName(NBTTagCompound compound) {
+        if (compound.hasKey("LevelName")) {
+            return compound.getString("LevelName");
+        }
+        
+        return "";
+    }
     
     public static class ModDataFix {
         private final IFixType fixType;
