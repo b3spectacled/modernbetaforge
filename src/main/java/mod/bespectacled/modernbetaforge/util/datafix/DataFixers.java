@@ -81,7 +81,7 @@ public class DataFixers {
    }
     
     public static void fixSwamplandBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
+        Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SWAMPLAND_BIOMES);
         
         factory.swamplandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.swamplandBiomeBase);
         factory.swamplandBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.swamplandBiomeOcean);

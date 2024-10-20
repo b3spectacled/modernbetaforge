@@ -1,8 +1,5 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.JsonObject;
@@ -13,8 +10,6 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.DataFi
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 
 public class DataFixer {
-    private static final Set<String> LOGGED_DATA_FIXES = new HashSet<>();
-    
     public static void runDataFixer(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
         ModernBetaRegistries.DATA_FIX.getKeys().stream().forEach(key -> {
             if (jsonObject.has(key)) {

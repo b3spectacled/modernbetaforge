@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistry;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
