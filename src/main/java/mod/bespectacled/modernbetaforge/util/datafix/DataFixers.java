@@ -12,12 +12,9 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.JsonUtils;
-import net.minecraftforge.fml.common.versioning.ComparableVersion;
 
 public class DataFixers {
     private static final Gson GSON = new Gson();
-    
-    public static ComparableVersion v1_1_0_0 = new ComparableVersion("1.1.0.0");  
     
     public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);

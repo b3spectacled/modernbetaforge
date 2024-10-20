@@ -2,8 +2,6 @@ package mod.bespectacled.modernbetaforge.registry;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
-import mod.bespectacled.modernbetaforge.util.VersionUtil;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixer.DataFix;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
@@ -42,60 +40,16 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
     }
     
-    public static void registerDataFixers() {
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.DESERT_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixDesertBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.FOREST_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixForestBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.ICE_DESERT_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixIceDesertBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.PLAINS_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixPlainsBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.RAINFOREST_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixRainforestBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.SAVANNA_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixSavannaBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.SHRUBLAND_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixShrublandBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.SEASONAL_FOREST_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixSeasonalForestBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.SWAMPLAND_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixSwamplandBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.TAIGA_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixTaigaBiomes(factory, jsonObject))
-        );
-        
-        ModernBetaRegistries.DATA_FIX.register(
-            NbtTags.TUNDRA_BIOMES,
-            new DataFix(version -> VersionUtil.isLowerVersionThan(version, DataFixers.v1_1_0_0), (factory, jsonObject) -> DataFixers.fixTundraBiomes(factory, jsonObject))
-        );
+    public static void registerDataFixes() {
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes);
     }
 }

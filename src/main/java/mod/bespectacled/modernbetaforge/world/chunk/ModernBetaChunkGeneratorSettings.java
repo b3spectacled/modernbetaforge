@@ -15,7 +15,6 @@ import com.google.gson.JsonSerializer;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
@@ -549,10 +548,10 @@ public class ModernBetaChunkGeneratorSettings {
             if (string.isEmpty()) {
                 return new Factory();
             }
+            
             try {
                 return JsonUtils.<Factory>gsonDeserialize(Factory.JSON_ADAPTER, string, Factory.class);
-            }
-            catch (Exception lvt_1_1_) {
+            } catch (Exception e) {
                 return new Factory();
             }
         }
@@ -1469,8 +1468,6 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.tundraBiomeBase = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
                 factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
                 factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
-                
-                DataFixer.runDataFixer(factory, jsonObject);
                 
             } catch (Exception e) {}
             

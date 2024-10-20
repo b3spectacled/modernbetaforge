@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge;
 
-import java.io.File;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +9,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistry;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
+import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
@@ -36,6 +35,7 @@ public class ModernBeta {
     public static final String NAME = "Modern Beta Forge";
     public static final String VERSION = "1.1.0.0";
     public static final String MCVERSION = "1.12.2";
+    public static final int DATA_VERSION = 1;
 
     private static Logger logger = LogManager.getLogger(MODID);
     
@@ -68,7 +68,9 @@ public class ModernBeta {
         ModernBetaBuiltInRegistry.registerChunkSources();
         ModernBetaBuiltInRegistry.registerBiomeSources();
         ModernBetaBuiltInRegistry.registerNoiseSettings();
-        ModernBetaBuiltInRegistry.registerDataFixers();
+        ModernBetaBuiltInRegistry.registerDataFixes();
+        
+        ModDataFixer.INSTANCE.registerModDataFixes();
         
         proxy.init();
     }
@@ -77,16 +79,11 @@ public class ModernBeta {
     public static void postInit(FMLPostInitializationEvent event) { }
 
     /*
-     * Update datafixers based on save file mod version
+     * Clear logged datafixes
      */
     
     @EventHandler
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) {
-        MinecraftServer server = event.getServer();
-        
-        // Try client, then server save file directories
-        DataFixer.readModVersion(new File(new File(server.getDataDirectory(), "saves"), server.getFolderName()));
-        DataFixer.readModVersion(new File(server.getDataDirectory(), server.getFolderName()));
         DataFixer.clearLoggedDataFixes();
     }
     

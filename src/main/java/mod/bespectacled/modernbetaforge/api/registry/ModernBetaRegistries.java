@@ -1,8 +1,9 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
+import com.google.gson.JsonObject;
+
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixer.DataFix;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -37,5 +38,10 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface BiomeSourceCreator {
         BiomeSource apply(WorldInfo worldInfo);
+    }
+    
+    @FunctionalInterface
+    public static interface DataFix {
+        void apply(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject);
     }
 }
