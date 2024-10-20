@@ -19,12 +19,10 @@ public class ModDataFixers {
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
      * 
-     * Fix version appears to increment for each new fix,
-     * regardless of type.
-     * 
-     * Fix version should not be confused/aligned with mod data version.
+     * ModDataFix version should target the mod's data version where data should be fixed.
      * Fixes will run on data processed by an earlier mod data version of the DataFixer,
-     * but not by a later mod data version of the DataFixer.
+     * but not by a later mod data version of the DataFixer. 
+     * After being processed, the file will be updated to the mod's current data version.
      * 
      * Ex:
      * level.dat/Data/ForgeDataVersion/modernbetaforge value
