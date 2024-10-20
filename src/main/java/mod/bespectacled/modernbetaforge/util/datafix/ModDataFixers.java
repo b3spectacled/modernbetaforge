@@ -1,8 +1,12 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.FixTypes;
@@ -49,7 +53,24 @@ public class ModDataFixers {
                         jsonObject = new JsonObject();
                     }
                     
-                    DataFixer.runDataFixer(factory, jsonObject);
+                    List<String> dataFixKeys = Arrays.asList(
+                        NbtTags.DESERT_BIOMES,
+                        NbtTags.FOREST_BIOMES,
+                        NbtTags.ICE_DESERT_BIOMES,
+                        NbtTags.PLAINS_BIOMES,
+                        NbtTags.RAINFOREST_BIOMES,
+                        NbtTags.SAVANNA_BIOMES,
+                        NbtTags.SHRUBLAND_BIOMES,
+                        NbtTags.SEASONAL_FOREST_BIOMES,
+                        NbtTags.SWAMPLAND_BIOMES,
+                        NbtTags.TAIGA_BIOMES,
+                        NbtTags.TUNDRA_BIOMES
+                    );
+                    
+                    for (String key : dataFixKeys) {
+                        DataFixer.runDataFixer(key, factory, jsonObject);
+                    }
+                    
                     compound.setString("generatorOptions", factory.toString().replace("\n", ""));
                 }
                     

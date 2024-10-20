@@ -74,7 +74,7 @@ public class ClimateMap {
         );
         ClimateMapping seasonal_forest = new ClimateMapping(
             settings.seasonalForestBiomeBase,
-            settings.seasonalForestBiomeBeach,
+            settings.seasonalForestBiomeOcean,
             settings.seasonalForestBiomeBeach
         );
         ClimateMapping rainforest = new ClimateMapping(

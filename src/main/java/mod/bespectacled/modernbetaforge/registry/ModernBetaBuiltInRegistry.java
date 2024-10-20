@@ -43,6 +43,7 @@ public class ModernBetaBuiltInRegistry {
     public static void registerDataFixes() {
         ModernBetaRegistries.DATA_FIX.register(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes);
