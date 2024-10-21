@@ -61,22 +61,22 @@ createWorld.customize.custom.beachBiome=Beach Biome
 
 # World Customization Presets
 
-createWorld.customize.custom.preset.beta=Classic Beta
-createWorld.customize.custom.preset.alpha12=Classic Alpha 1.2
-createWorld.customize.custom.preset.alpha=Classic Alpha
-createWorld.customize.custom.preset.alphaWinter=Classic Alpha Winter
-createWorld.customize.custom.preset.infdev_415=Classic Infdev 20100415
-createWorld.customize.custom.preset.infdev_420=Classic Infdev 20100420
-createWorld.customize.custom.preset.infdev_611=Classic Infdev 20100611
-createWorld.customize.custom.preset.sky=Classic Skylands
-createWorld.customize.custom.preset.skylands=Beta Skylands
-createWorld.customize.custom.preset.isleLandBeta=Beta Isle Land
-createWorld.customize.custom.preset.caveDelightBeta=Beta Caver's Delight
-createWorld.customize.custom.preset.caveChaosBeta=Beta Caves of Chaos
-createWorld.customize.custom.preset.realisticBeta=Beta Realistic
-createWorld.customize.custom.preset.plusBeta=Beta Plus
-createWorld.customize.custom.preset.peBeta=Beta Pocket Edition
-createWorld.customize.custom.preset.releaseBeta=Beta 1.12.2
+createWorld.customize.custom.preset.classicBeta=Classic Beta
+createWorld.customize.custom.preset.classicAlpha12=Classic Alpha 1.2
+createWorld.customize.custom.preset.classicAlpha=Classic Alpha
+createWorld.customize.custom.preset.classicAlphaWinter=Classic Alpha Winter
+createWorld.customize.custom.preset.classicInfdev415=Classic Infdev 20100415
+createWorld.customize.custom.preset.classicInfdev420=Classic Infdev 20100420
+createWorld.customize.custom.preset.classicInfdev611=Classic Infdev 20100611
+createWorld.customize.custom.preset.classicSkylands=Classic Skylands
+createWorld.customize.custom.preset.betaSkylands=Beta Skylands
+createWorld.customize.custom.preset.betaIsleLand=Beta Isle Land
+createWorld.customize.custom.preset.betaCaveDelight=Beta Caver's Delight
+createWorld.customize.custom.preset.betaCaveChaos=Beta Caves of Chaos
+createWorld.customize.custom.preset.betaRealistic=Beta Realistic
+createWorld.customize.custom.preset.betaPlus=Beta Plus
+createWorld.customize.custom.preset.betaPE=Beta Pocket Edition
+createWorld.customize.custom.preset.betaRelease=Beta 1.12.2
 
 # Config
 

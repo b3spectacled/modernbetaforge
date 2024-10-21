@@ -22,6 +22,8 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.BETA.id, true)
         .put(ModernBetaBuiltInTypes.Chunk.ALPHA.id, false)
         .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, false)
         .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, false)
         .put(ModernBetaBuiltInTypes.Chunk.PE.id, true)
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, true)
