@@ -25,6 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
     private static final List<Info> PRESETS;
+    private static final int MAX_PRESET_LENGTH = 5000;
+    
     private ListPreset list;
     private GuiButton select;
     private GuiTextField export;
@@ -50,7 +52,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list = new ListPreset();
         
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
-        this.export.setMaxStringLength(5000);
+        this.export.setMaxStringLength(MAX_PRESET_LENGTH);
         this.export.setText(this.parent.saveValues());
         
         this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.presets.select")));

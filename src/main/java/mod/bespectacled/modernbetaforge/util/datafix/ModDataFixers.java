@@ -41,44 +41,21 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                String worldName = getWorldName(compound);
+                List<String> dataFixKeys = Arrays.asList(
+                    NbtTags.DESERT_BIOMES,
+                    NbtTags.FOREST_BIOMES,
+                    NbtTags.ICE_DESERT_BIOMES,
+                    NbtTags.PLAINS_BIOMES,
+                    NbtTags.RAINFOREST_BIOMES,
+                    NbtTags.SAVANNA_BIOMES,
+                    NbtTags.SHRUBLAND_BIOMES,
+                    NbtTags.SEASONAL_FOREST_BIOMES,
+                    NbtTags.SWAMPLAND_BIOMES,
+                    NbtTags.TAIGA_BIOMES,
+                    NbtTags.TUNDRA_BIOMES
+                );
                 
-                if (!isModernBetaWorld(compound))
-                    return compound;
-                
-                if (compound.hasKey("generatorOptions")) {
-                    String generatorOptions = compound.getString("generatorOptions");
-                    ModernBetaChunkGeneratorSettings.Factory factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions);
-                    
-                    JsonObject jsonObject;
-                    try {
-                        jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
-                    } catch (Exception e) {
-                        jsonObject = new JsonObject();
-                    }
-                    
-                    List<String> dataFixKeys = Arrays.asList(
-                        NbtTags.DESERT_BIOMES,
-                        NbtTags.FOREST_BIOMES,
-                        NbtTags.ICE_DESERT_BIOMES,
-                        NbtTags.PLAINS_BIOMES,
-                        NbtTags.RAINFOREST_BIOMES,
-                        NbtTags.SAVANNA_BIOMES,
-                        NbtTags.SHRUBLAND_BIOMES,
-                        NbtTags.SEASONAL_FOREST_BIOMES,
-                        NbtTags.SWAMPLAND_BIOMES,
-                        NbtTags.TAIGA_BIOMES,
-                        NbtTags.TUNDRA_BIOMES
-                    );
-                    
-                    for (String key : dataFixKeys) {
-                        DataFixer.runDataFixer(key, factory, jsonObject, worldName);
-                    }
-                    
-                    compound.setString("generatorOptions", factory.toString().replace("\n", ""));
-                }
-                    
-                return compound;
+                return fixGeneratorSettings(compound, dataFixKeys);
             }
         }
     );
@@ -86,7 +63,6 @@ public class ModDataFixers {
     public static final ModDataFix SANDSTONE_FIX = new ModDataFix(
         FixTypes.LEVEL,
         new IFixableData() {
-
             @Override
             public int getFixVersion() {
                 return DATA_VERSION_V1_1_1_0;
@@ -94,32 +70,36 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                String worldName = getWorldName(compound);
+                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE);
                 
-                if (!isModernBetaWorld(compound))
-                    return compound;
-                
-                if (compound.hasKey("generatorOptions")) {
-                    String generatorOptions = compound.getString("generatorOptions");
-                    ModernBetaChunkGeneratorSettings.Factory factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions);
-                    
-                    JsonObject jsonObject;
-                    try {
-                        jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
-                    } catch (Exception e) {
-                        jsonObject = new JsonObject();
-                    }
-                    
-                    DataFixer.runDataFixer(NbtTags.USE_SANDSTONE, factory, jsonObject, worldName);
-                    
-                    compound.setString("generatorOptions", factory.toString().replace("\n", ""));
-                }
-                
-                return compound;
+                return fixGeneratorSettings(compound, dataFixKeys);
             }
-            
         }
     );
+    
+    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<String> dataFixKeys) {
+        String worldName = getWorldName(compound);
+        
+        if (isModernBetaWorld(compound) && compound.hasKey("generatorOptions")) {
+            String generatorOptions = compound.getString("generatorOptions");
+            ModernBetaChunkGeneratorSettings.Factory factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions);
+            
+            JsonObject jsonObject;
+            try {
+                jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
+            } catch (Exception e) {
+                jsonObject = new JsonObject();      
+            }
+            
+            for (String key : dataFixKeys) {
+                DataFixer.runDataFixer(key, factory, jsonObject, worldName);
+            }
+            
+            compound.setString("generatorOptions", factory.toString().replace("\n", ""));
+        }
+        
+        return compound;
+    }
     
     private static boolean isModernBetaWorld(NBTTagCompound compound) {
         if (compound.hasKey("generatorName")) {

@@ -31,6 +31,17 @@ public class BiomeDecoratorInfdev415 extends ModernBetaBiomeDecorator {
          * Lake and dungeon generation handled in chunk source populate method.
          */
         
+        /*
+         * For future reference, since it will not be implemented here due to standardization of ore gen.
+         * 
+         * In Infdev 20100415, gold and diamond ore deposits do not generate given a number of attempts,
+         * they generate based on chance, like certain other features, based on the following conditions:
+         * 
+         * - Gold: random.nextInt(2) == 0
+         * - Diamond: random.nextInt(8) == 0 
+         * 
+         */
+        
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, random, startPos));
         this.populateOres(world, random, biome, startPos, mutablePos);
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(world, random, startPos));
