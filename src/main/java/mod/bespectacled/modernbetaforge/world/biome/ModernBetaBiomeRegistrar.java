@@ -21,6 +21,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTaiga;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTundra;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev611;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -59,6 +60,7 @@ public class ModernBetaBiomeRegistrar {
         
         biomeRegistry.register(new BiomeInfdev415(), ModernBetaBiomeTags.INFDEV_415, Type.FOREST);
         biomeRegistry.register(new BiomeInfdev420(), ModernBetaBiomeTags.INFDEV_420, Type.FOREST);
+        biomeRegistry.register(new BiomeInfdev611(), ModernBetaBiomeTags.INFDEV_611, Type.FOREST);
     }
     
     private static class BiomeRegistry {

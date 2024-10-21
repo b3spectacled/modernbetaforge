@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev420ChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev611ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.PEChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
@@ -23,6 +24,7 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, SkylandsChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, Infdev415ChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, Infdev420ChunkSource::new);
+        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, Infdev611ChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.PE.id, PEChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ReleaseChunkSource::new);
     }
@@ -38,6 +40,8 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.ALPHA.id, ModernBetaNoiseSettings.ALPHA);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, ModernBetaNoiseSettings.SKYLANDS);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, ModernBetaNoiseSettings.INFDEV_415);
+        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, ModernBetaNoiseSettings.INFDEV_420);
+        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, ModernBetaNoiseSettings.INFDEV_611);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.PE.id, ModernBetaNoiseSettings.PE);
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
     }

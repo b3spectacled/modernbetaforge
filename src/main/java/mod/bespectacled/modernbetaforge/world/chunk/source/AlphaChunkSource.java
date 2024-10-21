@@ -25,6 +25,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
+    private final boolean isInfdev611;
+    
     public AlphaChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
@@ -33,8 +35,20 @@ public class AlphaChunkSource extends NoiseChunkSource {
         long seed,
         boolean mapFeaturesEnabled
     ) {
+        this(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled, false);
+    }
+    
+    public AlphaChunkSource(
+        World world,
+        ModernBetaChunkGenerator chunkGenerator,
+        ModernBetaChunkGeneratorSettings settings,
+        ModernBetaNoiseSettings noiseSettings,
+        long seed,
+        boolean mapFeaturesEnabled,
+        boolean isInfdev611
+    ) {
         super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
-
+        
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
@@ -43,6 +57,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        
+        this.isInfdev611 = isInfdev611;
 
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
@@ -224,7 +240,9 @@ public class AlphaChunkSource extends NoiseChunkSource {
             }
 
             depth /= 1.4;
-            depth /= 2.0; // Omitting this creates the Infdev 20100611 generator.
+            
+            if (!isInfdev611)
+                depth /= 2.0; // Omitting this creates the Infdev 20100611 generator.
 
             scale = 0.0;
 

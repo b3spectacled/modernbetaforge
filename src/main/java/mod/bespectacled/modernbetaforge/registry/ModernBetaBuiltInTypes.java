@@ -7,6 +7,7 @@ public class ModernBetaBuiltInTypes {
         SKYLANDS("skylands", "Skylands"),
         INFDEV_420("infdev_420", "Infdev 420"),
         INFDEV_415("infdev_415", "Infdev 415"),
+        INFDEV_611("infdev_611", "Infdev 611"),
         PE("pe", "Pocket Edition"),
         RELEASE("release", "Release")
         ;
