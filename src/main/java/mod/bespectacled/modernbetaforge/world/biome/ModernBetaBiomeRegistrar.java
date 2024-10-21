@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSwampla
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTaiga;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTundra;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -45,6 +46,7 @@ public class ModernBetaBiomeRegistrar {
         biomeRegistry.register(new BiomeBetaPlains(), ModernBetaBiomeTags.BETA_PLAINS, Type.PLAINS, Type.DRY);
         biomeRegistry.register(new BiomeBetaSeasonalForest(), ModernBetaBiomeTags.BETA_SEASONAL_FOREST, Type.FOREST);
         biomeRegistry.register(new BiomeBetaRainforest(), ModernBetaBiomeTags.BETA_RAINFOREST, Type.FOREST, Type.LUSH, Type.JUNGLE, Type.DENSE, Type.WET);
+        biomeRegistry.register(new BiomeBetaSky(), ModernBetaBiomeTags.BETA_SKY, Type.PLAINS, Type.SPARSE, Type.DRY);
         
         biomeRegistry.register(new BiomeBetaOcean(), ModernBetaBiomeTags.BETA_OCEAN, Type.OCEAN, Type.WET);
         biomeRegistry.register(new BiomeBetaFrozenOcean(), ModernBetaBiomeTags.BETA_FROZEN_OCEAN, Type.OCEAN, Type.SNOWY, Type.COLD, Type.WET);
@@ -56,8 +58,7 @@ public class ModernBetaBiomeRegistrar {
         biomeRegistry.register(new BiomeAlphaWinter(), ModernBetaBiomeTags.ALPHA_WINTER, Type.FOREST, Type.SNOWY, Type.COLD);
         
         biomeRegistry.register(new BiomeInfdev415(), ModernBetaBiomeTags.INFDEV_415, Type.FOREST);
-        
-        biomeRegistry.register(new BiomeBetaSky(), ModernBetaBiomeTags.BETA_SKY, Type.PLAINS, Type.SPARSE, Type.DRY);
+        biomeRegistry.register(new BiomeInfdev420(), ModernBetaBiomeTags.INFDEV_420, Type.FOREST);
     }
     
     private static class BiomeRegistry {

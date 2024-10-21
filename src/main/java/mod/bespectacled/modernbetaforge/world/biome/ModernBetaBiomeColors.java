@@ -27,4 +27,10 @@ public final class ModernBetaBiomeColors {
     
     public static final int INFDEV_415_SKY_COLOR = 10079487;
     public static final int INFDEV_415_FOG_COLOR = 11587839;
+    
+    public static final int INFDEV_420_SKY_COLOR = 10079487;
+    public static final int INFDEV_420_FOG_COLOR = 11587839;
+    
+    public static final int INFDEV_611_SKY_COLOR = 10079487;
+    public static final int INFDEV_611_FOG_COLOR = 11587839;
 }

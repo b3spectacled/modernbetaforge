@@ -9,7 +9,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -34,7 +34,6 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
     ) {
         super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
         
-        // Noise Generators
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
@@ -49,7 +48,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
 
     @Override
     public SpawnLocator getSpawnLocator() {
-        return new BetaSpawnLocator();
+        return new InfdevSpawnLocator();
     }
 
     @Override
@@ -167,8 +166,8 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
 
-        double coordinateScale = this.settings.coordinateScale;
-        double heightScale = this.settings.heightScale;
+        double coordinateScale = this.settings.coordinateScale; // Default: 684.412
+        double heightScale = this.settings.heightScale;         // Default: 984.412
         
         double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
         double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 400
@@ -179,17 +178,15 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
-            
             double densityOffset = this.getOffset(noiseY);
             
             // Default values: 8.55515, 1.71103, 8.55515
             double mainNoiseVal = this.mainOctaveNoise.sample(
                 noiseX * coordinateScale / mainNoiseScaleX,
-                noiseY * coordinateScale / mainNoiseScaleY, 
+                noiseY * coordinateScale / mainNoiseScaleY, // Original source uses 684.412 instead of 984.412, so using coordinateScale here.
                 noiseZ * coordinateScale / mainNoiseScaleZ
             ) / 2.0;
             
-            // Do not clamp noise if generating with noise caves!
             if (mainNoiseVal < -1.0) {
                 density = this.minLimitOctaveNoise.sample(
                     noiseX * coordinateScale, 

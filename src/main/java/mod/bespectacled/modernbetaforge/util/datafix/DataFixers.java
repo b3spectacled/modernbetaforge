@@ -116,7 +116,7 @@ public class DataFixers {
    }
     
     public static void fixSandstone(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.useSandstone = SHOULD_GEN_SANDSTONE.get(factory.chunkSource);
+        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, true);
     }
     
     @SuppressWarnings("unchecked")

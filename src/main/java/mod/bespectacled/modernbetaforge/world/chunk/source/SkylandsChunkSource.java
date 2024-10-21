@@ -30,7 +30,6 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     ) {
         super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
 
-        // Noise Generators
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);

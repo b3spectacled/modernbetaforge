@@ -5,6 +5,7 @@ public class ModernBetaBuiltInTypes {
         BETA("beta", "Beta"),
         ALPHA("alpha", "Alpha"),
         SKYLANDS("skylands", "Skylands"),
+        INFDEV_420("infdev_420", "Infdev 420"),
         INFDEV_415("infdev_415", "Infdev 415"),
         PE("pe", "Pocket Edition"),
         RELEASE("release", "Release")

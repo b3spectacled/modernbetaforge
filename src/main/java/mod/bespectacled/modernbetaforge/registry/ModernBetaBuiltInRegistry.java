@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev420ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.PEChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
@@ -21,6 +22,7 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.ALPHA.id, AlphaChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, SkylandsChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, Infdev415ChunkSource::new);
+        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, Infdev420ChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.PE.id, PEChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ReleaseChunkSource::new);
     }

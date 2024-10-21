@@ -23,6 +23,7 @@ public class ModernBetaBiomeTags {
     public static final String ALPHA_WINTER = "alpha_winter";
     
     public static final String INFDEV_415 = "infdev_415";
+    public static final String INFDEV_420 = "infdev_420";
     
     public static final String BETA_SKY = "beta_sky";
 }

@@ -44,7 +44,8 @@ public class ModernBetaBiomeLists {
         );
         
         INFDEV_BIOMES = Arrays.asList(
-            ModernBetaBiomeHolders.INFDEV_415
+            ModernBetaBiomeHolders.INFDEV_415,
+            ModernBetaBiomeHolders.INFDEV_420
         );
         
         ALL_BIOMES = new ArrayList<>();

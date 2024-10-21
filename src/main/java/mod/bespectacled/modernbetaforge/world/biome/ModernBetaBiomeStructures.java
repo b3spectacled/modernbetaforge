@@ -29,16 +29,17 @@ public class ModernBetaBiomeStructures {
         
         /* Alpha */
         
-        addStrongholdBiome(ModernBetaBiomeHolders.ALPHA);
-        addStrongholdBiome(ModernBetaBiomeHolders.ALPHA_WINTER);
+        for (Biome biome : ModernBetaBiomeLists.ALPHA_BIOMES) {
+            addStrongholdBiome(biome);
+            addVillageBiome(biome);
+        }
         
-        addVillageBiome(ModernBetaBiomeHolders.ALPHA);
-        addVillageBiome(ModernBetaBiomeHolders.ALPHA_WINTER);
+        /* Infdev */ 
         
-        /* Infdev 415 */ 
-        
-        addStrongholdBiome(ModernBetaBiomeHolders.INFDEV_415);
-        addVillageBiome(ModernBetaBiomeHolders.INFDEV_415);
+        for (Biome biome : ModernBetaBiomeLists.INFDEV_BIOMES) {
+            addStrongholdBiome(biome);
+            addVillageBiome(biome);
+        }
     }
     
     public static void addStrongholdBiome(Biome biome) {

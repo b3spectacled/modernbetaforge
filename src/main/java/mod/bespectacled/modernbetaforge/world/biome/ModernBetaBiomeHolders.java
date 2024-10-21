@@ -52,6 +52,9 @@ public class ModernBetaBiomeHolders {
     @ObjectHolder("beta_snowy_beach")
     public static final Biome BETA_SNOWY_BEACH = null;
     
+    @ObjectHolder("beta_sky")
+    public static final Biome BETA_SKY = null;
+    
     @ObjectHolder("alpha")
     public static final Biome ALPHA = null;
     
@@ -61,6 +64,6 @@ public class ModernBetaBiomeHolders {
     @ObjectHolder("infdev_415")
     public static final Biome INFDEV_415 = null;
     
-    @ObjectHolder("beta_sky")
-    public static final Biome BETA_SKY = null;
+    @ObjectHolder("infdev_420")
+    public static final Biome INFDEV_420 = null;
 }

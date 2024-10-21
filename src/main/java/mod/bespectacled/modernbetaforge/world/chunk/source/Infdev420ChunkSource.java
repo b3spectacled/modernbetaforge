@@ -9,23 +9,21 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
-public class AlphaChunkSource extends NoiseChunkSource {
+public class Infdev420ChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
     private final PerlinOctaveNoise maxLimitOctaveNoise;
     private final PerlinOctaveNoise mainOctaveNoise;
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
-    private final PerlinOctaveNoise scaleOctaveNoise;
-    private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    public AlphaChunkSource(
+    public Infdev420ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaChunkGeneratorSettings settings,
@@ -40,127 +38,116 @@ public class AlphaChunkSource extends NoiseChunkSource {
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
-        this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
-        this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        new PerlinOctaveNoise(this.random, 5, true); // Unused in original source
+        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 5, true);
 
         this.setForestOctaveNoise(this.forestOctaveNoise);
         this.setBeachOctaveNoise(this.beachOctaveNoise);
     }
-
+    
     @Override
     public SpawnLocator getSpawnLocator() {
-        return new BetaSpawnLocator();
+        return new InfdevSpawnLocator();
     }
-
+    
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
-
+        
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
         int bedrockFloor = this.worldMinY + this.bedrockFloor;
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
-        
-        double[] sandNoise = this.beachOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0,
-            16, 16, 1,
-            scale, scale, 1.0
-        );
-        
-        double[] gravelNoise = this.beachOctaveNoise.sampleAlpha(
-            chunkZ * 16, 109.0134, chunkX * 16,
-            16, 1, 16,
-            scale, 1.0, scale
-        );
-        
-        double[] surfaceNoise = this.surfaceOctaveNoise.sampleAlpha(
-            chunkX * 16, chunkZ * 16, 0.0,
-            16, 16, 1,
-            scale * 2.0, scale * 2.0, scale * 2.0
-        );
-        
-        for (int localX = 0; localX < 16; localX++) {
-            for (int localZ = 0; localZ < 16; localZ++) {
+        Random bedrockRand = this.createSurfaceRandom(chunkX, chunkZ);
+
+        for (int localX = 0; localX < 16; ++localX) {
+            for (int localZ = 0; localZ < 16; ++localZ) {
                 int x = startX + localX;
                 int z = startZ + localZ;
-
-                boolean genSandBeach = sandNoise[localX + localZ * 16] + rand.nextDouble() * 0.2 > 0.0;
-                boolean genGravelBeach = gravelNoise[localX + localZ * 16] + rand.nextDouble() * 0.2 > 3.0;
                 
-                int surfaceDepth = (int) (surfaceNoise[localX + localZ * 16] / 3.0 + 3.0 + rand.nextDouble() * 0.25);
+                boolean genSandBeach = this.beachOctaveNoise.sample(
+                    x * scale,
+                    z * scale,
+                    0.0
+                ) + rand.nextDouble() * 0.2 > 0.0;
+                
+                boolean genGravelBeach = this.beachOctaveNoise.sample(
+                    z * scale, 
+                    109.0134,
+                    x * scale
+                ) + rand.nextDouble() * 0.2 > 3.0;
+                
+                double surfaceNoise = this.surfaceOctaveNoise.sampleXY(
+                    x * scale * 2.0,
+                    z * scale * 2.0
+                );
+                
+                int surfaceDepth = (int)(surfaceNoise / 3.0 + 3.0 + rand.nextDouble() * 0.25);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
-                
+
                 IBlockState topBlock = biome.topBlock;
                 IBlockState fillerBlock = biome.fillerBlock;
-                
+
                 // Skip if used custom surface generation or if below minimum surface level.
                 if (this.useCustomSurfaceBuilder(biome, chunkPrimer, rand, x, z)) {
                     continue;
                 }
                 
-                // Generate from top to bottom of world
-                for (int y = this.worldTopY - 1; y >= this.worldMinY; y--) {
+                for (int y = this.worldTopY - 1; y >= this.worldMinY; --y) {
                     
                     // Place bedrock
-                    if (y <= bedrockFloor + rand.nextInt(6) - 1) {
+                    if (y <= bedrockFloor + bedrockRand.nextInt(5)) {
                         chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                         continue;
                     }
-
+                    
                     IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
-
+                    
                     if (BlockStates.isAir(blockState)) { // Skip if air block
                         runDepth = -1;
-                        continue;
-                    }
-
-                    if (!BlockStates.isEqual(blockState, this.defaultBlock)) { // Skip if not stone
-                        continue;
-                    }
-
-                    if (runDepth == -1) {
-                        if (surfaceDepth <= 0) { // Generate stone basin if noise permits
-                            topBlock = BlockStates.AIR;
-                            fillerBlock = this.defaultBlock;
+                        
+                    } else if (BlockStates.isEqual(blockState, this.defaultBlock)) {
+                        if (runDepth == -1) {
+                            if (surfaceDepth <= 0) {
+                                topBlock = BlockStates.AIR;
+                                fillerBlock = this.defaultBlock;
+                                
+                            } else if (y >= this.seaLevel - 4 && y <= this.seaLevel + 1) {
+                                topBlock = biome.topBlock;
+                                fillerBlock = biome.fillerBlock;
+                                
+                                if (genGravelBeach) {
+                                    topBlock = BlockStates.AIR;
+                                    fillerBlock = BlockStates.GRAVEL;
+                                }
+                                
+                                if (genSandBeach) {
+                                    topBlock = BlockStates.SAND;
+                                    fillerBlock = BlockStates.SAND;
+                                }
+                            }
                             
-                        } else if (y >= this.seaLevel - 4 && y <= this.seaLevel + 1) { // Generate beaches at this y range
-                            topBlock = biome.topBlock;
-                            fillerBlock = biome.fillerBlock;
-
-                            if (genGravelBeach) {
-                                topBlock = BlockStates.AIR; // This reduces gravel beach height by 1
-                                fillerBlock = BlockStates.GRAVEL;
+                            runDepth = surfaceDepth;
+                            
+                            if (y < this.seaLevel && BlockStates.isAir(topBlock)) { // Generate water bodies
+                                topBlock = this.defaultFluid;
                             }
-
-                            if (genSandBeach) {
-                                topBlock = BlockStates.SAND;
-                                fillerBlock = BlockStates.SAND;
-                            }
-                        }
-                        
-                        if (y < this.seaLevel && BlockStates.isAir(topBlock)) {
-                            topBlock = this.defaultFluid;
-                        }
-
-                        runDepth = surfaceDepth;
-                        
-                        if (y >= this.seaLevel - 1) {
-                            chunkPrimer.setBlockState(localX, y, localZ, topBlock);
-                        } else {
+                            
+                            blockState = y >= this.seaLevel - 1 || (y < this.seaLevel - 1 && BlockStates.isAir(chunkPrimer.getBlockState(localX, y + 1, localZ))) ?
+                                topBlock : 
+                                fillerBlock;
+                            
+                            chunkPrimer.setBlockState(localX, y, localZ, blockState);
+                            
+                        } else if (runDepth > 0) {
                             chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
+                            
+                            --runDepth;
                         }
-
-                        continue;
-                    }
-                    
-                    if (runDepth > 0) { 
-                        runDepth--;
-                        chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
                     }
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
@@ -174,24 +161,15 @@ public class AlphaChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    protected void sampleNoiseColumn(
-        double[] buffer,
-        int startNoiseX,
-        int startNoiseZ,
-        int localNoiseX,
-        int localNoiseZ
-    ) {
+    protected void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
-
-        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 100
-        double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         
         double coordinateScale = this.settings.coordinateScale;
         double heightScale = this.settings.heightScale;
         
-        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
+        double mainNoiseScaleX = this.settings.mainNoiseScaleX;
+        double mainNoiseScaleY = this.settings.mainNoiseScaleY;
         double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
 
         double lowerLimitScale = this.settings.lowerLimitScale;
@@ -200,50 +178,10 @@ public class AlphaChunkSource extends NoiseChunkSource {
         double baseSize = this.settings.baseSize;
         double heightStretch = this.settings.stretchY;
         
-        double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, 1.0, 0.0, 1.0);
-        double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
-        
-        scale = (scale + 256.0) / 512.0;
-        
-        if (scale > 1.0) {
-            scale = 1.0; 
-        }
-
-        depth /= 8000.0;
-        
-        if (depth < 0.0) {
-            depth = -depth;
-        }
-
-        depth = depth * 3.0 - 3.0;
-
-        if (depth < 0.0) {
-            depth /= 2.0;
-            if (depth < -1.0) {
-                depth = -1.0;
-            }
-
-            depth /= 1.4;
-            depth /= 2.0; // Omitting this creates the Infdev 20100611 generator.
-
-            scale = 0.0;
-
-        } else {
-            if (depth > 1.0) {
-                depth = 1.0;
-            }
-            depth /= 6.0;
-        }
-
-        scale += 0.5;
-        depth = depth * baseSize / 8.0;
-        depth = baseSize + depth * 4.0;
-        
-        
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
-            double densityOffset = this.getOffset(noiseY, heightStretch, depth, scale);
-
+            double densityOffset = this.getOffset(noiseY, baseSize, heightStretch);
+            
             double mainNoise = (this.mainOctaveNoise.sample(
                 noiseX, noiseY, noiseZ,
                 coordinateScale / mainNoiseScaleX, 
@@ -284,7 +222,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
                 
                 density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
             }
-
+            
             density -= densityOffset;
             density = this.applySlides(density, noiseY);
             
@@ -292,11 +230,11 @@ public class AlphaChunkSource extends NoiseChunkSource {
         }
     }
     
-    private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
-        double offset = (((double)noiseY - depth) * heightStretch) / scale;
+    private double getOffset(int noiseY, double baseSize, double heightStretch) {
+        double offset = ((double) noiseY - baseSize) * heightStretch;
         
         if (offset < 0.0)
-            offset *= 4.0;
+            offset *= 2.0;
         
         return offset;
     }
