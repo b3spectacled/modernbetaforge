@@ -33,6 +33,7 @@ createWorld.customize.custom.usePineTrees=Pine Trees
 createWorld.customize.custom.useSwampTrees=Swamp Trees
 createWorld.customize.custom.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.useJungleTrees=Jungle Trees
+createWorld.customize.custom.useSandstone=Sandstone
 
 createWorld.customize.custom.height=Height
 

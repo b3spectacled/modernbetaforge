@@ -3,12 +3,9 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +15,7 @@ import net.minecraft.util.datafix.IFixableData;
 
 public class ModDataFixers {
     private static final int DATA_VERSION_V1_1_0_0 = 1100;
+    private static final int DATA_VERSION_V1_1_1_0 = 1110;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -82,6 +80,44 @@ public class ModDataFixers {
                     
                 return compound;
             }
+        }
+    );
+    
+    public static final ModDataFix SANDSTONE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_1_1_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                String worldName = getWorldName(compound);
+                
+                if (!isModernBetaWorld(compound))
+                    return compound;
+                
+                if (compound.hasKey("generatorOptions")) {
+                    String generatorOptions = compound.getString("generatorOptions");
+                    ModernBetaChunkGeneratorSettings.Factory factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions);
+                    
+                    JsonObject jsonObject;
+                    try {
+                        jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
+                    } catch (Exception e) {
+                        jsonObject = new JsonObject();
+                    }
+                    
+                    DataFixer.runDataFixer(NbtTags.USE_SANDSTONE, factory, jsonObject, worldName);
+                    
+                    compound.setString("generatorOptions", factory.toString().replace("\n", ""));
+                }
+                
+                return compound;
+            }
+            
         }
     );
     

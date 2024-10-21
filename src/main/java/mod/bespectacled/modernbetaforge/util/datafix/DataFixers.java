@@ -5,16 +5,27 @@ import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.JsonUtils;
 
 public class DataFixers {
     private static final Gson GSON = new Gson();
+    
+    private static final Map<String, Boolean> SHOULD_GEN_SANDSTONE = ImmutableMap.<String, Boolean>builder()
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, true)
+        .build();
     
     public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
@@ -103,6 +114,10 @@ public class DataFixers {
         factory.tundraBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.tundraBiomeOcean);
         factory.tundraBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.tundraBiomeBeach);
    }
+    
+    public static void fixSandstone(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.useSandstone = SHOULD_GEN_SANDSTONE.get(factory.chunkSource);
+    }
     
     @SuppressWarnings("unchecked")
     private static Map<String, String> deserializeBiomeMap(JsonObject jsonObject, String tag) {

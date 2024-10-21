@@ -9,6 +9,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
 public class BlockStates {
+    public static final IBlockState GLASS = Blocks.GLASS.getDefaultState();
+    
     public static final IBlockState GRASS_BLOCK = Blocks.GRASS.getDefaultState();
     public static final IBlockState DIRT = Blocks.DIRT.getDefaultState();
     

@@ -171,7 +171,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_WATER_LAKE_CHANCE, I18n.format(PREFIX + "waterLakeChance"), true, this, 1.0f, 100.0f, (float)this.settings.waterLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_LAKES, I18n.format(PREFIX + "useLavaLakes"), true, this.settings.useLavaLakes),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LAVA_LAKE_CHANGE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans)
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
@@ -974,6 +975,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_B_USE_LAVA_OCEANS:
                 this.settings.useLavaOceans = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_SANDSTONE:
+                this.settings.useSandstone = entryValue;
                 break;
         }
         

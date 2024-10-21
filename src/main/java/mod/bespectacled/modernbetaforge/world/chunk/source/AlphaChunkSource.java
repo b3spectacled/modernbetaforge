@@ -163,6 +163,12 @@ public class AlphaChunkSource extends NoiseChunkSource {
                         runDepth--;
                         chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
                     }
+
+                    // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
+                    if (this.settings.useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
+                        runDepth = rand.nextInt(4);
+                        fillerBlock = BlockStates.SANDSTONE;
+                    }
                 }
             }
         }

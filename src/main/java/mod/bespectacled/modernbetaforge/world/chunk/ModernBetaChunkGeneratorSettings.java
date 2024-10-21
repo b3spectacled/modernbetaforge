@@ -43,6 +43,10 @@ public class ModernBetaChunkGeneratorSettings {
     public final int seaLevel;
     public final int height;
     
+    public final float tempNoiseScale;
+    public final float rainNoiseScale;
+    public final float detailNoiseScale;
+    
     public final float biomeDepthWeight;
     public final float biomeDepthOffset;
     public final float biomeScaleWeight;
@@ -66,6 +70,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useLavaLakes;
     public final int lavaLakeChance;
     public final boolean useLavaOceans;
+    
+    public final boolean useSandstone;
     
     public final int claySize;
     public final int clayCount;
@@ -145,10 +151,6 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useJungleTrees;
     public final boolean useAcaciaTrees;
     
-    public final float tempNoiseScale;
-    public final float rainNoiseScale;
-    public final float detailNoiseScale;
-    
     public final String desertBiomeBase;
     public final String desertBiomeOcean;
     public final String desertBiomeBeach;
@@ -217,6 +219,10 @@ public class ModernBetaChunkGeneratorSettings {
         this.seaLevel = factory.seaLevel;
         this.height = factory.height;
         
+        this.tempNoiseScale = factory.tempNoiseScale;
+        this.rainNoiseScale = factory.rainNoiseScale;
+        this.detailNoiseScale = factory.detailNoiseScale;
+        
         this.biomeDepthWeight = factory.biomeDepthWeight;
         this.biomeDepthOffset = factory.biomeDepthOffset;
         this.biomeScaleWeight = factory.biomeScaleWeight;
@@ -246,6 +252,8 @@ public class ModernBetaChunkGeneratorSettings {
         this.useLavaLakes = factory.useLavaLakes;
         this.lavaLakeChance = factory.lavaLakeChance;
         this.useLavaOceans = factory.useLavaOceans;
+        
+        this.useSandstone = factory.useSandstone;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -319,10 +327,6 @@ public class ModernBetaChunkGeneratorSettings {
         this.useDesertWells = factory.useDesertWells;
         this.useFossils = factory.useFossils;
         
-        this.tempNoiseScale = factory.tempNoiseScale;
-        this.rainNoiseScale = factory.rainNoiseScale;
-        this.detailNoiseScale = factory.detailNoiseScale;
-        
         this.desertBiomeBase = factory.desertBiomeBase;
         this.desertBiomeOcean = factory.desertBiomeOcean;
         this.desertBiomeBeach = factory.desertBiomeBeach;
@@ -394,6 +398,10 @@ public class ModernBetaChunkGeneratorSettings {
         public int seaLevel;
         public int height;
         
+        public float tempNoiseScale;
+        public float rainNoiseScale;
+        public float detailNoiseScale;
+        
         public float biomeDepthWeight;
         public float biomeDepthOffset;
         public float biomeScaleWeight;
@@ -417,6 +425,8 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useLavaLakes;
         public int lavaLakeChance;
         public boolean useLavaOceans;
+        
+        public boolean useSandstone;
         
         public int claySize;
         public int clayCount;
@@ -495,10 +505,6 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useSwampTrees;
         public boolean useJungleTrees;
         public boolean useAcaciaTrees;
-        
-        public float tempNoiseScale;
-        public float rainNoiseScale;
-        public float detailNoiseScale;
         
         public String desertBiomeBase;
         public String desertBiomeOcean;
@@ -585,6 +591,10 @@ public class ModernBetaChunkGeneratorSettings {
             this.seaLevel = 64;
             this.height = 128;
             
+            this.tempNoiseScale = 1.0f;
+            this.rainNoiseScale = 1.0f;
+            this.detailNoiseScale = 1.0f;
+            
             this.biomeDepthWeight = 1.0f;
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
@@ -607,6 +617,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.waterLakeChance = 4;
             this.useLavaLakes = true;
             this.lavaLakeChance = 80;
+            
+            this.useSandstone = true;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -685,10 +697,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
-            
-            this.tempNoiseScale = 1.0f;
-            this.rainNoiseScale = 1.0f;
-            this.detailNoiseScale = 1.0f;
             
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -761,6 +769,10 @@ public class ModernBetaChunkGeneratorSettings {
             this.seaLevel = 64;
             this.height = 128;
             
+            this.tempNoiseScale = 1.0f;
+            this.rainNoiseScale = 1.0f;
+            this.detailNoiseScale = 1.0f;
+            
             this.biomeDepthWeight = 1.0f;
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
@@ -784,6 +796,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.useLavaLakes = true;
             this.lavaLakeChance = 80;
             this.useLavaOceans = false;
+            
+            this.useSandstone = true;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -862,10 +876,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
-            
-            this.tempNoiseScale = 1.0f;
-            this.rainNoiseScale = 1.0f;
-            this.detailNoiseScale = 1.0f;
 
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -948,6 +958,10 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.seaLevel == factory.seaLevel &&
                 this.height == factory.height &&
+                        
+                this.tempNoiseScale == factory.tempNoiseScale &&
+                this.rainNoiseScale == factory.rainNoiseScale &&
+                this.detailNoiseScale == factory.detailNoiseScale &&
                 
                 Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
@@ -972,6 +986,8 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useLavaLakes == factory.useLavaLakes &&
                 this.lavaLakeChance == factory.lavaLakeChance &&
                 this.useLavaOceans == factory.useLavaOceans &&
+                
+                this.useSandstone == factory.useSandstone &&
                 
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
@@ -1051,10 +1067,6 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useJungleTrees == factory.useJungleTrees &&
                 this.useAcaciaTrees == factory.useAcaciaTrees &&
                 
-                this.tempNoiseScale == factory.tempNoiseScale &&
-                this.rainNoiseScale == factory.rainNoiseScale &&
-                this.detailNoiseScale == factory.detailNoiseScale &&
-                
                 this.desertBiomeBase.equals(factory.desertBiomeBase) &&
                 this.desertBiomeOcean.equals(factory.desertBiomeOcean) &&
                 this.desertBiomeBeach.equals(factory.desertBiomeBeach) &&
@@ -1127,6 +1139,10 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.seaLevel;
             hashCode = 31 * hashCode + this.height;
             
+            hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
+            hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
+            hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
+            
             hashCode = 31 * hashCode + ((this.biomeDepthWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthWeight));
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
             hashCode = 31 * hashCode + ((this.biomeScaleWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeScaleWeight));
@@ -1150,6 +1166,8 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useLavaLakes ? 1 : 0);
             hashCode = 31 * hashCode + this.lavaLakeChance;
             hashCode = 31 * hashCode + (this.useLavaOceans ? 1 : 0);
+            
+            hashCode = 31 * hashCode + (this.useSandstone ? 1 : 0);
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1228,10 +1246,6 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useSwampTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useJungleTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useAcaciaTrees ? 1 : 0);
-            
-            hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
-            hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
-            hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
             
             hashCode = 31 * hashCode + this.desertBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.desertBiomeOcean.hashCode();
@@ -1318,6 +1332,10 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.stretchY = JsonUtils.getFloat(jsonObject, "stretchY", factory.stretchY);
                 factory.seaLevel = JsonUtils.getInt(jsonObject, "seaLevel", factory.seaLevel);
                 factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
+
+                factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
+                factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
+                factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 
                 factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, "biomeDepthWeight", factory.biomeDepthWeight);
                 factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, "biomeDepthOffset", factory.biomeDepthOffset);
@@ -1342,6 +1360,8 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, "useLavaLakes", factory.useLavaLakes);
                 factory.lavaLakeChance = JsonUtils.getInt(jsonObject, "lavaLakeChance", factory.lavaLakeChance);
                 factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, "useLavaOceans", factory.useLavaOceans);
+                
+                factory.useSandstone = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SANDSTONE, factory.useSandstone);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1421,10 +1441,6 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useJungleTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
                 factory.useAcaciaTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
 
-                factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
-                factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
-                factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
-
                 factory.desertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
                 factory.desertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
                 factory.desertBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BEACH, factory.desertBiomeBeach);
@@ -1480,6 +1496,8 @@ public class ModernBetaChunkGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.CHUNK_SOURCE, factory.chunkSource);
             jsonObject.addProperty(NbtTags.BIOME_SOURCE, factory.biomeSource);
+            
+            jsonObject.addProperty("fixedBiome", factory.fixedBiome);
 
             jsonObject.addProperty(NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
@@ -1498,6 +1516,10 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("stretchY", factory.stretchY);
             jsonObject.addProperty("seaLevel", factory.seaLevel);
             jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
+            
+            jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
+            jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
+            jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
 
             jsonObject.addProperty("biomeDepthWeight", factory.biomeDepthWeight);
             jsonObject.addProperty("biomeDepthOffset", factory.biomeDepthOffset);
@@ -1523,7 +1545,7 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("lavaLakeChance", factory.lavaLakeChance);
             jsonObject.addProperty("useLavaOceans", factory.useLavaOceans);
             
-            jsonObject.addProperty("fixedBiome", factory.fixedBiome);
+            jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1602,10 +1624,6 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
             jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
             jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
-            
-            jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
-            jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
-            jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
             
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
