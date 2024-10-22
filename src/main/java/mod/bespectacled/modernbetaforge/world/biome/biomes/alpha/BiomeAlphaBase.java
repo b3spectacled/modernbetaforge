@@ -7,8 +7,8 @@ import net.minecraft.world.biome.BiomeDecorator;
 public abstract class BiomeAlphaBase extends ModernBetaBiome {
     public BiomeAlphaBase(BiomeProperties properties) {
         super(properties
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
         );
         
         this.skyColor = ModernBetaBiomeColors.ALPHA_SKY_COLOR;

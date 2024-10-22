@@ -15,6 +15,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class ModernBetaBiome extends Biome {
     public static final WorldGenTrees TREE_FEATURE = new WorldGenTrees(false);
     public static final WorldGenFancyOak BIG_TREE_FEATURE = new WorldGenFancyOak(false);
+
+    protected static final float BASE_HEIGHT_HIGH = 0.37f;
+    protected static final float HEIGHT_VARY_HIGH = 0.5f;
+    
+    protected static final float BASE_HEIGHT_LOW = 0.1f;
+    protected static final float HEIGHT_VARY_LOW = 0.2f;
+    
+    protected static final float BASE_HEIGHT_BEACH = 0.0f;
+    protected static final float HEIGHT_VARY_BEACH = 0.025f;
+    
+    protected static final float BASE_HEIGHT_OCEAN = -1.0f;
+    protected static final float HEIGHT_VARY_OCEAN = 0.1f;
     
     protected int skyColor;
     protected int fogColor;

@@ -8,8 +8,8 @@ public class BiomeBetaFrozenOcean extends BiomeBeta {
         super(new BiomeProperties("Beta Frozen Ocean")
             .setTemperature(0.0f)
             .setRainfall(0.5f)
-            .setBaseHeight(-1.0f)
-            .setHeightVariation(0.1f)
+            .setBaseHeight(BASE_HEIGHT_OCEAN)
+            .setHeightVariation(HEIGHT_VARY_OCEAN)
             .setSnowEnabled()
             //.setWaterColor(0)
         );

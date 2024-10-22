@@ -9,8 +9,8 @@ public class BiomeInfdev611 extends ModernBetaBiome {
         super(new BiomeProperties("Infdev 611")
             .setTemperature(0.5f)
             .setRainfall(0.5f)
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
         );
         
         this.skyColor = ModernBetaBiomeColors.INFDEV_611_SKY_COLOR;

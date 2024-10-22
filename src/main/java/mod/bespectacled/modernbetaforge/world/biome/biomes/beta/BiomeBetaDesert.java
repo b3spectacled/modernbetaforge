@@ -24,8 +24,8 @@ public class BiomeBetaDesert extends BiomeBeta {
         super(new BiomeProperties("Beta Desert")
             .setTemperature(1.0f)
             .setRainfall(0.0f)
-            .setBaseHeight(0.2f)
-            .setHeightVariation(0.3f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
             .setRainDisabled()
         );
         

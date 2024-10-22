@@ -8,8 +8,8 @@ public class BiomeBetaSnowyBeach extends BiomeBeta {
         super(new BiomeProperties("Beta Snowy Beach")
             .setTemperature(0.0f)
             .setRainfall(0.5f)
-            .setBaseHeight(0.0f)
-            .setHeightVariation(0.025f)
+            .setBaseHeight(BASE_HEIGHT_BEACH)
+            .setHeightVariation(HEIGHT_VARY_BEACH)
             .setSnowEnabled()
         );
         

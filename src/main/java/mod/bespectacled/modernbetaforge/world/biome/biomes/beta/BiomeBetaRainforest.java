@@ -23,8 +23,8 @@ public class BiomeBetaRainforest extends BiomeBeta {
         super(new BiomeProperties("Beta Rainforest")
             .setTemperature(1.0f)
             .setRainfall(1.0f)
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

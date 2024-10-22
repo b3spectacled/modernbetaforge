@@ -15,8 +15,8 @@ public class BiomeBetaTundra extends BiomeBeta {
         super(new BiomeProperties("Beta Tundra")
             .setTemperature(0.0f)
             .setRainfall(0.5f)
-            .setBaseHeight(0.2f)
-            .setHeightVariation(0.3f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
             .setSnowEnabled()
         );
         

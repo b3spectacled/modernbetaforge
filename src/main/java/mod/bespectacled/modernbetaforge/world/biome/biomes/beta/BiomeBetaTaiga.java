@@ -20,8 +20,8 @@ public class BiomeBetaTaiga extends BiomeBeta {
         super(new BiomeProperties("Beta Taiga")
             .setTemperature(0.0f)
             .setRainfall(0.5f)
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
             .setSnowEnabled()
         );
         

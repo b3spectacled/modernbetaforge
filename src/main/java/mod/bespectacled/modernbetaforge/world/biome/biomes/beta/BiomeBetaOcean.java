@@ -8,8 +8,8 @@ public class BiomeBetaOcean extends BiomeBeta {
         super(new BiomeProperties("Beta Ocean")
             .setTemperature(0.5f)
             .setRainfall(0.5f)
-            .setBaseHeight(-1.0f)
-            .setHeightVariation(0.1f)
+            .setBaseHeight(BASE_HEIGHT_OCEAN)
+            .setHeightVariation(HEIGHT_VARY_OCEAN)
             //.setWaterColor(0)
         );
         

@@ -20,8 +20,8 @@ public class BiomeBetaSavanna extends BiomeBeta {
         super(new BiomeProperties("Beta Savanna")
             .setTemperature(0.7f)
             .setRainfall(0.1f)
-            .setBaseHeight(0.2f)
-            .setHeightVariation(0.3f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

@@ -23,8 +23,8 @@ public class BiomeBetaPlains extends BiomeBeta {
         super(new BiomeProperties("Beta Plains")
             .setTemperature(1.0f)
             .setRainfall(0.4f)
-            .setBaseHeight(0.2f)
-            .setHeightVariation(0.3f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

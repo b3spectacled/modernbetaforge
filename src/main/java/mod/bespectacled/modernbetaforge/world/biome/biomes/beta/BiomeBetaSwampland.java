@@ -29,8 +29,8 @@ public class BiomeBetaSwampland extends BiomeBeta {
         super(new BiomeProperties("Beta Swampland")
             .setTemperature(0.5f)
             .setRainfall(1.0f)
-            .setBaseHeight(0.2f)
-            .setHeightVariation(0.3f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

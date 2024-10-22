@@ -8,8 +8,8 @@ public class BiomeBetaSeasonalForest extends BiomeBeta {
         super(new BiomeProperties("Beta Seasonal Forest")
             .setTemperature(1.0f)
             .setRainfall(0.7f)
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;

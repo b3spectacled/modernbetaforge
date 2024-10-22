@@ -9,8 +9,8 @@ public class BiomeBetaSky extends BiomeBeta {
         super(new BiomeProperties("Beta Sky")
             .setTemperature(0.5f)
             .setRainfall(0.0f)
-            .setBaseHeight(0.37f)
-            .setHeightVariation(0.5f)
+            .setBaseHeight(BASE_HEIGHT_LOW)
+            .setHeightVariation(HEIGHT_VARY_LOW)
         );
         
         this.topBlock = BlockStates.GRASS_BLOCK;
