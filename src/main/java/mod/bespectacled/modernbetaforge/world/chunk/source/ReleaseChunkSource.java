@@ -233,14 +233,14 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         double biomeDepth = 0.0;
         double totalBiomeWeight = 0.0;
 
-        Biome biome = this.noiseBiomeSource.getBiome(x, z);
+        Biome biome = this.sampleBiome(x, z);
         
         for (int localBiomeX = -2; localBiomeX <= 2; ++localBiomeX) {
             for (int localBiomeZ = -2; localBiomeZ <= 2; ++localBiomeZ) {
                 int bX = (noiseX + localBiomeX) << 2;
                 int bZ = (noiseZ + localBiomeZ) << 2;
                 
-                Biome curBiome = this.noiseBiomeSource.getBiome(bX, bZ);
+                Biome curBiome = this.sampleBiome(bX, bZ);
                 
                 float curBiomeDepth = biomeDepthOffset + curBiome.getBaseHeight() * biomeDepthWeight;
                 float curBiomeScale = biomeScaleOffset + curBiome.getHeightVariation() * biomeScaleWeight;
@@ -368,6 +368,19 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             
             this.addBiomeInjectorRule(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
         }
+    }
+    
+    private Biome sampleBiome(int x, int z) {
+        Biome biome = this.noiseBiomeSource.getBiome(x, z);
+        
+        if (this.settings.useBiomeDepthScale &&
+            !BiomeDictionary.hasType(biome, Type.OCEAN) &&
+            !BiomeDictionary.hasType(biome, Type.RIVER)
+        ) {
+            biome = this.biomeProvider.getBiomeSource().getBiome(x, z);
+        }
+        
+        return biome;
     }
     
     private double getOffset(int noiseY, double heightStretch, double depth, double scale) {

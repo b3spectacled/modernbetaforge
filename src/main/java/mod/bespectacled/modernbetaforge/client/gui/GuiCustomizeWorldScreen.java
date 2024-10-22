@@ -312,7 +312,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset)
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG3_B_USE_BDS, I18n.format(PREFIX + NbtTags.USE_BIOME_DEPTH_SCALE), true, this.settings.useBiomeDepthScale)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList4 = {
@@ -790,6 +791,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             if (newEntryBiome.equals(entryBiome)) {
                 ((GuiTextField)this.pageList.getComponent(entry)).setText(newEntryBiome);
             }
+            
         } else {
             float entryValue = 0.0f;
             
@@ -895,8 +897,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     }
 
     @Override
-    public void setEntryValue(int id, boolean entryValue) {
-        switch (id) {
+    public void setEntryValue(int entry, boolean entryValue) {
+        switch (entry) {
             case GuiTags.PG0_B_USE_OCEAN:
                 this.settings.replaceOceanBiomes = entryValue;
                 break;
@@ -978,6 +980,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_B_USE_SANDSTONE:
                 this.settings.useSandstone = entryValue;
+                break;
+                
+            case GuiTags.PG3_B_USE_BDS:
+                this.settings.useBiomeDepthScale = entryValue;
                 break;
         }
         

@@ -177,6 +177,8 @@ public class GuiTags {
     public static final int PG3_S_B_SCL_WT = 418;
     public static final int PG3_S_B_SCL_OF = 419;
     
+    public static final int PG3_B_USE_BDS = 450;
+    
     // Labels
     public static final int PG3_L_BETA_LABL = 1400;
     public static final int PG3_L_RELE_LABL = 1401;

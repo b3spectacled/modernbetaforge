@@ -51,6 +51,7 @@ public class ModernBetaChunkGeneratorSettings {
     public final float biomeDepthOffset;
     public final float biomeScaleWeight;
     public final float biomeScaleOffset;
+    public final boolean useBiomeDepthScale;
     
     public final boolean useCaves;
     public final boolean useDungeons;
@@ -227,6 +228,7 @@ public class ModernBetaChunkGeneratorSettings {
         this.biomeDepthOffset = factory.biomeDepthOffset;
         this.biomeScaleWeight = factory.biomeScaleWeight;
         this.biomeScaleOffset = factory.biomeScaleOffset;
+        this.useBiomeDepthScale = factory.useBiomeDepthScale;
         
         this.useCaves = factory.useCaves;
         this.useDungeons = factory.useDungeons;
@@ -406,6 +408,7 @@ public class ModernBetaChunkGeneratorSettings {
         public float biomeDepthOffset;
         public float biomeScaleWeight;
         public float biomeScaleOffset;
+        public boolean useBiomeDepthScale;
         
         public boolean useCaves;
         public boolean useDungeons;
@@ -599,6 +602,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
             this.biomeScaleOffset = 0.0f;
+            this.useBiomeDepthScale = false;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -777,6 +781,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
             this.biomeScaleOffset = 0.0f;
+            this.useBiomeDepthScale = false;
             
             this.useCaves = true;
             this.useDungeons = true;
@@ -967,6 +972,7 @@ public class ModernBetaChunkGeneratorSettings {
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
                 Float.compare(factory.biomeScaleWeight, this.biomeScaleWeight) == 0 &&
                 Float.compare(factory.biomeScaleOffset, this.biomeScaleOffset) == 0 &&
+                this.useBiomeDepthScale == factory.useBiomeDepthScale &&
                 
                 this.useCaves == factory.useCaves &&
                 this.useDungeons == factory.useDungeons &&
@@ -1147,6 +1153,7 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
             hashCode = 31 * hashCode + ((this.biomeScaleWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeScaleWeight));
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
+            hashCode = 31 * hashCode + (this.useBiomeDepthScale ? 1 : 0);
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
@@ -1341,6 +1348,7 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, "biomeDepthOffset", factory.biomeDepthOffset);
                 factory.biomeScaleWeight = JsonUtils.getFloat(jsonObject, "biomeScaleWeight", factory.biomeScaleWeight);
                 factory.biomeScaleOffset = JsonUtils.getFloat(jsonObject, "biomeScaleOffset", factory.biomeScaleOffset);
+                factory.useBiomeDepthScale = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
                 
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, "useCaves", factory.useCaves);
                 factory.useDungeons = JsonUtils.getBoolean(jsonObject, "useDungeons", factory.useDungeons);
@@ -1525,6 +1533,7 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("biomeDepthOffset", factory.biomeDepthOffset);
             jsonObject.addProperty("biomeScaleWeight", factory.biomeScaleWeight);
             jsonObject.addProperty("biomeScaleOffset", factory.biomeScaleOffset);
+            jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
             
             jsonObject.addProperty("useCaves", factory.useCaves);
             jsonObject.addProperty("useDungeons", factory.useDungeons);
