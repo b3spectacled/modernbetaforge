@@ -76,7 +76,8 @@ createWorld.customize.custom.preset.betaCaveChaos=Beta Caves of Chaos
 createWorld.customize.custom.preset.betaRealistic=Beta Realistic
 createWorld.customize.custom.preset.betaPlus=Beta Plus
 createWorld.customize.custom.preset.betaPE=Beta Pocket Edition
-createWorld.customize.custom.preset.betaRelease=Beta 1.12.2
+createWorld.customize.custom.preset.betaRelease=Beta Release 1.12.2
+createWorld.customize.custom.preset.custom=Custom Preset
 
 # Config
 
@@ -84,9 +85,10 @@ modernbetaforge.general.generatoroptions=Generator Options
 modernbetaforge.general.moboptions=Mob Options
 modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
+modernbetaforge.general.presetoptions=Custom World Presets
 
-modernbetaforge.general.generatoroptions.defaultgeneratoroptions=Default Generator Options
 modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Custom Surfaces
+modernbetaforge.general.generatoroptions.custompresets=Custom World Presets
 
 modernbetaforge.general.moboptions.usenewmobs=Use New Mobs
 

@@ -24,6 +24,12 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public String[] biomesWithCustomSurfaces = {};
+
+        @Comment({
+            "Add custom Modern Beta world presets"
+        })
+        @RequiresWorldRestart
+        public String[] customPresets = {};
     }
 
     public static class CategoryVisual {
