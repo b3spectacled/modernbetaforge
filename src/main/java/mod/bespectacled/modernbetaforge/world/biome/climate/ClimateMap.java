@@ -2,31 +2,40 @@ package mod.bespectacled.modernbetaforge.world.biome.climate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
-import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 
 public class ClimateMap {
     private final Map<String, ClimateMapping> climateMap;
-    private final Map<String, ClimateMapping> defaultMap;
     private final ClimateMapping[] climateTable;
     private final boolean modifiedMap;
     
     public ClimateMap(ModernBetaChunkGeneratorSettings settings) {
         this.climateMap = new LinkedHashMap<>();
-        this.defaultMap = new LinkedHashMap<>();
         this.climateTable = new ClimateMapping[4096];
         
-        this.populateBiomeMap(this.climateMap, settings);
-        this.populateBiomeMap(this.defaultMap, new ModernBetaChunkGeneratorSettings.Factory().build());
-        this.generateBiomeLookup();
+        this.populateBiomeMap(settings);
+        this.populateBiomeLookup();
         
-        this.modifiedMap = !this.climateMap.equals(this.defaultMap);
+        this.modifiedMap = isModifiedMap(this.climateMap);
     }
     
-    public void populateBiomeMap(Map<String, ClimateMapping> climateMap, ModernBetaChunkGeneratorSettings settings) {
+    public ClimateMapping getMapping(double temp, double rain) {
+        int t = (int) (temp * 63.0);
+        int r = (int) (rain * 63.0);
+
+        return this.climateTable[t + r * 64];
+    }
+    
+    public boolean isModifiedMap() {
+        return this.modifiedMap;
+    }
+    
+    private void populateBiomeMap(ModernBetaChunkGeneratorSettings settings) {
         ClimateMapping iceDesert = new ClimateMapping(
             settings.iceDesertBiomeBase,
             settings.iceDesertBiomeOcean,
@@ -83,35 +92,20 @@ public class ClimateMap {
             settings.rainforestBiomeBeach
         );
         
-        climateMap.put("ice_desert", iceDesert);
-        climateMap.put("tundra", tundra);
-        climateMap.put("savanna", savanna);
-        climateMap.put("desert", desert);
-        climateMap.put("swampland", swampland);
-        climateMap.put("taiga", taiga);
-        climateMap.put("shrubland", shrubland);
-        climateMap.put("forest", forest);
-        climateMap.put("plains", plains);
-        climateMap.put("seasonal_forest", seasonal_forest);
-        climateMap.put("rainforest", rainforest);
+        this.climateMap.put("ice_desert", iceDesert);
+        this.climateMap.put("tundra", tundra);
+        this.climateMap.put("savanna", savanna);
+        this.climateMap.put("desert", desert);
+        this.climateMap.put("swampland", swampland);
+        this.climateMap.put("taiga", taiga);
+        this.climateMap.put("shrubland", shrubland);
+        this.climateMap.put("forest", forest);
+        this.climateMap.put("plains", plains);
+        this.climateMap.put("seasonal_forest", seasonal_forest);
+        this.climateMap.put("rainforest", rainforest);
     }
-    
-    public Map<String, ClimateMapping> getMap() {
-        return new LinkedHashMap<>(this.climateMap);
-    }
-    
-    public ClimateMapping getMapping(double temp, double rain) {
-        int t = (int) (temp * 63.0);
-        int r = (int) (rain * 63.0);
 
-        return this.climateTable[t + r * 64];
-    }
-    
-    public boolean isModifiedMap() {
-        return this.modifiedMap;
-    }
-    
-    private void generateBiomeLookup() {
+    private void populateBiomeLookup() {
         for (int t = 0; t < 64; t++) {
             for (int r = 0; r < 64; r++) {
                 this.climateTable[t + r * 64] = this.getBiome((float) t / 63F, (float) r / 63F);
@@ -164,22 +158,32 @@ public class ClimateMap {
         }
     }
     
+    private static boolean isModifiedMap(Map<String, ClimateMapping> climateMap) {
+        for (Entry<String, ClimateMapping> mapping : climateMap.entrySet()) {
+            if (!mapping.getValue().containsOnlyBetaBiomes) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public static class ClimateMapping {
         public final Biome baseBiome;
         public final Biome oceanBiome;
         public final Biome beachBiome;
         
-        // Used by datafixer
-        public ClimateMapping(Map<String, String> settings) {
-            this.baseBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_LAND_BIOME), "landBiome");
-            this.oceanBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_OCEAN_BIOME), "oceanBiome");
-            this.beachBiome = BiomeUtil.getBiome(settings.get(NbtTags.DEPR_BEACH_BIOME), "beachBiome");
-        }
+        public final boolean containsOnlyBetaBiomes;
         
         public ClimateMapping(String baseBiome, String oceanBiome, String beachBiome) {
             this.baseBiome = BiomeUtil.getBiome(baseBiome, "landBiome");
             this.oceanBiome = BiomeUtil.getBiome(oceanBiome, "oceanBiome");
             this.beachBiome = BiomeUtil.getBiome(beachBiome, "beachBiome");
+            
+            this.containsOnlyBetaBiomes = 
+                ModernBetaBiomeLists.BETA_BIOMES.contains(this.baseBiome) &&
+                ModernBetaBiomeLists.BETA_BIOMES.contains(this.oceanBiome) &&
+                ModernBetaBiomeLists.BETA_BIOMES.contains(this.oceanBiome);
         }
         
         public Biome biomeByClimateType(ClimateType type) {
