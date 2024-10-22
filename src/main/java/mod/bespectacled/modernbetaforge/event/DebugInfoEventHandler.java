@@ -4,6 +4,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -45,6 +46,33 @@ public class DebugInfoEventHandler {
             
             event.getLeft().add("");
             
+            if (chunkGenerator instanceof ModernBetaChunkGenerator) {
+                ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
+                
+                String chunkSourceName = chunkSource.getChunkGeneratorSettings().chunkSource;
+                String biomeSourceName = chunkSource.getChunkGeneratorSettings().biomeSource;
+                String fixedBiome = chunkSource.getChunkGeneratorSettings().fixedBiome;
+                
+                String sourceText = String.format("[Modern Beta] Chunk source: %s Biome source: %s", chunkSourceName, biomeSourceName);
+                String fixedBiomeText = String.format("[Modern Beta] Fixed biome: %s", fixedBiome);
+                
+                String heightmapText = String.format(
+                    "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
+                    chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE),
+                    chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
+                    chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
+                );
+                String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
+                
+                event.getLeft().add(sourceText);
+                
+                if (biomeSourceName.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id))
+                    event.getLeft().add(fixedBiomeText);
+                
+                event.getLeft().add(heightmapText);
+                event.getLeft().add(seaLevelText);
+            }
+            
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
                 
@@ -61,21 +89,6 @@ public class DebugInfoEventHandler {
                     event.getLeft().add(climateText);
                     event.getLeft().add(baseBiomeText);
                 }
-            }
-            
-            if (chunkGenerator instanceof ModernBetaChunkGenerator) {
-                ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-                
-                String heightmapText = String.format(
-                    "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE),
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
-                );
-                String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
-                
-                event.getLeft().add(heightmapText);
-                event.getLeft().add(seaLevelText);
             }
         }
         

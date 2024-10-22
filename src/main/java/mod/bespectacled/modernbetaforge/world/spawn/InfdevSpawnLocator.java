@@ -13,6 +13,6 @@ public class InfdevSpawnLocator implements SpawnLocator {
         if (!(chunkSource instanceof NoiseChunkSource))
             return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         
-        return new BlockPos(0, chunkSource.getHeight(0, 0, HeightmapChunk.Type.SURFACE) + 1, 0);
+        return new BlockPos(0, chunkSource.getHeight(0, 0, HeightmapChunk.Type.OCEAN) + 1, 0);
     }
 }

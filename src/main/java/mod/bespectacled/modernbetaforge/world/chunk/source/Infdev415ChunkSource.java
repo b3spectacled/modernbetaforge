@@ -62,6 +62,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
         Random bedrockRand = this.createSurfaceRandom(chunkX, chunkZ);
+        Random sandRand = this.createSurfaceRandom(chunkX, chunkZ);
 
         for (int localX = 0; localX < 16; ++localX) {
             for (int localZ = 0; localZ < 16; ++localZ) {
@@ -153,7 +154,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
                     if (this.settings.useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
-                        runDepth = rand.nextInt(4);
+                        runDepth = sandRand.nextInt(4);
                         fillerBlock = BlockStates.SANDSTONE;
                     }
                 }

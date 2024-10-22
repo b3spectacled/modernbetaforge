@@ -79,6 +79,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
         int bedrockFloor = this.worldMinY + this.bedrockFloor;
         
         Random rand = this.createSurfaceRandom(chunkX, chunkZ);
+        Random sandRand = this.createSurfaceRandom(chunkX, chunkZ);
         
         double[] sandNoise = this.beachOctaveNoise.sampleAlpha(
             chunkX * 16, chunkZ * 16, 0.0,
@@ -181,7 +182,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
                     if (this.settings.useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
-                        runDepth = rand.nextInt(4);
+                        runDepth = sandRand.nextInt(4);
                         fillerBlock = BlockStates.SANDSTONE;
                     }
                 }
