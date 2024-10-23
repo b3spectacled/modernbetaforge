@@ -19,7 +19,7 @@ import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
-import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionResolver;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
@@ -118,10 +118,7 @@ public abstract class ChunkSource {
         );
 
         // Init biome injector
-        this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource());
-        this.initBiomeInjector();
-        this.biomeInjector.buildRules();
-        
+        this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
         this.biomeProvider.setChunkSource(this);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
@@ -526,9 +523,11 @@ public abstract class ChunkSource {
         return false;
     }
     
-    protected void initBiomeInjector() {
+    protected BiomeInjectionRules buildBiomeInjectorRules() {
         boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        
+        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
             this.atOceanDepth(context.topPos.getY(), OCEAN_MIN_DEPTH);
@@ -539,18 +538,16 @@ public abstract class ChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            this.addBiomeInjectorRule(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
             
-            this.addBiomeInjectorRule(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
         }
-    }
-    
-    protected void addBiomeInjectorRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
-        this.biomeInjector.addRule(rule, resolver, id);
+        
+        return builder.build();
     }
 
     protected boolean atBeachDepth(int topHeight) {

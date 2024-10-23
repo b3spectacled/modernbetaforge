@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
-import java.util.function.Predicate;
-
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
@@ -14,14 +12,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeInjector {
-    private final BiomeInjectionRules.Builder builder;
     private final ChunkCache<BiomeChunk> biomeCache;
-
-    private BiomeInjectionRules rules;
+    private final BiomeInjectionRules rules;
     
-    public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource) {
-        this.builder = new BiomeInjectionRules.Builder();
-        
+    public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules rules) {
         this.biomeCache = new ChunkCache<>(
             "cached_injected_biomes",
             512,
@@ -29,15 +23,7 @@ public class BiomeInjector {
             (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome)
         );
         
-        this.rules = this.builder.build();
-    }
-    
-    public void addRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, String id) {
-        this.builder.add(rule, resolver, id);
-    }
-    
-    public void buildRules() {
-        this.rules = this.builder.build();
+        this.rules = rules;
     }
     
     public void getInjectedBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ) {

@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
@@ -344,9 +345,11 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    protected void initBiomeInjector() {
+    protected BiomeInjectionRules buildBiomeInjectorRules() {
         boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        
+        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> {
             Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
@@ -360,14 +363,16 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            this.addBiomeInjectorRule(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
             
-            this.addBiomeInjectorRule(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
         }
+        
+        return builder.build();
     }
     
     private Biome sampleBiome(int x, int z) {
