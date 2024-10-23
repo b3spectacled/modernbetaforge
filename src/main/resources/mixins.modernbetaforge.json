@@ -11,7 +11,8 @@
 	    "MixinMapGenScatteredFeatureStart",
 	    "MixinStructureVillagePiecesStart",
 	    "accessor.AccessorStructureStart",
-	    "accessor.AccessorVillage"
+	    "accessor.AccessorVillage",
+	    "accessor.AccessorWorldServer"
     ],
     "client": [
 	    "client.MixinEntityRenderer",

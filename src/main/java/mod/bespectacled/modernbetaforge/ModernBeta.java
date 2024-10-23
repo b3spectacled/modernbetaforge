@@ -80,32 +80,6 @@ public class ModernBeta {
     @EventHandler
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) { }
     
-    /*
-     * Modify player spawning algorithm
-     */
-    
     @EventHandler
-    private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        WorldServer worldServer = server.getServer().getWorld(0);
-
-        IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
-        BiomeProvider biomeProvider = worldServer.getBiomeProvider();
-        
-        BlockPos currentSpawnPos = worldServer.getSpawnPoint();
-        boolean useOldSpawns = ModernBetaConfig.spawnOptions.useOldSpawns;
-        
-        if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
-            ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-            BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
-            
-            BlockPos newSpawnPos = useOldSpawns ?
-                chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
-                null;
-            
-            if (newSpawnPos != null) {
-                worldServer.setSpawnPoint(newSpawnPos);
-            }
-        }
-    }
+    private void onFMLServerStartingEvent(FMLServerStartingEvent event) { }
 }

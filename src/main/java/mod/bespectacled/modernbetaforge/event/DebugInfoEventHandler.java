@@ -53,8 +53,8 @@ public class DebugInfoEventHandler {
                 String biomeSourceName = chunkSource.getChunkGeneratorSettings().biomeSource;
                 String fixedBiome = chunkSource.getChunkGeneratorSettings().fixedBiome;
                 
-                String sourceText = String.format("[Modern Beta] Chunk source: %s Biome source: %s", chunkSourceName, biomeSourceName);
-                String fixedBiomeText = String.format("[Modern Beta] Fixed biome: %s", fixedBiome);
+                String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
+                String fixedBiomeText = String.format("[Modern Beta] Fixed Biome: %s", fixedBiome);
                 
                 String heightmapText = String.format(
                     "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
