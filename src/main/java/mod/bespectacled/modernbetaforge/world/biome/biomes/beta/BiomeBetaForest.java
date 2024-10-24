@@ -2,11 +2,9 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBirchTree;
 
@@ -20,11 +18,6 @@ public class BiomeBetaForest extends BiomeBeta {
             .setBaseHeight(BASE_HEIGHT_HIGH)
             .setHeightVariation(HEIGHT_VARY_HIGH)
         );
-        
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
-        
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityWolf.class, 5, 4, 4));
 
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
     }
@@ -49,5 +42,10 @@ public class BiomeBetaForest extends BiomeBeta {
             return super.getRandomTreeFeature(random);
         
         return this.getRandomTreeFeature(random);
+    }
+    
+    @Override
+    protected void populateAdditionalWolves() {
+        this.additionalWolves.add(WOLF_FOREST);
     }
 }

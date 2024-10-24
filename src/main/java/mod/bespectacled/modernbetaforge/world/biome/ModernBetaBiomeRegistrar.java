@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlpha;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlphaNormal;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlphaWinter;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaBeach;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaDesert;
@@ -55,7 +55,7 @@ public class ModernBetaBiomeRegistrar {
         biomeRegistry.register(new BiomeBetaBeach(), ModernBetaBiomeTags.BETA_BEACH, Type.BEACH, Type.WET);
         biomeRegistry.register(new BiomeBetaSnowyBeach(), ModernBetaBiomeTags.BETA_SNOWY_BEACH, Type.BEACH, Type.SNOWY, Type.COLD, Type.WET);
         
-        biomeRegistry.register(new BiomeAlpha(), ModernBetaBiomeTags.ALPHA, Type.FOREST);
+        biomeRegistry.register(new BiomeAlphaNormal(), ModernBetaBiomeTags.ALPHA, Type.FOREST);
         biomeRegistry.register(new BiomeAlphaWinter(), ModernBetaBiomeTags.ALPHA_WINTER, Type.FOREST, Type.SNOWY, Type.COLD);
         
         biomeRegistry.register(new BiomeInfdev415(), ModernBetaBiomeTags.INFDEV_415, Type.FOREST);

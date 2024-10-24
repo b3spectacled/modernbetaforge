@@ -7,6 +7,17 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.monster.EntityHusk;
+import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntityStray;
+import net.minecraft.entity.passive.EntityDonkey;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityParrot;
+import net.minecraft.entity.passive.EntityRabbit;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -16,6 +27,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BiomeBeta extends ModernBetaBiome {
+    protected static final SpawnListEntry RABBIT = new SpawnListEntry(EntityRabbit.class, 4, 2, 3);
+    protected static final SpawnListEntry RABBIT_TUNDRA = new SpawnListEntry(EntityRabbit.class, 10, 2, 3);
+    protected static final SpawnListEntry POLAR_BEAR = new SpawnListEntry(EntityPolarBear.class, 1, 1, 2);
+    protected static final SpawnListEntry HORSE_PLAINS = new SpawnListEntry(EntityHorse.class, 5, 2, 6);
+    protected static final SpawnListEntry HORSE_SAVANNA = new SpawnListEntry(EntityHorse.class, 1, 2, 6);
+    protected static final SpawnListEntry DONKEY_PLAINS = new SpawnListEntry(EntityDonkey.class, 1, 1, 3);
+    protected static final SpawnListEntry DONKEY_SAVANNA = new SpawnListEntry(EntityDonkey.class, 1, 1, 1);
+    protected static final SpawnListEntry LLAMA = new SpawnListEntry(EntityLlama.class, 1, 4, 4);
+    protected static final SpawnListEntry PARROT = new SpawnListEntry(EntityParrot.class, 40, 1, 2);
+    protected static final SpawnListEntry OCELOT = new SpawnListEntry(EntityOcelot.class, 2, 1, 1);
+    protected static final SpawnListEntry WOLF_TAIGA = new SpawnListEntry(EntityWolf.class, 8, 4, 4);
+    
+    protected static final SpawnListEntry HUSK = new SpawnListEntry(EntityHusk.class, 80, 4, 4);
+    protected static final SpawnListEntry STRAY = new SpawnListEntry(EntityStray.class, 80, 4, 4);
+    protected static final SpawnListEntry SLIME_SWAMP = new SpawnListEntry(EntitySlime.class, 1, 1, 1);
+    
     public BiomeBeta(BiomeProperties properties) {
         super(properties);
     }

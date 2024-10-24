@@ -1,6 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 
 public class BiomeBetaShrubland extends BiomeBeta {
@@ -11,9 +10,6 @@ public class BiomeBetaShrubland extends BiomeBeta {
             .setBaseHeight(BASE_HEIGHT_LOW)
             .setHeightVariation(HEIGHT_VARY_LOW)
         );
-        
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
 
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
     }

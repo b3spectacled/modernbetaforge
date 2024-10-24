@@ -10,6 +10,7 @@
     "mixins": [
 	    "MixinMapGenScatteredFeatureStart",
 	    "MixinStructureVillagePiecesStart",
+	    "MixinWorldEntitySpawner",
 	    "accessor.AccessorStructureStart",
 	    "accessor.AccessorVillage",
 	    "accessor.AccessorWorldServer"

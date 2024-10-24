@@ -176,6 +176,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_BETA, I18n.format(PREFIX + "betaFeaturesLabel"), true),
+            null,
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_GRASS, I18n.format(PREFIX + NbtTags.USE_TALL_GRASS), true, this.settings.useTallGrass),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_FLOWERS, I18n.format(PREFIX + NbtTags.USE_NEW_FLOWERS), true, this.settings.useNewFlowers),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_PADS, I18n.format(PREFIX + NbtTags.USE_LILY_PADS), true, this.settings.useLilyPads),
@@ -188,7 +190,17 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_PINE, I18n.format(PREFIX + NbtTags.USE_PINE_TREES), true, this.settings.usePineTrees),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_SWAMP, I18n.format(PREFIX + NbtTags.USE_SWAMP_TREES), true, this.settings.useSwampTrees),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees)
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees),
+            null,
+        
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MOBS, I18n.format(PREFIX + "mobSpawnLabel"), true),
+            null,
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_SPAWN_CREATURE, I18n.format(PREFIX + NbtTags.SPAWN_NEW_CREATURE_MOBS), true, this.settings.spawnNewCreatureMobs),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_SPAWN_MONSTER, I18n.format(PREFIX + NbtTags.SPAWN_NEW_MONSTER_MOBS), true, this.settings.spawnNewMonsterMobs),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_SPAWN_WATER, I18n.format(PREFIX + NbtTags.SPAWN_WATER_MOBS), true, this.settings.spawnWaterMobs),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_SPAWN_AMBIENT, I18n.format(PREFIX + NbtTags.SPAWN_AMBIENT_MOBS), true, this.settings.spawnAmbientMobs),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_SPAWN_WOLVES, I18n.format(PREFIX + NbtTags.SPAWN_WOLVES), true, this.settings.spawnWolves),
+            null
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
@@ -300,14 +312,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height),
             null,
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE), false, this, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
             null,
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseNoiseLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
@@ -344,7 +356,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), false, this.intFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel"), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), false, this.floatFilter),
@@ -353,7 +365,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), false, this.floatFilter),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseNoiseLabel"), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), false, this.floatFilter),
@@ -937,6 +949,22 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG1_B_USE_ACACIA:
                 this.settings.useAcaciaTrees = entryValue;
+                break;
+                
+            case GuiTags.PG1_B_SPAWN_CREATURE:
+                this.settings.spawnNewCreatureMobs = entryValue;
+                break;
+            case GuiTags.PG1_B_SPAWN_MONSTER:
+                this.settings.spawnNewMonsterMobs = entryValue;
+                break;
+            case GuiTags.PG1_B_SPAWN_WOLVES:
+                this.settings.spawnWolves = entryValue;
+                break;
+            case GuiTags.PG1_B_SPAWN_WATER:
+                this.settings.spawnWaterMobs = entryValue;
+                break;
+            case GuiTags.PG1_B_SPAWN_AMBIENT:
+                this.settings.spawnAmbientMobs = entryValue;
                 break;
                 
             case GuiTags.PG0_B_USE_CAVES:

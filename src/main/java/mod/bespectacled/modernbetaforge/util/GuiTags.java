@@ -63,10 +63,15 @@ public class GuiTags {
     public static final int PG1_B_USE_JUNGLE = 209;
     public static final int PG1_B_USE_ACACIA = 210;
     
+    public static final int PG1_B_SPAWN_CREATURE = 211;
+    public static final int PG1_B_SPAWN_MONSTER = 212;
+    public static final int PG1_B_SPAWN_WATER = 213;
+    public static final int PG1_B_SPAWN_AMBIENT = 214;
+    public static final int PG1_B_SPAWN_WOLVES = 215;
+    
     // Labels
-    public static final int PG1_L_VEGETATION = 1200;
-    public static final int PG1_L_STRUCTURE = 1201;
-    public static final int PG1_L_TREE = 1202;
+    public static final int PG1_L_BETA = 1200;
+    public static final int PG1_L_MOBS = 1201;
     
     /* Page 3 */
     

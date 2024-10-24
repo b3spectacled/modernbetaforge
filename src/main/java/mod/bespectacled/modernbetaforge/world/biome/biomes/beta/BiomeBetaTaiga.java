@@ -2,12 +2,8 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTaiga1;
 import net.minecraft.world.gen.feature.WorldGenTaiga2;
@@ -25,15 +21,6 @@ public class BiomeBetaTaiga extends BiomeBeta {
             .setSnowEnabled()
         );
         
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
-        
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityWolf.class, 8, 4, 4));
-        
-        if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
-        }
-            
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
     }
     
@@ -52,5 +39,15 @@ public class BiomeBetaTaiga extends BiomeBeta {
             return super.getRandomTreeFeature(random);
         
         return this.getRandomTreeFeature(random);
+    }
+    
+    @Override
+    protected void populateAdditionalCreatures() {
+        this.additionalCreatures.add(RABBIT);
+    }
+    
+    @Override
+    protected void populateAdditionalWolves() {
+        this.additionalWolves.add(WOLF_TAIGA);
     }
 }

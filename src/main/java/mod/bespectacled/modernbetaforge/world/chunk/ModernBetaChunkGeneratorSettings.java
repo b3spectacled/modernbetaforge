@@ -151,6 +151,12 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useSwampTrees;
     public final boolean useJungleTrees;
     public final boolean useAcaciaTrees;
+
+    public final boolean spawnNewCreatureMobs;
+    public final boolean spawnNewMonsterMobs;
+    public final boolean spawnWaterMobs;
+    public final boolean spawnAmbientMobs;
+    public final boolean spawnWolves;
     
     public final String desertBiomeBase;
     public final String desertBiomeOcean;
@@ -328,6 +334,12 @@ public class ModernBetaChunkGeneratorSettings {
         this.useMelons = factory.useMelons;
         this.useDesertWells = factory.useDesertWells;
         this.useFossils = factory.useFossils;
+        
+        this.spawnNewCreatureMobs = factory.spawnNewCreatureMobs;
+        this.spawnNewMonsterMobs = factory.spawnNewMonsterMobs;
+        this.spawnWaterMobs = factory.spawnWaterMobs;
+        this.spawnAmbientMobs = factory.spawnAmbientMobs;
+        this.spawnWolves = factory.spawnWolves;
         
         this.desertBiomeBase = factory.desertBiomeBase;
         this.desertBiomeOcean = factory.desertBiomeOcean;
@@ -508,6 +520,12 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useSwampTrees;
         public boolean useJungleTrees;
         public boolean useAcaciaTrees;
+
+        public boolean spawnNewCreatureMobs;
+        public boolean spawnNewMonsterMobs;
+        public boolean spawnWaterMobs;
+        public boolean spawnAmbientMobs;
+        public boolean spawnWolves;
         
         public String desertBiomeBase;
         public String desertBiomeOcean;
@@ -702,6 +720,12 @@ public class ModernBetaChunkGeneratorSettings {
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
             
+            this.spawnNewCreatureMobs = true;
+            this.spawnNewMonsterMobs = true;
+            this.spawnWaterMobs = true;
+            this.spawnAmbientMobs = true;
+            this.spawnWolves = true;
+            
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
             this.desertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
@@ -881,6 +905,12 @@ public class ModernBetaChunkGeneratorSettings {
             this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
+            
+            this.spawnNewCreatureMobs = true;
+            this.spawnNewMonsterMobs = true;
+            this.spawnWaterMobs = true;
+            this.spawnAmbientMobs = true;
+            this.spawnWolves = true;
 
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -1073,6 +1103,12 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useJungleTrees == factory.useJungleTrees &&
                 this.useAcaciaTrees == factory.useAcaciaTrees &&
                 
+                this.spawnNewCreatureMobs == factory.spawnNewCreatureMobs &&
+                this.spawnNewMonsterMobs == factory.spawnNewMonsterMobs &&
+                this.spawnWaterMobs == factory.spawnWaterMobs &&
+                this.spawnAmbientMobs == factory.spawnAmbientMobs &&
+                this.spawnWolves == factory.spawnWolves &&
+                
                 this.desertBiomeBase.equals(factory.desertBiomeBase) &&
                 this.desertBiomeOcean.equals(factory.desertBiomeOcean) &&
                 this.desertBiomeBeach.equals(factory.desertBiomeBeach) &&
@@ -1253,6 +1289,12 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useSwampTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useJungleTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useAcaciaTrees ? 1 : 0);
+
+            hashCode = 31 * hashCode + (this.spawnNewCreatureMobs ? 1 : 0);
+            hashCode = 31 * hashCode + (this.spawnNewMonsterMobs ? 1 : 0);
+            hashCode = 31 * hashCode + (this.spawnWaterMobs ? 1 : 0);
+            hashCode = 31 * hashCode + (this.spawnAmbientMobs ? 1 : 0);
+            hashCode = 31 * hashCode + (this.spawnWolves ? 1 : 0);
             
             hashCode = 31 * hashCode + this.desertBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.desertBiomeOcean.hashCode();
@@ -1448,6 +1490,12 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useSwampTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
                 factory.useJungleTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
                 factory.useAcaciaTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
+                
+                factory.spawnNewCreatureMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
+                factory.spawnNewMonsterMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);
+                factory.spawnWaterMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
+                factory.spawnAmbientMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
+                factory.spawnWolves = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WOLVES, factory.spawnWolves);
 
                 factory.desertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
                 factory.desertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
@@ -1633,6 +1681,12 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
             jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
             jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
+
+            jsonObject.addProperty(NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_WOLVES, factory.spawnWolves);
             
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
@@ -1680,5 +1734,9 @@ public class ModernBetaChunkGeneratorSettings {
             
             return jsonObject;
         }
+    }
+    
+    public static ModernBetaChunkGeneratorSettings buildSettings(String generatorSettings) {
+        return ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
     }
 }

@@ -37,6 +37,12 @@ public class NbtTags {
     public static final String USE_JUNGLE_TREES = "useJungleTrees";
     public static final String USE_ACACIA_TREES = "useAcaciaTrees";
     
+    public static final String SPAWN_NEW_CREATURE_MOBS = "spawnNewCreatureMobs";
+    public static final String SPAWN_NEW_MONSTER_MOBS = "spawnNewMonsterMobs";
+    public static final String SPAWN_WATER_MOBS = "spawnWaterMobs";
+    public static final String SPAWN_AMBIENT_MOBS = "spawnAmbientMobs";
+    public static final String SPAWN_WOLVES = "spawnWolves";
+    
     public static final String HEIGHT = "height";
     
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";

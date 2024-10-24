@@ -4,7 +4,6 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeInt;
-import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.Config.RequiresWorldRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ModernBetaConfig {
     public static CategoryGenerator generatorOptions = new CategoryGenerator();
     public static CategoryVisual visualOptions = new CategoryVisual();
-    public static CategoryMob mobOptions = new CategoryMob();
     public static CategorySpawn spawnOptions = new CategorySpawn();
     
     public static class CategoryGenerator {
@@ -61,14 +59,6 @@ public class ModernBetaConfig {
         })
         @RangeInt(min = 0, max = 255)
         public int cloudHeight = 108;
-    }
-    
-    public static class CategoryMob {
-        @Comment({
-            "Use new mobs when initializing Beta biomes"
-        })
-        @RequiresMcRestart
-        public boolean useNewMobs = true;
     }
     
     public static class CategorySpawn {

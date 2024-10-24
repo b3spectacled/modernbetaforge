@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -373,7 +375,11 @@ public abstract class ChunkSource {
                 return this.oceanMonumentGenerator.getMonsters();
             }
         }
-        return biome.getSpawnableList(enumCreatureType);
+        
+        List<Biome.SpawnListEntry> spawnEntries = new ArrayList<>(biome.getSpawnableList(enumCreatureType));
+        ModernBetaBiomeMobs.modifySpawnList(spawnEntries, enumCreatureType, biome, this.settings);
+        
+        return spawnEntries;
     }
     
     public boolean isInsideStructure(World world, String structureName, BlockPos blockPos) {

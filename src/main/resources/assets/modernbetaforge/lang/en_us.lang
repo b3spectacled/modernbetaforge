@@ -5,14 +5,16 @@ generator.modernbeta=Modern Beta
 # World Customization
 
 createWorld.customize.custom.page4=Beta/PE Biome Source Biomes (Expert Users Only!)
-createWorld.customize.custom.page5=Beta Biome Feature Settings
+createWorld.customize.custom.page5=Biome Feature Settings
 
 createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
 
 createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
 createWorld.customize.custom.basicFeaturesLabel=Other Feature Settings
-createWorld.customize.custom.betaLabel=Beta Noise Settings
-createWorld.customize.custom.releaseLabel=Release Noise Settings
+createWorld.customize.custom.betaNoiseLabel=Beta Noise Settings
+createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
+createWorld.customize.custom.betaFeaturesLabel=Beta Feature Settings
+createWorld.customize.custom.mobSpawnLabel=Mob Settings
 
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
@@ -28,12 +30,20 @@ createWorld.customize.custom.useLilyPads=Lily Pads
 createWorld.customize.custom.useMelons=Melons
 createWorld.customize.custom.useDesertWells=Desert Wells
 createWorld.customize.custom.useFossils=Fossils
+
 createWorld.customize.custom.useBirchTrees=Birch Trees
 createWorld.customize.custom.usePineTrees=Pine Trees
 createWorld.customize.custom.useSwampTrees=Swamp Trees
 createWorld.customize.custom.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.useJungleTrees=Jungle Trees
+
 createWorld.customize.custom.useSandstone=Sandstone
+
+createWorld.customize.custom.spawnNewCreatureMobs=Modern Passive Mobs
+createWorld.customize.custom.spawnNewMonsterMobs=Modern Hostile Mobs
+createWorld.customize.custom.spawnWaterMobs=Water Mobs
+createWorld.customize.custom.spawnAmbientMobs=Ambient Mobs
+createWorld.customize.custom.spawnWolves=Wolves
 
 createWorld.customize.custom.height=Height
 
@@ -70,14 +80,11 @@ createWorld.customize.custom.preset.classicInfdev415=Classic Infdev 20100415
 createWorld.customize.custom.preset.classicInfdev420=Classic Infdev 20100420
 createWorld.customize.custom.preset.classicInfdev611=Classic Infdev 20100611
 createWorld.customize.custom.preset.classicSkylands=Classic Skylands
-createWorld.customize.custom.preset.betaSkylands=Beta Skylands
-createWorld.customize.custom.preset.betaIsleLand=Beta Isle Land
-createWorld.customize.custom.preset.betaCaveDelight=Beta Caver's Delight
-createWorld.customize.custom.preset.betaCaveChaos=Beta Caves of Chaos
-createWorld.customize.custom.preset.betaRealistic=Beta Realistic
-createWorld.customize.custom.preset.betaPlus=Beta Plus
-createWorld.customize.custom.preset.betaPE=Beta Pocket Edition
-createWorld.customize.custom.preset.betaRelease=Beta Release 1.12.2
+createWorld.customize.custom.preset.betaSkylands=Modern Beta Skylands
+createWorld.customize.custom.preset.betaRealistic=Modern Beta Realistic
+createWorld.customize.custom.preset.betaPlus=Modern Beta Plus
+createWorld.customize.custom.preset.betaPE=Modern Beta Pocket Edition
+createWorld.customize.custom.preset.betaRelease=Modern Beta Release 1.12.2
 createWorld.customize.custom.preset.custom=Custom Preset
 
 # Config

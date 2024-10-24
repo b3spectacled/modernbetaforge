@@ -1,6 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 
 public class BiomeBetaOcean extends BiomeBeta {
@@ -12,9 +11,6 @@ public class BiomeBetaOcean extends BiomeBeta {
             .setHeightVariation(HEIGHT_VARY_OCEAN)
             //.setWaterColor(0)
         );
-        
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
         
         this.spawnableCreatureList.clear();
 

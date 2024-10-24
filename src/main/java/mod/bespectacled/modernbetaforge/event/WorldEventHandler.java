@@ -24,43 +24,44 @@ public class WorldEventHandler {
     /*
      * Modify player spawning algorithm
      */
-    
     @SubscribeEvent
-    public void onCreateSpawnPosition(WorldEvent.CreateSpawnPosition event) {
+    public void onWorldEventCreateSpawnPosition(WorldEvent.CreateSpawnPosition event) {
         WorldServer world = (WorldServer)event.getWorld();
         WorldSettings settings = event.getSettings();
         
         IChunkGenerator chunkGenerator = world.getChunkProvider().chunkGenerator;
         BiomeProvider biomeProvider = world.getBiomeProvider();
         
-        if (!(settings.getTerrainType() instanceof ModernBetaWorldType))
-            return;
-        
-        BlockPos currentSpawnPos = world.getSpawnPoint();
-        boolean useOldSpawns = ModernBetaConfig.spawnOptions.useOldSpawns;
-        
-        if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
-            ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-            BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
+        if ((settings.getTerrainType() instanceof ModernBetaWorldType)) {
+            BlockPos currentSpawnPos = world.getSpawnPoint();
+            boolean useOldSpawns = ModernBetaConfig.spawnOptions.useOldSpawns;
             
-            BlockPos newSpawnPos = useOldSpawns ?
-                chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
-                null;
-            
-            if (newSpawnPos != null) {
-                world.getWorldInfo().setSpawn(newSpawnPos);
+            if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
+                ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
+                BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
                 
-                if (settings.isBonusChestEnabled()) {
-                    AccessorWorldServer accessor = (AccessorWorldServer)world;
+                BlockPos newSpawnPos = useOldSpawns ?
+                    chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
+                    null;
+                
+                if (newSpawnPos != null) {
+                    world.getWorldInfo().setSpawn(newSpawnPos);
                     
-                    accessor.invokeCreateBonusChest();
+                    if (settings.isBonusChestEnabled()) {
+                        AccessorWorldServer accessor = (AccessorWorldServer)world;
+                        
+                        accessor.invokeCreateBonusChest();
+                    }
+                    
+                    event.setCanceled(true);
                 }
-                
-                event.setCanceled(true);
             }
         }
     }
     
+    /*
+     * Set Climate Samplers
+     */
     @SubscribeEvent
     public void onWorldEventLoad(WorldEvent.Load event) {
         World world = event.getWorld();

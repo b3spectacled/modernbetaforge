@@ -19,7 +19,7 @@ public class ModDataFixer {
     
     public void registerModDataFixes() {
         this.registerModDataFix(ModDataFixers.BIOME_MAP_FIX);
-        this.registerModDataFix(ModDataFixers.SANDSTONE_FIX);
+        this.registerModDataFix(ModDataFixers.SANDSTONE_AND_WOLVES_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {

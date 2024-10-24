@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.alpha;
 
-public class BiomeAlphaWinter extends BiomeAlphaBase {
+public class BiomeAlphaWinter extends BiomeAlpha {
     public BiomeAlphaWinter() {
         super(new BiomeProperties("Alpha Winter")
             .setTemperature(0.0f)

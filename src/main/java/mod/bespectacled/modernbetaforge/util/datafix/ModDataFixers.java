@@ -60,7 +60,7 @@ public class ModDataFixers {
         }
     );
     
-    public static final ModDataFix SANDSTONE_FIX = new ModDataFix(
+    public static final ModDataFix SANDSTONE_AND_WOLVES_FIX = new ModDataFix(
         FixTypes.LEVEL,
         new IFixableData() {
             @Override
@@ -70,7 +70,7 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE);
+                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE, NbtTags.SPAWN_WOLVES);
                 
                 return fixGeneratorSettings(compound, dataFixKeys);
             }

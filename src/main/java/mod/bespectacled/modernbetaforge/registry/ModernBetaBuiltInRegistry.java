@@ -59,5 +59,6 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.DATA_FIX.register(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves);
     }
 }

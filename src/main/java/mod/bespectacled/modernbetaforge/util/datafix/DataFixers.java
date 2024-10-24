@@ -29,6 +29,17 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, true)
         .build();
     
+    private static final Map<String, Boolean> SHOULD_SPAWN_WOLVES = ImmutableMap.<String, Boolean>builder()
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.id, true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, true)
+        .build();
+    
     public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
@@ -119,6 +130,10 @@ public class DataFixers {
     
     public static void fixSandstone(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, true);
+    }
+    
+    public static void fixWolves(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(factory.chunkSource, true);
     }
     
     @SuppressWarnings("unchecked")

@@ -2,13 +2,10 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -27,14 +24,6 @@ public class BiomeBetaRainforest extends BiomeBeta {
             .setHeightVariation(HEIGHT_VARY_HIGH)
         );
         
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
-        
-        if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableMonsterList.add(new SpawnListEntry(EntityOcelot.class, 2, 1, 1));
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityParrot.class, 40, 1, 2));
-        }
-
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
     
@@ -80,5 +69,16 @@ public class BiomeBetaRainforest extends BiomeBeta {
                 new WorldGenMelon().generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
+    }
+    
+    @Override
+    protected void populateAdditionalCreatures() {
+        this.additionalCreatures.add(PARROT);
+    }
+    
+    @Override
+    protected void populateAdditionalMonsters() {
+        super.populateAdditionalMonsters();
+        this.additionalMonsters.add(OCELOT);
     }
 }

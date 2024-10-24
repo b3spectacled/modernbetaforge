@@ -2,15 +2,11 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.passive.EntityDonkey;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -26,14 +22,6 @@ public class BiomeBetaPlains extends BiomeBeta {
             .setBaseHeight(BASE_HEIGHT_LOW)
             .setHeightVariation(HEIGHT_VARY_LOW)
         );
-        
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
-
-        if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityHorse.class, 5, 2, 6));
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityDonkey.class, 1, 1, 3));
-        }
 
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
@@ -83,5 +71,11 @@ public class BiomeBetaPlains extends BiomeBeta {
                 }
             }
         }
+    }
+    
+    @Override
+    protected void populateAdditionalCreatures() {
+        this.additionalCreatures.add(HORSE_PLAINS);
+        this.additionalCreatures.add(DONKEY_PLAINS);
     }
 }

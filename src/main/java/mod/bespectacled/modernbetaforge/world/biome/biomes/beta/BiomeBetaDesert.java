@@ -1,16 +1,10 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
-import java.util.Iterator;
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import net.minecraft.entity.monster.EntityHusk;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.EntityZombieVillager;
-import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -35,23 +29,6 @@ public class BiomeBetaDesert extends BiomeBeta {
         // Should always clear to prevent passive mobs from spawning in desert
         this.spawnableCreatureList.clear();
         
-        if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityRabbit.class, 4, 2, 3));
-            
-            Iterator<SpawnListEntry> monsterIterator = this.spawnableMonsterList.iterator();
-            while (monsterIterator.hasNext()) {
-                SpawnListEntry spawnListEntry = monsterIterator.next();
-                
-                if (spawnListEntry.entityClass == EntityZombie.class || spawnListEntry.entityClass == EntityZombieVillager.class) {
-                    monsterIterator.remove();
-                }
-            }
-            
-            this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
-            this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
-            this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
-        }
-        
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
     }
     
@@ -73,5 +50,21 @@ public class BiomeBetaDesert extends BiomeBeta {
         if (settings.useFossils && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FOSSIL) && random.nextInt(64) == 0) {
             new WorldGenFossils().generate(world, random, startPos);
         }
+    }
+    
+    @Override
+    protected void populateAdditionalCreatures() {
+        this.additionalCreatures.add(RABBIT);
+    }
+    
+    @Override
+    protected void populateAdditionalMonsters() {
+        super.populateAdditionalMonsters();
+        this.additionalMonsters.add(HUSK);
+        
+        // Vanilla spawners
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
     }
 }

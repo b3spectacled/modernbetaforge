@@ -2,15 +2,12 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -32,13 +29,6 @@ public class BiomeBetaSwampland extends BiomeBeta {
             .setBaseHeight(BASE_HEIGHT_LOW)
             .setHeightVariation(HEIGHT_VARY_LOW)
         );
-        
-        this.topBlock = BlockStates.GRASS_BLOCK;
-        this.fillerBlock = BlockStates.DIRT;
-        
-        if (ModernBetaConfig.mobOptions.useNewMobs) {
-            this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 1, 1, 1));
-        }
 
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
     }
@@ -115,5 +105,11 @@ public class BiomeBetaSwampland extends BiomeBeta {
                 }
             }
         }
+    }
+    
+    @Override
+    protected void populateAdditionalMonsters() {
+        super.populateAdditionalMonsters();
+        this.additionalMonsters.add(SLIME_SWAMP);
     }
 }

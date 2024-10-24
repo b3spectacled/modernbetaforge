@@ -1,23 +1,10 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.infdev;
 
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import net.minecraft.world.biome.BiomeDecorator;
 
-public class BiomeInfdev611 extends ModernBetaBiome {
+public class BiomeInfdev611 extends BiomeInfdev {
     public BiomeInfdev611() {
-        super(new BiomeProperties("Infdev 611")
-            .setTemperature(0.5f)
-            .setRainfall(0.5f)
-            .setBaseHeight(BASE_HEIGHT_HIGH)
-            .setHeightVariation(HEIGHT_VARY_HIGH)
-        );
-        
-        this.skyColor = ModernBetaBiomeColors.INFDEV_611_SKY_COLOR;
-        this.fogColor = ModernBetaBiomeColors.INFDEV_611_FOG_COLOR;
-        
-        this.grassColor = ModernBetaBiomeColors.OLD_GRASS_COLOR;
-        this.foliageColor = ModernBetaBiomeColors.OLD_FOLIAGE_COLOR;
+        super(new BiomeProperties("Infdev 611"));
     }
     
     @Override

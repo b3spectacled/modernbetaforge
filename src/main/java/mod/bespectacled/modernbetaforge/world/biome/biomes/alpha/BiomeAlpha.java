@@ -1,10 +1,29 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.alpha;
 
-public class BiomeAlpha extends BiomeAlphaBase {
-    public BiomeAlpha() {
-        super(new BiomeProperties("Alpha")
-            .setTemperature(0.5f)
-            .setRainfall(0.5f)
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
+import net.minecraft.world.biome.BiomeDecorator;
+
+public abstract class BiomeAlpha extends ModernBetaBiome {
+    public BiomeAlpha(BiomeProperties properties) {
+        super(properties
+            .setBaseHeight(BASE_HEIGHT_HIGH)
+            .setHeightVariation(HEIGHT_VARY_HIGH)
         );
+        
+        this.skyColor = ModernBetaBiomeColors.ALPHA_SKY_COLOR;
+        
+        this.grassColor = ModernBetaBiomeColors.OLD_GRASS_COLOR;
+        this.foliageColor = ModernBetaBiomeColors.OLD_FOLIAGE_COLOR;
+    }
+    
+    @Override
+    public BiomeDecorator createBiomeDecorator() {
+        return this.getModdedBiomeDecorator(new BiomeDecoratorAlpha());
+    }
+    
+    @Override
+    protected void populateAdditionalWolves() {
+        this.additionalWolves.add(WOLF_FOREST);
     }
 }
