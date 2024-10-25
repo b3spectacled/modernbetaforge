@@ -71,6 +71,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private GuiButton presets;
     private GuiSlideEntry chunkSlider;
     private GuiSlideEntry biomeSlider;
+    private GuiSlideEntry surfaceSlider;
     private GuiSlideEntry fixedSlider;
     
     private boolean settingsModified;
@@ -137,15 +138,17 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
+        int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
         
         this.chunkSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_CHUNK, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId);
         this.biomeSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId);
+        this.surfaceSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SURFACE, I18n.format(PREFIX + NbtTags.SURFACE_BUILDER), true, this, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId);
         this.fixedSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_FIXED, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId);
         
         GuiPageButtonList.GuiListEntry[] pageList0 = {
             this.chunkSlider,
             this.biomeSlider,
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_FIXED, I18n.format(PREFIX + "fixedBiomeLabel"), true),
+            this.surfaceSlider,
             this.fixedSlider,
 
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BIOME_REPLACEMENT, I18n.format(PREFIX + "biomeReplacementLabel"), true),
@@ -636,6 +639,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.pageList.scrollBy(curScroll);
             this.updatePageControls();
         }
+        
+        // Set default enabled for Fixed Biome slider
+        if (this.pageList != null) {
+            String biomeId = this.settings.biomeSource;
+            Gui gui = this.pageList.getComponent(GuiTags.PG0_S_FIXED);
+            if (gui != null) {
+                ((GuiSlider)gui).enabled = biomeId.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            }
+        }
     }
     
     @Override
@@ -1090,6 +1102,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_S_BIOME:
                 this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 break;
+            case GuiTags.PG0_S_SURFACE:
+                this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
+                break;
             case GuiTags.PG0_S_SEA_LEVEL:
                 this.settings.seaLevel = (int)entryValue;
                 break;
@@ -1268,6 +1283,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             Gui gui = this.pageList.getComponent(GuiTags.offsetForward(entry));
             if (gui != null) {
                 ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
+            }
+        }
+        
+        if (entry == GuiTags.PG0_S_BIOME) {
+            String biomeId = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+            Gui gui = this.pageList.getComponent(GuiTags.PG0_S_FIXED);
+            if (gui != null) {
+                ((GuiSlider)gui).enabled = biomeId.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             }
         }
         
@@ -1463,6 +1486,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_S_BIOME: {
                 String key = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 String name = ModernBetaBuiltInTypes.Biome.valueOf(key.toUpperCase()).name;
+                return name;
+            }
+            case GuiTags.PG0_S_SURFACE: {
+                String key = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
+                String name = ModernBetaBuiltInTypes.Surface.valueOf(key.toUpperCase()).name;
                 return name;
             }
             

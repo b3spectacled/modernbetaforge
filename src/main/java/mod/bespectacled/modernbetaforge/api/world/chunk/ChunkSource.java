@@ -489,20 +489,6 @@ public abstract class ChunkSource {
     }
     
     /**
-     * Get a new Random object initialized with chunk coordinates for seed, for surface generation.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates.
-     * @param chunkZ z-coordinate in chunk coordinates.
-     * 
-     * @return New Random object initialized with chunk coordinates for seed.
-     */
-    protected Random createSurfaceRandom(int chunkX, int chunkZ) {
-        long seed = (long)chunkX * 0x4f9939f508L + (long)chunkZ * 0x1ef1565bd5L;
-        
-        return new Random(seed);
-    }
-    
-    /**
      * Use a biome-specific surface builder, at a given x/z-coordinate and topmost y-coordinate.
      * Valid biomes are checked on per-biome basis using identifier from BIOMES_WITH_CUSTOM_SURFACES set. 
      * 

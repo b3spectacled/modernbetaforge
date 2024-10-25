@@ -40,6 +40,17 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, true)
         .build();
     
+    private static final Map<String, String> SURFACE_BUILDERS = ImmutableMap.<String, String>builder()
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.id, ModernBetaBuiltInTypes.Surface.BETA.id)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.id, ModernBetaBuiltInTypes.Surface.ALPHA.id)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, ModernBetaBuiltInTypes.Surface.SKYLANDS.id)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, ModernBetaBuiltInTypes.Surface.INFDEV.id)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, ModernBetaBuiltInTypes.Surface.INFDEV.id)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, ModernBetaBuiltInTypes.Surface.INFDEV.id)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.id, ModernBetaBuiltInTypes.Surface.PE.id)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaBuiltInTypes.Surface.INFDEV.id)
+        .build();
+    
     public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
@@ -129,11 +140,15 @@ public class DataFixers {
    }
     
     public static void fixSandstone(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, true);
+        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, factory.useSandstone);
     }
     
     public static void fixWolves(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(factory.chunkSource, true);
+        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(factory.chunkSource, factory.spawnWolves);
+    }
+    
+    public static void fixSurfaces(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(factory.chunkSource, factory.surfaceBuilder);
     }
     
     @SuppressWarnings("unchecked")

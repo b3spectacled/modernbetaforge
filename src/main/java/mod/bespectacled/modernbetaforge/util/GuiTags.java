@@ -17,8 +17,8 @@ public class GuiTags {
     // Entries
     public static final int PG0_S_CHUNK = 100;
     public static final int PG0_S_BIOME = 101;
+    public static final int PG0_S_SURFACE = 102;
     
-    public static final int PG0_L_FIXED = 102;
     public static final int PG0_S_FIXED = 103;
     
     public static final int PG0_B_USE_OCEAN = 104;
@@ -44,8 +44,10 @@ public class GuiTags {
     public static final int PG0_B_USE_SANDSTONE = 123;
     
     // Labels
-    public static final int PG0_L_BIOME_REPLACEMENT = 1000;
-    public static final int PG0_L_BASIC_FEATURES = 1001;
+    public static final int PG0_L_SURFACE_BUILDER = 1000;
+    public static final int PG0_L_FIXED_BIOME = 1001;
+    public static final int PG0_L_BIOME_REPLACEMENT = 1002;
+    public static final int PG0_L_BASIC_FEATURES = 1003;
     
     /* Page 2 */
     

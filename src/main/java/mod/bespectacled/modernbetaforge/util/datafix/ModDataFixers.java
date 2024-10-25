@@ -15,7 +15,7 @@ import net.minecraft.util.datafix.IFixableData;
 
 public class ModDataFixers {
     private static final int DATA_VERSION_V1_1_0_0 = 1100;
-    private static final int DATA_VERSION_V1_1_1_0 = 1110;
+    private static final int DATA_VERSION_V1_2_0_0 = 1200;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -60,17 +60,17 @@ public class ModDataFixers {
         }
     );
     
-    public static final ModDataFix SANDSTONE_AND_WOLVES_FIX = new ModDataFix(
+    public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = new ModDataFix(
         FixTypes.LEVEL,
         new IFixableData() {
             @Override
             public int getFixVersion() {
-                return DATA_VERSION_V1_1_1_0;
+                return DATA_VERSION_V1_2_0_0;
             }
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE, NbtTags.SPAWN_WOLVES);
+                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE, NbtTags.SPAWN_WOLVES, NbtTags.SURFACE_BUILDER);
                 
                 return fixGeneratorSettings(compound, dataFixKeys);
             }

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistry;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
@@ -22,9 +22,9 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.1.1.0";
+    public static final String VERSION = "1.2.0.0";
     public static final String MCVERSION = "1.12.2";
-    public static final int DATA_VERSION = 1110;
+    public static final int DATA_VERSION = 1200;
 
     private static Logger logger = LogManager.getLogger(MODID);
     
@@ -54,10 +54,11 @@ public class ModernBeta {
         ModernBetaBiomeStructures.registerStructures();
         ModernBetaBiomeStructures.registerStructureBiomes();
         
-        ModernBetaBuiltInRegistry.registerChunkSources();
-        ModernBetaBuiltInRegistry.registerBiomeSources();
-        ModernBetaBuiltInRegistry.registerNoiseSettings();
-        ModernBetaBuiltInRegistry.registerDataFixes();
+        ModernBetaBuiltInRegistries.registerChunkSources();
+        ModernBetaBuiltInRegistries.registerBiomeSources();
+        ModernBetaBuiltInRegistries.registerNoiseSettings();
+        ModernBetaBuiltInRegistries.registerSurfaceBuilders();
+        ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();
         

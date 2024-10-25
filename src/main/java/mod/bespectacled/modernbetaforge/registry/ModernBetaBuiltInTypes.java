@@ -8,7 +8,7 @@ public class ModernBetaBuiltInTypes {
         INFDEV_420("infdev_420", "Infdev 420"),
         INFDEV_415("infdev_415", "Infdev 415"),
         INFDEV_611("infdev_611", "Infdev 611"),
-        PE("pe", "Pocket Edition"),
+        PE("pe", "Pocket Ed."),
         RELEASE("release", "Release")
         ;
         
@@ -24,7 +24,7 @@ public class ModernBetaBuiltInTypes {
     public enum Biome {
         BETA("beta", "Beta"),
         SINGLE("single", "Single"),
-        PE("pe", "Pocket Edition"),
+        PE("pe", "Pocket Ed."),
         RELEASE("release", "Release")
         ;
         
@@ -32,6 +32,23 @@ public class ModernBetaBuiltInTypes {
         public final String name;
         
         private Biome(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+    
+    public enum Surface {
+        BETA("beta", "Beta"),
+        ALPHA("alpha", "Alpha"),
+        SKYLANDS("skylands", "Skylands"),
+        INFDEV("infdev", "Infdev"),
+        PE("pe", "Pocket Ed.")
+        ;
+        
+        public final String id;
+        public final String name;
+        
+        private Surface(String id, String name) {
             this.id = id;
             this.name = name;
         }

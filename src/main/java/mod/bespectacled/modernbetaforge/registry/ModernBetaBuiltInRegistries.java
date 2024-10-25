@@ -15,8 +15,13 @@ import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev611ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.PEChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.AlphaSurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.BetaSurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 
-public class ModernBetaBuiltInRegistry {
+public class ModernBetaBuiltInRegistries {
     
     public static void registerChunkSources() {
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.BETA.id, BetaChunkSource::new);
@@ -46,6 +51,14 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
     }
     
+    public static void registerSurfaceBuilders() {
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.BETA.id, BetaSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA.id, AlphaSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.SKYLANDS.id, SkylandsSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.id, InfdevSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.id, PESurfaceBuilder::new);
+    }
+    
     public static void registerDataFixes() {
         ModernBetaRegistries.DATA_FIX.register(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes);
@@ -60,5 +73,6 @@ public class ModernBetaBuiltInRegistry {
         ModernBetaRegistries.DATA_FIX.register(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone);
         ModernBetaRegistries.DATA_FIX.register(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves);
+        ModernBetaRegistries.DATA_FIX.register(NbtTags.SURFACE_BUILDER, DataFixers::fixSurfaces);
     }
 }

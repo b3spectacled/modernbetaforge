@@ -7,8 +7,6 @@ generator.modernbeta=Modern Beta
 createWorld.customize.custom.page4=Beta/PE Biome Source Biomes (Expert Users Only!)
 createWorld.customize.custom.page5=Biome Feature Settings
 
-createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
-
 createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
 createWorld.customize.custom.basicFeaturesLabel=Other Feature Settings
 createWorld.customize.custom.betaNoiseLabel=Beta Noise Settings
@@ -18,6 +16,9 @@ createWorld.customize.custom.mobSpawnLabel=Mob Settings
 
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
+createWorld.customize.custom.surfaceBuilder=Surface Builder
+createWorld.customize.custom.surfaceBuilderLabel=Surface Builder
+createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
 
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.replaceBeachBiomes=Beach Biomes

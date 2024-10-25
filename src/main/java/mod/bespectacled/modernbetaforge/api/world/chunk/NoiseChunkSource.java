@@ -5,7 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -19,6 +22,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class NoiseChunkSource extends ChunkSource {
@@ -46,9 +50,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     protected final ChunkCache<NoiseSource> noiseCache;
     protected final ChunkCache<HeightmapChunk> heightmapCache;
+
+    private final SurfaceBuilder surfaceBuilder;
     
-    private Optional<PerlinOctaveNoise> forestOctaveNoise;
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
+    private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
+    private Optional<PerlinOctaveNoise> forestOctaveNoise;
 
     public NoiseChunkSource(
         World world,
@@ -106,14 +113,24 @@ public abstract class NoiseChunkSource extends ChunkSource {
             true, 
             this::sampleHeightmap
         );
+
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE
+            .getOrElse(settings.surfaceBuilder, ModernBetaBuiltInTypes.Surface.BETA.id)
+            .apply(world, this, settings);
         
-        this.forestOctaveNoise = Optional.empty();
         this.beachOctaveNoise = Optional.empty();
+        this.surfaceOctaveNoise = Optional.empty();
+        this.forestOctaveNoise = Optional.empty();
     }
     
     @Override
     public void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.generateTerrain(chunkPrimer, chunkX, chunkZ);
+    }
+    
+    @Override
+    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
     }
     
     /**
@@ -134,12 +151,16 @@ public abstract class NoiseChunkSource extends ChunkSource {
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
     }
     
-    public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
-        return this.forestOctaveNoise;
-    }
-    
     public Optional<PerlinOctaveNoise> getBeachOctaveNoise() {
         return this.beachOctaveNoise;
+    }
+    
+    public Optional<PerlinOctaveNoise> getSurfaceOctaveNoise() {
+        return this.surfaceOctaveNoise;
+    }
+    
+    public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
+        return this.forestOctaveNoise;
     }
     
     /**
@@ -175,12 +196,16 @@ public abstract class NoiseChunkSource extends ChunkSource {
         return density;
     }
     
-    protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
-        this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
-    }
-    
     protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
+    }
+    
+    protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {
+        this.surfaceOctaveNoise = Optional.ofNullable(surfaceOctaveNoise);
+    }
+    
+    protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
+        this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
     }
     
     /**

@@ -20,8 +20,8 @@ public class BiomeBetaRainforest extends BiomeBeta {
         super(new BiomeProperties("Beta Rainforest")
             .setTemperature(1.0f)
             .setRainfall(1.0f)
-            .setBaseHeight(BASE_HEIGHT_HIGH)
-            .setHeightVariation(HEIGHT_VARY_HIGH)
+            .setBaseHeight(BASE_HEIGHT_WET)
+            .setHeightVariation(HEIGHT_VARY_WET)
         );
         
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;

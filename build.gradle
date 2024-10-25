@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
-version = '1.12.2-1.1.0.0'
+version = '1.12.2-1.2.0.0'
 group = 'mod.bespectacled.modernbetaforge'
 archivesBaseName = 'modernbetaforge'
 

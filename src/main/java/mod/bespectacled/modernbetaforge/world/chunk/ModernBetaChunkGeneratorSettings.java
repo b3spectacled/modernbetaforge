@@ -22,6 +22,7 @@ import net.minecraft.util.JsonUtils;
 public class ModernBetaChunkGeneratorSettings {
     public final String chunkSource;
     public final String biomeSource;
+    public final String surfaceBuilder;
     
     public final String fixedBiome;
     
@@ -205,6 +206,7 @@ public class ModernBetaChunkGeneratorSettings {
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
+        this.surfaceBuilder = factory.surfaceBuilder;
         
         this.fixedBiome = factory.fixedBiome;
         
@@ -391,6 +393,7 @@ public class ModernBetaChunkGeneratorSettings {
         
         public String chunkSource;
         public String biomeSource;
+        public String surfaceBuilder;
         
         public String fixedBiome;
 
@@ -591,6 +594,7 @@ public class ModernBetaChunkGeneratorSettings {
         public Factory() {
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
+            this.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
             
             this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
             
@@ -776,6 +780,7 @@ public class ModernBetaChunkGeneratorSettings {
         public void setDefaults() {
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
+            this.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
             
             this.fixedBiome = Biomes.PLAINS.getRegistryName().toString();
             
@@ -972,6 +977,7 @@ public class ModernBetaChunkGeneratorSettings {
             return
                 this.chunkSource.equals(factory.chunkSource) &&
                 this.biomeSource.equals(factory.biomeSource) &&
+                this.surfaceBuilder.equals(factory.surfaceBuilder) &&
                 
                 this.fixedBiome.equals(factory.fixedBiome) &&
                 
@@ -1160,6 +1166,7 @@ public class ModernBetaChunkGeneratorSettings {
         public int hashCode() {
             int hashCode = this.chunkSource.hashCode();
             hashCode = 31 * hashCode + this.biomeSource.hashCode();
+            hashCode = 31 * hashCode + this.surfaceBuilder.hashCode();
             
             hashCode = 31 * hashCode + this.fixedBiome.hashCode();
             
@@ -1361,6 +1368,7 @@ public class ModernBetaChunkGeneratorSettings {
             try {
                 factory.chunkSource = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
                 factory.biomeSource = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource);
+                factory.surfaceBuilder = JsonUtils.getString(jsonObject, NbtTags.SURFACE_BUILDER, factory.surfaceBuilder);
                 
                 factory.fixedBiome = JsonUtils.getString(jsonObject, "fixedBiome", factory.fixedBiome);
                 
@@ -1552,6 +1560,7 @@ public class ModernBetaChunkGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.CHUNK_SOURCE, factory.chunkSource);
             jsonObject.addProperty(NbtTags.BIOME_SOURCE, factory.biomeSource);
+            jsonObject.addProperty(NbtTags.SURFACE_BUILDER, factory.surfaceBuilder);
             
             jsonObject.addProperty("fixedBiome", factory.fixedBiome);
 
