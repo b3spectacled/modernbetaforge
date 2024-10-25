@@ -23,26 +23,26 @@ public class AlphaSurfaceBuilder extends SurfaceBuilder {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
-        int worldHeight = this.settings.height;
-        int seaLevel = this.settings.seaLevel;
-        boolean useSandstone = this.settings.useSandstone;
+        int worldHeight = this.getWorldHeight();
+        int seaLevel = this.getSeaLevel();
+        boolean useSandstone = this.useSandstone();
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         Random sandstoneRandom = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] sandNoise = this.chunkSource.getBeachOctaveNoise().get().sampleAlpha(
+        double[] sandNoise = this.getBeachOctaveNoise().sampleAlpha(
             chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
             scale, scale, 1.0
         );
         
-        double[] gravelNoise = this.chunkSource.getBeachOctaveNoise().get().sampleAlpha(
+        double[] gravelNoise = this.getBeachOctaveNoise().sampleAlpha(
             chunkZ * 16, 109.0134, chunkX * 16,
             16, 1, 16,
             scale, 1.0, scale
         );
         
-        double[] surfaceNoise = this.chunkSource.getSurfaceOctaveNoise().get().sampleAlpha(
+        double[] surfaceNoise = this.getSurfaceOctaveNoise().sampleAlpha(
             chunkX * 16, chunkZ * 16, 0.0,
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0

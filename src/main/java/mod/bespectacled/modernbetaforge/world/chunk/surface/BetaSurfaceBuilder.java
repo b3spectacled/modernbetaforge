@@ -23,25 +23,25 @@ public class BetaSurfaceBuilder extends SurfaceBuilder {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
 
-        int worldHeight = this.settings.height;
-        int seaLevel = this.settings.seaLevel;
-        boolean useSandstone = this.settings.useSandstone;
+        int worldHeight = this.getWorldHeight();
+        int seaLevel = this.getSeaLevel();
+        boolean useSandstone = this.useSandstone();
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] sandNoise = this.chunkSource.getBeachOctaveNoise().get().sampleBeta(
+        double[] sandNoise = this.getBeachOctaveNoise().sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale, scale, 1.0
         );
         
-        double[] gravelNoise = this.chunkSource.getBeachOctaveNoise().get().sampleBeta(
+        double[] gravelNoise = this.getBeachOctaveNoise().sampleBeta(
             chunkX * 16, 109.0134, chunkZ * 16, 
             16, 1, 16, 
             scale, 1.0, scale
         );
         
-        double[] surfaceNoise = this.chunkSource.getSurfaceOctaveNoise().get().sampleBeta(
+        double[] surfaceNoise = this.getSurfaceOctaveNoise().sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0

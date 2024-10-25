@@ -23,9 +23,9 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
-        int worldHeight = this.settings.height;
-        int seaLevel = this.settings.seaLevel;
-        boolean useSandstone = this.settings.useSandstone;
+        int worldHeight = this.getWorldHeight();
+        int seaLevel = this.getSeaLevel();
+        boolean useSandstone = this.useSandstone();
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         Random bedrockRandom = this.createSurfaceRandom(chunkX, chunkZ);
@@ -36,19 +36,19 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                 int x = startX + localX;
                 int z = startZ + localZ;
                 
-                boolean genSandBeach = this.chunkSource.getBeachOctaveNoise().get().sample(
+                boolean genSandBeach = this.getBeachOctaveNoise().sample(
                     x * scale,
                     z * scale,
                     0.0
                 ) + random.nextDouble() * 0.2 > 0.0;
                 
-                boolean genGravelBeach = this.chunkSource.getBeachOctaveNoise().get().sample(
+                boolean genGravelBeach = this.getBeachOctaveNoise().sample(
                     z * scale, 
                     109.0134,
                     x * scale
                 ) + random.nextDouble() * 0.2 > 3.0;
                 
-                double surfaceNoise = this.chunkSource.getSurfaceOctaveNoise().get().sampleXY(
+                double surfaceNoise = this.getSurfaceOctaveNoise().sampleXY(
                     x * scale * 2.0,
                     z * scale * 2.0
                 );

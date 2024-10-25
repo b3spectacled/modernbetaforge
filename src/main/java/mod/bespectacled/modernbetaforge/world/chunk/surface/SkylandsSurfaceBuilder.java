@@ -23,12 +23,12 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
 
-        int worldHeight = this.settings.height;
-        boolean useSandstone = this.settings.useSandstone;
+        int worldHeight = this.getWorldHeight();
+        boolean useSandstone = this.useSandstone();
 
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         
-        double[] surfaceNoise = this.chunkSource.getSurfaceOctaveNoise().get().sampleBeta(
+        double[] surfaceNoise = this.getSurfaceOctaveNoise().sampleBeta(
             chunkX * 16, chunkZ * 16, 0.0, 
             16, 16, 1,
             scale * 2.0, scale * 2.0, scale * 2.0
