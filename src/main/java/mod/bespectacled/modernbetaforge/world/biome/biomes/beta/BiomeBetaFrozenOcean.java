@@ -12,10 +12,10 @@ public class BiomeBetaFrozenOcean extends BiomeBeta {
             .setSnowEnabled()
             //.setWaterColor(0)
         );
-
-        this.spawnableCreatureList.clear();
         
         this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
+
+        this.spawnableCreatureList.clear();
     }
     
 }

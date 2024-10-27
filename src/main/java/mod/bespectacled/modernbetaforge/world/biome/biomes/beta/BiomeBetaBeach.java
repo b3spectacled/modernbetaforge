@@ -16,8 +16,9 @@ public class BiomeBetaBeach extends BiomeBeta {
         this.topBlock = BlockStates.SAND;
         this.fillerBlock = BlockStates.SAND;
         
-        this.spawnableCreatureList.clear();
-        
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
+        
+        this.spawnableCreatureList.clear();
     }
+    
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTaiga1;
 import net.minecraft.world.gen.feature.WorldGenTaiga2;
@@ -22,6 +23,9 @@ public class BiomeBetaTaiga extends BiomeBeta {
         );
         
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
+        
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, RABBIT);
+        this.populateAdditionalMobs(null, true, WOLF_TAIGA);
     }
     
     @Override
@@ -39,15 +43,5 @@ public class BiomeBetaTaiga extends BiomeBeta {
             return super.getRandomTreeFeature(random);
         
         return this.getRandomTreeFeature(random);
-    }
-    
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(RABBIT);
-    }
-    
-    @Override
-    protected void populateAdditionalWolves() {
-        this.additionalWolves.add(WOLF_TAIGA);
     }
 }

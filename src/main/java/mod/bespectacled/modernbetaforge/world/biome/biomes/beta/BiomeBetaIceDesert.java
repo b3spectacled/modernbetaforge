@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
+import net.minecraft.entity.EnumCreatureType;
 
 public class BiomeBetaIceDesert extends BiomeBeta {
     public BiomeBetaIceDesert() {
@@ -16,22 +17,13 @@ public class BiomeBetaIceDesert extends BiomeBeta {
         this.topBlock = BlockStates.SAND;
         this.fillerBlock = BlockStates.SAND;
         
+        this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
+        
         // Should always clear to prevent passive mobs from spawning in desert
         this.spawnableCreatureList.clear();
         
-        this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
-    }
-    
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(RABBIT_TUNDRA);
-        this.additionalCreatures.add(POLAR_BEAR);
-    }
-    
-    @Override
-    protected void populateAdditionalMonsters() {
-        super.populateAdditionalMonsters();
-        this.additionalMonsters.add(STRAY);
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, RABBIT_TUNDRA, POLAR_BEAR);
+        this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, STRAY);
         
         // Vanilla spawners
         // this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 20, 4, 4));

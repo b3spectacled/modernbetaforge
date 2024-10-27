@@ -6,6 +6,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -25,6 +26,9 @@ public class BiomeBetaRainforest extends BiomeBeta {
         );
         
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
+        
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, PARROT);
+        this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, OCELOT);
     }
     
     @Override
@@ -71,14 +75,4 @@ public class BiomeBetaRainforest extends BiomeBeta {
         }
     }
     
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(PARROT);
-    }
-    
-    @Override
-    protected void populateAdditionalMonsters() {
-        super.populateAdditionalMonsters();
-        this.additionalMonsters.add(OCELOT);
-    }
 }

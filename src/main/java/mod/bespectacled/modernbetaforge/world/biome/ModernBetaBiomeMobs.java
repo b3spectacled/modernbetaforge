@@ -8,7 +8,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 public class ModernBetaBiomeMobs {
-
     public static List<SpawnListEntry> modifySpawnList(
         List<SpawnListEntry> spawnEntries,
         EnumCreatureType creatureType,
@@ -20,17 +19,17 @@ public class ModernBetaBiomeMobs {
             
             switch(creatureType) {
                 case MONSTER:        // New Monsters
-                    addMobs(spawnEntries, modernBetaBiome.getAdditionalMonsters(), settings.spawnNewMonsterMobs);
+                    addMobs(spawnEntries, creatureType, modernBetaBiome, settings.spawnNewMonsterMobs, false);
                     break;
                 case CREATURE:       // New Passives, wolves
-                    addMobs(spawnEntries, modernBetaBiome.getAdditionalCreatures(), settings.spawnNewCreatureMobs);
-                    addMobs(spawnEntries, modernBetaBiome.getAdditionalWolves(), settings.spawnWolves);
+                    addMobs(spawnEntries, creatureType, modernBetaBiome, settings.spawnNewCreatureMobs, false);
+                    addMobs(spawnEntries, creatureType, modernBetaBiome, settings.spawnWolves, true);
                     break;
                 case AMBIENT:        // Bats
-                    clearMobs(spawnEntries, !settings.spawnAmbientMobs);
+                    addMobs(spawnEntries, creatureType, modernBetaBiome, settings.spawnAmbientMobs, false);
                     break;
                 case WATER_CREATURE: // Squid
-                    clearMobs(spawnEntries, !settings.spawnWaterMobs);
+                    addMobs(spawnEntries, creatureType, modernBetaBiome, settings.spawnWaterMobs, false);
                     break;
             }
         }
@@ -38,15 +37,9 @@ public class ModernBetaBiomeMobs {
         return spawnEntries;
     }
     
-    private static void addMobs(List<SpawnListEntry> spawnEntries, List<SpawnListEntry> additionalMobs, boolean shouldAdd) {
+    private static void addMobs(List<SpawnListEntry> spawnEntries, EnumCreatureType creatureType, ModernBetaBiome biome, boolean shouldAdd, boolean addWolves) {
         if (shouldAdd) {
-            spawnEntries.addAll(additionalMobs);
-        }
-    }
-    
-    private static void clearMobs(List<SpawnListEntry> spawnEntries, boolean shouldClear) {
-        if (shouldClear) {
-            spawnEntries.clear();
+            spawnEntries.addAll(biome.getAdditionalSpawnableList(creatureType, addWolves));
         }
     }
 }

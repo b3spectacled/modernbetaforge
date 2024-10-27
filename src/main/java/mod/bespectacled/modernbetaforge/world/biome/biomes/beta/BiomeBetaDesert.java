@@ -5,6 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -25,11 +26,19 @@ public class BiomeBetaDesert extends BiomeBeta {
         
         this.topBlock = BlockStates.SAND;
         this.fillerBlock = BlockStates.SAND;
+        
+        this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
 
         // Should always clear to prevent passive mobs from spawning in desert
         this.spawnableCreatureList.clear();
         
-        this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, RABBIT);
+        this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, HUSK);
+        
+        // Vanilla spawners
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
+        // this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
     }
     
     @Override
@@ -52,19 +61,4 @@ public class BiomeBetaDesert extends BiomeBeta {
         }
     }
     
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(RABBIT);
-    }
-    
-    @Override
-    protected void populateAdditionalMonsters() {
-        super.populateAdditionalMonsters();
-        this.additionalMonsters.add(HUSK);
-        
-        // Vanilla spawners
-        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombie.class, 19, 4, 4));
-        // this.spawnableMonsterList.add(new SpawnListEntry(EntityZombieVillager.class, 1, 1, 1));
-        // this.spawnableMonsterList.add(new SpawnListEntry(EntityHusk.class, 80, 4, 4));
-    }
 }

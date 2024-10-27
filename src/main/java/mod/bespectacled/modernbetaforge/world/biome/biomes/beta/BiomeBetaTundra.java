@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
+import net.minecraft.entity.EnumCreatureType;
 
 public class BiomeBetaTundra extends BiomeBeta {
     public BiomeBetaTundra() {
@@ -13,18 +14,9 @@ public class BiomeBetaTundra extends BiomeBeta {
         );
 
         this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
-    }
-    
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(RABBIT_TUNDRA);
-        this.additionalCreatures.add(POLAR_BEAR);
-    }
-    
-    @Override
-    protected void populateAdditionalMonsters() {
-        super.populateAdditionalMonsters();
-        this.additionalMonsters.add(STRAY);
+        
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, RABBIT_TUNDRA, POLAR_BEAR);
+        this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, STRAY);
         
         // Vanilla spawners
         // this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 20, 4, 4));

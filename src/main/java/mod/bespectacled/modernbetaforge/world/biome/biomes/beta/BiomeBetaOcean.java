@@ -11,9 +11,10 @@ public class BiomeBetaOcean extends BiomeBeta {
             .setHeightVariation(HEIGHT_VARY_OCEAN)
             //.setWaterColor(0)
         );
-        
-        this.spawnableCreatureList.clear();
 
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
+        
+        this.spawnableCreatureList.clear();
     }
+    
 }

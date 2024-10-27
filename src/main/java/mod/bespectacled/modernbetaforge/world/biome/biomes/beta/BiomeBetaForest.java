@@ -20,6 +20,8 @@ public class BiomeBetaForest extends BiomeBeta {
         );
 
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
+        
+        this.populateAdditionalMobs(null, true, WOLF_FOREST);
     }
     
     @Override
@@ -44,8 +46,4 @@ public class BiomeBetaForest extends BiomeBeta {
         return this.getRandomTreeFeature(random);
     }
     
-    @Override
-    protected void populateAdditionalWolves() {
-        this.additionalWolves.add(WOLF_FOREST);
-    }
 }

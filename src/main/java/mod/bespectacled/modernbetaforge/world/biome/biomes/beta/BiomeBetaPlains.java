@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -24,6 +25,8 @@ public class BiomeBetaPlains extends BiomeBeta {
         );
 
         this.skyColor = ModernBetaBiomeColors.BETA_WARM_SKY_COLOR;
+        
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, HORSE_PLAINS, DONKEY_PLAINS);
     }
     
     @Override
@@ -71,11 +74,5 @@ public class BiomeBetaPlains extends BiomeBeta {
                 }
             }
         }
-    }
-    
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(HORSE_PLAINS);
-        this.additionalCreatures.add(DONKEY_PLAINS);
     }
 }

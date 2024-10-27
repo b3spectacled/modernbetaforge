@@ -8,6 +8,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -31,6 +32,8 @@ public class BiomeBetaSwampland extends BiomeBeta {
         );
 
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
+        
+        this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, SLIME_SWAMP);
     }
     
     @Override
@@ -105,11 +108,5 @@ public class BiomeBetaSwampland extends BiomeBeta {
                 }
             }
         }
-    }
-    
-    @Override
-    protected void populateAdditionalMonsters() {
-        super.populateAdditionalMonsters();
-        this.additionalMonsters.add(SLIME_SWAMP);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenSavannaTree;
 
@@ -20,6 +21,8 @@ public class BiomeBetaSavanna extends BiomeBeta {
         );
 
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
+        
+        this.populateAdditionalMobs(EnumCreatureType.CREATURE, false, HORSE_SAVANNA, DONKEY_SAVANNA, LLAMA);
     }
     
     @Override
@@ -34,10 +37,4 @@ public class BiomeBetaSavanna extends BiomeBeta {
         return ACACIA_TREE_FEATURE;
     }
     
-    @Override
-    protected void populateAdditionalCreatures() {
-        this.additionalCreatures.add(HORSE_SAVANNA);
-        this.additionalCreatures.add(DONKEY_SAVANNA);
-        this.additionalCreatures.add(LLAMA);
-    }
 }

@@ -15,10 +15,10 @@ public class BiomeBetaSnowyBeach extends BiomeBeta {
         
         this.topBlock = BlockStates.SAND;
         this.fillerBlock = BlockStates.SAND;
-        
-        this.spawnableCreatureList.clear();
 
         this.skyColor = ModernBetaBiomeColors.BETA_COLD_SKY_COLOR;
+        
+        this.spawnableCreatureList.clear();
     }
     
 }

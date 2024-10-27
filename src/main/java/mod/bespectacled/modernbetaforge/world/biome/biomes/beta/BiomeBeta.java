@@ -7,6 +7,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityHusk;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntitySlime;
@@ -45,6 +46,9 @@ public abstract class BiomeBeta extends ModernBetaBiome {
     
     public BiomeBeta(BiomeProperties properties) {
         super(properties);
+        
+        this.populateSpawnableMobs(EnumCreatureType.MONSTER, SPIDER, SKELETON, ZOMBIE, CREEPER, SLIME);
+        this.populateSpawnableMobs(EnumCreatureType.CREATURE, SHEEP, PIG, COW, CHICKEN);
     }
     
     @Override
@@ -80,7 +84,7 @@ public abstract class BiomeBeta extends ModernBetaBiome {
         
         return super.getFoliageColorAtPos(blockPos);
     }
-    
+
     public static boolean canSetIce(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
         if (temp >= 0.5) {
             return false;

@@ -11,6 +11,9 @@ public class BiomeBetaSky extends BiomeBeta {
             .setBaseHeight(BASE_HEIGHT_LOW)
             .setHeightVariation(HEIGHT_VARY_LOW)
         );
+
+        this.skyColor = ModernBetaBiomeColors.SKYLANDS_SKY_COLOR;
+        this.fogColor = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR;
         
         this.spawnableCreatureList.clear();
         this.spawnableCreatureList.add(new SpawnListEntry(EntityChicken.class, 10, 4, 4));
@@ -21,9 +24,8 @@ public class BiomeBetaSky extends BiomeBeta {
         
         this.additionalCreatures.clear();
         this.additionalMonsters.clear();
-
-        this.skyColor = ModernBetaBiomeColors.SKYLANDS_SKY_COLOR;
-        this.fogColor = ModernBetaBiomeColors.SKYLANDS_FOG_COLOR;
+        this.additionalWaterCreatures.clear();
+        this.additionalCaveCreatures.clear();
     }
     
 }
