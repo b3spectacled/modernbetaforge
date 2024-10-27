@@ -600,7 +600,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setInitialText(this.pageList, GuiTags.PG5_TUND_BEACH, this.settings.tundraBiomeBeach);
 
         this.updatePageControls();
-        this.updateGuiEnabled();
     }
 
     @Override
@@ -647,9 +646,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.pageList.scrollBy(curScroll);
             this.updatePageControls();
         }
-        
-        // Set default enabled for certain options
-        this.updateGuiEnabled();
     }
     
     @Override
@@ -1042,28 +1038,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
-        if (entry == GuiTags.PG0_B_USE_OLD_NETHER) {
-            this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, entryValue);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, entryValue);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, entryValue);
-            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_SIZE, entryValue);
-            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_CNT, entryValue);
-            this.setButtonEnabled(GuiTags.PG2_S_MGMA_SIZE, entryValue);
-            this.setButtonEnabled(GuiTags.PG2_S_MGMA_CNT, entryValue);
-        }
-        
-        if (entry == GuiTags.PG0_B_USE_DUNGEONS) {
-            this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, entryValue);
-        }
-        
-        if (entry == GuiTags.PG0_B_USE_WATER_LAKES) {
-            this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, entryValue);
-        }
-        
-        if (entry == GuiTags.PG0_B_USE_LAVA_LAKES) {
-            this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, entryValue);
-        }
-        
         if (!this.settings.equals(this.defaultSettings)) {
             this.setSettingsModified(true);
         }
@@ -1335,11 +1309,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         }
         
-        if (entry == GuiTags.PG0_S_BIOME) {
-            String biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
-            this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
-        }
-        
         if (!this.settings.equals(this.defaultSettings)) {
             this.setSettingsModified(true);
         }
@@ -1400,8 +1369,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                         }
                     }
                 }
-                
-                this.updateGuiEnabled();                
+                             
                 break;
             case GuiTags.FUNC_PREV:
                 this.pageList.previousPage();
@@ -1641,33 +1609,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
         ((GuiTextField)pageList.getComponent(id)).setText(initial);
-    }
-    
-    private void setButtonEnabled(int entry, boolean enabled) {
-        Gui gui = this.pageList.getComponent(entry);
-        if (gui != null) {
-            ((GuiButton)gui).enabled = enabled;
-        }
-    }
-    
-    private void updateGuiEnabled() {
-        // Set default enabled for certain options
-        if (this.pageList != null) {
-            String biomeSource = this.settings.biomeSource;
-            boolean useOldNether = this.settings.useOldNether;
-            
-            this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
-            this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, useOldNether);
-            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_SIZE, useOldNether);
-            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_CNT, useOldNether);
-            this.setButtonEnabled(GuiTags.PG2_S_MGMA_SIZE, useOldNether);
-            this.setButtonEnabled(GuiTags.PG2_S_MGMA_CNT, useOldNether);
-            this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, this.settings.useDungeons);
-            this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
-            this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
-        }
     }
     
     @Override
