@@ -48,6 +48,9 @@ public class BlockStates {
     public static final IBlockState DIORITE = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE);
     public static final IBlockState ANDESITE = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE);
     
+    public static final IBlockState QUARTZ_ORE = Blocks.QUARTZ_ORE.getDefaultState();
+    public static final IBlockState MAGMA = Blocks.MAGMA.getDefaultState();
+    
     public static boolean isAir(IBlockState blockState) {
         return blockState.getBlock().isAir(blockState, null, null);
     }

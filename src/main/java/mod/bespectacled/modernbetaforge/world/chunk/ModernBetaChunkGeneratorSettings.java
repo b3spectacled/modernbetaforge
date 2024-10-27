@@ -75,6 +75,11 @@ public class ModernBetaChunkGeneratorSettings {
     
     public final boolean useSandstone;
     
+    public final boolean useOldNether;
+    public final boolean useNetherCaves;
+    public final boolean useFortresses;
+    public final boolean useLavaPockets;
+    
     public final int claySize;
     public final int clayCount;
     public final int clayMinHeight;
@@ -139,6 +144,12 @@ public class ModernBetaChunkGeneratorSettings {
     public final int emeraldCount;
     public final int emeraldMinHeight;
     public final int emeraldMaxHeight;
+    
+    public final int quartzSize;
+    public final int quartzCount;
+    
+    public final int magmaSize;
+    public final int magmaCount;
 
     public final boolean useTallGrass;
     public final boolean useNewFlowers;
@@ -265,6 +276,11 @@ public class ModernBetaChunkGeneratorSettings {
         
         this.useSandstone = factory.useSandstone;
         
+        this.useOldNether = factory.useOldNether;
+        this.useNetherCaves = factory.useNetherCaves;
+        this.useFortresses = factory.useFortresses;
+        this.useLavaPockets = factory.useLavaPockets;
+        
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
         this.clayMinHeight = factory.clayMinHeight;
@@ -329,6 +345,12 @@ public class ModernBetaChunkGeneratorSettings {
         this.emeraldCount = factory.emeraldCount;
         this.emeraldMinHeight = factory.emeraldMinHeight;
         this.emeraldMaxHeight = factory.emeraldMaxHeight;
+        
+        this.quartzSize = factory.quartzSize;
+        this.quartzCount = factory.quartzCount;
+        
+        this.magmaSize = factory.magmaSize;
+        this.magmaCount = factory.magmaCount;
 
         this.useTallGrass = factory.useTallGrass;
         this.useNewFlowers = factory.useNewFlowers;
@@ -446,6 +468,11 @@ public class ModernBetaChunkGeneratorSettings {
         
         public boolean useSandstone;
         
+        public boolean useOldNether;
+        public boolean useNetherCaves;
+        public boolean useFortresses;
+        public boolean useLavaPockets;
+        
         public int claySize;
         public int clayCount;
         public int clayMinHeight;
@@ -510,6 +537,12 @@ public class ModernBetaChunkGeneratorSettings {
         public int emeraldCount;
         public int emeraldMinHeight;
         public int emeraldMaxHeight;
+        
+        public int quartzSize;
+        public int quartzCount;
+        
+        public int magmaSize;
+        public int magmaCount;
         
         public boolean useTallGrass;
         public boolean useNewFlowers;
@@ -646,6 +679,11 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useSandstone = true;
             
+            this.useOldNether = false;
+            this.useNetherCaves = true;
+            this.useFortresses = true;
+            this.useLavaPockets = true;
+            
             this.claySize = 33;
             this.clayCount = 10;
             this.clayMinHeight = 0;
@@ -710,6 +748,12 @@ public class ModernBetaChunkGeneratorSettings {
             this.emeraldCount = 1;
             this.emeraldMinHeight = 95;
             this.emeraldMaxHeight = 128;
+            
+            this.quartzSize = 14;
+            this.quartzCount = 16;
+            
+            this.magmaSize = 33;
+            this.magmaCount = 4;
             
             this.useTallGrass = true;
             this.useNewFlowers = true;
@@ -833,6 +877,11 @@ public class ModernBetaChunkGeneratorSettings {
             
             this.useSandstone = true;
             
+            this.useOldNether = false;
+            this.useNetherCaves = true;
+            this.useFortresses = true;
+            this.useLavaPockets = true;
+            
             this.claySize = 33;
             this.clayCount = 10;
             this.clayMinHeight = 0;
@@ -897,6 +946,12 @@ public class ModernBetaChunkGeneratorSettings {
             this.emeraldCount = 1;
             this.emeraldMinHeight = 95;
             this.emeraldMaxHeight = 128;
+            
+            this.quartzSize = 14;
+            this.quartzCount = 16;
+            
+            this.magmaSize = 33;
+            this.magmaCount = 4;
             
             this.useTallGrass = true;
             this.useNewFlowers = true;
@@ -1031,6 +1086,11 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.useSandstone == factory.useSandstone &&
                 
+                this.useOldNether == factory.useOldNether &&
+                this.useNetherCaves == factory.useNetherCaves &&
+                this.useFortresses == factory.useFortresses &&
+                this.useLavaPockets == factory.useLavaPockets &&
+                
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
                 this.clayMinHeight == factory.clayMinHeight &&
@@ -1095,6 +1155,12 @@ public class ModernBetaChunkGeneratorSettings {
                 this.emeraldCount == factory.emeraldCount &&
                 this.emeraldMinHeight == factory.emeraldMinHeight &&
                 this.emeraldMaxHeight == factory.emeraldMaxHeight &&
+        
+                this.quartzSize == factory.quartzSize &&
+                this.quartzCount == factory.quartzCount &&
+
+                this.magmaSize == factory.magmaSize &&
+                this.magmaCount == factory.magmaCount &&
                 
                 this.useTallGrass == factory.useTallGrass &&
                 this.useNewFlowers == factory.useNewFlowers &&
@@ -1219,6 +1285,11 @@ public class ModernBetaChunkGeneratorSettings {
             
             hashCode = 31 * hashCode + (this.useSandstone ? 1 : 0);
             
+            hashCode = 31 * hashCode + (this.useOldNether ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useNetherCaves ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useFortresses ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useLavaPockets ? 1 : 0);
+            
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
             hashCode = 31 * hashCode + this.clayMinHeight;
@@ -1283,6 +1354,12 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.emeraldCount;
             hashCode = 31 * hashCode + this.emeraldMinHeight;
             hashCode = 31 * hashCode + this.emeraldMaxHeight;
+            
+            hashCode = 31 * hashCode + this.quartzSize;
+            hashCode = 31 * hashCode + this.quartzCount;
+            
+            hashCode = 31 * hashCode + this.magmaSize;
+            hashCode = 31 * hashCode + this.magmaCount;
 
             hashCode = 31 * hashCode + (this.useTallGrass ? 1 : 0);
             hashCode = 31 * hashCode + (this.useNewFlowers ? 1 : 0);
@@ -1421,6 +1498,11 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 factory.useSandstone = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SANDSTONE, factory.useSandstone);
                 
+                factory.useOldNether = JsonUtils.getBoolean(jsonObject, NbtTags.USE_OLD_NETHER, factory.useOldNether);
+                factory.useNetherCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
+                factory.useFortresses = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FORTRESSES, factory.useFortresses);
+                factory.useLavaPockets = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
+                
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
                 factory.clayMinHeight = JsonUtils.getInt(jsonObject, NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
@@ -1485,6 +1567,12 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.emeraldCount = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_COUNT, factory.emeraldCount);
                 factory.emeraldMinHeight = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
                 factory.emeraldMaxHeight = JsonUtils.getInt(jsonObject, NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
+                
+                factory.quartzSize = JsonUtils.getInt(jsonObject, NbtTags.QUARTZ_SIZE, factory.quartzSize);
+                factory.quartzCount = JsonUtils.getInt(jsonObject, NbtTags.QUARTZ_COUNT, factory.quartzCount);
+                
+                factory.magmaSize = JsonUtils.getInt(jsonObject, NbtTags.MAGMA_SIZE, factory.magmaSize);
+                factory.magmaCount = JsonUtils.getInt(jsonObject, NbtTags.MAGMA_COUNT, factory.magmaCount);
 
                 factory.useTallGrass = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TALL_GRASS, factory.useTallGrass);
                 factory.useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
@@ -1613,6 +1701,11 @@ public class ModernBetaChunkGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             
+            jsonObject.addProperty(NbtTags.USE_OLD_NETHER, factory.useOldNether);
+            jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
+            jsonObject.addProperty(NbtTags.USE_FORTRESSES, factory.useFortresses);
+            jsonObject.addProperty(NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
+            
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
             jsonObject.addProperty(NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
@@ -1677,6 +1770,12 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.EMERALD_COUNT, factory.emeraldCount);
             jsonObject.addProperty(NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
             jsonObject.addProperty(NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
+            
+            jsonObject.addProperty(NbtTags.QUARTZ_SIZE, factory.quartzSize);
+            jsonObject.addProperty(NbtTags.QUARTZ_COUNT, factory.quartzCount);
+            
+            jsonObject.addProperty(NbtTags.MAGMA_SIZE, factory.magmaSize);
+            jsonObject.addProperty(NbtTags.MAGMA_COUNT, factory.magmaCount);
 
             jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
             jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);

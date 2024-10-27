@@ -1,60 +1,71 @@
-# WorldType
+## WorldType
 
 generator.modernbeta=Modern Beta
 
-# World Customization
+## World Customization
 
+# Page Titles
 createWorld.customize.custom.page4=Beta/PE Biome Source Biomes (Expert Users Only!)
 createWorld.customize.custom.page5=Biome Feature Settings
 
+# Page Labels
 createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
-createWorld.customize.custom.basicFeaturesLabel=Other Feature Settings
+createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
+createWorld.customize.custom.netherFeaturesLabel=Nether Settings
 createWorld.customize.custom.betaNoiseLabel=Beta Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Feature Settings
 createWorld.customize.custom.mobSpawnLabel=Mob Settings
 
+# Page 1 - Main Settings
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.surfaceBuilder=Surface Builder
 createWorld.customize.custom.surfaceBuilderLabel=Surface Builder
-createWorld.customize.custom.fixedBiomeLabel=Single Biome Source
 
+# Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.replaceBeachBiomes=Beach Biomes
 
+# Page 1 - Other Feature Settings
 createWorld.customize.custom.useVillageVariants=Village Variants
+createWorld.customize.custom.useSandstone=Sandstone
 
+# Page 1 - Nether Settings
+createWorld.customize.custom.useOldNether=Classic Nether
+createWorld.customize.custom.useNetherCaves=Nether Caves
+createWorld.customize.custom.useFortresses=Nether Fortresses
+createWorld.customize.custom.useLavaPockets=Lava Pockets
+
+# Page 2 - Features
 createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=Modern Flowers
 createWorld.customize.custom.useLilyPads=Lily Pads
 createWorld.customize.custom.useMelons=Melons
 createWorld.customize.custom.useDesertWells=Desert Wells
 createWorld.customize.custom.useFossils=Fossils
-
 createWorld.customize.custom.useBirchTrees=Birch Trees
 createWorld.customize.custom.usePineTrees=Pine Trees
 createWorld.customize.custom.useSwampTrees=Swamp Trees
 createWorld.customize.custom.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.useJungleTrees=Jungle Trees
 
-createWorld.customize.custom.useSandstone=Sandstone
-
+# Page 3 - Mobs
 createWorld.customize.custom.spawnNewCreatureMobs=Modern Passive Mobs
 createWorld.customize.custom.spawnNewMonsterMobs=Modern Hostile Mobs
 createWorld.customize.custom.spawnWaterMobs=Water Mobs
 createWorld.customize.custom.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.spawnWolves=Wolves
 
+# Page 4/5
 createWorld.customize.custom.height=Height
-
 createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
 createWorld.customize.custom.useBiomeDepthScale=Override Depth/Scale
 
-# World Customization Beta Biomes
 
+# Page 6 - World Customization Beta Biomes
 createWorld.customize.custom.desertBiomes=Desert
 createWorld.customize.custom.forestBiomes=Forest
 createWorld.customize.custom.iceDesertBiomes=Ice Desert
@@ -71,8 +82,7 @@ createWorld.customize.custom.baseBiome=Base Biome
 createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
-# World Customization Presets
-
+## World Customization Presets
 createWorld.customize.custom.preset.classicBeta=Classic Beta
 createWorld.customize.custom.preset.classicAlpha12=Classic Alpha 1.2
 createWorld.customize.custom.preset.classicAlpha=Classic Alpha
@@ -88,8 +98,7 @@ createWorld.customize.custom.preset.betaPE=Modern Beta Pocket Edition
 createWorld.customize.custom.preset.betaRelease=Modern Beta Release 1.12.2
 createWorld.customize.custom.preset.custom=Custom Preset
 
-# Config
-
+## Config
 modernbetaforge.general.generatoroptions=Generator Options
 modernbetaforge.general.moboptions=Mob Options
 modernbetaforge.general.spawnoptions=Spawn Options

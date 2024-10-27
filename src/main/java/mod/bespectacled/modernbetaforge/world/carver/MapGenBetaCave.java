@@ -136,8 +136,7 @@ public class MapGenBetaCave extends MapGenBase {
             return false;
         }
 
-        int minX = MathHelper.floor(x - yaw) - chunkX * 16 - 1; // Get min and max extents of tunnel, relative to
-                                                                    // chunk coords
+        int minX = MathHelper.floor(x - yaw) - chunkX * 16 - 1; // Get min and max extents of tunnel, relative to chunk coords
         int maxX = (MathHelper.floor(x + yaw) - chunkX * 16) + 1;
 
         int minY = MathHelper.floor(y - pitch) - 1;

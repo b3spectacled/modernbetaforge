@@ -11,9 +11,12 @@
 	    "MixinMapGenScatteredFeatureStart",
 	    "MixinStructureVillagePiecesStart",
 	    "MixinWorldEntitySpawner",
+	    "MixinWorldProviderHell",
+	    "accessor.AccessorChunkGeneratorHell",
 	    "accessor.AccessorStructureStart",
 	    "accessor.AccessorVillage",
-	    "accessor.AccessorWorldServer"
+	    "accessor.AccessorWorldServer",
+	    "accessor.AccessorWorldProvider"
     ],
     "client": [
 	    "client.MixinEntityRenderer",

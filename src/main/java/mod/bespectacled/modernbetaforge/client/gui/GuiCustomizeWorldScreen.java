@@ -156,7 +156,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_OCEAN, I18n.format(PREFIX + NbtTags.REPLACE_OCEAN_BIOMES), true, this.settings.replaceOceanBiomes),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_BEACH, I18n.format(PREFIX + NbtTags.REPLACE_BEACH_BIOMES), true, this.settings.replaceBeachBiomes),
             
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BASIC_FEATURES, I18n.format(PREFIX + "basicFeaturesLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BASIC_FEATURES, I18n.format(PREFIX + "overworldFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SEA_LEVEL, I18n.format(PREFIX + "seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_CAVES, I18n.format(PREFIX + "useCaves"), true, this.settings.useCaves),
@@ -175,7 +175,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_LAKES, I18n.format(PREFIX + "useLavaLakes"), true, this.settings.useLavaLakes),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LAVA_LAKE_CHANGE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone)
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
+        
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_NETHER_FEATURES, I18n.format(PREFIX + "netherFeaturesLabel"), true),
+            null,
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_OLD_NETHER, I18n.format(PREFIX + NbtTags.USE_OLD_NETHER), true, this.settings.useOldNether),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_NETHER_CAVES, I18n.format(PREFIX + NbtTags.USE_NETHER_CAVES), true, this.settings.useNetherCaves),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_FORTRESSES, I18n.format(PREFIX + NbtTags.USE_FORTRESSES), true, this.settings.useFortresses),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_POCKETS, I18n.format(PREFIX + NbtTags.USE_LAVA_POCKETS), true, this.settings.useLavaPockets)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
@@ -296,7 +303,17 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.emeraldSize),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.emeraldCount),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_MIN, I18n.format(PREFIX + "minHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight)
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_EMER_MAX, I18n.format(PREFIX + "maxHeight"), false, this, 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight),
+            
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether")), false),
+            null,
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_QRTZ_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.quartzSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_QRTZ_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.quartzCount),
+
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG2_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether")), false),
+            null,
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MGMA_SIZE, I18n.format(PREFIX + "size"), false, this, 1.0f, 50.0f, (float)this.settings.magmaSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG2_S_MGMA_CNT, I18n.format(PREFIX + "count"), false, this, 0.0f, 40.0f, (float)this.settings.magmaCount),
         };
         
         GuiPageButtonList.GuiListEntry[] pageList3 = {
@@ -1022,6 +1039,19 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.settings.useSandstone = entryValue;
                 break;
                 
+            case GuiTags.PG0_B_USE_OLD_NETHER:
+                this.settings.useOldNether = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_NETHER_CAVES:
+                this.settings.useNetherCaves = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_FORTRESSES:
+                this.settings.useFortresses = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_LAVA_POCKETS:
+                this.settings.useLavaPockets = entryValue;
+                break;
+                
             case GuiTags.PG3_B_USE_BDS:
                 this.settings.useBiomeDepthScale = entryValue;
                 break;
@@ -1276,6 +1306,18 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG2_S_EMER_MAX:
                 this.settings.emeraldMaxHeight = (int)entryValue;
+                break;
+            case GuiTags.PG2_S_QRTZ_SIZE:
+                this.settings.quartzSize = (int)entryValue;
+                break;
+            case GuiTags.PG2_S_QRTZ_CNT:
+                this.settings.quartzCount = (int)entryValue;
+                break;
+            case GuiTags.PG2_S_MGMA_SIZE:
+                this.settings.magmaSize = (int)entryValue;
+                break;
+            case GuiTags.PG2_S_MGMA_CNT:
+                this.settings.magmaCount = (int)entryValue;
                 break;
         }
         

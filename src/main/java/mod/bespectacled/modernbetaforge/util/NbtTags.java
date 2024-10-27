@@ -11,6 +11,11 @@ public class NbtTags {
     public static final String USE_VILLAGE_VARIANTS = "useVillageVariants";
     public static final String USE_SANDSTONE = "useSandstone";
     
+    public static final String USE_OLD_NETHER = "useOldNether";
+    public static final String USE_NETHER_CAVES = "useNetherCaves";
+    public static final String USE_FORTRESSES = "useFortresses";
+    public static final String USE_LAVA_POCKETS = "useLavaPockets";
+    
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     
     public static final String CLAY_SIZE = "claySize";
@@ -22,6 +27,12 @@ public class NbtTags {
     public static final String EMERALD_COUNT = "emeraldCount";
     public static final String EMERALD_MIN_HEIGHT = "emeraldMinHeight";
     public static final String EMERALD_MAX_HEIGHT = "emeraldMaxHeight";
+    
+    public static final String QUARTZ_SIZE = "quartzSize";
+    public static final String QUARTZ_COUNT = "quartzCount";
+    
+    public static final String MAGMA_SIZE = "magmaSize";
+    public static final String MAGMA_COUNT = "magmaCount";
     
     public static final String USE_NEW_FLOWERS = "useNewFlowers";
     public static final String USE_TALL_GRASS = "useTallGrass";

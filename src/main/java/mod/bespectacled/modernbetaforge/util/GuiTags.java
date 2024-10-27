@@ -43,11 +43,17 @@ public class GuiTags {
     public static final int PG0_B_USE_LAVA_OCEANS = 122;
     public static final int PG0_B_USE_SANDSTONE = 123;
     
+    public static final int PG0_B_USE_OLD_NETHER = 124;
+    public static final int PG0_B_USE_NETHER_CAVES = 125;
+    public static final int PG0_B_USE_FORTRESSES = 126;
+    public static final int PG0_B_USE_LAVA_POCKETS = 127;
+    
     // Labels
     public static final int PG0_L_SURFACE_BUILDER = 1000;
     public static final int PG0_L_FIXED_BIOME = 1001;
     public static final int PG0_L_BIOME_REPLACEMENT = 1002;
     public static final int PG0_L_BASIC_FEATURES = 1003;
+    public static final int PG0_L_NETHER_FEATURES = 1004;
     
     /* Page 2 */
     
@@ -143,6 +149,12 @@ public class GuiTags {
     public static final int PG2_S_EMER_MIN = 350;
     public static final int PG2_S_EMER_MAX = 351;
     
+    public static final int PG2_S_QRTZ_SIZE = 352;
+    public static final int PG2_S_QRTZ_CNT = 353;
+    
+    public static final int PG2_S_MGMA_SIZE = 354;
+    public static final int PG2_S_MGMA_CNT = 355;
+    
     // Labels
     public static final int PG2_L_CLAY_NAME = 1300;
     public static final int PG2_L_DIRT_NAME = 1301;
@@ -157,6 +169,8 @@ public class GuiTags {
     public static final int PG2_L_DIAM_NAME = 1310;
     public static final int PG2_L_LAPS_NAME = 1311;
     public static final int PG2_L_EMER_NAME = 1312;
+    public static final int PG2_L_QRTZ_NAME = 1313;
+    public static final int PG2_L_MGMA_NAME = 1314;
     
     /* Page 4 */
     
