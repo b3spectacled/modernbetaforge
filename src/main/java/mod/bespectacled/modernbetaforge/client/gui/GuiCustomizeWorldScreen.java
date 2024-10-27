@@ -19,7 +19,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList;
-import net.minecraft.client.gui.GuiPageButtonList.GuiSlideEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiTextField;
@@ -69,10 +68,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private GuiButton confirm;
     private GuiButton cancel;
     private GuiButton presets;
-    private GuiSlideEntry chunkSlider;
-    private GuiSlideEntry biomeSlider;
-    private GuiSlideEntry surfaceSlider;
-    private GuiSlideEntry fixedSlider;
     
     private boolean settingsModified;
     private int confirmMode;
@@ -140,16 +135,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
         
-        this.chunkSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_CHUNK, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId);
-        this.biomeSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId);
-        this.surfaceSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SURFACE, I18n.format(PREFIX + NbtTags.SURFACE_BUILDER), true, this, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId);
-        this.fixedSlider = new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_FIXED, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId);
-        
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            this.chunkSlider,
-            this.biomeSlider,
-            this.surfaceSlider,
-            this.fixedSlider,
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_CHUNK, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SURFACE, I18n.format(PREFIX + NbtTags.SURFACE_BUILDER), true, this, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_FIXED, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),
 
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BIOME_REPLACEMENT, I18n.format(PREFIX + "biomeReplacementLabel"), true),
             null,
@@ -173,7 +163,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_WATER_LAKES, I18n.format(PREFIX + "useWaterLakes"), true, this.settings.useWaterLakes),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_WATER_LAKE_CHANCE, I18n.format(PREFIX + "waterLakeChance"), true, this, 1.0f, 100.0f, (float)this.settings.waterLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_LAKES, I18n.format(PREFIX + "useLavaLakes"), true, this.settings.useLavaLakes),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LAVA_LAKE_CHANGE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LAVA_LAKE_CHANCE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
         
@@ -610,6 +600,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setInitialText(this.pageList, GuiTags.PG5_TUND_BEACH, this.settings.tundraBiomeBeach);
 
         this.updatePageControls();
+        this.updateGuiEnabled();
     }
 
     @Override
@@ -657,14 +648,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.updatePageControls();
         }
         
-        // Set default enabled for Fixed Biome slider
-        if (this.pageList != null) {
-            String biomeId = this.settings.biomeSource;
-            Gui gui = this.pageList.getComponent(GuiTags.PG0_S_FIXED);
-            if (gui != null) {
-                ((GuiSlider)gui).enabled = biomeId.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
-            }
-        }
+        // Set default enabled for certain options
+        this.updateGuiEnabled();
     }
     
     @Override
@@ -1057,6 +1042,28 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
+        if (entry == GuiTags.PG0_B_USE_OLD_NETHER) {
+            this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, entryValue);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, entryValue);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, entryValue);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_SIZE, entryValue);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_CNT, entryValue);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_SIZE, entryValue);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_CNT, entryValue);
+        }
+        
+        if (entry == GuiTags.PG0_B_USE_DUNGEONS) {
+            this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, entryValue);
+        }
+        
+        if (entry == GuiTags.PG0_B_USE_WATER_LAKES) {
+            this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, entryValue);
+        }
+        
+        if (entry == GuiTags.PG0_B_USE_LAVA_LAKES) {
+            this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, entryValue);
+        }
+        
         if (!this.settings.equals(this.defaultSettings)) {
             this.setSettingsModified(true);
         }
@@ -1144,7 +1151,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_S_WATER_LAKE_CHANCE:
                 this.settings.waterLakeChance = (int)entryValue;
                 break;
-            case GuiTags.PG0_S_LAVA_LAKE_CHANGE:
+            case GuiTags.PG0_S_LAVA_LAKE_CHANCE:
                 this.settings.lavaLakeChance = (int)entryValue;
                 break;
             case GuiTags.PG0_S_FIXED:
@@ -1329,11 +1336,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
         
         if (entry == GuiTags.PG0_S_BIOME) {
-            String biomeId = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
-            Gui gui = this.pageList.getComponent(GuiTags.PG0_S_FIXED);
-            if (gui != null) {
-                ((GuiSlider)gui).enabled = biomeId.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
-            }
+            String biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+            this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
         }
         
         if (!this.settings.equals(this.defaultSettings)) {
@@ -1397,6 +1401,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                     }
                 }
                 
+                this.updateGuiEnabled();                
                 break;
             case GuiTags.FUNC_PREV:
                 this.pageList.previousPage();
@@ -1636,6 +1641,33 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
         ((GuiTextField)pageList.getComponent(id)).setText(initial);
+    }
+    
+    private void setButtonEnabled(int entry, boolean enabled) {
+        Gui gui = this.pageList.getComponent(entry);
+        if (gui != null) {
+            ((GuiButton)gui).enabled = enabled;
+        }
+    }
+    
+    private void updateGuiEnabled() {
+        // Set default enabled for certain options
+        if (this.pageList != null) {
+            String biomeSource = this.settings.biomeSource;
+            boolean useOldNether = this.settings.useOldNether;
+            
+            this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
+            this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_SIZE, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_CNT, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_SIZE, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_CNT, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, this.settings.useDungeons);
+            this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
+            this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
+        }
     }
     
     @Override

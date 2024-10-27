@@ -39,7 +39,7 @@ public class GuiTags {
     public static final int PG0_B_USE_WATER_LAKES = 118;
     public static final int PG0_S_WATER_LAKE_CHANCE = 119;
     public static final int PG0_B_USE_LAVA_LAKES = 120;
-    public static final int PG0_S_LAVA_LAKE_CHANGE = 121;
+    public static final int PG0_S_LAVA_LAKE_CHANCE = 121;
     public static final int PG0_B_USE_LAVA_OCEANS = 122;
     public static final int PG0_B_USE_SANDSTONE = 123;
     
