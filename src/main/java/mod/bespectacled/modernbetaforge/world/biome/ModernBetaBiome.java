@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenFancyOak;
@@ -173,8 +174,7 @@ public abstract class ModernBetaBiome extends Biome {
     }
     
     protected void populateSpawnableMobs(EnumCreatureType creatureType, SpawnListEntry... entries) {
-        @SuppressWarnings("unchecked")
-        List<SpawnListEntry> spawnEntries = Arrays.asList(entries);
+        List<SpawnListEntry> spawnEntries = Lists.newArrayList(entries);
         
         switch (creatureType) {
             case MONSTER:
@@ -193,8 +193,7 @@ public abstract class ModernBetaBiome extends Biome {
     }
     
     protected void populateAdditionalMobs(EnumCreatureType creatureType, boolean addWolves, SpawnListEntry... entries) {
-        @SuppressWarnings("unchecked")
-        List<SpawnListEntry> spawnEntries = Arrays.asList(entries);
+        List<SpawnListEntry> spawnEntries = Lists.newArrayList(entries);
         
         if (addWolves) {
             this.additionalWolves.addAll(spawnEntries);
