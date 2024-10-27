@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
-    private static final int MAX_PRESET_LENGTH = 5000;
+    private static final int MAX_PRESET_LENGTH = 8000;
     
     private final GuiCustomizeWorldScreen parent;
     private final List<Info> presets;
