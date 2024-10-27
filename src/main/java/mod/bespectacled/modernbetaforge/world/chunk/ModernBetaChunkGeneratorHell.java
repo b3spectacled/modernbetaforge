@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorChunkGeneratorHell;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
+import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.EnumCreatureType;
@@ -25,7 +27,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.MapGenCavesHell;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenFire;
 import net.minecraft.world.gen.feature.WorldGenGlowStone1;
@@ -53,12 +54,12 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
     private final WorldGenerator quartzOreFeature;
     private final WorldGenerator magmaOreFeature;
     private final WorldGenHellLava lavaPocketFeature;
-    private final WorldGenHellLava lavaSpringFeature;
+    private final WorldGenHellSpring lavaSpringFeature;
     private final WorldGenBush brownMushroomFeature;
     private final WorldGenBush redMushroomFeature;
    
     private MapGenNetherBridge netherFortressGenerator = new MapGenNetherBridge();
-    private MapGenBase netherCaveCarver = new MapGenCavesHell();
+    private MapGenBase netherCaveCarver = new MapGenBetaCaveHell();
     
     public ModernBetaChunkGeneratorHell(World world, boolean mapFeaturesEnabled, long seed, String generatorOptions) {
         super(world, mapFeaturesEnabled, seed);
@@ -73,7 +74,7 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         this.quartzOreFeature = new WorldGenMinable(BlockStates.QUARTZ_ORE, settings.quartzSize, BlockMatcher.forBlock(Blocks.NETHERRACK));
         this.magmaOreFeature = new WorldGenMinable(BlockStates.MAGMA, settings.magmaSize, BlockMatcher.forBlock(Blocks.NETHERRACK));
         this.lavaPocketFeature = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
-        this.lavaSpringFeature = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
+        this.lavaSpringFeature = new WorldGenHellSpring(Blocks.FLOWING_LAVA);
         this.brownMushroomFeature = new WorldGenBush(Blocks.BROWN_MUSHROOM);
         this.redMushroomFeature = new WorldGenBush(Blocks.RED_MUSHROOM);
        
