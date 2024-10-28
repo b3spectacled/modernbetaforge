@@ -35,7 +35,6 @@ public class ModernBetaChunkGeneratorSettings {
     public final float lowerLimitScale;
     public final float depthNoiseScaleX;
     public final float depthNoiseScaleZ;
-    public final float depthNoiseScaleExponent;
     public final float mainNoiseScaleX;
     public final float mainNoiseScaleY;
     public final float mainNoiseScaleZ;
@@ -230,7 +229,6 @@ public class ModernBetaChunkGeneratorSettings {
         this.lowerLimitScale = factory.lowerLimitScale;
         this.depthNoiseScaleX = factory.depthNoiseScaleX;
         this.depthNoiseScaleZ = factory.depthNoiseScaleZ;
-        this.depthNoiseScaleExponent = factory.depthNoiseScaleExponent;
         this.mainNoiseScaleX = factory.mainNoiseScaleX;
         this.mainNoiseScaleY = factory.mainNoiseScaleY;
         this.mainNoiseScaleZ = factory.mainNoiseScaleZ;
@@ -428,7 +426,6 @@ public class ModernBetaChunkGeneratorSettings {
         public float lowerLimitScale;
         public float depthNoiseScaleX;
         public float depthNoiseScaleZ;
-        public float depthNoiseScaleExponent;
         public float mainNoiseScaleX;
         public float mainNoiseScaleY;
         public float mainNoiseScaleZ;
@@ -640,7 +637,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.lowerLimitScale = 512.0f;
             this.depthNoiseScaleX = 200.0f;
             this.depthNoiseScaleZ = 200.0f;
-            this.depthNoiseScaleExponent = 0.5f;
             this.mainNoiseScaleX = 80.0f;
             this.mainNoiseScaleY = 160.0f;
             this.mainNoiseScaleZ = 80.0f;
@@ -837,7 +833,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.lowerLimitScale = 512.0f;
             this.depthNoiseScaleX = 200.0f;
             this.depthNoiseScaleZ = 200.0f;
-            this.depthNoiseScaleExponent = 0.5f;
             this.mainNoiseScaleX = 80.0f;
             this.mainNoiseScaleY = 160.0f;
             this.mainNoiseScaleZ = 80.0f;
@@ -1045,7 +1040,6 @@ public class ModernBetaChunkGeneratorSettings {
                 Float.compare(factory.lowerLimitScale, this.lowerLimitScale) == 0 &&
                 Float.compare(factory.depthNoiseScaleX, this.depthNoiseScaleX) == 0 &&
                 Float.compare(factory.depthNoiseScaleZ, this.depthNoiseScaleZ) == 0 &&
-                Float.compare(factory.depthNoiseScaleExponent, this.depthNoiseScaleExponent) == 0 &&
                 Float.compare(factory.mainNoiseScaleX, this.mainNoiseScaleX) == 0 &&
                 Float.compare(factory.mainNoiseScaleY, this.mainNoiseScaleY) == 0 &&
                 Float.compare(factory.mainNoiseScaleZ, this.mainNoiseScaleZ) == 0 &&
@@ -1245,7 +1239,6 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + ((this.lowerLimitScale == 0.0f) ? 0 : Float.floatToIntBits(this.lowerLimitScale));
             hashCode = 31 * hashCode + ((this.depthNoiseScaleX == 0.0f) ? 0 : Float.floatToIntBits(this.depthNoiseScaleX));
             hashCode = 31 * hashCode + ((this.depthNoiseScaleZ == 0.0f) ? 0 : Float.floatToIntBits(this.depthNoiseScaleZ));
-            hashCode = 31 * hashCode + ((this.depthNoiseScaleExponent == 0.0f) ? 0 : Float.floatToIntBits(this.depthNoiseScaleExponent));
             hashCode = 31 * hashCode + ((this.mainNoiseScaleX == 0.0f) ? 0 : Float.floatToIntBits(this.mainNoiseScaleX));
             hashCode = 31 * hashCode + ((this.mainNoiseScaleY == 0.0f) ? 0 : Float.floatToIntBits(this.mainNoiseScaleY));
             hashCode = 31 * hashCode + ((this.mainNoiseScaleZ == 0.0f) ? 0 : Float.floatToIntBits(this.mainNoiseScaleZ));
@@ -1458,7 +1451,6 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.upperLimitScale = JsonUtils.getFloat(jsonObject, "upperLimitScale", factory.upperLimitScale);
                 factory.depthNoiseScaleX = JsonUtils.getFloat(jsonObject, "depthNoiseScaleX", factory.depthNoiseScaleX);
                 factory.depthNoiseScaleZ = JsonUtils.getFloat(jsonObject, "depthNoiseScaleZ", factory.depthNoiseScaleZ);
-                factory.depthNoiseScaleExponent = JsonUtils.getFloat(jsonObject, "depthNoiseScaleExponent", factory.depthNoiseScaleExponent);
                 factory.mainNoiseScaleX = JsonUtils.getFloat(jsonObject, "mainNoiseScaleX", factory.mainNoiseScaleX);
                 factory.mainNoiseScaleY = JsonUtils.getFloat(jsonObject, "mainNoiseScaleY", factory.mainNoiseScaleY);
                 factory.mainNoiseScaleZ = JsonUtils.getFloat(jsonObject, "mainNoiseScaleZ", factory.mainNoiseScaleZ);
@@ -1661,7 +1653,6 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty("upperLimitScale", factory.upperLimitScale);
             jsonObject.addProperty("depthNoiseScaleX", factory.depthNoiseScaleX);
             jsonObject.addProperty("depthNoiseScaleZ", factory.depthNoiseScaleZ);
-            jsonObject.addProperty("depthNoiseScaleExponent", factory.depthNoiseScaleExponent);
             jsonObject.addProperty("mainNoiseScaleX", factory.mainNoiseScaleX);
             jsonObject.addProperty("mainNoiseScaleY", factory.mainNoiseScaleY);
             jsonObject.addProperty("mainNoiseScaleZ", factory.mainNoiseScaleZ);

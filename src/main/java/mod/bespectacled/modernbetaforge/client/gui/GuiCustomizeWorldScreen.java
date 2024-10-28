@@ -1,11 +1,15 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
@@ -38,6 +42,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
+    private static final Map<String, List<Integer>> UNUSED_CHUNK_SETTINGS = new LinkedHashMap<>();
     private static final String PREFIX = "createWorld.customize.custom.";
     
     private static final int MAX_TEXT_LENGTH = 120;
@@ -153,7 +158,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_RAVINES, I18n.format(PREFIX + "useRavines"), true, this.settings.useRavines),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SHAFTS, I18n.format(PREFIX + "useMineShafts"), true, this.settings.useMineShafts),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VILLAGES, I18n.format(PREFIX + "useVillages"), true, this.settings.useVillages),
-            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VARIANTS, I18n.format(PREFIX + NbtTags.USE_VILLAGE_VARIANTS), true, this.settings.useVillageVariants),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, I18n.format(PREFIX + NbtTags.USE_VILLAGE_VARIANTS), true, this.settings.useVillageVariants),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_HOLDS, I18n.format(PREFIX + "useStrongholds"), true, this.settings.useStrongholds),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_TEMPLES, I18n.format(PREFIX + "useTemples"), true, this.settings.useTemples),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_MONUMENTS, I18n.format(PREFIX + "useMonuments"), true, this.settings.useMonuments),
@@ -312,7 +317,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ"), false, this, 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ"), false, this, 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
-            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent"), false, this, 0.01f, 20.0f, this.settings.depthNoiseScaleExponent),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_BASE_SIZE, I18n.format(PREFIX + "baseSize"), false, this, 1.0f, 25.0f, this.settings.baseSize),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_COORD_SCL, I18n.format(PREFIX + "coordinateScale"), false, this, 1.0f, 6000.0f, this.settings.coordinateScale),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_HEIGH_SCL, I18n.format(PREFIX + "heightScale"), false, this, 1.0f, 6000.0f, this.settings.heightScale),
@@ -320,7 +324,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale"), false, this, 1.0f, 5000.0f, this.settings.upperLimitScale),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale"), false, this, 1.0f, 5000.0f, this.settings.lowerLimitScale),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT), false, this, 1.0f, MAX_HEIGHT, this.settings.height),
-            null,
             
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel"), true),
             null,
@@ -349,8 +352,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), false, this.floatFilter),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_DPTH_EXPT, I18n.format(PREFIX + "depthNoiseScaleExponent") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_DPTH_EXPT, String.format("%2.3f", this.settings.depthNoiseScaleExponent), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":", false),
@@ -847,10 +848,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                     this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
                     newEntryValue = this.settings.depthNoiseScaleZ;
                     break;
-                case GuiTags.PG4_F_DPTH_EXPT:
-                    this.settings.depthNoiseScaleExponent = MathHelper.clamp(entryValue, 0.01f, 20.0f);
-                    newEntryValue = this.settings.depthNoiseScaleExponent;
-                    break;
                 case GuiTags.PG4_F_BASE_SIZE:
                     this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
                     newEntryValue = this.settings.baseSize;
@@ -989,7 +986,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_B_USE_VILLAGES:
                 this.settings.useVillages = entryValue;
                 break;
-            case GuiTags.PG0_B_USE_VARIANTS:
+            case GuiTags.PG0_B_USE_VILLAGE_VARIANTS:
                 this.settings.useVillageVariants = entryValue;
                 break;
             case GuiTags.PG0_B_USE_SHAFTS:
@@ -1065,9 +1062,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG3_S_DPTH_NS_Z:
                 this.settings.depthNoiseScaleZ = entryValue;
-                break;
-            case GuiTags.PG3_S_DPTH_EXPT:
-                this.settings.depthNoiseScaleExponent = entryValue;
                 break;
             case GuiTags.PG3_S_BASE_SIZE:
                 this.settings.baseSize = entryValue;
@@ -1355,11 +1349,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                     if (guiComponent instanceof GuiButton) {
                         GuiButton guiButtonComponent = (GuiButton)guiComponent;
                         
-                        if (guiButtonComponent instanceof GuiSlider) {
+                        if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
                             float randomFloat = ((GuiSlider)guiButtonComponent).getSliderPosition() * (0.75f + this.random.nextFloat() * 0.5f) + (this.random.nextFloat() * 0.1f - 0.05f);
                             ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
                             
-                        } else if (guiButtonComponent instanceof GuiListButton) {
+                        } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
                             ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
                         }
                     }
@@ -1367,11 +1361,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                     if (guiComponent2 instanceof GuiButton) {
                         GuiButton guiButtonComponent = (GuiButton)guiComponent2;
                         
-                        if (guiButtonComponent instanceof GuiSlider) {
+                        if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
                             float randomFloat = ((GuiSlider)guiButtonComponent).getSliderPosition() * (0.75f + this.random.nextFloat() * 0.5f) + (this.random.nextFloat() * 0.1f - 0.05f);
                             ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
                             
-                        } else if (guiButtonComponent instanceof GuiListButton) {
+                        } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
                             ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
                         }
                     }
@@ -1476,7 +1470,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG4_F_UPPER_LIM:
             case GuiTags.PG4_F_LOWER_LIM: return String.format("%5.3f", entryValue);
             
-            case GuiTags.PG3_S_DPTH_EXPT:
             case GuiTags.PG3_S_BASE_SIZE:
             case GuiTags.PG3_S_STRETCH_Y:
             case GuiTags.PG3_S_TEMP_SCL:
@@ -1486,8 +1479,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG3_S_B_DPTH_OF:
             case GuiTags.PG3_S_B_SCL_WT:
             case GuiTags.PG3_S_B_SCL_OF:
-                
-            case GuiTags.PG4_F_DPTH_EXPT:
+            
             case GuiTags.PG4_F_BASE_SIZE:
             case GuiTags.PG4_F_STRETCH_Y:
             case GuiTags.PG4_F_TEMP_SCL:
@@ -1548,6 +1540,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.mc.displayGuiScreen(new GuiCustomizeWorldScreen(this.parent, this.settings.toString()));
                 break;
         }
+        
         this.confirmMode = 0;
         this.confirmDismissed = true;
         this.setConfirmationControls(false);
@@ -1627,12 +1620,25 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             ((GuiButton)gui).enabled = enabled;
         }
     }
+    
+    private void setFieldEnabled(int entry, boolean enabled) {
+        Gui gui = this.pageList.getComponent(entry);
+        if (gui != null) {
+            ((GuiTextField)gui).setEnabled(enabled);
+        }
+    }
 
     private void updateGuiEnabled() {
         // Set default enabled for certain options
         if (this.pageList != null) {
+            String chunkSource = this.settings.chunkSource;
             String biomeSource = this.settings.biomeSource;
             boolean useOldNether = this.settings.useOldNether;
+            boolean isBetaOrPE = 
+                chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
+                chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
@@ -1645,11 +1651,34 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, this.settings.useDungeons);
             this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_VARIANTS, this.settings.useVillages);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
+            
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_X, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_Z, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_BASE_SIZE, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_STRETCH_Y, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_DPTH_WT, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_DPTH_OF, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_WT, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_OF, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_B_USE_BDS, chunkSource);
+            
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_RAIN_SCL, isBetaOrPE);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_DETL_SCL, isBetaOrPE);
         }
     }
-
-
+    
+    private void setChunkSettingsEnabled(int tag, String chunkSource) {
+        boolean enabled = !UNUSED_CHUNK_SETTINGS.get(chunkSource).contains(tag);
+        this.setButtonEnabled(tag, enabled);
+        this.setFieldEnabled(GuiTags.offsetForward(tag), enabled);
+    }
+    
+    private void setChunkSettingsEnabled(int tag, boolean enabled) {
+        this.setButtonEnabled(tag, enabled);
+        this.setFieldEnabled(GuiTags.offsetForward(tag), enabled);
+    } 
     
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -1694,5 +1723,97 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.confirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
             this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
         }
+    }
+    
+    static {
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.BETA.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS
+            )
+        );
+
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.ALPHA.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS
+            )
+        );
+
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z
+            )
+        );
+        
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z
+            )
+        );
+        
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS
+            )
+        );
+        
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_STRETCH_Y
+            )
+        );
+        
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.PE.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_B_DPTH_WT,
+                GuiTags.PG3_S_B_DPTH_OF,
+                GuiTags.PG3_S_B_SCL_WT,
+                GuiTags.PG3_S_B_SCL_OF,
+                GuiTags.PG3_B_USE_BDS
+            )
+        );
+        
+        UNUSED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
+            ImmutableList.of()
+        );
     }
 }

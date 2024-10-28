@@ -28,7 +28,7 @@ public class GuiTags {
     public static final int PG0_B_USE_CAVES = 107;
     public static final int PG0_B_USE_HOLDS = 108;
     public static final int PG0_B_USE_VILLAGES = 109;
-    public static final int PG0_B_USE_VARIANTS = 110;
+    public static final int PG0_B_USE_VILLAGE_VARIANTS = 110;
     public static final int PG0_B_USE_SHAFTS = 111;
     public static final int PG0_B_USE_TEMPLES = 112;
     public static final int PG0_B_USE_MONUMENTS = 113;
@@ -180,7 +180,6 @@ public class GuiTags {
     public static final int PG3_S_MAIN_NS_Z = 402;
     public static final int PG3_S_DPTH_NS_X = 403;
     public static final int PG3_S_DPTH_NS_Z = 404;
-    public static final int PG3_S_DPTH_EXPT = 405;
     public static final int PG3_S_BASE_SIZE = 406;
     public static final int PG3_S_COORD_SCL = 407;
     public static final int PG3_S_HEIGH_SCL = 408;
@@ -212,7 +211,6 @@ public class GuiTags {
     public static final int PG4_F_MAIN_NS_Z = 502;
     public static final int PG4_F_DPTH_NS_X = 503;
     public static final int PG4_F_DPTH_NS_Z = 504;
-    public static final int PG4_F_DPTH_EXPT = 505;
     public static final int PG4_F_BASE_SIZE = 506;
     public static final int PG4_F_COORD_SCL = 507;
     public static final int PG4_F_HEIGH_SCL = 508;
@@ -236,7 +234,6 @@ public class GuiTags {
     public static final int PG4_L_MAIN_NS_Z = 1502;
     public static final int PG4_L_DPTH_NS_X = 1503;
     public static final int PG4_L_DPTH_NS_Z = 1504;
-    public static final int PG4_L_DPTH_EXPT = 1505;
     public static final int PG4_L_BASE_SIZE = 1506;
     public static final int PG4_L_COORD_SCL = 1507;
     public static final int PG4_L_HEIGH_SCL = 1508;
@@ -332,7 +329,6 @@ public class GuiTags {
         assertOffset(PG3_S_MAIN_NS_Z, PG4_F_MAIN_NS_Z);
         assertOffset(PG3_S_DPTH_NS_X, PG4_F_DPTH_NS_X);
         assertOffset(PG3_S_DPTH_NS_Z, PG4_F_DPTH_NS_Z);
-        assertOffset(PG3_S_DPTH_EXPT, PG4_F_DPTH_EXPT);
         assertOffset(PG3_S_BASE_SIZE, PG4_F_BASE_SIZE);
         assertOffset(PG3_S_COORD_SCL, PG4_F_COORD_SCL);
         assertOffset(PG3_S_HEIGH_SCL, PG4_F_HEIGH_SCL);
