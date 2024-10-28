@@ -32,7 +32,6 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.actors.threadpool.Arrays;
 
 public abstract class ModernBetaBiome extends Biome {
     private static final List<SpawnListEntry> EMPTY_LIST = ImmutableList.of();

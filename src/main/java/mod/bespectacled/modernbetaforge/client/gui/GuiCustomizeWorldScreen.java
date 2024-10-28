@@ -646,6 +646,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.pageList.scrollBy(curScroll);
             this.updatePageControls();
         }
+        
+        // Set default enabled for certain options
+        this.updateGuiEnabled();
     }
     
     @Override
@@ -1038,6 +1041,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
+        this.updateGuiEnabled();
+        
         if (!this.settings.equals(this.defaultSettings)) {
             this.setSettingsModified(true);
         }
@@ -1309,6 +1314,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         }
         
+        this.updateGuiEnabled();
+        
         if (!this.settings.equals(this.defaultSettings)) {
             this.setSettingsModified(true);
         }
@@ -1368,6 +1375,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                             ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
                         }
                     }
+                    
+                    this.updateGuiEnabled();
                 }
                              
                 break;
@@ -1536,6 +1545,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.FUNC_DFLT:
                 this.restoreDefaults();
+                this.mc.displayGuiScreen(new GuiCustomizeWorldScreen(this.parent, this.settings.toString()));
                 break;
         }
         this.confirmMode = 0;
@@ -1610,6 +1620,36 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
         ((GuiTextField)pageList.getComponent(id)).setText(initial);
     }
+    
+    private void setButtonEnabled(int entry, boolean enabled) {
+        Gui gui = this.pageList.getComponent(entry);
+        if (gui != null) {
+            ((GuiButton)gui).enabled = enabled;
+        }
+    }
+
+    private void updateGuiEnabled() {
+        // Set default enabled for certain options
+        if (this.pageList != null) {
+            String biomeSource = this.settings.biomeSource;
+            boolean useOldNether = this.settings.useOldNether;
+
+            this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
+            this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_SIZE, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_QRTZ_CNT, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_SIZE, useOldNether);
+            this.setButtonEnabled(GuiTags.PG2_S_MGMA_CNT, useOldNether);
+            this.setButtonEnabled(GuiTags.PG0_S_DUNGEON_CHANCE, this.settings.useDungeons);
+            this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
+            this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_VARIANTS, this.settings.useVillages);
+        }
+    }
+
+
     
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
