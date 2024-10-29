@@ -15,7 +15,6 @@ import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
-import mod.bespectacled.modernbetaforge.util.GuiTags;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.gui.Gui;
@@ -56,6 +55,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private static final float MAX_BIOME_WEIGHT = 20.0f;
     private static final float MIN_BIOME_OFFSET = 0.0f;
     private static final float MAX_BIOME_OFFSET = 20.0f;
+    private static final int MIN_BIOME_SIZE = 1;
+    private static final int MAX_BIOME_SIZE = 8;
+    private static final int MIN_RIVER_SIZE = 1;
+    private static final int MAX_RIVER_SIZE = 5;
     
     private final GuiCreateWorld parent;
     
@@ -81,6 +84,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private final Predicate<String> floatFilter;
     private final Predicate<String> intFilter;
     private final Predicate<String> stringFilter;
+    private final Predicate<String> intBiomeSizeFilter;
+    private final Predicate<String> intRiverSizeFilter;
     
     private final ModernBetaChunkGeneratorSettings.Factory defaultSettings;
     private ModernBetaChunkGeneratorSettings.Factory settings;
@@ -122,6 +127,24 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             @Override
             public boolean apply(@Nullable String entryString) {
                 return entryString.isEmpty() || entryString != null;
+            }
+        };
+        
+        this.intBiomeSizeFilter = new Predicate<String>() {
+            @Override
+            public boolean apply(@Nullable String entryString) {
+                Integer entryValue = Ints.tryParse(entryString);
+                
+                return entryString.isEmpty() || (entryValue != null && entryValue >= (int)MIN_BIOME_SIZE && entryValue <= (int)MAX_BIOME_SIZE);
+            }
+        };
+        
+        this.intRiverSizeFilter = new Predicate<String>() {
+            @Override
+            public boolean apply(@Nullable String entryString) {
+                Integer entryValue = Ints.tryParse(entryString);
+                
+                return entryString.isEmpty() || (entryValue != null && entryValue >= (int)MIN_RIVER_SIZE && entryValue <= (int)MAX_RIVER_SIZE);
             }
         };
         
@@ -338,6 +361,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight"), false, this, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset"), false, this, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE), false, this, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.biomeSize),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG3_S_RIVER_SZ, I18n.format(PREFIX + "riverRarity"), false, this, MIN_RIVER_SIZE, MAX_RIVER_SIZE, this.settings.riverSize),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG3_B_USE_BDS, I18n.format(PREFIX + NbtTags.USE_BIOME_DEPTH_SCALE), true, this.settings.useBiomeDepthScale)
         };
         
@@ -385,7 +410,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), false, this.floatFilter),
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), false, this.floatFilter)
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), false, this.floatFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE) + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), false, this.intBiomeSizeFilter),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG4_L_RIVER_SZ, I18n.format(PREFIX + "riverRarity") + ":", false),
+            new GuiPageButtonList.EditBoxEntry(GuiTags.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), false, this.intRiverSizeFilter)
             
         };
         
@@ -818,6 +847,31 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 ((GuiTextField)this.pageList.getComponent(entry)).setText(newEntryBiome);
             }
             
+        } else if (entry == GuiTags.PG4_F_BIOME_SZ || entry == GuiTags.PG4_F_RIVER_SZ) {
+            int entryValue = 0;
+            
+            try {
+                entryValue = Integer.parseInt(string);
+            } catch (NumberFormatException ex) {}
+            
+            int newEntryValue = 0;
+            switch(entry) {
+                case GuiTags.PG4_F_BIOME_SZ:
+                    this.settings.biomeSize = MathHelper.clamp(entryValue, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                    newEntryValue = this.settings.biomeSize;
+                    break;
+                case GuiTags.PG4_F_RIVER_SZ:
+                    this.settings.riverSize = MathHelper.clamp(entryValue, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
+                    newEntryValue = this.settings.riverSize;
+                    break;
+            }
+            
+            if (newEntryValue != entryValue && entryValue != 0) {
+                ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
+            }
+            
+            ((GuiSlider)this.pageList.getComponent(GuiTags.offsetBackward(entry))).setSliderValue(newEntryValue, false);
+        
         } else {
             float entryValue = 0.0f;
             
@@ -1105,6 +1159,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG3_S_B_SCL_OF:
                 this.settings.biomeScaleOffset = entryValue;
                 break;
+            case GuiTags.PG3_S_BIOME_SZ:
+                this.settings.biomeSize = (int)entryValue;
+                break;
+            case GuiTags.PG3_S_RIVER_SZ:
+                this.settings.riverSize = (int)entryValue;
+                break;
                 
             case GuiTags.PG0_S_CHUNK:
                 this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
@@ -1301,7 +1361,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
-        if (entry >= GuiTags.PG3_S_MAIN_NS_X && entry <= GuiTags.PG3_S_B_SCL_OF) {
+        if (entry >= GuiTags.PG3_S_MAIN_NS_X && entry <= GuiTags.PG3_S_RIVER_SZ) {
             Gui gui = this.pageList.getComponent(GuiTags.offsetForward(entry));
             if (gui != null) {
                 ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
@@ -1468,7 +1528,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG4_F_COORD_SCL:
             case GuiTags.PG4_F_HEIGH_SCL:
             case GuiTags.PG4_F_UPPER_LIM:
-            case GuiTags.PG4_F_LOWER_LIM: return String.format("%5.3f", entryValue);
+            case GuiTags.PG4_F_LOWER_LIM:
+                return String.format("%5.3f", entryValue);
             
             case GuiTags.PG3_S_BASE_SIZE:
             case GuiTags.PG3_S_STRETCH_Y:
@@ -1488,7 +1549,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG4_F_B_DPTH_WT:
             case GuiTags.PG4_F_B_DPTH_OF:
             case GuiTags.PG4_F_B_SCL_WT:
-            case GuiTags.PG4_F_B_SCL_OF: return String.format("%2.3f", entryValue);
+            case GuiTags.PG4_F_B_SCL_OF:
+                return String.format("%2.3f", entryValue);
+                
+            case GuiTags.PG4_F_BIOME_SZ:
+            case GuiTags.PG4_F_RIVER_SZ:
+                return String.format("%d", entryValue);
             
             case GuiTags.PG0_S_FIXED: {
                 Biome biome = ForgeRegistries.BIOMES.getValues().get((int)entryValue);
@@ -1662,6 +1728,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_WT, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_OF, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_B_USE_BDS, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_BIOME_SZ, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_RIVER_SZ, chunkSource);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_RAIN_SCL, isBetaOrPE);
@@ -1733,7 +1801,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_DPTH_OF,
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ
             )
         );
 
@@ -1744,7 +1814,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_DPTH_OF,
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ
             )
         );
 
@@ -1756,6 +1828,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
                 GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ,
                 GuiTags.PG3_S_BASE_SIZE,
                 GuiTags.PG3_S_STRETCH_Y,
                 GuiTags.PG3_S_DPTH_NS_X,
@@ -1771,6 +1845,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
                 GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ,
                 GuiTags.PG3_S_DPTH_NS_X,
                 GuiTags.PG3_S_DPTH_NS_Z
             )
@@ -1783,7 +1859,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_DPTH_OF,
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ
             )
         );
         
@@ -1795,6 +1873,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
                 GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ,
                 GuiTags.PG3_S_BASE_SIZE,
                 GuiTags.PG3_S_STRETCH_Y
             )
@@ -1807,9 +1887,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_B_DPTH_OF,
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS
+                GuiTags.PG3_B_USE_BDS,
+                GuiTags.PG3_S_BIOME_SZ,
+                GuiTags.PG3_S_RIVER_SZ
             )
-        );
+        );      
         
         UNUSED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.RELEASE.id,

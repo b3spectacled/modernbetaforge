@@ -63,6 +63,7 @@ createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
 createWorld.customize.custom.useBiomeDepthScale=Override Depth/Scale
+createWorld.customize.custom.riverRarity=River Rarity
 
 
 # Page 6 - World Customization Beta Biomes

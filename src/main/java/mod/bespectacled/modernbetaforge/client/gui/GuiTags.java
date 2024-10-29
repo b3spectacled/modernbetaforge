@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.util;
+package mod.bespectacled.modernbetaforge.client.gui;
 
 public class GuiTags {
     /* Function Buttons */
@@ -196,6 +196,8 @@ public class GuiTags {
     public static final int PG3_S_B_DPTH_OF = 417;
     public static final int PG3_S_B_SCL_WT = 418;
     public static final int PG3_S_B_SCL_OF = 419;
+    public static final int PG3_S_BIOME_SZ = 420;
+    public static final int PG3_S_RIVER_SZ = 421;
     
     public static final int PG3_B_USE_BDS = 450;
     
@@ -227,6 +229,8 @@ public class GuiTags {
     public static final int PG4_F_B_DPTH_OF = 517;
     public static final int PG4_F_B_SCL_WT = 518;
     public static final int PG4_F_B_SCL_OF = 519;
+    public static final int PG4_F_BIOME_SZ = 520;
+    public static final int PG4_F_RIVER_SZ = 521;
     
     // Labels
     public static final int PG4_L_MAIN_NS_X = 1500;
@@ -250,6 +254,8 @@ public class GuiTags {
     public static final int PG4_L_B_DPTH_OF = 1517;
     public static final int PG4_L_B_SCL_WT = 1518;
     public static final int PG4_L_B_SCL_OF = 1519;
+    public static final int PG4_L_BIOME_SZ = 1520;
+    public static final int PG4_L_RIVER_SZ = 1521;
     
     /* Page 6 */
     

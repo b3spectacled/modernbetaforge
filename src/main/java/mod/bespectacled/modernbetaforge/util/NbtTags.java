@@ -17,6 +17,8 @@ public class NbtTags {
     public static final String USE_LAVA_POCKETS = "useLavaPockets";
     
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
+    public static final String BIOME_SIZE = "biomeSize";
+    public static final String RIVER_SIZE = "riverSize";
     
     public static final String CLAY_SIZE = "claySize";
     public static final String CLAY_COUNT = "clayCount";
