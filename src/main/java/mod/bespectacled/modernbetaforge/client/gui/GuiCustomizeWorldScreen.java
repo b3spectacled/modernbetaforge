@@ -33,6 +33,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.MapGenScatteredFeature;
+import net.minecraft.world.gen.structure.MapGenStronghold;
+import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraft.world.gen.structure.StructureOceanMonument;
+import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,6 +46,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
+    private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     private static final Map<String, List<Integer>> UNUSED_CHUNK_SETTINGS = new LinkedHashMap<>();
     private static final String PREFIX = "createWorld.customize.custom.";
     
@@ -1699,6 +1705,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         if (this.pageList != null) {
             String chunkSource = this.settings.chunkSource;
             String biomeSource = this.settings.biomeSource;
+            String fixedBiome = this.settings.fixedBiome;
             boolean useOldNether = this.settings.useOldNether;
             boolean isBetaOrPE = 
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.id) ||
@@ -1734,6 +1741,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_RAIN_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DETL_SCL, isBetaOrPE);
+            
+            this.setBiomeStructuresEnabled(biomeSource, fixedBiome);
         }
     }
     
@@ -1746,7 +1755,25 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private void setChunkSettingsEnabled(int tag, boolean enabled) {
         this.setButtonEnabled(tag, enabled);
         this.setFieldEnabled(GuiTags.offsetForward(tag), enabled);
-    } 
+    }
+    
+    private void setBiomeStructuresEnabled(String biomeSource, String biomeId) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeId));
+        boolean isFixed = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+        
+        boolean hasStrongholds = isFixed ? STRONGHOLD.allowedBiomes.contains(biome) : true; 
+        boolean hasVillages = isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
+        boolean hasTemples = isFixed ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
+        boolean hasMonuments = isFixed ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
+        boolean hasMansions = isFixed ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
+        
+        this.setButtonEnabled(GuiTags.PG0_B_USE_HOLDS, hasStrongholds);
+        this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGES, hasVillages);
+        this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, hasVillages && this.settings.useVillages);
+        this.setButtonEnabled(GuiTags.PG0_B_USE_TEMPLES, hasTemples);
+        this.setButtonEnabled(GuiTags.PG0_B_USE_MONUMENTS, hasMonuments);
+        this.setButtonEnabled(GuiTags.PG0_B_USE_MANSIONS, hasMansions);
+    }
     
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
