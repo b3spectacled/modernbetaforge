@@ -1,8 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.biome.source;
 
-import org.apache.logging.log4j.Level;
-
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.math.BlockPos;
@@ -27,11 +24,8 @@ public class ReleaseBiomeSource extends BiomeSource {
         factory.biomeSize = settings.biomeSize;
         factory.riverSize = settings.riverSize;
         
-        WorldSettings worldSettings = new WorldSettings(worldInfo);
-        worldSettings.setGeneratorOptions(factory.toString());
-        
         WorldInfo newWorldInfo = new WorldInfo(worldInfo);
-        newWorldInfo.populateFromWorldSettings(worldSettings);
+        newWorldInfo.populateFromWorldSettings(new WorldSettings(worldInfo).setGeneratorOptions(factory.toString()));
         newWorldInfo.setTerrainType(WorldType.CUSTOMIZED);
         
         this.biomeProvider = new BiomeProvider(newWorldInfo);
