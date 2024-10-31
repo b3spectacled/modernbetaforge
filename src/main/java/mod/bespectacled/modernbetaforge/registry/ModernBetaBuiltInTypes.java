@@ -40,6 +40,7 @@ public class ModernBetaBuiltInTypes {
     public enum Surface {
         BETA("beta", "Beta"),
         ALPHA("alpha", "Alpha"),
+        ALPHA_1_2("alpha_1_2", "Alpha 1.2"),
         SKYLANDS("skylands", "Skylands"),
         INFDEV("infdev", "Infdev"),
         PE("pe", "Pocket Ed.")

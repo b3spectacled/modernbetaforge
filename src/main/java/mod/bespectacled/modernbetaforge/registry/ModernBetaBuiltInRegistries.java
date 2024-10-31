@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev611ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.PEChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.Alpha12SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.AlphaSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.BetaSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
@@ -54,6 +55,7 @@ public class ModernBetaBuiltInRegistries {
     public static void registerSurfaceBuilders() {
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.BETA.id, BetaSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA.id, AlphaSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.id, Alpha12SurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.SKYLANDS.id, SkylandsSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.id, InfdevSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.id, PESurfaceBuilder::new);
