@@ -67,7 +67,6 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             int plantCount = this.getYellowFlowerCount(biome);
             
             this.populateWorldGenCount(world, random, biome, startPos, this.worldGenDandelion, mutablePos, plantCount, settings.height);
-            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenPoppy, mutablePos, 2, settings.height);
         }
 
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
@@ -80,6 +79,10 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             if (biome instanceof BiomeBetaDesert) {
                 this.populateWorldGenCount(world, random, biome, startPos, this.worldGenDeadBush, mutablePos, 2, settings.height);
             }
+        }
+        
+        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
+            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenPoppy, mutablePos, 2, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
