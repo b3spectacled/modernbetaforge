@@ -41,14 +41,14 @@ public class BetaSpawnLocator implements SpawnLocator {
             attempts++;
         }
         
-        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE) + 1;
+        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR) + 1;
         
         return new BlockPos(x, y, z);
     }
     
     private boolean isSandAt(int x, int z, ChunkSource chunkSource, BiomeSource biomeSource, PerlinOctaveNoise beachOctaveNoise) {
         int seaLevel = chunkSource.getSeaLevel();
-        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
+        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR);
         
         Biome biome = biomeSource.getBiome(x, z);
         boolean isSandy = BiomeDictionary.getBiomes(Type.SANDY).contains(biome);
