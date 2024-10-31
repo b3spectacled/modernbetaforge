@@ -58,8 +58,8 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
     private final WorldGenBush brownMushroomFeature;
     private final WorldGenBush redMushroomFeature;
    
-    private MapGenNetherBridge netherFortressGenerator = new MapGenNetherBridge();
-    private MapGenBase netherCaveCarver = new MapGenBetaCaveHell();
+    private MapGenNetherBridge netherFortressGenerator;
+    private MapGenBase netherCaveCarver;
     
     public ModernBetaChunkGeneratorHell(World world, boolean mapFeaturesEnabled, long seed, String generatorOptions) {
         super(world, mapFeaturesEnabled, seed);
@@ -78,8 +78,8 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         this.brownMushroomFeature = new WorldGenBush(Blocks.BROWN_MUSHROOM);
         this.redMushroomFeature = new WorldGenBush(Blocks.RED_MUSHROOM);
        
-        this.netherFortressGenerator = (MapGenNetherBridge)TerrainGen.getModdedMapGen(netherFortressGenerator, InitMapGenEvent.EventType.NETHER_BRIDGE);
-        this.netherCaveCarver = TerrainGen.getModdedMapGen(netherCaveCarver, InitMapGenEvent.EventType.NETHER_CAVE);
+        this.netherFortressGenerator = (MapGenNetherBridge)TerrainGen.getModdedMapGen(new MapGenNetherBridge(), InitMapGenEvent.EventType.NETHER_BRIDGE);
+        this.netherCaveCarver = TerrainGen.getModdedMapGen(new MapGenBetaCaveHell(), InitMapGenEvent.EventType.NETHER_CAVE);
     }
     
     @Override
