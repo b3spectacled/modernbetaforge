@@ -1411,7 +1411,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                     Gui guiComponent = guiEntry.getComponent1();
                     Gui guiComponent2 = guiEntry.getComponent2();
                     
-                    
                     if (guiComponent instanceof GuiButton) {
                         GuiButton guiButtonComponent = (GuiButton)guiComponent;
                         

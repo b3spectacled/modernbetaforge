@@ -17,7 +17,8 @@ public class ModernBetaBiomeStructures {
 
         // Add stronghold biomes
         for (Biome biome : ModernBetaBiomeLists.BETA_BIOMES) {
-            addStrongholdBiome(biome);
+            if (biome != ModernBetaBiomeHolders.BETA_OCEAN && biome != ModernBetaBiomeHolders.BETA_FROZEN_OCEAN)
+                addStrongholdBiome(biome);
         }
         
         // Add village biomes
@@ -42,11 +43,11 @@ public class ModernBetaBiomeStructures {
         }
     }
     
-    public static void addStrongholdBiome(Biome biome) {
+    private static void addStrongholdBiome(Biome biome) {
         BiomeManager.addStrongholdBiome(biome);
     }
     
-    public static void addVillageBiome(Biome biome) {
+    private static void addVillageBiome(Biome biome) {
         BiomeManager.addVillageBiome(biome, false);
     }
     
