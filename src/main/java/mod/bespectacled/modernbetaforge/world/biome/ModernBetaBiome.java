@@ -43,10 +43,10 @@ public abstract class ModernBetaBiome extends Biome {
     protected static final float HEIGHT_VARY_LOW = 0.2f;
     
     protected static final float BASE_HEIGHT_TEMPERATE = 0.1f;
-    protected static final float HEIGHT_VARY_TEMPERATE = 0.35f;
+    protected static final float HEIGHT_VARY_TEMPERATE = 0.4f;
     
     protected static final float BASE_HEIGHT_WET = 0.1f;
-    protected static final float HEIGHT_VARY_WET = 0.45f;
+    protected static final float HEIGHT_VARY_WET = 0.5f;
     
     protected static final float BASE_HEIGHT_BEACH = 0.0f;
     protected static final float HEIGHT_VARY_BEACH = 0.025f;
