@@ -17,6 +17,7 @@ public class BlockStates {
     public static final IBlockState GRAVEL = Blocks.GRAVEL.getDefaultState();
     public static final IBlockState SAND = Blocks.SAND.getDefaultState();
     public static final IBlockState SANDSTONE = Blocks.SANDSTONE.getDefaultState();
+    public static final IBlockState RED_SANDSTONE = Blocks.RED_SANDSTONE.getDefaultState();
     public static final IBlockState CLAY = Blocks.CLAY.getDefaultState();
     
     public static final IBlockState STONE = Blocks.STONE.getDefaultState();

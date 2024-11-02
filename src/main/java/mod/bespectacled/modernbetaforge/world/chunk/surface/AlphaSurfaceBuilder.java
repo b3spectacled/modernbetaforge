@@ -6,6 +6,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -65,7 +66,7 @@ public class AlphaSurfaceBuilder extends SurfaceBuilder {
                 IBlockState fillerBlock = biome.fillerBlock;
                 
                 // Skip if used custom surface generation or if below minimum surface level.
-                if (this.useCustomSurfaceBuilder(biome, chunkPrimer, random, x, z)) {
+                if (this.useCustomSurfaceBuilder(biome, chunkPrimer, random, x, z, false)) {
                     continue;
                 }
                 
@@ -132,7 +133,9 @@ public class AlphaSurfaceBuilder extends SurfaceBuilder {
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
                     if (useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
                         runDepth = sandstoneRandom.nextInt(4);
-                        fillerBlock = BlockStates.SANDSTONE;
+                        fillerBlock = fillerBlock.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ?
+                            BlockStates.RED_SANDSTONE :
+                            BlockStates.SANDSTONE;
                     }
                 }
             }

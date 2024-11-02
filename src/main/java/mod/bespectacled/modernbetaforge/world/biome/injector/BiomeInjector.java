@@ -2,9 +2,9 @@ package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
+import mod.bespectacled.modernbetaforge.util.chunk.InjectorChunk;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +12,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeInjector {
-    private final ChunkCache<BiomeChunk> biomeCache;
+    private final ChunkCache<InjectorChunk> biomeCache;
     private final BiomeInjectionRules rules;
     
     public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules rules) {
@@ -20,7 +20,7 @@ public class BiomeInjector {
             "cached_injected_biomes",
             512,
             true,
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome)
+            (chunkX, chunkZ) -> new InjectorChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome)
         );
         
         this.rules = rules;

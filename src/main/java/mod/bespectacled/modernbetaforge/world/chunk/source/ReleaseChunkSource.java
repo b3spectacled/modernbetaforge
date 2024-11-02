@@ -4,21 +4,28 @@ import java.util.function.Predicate;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
-import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import net.minecraft.init.Biomes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSettings;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.gen.ChunkGeneratorSettings;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -54,8 +61,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         BiomeSource biomeSource = this.biomeProvider.getBiomeSource();
-        this.noiseBiomeSource = biomeSource instanceof ReleaseBiomeSource || biomeSource instanceof SingleBiomeSource ?
-            biomeSource : new ReleaseBiomeSource(world.getWorldInfo());
+        this.noiseBiomeSource = biomeSource instanceof ReleaseNoiseBiomeSource || biomeSource instanceof SingleBiomeSource ?
+            biomeSource : new ReleaseNoiseBiomeSource(world.getWorldInfo());
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
@@ -69,6 +76,56 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
     public Biome getNoiseBiome(int x, int z) {
         return this.noiseBiomeSource.getBiome(x, z);
+    }
+
+    @Override
+    protected BiomeInjectionRules buildBiomeInjectorRules() {
+        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        
+        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
+    
+        Predicate<BiomeInjectionContext> riverPredicate = context -> {
+            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            
+            return BiomeDictionary.hasType(noiseBiome, Type.RIVER);
+        };
+        
+        Predicate<BiomeInjectionContext> deepOceanPredicate = context -> {
+            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            
+            return BiomeDictionary.hasType(noiseBiome, Type.OCEAN) && noiseBiome.equals(Biomes.DEEP_OCEAN);
+        };
+        
+        Predicate<BiomeInjectionContext> oceanPredicate = context -> {
+            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            
+            return BiomeDictionary.hasType(noiseBiome, Type.OCEAN);
+        };
+        
+        Predicate<BiomeInjectionContext> beachPredicate = context ->
+            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
+            
+        if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
+            
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+        }
+        
+        if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
+    
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, "deep_ocean");
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+        }
+        
+        if (this.biomeProvider.getBiomeSource() instanceof BiomeResolverRiver) {
+            BiomeResolverRiver biomeResolverRiver = (BiomeResolverRiver)this.biomeProvider.getBiomeSource();
+            
+            builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, "river");
+        }
+        
+        return builder.build();
     }
 
     @Override
@@ -223,35 +280,13 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         }
     }
     
-    @Override
-    protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+    private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
+        double offset = ((double)noiseY - depth) * heightStretch * 128.0 / 256.0 / scale;
         
-        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
+        if (offset < 0.0)
+            offset *= 4.0;
         
-        Predicate<BiomeInjectionContext> oceanPredicate = context -> {
-            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
-            
-            return BiomeDictionary.getBiomes(Type.OCEAN).contains(noiseBiome);
-        };
-        
-        Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
-            
-        if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
-            
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
-        }
-        
-        if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
-            
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
-        }
-        
-        return builder.build();
+        return offset;
     }
     
     private Biome sampleBiome(int x, int z) {
@@ -267,21 +302,39 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         return biome;
     }
     
-    private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
-        double offset = ((double)noiseY - depth) * heightStretch * 128.0 / 256.0 / scale;
-        
-        if (offset < 0.0)
-            offset *= 4.0;
-        
-        return offset;
-    }
-    
     static {
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
                 float f = 10.0f / MathHelper.sqrt((float)(i * i + j * j) + 0.2f);
                 BIOME_WEIGHTS[i + 2 + (j + 2) * 5] = f;
             }
+        }
+    }
+
+    private static class ReleaseNoiseBiomeSource extends BiomeSource {
+        private final BiomeProvider biomeProvider;
+    
+        public ReleaseNoiseBiomeSource(WorldInfo worldInfo) {
+            super(worldInfo);
+    
+            // Create new world info with Customized world type,
+            // so biome provider will accept custom biome sizes
+            ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
+            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.buildSettings(worldInfo.getGeneratorOptions());
+            
+            factory.biomeSize = settings.biomeSize;
+            factory.riverSize = settings.riverSize;
+            
+            WorldInfo vanillaWorldInfo = new WorldInfo(worldInfo);
+            vanillaWorldInfo.populateFromWorldSettings(new WorldSettings(worldInfo).setGeneratorOptions(factory.toString()));
+            vanillaWorldInfo.setTerrainType(WorldType.CUSTOMIZED);
+            
+            this.biomeProvider = new BiomeProvider(vanillaWorldInfo);
+        }
+    
+        @Override
+        public Biome getBiome(int x, int z) {
+            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z));
         }
     }
 }

@@ -43,7 +43,8 @@ public class ModernBetaBuiltInTypes {
         ALPHA_1_2("alpha_1_2", "Alpha 1.2"),
         SKYLANDS("skylands", "Skylands"),
         INFDEV("infdev", "Infdev"),
-        PE("pe", "Pocket Ed.")
+        PE("pe", "Pocket Ed."),
+        RELEASE("release", "Release")
         ;
         
         public final String id;

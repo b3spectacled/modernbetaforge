@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
+import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
@@ -20,6 +21,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.AlphaSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.BetaSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 
 public class ModernBetaBuiltInRegistries {
@@ -39,6 +41,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.BETA.id, BetaBiomeSource::new);
         ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.SINGLE.id, SingleBiomeSource::new);
         ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.PE.id, PEBiomeSource::new);
+        ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.RELEASE.id, ReleaseBiomeSource::new);
     }
     
     public static void registerNoiseSettings() {
@@ -59,6 +62,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.SKYLANDS.id, SkylandsSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.id, InfdevSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.id, PESurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.RELEASE.id, ReleaseSurfaceBuilder::new);
     }
     
     public static void registerDataFixes() {

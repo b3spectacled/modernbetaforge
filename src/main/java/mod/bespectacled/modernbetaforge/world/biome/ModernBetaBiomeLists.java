@@ -85,7 +85,12 @@ public class ModernBetaBiomeLists {
             // Other
             Biomes.STONE_BEACH,
             Biomes.MUSHROOM_ISLAND,
-            Biomes.MUSHROOM_ISLAND_SHORE
+            Biomes.MUSHROOM_ISLAND_SHORE,
+            
+            // Oceans
+            Biomes.OCEAN,
+            Biomes.DEEP_OCEAN,
+            Biomes.FROZEN_OCEAN
         );
     }
 }

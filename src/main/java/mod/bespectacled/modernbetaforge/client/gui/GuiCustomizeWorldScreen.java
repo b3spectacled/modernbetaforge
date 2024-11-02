@@ -1711,6 +1711,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+            boolean isRelease = 
+                chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
@@ -1734,7 +1737,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_WT, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_OF, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_B_USE_BDS, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_BIOME_SZ, chunkSource);
+            this.setChunkSettingsEnabled(GuiTags.PG3_S_BIOME_SZ, isRelease);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_RIVER_SZ, chunkSource);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
