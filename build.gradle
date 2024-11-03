@@ -63,7 +63,7 @@ minecraft {
         }
     }
     
-    accessTransformer = file('src/main/resources/META-INF/modernbeta_at.cfg')
+    accessTransformer = file('src/main/resources/META-INF/' + projectATFile)
 }
 
 processResources {
@@ -75,13 +75,13 @@ processResources {
 }
 
 mixin {
-	add sourceSets.main, 'refmap.modernbetaforge.json'
-    config 'mixins.modernbetaforge.json'
+    add sourceSets.main, projectMixinRefmap
+    config projectMixinConfig
 }
 
 jar {
     manifest.attributes(
-        'FMLAT': 'modernbeta_at.cfg',
+        'FMLAT': projectATFile,
         'ForceLoadAsMod': true,
         'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
         'TweakOrder': '0'

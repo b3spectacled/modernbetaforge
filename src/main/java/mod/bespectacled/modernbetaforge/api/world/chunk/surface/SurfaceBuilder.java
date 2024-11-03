@@ -46,7 +46,7 @@ public abstract class SurfaceBuilder {
     
     public SurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
-        this.defaultFluid = BlockStates.WATER;
+        this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
         
         this.world = world;
         this.chunkSource = chunkSource;
