@@ -4,9 +4,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
+import mod.bespectacled.modernbetaforge.compat.Compat;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -60,6 +64,15 @@ public abstract class SurfaceBuilder {
                 .map(id -> BiomeUtil.getBiome(id, "custom surface config"))
                 .collect(Collectors.toList())
         );
+        
+        // Init modded surface info
+        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+            Compat compat = entry.getValue();
+            if (compat instanceof BiomeCompat) {
+                BiomeCompat biomeCompat = (BiomeCompat)compat;
+                this.biomesWithCustomSurfaces.addAll(biomeCompat.getCustomSurfaces());
+            }
+        }
     }
     
     /**

@@ -15,6 +15,7 @@ createWorld.customize.custom.netherFeaturesLabel=Nether Settings
 createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Feature Settings
+createWorld.customize.custom.releaseFeaturesLabel=Release Feature Settings
 createWorld.customize.custom.mobSpawnLabel=Mob Settings
 
 # Page 1 - Main Settings
@@ -49,6 +50,7 @@ createWorld.customize.custom.usePineTrees=Pine Trees
 createWorld.customize.custom.useSwampTrees=Swamp Trees
 createWorld.customize.custom.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.useJungleTrees=Jungle Trees
+createWorld.customize.custom.useModdedBiomes=Mod Biome Compatibility
 
 # Page 3 - Mobs
 createWorld.customize.custom.spawnNewCreatureMobs=Modern Passive Mobs

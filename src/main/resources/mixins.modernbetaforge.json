@@ -8,19 +8,20 @@
         "defaultRequire": 1
     },
     "mixins": [
-	    "MixinMapGenScatteredFeatureStart",
-	    "MixinStructureVillagePiecesStart",
-	    "MixinWorldEntitySpawner",
-	    "MixinWorldProviderHell",
-	    "accessor.AccessorChunkGeneratorHell",
-	    "accessor.AccessorStructureStart",
-	    "accessor.AccessorVillage",
-	    "accessor.AccessorWorldServer",
-	    "accessor.AccessorWorldProvider"
+      "MixinMapGenScatteredFeatureStart",
+      "MixinStructureVillagePiecesStart",
+      "MixinWorldEntitySpawner",
+      "MixinWorldProviderHell",
+      "accessor.AccessorChunkGeneratorHell",
+      "accessor.AccessorStructureStart",
+      "accessor.AccessorVillage",
+      "accessor.AccessorWorldServer",
+      "accessor.AccessorWorldProvider",
+      "accessor.AccessorGenLayerBiome"
     ],
     "client": [
-	    "client.MixinEntityRenderer",
-	    "accessor.AccessorEntityRenderer"
+      "client.MixinEntityRenderer",
+      "accessor.AccessorEntityRenderer"
     ],
     "server": []
 }

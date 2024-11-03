@@ -77,9 +77,12 @@ public class GuiTags {
     public static final int PG1_B_SPAWN_AMBIENT = 214;
     public static final int PG1_B_SPAWN_WOLVES = 215;
     
+    public static final int PG1_B_USE_MODDED_BIOMES = 216;
+    
     // Labels
     public static final int PG1_L_BETA = 1200;
     public static final int PG1_L_MOBS = 1201;
+    public static final int PG1_L_RELEASE = 1202;
     
     /* Page 3 */
     

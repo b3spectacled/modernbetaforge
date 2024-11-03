@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -61,6 +62,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();
+        ModCompat.loadModCompat();
         
         proxy.init();
     }

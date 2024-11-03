@@ -4,6 +4,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.GenLayerBiomeEdge;
 import net.minecraft.world.gen.layer.GenLayerEdge;
 import net.minecraft.world.gen.layer.GenLayerFuzzyZoom;
 import net.minecraft.world.gen.layer.GenLayerHills;
@@ -32,7 +33,7 @@ public class ModernBetaGenLayer {
         GenLayer genLayerMutation = GenLayerZoom.magnify(1000L, genLayer, 0);
         genLayerMutation = new GenLayerRiverInit(100L, genLayerMutation);
         genLayerMutation = GenLayerZoom.magnify(1000L, genLayerMutation, 2);
-        genLayer = worldType.getBiomeLayer(seed, genLayer, vanillaSettings);
+        genLayer = getBiomeLayer(seed, genLayer, worldType, vanillaSettings, settings);
         genLayer = new GenLayerOceanlessMushroom(5L, genLayer);
         genLayer = new GenLayerHills(1000L, genLayer, genLayerMutation);
         genLayer = new GenLayerRareBiome(1001L, genLayer);
@@ -51,5 +52,19 @@ public class ModernBetaGenLayer {
         genLayerVoronoi.initWorldGenSeed(seed);
         
         return new GenLayer[] { genLayerNoise, genLayerVoronoi, genLayerNoise };
+    }
+    
+    private static GenLayer getBiomeLayer(
+        long seed,
+        GenLayer parent,
+        WorldType worldType,
+        ChunkGeneratorSettings vanillaSettings,
+        ModernBetaChunkGeneratorSettings settings
+    ) {
+        GenLayer biomeLayer = new GenLayerBiomeExtended(200L, parent, worldType, vanillaSettings, settings);
+        biomeLayer = GenLayerZoom.magnify(1000L, biomeLayer, 2);
+        biomeLayer = new GenLayerBiomeEdge(1000L, biomeLayer);
+        
+        return biomeLayer;
     }
 }

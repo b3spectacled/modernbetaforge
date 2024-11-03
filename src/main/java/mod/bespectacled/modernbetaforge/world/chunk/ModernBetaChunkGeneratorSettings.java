@@ -171,6 +171,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean spawnAmbientMobs;
     public final boolean spawnWolves;
     
+    public final boolean useModdedBiomes;
+    
     public final String desertBiomeBase;
     public final String desertBiomeOcean;
     public final String desertBiomeBeach;
@@ -366,6 +368,8 @@ public class ModernBetaChunkGeneratorSettings {
         this.spawnWaterMobs = factory.spawnWaterMobs;
         this.spawnAmbientMobs = factory.spawnAmbientMobs;
         this.spawnWolves = factory.spawnWolves;
+        
+        this.useModdedBiomes = factory.useModdedBiomes;
         
         this.desertBiomeBase = factory.desertBiomeBase;
         this.desertBiomeOcean = factory.desertBiomeOcean;
@@ -565,6 +569,8 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean spawnWaterMobs;
         public boolean spawnAmbientMobs;
         public boolean spawnWolves;
+        
+        public boolean useModdedBiomes;
         
         public String desertBiomeBase;
         public String desertBiomeOcean;
@@ -778,6 +784,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
             
+            this.useModdedBiomes = true;
+            
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
             this.desertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
@@ -976,6 +984,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.spawnWaterMobs = true;
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
+            
+            this.useModdedBiomes = true;
 
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -1186,6 +1196,8 @@ public class ModernBetaChunkGeneratorSettings {
                 this.spawnWaterMobs == factory.spawnWaterMobs &&
                 this.spawnAmbientMobs == factory.spawnAmbientMobs &&
                 this.spawnWolves == factory.spawnWolves &&
+                        
+                this.useModdedBiomes == factory.useModdedBiomes &&
                 
                 this.desertBiomeBase.equals(factory.desertBiomeBase) &&
                 this.desertBiomeOcean.equals(factory.desertBiomeOcean) &&
@@ -1386,6 +1398,8 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.spawnWaterMobs ? 1 : 0);
             hashCode = 31 * hashCode + (this.spawnAmbientMobs ? 1 : 0);
             hashCode = 31 * hashCode + (this.spawnWolves ? 1 : 0);
+
+            hashCode = 31 * hashCode + (this.useModdedBiomes ? 1 : 0);
             
             hashCode = 31 * hashCode + this.desertBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.desertBiomeOcean.hashCode();
@@ -1600,6 +1614,8 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.spawnWaterMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
                 factory.spawnAmbientMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
                 factory.spawnWolves = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WOLVES, factory.spawnWolves);
+                
+                factory.useModdedBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MODDED_BIOMES, factory.useModdedBiomes);
 
                 factory.desertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
                 factory.desertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
@@ -1804,6 +1820,8 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
             jsonObject.addProperty(NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
             jsonObject.addProperty(NbtTags.SPAWN_WOLVES, factory.spawnWolves);
+            
+            jsonObject.addProperty(NbtTags.USE_MODDED_BIOMES, factory.useModdedBiomes);
             
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);

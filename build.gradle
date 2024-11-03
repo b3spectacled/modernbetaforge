@@ -5,11 +5,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:4.+'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-        
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
@@ -22,10 +22,10 @@ archivesBaseName = 'modernbetaforge'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: "stable", version: "39-1.12"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/modernbeta_at.cfg')
     
     runs {
         client {
@@ -45,6 +45,7 @@ minecraft {
 
 repositories {
     maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = "https://www.cursemaven.com" }
 }
 
 configurations {
@@ -65,6 +66,9 @@ dependencies {
     annotationProcessor "com.google.code.gson:gson:2.8.9"
     annotationProcessor "com.google.guava:guava:21.0"
     annotationProcessor "org.ow2.asm:asm-debug-all:5.2"
+    
+    implementation fg.deobf("curse.maven:biomes-o-plenty-220318:2842510")
+    
 }
 
 processResources {

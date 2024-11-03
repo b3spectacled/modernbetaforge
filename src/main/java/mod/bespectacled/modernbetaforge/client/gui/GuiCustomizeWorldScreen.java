@@ -226,6 +226,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_JUNGLE, I18n.format(PREFIX + NbtTags.USE_JUNGLE_TREES), true, this.settings.useJungleTrees),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_ACACIA, I18n.format(PREFIX + NbtTags.USE_ACACIA_TREES), true, this.settings.useAcaciaTrees),
             null,
+            
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_RELEASE, I18n.format(PREFIX + "releaseFeaturesLabel"), true),
+            null,
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_MODDED_BIOMES, I18n.format(PREFIX + NbtTags.USE_MODDED_BIOMES), true, this.settings.useModdedBiomes),
+            null,
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MOBS, I18n.format(PREFIX + "mobSpawnLabel"), true),
             null,
@@ -1019,6 +1024,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG1_B_USE_ACACIA:
                 this.settings.useAcaciaTrees = entryValue;
+                break;
+                
+            case GuiTags.PG1_B_USE_MODDED_BIOMES:
+                this.settings.useModdedBiomes = entryValue;
                 break;
                 
             case GuiTags.PG1_B_SPAWN_CREATURE:
