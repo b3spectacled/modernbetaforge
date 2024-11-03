@@ -14,9 +14,9 @@ createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
 createWorld.customize.custom.netherFeaturesLabel=Nether Settings
 createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
-createWorld.customize.custom.betaFeaturesLabel=Beta Feature Settings
-createWorld.customize.custom.releaseFeaturesLabel=Release Feature Settings
-createWorld.customize.custom.mobSpawnLabel=Mob Settings
+createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
+createWorld.customize.custom.releaseFeaturesLabel=Release Biome Feature Settings
+createWorld.customize.custom.mobSpawnLabel=Modern Beta Mob Settings
 
 # Page 1 - Main Settings
 createWorld.customize.custom.chunkSource=Chunk Source

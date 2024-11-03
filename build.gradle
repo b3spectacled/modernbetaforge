@@ -1,3 +1,5 @@
+// Based on 'modern-forge-1.12-template' by by github@quat1024
+
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
@@ -11,21 +13,40 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
+apply plugin: 'java'
 
-version = '1.12.2-1.2.2.0'
-group = 'mod.bespectacled.modernbetaforge'
-archivesBaseName = 'modernbetaforge'
+version = projectVersion
+group = projectGroup
+archivesBaseName = projectName
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+compileJava {
+    sourceCompatibility = '8'
+    targetCompatibility = '8'
+}
+
+repositories {
+    maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = 'https://www.cursemaven.com' }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    
+    implementation 'com.google.guava:guava:21.0'
+    implementation 'org.spongepowered:mixin:0.8.5-SNAPSHOT'
+    implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
+    
+    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT'
+    annotationProcessor 'com.google.code.gson:gson:2.8.9'
+    annotationProcessor 'com.google.guava:guava:21.0'
+    annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
+}
 
 minecraft {
-    mappings channel: "stable", version: "39-1.12"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    accessTransformer = file('src/main/resources/META-INF/modernbeta_at.cfg')
+    mappings channel: 'stable', version: '39-1.12'
     
     runs {
         client {
@@ -41,42 +62,15 @@ minecraft {
             arg '-torg.spongepowered.asm.launch.MixinTweaker'
         }
     }
-}
-
-repositories {
-    maven { url = 'https://repo.spongepowered.org/maven' }
-    maven { url = "https://www.cursemaven.com" }
-}
-
-configurations {
-    library
-    implementation.extendsFrom library
-}
-
-dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     
-    library "com.google.guava:guava:21.0"
-    library "org.spongepowered:mixin:0.8.5-SNAPSHOT"
-    
-    annotationProcessor "org.spongepowered:mixin:0.8.5-SNAPSHOT"
-    annotationProcessor "com.google.code.gson:gson:2.8.9"
-    annotationProcessor "com.google.guava:guava:21.0"
-    annotationProcessor "org.ow2.asm:asm-debug-all:5.2"
-    
-    implementation fg.deobf("curse.maven:biomes-o-plenty-220318:2842510")
-    
+    accessTransformer = file('src/main/resources/META-INF/modernbeta_at.cfg')
 }
 
 processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-
-    filesMatching("mcmod.info") {
-        expand "version": project.version
+    inputs.property 'version', project.version
+  
+    filesMatching('mcmod.info') {
+      expand 'version': project.version
     }
 }
 
@@ -88,8 +82,8 @@ mixin {
 jar {
     manifest.attributes(
         'FMLAT': 'modernbeta_at.cfg',
-        "ForceLoadAsMod": true,
+        'ForceLoadAsMod': true,
         'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
-    	'TweakOrder': '0'
+        'TweakOrder': '0'
     )
 }
