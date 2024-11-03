@@ -63,7 +63,9 @@ minecraft {
         }
     }
     
-    accessTransformer = file('src/main/resources/META-INF/' + projectATFile)
+    accessTransformers {
+        file('src/main/resources/META-INF/' + projectATFile)
+    }
 }
 
 processResources {
