@@ -125,6 +125,7 @@ public class CompatBOP implements Compat, BiomeCompat {
         this.addBiomeSurface(builder, BOPBiomes.bog);
         this.addBiomeSurface(builder, BOPBiomes.chaparral);
         this.addBiomeSurface(builder, BOPBiomes.cold_desert);
+        this.addBiomeSurface(builder, BOPBiomes.dead_swamp);
         this.addBiomeSurface(builder, BOPBiomes.mangrove);
         this.addBiomeSurface(builder, BOPBiomes.overgrown_cliffs);
         this.addBiomeSurface(builder, BOPBiomes.quagmire);
