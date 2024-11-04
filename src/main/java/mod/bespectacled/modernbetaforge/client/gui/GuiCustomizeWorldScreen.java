@@ -14,6 +14,7 @@ import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -529,6 +530,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
             new GuiPageButtonList.EditBoxEntry(GuiTags.PG5_TUND_BEACH, "", false, this.stringFilter)
         };
+        
+        if (ModCompat.isBoPLoaded()) {
+            GuiPageButtonList.GuiListEntry[] newPageList0 = new GuiPageButtonList.GuiListEntry[pageList0.length + 2];
+            System.arraycopy(pageList0, 0, newPageList0, 0, pageList0.length);
+            newPageList0[pageList0.length] = new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_NETHER_BOP, I18n.format(PREFIX + "netherBoPLabel"), true);
+            newPageList0[pageList0.length + 1] = null;
+            pageList0 = newPageList0;
+        }
         
         this.pageList = new GuiPageButtonList(
             this.mc,
@@ -1715,7 +1724,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             String biomeSource = this.settings.biomeSource;
             String surfaceBuilder = this.settings.surfaceBuilder;
             String fixedBiome = this.settings.fixedBiome;
-            boolean useOldNether = this.settings.useOldNether;
+            boolean useOldNether = this.settings.useOldNether && !ModCompat.isBoPLoaded();
             boolean isBetaOrPE = 
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
@@ -1731,6 +1740,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
+            this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
             this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
             this.setButtonEnabled(GuiTags.PG0_B_USE_LAVA_POCKETS, useOldNether);

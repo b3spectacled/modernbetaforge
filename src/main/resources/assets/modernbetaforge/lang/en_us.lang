@@ -12,6 +12,7 @@ createWorld.customize.custom.page5=Biome Feature Settings
 createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
 createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
 createWorld.customize.custom.netherFeaturesLabel=Nether Settings
+createWorld.customize.custom.netherBoPLabel=BoP is detected, Classic Nether is incompatible.
 createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings

@@ -54,6 +54,7 @@ public class GuiTags {
     public static final int PG0_L_BIOME_REPLACEMENT = 1002;
     public static final int PG0_L_BASIC_FEATURES = 1003;
     public static final int PG0_L_NETHER_FEATURES = 1004;
+    public static final int PG0_L_NETHER_BOP = 1005;
     
     /* Page 2 */
     
