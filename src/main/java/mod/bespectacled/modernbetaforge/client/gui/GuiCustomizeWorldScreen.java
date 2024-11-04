@@ -230,7 +230,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_RELEASE, I18n.format(PREFIX + "releaseFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_MODDED_BIOMES, I18n.format(PREFIX + NbtTags.USE_MODDED_BIOMES), true, this.settings.useModdedBiomes),
-            null,
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MODS, I18n.format(PREFIX + "modsLabel"), true),
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MOBS, I18n.format(PREFIX + "mobSpawnLabel"), true),
             null,
@@ -1725,6 +1725,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
             boolean isReleaseSurface = surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
+            boolean isReleaseBiome = biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+            boolean isBetaOrPEBiome = 
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
@@ -1739,6 +1743,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
             this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
             this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !isReleaseSurface);
+            this.setButtonEnabled(GuiTags.PG1_B_USE_MODDED_BIOMES, isReleaseBiome);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_X, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_Z, chunkSource);
@@ -1755,6 +1760,22 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_RAIN_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DETL_SCL, isBetaOrPE);
+            
+            // Disable all Beta/PE custom biome options when not using Beta/PE Biome Source
+            
+            for (int i = GuiTags.PG5_DSRT_LAND; i <= GuiTags.PG5_TUND_BEACH; ++i) {
+                this.setFieldEnabled(i, isBetaOrPEBiome);
+            }
+
+            // Disable all ore, biome, and mob feature settings when using Release Biome Source
+            
+            for (int i = GuiTags.PG1_B_USE_GRASS; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
+                this.setButtonEnabled(i, !isReleaseBiome);
+            }
+            
+            for (int i = GuiTags.PG2_S_CLAY_SIZE; i <= GuiTags.PG2_S_EMER_MAX; ++i) {
+                this.setButtonEnabled(i, !isReleaseBiome);
+            }
             
             this.setBiomeStructuresEnabled(biomeSource, fixedBiome);
         }

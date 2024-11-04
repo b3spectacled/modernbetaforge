@@ -83,6 +83,7 @@ public class GuiTags {
     public static final int PG1_L_BETA = 1200;
     public static final int PG1_L_MOBS = 1201;
     public static final int PG1_L_RELEASE = 1202;
+    public static final int PG1_L_MODS = 1203;
     
     /* Page 3 */
     

@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.function.TriFunction;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -12,8 +13,16 @@ import net.minecraft.world.biome.Biome;
 
 public class InjectorChunk {
     private Biome[] biomes = new Biome[256];
+    private byte[] ids = new byte[256];
     
-    public InjectorChunk(int chunkX, int chunkZ, ChunkSource chunkSource, BiomeSource biomeSource, TriFunction<BiomeInjectionContext, Integer, Integer, Biome> chunkFunc) {
+    public InjectorChunk(
+        int chunkX,
+        int chunkZ,
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        TriFunction<BiomeInjectionContext, Integer, Integer, Biome> biomeFunc,
+        TriFunction<BiomeInjectionContext, Integer, Integer, Byte> idFunc
+    ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
 
@@ -27,12 +36,19 @@ public class InjectorChunk {
                 
                 BiomeInjectionContext context = new BiomeInjectionContext(topPos, topState, biome);
                 
-                this.biomes[ndx++] = chunkFunc.apply(context, x, z);
+                this.biomes[ndx] = biomeFunc.apply(context, x, z);
+                this.ids[ndx] = idFunc.apply(context, x, z);
+                
+                ndx++;
             }
         }
     }
     
     public Biome sampleBiome(int x, int z) {
         return this.biomes[(z & 0xF) + (x & 0xF) * 16];
+    }
+    
+    public String getId(int x, int z) {
+        return BiomeInjectionRules.RULES_IDS.get(this.ids[(z & 0xF) + (x & 0xF) * 16]);
     }
 }

@@ -467,6 +467,14 @@ public abstract class ChunkSource {
         return null;
     }
     
+    public String getCachedInjectionId(int x, int z) {
+        if (this.biomeInjector != null) {
+            return this.biomeInjector.getCachedInjectionId(x, z);
+        }
+        
+        return "N/A";
+    }
+    
     public ModernBetaChunkGeneratorSettings getChunkGeneratorSettings() {
         return this.settings;
     }
@@ -474,7 +482,7 @@ public abstract class ChunkSource {
     public SpawnLocator getSpawnLocator() {
         return SpawnLocator.DEFAULT;
     }
-    
+
     protected BiomeInjectionRules buildBiomeInjectorRules() {
         boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
@@ -493,14 +501,14 @@ public abstract class ChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionRules.BEACH);
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
 
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, "deep_ocean");
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionRules.DEEP_OCEAN);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionRules.OCEAN);
         }
         
         return builder.build();

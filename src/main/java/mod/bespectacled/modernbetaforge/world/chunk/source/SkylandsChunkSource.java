@@ -11,6 +11,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
     private final PerlinOctaveNoise maxLimitOctaveNoise;
     private final PerlinOctaveNoise mainOctaveNoise;
+    private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
@@ -27,13 +28,13 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-        new PerlinOctaveNoise(this.random, 4, true);
+        this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         new PerlinOctaveNoise(this.random, 10, true);
         new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
-        this.setBeachOctaveNoise(null);
+        this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
     }

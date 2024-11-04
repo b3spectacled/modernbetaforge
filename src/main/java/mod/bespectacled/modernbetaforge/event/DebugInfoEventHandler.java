@@ -8,6 +8,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.server.MinecraftServer;
@@ -51,9 +52,11 @@ public class DebugInfoEventHandler {
                 
                 String chunkSourceName = chunkSource.getChunkGeneratorSettings().chunkSource;
                 String biomeSourceName = chunkSource.getChunkGeneratorSettings().biomeSource;
+                String surfaceBuilderName = chunkSource.getChunkGeneratorSettings().surfaceBuilder;
                 String fixedBiome = chunkSource.getChunkGeneratorSettings().fixedBiome;
                 
                 String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
+                String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceBuilderName);
                 String fixedBiomeText = String.format("[Modern Beta] Fixed Biome: %s", fixedBiome);
                 
                 String heightmapText = String.format(
@@ -65,12 +68,24 @@ public class DebugInfoEventHandler {
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 event.getLeft().add(sourceText);
+                event.getLeft().add(surfaceText);
                 
                 if (biomeSourceName.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id))
                     event.getLeft().add(fixedBiomeText);
                 
                 event.getLeft().add(heightmapText);
                 event.getLeft().add(seaLevelText);
+                
+                if (chunkSource instanceof ReleaseChunkSource) {
+                    ReleaseChunkSource releaseChunkSource = (ReleaseChunkSource)chunkSource;
+                    String noisebiome = releaseChunkSource.getNoiseBiome(x, z).getBiomeName();
+                    
+                    String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
+                    event.getLeft().add(noiseBiomeText);
+                }
+                
+                String injectorText = String.format("[Modern Beta] Biome Injector Id (w/o Beaches): %s", chunkSource.getCachedInjectionId(x, z));
+                event.getLeft().add(injectorText);
             }
             
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
@@ -84,11 +99,11 @@ public class DebugInfoEventHandler {
                     double rain = clime.rain();
                     
                     String climateText = String.format("[Modern Beta] Climate Temp: %.3f Rainfall: %.3f", temp, rain);
-                    String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
-
                     event.getLeft().add(climateText);
-                    event.getLeft().add(baseBiomeText);
                 }
+
+                String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
+                event.getLeft().add(baseBiomeText);
             }
         }
         

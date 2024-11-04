@@ -14,6 +14,7 @@ import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -198,6 +199,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
+        
+        // Set beach noise for builtin Modern Biome surface builder
+        ModernBetaBiome.setBeachOctaveNoise(beachOctaveNoise);
     }
     
     protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {

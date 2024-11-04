@@ -4,7 +4,7 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerAddMoreSnow extends GenLayer {
-    private static final int SNOW_CHANCE = 4; // Vanilla is 6
+    private static final int SNOW_CHANCE = 3; // Vanilla is 6
     
     public GenLayerAddMoreSnow(long seed, GenLayer parent) {
         super(seed);

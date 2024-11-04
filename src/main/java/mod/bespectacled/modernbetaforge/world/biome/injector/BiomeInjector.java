@@ -20,7 +20,7 @@ public class BiomeInjector {
             "cached_injected_biomes",
             512,
             true,
-            (chunkX, chunkZ) -> new InjectorChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome)
+            (chunkX, chunkZ) -> new InjectorChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome, this::getInjectionId)
         );
         
         this.rules = rules;
@@ -58,7 +58,18 @@ public class BiomeInjector {
         return this.biomeCache.get(chunkX, chunkZ).sampleBiome(x, z);
     }
     
+    public String getCachedInjectionId(int x, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        
+        return this.biomeCache.get(chunkX, chunkZ).getId(x, z);
+    }
+    
     private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z) {
         return this.rules.test(context, x, z);
+    }
+    
+    private byte getInjectionId(BiomeInjectionContext context, int x, int z) {
+        return this.rules.testId(context, x, z);
     }
 }

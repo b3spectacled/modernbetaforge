@@ -41,7 +41,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ModernBetaBiome extends Biome {
     private static final List<SpawnListEntry> EMPTY_LIST = ImmutableList.of();
-    private static final PerlinOctaveNoise BEACH_OCTAVE_NOISE = new PerlinOctaveNoise(new Random(357), 4, true);
     
     public static final WorldGenTrees TREE_FEATURE = new WorldGenTrees(false);
     public static final WorldGenFancyOak BIG_TREE_FEATURE = new WorldGenFancyOak(false);
@@ -81,6 +80,8 @@ public abstract class ModernBetaBiome extends Biome {
     
     protected static final SpawnListEntry SQUID = new SpawnListEntry(EntitySquid.class, 10, 4, 4);
     protected static final SpawnListEntry BAT = new SpawnListEntry(EntityBat.class, 10, 8, 8);
+    
+    private static PerlinOctaveNoise BEACH_OCTAVE_NOISE = new PerlinOctaveNoise(new Random(357), 4, true);
     
     protected final List<SpawnListEntry> additionalMonsters;
     protected final List<SpawnListEntry> additionalCreatures;
@@ -309,5 +310,10 @@ public abstract class ModernBetaBiome extends Biome {
                 this.additionalCaveCreatures.addAll(spawnEntries);
                 break;
         }
+    }
+    
+    public static void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
+        if (beachOctaveNoise != null)
+            BEACH_OCTAVE_NOISE = beachOctaveNoise;
     }
 }

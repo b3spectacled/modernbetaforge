@@ -109,20 +109,20 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, "beach");
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionRules.BEACH);
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
     
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, "deep_ocean");
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, "ocean");
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionRules.DEEP_OCEAN);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionRules.OCEAN);
         }
         
         if (this.biomeProvider.getBiomeSource() instanceof BiomeResolverRiver) {
             BiomeResolverRiver biomeResolverRiver = (BiomeResolverRiver)this.biomeProvider.getBiomeSource();
             
-            builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, "river");
+            builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, BiomeInjectionRules.RIVER);
         }
         
         return builder.build();
