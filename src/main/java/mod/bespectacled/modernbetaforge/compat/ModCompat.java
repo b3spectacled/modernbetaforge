@@ -18,6 +18,10 @@ public class ModCompat {
         }
     }
     
+    public static boolean isBoPLoaded() {
+        return LOADED_MODS.containsKey(MOD_BOP);
+    }
+    
     private static void loadModCompat(String modName, Compat compat) {
         try {
             ModernBeta.log(Level.INFO, String.format("Found mod '%s', attempting to load..", modName));

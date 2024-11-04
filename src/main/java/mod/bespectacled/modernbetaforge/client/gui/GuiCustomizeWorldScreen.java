@@ -1713,6 +1713,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         if (this.pageList != null) {
             String chunkSource = this.settings.chunkSource;
             String biomeSource = this.settings.biomeSource;
+            String surfaceBuilder = this.settings.surfaceBuilder;
             String fixedBiome = this.settings.fixedBiome;
             boolean useOldNether = this.settings.useOldNether;
             boolean isBetaOrPE = 
@@ -1723,6 +1724,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             boolean isRelease = 
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+            boolean isReleaseSurface = surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
@@ -1736,6 +1738,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
             this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !isReleaseSurface);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_X, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_Z, chunkSource);
