@@ -122,15 +122,18 @@ public class CompatBOP implements Compat, BiomeCompat {
         ImmutableList.Builder<Biome> builder = new ImmutableList.Builder<>();
 
         this.addBiomeSurface(builder, BOPBiomes.bamboo_forest);
+        this.addBiomeSurface(builder, BOPBiomes.bayou);
         this.addBiomeSurface(builder, BOPBiomes.bog);
         this.addBiomeSurface(builder, BOPBiomes.chaparral);
         this.addBiomeSurface(builder, BOPBiomes.cold_desert);
         this.addBiomeSurface(builder, BOPBiomes.dead_swamp);
         this.addBiomeSurface(builder, BOPBiomes.mangrove);
+        this.addBiomeSurface(builder, BOPBiomes.mystic_grove);
         this.addBiomeSurface(builder, BOPBiomes.overgrown_cliffs);
         this.addBiomeSurface(builder, BOPBiomes.quagmire);
         this.addBiomeSurface(builder, BOPBiomes.redwood_forest);
         this.addBiomeSurface(builder, BOPBiomes.shield);
+        this.addBiomeSurface(builder, BOPBiomes.wetland);
         this.addBiomeSurface(builder, BOPBiomes.xeric_shrubland);
         
         return builder.build();
