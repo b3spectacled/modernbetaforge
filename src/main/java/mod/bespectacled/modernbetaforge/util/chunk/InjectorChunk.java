@@ -44,7 +44,7 @@ public class InjectorChunk {
         }
     }
     
-    public Biome sampleBiome(int x, int z) {
+    public Biome sample(int x, int z) {
         return this.biomes[(z & 0xF) + (x & 0xF) * 16];
     }
     

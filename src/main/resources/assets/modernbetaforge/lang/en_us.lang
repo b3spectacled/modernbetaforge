@@ -18,7 +18,7 @@ createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
 createWorld.customize.custom.releaseFeaturesLabel=Release Biome Feature Settings
 createWorld.customize.custom.mobSpawnLabel=Modern Beta Mob Settings
-createWorld.customize.custom.modsLabel=(Supported Mods: BoP)
+createWorld.customize.custom.modsLabel=Loaded Mods
 
 # Page 1 - Main Settings
 createWorld.customize.custom.chunkSource=Chunk Source

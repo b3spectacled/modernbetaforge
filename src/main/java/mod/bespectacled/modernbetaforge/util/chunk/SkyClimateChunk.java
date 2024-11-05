@@ -19,7 +19,7 @@ public class SkyClimateChunk {
         }
     }
     
-    public double sampleTemp(int x, int z) {
+    public double sample(int x, int z) {
         return this.temps[(z & 0xF) + (x & 0xF) * 16];
     }
 }

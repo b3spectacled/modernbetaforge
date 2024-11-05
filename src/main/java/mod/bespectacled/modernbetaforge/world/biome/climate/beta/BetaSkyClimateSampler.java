@@ -35,7 +35,7 @@ public class BetaSkyClimateSampler {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
-        return this.skyClimateCache.get(chunkX, chunkZ).sampleTemp(x, z);
+        return this.skyClimateCache.get(chunkX, chunkZ).sample(x, z);
     }
     
     private double sampleSkyTempNoise(int x, int z) {

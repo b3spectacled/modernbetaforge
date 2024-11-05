@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +171,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
         
+        List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
+        StringBuilder loadedModsList = new StringBuilder();
+        
+        if (loadedMods.isEmpty()) { 
+            loadedModsList.append("n/a");
+        } else if (loadedMods.size() > 0) {
+            loadedModsList.append(loadedMods.get(0));
+        }
+        
         GuiPageButtonList.GuiListEntry[] pageList0 = {
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_CHUNK, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
@@ -231,7 +241,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_RELEASE, I18n.format(PREFIX + "releaseFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG1_B_USE_MODDED_BIOMES, I18n.format(PREFIX + NbtTags.USE_MODDED_BIOMES), true, this.settings.useModdedBiomes),
-            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MODS, I18n.format(PREFIX + "modsLabel"), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MODS, String.format("%s: %s", I18n.format(PREFIX + "modsLabel"), loadedModsList), true),
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG1_L_MOBS, I18n.format(PREFIX + "mobSpawnLabel"), true),
             null,

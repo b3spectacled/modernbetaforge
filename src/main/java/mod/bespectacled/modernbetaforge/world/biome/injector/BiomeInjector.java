@@ -55,7 +55,7 @@ public class BiomeInjector {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
-        return this.biomeCache.get(chunkX, chunkZ).sampleBiome(x, z);
+        return this.biomeCache.get(chunkX, chunkZ).sample(x, z);
     }
     
     public String getCachedInjectionId(int x, int z) {

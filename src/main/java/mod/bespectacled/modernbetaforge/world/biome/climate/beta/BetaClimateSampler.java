@@ -45,7 +45,7 @@ public class BetaClimateSampler {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
-        return this.climateCache.get(chunkX, chunkZ).sampleClime(x, z);
+        return this.climateCache.get(chunkX, chunkZ).sample(x, z);
     }
     
     public Clime sampleClimateNoise(int x, int z) {

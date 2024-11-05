@@ -19,7 +19,7 @@ public class ClimateChunk {
         }
     }
     
-    public Clime sampleClime(int x, int z) {
+    public Clime sample(int x, int z) {
         return this.climes[(z & 0xF) + (x & 0xF) * 16];
     }
 }
