@@ -35,8 +35,6 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
     }
     
     private void populateAdditionalBiomes(List<BiomeEntry>[] biomes) {
-        AccessorGenLayerBiome accessor = (AccessorGenLayerBiome)this;
-        
         for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
             Compat compat = entry.getValue();
             if (compat instanceof BiomeCompat) {
@@ -49,7 +47,5 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
                 }
             }
         }
-        
-        accessor.setBiomes(biomes);
     }
 }

@@ -12,9 +12,7 @@ public class SkyClimateChunk {
         int ndx = 0;
         for (int x = startX; x < startX + 16; ++x) {
             for (int z = startZ; z < startZ + 16; ++z) {    
-                this.temps[ndx] = chunkFunc.apply(x, z);
-                
-                ndx++;
+                this.temps[ndx++] = chunkFunc.apply(x, z);
             }
         }
     }
