@@ -123,6 +123,7 @@ modernbetaforge.general.visualoptions.usebetaskycolors=Beta Sky Colors
 modernbetaforge.general.visualoptions.useoldsugarcanecolor=Old Sugar Cane Color
 modernbetaforge.general.visualoptions.useoldfogcolorblending=Old Fog Color Blending
 modernbetaforge.general.visualoptions.cloudheight=Modern Beta Cloud Height
+modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Temperature Gradient
 modernbetaforge.general.hudoptions.useversiontext=Version Text
 modernbetaforge.general.hudoptions.usecustomversiontext=Custom Version Text
 modernbetaforge.general.hudoptions.customversiontext=Custom Version Text

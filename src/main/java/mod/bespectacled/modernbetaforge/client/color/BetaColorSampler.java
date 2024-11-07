@@ -5,6 +5,7 @@ import java.util.Optional;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ColorizerFoliage;
@@ -44,14 +45,16 @@ public class BetaColorSampler {
     
     public int getGrassColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
         
-        return ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+        return ColorizerGrass.getGrassColor(temp, clime.rain());
     }
     
     public int getFoliageColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
         
-        return ColorizerFoliage.getFoliageColor(clime.temp(), clime.rain());
+        return ColorizerFoliage.getFoliageColor(temp, clime.rain());
     }
     
     public int getTallGrassColor(BlockPos blockPos) {
@@ -66,8 +69,9 @@ public class BetaColorSampler {
         z = (int) ((long) z + (shift >> 24 & 31L));
         
         Clime clime = this.climateSampler.get().sample(x, z);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
 
-        return ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+        return ColorizerGrass.getGrassColor(temp, clime.rain());
     }
     
     public boolean canSampleSkyColor() {
@@ -76,5 +80,10 @@ public class BetaColorSampler {
     
     public boolean canSampleBiomeColor() {
         return this.climateSampler.isPresent() && this.climateSampler.get().sampleBiomeColor();
+    }
+    
+    private static double getTempOffset(int y) {
+        boolean useHeightTempGradient = ModernBetaConfig.visualOptions.useHeightTempGradient;        
+        return useHeightTempGradient ? MathHelper.clamp(1.0 - (256.0 - y) / 128.0, 0.0, 0.5) : 0.0;
     }
 }

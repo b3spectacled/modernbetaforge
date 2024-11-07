@@ -60,6 +60,12 @@ public class ModernBetaConfig {
         })
         @RangeInt(min = 0, max = 255)
         public int cloudHeight = 108;
+        
+        @Comment({
+            "Render biome colors with increasingly lower temperatures above y128"
+        })
+        @RequiresWorldRestart
+        public boolean useHeightTempGradient = true;
     }
     
     public static class CategoryHud {
