@@ -16,13 +16,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModernBetaWorldType extends WorldType {
+    public static final ModernBetaWorldType INSTANCE = new ModernBetaWorldType("modernbeta");
+    
     public ModernBetaWorldType(String name) {
         super(name);
     }
 
-    public static void register() {
-        new ModernBetaWorldType("modernbeta");
-    }
+    public static void register() {}
     
     @Override
     public boolean isCustomizable() {

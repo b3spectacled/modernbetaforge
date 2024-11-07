@@ -29,6 +29,13 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public String[] customPresets = {};
+
+        @Comment({
+            "Set Modern Beta world type as default"
+        })
+        @RequiresWorldRestart
+        public boolean useModernBetaAsDefault = false;
+        
     }
 
     public static class CategoryVisual {
