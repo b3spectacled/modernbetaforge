@@ -29,9 +29,8 @@ public class DebugInfoEventHandler {
         if (minecraft.isSingleplayer() && Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             IntegratedServer integratedServer = minecraft.getIntegratedServer();
             MinecraftServer minecraftServer = integratedServer.getServer();
-            
-            EntityPlayerSP player = Minecraft.getMinecraft().player;
             WorldServer worldServer = (WorldServer)minecraftServer.getEntityWorld();
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
             
             // Do not render if not in Overworld
             if (player.dimension != DimensionType.OVERWORLD.getId()) {

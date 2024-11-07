@@ -106,21 +106,23 @@ createWorld.customize.custom.preset.custom=Custom Preset
 
 ## Config
 modernbetaforge.general.generatoroptions=Generator Options
-modernbetaforge.general.moboptions=Mob Options
 modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
-modernbetaforge.general.presetoptions=Custom World Presets
+modernbetaforge.general.hudoptions=HUD Options
 
 modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Custom Surfaces
 modernbetaforge.general.generatoroptions.custompresets=Custom World Presets
 
-modernbetaforge.general.moboptions.usenewmobs=Use New Mobs
+modernbetaforge.general.moboptions.usenewmobs=New Mobs
 
-modernbetaforge.general.spawnoptions.usespawnfuzz=Use Spawn Fuzz
-modernbetaforge.general.spawnoptions.useoldspawns=Use Old Spawns
+modernbetaforge.general.spawnoptions.usespawnfuzz=Spawn Fuzz
+modernbetaforge.general.spawnoptions.useoldspawns=Old Player Spawns
 
 modernbetaforge.general.visualoptions.usebetabiomecolors=Beta Biome Colors
 modernbetaforge.general.visualoptions.usebetaskycolors=Beta Sky Colors
 modernbetaforge.general.visualoptions.useoldsugarcanecolor=Old Sugar Cane Color
 modernbetaforge.general.visualoptions.useoldfogcolorblending=Old Fog Color Blending
 modernbetaforge.general.visualoptions.cloudheight=Modern Beta Cloud Height
+modernbetaforge.general.hudoptions.useversiontext=Version Text
+modernbetaforge.general.hudoptions.usecustomversiontext=Custom Version Text
+modernbetaforge.general.hudoptions.customversiontext=Custom Version Text

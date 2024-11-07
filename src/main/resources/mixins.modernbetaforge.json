@@ -21,6 +21,7 @@
     ],
     "client": [
       "client.MixinEntityRenderer",
+      "client.MixinGuiIngameForge",
       "accessor.AccessorEntityRenderer"
     ],
     "server": []

@@ -15,6 +15,7 @@ public class ModernBetaConfig {
     public static CategoryGenerator generatorOptions = new CategoryGenerator();
     public static CategoryVisual visualOptions = new CategoryVisual();
     public static CategorySpawn spawnOptions = new CategorySpawn();
+    public static CategoryHud hudOptions = new CategoryHud();
     
     public static class CategoryGenerator {
         @Comment({
@@ -59,6 +60,23 @@ public class ModernBetaConfig {
         })
         @RangeInt(min = 0, max = 255)
         public int cloudHeight = 108;
+    }
+    
+    public static class CategoryHud {
+        @Comment({
+            "Render version text in the top-left corner of the HUD"
+        })
+        public boolean useVersionText = false;
+        
+        @Comment({
+            "Render custom version text"
+        })
+        public boolean useCustomVersionText = false;
+        
+        @Comment({
+            "Custom version text"
+        })
+        public String customVersionText = "Minecraft Beta 1.7.3";
     }
     
     public static class CategorySpawn {
