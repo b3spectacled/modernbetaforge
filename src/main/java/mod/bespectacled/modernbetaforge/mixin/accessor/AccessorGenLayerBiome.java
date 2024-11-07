@@ -14,5 +14,5 @@ public interface AccessorGenLayerBiome {
     List<BiomeEntry>[] getBiomes();
     
     @Accessor("biomes")
-    public void setBiomes(List<BiomeEntry>[] biomes);
+    void setBiomes(List<BiomeEntry>[] biomes);
 }

@@ -15,5 +15,5 @@ public interface AccessorStructureStart {
     List<StructureComponent> getComponents();
     
     @Invoker("updateBoundingBox")
-    public void invokeUpdateBoundingBox();
+    void invokeUpdateBoundingBox();
 }

@@ -784,7 +784,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
             
-            this.useModdedBiomes = false;
+            this.useModdedBiomes = true;
             
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -985,7 +985,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
             
-            this.useModdedBiomes = false;
+            this.useModdedBiomes = true;
 
             this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();

@@ -8,5 +8,5 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 @Mixin(StructureVillagePieces.Village.class)
 public interface AccessorVillage {
     @Accessor("structureType")
-    public void setStructureType(int structureType);
+    void setStructureType(int structureType);
 }

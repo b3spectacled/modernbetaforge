@@ -12,7 +12,7 @@ import net.minecraftforge.client.GuiIngameForge;
 
 @Mixin(GuiIngameForge.class)
 public class MixinGuiIngameForge {
-    @ModifyVariable(method = "renderHUDText(II)V", at = @At("STORE"), index = 6)
+    @ModifyVariable(method = "renderHUDText(II)V", at = @At("STORE"), index = 6, remap = false)
     private int injectRenderHUDText(int top) {
         Minecraft mc = Minecraft.getMinecraft();
         FontRenderer fontRenderer = mc.fontRenderer;

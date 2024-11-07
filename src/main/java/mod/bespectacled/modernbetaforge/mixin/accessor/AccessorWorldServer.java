@@ -8,5 +8,5 @@ import net.minecraft.world.WorldServer;
 @Mixin(WorldServer.class)
 public interface AccessorWorldServer {
     @Invoker("createBonusChest")
-    public void invokeCreateBonusChest();
+    void invokeCreateBonusChest();
 }
