@@ -24,7 +24,7 @@ createWorld.customize.custom.modsLabel=Loaded Mods
 createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.surfaceBuilder=Surface Builder
-createWorld.customize.custom.surfaceBuilderLabel=Surface Builder
+createWorld.customize.custom.caveCarver=Cave Carver
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes

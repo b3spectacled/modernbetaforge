@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
@@ -84,7 +85,7 @@ public abstract class ChunkSource {
         this.mapFeaturesEnabled = mapFeaturesEnabled;
         this.random = new Random(seed);
 
-        this.caveCarver = TerrainGen.getModdedMapGen(new MapGenBetaCave(), InitMapGenEvent.EventType.CAVE);
+        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
         
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);

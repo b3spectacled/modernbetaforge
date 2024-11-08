@@ -55,4 +55,19 @@ public class ModernBetaBuiltInTypes {
             this.name = name;
         }
     }
+    
+    public enum Carver {
+        BETA("beta", "Beta"),
+        RELEASE("release", "Release")
+        ;
+        
+        public final String id;
+        public final String name;
+        
+        private Carver(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+        
+    }
 }

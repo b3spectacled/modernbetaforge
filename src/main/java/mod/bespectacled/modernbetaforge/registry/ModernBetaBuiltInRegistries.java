@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
@@ -23,6 +24,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
+import net.minecraft.world.gen.MapGenCaves;
 
 public class ModernBetaBuiltInRegistries {
     
@@ -63,6 +65,11 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.id, InfdevSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.id, PESurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.RELEASE.id, ReleaseSurfaceBuilder::new);
+    }
+    
+    public static void registerCaveCarvers() {
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.id, new MapGenBetaCave());
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, new MapGenCaves());
     }
     
     public static void registerDataFixes() {

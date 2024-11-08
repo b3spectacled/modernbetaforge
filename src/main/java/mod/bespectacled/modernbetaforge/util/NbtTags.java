@@ -4,6 +4,7 @@ public class NbtTags {
     public static final String CHUNK_SOURCE = "chunkSource";
     public static final String BIOME_SOURCE = "biomeSource";
     public static final String SURFACE_BUILDER = "surfaceBuilder";
+    public static final String CAVE_CARVER = "caveCarver";
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";

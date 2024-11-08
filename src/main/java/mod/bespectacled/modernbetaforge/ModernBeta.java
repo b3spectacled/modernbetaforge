@@ -59,6 +59,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerBiomeSources();
         ModernBetaBuiltInRegistries.registerNoiseSettings();
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
+        ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();

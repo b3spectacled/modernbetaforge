@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +171,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
+        int caveCarverId = ModernBetaRegistries.CARVER.getKeys().indexOf(this.settings.caveCarver);
         
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
@@ -185,6 +187,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_SURFACE, I18n.format(PREFIX + NbtTags.SURFACE_BUILDER), true, this, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_FIXED, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_CARVER, I18n.format(PREFIX + NbtTags.CAVE_CARVER), true, this, 0f, ModernBetaRegistries.CARVER.getKeys().size() - 1, caveCarverId),
+            null,
 
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_BIOME_REPLACEMENT, I18n.format(PREFIX + "biomeReplacementLabel"), true),
             null,
@@ -1209,6 +1213,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_S_SURFACE:
                 this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
                 break;
+            case GuiTags.PG0_S_CARVER:
+                this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
+                break;
             case GuiTags.PG0_S_SEA_LEVEL:
                 this.settings.seaLevel = (int)entryValue;
                 break;
@@ -1595,18 +1602,27 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
             case GuiTags.PG0_S_CHUNK: {
                 String key = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
-                String name = ModernBetaBuiltInTypes.Chunk.valueOf(key.toUpperCase()).name;
-                return name;
+                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Chunk.values()).anyMatch(i -> i.id.equals(key));
+                
+                return contains ? ModernBetaBuiltInTypes.Chunk.valueOf(key.toUpperCase()).name : key;
             }
             case GuiTags.PG0_S_BIOME: {
                 String key = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
-                String name = ModernBetaBuiltInTypes.Biome.valueOf(key.toUpperCase()).name;
-                return name;
+                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Biome.values()).anyMatch(i -> i.id.equals(key));
+                
+                return contains ? ModernBetaBuiltInTypes.Biome.valueOf(key.toUpperCase()).name : key;
             }
             case GuiTags.PG0_S_SURFACE: {
                 String key = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
-                String name = ModernBetaBuiltInTypes.Surface.valueOf(key.toUpperCase()).name;
-                return name;
+                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Surface.values()).anyMatch(i -> i.id.equals(key));
+                
+                return contains ? ModernBetaBuiltInTypes.Surface.valueOf(key.toUpperCase()).name : key;
+            }
+            case GuiTags.PG0_S_CARVER: {
+                String key = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
+                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Carver.values()).anyMatch(i -> i.id.equals(key));
+                
+                return contains ? ModernBetaBuiltInTypes.Carver.valueOf(key.toUpperCase()).name : key;
             }
             
             default: return String.format("%d", (int)entryValue);
@@ -1749,6 +1765,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
 
+            this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
