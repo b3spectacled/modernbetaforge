@@ -9,6 +9,12 @@ import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class InitGuiEventHandler {
+    /*
+     * This handles setting the default world preset just when clicking Create World directly.
+     * Cycling through world presets resets the generator settings string, so if using default preset string,
+     * then it must also be set in MixinGuiCreateWorld.
+     * 
+     */
     @SubscribeEvent
     public void onInitGuiEventPre(InitGuiEvent.Pre event) {
         GuiScreen guiScreen = event.getGui();
@@ -18,6 +24,10 @@ public class InitGuiEventHandler {
             
             if (guiCreateWorld.selectedIndex == WorldType.DEFAULT.getId()) {
                 guiCreateWorld.selectedIndex = ModernBetaWorldType.INSTANCE.getId();
+               
+                if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && !ModernBetaConfig.generatorOptions.defaultPreset.isEmpty()) {
+                    guiCreateWorld.chunkProviderSettingsJson = ModernBetaConfig.generatorOptions.defaultPreset;
+                }
             }
         }
     }

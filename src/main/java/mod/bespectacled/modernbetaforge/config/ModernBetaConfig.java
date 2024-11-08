@@ -31,6 +31,12 @@ public class ModernBetaConfig {
         public String[] customPresets = {};
 
         @Comment({
+            "Default Modern Beta world preset"
+        })
+        @RequiresWorldRestart
+        public String defaultPreset = "";
+
+        @Comment({
             "Set Modern Beta world type as default"
         })
         @RequiresWorldRestart
