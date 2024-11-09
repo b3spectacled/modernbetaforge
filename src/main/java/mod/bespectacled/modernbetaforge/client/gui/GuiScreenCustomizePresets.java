@@ -160,7 +160,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             }
         }
         
-        String[] customPresets = ModernBetaConfig.generatorOptions.customPresets;
+        String[] customPresets = ModernBetaConfig.guiOptions.customPresets;
         for (int i = 0; i < customPresets.length; ++i) {
             String customPreset = customPresets[i];
             name = I18n.format("createWorld.customize.custom.preset.custom").concat(String.format(" %d", i + 1));

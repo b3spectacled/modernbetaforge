@@ -25,8 +25,8 @@ public class MixinGuiCreateWorld {
     @Inject(method = "actionPerformed", at = @At("RETURN"))
     private void injectActionPerformed(GuiButton button, CallbackInfo info) {
         if (button.enabled && button.id == 5 && this.selectedIndex == ModernBetaWorldType.INSTANCE.getId()) {
-            if (this.chunkProviderSettingsJson.isEmpty() && !ModernBetaConfig.generatorOptions.defaultPreset.isEmpty()) {
-                this.chunkProviderSettingsJson = ModernBetaConfig.generatorOptions.defaultPreset;
+            if (this.chunkProviderSettingsJson.isEmpty() && !ModernBetaConfig.guiOptions.defaultPreset.isEmpty()) {
+                this.chunkProviderSettingsJson = ModernBetaConfig.guiOptions.defaultPreset;
             }
         }
     }

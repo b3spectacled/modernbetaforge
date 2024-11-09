@@ -19,14 +19,14 @@ public class InitGuiEventHandler {
     public void onInitGuiEventPre(InitGuiEvent.Pre event) {
         GuiScreen guiScreen = event.getGui();
         
-        if (ModernBetaConfig.generatorOptions.useModernBetaAsDefault && guiScreen instanceof GuiCreateWorld) {
+        if (ModernBetaConfig.guiOptions.useModernBetaAsDefault && guiScreen instanceof GuiCreateWorld) {
             GuiCreateWorld guiCreateWorld = (GuiCreateWorld)guiScreen;
             
             if (guiCreateWorld.selectedIndex == WorldType.DEFAULT.getId()) {
                 guiCreateWorld.selectedIndex = ModernBetaWorldType.INSTANCE.getId();
                
-                if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && !ModernBetaConfig.generatorOptions.defaultPreset.isEmpty()) {
-                    guiCreateWorld.chunkProviderSettingsJson = ModernBetaConfig.generatorOptions.defaultPreset;
+                if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && !ModernBetaConfig.guiOptions.defaultPreset.isEmpty()) {
+                    guiCreateWorld.chunkProviderSettingsJson = ModernBetaConfig.guiOptions.defaultPreset;
                 }
             }
         }

@@ -12,17 +12,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = ModernBeta.MODID)
 public class ModernBetaConfig {
+    public static CategoryGui guiOptions = new CategoryGui();
     public static CategoryGenerator generatorOptions = new CategoryGenerator();
     public static CategoryVisual visualOptions = new CategoryVisual();
     public static CategorySpawn spawnOptions = new CategorySpawn();
     
-    public static class CategoryGenerator {
-        @Comment({
-            "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
-        })
-        @RequiresWorldRestart
-        public String[] biomesWithCustomSurfaces = {};
-
+    public static class CategoryGui {
         @Comment({
             "Add custom Modern Beta world presets"
         })
@@ -40,7 +35,14 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean useModernBetaAsDefault = false;
-        
+    }
+    
+    public static class CategoryGenerator {
+        @Comment({
+            "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
+        })
+        @RequiresWorldRestart
+        public String[] biomesWithCustomSurfaces = {};
     }
 
     public static class CategoryVisual {
