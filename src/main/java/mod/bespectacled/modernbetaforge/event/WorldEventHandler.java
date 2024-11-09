@@ -46,7 +46,7 @@ public class WorldEventHandler {
                 
                 if (newSpawnPos != null) {
                     world.getWorldInfo().setSpawn(newSpawnPos);
-                    
+
                     if (settings.isBonusChestEnabled()) {
                         AccessorWorldServer accessor = (AccessorWorldServer)world;
                         

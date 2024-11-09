@@ -20,6 +20,10 @@ public class ModCompat {
         return LOADED_MODS.containsKey(MOD_BOP);
     }
     
+    public static boolean isModLoaded(String mod) {
+        return LOADED_MODS.containsKey(mod);
+    }
+    
     private static void loadModCompat(String modName, Compat compat) {
         if (Loader.isModLoaded(modName)) {
             try {

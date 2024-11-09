@@ -104,6 +104,21 @@ createWorld.customize.custom.preset.betaRelease=Modern Beta Release 1.12.2
 createWorld.customize.custom.preset.betaBoP=Modern Beta Biomes O' Plenty
 createWorld.customize.custom.preset.custom=Custom Preset
 
+createWorld.customize.custom.preset.info.classicBeta=Based on Minecraft Beta 1.7.3
+createWorld.customize.custom.preset.info.classicAlpha12=Based on Minecraft Alpha 1.2.6
+createWorld.customize.custom.preset.info.classicAlpha=Based on Minecraft Alpha 1.1.2_01
+createWorld.customize.custom.preset.info.classicAlphaWinter=Based on Minecraft Alpha 1.1.2_01
+createWorld.customize.custom.preset.info.classicInfdev415=Based on Minecraft Infdev 20100415
+createWorld.customize.custom.preset.info.classicInfdev420=Based on Minecraft Infdev 20100420
+createWorld.customize.custom.preset.info.classicInfdev611=Based on Minecraft Infdev 20100611
+createWorld.customize.custom.preset.info.classicSkylands=Based on the unused Sky dimension
+createWorld.customize.custom.preset.info.betaSkylands=Skylands generation with Beta biomes
+createWorld.customize.custom.preset.info.betaRealistic=Beta generation with large continents and biomes
+createWorld.customize.custom.preset.info.betaPlus=Beta generation with modern biomes
+createWorld.customize.custom.preset.info.betaPE=Based on Minecraft PE v0.6.0 with Beta biomes
+createWorld.customize.custom.preset.info.betaRelease=Release 1.12.2 generation with Beta biomes
+createWorld.customize.custom.preset.info.betaBoP=Beta generation with modded biomes
+
 ## Config
 modernbetaforge.general.generatoroptions=Generator Options
 modernbetaforge.general.spawnoptions=Spawn Options
