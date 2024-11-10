@@ -7,6 +7,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorChunkGeneratorHell;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
@@ -16,6 +18,8 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMagmaCube;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -254,7 +258,10 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
             while (iterator.hasNext()) {
                 SpawnListEntry spawnEntry = iterator.next();
 
-                if (spawnEntry.entityClass == EntityMagmaCube.class || spawnEntry.entityClass == EntityEnderman.class) {
+                if (spawnEntry.entityClass == EntityMagmaCube.class ||
+                    spawnEntry.entityClass == EntityEnderman.class ||
+                    spawnEntry.entityClass == EntityWitherSkeleton.class
+                ) {
                     iterator.remove();
                 }
             }

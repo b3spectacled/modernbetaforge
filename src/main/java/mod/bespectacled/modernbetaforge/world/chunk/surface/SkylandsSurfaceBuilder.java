@@ -37,9 +37,6 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
         
         for (int localZ = 0; localZ < 16; localZ++) {
             for (int localX = 0; localX < 16; localX++) {
-                int x = startX + localX; 
-                int z = startZ + localZ;
-
                 int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + random.nextDouble() * 0.25);
                 
                 int runDepth = -1;
@@ -48,11 +45,6 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
 
                 IBlockState topBlock = biome.topBlock;
                 IBlockState fillerBlock = biome.fillerBlock;
-
-                // Skip if used custom surface generation or if below minimum surface level.
-                if (this.useCustomSurfaceBuilder(biome, chunkPrimer, random, x, z, false)) {
-                    continue;
-                }
                 
                 // Generate from top to bottom of world
                 for (int y = worldHeight - 1; y >= 0; y--) {
