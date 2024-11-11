@@ -159,9 +159,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         };
         
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
-        this.defaultSettings = defaultPreset.isEmpty() ?
-            new ModernBetaChunkGeneratorSettings.Factory() :
-            ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
+        this.defaultSettings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
         
@@ -1632,12 +1630,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
 
     private void restoreDefaults() {
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
-        
-        if (defaultPreset.isEmpty()) {
-            this.settings.setDefaults();
-        } else {
-            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
-        }
+        this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         
         this.createPagedList();
         this.setSettingsModified(false);
