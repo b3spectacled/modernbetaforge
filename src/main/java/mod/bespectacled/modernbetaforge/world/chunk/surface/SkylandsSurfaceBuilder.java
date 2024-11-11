@@ -21,9 +21,6 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
 
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
-
         int worldHeight = this.getWorldHeight();
         boolean useSandstone = this.useSandstone();
 

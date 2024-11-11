@@ -23,7 +23,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.BetaSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
-import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 import net.minecraft.world.gen.MapGenCaves;
 
 public class ModernBetaBuiltInRegistries {
@@ -61,7 +60,6 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.BETA.id, BetaSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA.id, AlphaSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.id, Alpha12SurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.SKYLANDS.id, SkylandsSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.id, InfdevSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.id, PESurfaceBuilder::new);
         ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.RELEASE.id, ReleaseSurfaceBuilder::new);

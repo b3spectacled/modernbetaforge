@@ -1,11 +1,15 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SkylandsChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
@@ -14,6 +18,8 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
+    
+    private final SurfaceBuilder surfaceBuilder;
     
     public SkylandsChunkSource(
         World world,
@@ -37,6 +43,13 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
+        
+        this.surfaceBuilder = new SkylandsSurfaceBuilder(this.world, this, settings);
+    }
+    
+    @Override
+    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
     }
 
     @Override
