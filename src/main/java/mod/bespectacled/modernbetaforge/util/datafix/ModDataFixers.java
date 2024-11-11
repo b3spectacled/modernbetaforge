@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.FixTypes;
@@ -16,6 +15,7 @@ import net.minecraft.util.datafix.IFixableData;
 public class ModDataFixers {
     private static final int DATA_VERSION_V1_1_0_0 = 1100;
     private static final int DATA_VERSION_V1_2_0_0 = 1200;
+    private static final int DATA_VERSION_V1_2_2_2 = 1222;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -41,21 +41,21 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> dataFixKeys = Arrays.asList(
-                    NbtTags.DESERT_BIOMES,
-                    NbtTags.FOREST_BIOMES,
-                    NbtTags.ICE_DESERT_BIOMES,
-                    NbtTags.PLAINS_BIOMES,
-                    NbtTags.RAINFOREST_BIOMES,
-                    NbtTags.SAVANNA_BIOMES,
-                    NbtTags.SHRUBLAND_BIOMES,
-                    NbtTags.SEASONAL_FOREST_BIOMES,
-                    NbtTags.SWAMPLAND_BIOMES,
-                    NbtTags.TAIGA_BIOMES,
-                    NbtTags.TUNDRA_BIOMES
+                List<String> registryKeys = Arrays.asList(
+                    DataFixTags.DESERT_BIOMES,
+                    DataFixTags.FOREST_BIOMES,
+                    DataFixTags.ICE_DESERT_BIOMES,
+                    DataFixTags.PLAINS_BIOMES,
+                    DataFixTags.RAINFOREST_BIOMES,
+                    DataFixTags.SAVANNA_BIOMES,
+                    DataFixTags.SHRUBLAND_BIOMES,
+                    DataFixTags.SEASONAL_FOREST_BIOMES,
+                    DataFixTags.SWAMPLAND_BIOMES,
+                    DataFixTags.TAIGA_BIOMES,
+                    DataFixTags.TUNDRA_BIOMES
                 );
                 
-                return fixGeneratorSettings(compound, dataFixKeys);
+                return fixGeneratorSettings(compound, registryKeys);
             }
         }
     );
@@ -70,14 +70,35 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> dataFixKeys = Arrays.asList(NbtTags.USE_SANDSTONE, NbtTags.SPAWN_WOLVES, NbtTags.SURFACE_BUILDER);
+                List<String> registryKeys = Arrays.asList(
+                    DataFixTags.USE_SANDSTONE,
+                    DataFixTags.SPAWN_WOLVES,
+                    DataFixTags.SURFACE_BUILDER
+                );
                 
-                return fixGeneratorSettings(compound, dataFixKeys);
+                return fixGeneratorSettings(compound, registryKeys);
             }
         }
     );
     
-    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<String> dataFixKeys) {
+    public static final ModDataFix SKYLANDS_SURFACE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_2_2_2;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<String> registryKeys = Arrays.asList(DataFixTags.SURFACE_SKYLANDS);
+                
+                return fixGeneratorSettings(compound, registryKeys);
+            }
+        }
+    );
+    
+    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<String> registryKeys) {
         String worldName = getWorldName(compound);
         
         if (isModernBetaWorld(compound) && compound.hasKey("generatorOptions")) {
@@ -91,8 +112,8 @@ public class ModDataFixers {
                 jsonObject = new JsonObject();      
             }
             
-            for (String key : dataFixKeys) {
-                DataFixer.runDataFixer(key, factory, jsonObject, worldName);
+            for (String registryKey : registryKeys) {
+                DataFixer.runDataFixer(registryKey, factory, jsonObject, worldName);
             }
             
             compound.setString("generatorOptions", factory.toString().replace("\n", ""));

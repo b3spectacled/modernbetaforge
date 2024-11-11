@@ -1765,6 +1765,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
 
+            this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id));
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());

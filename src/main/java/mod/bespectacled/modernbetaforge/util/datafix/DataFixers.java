@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.logging.log4j.Level;
 
@@ -151,6 +152,11 @@ public class DataFixers {
         factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(factory.chunkSource, factory.surfaceBuilder);
     }
     
+    public static void fixSkylandsSurface(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id))
+            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
+    }
+    
     @SuppressWarnings("unchecked")
     private static Map<String, String> deserializeBiomeMap(JsonObject jsonObject, String tag) {
         try {
@@ -160,5 +166,23 @@ public class DataFixers {
         }
         
         return new LinkedHashMap<>();
+    }
+    
+    public static class DataFix {
+        private final String tag;
+        private final BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFixConsumer;
+        
+        public DataFix(String tag, BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFixConsumer) {
+            this.tag = tag;
+            this.dataFixConsumer = dataFixConsumer;
+        }
+        
+        public String getTag() {
+            return this.tag;
+        }
+        
+        public BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> getDataFixConsumer() {
+            return this.dataFixConsumer;
+        }
     }
 }

@@ -2,7 +2,9 @@ package mod.bespectacled.modernbetaforge.registry;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
+import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
@@ -71,19 +73,20 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerDataFixes() {
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves);
-        ModernBetaRegistries.DATA_FIX.register(NbtTags.SURFACE_BUILDER, DataFixers::fixSurfaces);
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.DESERT_BIOMES, new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FOREST_BIOMES, new DataFix(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.ICE_DESERT_BIOMES, new DataFix(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.PLAINS_BIOMES, new DataFix(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.RAINFOREST_BIOMES, new DataFix(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SAVANNA_BIOMES, new DataFix(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SHRUBLAND_BIOMES, new DataFix(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SEASONAL_FOREST_BIOMES, new DataFix(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SWAMPLAND_BIOMES, new DataFix(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.TAIGA_BIOMES, new DataFix(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.TUNDRA_BIOMES, new DataFix(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.USE_SANDSTONE, new DataFix(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SPAWN_WOLVES, new DataFix(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SURFACE_BUILDER, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSurfaces));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.SURFACE_SKYLANDS, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSkylandsSurface));
     }
 }
