@@ -17,6 +17,7 @@ import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -157,7 +158,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        this.defaultSettings = new ModernBetaChunkGeneratorSettings.Factory();
+        String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
+        this.defaultSettings = defaultPreset.isEmpty() ?
+            new ModernBetaChunkGeneratorSettings.Factory() :
+            ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
         
@@ -1001,9 +1005,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             ((GuiSlider)this.pageList.getComponent(GuiTags.offsetBackward(entry))).setSliderValue(newEntryValue, false);
         }
         
-        if (!this.settings.equals(this.defaultSettings)) {
-            this.setSettingsModified(true);
-        }
+        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
     }
 
     @Override
@@ -1131,10 +1133,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
         
         this.updateGuiEnabled();
-        
-        if (!this.settings.equals(this.defaultSettings)) {
-            this.setSettingsModified(true);
-        }
+        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
     }
 
     @Override
@@ -1410,10 +1409,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
         
         this.updateGuiEnabled();
-        
-        if (!this.settings.equals(this.defaultSettings)) {
-            this.setSettingsModified(true);
-        }
+        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
     }
 
     public String saveValues() {
@@ -1635,7 +1631,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     }
 
     private void restoreDefaults() {
-        this.settings.setDefaults();
+        String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
+        
+        if (defaultPreset.isEmpty()) {
+            this.settings.setDefaults();
+        } else {
+            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
+        }
+        
         this.createPagedList();
         this.setSettingsModified(false);
     }
