@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -59,7 +60,13 @@ public abstract class ChunkSource {
     protected final long seed;
     protected final boolean mapFeaturesEnabled;
     protected final Random random;
+    
+    protected final IBlockState defaultBlock;
+    protected final IBlockState defaultFluid;
 
+    protected final int worldHeight;
+    protected final int seaLevel;
+    
     private final MapGenBase caveCarver;
     private final MapGenBase ravineCarver; 
     
@@ -83,6 +90,12 @@ public abstract class ChunkSource {
         this.seed = seed;
         this.mapFeaturesEnabled = mapFeaturesEnabled;
         this.random = new Random(seed);
+        
+        this.defaultBlock = BlockStates.STONE;
+        this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
+        
+        this.worldHeight = settings.height;
+        this.seaLevel = settings.seaLevel;
 
         this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);

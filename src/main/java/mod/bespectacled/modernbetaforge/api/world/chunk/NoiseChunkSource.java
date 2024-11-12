@@ -27,17 +27,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class NoiseChunkSource extends ChunkSource {
-    protected final IBlockState defaultBlock;
-    protected final IBlockState defaultFluid;
-    
-    protected final int worldMinY;
-    protected final int worldHeight;
-    protected final int worldTopY;
-    protected final int seaLevel;
-    
-    protected final int bedrockFloor;
-    protected final int bedrockCeiling;
-    
     protected final int verticalNoiseResolution;   // Number of blocks in a vertical subchunk
     protected final int horizontalNoiseResolution; // Number of blocks in a horizontal subchunk 
     
@@ -68,24 +57,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
     ) {
         super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
         
-        this.defaultBlock = BlockStates.STONE;
-        this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
-        
-        this.worldMinY = 0;
-        this.worldHeight = settings.height;
-        this.worldTopY = this.worldMinY + this.worldHeight;
-        this.seaLevel = settings.seaLevel;
-        
-        this.bedrockFloor = 0;
-        this.bedrockCeiling = -10;
-        
         this.verticalNoiseResolution = noiseSettings.sizeVertical * 4;
         this.horizontalNoiseResolution = noiseSettings.sizeHorizontal * 4;
         
         this.noiseSizeX = 16 / this.horizontalNoiseResolution;
         this.noiseSizeZ = 16 / this.horizontalNoiseResolution;
         this.noiseSizeY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
-        this.noiseTopY = Math.floorDiv(this.worldTopY, this.verticalNoiseResolution);
+        this.noiseTopY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         
         this.topSlide = noiseSettings.topSlideSettings;
         this.bottomSlide = noiseSettings.bottomSlideSettings;
@@ -294,8 +272,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
         short minHeight = 0;
-        short worldMinY = (short)this.worldMinY;
-        short worldTopY = (short)this.worldTopY;
+        short worldMinY = 0;
+        short worldHeight = (short)this.worldHeight;
         
         NoiseSource noiseSource = this.noiseCache.get(chunkX, chunkZ);
         
@@ -314,8 +292,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     
                     for (int subY = 0; subY < this.verticalNoiseResolution; ++subY) {
                         int y = subY + subChunkY * this.verticalNoiseResolution;
-                        y += this.worldMinY;
-                        
+
                         double deltaY = subY / (double)this.verticalNoiseResolution;
                         noiseSource.sampleNoiseY(deltaY);
                         
@@ -353,10 +330,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                 // This handles situations where the bottom of the world may not be solid,
                                 // i.e. Skylands-style world types.
                                 if (isSolid && heightmapFloor[ndx] == worldMinY) {
-                                    heightmapFloor[ndx] = worldTopY;
+                                    heightmapFloor[ndx] = worldHeight;
                                 }
                                 
-                                if (!isSolid && heightmapFloor[ndx] == worldTopY) {
+                                if (!isSolid && heightmapFloor[ndx] == worldHeight) {
                                     heightmapFloor[ndx] = (short)(height - 1);
                                 }
                             }
