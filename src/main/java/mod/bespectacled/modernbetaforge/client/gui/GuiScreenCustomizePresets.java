@@ -12,6 +12,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets.Preset;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
+    private static final int SLOT_HEIGHT = 32;
     private static final int MAX_PRESET_LENGTH = 8000;
     
     private final GuiCustomizeWorldScreen parent;
@@ -175,10 +177,19 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     @SideOnly(Side.CLIENT)
     public class ListPreset extends GuiSlot {
+        private static final int LIST_PADDING_TOP = 80;
+        
         public int selected;
         
         public ListPreset() {
-            super(GuiScreenCustomizePresets.this.mc, GuiScreenCustomizePresets.this.width, GuiScreenCustomizePresets.this.height, 80, GuiScreenCustomizePresets.this.height - 32, 38);
+            super(
+                GuiScreenCustomizePresets.this.mc,
+                GuiScreenCustomizePresets.this.width,
+                GuiScreenCustomizePresets.this.height,
+                LIST_PADDING_TOP,
+                GuiScreenCustomizePresets.this.height - 32,
+                SLOT_HEIGHT + 6
+            );
             this.selected = -1;
         }
         
@@ -188,11 +199,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
         
         @Override
-        protected void elementClicked(int selected, boolean flag, int mouseX, int mouseY) {
+        protected void elementClicked(int selected, boolean doubleClicked, int mouseX, int mouseY) {
             this.selected = selected;
             
             GuiScreenCustomizePresets.this.updateButtonValidity();
             GuiScreenCustomizePresets.this.export.setText(GuiScreenCustomizePresets.this.presets.get(GuiScreenCustomizePresets.this.list.selected).settings.toString());
+            
+            if (doubleClicked) {
+                GuiScreenCustomizePresets.this.parent.loadValues(GuiScreenCustomizePresets.this.export.getText());
+                GuiScreenCustomizePresets.this.mc.displayGuiScreen(GuiScreenCustomizePresets.this.parent);
+            } 
         }
         
         @Override
@@ -206,58 +222,61 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         @Override
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
             int size = this.getSize();
-            int paddingLeft = 4;
-            int paddingRight = 13;
-            int paddingVertical = 1;
+            int paddingL = 4;
+            int paddingR = 13;
+            int paddingY = 1;
             
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
 
-            for (int i = 0; i < size; ++i) {
-                int y = insideTop + i * this.slotHeight + this.headerPadding;
+            for (int preset = 0; preset < size; ++preset) {
+                int y = insideTop + preset * this.slotHeight + this.headerPadding;
                 int height = this.slotHeight - 4;
 
                 if (y > this.bottom || y + height < this.top) {
-                    this.updateItemPos(i, insideLeft, y, partialTicks);
+                    this.updateItemPos(preset, insideLeft, y, partialTicks);
                 }
 
-                if (this.showSelectionBox && this.isSelected(i)) {
-                    int l = this.left + (this.width / 2 - this.getListWidth() / 2) + paddingLeft;
-                    int r = this.left + this.width / 2 + this.getListWidth() / 2 + paddingRight;
+                if (this.showSelectionBox && this.isSelected(preset)) {
+                    int l = this.left + (this.width / 2 - this.getListWidth() / 2) + paddingL;
+                    int r = this.left + this.width / 2 + this.getListWidth() / 2 + paddingR;
                     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     
-                    bufferbuilder.pos((double)l, (double)(y + height + 2 + paddingVertical), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)r, (double)(y + height + 2 + paddingVertical), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y + height + 2 + paddingY), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y + height + 2 + paddingY), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)r, (double)(y - 2 + paddingVertical), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)l, (double)(y - 2 + paddingVertical), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y - 2 + paddingY), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y - 2 + paddingY), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + paddingVertical), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + paddingVertical), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + paddingY), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + paddingY), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + paddingVertical), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + paddingVertical), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + paddingY), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + paddingY), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
                     
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                 }
 
-                this.drawSlot(i, insideLeft, y, height, mouseX, mouseY, partialTicks);
+                this.drawSlot(preset, insideLeft, y, height, mouseX, mouseY, partialTicks);
             }
         }
         
         @Override
-        protected void drawSlot(int preset, int x, int y, int paddingY, int mouseX, int mouseY, float partialTicks) {
+        protected void drawSlot(int preset, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
             Info info = GuiScreenCustomizePresets.this.presets.get(preset);
-            int padding = 2;
             int maxChars = 34;
+            int paddingY = 2;
             
-            this.blitIcon(x, y + padding, info.texture);
+            // Render preset icon
+            this.blitIcon(x, y + paddingY, info.texture);
             
-            GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + 32 + 10, y + 2 + padding, 16777215);
+            // Render preset name
+            GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, 16777215);
             
+            // Render preset description, handles long strings by breaking into two lines
             if (info.desc.length() > maxChars) {
                 String[] infoSplit = info.desc.split(" ");
                 
@@ -275,10 +294,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     }
                 }
                 
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(line0.toString(), x + 32 + 10, y + 13 + padding, 10526880);
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(line1.toString(), x + 32 + 10, y + 23 + padding, 10526880);
+                GuiScreenCustomizePresets.this.fontRenderer.drawString(line0.toString(), x + SLOT_HEIGHT + 10, y + 13 + paddingY, 10526880);
+                GuiScreenCustomizePresets.this.fontRenderer.drawString(line1.toString(), x + SLOT_HEIGHT + 10, y + 23 + paddingY, 10526880);
             } else {
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + 32 + 10, y + 14 + padding, 10526880);
+                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 14 + paddingY, 10526880);
             }
         }
 
@@ -286,10 +305,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int iX = x + 5;
             int iY = y;
             
-            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + 32, iY - 1, -2039584);
-            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + 32, iY + 32, -6250336);
-            GuiScreenCustomizePresets.this.drawVerticalLine(iX - 1, iY - 1, iY + 32, -2039584);
-            GuiScreenCustomizePresets.this.drawVerticalLine(iX + 32, iY - 1, iY + 32, -6250336);
+            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY - 1, -2039584);
+            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, -6250336);
+            GuiScreenCustomizePresets.this.drawVerticalLine(iX - 1, iY - 1, iY + SLOT_HEIGHT, -2039584);
+            GuiScreenCustomizePresets.this.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             this.mc.getTextureManager().bindTexture(resourceLocation);
@@ -298,9 +317,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferBuilder.pos(iX + 0, iY + 32, 0.0).tex(0.0, 1.0).endVertex();
-            bufferBuilder.pos(iX + 32, iY + 32, 0.0).tex(1.0, 1.0).endVertex();
-            bufferBuilder.pos(iX + 32, iY + 0, 0.0).tex(1.0, 0.0).endVertex();
+            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(0.0, 1.0).endVertex();
+            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(1.0, 1.0).endVertex();
+            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + 0, 0.0).tex(1.0, 0.0).endVertex();
             bufferBuilder.pos(iX + 0, iY + 0, 0.0).tex(0.0, 0.0).endVertex();
             
             tessellator.draw();
