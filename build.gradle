@@ -88,6 +88,7 @@ jar {
     manifest.attributes(
         'FMLAT': projectATFile,
         'ForceLoadAsMod': true,
+        'FMLCorePluginContainsFMLMod': 'true',
         'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
         'TweakOrder': '0'
     )
