@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -1746,6 +1747,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             String biomeSource = this.settings.biomeSource;
             String surfaceBuilder = this.settings.surfaceBuilder;
             String fixedBiome = this.settings.fixedBiome;
+            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(fixedBiome));
+            
             boolean useOldNether = this.settings.useOldNether && !ModCompat.isBoPLoaded();
             boolean isBetaOrPE = 
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.id) ||
@@ -1756,10 +1759,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
             boolean isReleaseSurface = surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
-            boolean isReleaseBiome = biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
-            boolean isBetaOrPEBiome = 
+            boolean isReleaseBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+            boolean isBetaOrPEBiomeSource = 
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+            boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isBetaBiome = biome instanceof BiomeBeta;
 
             this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id));
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
@@ -1777,7 +1782,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
             this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
             this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !isReleaseSurface);
-            this.setButtonEnabled(GuiTags.PG1_B_USE_MODDED_BIOMES, isReleaseBiome);
+            this.setButtonEnabled(GuiTags.PG1_B_USE_MODDED_BIOMES, isReleaseBiomeSource);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_X, chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_Z, chunkSource);
@@ -1798,17 +1803,17 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             // Disable all Beta/PE custom biome options when not using Beta/PE Biome Source
             
             for (int i = GuiTags.PG5_DSRT_LAND; i <= GuiTags.PG5_TUND_BEACH; ++i) {
-                this.setFieldEnabled(i, isBetaOrPEBiome);
+                this.setFieldEnabled(i, isBetaOrPEBiomeSource);
             }
 
             // Disable all ore, biome, and mob feature settings when using Release Biome Source
             
             for (int i = GuiTags.PG1_B_USE_GRASS; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
-                this.setButtonEnabled(i, !isReleaseBiome);
+                this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
             }
             
             for (int i = GuiTags.PG2_S_CLAY_SIZE; i <= GuiTags.PG2_S_EMER_MAX; ++i) {
-                this.setButtonEnabled(i, !isReleaseBiome);
+                this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
             }
             
             this.setBiomeStructuresEnabled(biomeSource, fixedBiome);
@@ -1987,7 +1992,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 GuiTags.PG3_S_BIOME_SZ,
                 GuiTags.PG3_S_RIVER_SZ
             )
-        );      
+        );
         
         UNUSED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.RELEASE.id,
