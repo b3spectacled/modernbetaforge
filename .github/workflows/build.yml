@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
     - name: Build artifacts
       run: ./gradlew build
     - name: Upload build artifacts
