@@ -22,6 +22,8 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
@@ -52,7 +54,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
-    private static final Map<String, List<Integer>> UNUSED_CHUNK_SETTINGS = new LinkedHashMap<>();
+    private static final Map<String, List<Integer>> USED_CHUNK_SETTINGS = new LinkedHashMap<>();
+    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 1024 };
+    private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
     
     private static final int MAX_TEXT_LENGTH = 120;
@@ -176,6 +180,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
         int caveCarverId = ModernBetaRegistries.CARVER.getKeys().indexOf(this.settings.caveCarver);
         
+        int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
+        int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
+        int levelWidth = getNdx(LEVEL_WIDTHS, this.settings.levelWidth);
+        int levelLength = getNdx(LEVEL_WIDTHS, this.settings.levelLength);
+        int levelHeight = getNdx(LEVEL_HEIGHTS, this.settings.levelHeight);
+        
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
         
@@ -218,6 +228,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LAVA_LAKE_CHANCE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
+            
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_INDEV_FEATURES, I18n.format(PREFIX + "indevFeaturesLabel"), true),
+            null,
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_THEME, I18n.format(PREFIX + NbtTags.LEVEL_THEME), true, this, 0f, IndevTheme.values().length - 1, levelThemeId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_TYPE, I18n.format(PREFIX + NbtTags.LEVEL_TYPE), true, this, 0f, IndevType.values().length - 1, levelTypeId),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_WIDTH, I18n.format(PREFIX + NbtTags.LEVEL_WIDTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelWidth),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_LENGTH, I18n.format(PREFIX + NbtTags.LEVEL_LENGTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelLength),
+            new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_HEIGHT, I18n.format(PREFIX + NbtTags.LEVEL_HEIGHT), true, this, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INDEV_CAVES, I18n.format(PREFIX + NbtTags.USE_INDEV_CAVES), true, this.settings.useIndevCaves),
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_NETHER_FEATURES, I18n.format(PREFIX + "netherFeaturesLabel"), true),
             null,
@@ -1214,6 +1233,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_S_CARVER:
                 this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
                 break;
+            
             case GuiTags.PG0_S_SEA_LEVEL:
                 this.settings.seaLevel = (int)entryValue;
                 break;
@@ -1228,6 +1248,22 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiTags.PG0_S_FIXED:
                 this.settings.fixedBiome = ForgeRegistries.BIOMES.getValues().get((int)entryValue).getRegistryName().toString();
+                break;
+                
+            case GuiTags.PG0_S_LEVEL_THEME:
+                this.settings.levelTheme = IndevTheme.values()[(int)entryValue].id;
+                break;
+            case GuiTags.PG0_S_LEVEL_TYPE:
+                this.settings.levelType = IndevType.values()[(int)entryValue].id;
+                break;
+            case GuiTags.PG0_S_LEVEL_WIDTH:
+                this.settings.levelWidth = LEVEL_WIDTHS[(int)entryValue];
+                break;
+            case GuiTags.PG0_S_LEVEL_LENGTH:
+                this.settings.levelLength = LEVEL_WIDTHS[(int)entryValue];
+                break;
+            case GuiTags.PG0_S_LEVEL_HEIGHT:
+                this.settings.levelHeight = LEVEL_HEIGHTS[(int)entryValue];
                 break;
 
             case GuiTags.PG2_S_CLAY_SIZE:
@@ -1411,6 +1447,51 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
     }
 
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        this.pageList.drawScreen(mouseX, mouseY, partialTicks);
+        
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 2, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.subtitle, this.width / 2, 12, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.pageTitle, this.width / 2, 22, 16777215);
+        
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        
+        if (this.confirmMode != 0) {
+            Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
+            
+            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 99, -2039584);
+            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 185, -6250336);
+            this.drawVerticalLine(this.width / 2 - 91, 99, 185, -2039584);
+            this.drawVerticalLine(this.width / 2 + 90, 99, 185, -6250336);
+            
+            GlStateManager.disableLighting();
+            GlStateManager.disableFog();
+            
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            
+            this.mc.getTextureManager().bindTexture(GuiCustomizeWorldScreen.OPTIONS_BACKGROUND);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            bufferBuilder.pos(this.width / 2 - 90, 185.0, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(this.width / 2 + 90, 185.0, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(this.width / 2 + 90, 100.0, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(this.width / 2 - 90, 100.0, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
+            
+            tessellator.draw();
+            
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, 105, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
+            
+            this.confirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
+            this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
+        }
+    }
+
     public String saveValues() {
         return this.settings.toString().replace("\n", "");
     }
@@ -1590,6 +1671,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG4_F_BIOME_SZ:
             case GuiTags.PG4_F_RIVER_SZ:
                 return String.format("%d", entryValue);
+                
+            case GuiTags.PG0_S_LEVEL_WIDTH: return String.format("%d", LEVEL_WIDTHS[(int)entryValue]);
+            case GuiTags.PG0_S_LEVEL_LENGTH: return String.format("%d", LEVEL_WIDTHS[(int)entryValue]);
+            case GuiTags.PG0_S_LEVEL_HEIGHT: return String.format("%d", LEVEL_HEIGHTS[(int)entryValue]);
             
             case GuiTags.PG0_S_FIXED: {
                 Biome biome = ForgeRegistries.BIOMES.getValues().get((int)entryValue);
@@ -1618,6 +1703,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Carver.values()).anyMatch(i -> i.id.equals(key));
                 
                 return contains ? ModernBetaBuiltInTypes.Carver.valueOf(key.toUpperCase()).name : key;
+            }
+            case GuiTags.PG0_S_LEVEL_THEME: {
+                String key = IndevTheme.values()[(int)entryValue].id;
+                return key.substring(0, 1).toUpperCase() + key.substring(1);
+            }
+            case GuiTags.PG0_S_LEVEL_TYPE: {
+                String key = IndevType.values()[(int)entryValue].id;
+                return key.substring(0, 1).toUpperCase() + key.substring(1);
             }
             
             default: return String.format("%d", (int)entryValue);
@@ -1765,8 +1858,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
             boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             boolean isBetaBiome = biome instanceof BiomeBeta;
+            boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
+            boolean isIndev = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
 
-            this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id));
+            this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !(isSkylands || isIndev));
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
@@ -1781,24 +1876,21 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_WATER_LAKE_CHANCE, this.settings.useWaterLakes);
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
             this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !isReleaseSurface);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !(isReleaseSurface || isIndev));
             this.setButtonEnabled(GuiTags.PG1_B_USE_MODDED_BIOMES, isReleaseBiomeSource);
             
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_X, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_DPTH_NS_Z, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_BASE_SIZE, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_STRETCH_Y, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_DPTH_WT, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_DPTH_OF, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_WT, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_B_SCL_OF, chunkSource);
-            this.setChunkSettingsEnabled(GuiTags.PG3_B_USE_BDS, chunkSource);
+            this.setChunkSettingsEnabled(chunkSource);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_BIOME_SZ, isRelease);
-            this.setChunkSettingsEnabled(GuiTags.PG3_S_RIVER_SZ, chunkSource);
             
             this.setChunkSettingsEnabled(GuiTags.PG3_S_TEMP_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_RAIN_SCL, isBetaOrPE);
             this.setChunkSettingsEnabled(GuiTags.PG3_S_DETL_SCL, isBetaOrPE);
+            
+            // Disable all Indev settings when not using Indev chunkSource
+            
+            for (int i = GuiTags.PG0_S_LEVEL_THEME; i <= GuiTags.PG0_B_USE_INDEV_CAVES; ++i) {
+                this.setButtonEnabled(i, chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id));
+            }
             
             // Disable all Beta/PE custom biome options when not using Beta/PE Biome Source
             
@@ -1820,10 +1912,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
     }
     
-    private void setChunkSettingsEnabled(int tag, String chunkSource) {
-        boolean enabled = !UNUSED_CHUNK_SETTINGS.get(chunkSource).contains(tag);
-        this.setButtonEnabled(tag, enabled);
-        this.setFieldEnabled(GuiTags.offsetForward(tag), enabled);
+    private void setChunkSettingsEnabled(String chunkSource) {
+        List<Integer> ids = USED_CHUNK_SETTINGS.get(chunkSource);
+        
+        for (int i = GuiTags.PG3_S_MAIN_NS_X; i <= GuiTags.PG3_B_USE_BDS; ++i) {
+            boolean enabled = ids.contains(i);
+            this.setButtonEnabled(i, enabled);
+            this.setFieldEnabled(GuiTags.offsetForward(i), enabled);
+        }
     }
     
     private void setChunkSettingsEnabled(int tag, boolean enabled) {
@@ -1849,153 +1945,164 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.setButtonEnabled(GuiTags.PG0_B_USE_MANSIONS, hasMansions);
     }
     
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        this.pageList.drawScreen(mouseX, mouseY, partialTicks);
-        
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 2, 16777215);
-        this.drawCenteredString(this.fontRenderer, this.subtitle, this.width / 2, 12, 16777215);
-        this.drawCenteredString(this.fontRenderer, this.pageTitle, this.width / 2, 22, 16777215);
-        
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        
-        if (this.confirmMode != 0) {
-            Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
-            
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 99, -2039584);
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 185, -6250336);
-            this.drawVerticalLine(this.width / 2 - 91, 99, 185, -2039584);
-            this.drawVerticalLine(this.width / 2 + 90, 99, 185, -6250336);
-            
-            GlStateManager.disableLighting();
-            GlStateManager.disableFog();
-            
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferBuilder = tessellator.getBuffer();
-            
-            this.mc.getTextureManager().bindTexture(GuiCustomizeWorldScreen.OPTIONS_BACKGROUND);
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(this.width / 2 - 90, 185.0, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 185.0, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 100.0, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 - 90, 100.0, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
-            
-            tessellator.draw();
-            
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, 105, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
-            
-            this.confirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
+    private static int getNdx(int[] arr, int val) {
+        for (int i = 0; i < arr.length; ++i) {
+            if (val == arr[i])
+                return i;
         }
+        
+        return 0;
     }
     
     static {
-        UNUSED_CHUNK_SETTINGS.put(
+
+        USED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.BETA.id,
             ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
             )
         );
-
-        UNUSED_CHUNK_SETTINGS.put(
+        
+        USED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.ALPHA.id,
             ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
             )
         );
 
-        UNUSED_CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
-            ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ,
-                GuiTags.PG3_S_BASE_SIZE,
-                GuiTags.PG3_S_STRETCH_Y,
-                GuiTags.PG3_S_DPTH_NS_X,
-                GuiTags.PG3_S_DPTH_NS_Z
-            )
-        );
-        
-        UNUSED_CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
-            ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ,
-                GuiTags.PG3_S_DPTH_NS_X,
-                GuiTags.PG3_S_DPTH_NS_Z
-            )
-        );
-        
-        UNUSED_CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
-            ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ
-            )
-        );
-        
-        UNUSED_CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
-            ImmutableList.of(
-                GuiTags.PG3_S_B_DPTH_WT,
-                GuiTags.PG3_S_B_DPTH_OF,
-                GuiTags.PG3_S_B_SCL_WT,
-                GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
-                GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ,
-                GuiTags.PG3_S_BASE_SIZE,
-                GuiTags.PG3_S_STRETCH_Y
-            )
-        );
-        
-        UNUSED_CHUNK_SETTINGS.put(
+        USED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.PE.id,
             ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_MAIN_NS_X,
+                GuiTags.PG3_S_MAIN_NS_Y,
+                GuiTags.PG3_S_MAIN_NS_Z,
+                GuiTags.PG3_S_DPTH_NS_X,
+                GuiTags.PG3_S_DPTH_NS_Z,
+                GuiTags.PG3_S_BASE_SIZE,
+                GuiTags.PG3_S_COORD_SCL,
+                GuiTags.PG3_S_HEIGH_SCL,
+                GuiTags.PG3_S_STRETCH_Y,
+                GuiTags.PG3_S_UPPER_LIM,
+                GuiTags.PG3_S_LOWER_LIM,
+                GuiTags.PG3_S_HEIGH_LIM,
+                
                 GuiTags.PG3_S_B_DPTH_WT,
                 GuiTags.PG3_S_B_DPTH_OF,
                 GuiTags.PG3_S_B_SCL_WT,
                 GuiTags.PG3_S_B_SCL_OF,
-                GuiTags.PG3_B_USE_BDS,
                 GuiTags.PG3_S_BIOME_SZ,
-                GuiTags.PG3_S_RIVER_SZ
+                GuiTags.PG3_S_RIVER_SZ,
+                
+                GuiTags.PG3_B_USE_BDS
             )
         );
         
-        UNUSED_CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INDEV.id,
             ImmutableList.of()
         );
     }

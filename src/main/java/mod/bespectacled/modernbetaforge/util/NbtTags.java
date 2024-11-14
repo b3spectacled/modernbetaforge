@@ -17,6 +17,13 @@ public class NbtTags {
     public static final String USE_FORTRESSES = "useFortresses";
     public static final String USE_LAVA_POCKETS = "useLavaPockets";
     
+    public static final String LEVEL_THEME = "levelTheme";
+    public static final String LEVEL_TYPE = "levelType";
+    public static final String LEVEL_WIDTH = "levelWidth";
+    public static final String LEVEL_LENGTH = "levelLength";
+    public static final String LEVEL_HEIGHT = "levelHeight";
+    public static final String USE_INDEV_CAVES = "useIndevCaves";
+    
     public static final String USE_MODDED_BIOMES = "useModdedBiomes";
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     public static final String BIOME_SIZE = "biomeSize";

@@ -79,7 +79,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         int i = 0;
         for (int localZ = 0; localZ < 16; ++localZ) {
             for (int localX = 0; localX < 16; ++localX) {
-                biomes[(localZ & 0xF) + (localX & 0xF) * 16] = Biome.getBiome(ints[i++], Biomes.DEFAULT);
+                biomes[(localX & 0xF) + (localZ & 0xF) * 16] = Biome.getBiome(ints[i++], Biomes.DEFAULT);
             }
         }
 

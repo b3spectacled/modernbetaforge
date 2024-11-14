@@ -4,9 +4,9 @@ package mod.bespectacled.modernbetaforge.util.chunk;
  * A simple container for an array to hold height values for an entire chunk (256 blocks).
  * 
  * == Heightmap Reference ==
- * SURFACE: The highest block that blocks motion.
- * OCEAN: The highest non-air block, solid block.
- * FLOOR: The highest block non-air block, solid block, if any.
+ * SURFACE: The highest block that blocks motion. Blocked by highest solid surface.
+ * OCEAN: The highest non-air block, solid block. Blocked by highest non-solid surface.
+ * FLOOR: The highest block non-air block, solid block, if any. Blocked by lowest solid surface.
  * 
  */
 public class HeightmapChunk {

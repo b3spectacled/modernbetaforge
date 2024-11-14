@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableList;
+
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
@@ -192,6 +194,10 @@ public abstract class ChunkSource {
     }
     
     public void populateChunk(int chunkX, int chunkZ) {
+        if (this.skipChunk(chunkX, chunkZ)) {
+            return;
+        }
+        
         BlockFalling.fallInstantly = true;
         
         int startX = chunkX * 16;
@@ -340,6 +346,10 @@ public abstract class ChunkSource {
     }
     
     public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
+        if (this.skipChunk(chunkX, chunkZ)) {
+            return false;
+        }
+        
         boolean generated = false;
         
         if (this.settings.useMonuments && this.mapFeaturesEnabled && chunk.getInhabitedTime() < 3600L) {
@@ -350,6 +360,10 @@ public abstract class ChunkSource {
     }
     
     public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType enumCreatureType, BlockPos blockPos) {
+        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
+            return ImmutableList.of();
+        }
+        
         Biome biome = this.world.getBiome(blockPos);
         
         if (this.mapFeaturesEnabled) {
@@ -375,6 +389,10 @@ public abstract class ChunkSource {
     }
     
     public boolean isInsideStructure(World world, String structureName, BlockPos blockPos) {
+        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
+            return false;
+        }
+        
         if (!this.mapFeaturesEnabled) {
             return false;
         }
@@ -407,6 +425,10 @@ public abstract class ChunkSource {
     }
     
     public BlockPos getNearestStructurePos(World world, String structureName, BlockPos blockPos, boolean findUnexplored) {
+        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
+            return null;
+        }
+        
         if (!this.mapFeaturesEnabled) {
             return null;
         }
@@ -439,6 +461,10 @@ public abstract class ChunkSource {
     }
     
     public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {
+        if (this.skipChunk(chunkX, chunkZ)) {
+            return;
+        }
+        
         if (!this.mapFeaturesEnabled) {
             return;
         }
@@ -472,6 +498,10 @@ public abstract class ChunkSource {
         return this.settings.seaLevel;
     }
     
+    public IBlockState getDefaultFluid() {
+        return this.defaultFluid;
+    }
+    
     public Biome getCachedInjectedBiome(int x, int z) {
         if (this.biomeInjector != null) {
             return this.biomeInjector.getCachedInjectedBiome(x, z);
@@ -494,6 +524,10 @@ public abstract class ChunkSource {
     
     public SpawnLocator getSpawnLocator() {
         return SpawnLocator.DEFAULT;
+    }
+    
+    protected boolean skipChunk(int chunkX, int chunkZ) {
+        return false;
     }
 
     protected BiomeInjectionRules buildBiomeInjectorRules() {
@@ -541,7 +575,11 @@ public abstract class ChunkSource {
         return block == Blocks.SAND;
     }
     
-    private boolean atOceanDepth(int topHeight, int oceanDepth) {
+    protected boolean atOceanDepth(int topHeight, int oceanDepth) {
         return topHeight < this.getSeaLevel() - oceanDepth;
+    }
+    
+    protected boolean isFluidBlock(IBlockState blockState) {
+        return blockState.getBlock() == this.defaultFluid.getBlock();
     }
 }

@@ -13,6 +13,7 @@ import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.IndevChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev420ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev611ChunkSource;
@@ -38,6 +39,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, Infdev415ChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.PE.id, PEChunkSource::new);
         ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ReleaseChunkSource::new);
+        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INDEV.id, IndevChunkSource::new);
     }
     
     public static void registerBiomeSources() {

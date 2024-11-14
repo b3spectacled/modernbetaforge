@@ -13,6 +13,7 @@ createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
 createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
 createWorld.customize.custom.netherFeaturesLabel=Nether Settings
 createWorld.customize.custom.netherBoPLabel=BoP is detected, Classic Nether is incompatible.
+createWorld.customize.custom.indevFeaturesLabel=Indev/Classic Settings
 createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
@@ -25,6 +26,7 @@ createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.surfaceBuilder=Surface Builder
 createWorld.customize.custom.caveCarver=Cave Carver
+createWorld.customize
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
@@ -39,6 +41,14 @@ createWorld.customize.custom.useOldNether=Classic Nether
 createWorld.customize.custom.useNetherCaves=Nether Caves
 createWorld.customize.custom.useFortresses=Nether Fortresses
 createWorld.customize.custom.useLavaPockets=Lava Pockets
+
+# Page 1 - Indev Settings
+createWorld.customize.custom.levelTheme=Level Theme
+createWorld.customize.custom.levelType=Level Type
+createWorld.customize.custom.levelWidth=Level Width
+createWorld.customize.custom.levelLength=Level Length
+createWorld.customize.custom.levelHeight=Level Height
+createWorld.customize.custom.useIndevCaves=Indev Caves
 
 # Page 2 - Features
 createWorld.customize.custom.useTallGrass=Tall Grass

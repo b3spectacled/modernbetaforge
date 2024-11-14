@@ -9,7 +9,9 @@ public class ModernBetaBuiltInTypes {
         INFDEV_415("infdev_415", "Infdev 415"),
         INFDEV_611("infdev_611", "Infdev 611"),
         PE("pe", "Pocket Ed."),
-        RELEASE("release", "Release")
+        RELEASE("release", "Release"),
+        INDEV("indev", "Indev"),
+        CLASSIC_0_30("classic_0_30", "Classic 0.30")
         ;
         
         public final String id;

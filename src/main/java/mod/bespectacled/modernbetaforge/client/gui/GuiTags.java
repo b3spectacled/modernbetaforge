@@ -49,6 +49,13 @@ public class GuiTags {
     public static final int PG0_B_USE_FORTRESSES = 127;
     public static final int PG0_B_USE_LAVA_POCKETS = 128;
     
+    public static final int PG0_S_LEVEL_THEME = 129;
+    public static final int PG0_S_LEVEL_TYPE = 130;
+    public static final int PG0_S_LEVEL_WIDTH = 131;
+    public static final int PG0_S_LEVEL_LENGTH = 132;
+    public static final int PG0_S_LEVEL_HEIGHT = 133;
+    public static final int PG0_B_USE_INDEV_CAVES = 134;
+    
     // Labels
     public static final int PG0_L_SURFACE_BUILDER = 1000;
     public static final int PG0_L_FIXED_BIOME = 1001;
@@ -56,6 +63,7 @@ public class GuiTags {
     public static final int PG0_L_BASIC_FEATURES = 1003;
     public static final int PG0_L_NETHER_FEATURES = 1004;
     public static final int PG0_L_NETHER_BOP = 1005;
+    public static final int PG0_L_INDEV_FEATURES = 1006;
     
     /* Page 2 */
     

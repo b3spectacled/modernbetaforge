@@ -16,6 +16,8 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 
@@ -81,6 +83,13 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useNetherCaves;
     public final boolean useFortresses;
     public final boolean useLavaPockets;
+    
+    public final String levelTheme;
+    public final String levelType;
+    public final int levelWidth;
+    public final int levelLength;
+    public final int levelHeight;
+    public final boolean useIndevCaves;
     
     public final int claySize;
     public final int clayCount;
@@ -287,6 +296,13 @@ public class ModernBetaChunkGeneratorSettings {
         this.useFortresses = factory.useFortresses;
         this.useLavaPockets = factory.useLavaPockets;
         
+        this.levelTheme = factory.levelTheme;
+        this.levelType = factory.levelType;
+        this.levelLength = factory.levelLength;
+        this.levelWidth = factory.levelWidth;
+        this.levelHeight = factory.levelHeight;
+        this.useIndevCaves = factory.useIndevCaves;
+        
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
         this.clayMinHeight = factory.clayMinHeight;
@@ -482,6 +498,13 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useNetherCaves;
         public boolean useFortresses;
         public boolean useLavaPockets;
+        
+        public String levelTheme;
+        public String levelType;
+        public int levelWidth;
+        public int levelLength;
+        public int levelHeight;
+        public boolean useIndevCaves;
         
         public int claySize;
         public int clayCount;
@@ -698,6 +721,13 @@ public class ModernBetaChunkGeneratorSettings {
             this.useFortresses = true;
             this.useLavaPockets = true;
             
+            this.levelTheme = IndevTheme.NORMAL.id;
+            this.levelType = IndevType.ISLAND.id;
+            this.levelWidth = 128;
+            this.levelLength = 128;
+            this.levelHeight = 96;
+            this.useIndevCaves = true;
+            
             this.claySize = 33;
             this.clayCount = 10;
             this.clayMinHeight = 0;
@@ -911,6 +941,13 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useFortresses == factory.useFortresses &&
                 this.useLavaPockets == factory.useLavaPockets &&
                 
+                this.levelTheme.equals(factory.levelTheme) &&
+                this.levelType.equals(factory.levelType) &&
+                this.levelWidth == factory.levelWidth &&
+                this.levelLength == factory.levelLength &&
+                this.levelHeight == factory.levelHeight &&
+                this.useIndevCaves == factory.useIndevCaves &&
+                
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
                 this.clayMinHeight == factory.clayMinHeight &&
@@ -1113,6 +1150,13 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useNetherCaves ? 1 : 0);
             hashCode = 31 * hashCode + (this.useFortresses ? 1 : 0);
             hashCode = 31 * hashCode + (this.useLavaPockets ? 1 : 0);
+            
+            hashCode = 31 * hashCode + this.levelTheme.hashCode();
+            hashCode = 31 * hashCode + this.levelType.hashCode();
+            hashCode = 31 * hashCode + this.levelWidth;
+            hashCode = 31 * hashCode + this.levelLength;
+            hashCode = 31 * hashCode + this.levelHeight;
+            hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1331,6 +1375,13 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useFortresses = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FORTRESSES, factory.useFortresses);
                 factory.useLavaPockets = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
                 
+                factory.levelTheme = JsonUtils.getString(jsonObject, NbtTags.LEVEL_THEME, factory.levelTheme);
+                factory.levelType = JsonUtils.getString(jsonObject, NbtTags.LEVEL_TYPE, factory.levelType);
+                factory.levelWidth = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_WIDTH, factory.levelWidth);
+                factory.levelLength = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_LENGTH, factory.levelLength);
+                factory.levelHeight = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_HEIGHT, factory.levelHeight);
+                factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
+                
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
                 factory.clayMinHeight = JsonUtils.getInt(jsonObject, NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
@@ -1537,6 +1588,13 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
             jsonObject.addProperty(NbtTags.USE_FORTRESSES, factory.useFortresses);
             jsonObject.addProperty(NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
+            
+            jsonObject.addProperty(NbtTags.LEVEL_THEME, factory.levelTheme);
+            jsonObject.addProperty(NbtTags.LEVEL_TYPE, factory.levelType);
+            jsonObject.addProperty(NbtTags.LEVEL_WIDTH, factory.levelWidth);
+            jsonObject.addProperty(NbtTags.LEVEL_LENGTH, factory.levelLength);
+            jsonObject.addProperty(NbtTags.LEVEL_HEIGHT, factory.levelHeight);
+            jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

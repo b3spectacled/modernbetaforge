@@ -15,6 +15,6 @@ public class BiomeChunk {
     }
     
     public Biome sample(int x, int z) {
-        return this.biomes[(z & 0xF) + (x & 0xF) * 16];
+        return this.biomes[(x & 0xF) + (z & 0xF) * 16];
     }
 }

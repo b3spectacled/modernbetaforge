@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldServer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.source.IndevChunkSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,6 +47,10 @@ public class WorldEventHandler {
                 
                 if (newSpawnPos != null) {
                     world.getWorldInfo().setSpawn(newSpawnPos);
+                    
+                    if (chunkSource instanceof IndevChunkSource) {
+                        ((IndevChunkSource)chunkSource).buildHouse(world, newSpawnPos);
+                    }
 
                     if (settings.isBonusChestEnabled()) {
                         AccessorWorldServer accessor = (AccessorWorldServer)world;
