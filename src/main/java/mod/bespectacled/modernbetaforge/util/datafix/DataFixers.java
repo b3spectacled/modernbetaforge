@@ -157,6 +157,10 @@ public class DataFixers {
             factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
     }
     
+    public static void fixSingleBiome(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.DEPR_FIXED_BIOME, factory.singleBiome);
+    }
+    
     @SuppressWarnings("unchecked")
     private static Map<String, String> deserializeBiomeMap(JsonObject jsonObject, String tag) {
         try {

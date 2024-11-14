@@ -16,7 +16,7 @@ public class SingleBiomeSource extends BiomeSource {
             ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
             new ModernBetaChunkGeneratorSettings.Factory().build();
         
-        this.biome = BiomeUtil.getBiome(settings.fixedBiome, "fixedBiome");
+        this.biome = BiomeUtil.getBiome(settings.singleBiome, "singleBiome");
     }
 
     @Override

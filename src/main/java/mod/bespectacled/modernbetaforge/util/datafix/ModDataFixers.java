@@ -16,6 +16,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_1_0_0 = 1100;
     private static final int DATA_VERSION_V1_2_0_0 = 1200;
     private static final int DATA_VERSION_V1_2_2_2 = 1222;
+    private static final int DATA_VERSION_V1_3_0_0 = 1300;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -52,7 +53,10 @@ public class ModDataFixers {
                     DataFixTags.SEASONAL_FOREST_BIOMES,
                     DataFixTags.SWAMPLAND_BIOMES,
                     DataFixTags.TAIGA_BIOMES,
-                    DataFixTags.TUNDRA_BIOMES
+                    DataFixTags.TUNDRA_BIOMES,
+                    
+                    // Added in 1.3.0.0 to replace fixedBiome
+                    DataFixTags.FIX_SINGLE_BIOME
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys);
@@ -73,7 +77,10 @@ public class ModDataFixers {
                 List<String> registryKeys = Arrays.asList(
                     DataFixTags.USE_SANDSTONE,
                     DataFixTags.SPAWN_WOLVES,
-                    DataFixTags.SURFACE_BUILDER
+                    DataFixTags.SURFACE_BUILDER,
+
+                    // Added in 1.3.0.0 to replace fixedBiome
+                    DataFixTags.FIX_SINGLE_BIOME
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys);
@@ -91,7 +98,29 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(DataFixTags.SURFACE_SKYLANDS);
+                List<String> registryKeys = Arrays.asList(
+                    DataFixTags.SURFACE_SKYLANDS,
+
+                    // Added in 1.3.0.0 to replace fixedBiome
+                    DataFixTags.FIX_SINGLE_BIOME
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys);
+            }
+        }
+    );
+    
+    public static final ModDataFix SINGLE_BIOME_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_3_0_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<String> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
                 
                 return fixGeneratorSettings(compound, registryKeys);
             }

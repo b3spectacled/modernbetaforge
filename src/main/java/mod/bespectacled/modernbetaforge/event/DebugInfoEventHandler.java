@@ -52,7 +52,7 @@ public class DebugInfoEventHandler {
                 String chunkSourceName = chunkSource.getChunkGeneratorSettings().chunkSource;
                 String biomeSourceName = chunkSource.getChunkGeneratorSettings().biomeSource;
                 String surfaceBuilderName = chunkSource.getChunkGeneratorSettings().surfaceBuilder;
-                String fixedBiome = chunkSource.getChunkGeneratorSettings().fixedBiome;
+                String fixedBiome = chunkSource.getChunkGeneratorSettings().singleBiome;
                 
                 String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
                 String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceBuilderName);

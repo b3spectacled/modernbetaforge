@@ -5,6 +5,7 @@ public class NbtTags {
     public static final String BIOME_SOURCE = "biomeSource";
     public static final String SURFACE_BUILDER = "surfaceBuilder";
     public static final String CAVE_CARVER = "caveCarver";
+    public static final String SINGLE_BIOME = "singleBiome";
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";
@@ -131,6 +132,7 @@ public class NbtTags {
     public static final String TUNDRA_BIOMES = "tundraBiomes";
 
     /* OLD */
+    public static final String DEPR_FIXED_BIOME = "fixedBiome";
     
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";

@@ -173,7 +173,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private void createPagedList() {
         IForgeRegistry<Biome> biomes = ForgeRegistries.BIOMES;
-        int biomeId = biomes.getValues().indexOf(biomes.getValue(new ResourceLocation(this.settings.fixedBiome)));
+        int biomeId = biomes.getValues().indexOf(biomes.getValue(new ResourceLocation(this.settings.singleBiome)));
         
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
@@ -1247,7 +1247,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.settings.lavaLakeChance = (int)entryValue;
                 break;
             case GuiTags.PG0_S_FIXED:
-                this.settings.fixedBiome = ForgeRegistries.BIOMES.getValues().get((int)entryValue).getRegistryName().toString();
+                this.settings.singleBiome = ForgeRegistries.BIOMES.getValues().get((int)entryValue).getRegistryName().toString();
                 break;
                 
             case GuiTags.PG0_S_LEVEL_THEME:
@@ -1839,8 +1839,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             String chunkSource = this.settings.chunkSource;
             String biomeSource = this.settings.biomeSource;
             String surfaceBuilder = this.settings.surfaceBuilder;
-            String fixedBiome = this.settings.fixedBiome;
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(fixedBiome));
+            String singleBiome = this.settings.singleBiome;
+            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(singleBiome));
             
             boolean useOldNether = this.settings.useOldNether && !ModCompat.isBoPLoaded();
             boolean isBetaOrPE = 
@@ -1898,17 +1898,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.setFieldEnabled(i, isBetaOrPEBiomeSource);
             }
 
-            // Disable all ore, biome, and mob feature settings when using Release Biome Source
+            // Disable all Modern Beta biome and mob feature settings when using Release Biome Source
             
             for (int i = GuiTags.PG1_B_USE_GRASS; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
                 this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
             }
-            
-            for (int i = GuiTags.PG2_S_CLAY_SIZE; i <= GuiTags.PG2_S_EMER_MAX; ++i) {
-                this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
-            }
-            
-            this.setBiomeStructuresEnabled(biomeSource, fixedBiome);
+
+            this.setBiomeStructuresEnabled(biomeSource, singleBiome);
         }
     }
     
