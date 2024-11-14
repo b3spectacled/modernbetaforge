@@ -82,9 +82,6 @@ public class DebugInfoEventHandler {
                     String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
                     event.getLeft().add(noiseBiomeText);
                 }
-                
-                String injectorText = String.format("[Modern Beta] Biome Injector Id (w/o Beaches): %s", chunkSource.getCachedInjectionId(x, z));
-                event.getLeft().add(injectorText);
             }
             
             if (biomeProvider instanceof ModernBetaBiomeProvider) {

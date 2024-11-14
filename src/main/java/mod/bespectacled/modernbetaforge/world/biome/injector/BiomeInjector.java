@@ -2,27 +2,18 @@ package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
-import mod.bespectacled.modernbetaforge.util.chunk.InjectorChunk;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeInjector {
-    private final ChunkCache<InjectorChunk> biomeCache;
     private final BiomeInjectionRules rules;
     
     public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules rules) {
-        this.biomeCache = new ChunkCache<>(
-            "cached_injected_biomes",
-            512,
-            true,
-            (chunkX, chunkZ) -> new InjectorChunk(chunkX, chunkZ, chunkSource, biomeSource, this::getInjectedBiome, this::getInjectionId)
-        );
-        
         this.rules = rules;
     }
     
@@ -36,13 +27,15 @@ public class BiomeInjector {
                 int z = localZ + startZ;
                 int ndx = localX + localZ * 16;
                 
-                int topHeight = chunkSource.getHeight(x, z, Type.SURFACE);
-                BlockPos topPos = new BlockPos(x, topHeight, z);
-                IBlockState topState = chunkPrimer.getBlockState(localX, topHeight, localZ);
+                int height = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE), 0, 255);
+                int heightAbove = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE) + 1, 0, 255);
+                
+                BlockPos pos = new BlockPos(x, height, z);
+                IBlockState state = chunkPrimer.getBlockState(localX, height, localZ);
+                IBlockState stateAbove = chunkPrimer.getBlockState(localX, heightAbove, localZ);
                 Biome biome = biomes[ndx];
                 
-                BiomeInjectionContext context = new BiomeInjectionContext(topPos, topState, biome);
-                
+                BiomeInjectionContext context = new BiomeInjectionContext(pos, state, stateAbove, biome);
                 Biome injectedBiome = this.getInjectedBiome(context, x, z);
                 if (injectedBiome != null) {
                     biomes[ndx] = injectedBiome;
@@ -51,24 +44,11 @@ public class BiomeInjector {
         }
     }
     
-    public Biome getCachedInjectedBiome(int x, int z) {
-        int chunkX = x >> 4;
-        int chunkZ = z >> 4;
-        
-        return this.biomeCache.get(chunkX, chunkZ).sample(x, z);
-    }
-    
-    public String getCachedInjectionId(int x, int z) {
-        int chunkX = x >> 4;
-        int chunkZ = z >> 4;
-        
-        return this.biomeCache.get(chunkX, chunkZ).getId(x, z);
-    }
-    
     private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z) {
         return this.rules.test(context, x, z);
     }
     
+    @SuppressWarnings("unused")
     private byte getInjectionId(BiomeInjectionContext context, int x, int z) {
         return this.rules.testId(context, x, z);
     }

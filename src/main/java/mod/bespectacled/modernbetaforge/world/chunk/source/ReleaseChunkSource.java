@@ -86,25 +86,25 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
     
         Predicate<BiomeInjectionContext> riverPredicate = context -> {
-            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            Biome noiseBiome = this.getNoiseBiome(context.pos.getX(), context.pos.getZ());
             
             return BiomeDictionary.hasType(noiseBiome, Type.RIVER);
         };
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> {
-            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            Biome noiseBiome = this.getNoiseBiome(context.pos.getX(), context.pos.getZ());
             
             return BiomeDictionary.hasType(noiseBiome, Type.OCEAN) && noiseBiome.equals(Biomes.DEEP_OCEAN);
         };
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> {
-            Biome noiseBiome = this.getNoiseBiome(context.topPos.getX(), context.topPos.getZ());
+            Biome noiseBiome = this.getNoiseBiome(context.pos.getX(), context.pos.getZ());
             
             return BiomeDictionary.hasType(noiseBiome, Type.OCEAN);
         };
         
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
+            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
             
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();

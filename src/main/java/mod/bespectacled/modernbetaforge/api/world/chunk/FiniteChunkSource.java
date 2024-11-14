@@ -241,13 +241,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.topPos.getY(), DEEP_OCEAN_MIN_DEPTH) && this.isFluidBlock(context.topState);
+            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.topPos.getY(), OCEAN_MIN_DEPTH) && this.isFluidBlock(context.topState);
+            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
+            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
             
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();

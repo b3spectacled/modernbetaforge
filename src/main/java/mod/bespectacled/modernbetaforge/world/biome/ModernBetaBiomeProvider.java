@@ -9,6 +9,8 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
+import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -17,8 +19,9 @@ import net.minecraft.world.storage.WorldInfo;
 
 public class ModernBetaBiomeProvider extends BiomeProvider {
     private final ModernBetaChunkGeneratorSettings settings;
-    
     private final BiomeSource biomeSource;
+    private final ChunkCache<BiomeChunk> biomeCache;
+    
     private ChunkSource chunkSource;
     
     public ModernBetaBiomeProvider(WorldInfo worldInfo) {
@@ -29,7 +32,28 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             new ModernBetaChunkGeneratorSettings.Factory().build();
 
         this.biomeSource = ModernBetaRegistries.BIOME.get(settings.biomeSource).apply(worldInfo);
+        this.biomeCache = new ChunkCache<BiomeChunk>(
+            "biomes",
+            512,
+            true,
+            (chunkX, chunkZ) -> {
+                // Pregenerate chunk primer so we can retrieve post-injection biome map
+                this.chunkSource.initChunk(chunkX, chunkZ);
+                return new BiomeChunk(this.chunkSource.getBiomes(chunkX, chunkZ));
+            }
+        );
+        
         this.chunkSource = null;
+    }
+
+    @Override
+    public Biome getBiome(BlockPos blockPos)  {
+        return this.getBiome(blockPos, null);
+    }
+
+    @Override
+    public Biome getBiome(BlockPos blockPos, Biome defaultBiome) {
+        return this.getBiome(blockPos.getX(), blockPos.getZ());
     }
     
     @Override
@@ -54,14 +78,6 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             for (int localX = 0; localX < 16; ++localX) {
                 int x = startX + localX;
                 int z = startZ + localZ;
-                
-                // Initial injection here captures ocean biomes,
-                // only discriminates between land/ocean at this stage.
-                // Injection process is run again in chunk source in finer detail
-                // to perform block-specific checks, i.e. for beach biomes.
-                
-                // Initial injection should prevent certain structures, i.e. Temples,
-                // from generating over open ocean.
                 
                 biomes[localX + localZ * 16] = this.getBiome(x, z);
             }
@@ -127,6 +143,24 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return true;
     }
     
+    public Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {
+        if (biomes == null || biomes.length != sizeX * sizeZ) {
+            biomes = new Biome[sizeX * sizeZ];
+        }
+        
+        // Accesses done as x + z * 16, due to how vanilla biome array is stored.
+        for (int localZ = 0; localZ < 16; ++localZ) {
+            for (int localX = 0; localX < 16; ++localX) {
+                int x = startX + localX;
+                int z = startZ + localZ;
+                
+                biomes[localX + localZ * 16] = this.biomeSource.getBiome(x, z);
+            }
+        }
+        
+        return biomes;
+    }
+    
     public BiomeSource getBiomeSource() {
         return this.biomeSource;
     }
@@ -140,16 +174,9 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     }
     
     private Biome getBiome(int x, int z) {
-        Biome biome = this.chunkSource != null ?
-            this.chunkSource.getCachedInjectedBiome(x, z) :
-            this.biomeSource.getBiome(x, z);
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
         
-        // Biome may be null if sampling injected biome,
-        // in this case null means that the default biome should be used.
-        if (biome == null) {
-            biome = this.biomeSource.getBiome(x, z);
-        }
-        
-        return biome;
+        return this.biomeCache.get(chunkX, chunkZ).sample(x, z);
     }
 }

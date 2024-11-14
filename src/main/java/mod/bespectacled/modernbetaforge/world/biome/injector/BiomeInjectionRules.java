@@ -99,13 +99,15 @@ public class BiomeInjectionRules {
     }
     
     public static class BiomeInjectionContext {
-        public final BlockPos topPos;
-        public final IBlockState topState;
+        public final BlockPos pos;
+        public final IBlockState state;
+        public final IBlockState stateAbove;
         public final Biome biome;
         
-        public BiomeInjectionContext(BlockPos topPos, IBlockState topState, Biome biome) {
-            this.topPos = topPos;
-            this.topState = topState;
+        public BiomeInjectionContext(BlockPos pos, IBlockState state, IBlockState stateAbove, Biome biome) {
+            this.pos = pos;
+            this.state = state;
+            this.stateAbove = stateAbove;
             this.biome = biome;
         }
     }

@@ -14,6 +14,10 @@ public class BiomeChunk {
         this.biomes = chunkFunc.apply(startX, startZ);
     }
     
+    public BiomeChunk(Biome[] biomes) {
+        this.biomes = biomes;
+    }
+    
     public Biome sample(int x, int z) {
         return this.biomes[(x & 0xF) + (z & 0xF) * 16];
     }

@@ -13,6 +13,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -79,9 +80,9 @@ public abstract class ChunkSource {
     private final MapGenScatteredFeature scatteredFeatureGenerator;
     private final StructureOceanMonument oceanMonumentGenerator;
     private final WoodlandMansion woodlandMansionGenerator;
-    
-    private final Biome[] biomes = new Biome[256];
+
     private final BiomeInjector biomeInjector;
+    private final ChunkCache<ChunkContainer> chunkCache;
     
     public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, ModernBetaNoiseSettings noiseSettings, long seed, boolean mapFeaturesEnabled) {
         this.chunkGenerator = chunkGenerator;
@@ -110,9 +111,37 @@ public abstract class ChunkSource {
         this.woodlandMansionGenerator = (WoodlandMansion)TerrainGen.getModdedMapGen(new WoodlandMansion(this.chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
         this.scatteredFeatureGenerator = (MapGenScatteredFeature)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
 
-        // Init biome injector
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
         this.biomeProvider.setChunkSource(this);
+        
+        this.chunkCache = new ChunkCache<>(
+            "chunk_primer",
+            512,
+            true,
+            (chunkX, chunkZ) -> {
+                int startX = chunkX * 16;
+                int startZ = chunkZ * 16;
+                
+                ChunkPrimer chunkPrimer = new ChunkPrimer();
+                Biome[] biomes = new Biome[256];
+                
+                // Generate base terrain
+                this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
+                
+                // Generate base biome map
+                this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
+                
+                // Populate biome-specific surface
+                this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+                
+                // Post-process biome map
+                if (this.biomeInjector != null) {
+                    this.biomeInjector.getInjectedBiomes(biomes, chunkPrimer, this, chunkX, chunkZ);
+                }
+                
+                return new ChunkContainer(chunkPrimer, biomes);
+            }
+        );
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
@@ -125,24 +154,9 @@ public abstract class ChunkSource {
     public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
     
     public Chunk provideChunk(int chunkX, int chunkZ) {
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
-        
-        ChunkPrimer chunkPrimer = new ChunkPrimer();
-        
-        // Generate base terrain
-        this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
-        
-        // Generate biome map
-        this.world.getBiomeProvider().getBiomes(this.biomes, startX, startZ, 16, 16);
-        
-        // Populate biome-specific surface
-        this.provideSurface(this.biomes, chunkPrimer, chunkX, chunkZ);
-        
-        // Post-process biome map
-        if (this.biomeInjector != null) {
-            this.biomeInjector.getInjectedBiomes(this.biomes, chunkPrimer, this, chunkX, chunkZ);
-        }
+        // Retrieve chunk primer from cache
+        ChunkContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
+        ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         
         // Carve terrain
         if (this.settings.useCaves) {
@@ -186,7 +200,7 @@ public abstract class ChunkSource {
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
         for (int i = 0; i < biomeArray.length; ++i) {
-           biomeArray[i] = (byte)Biome.getIdForBiome(this.biomes[i]); 
+            biomeArray[i] = (byte)Biome.getIdForBiome(chunkContainer.biomes[i]);
         }
         
         chunk.generateSkylightMap();
@@ -494,28 +508,20 @@ public abstract class ChunkSource {
         }
     }
     
+    public void initChunk(int chunkX, int chunkZ) {
+        this.chunkCache.get(chunkX, chunkZ);
+    }
+
+    public Biome[] getBiomes(int chunkX, int chunkZ) {
+        return this.chunkCache.get(chunkX, chunkZ).biomes;
+    }
+
     public int getSeaLevel() {
         return this.settings.seaLevel;
     }
     
     public IBlockState getDefaultFluid() {
         return this.defaultFluid;
-    }
-    
-    public Biome getCachedInjectedBiome(int x, int z) {
-        if (this.biomeInjector != null) {
-            return this.biomeInjector.getCachedInjectedBiome(x, z);
-        }
-        
-        return null;
-    }
-    
-    public String getCachedInjectionId(int x, int z) {
-        if (this.biomeInjector != null) {
-            return this.biomeInjector.getCachedInjectionId(x, z);
-        }
-        
-        return "N/A";
     }
     
     public ModernBetaChunkGeneratorSettings getChunkGeneratorSettings() {
@@ -537,13 +543,13 @@ public abstract class ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.topPos.getY(), DEEP_OCEAN_MIN_DEPTH);
+            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH);
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.topPos.getY(), OCEAN_MIN_DEPTH);
+            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH);
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.topPos.getY()) && this.isBeachBlock(context.topState);
+            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
             
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
@@ -581,5 +587,15 @@ public abstract class ChunkSource {
     
     protected boolean isFluidBlock(IBlockState blockState) {
         return blockState.getBlock() == this.defaultFluid.getBlock();
+    }
+    
+    public static class ChunkContainer {
+        public final ChunkPrimer chunkPrimer;
+        public final Biome[] biomes;
+        
+        public ChunkContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
+            this.chunkPrimer = chunkPrimer;
+            this.biomes = biomes;
+        }
     }
 }
