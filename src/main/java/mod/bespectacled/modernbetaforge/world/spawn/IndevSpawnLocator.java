@@ -22,13 +22,7 @@ public class IndevSpawnLocator implements SpawnLocator {
         
         FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
         Random random = new Random();
-        
-        // We need to populate level array before heightmap can be sampled
-        if (!finiteChunkSource.hasPregenerated()) {
-            ModernBeta.log(Level.INFO, "Pregenerating level to place spawn..");
-            finiteChunkSource.pregenerateLevel();
-        }
-        
+
         int spawnX;
         int spawnY;
         int spawnZ;

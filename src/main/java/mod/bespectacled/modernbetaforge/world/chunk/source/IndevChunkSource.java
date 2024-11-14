@@ -76,7 +76,8 @@ public class IndevChunkSource extends FiniteChunkSource {
             }
         }
         
-        return this.getLevelHighestBlock(x, z, type) - 1;
+        this.pregenerateLevelOrWait();
+        return this.getLevelHighestBlock(x, z, type);
     }
     
     public void buildHouse(WorldServer world, BlockPos spawnPos) {
@@ -460,6 +461,9 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void generateBedrock() {
+        if (this.levelType == IndevType.FLOATING)
+            return;
+        
         for (int x = 0; x < this.levelWidth; ++x) {
             for (int z = 0; z < this.levelLength; ++z) {
                 this.setLevelBlock(x, 0, z, Blocks.BEDROCK);

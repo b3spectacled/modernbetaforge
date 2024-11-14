@@ -130,8 +130,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
             }
         };
 
-        int y;
-        for (y = this.levelHeight; testBlock.test(this.getLevelBlock(x, y - 1, z)) && y > 0; --y);
+        int y = this.levelHeight - 1;
+        while (testBlock.test(this.getLevelBlock(x, y, z)) && y > 0) {
+            --y;
+        }
         
         return y;
     }
@@ -142,14 +144,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
     
     public int getLevelLength() {
         return this.levelLength;
-    }
-    
-    public boolean hasPregenerated() {
-        return this.pregenerated;
-    }
-    
-    public void pregenerateLevel() {
-        this.pregenerateLevelOrWait();
     }
 
     @Override
@@ -229,6 +223,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
 
+    protected void pregenerateLevelOrWait() {
+        if (!this.pregenerated) {
+            this.pregenerateTerrain();
+            this.pregenerated = true;
+        }
+    }
+
     protected void logPhase(String phase) {
         ModernBeta.log(Level.INFO, phase + "..");
     }
@@ -283,13 +284,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         if (block == Blocks.AIR) {
             positions.add(new Vec3d(x, y, z));
-        }
-    }
-
-    private void pregenerateLevelOrWait() {
-        if (!this.pregenerated) {
-            this.pregenerateTerrain();
-            this.pregenerated = true;
         }
     }
 }
