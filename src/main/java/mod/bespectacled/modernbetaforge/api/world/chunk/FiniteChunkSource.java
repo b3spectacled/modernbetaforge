@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -40,7 +41,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelWidth;
     protected final int levelLength;
     protected final int levelHeight;
-    protected final float levelCaveRadius;
     protected final int[] levelHeightmap;
     
     private final Block[][][] levelArr;
@@ -60,7 +60,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelWidth = MathHelper.clamp(settings.levelWidth, MIN_WIDTH, MAX_WIDTH);
         this.levelLength = MathHelper.clamp(settings.levelLength, MIN_WIDTH, MAX_WIDTH);
         this.levelHeight = MathHelper.clamp(settings.levelHeight, MIN_HEIGHT, MAX_HEIGHT);
-        this.levelCaveRadius = 1.0f;
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         
         this.levelArr = new Block[this.levelWidth][this.levelHeight][this.levelLength];
@@ -223,6 +222,60 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return true;
     }
     
+    protected void pregenerateLevelOrWait() {
+        if (!this.pregenerated) {
+            this.pregenerateTerrain();
+            this.pregenerated = true;
+        }
+    }
+
+    protected void carveLevel(Random random) {
+        this.logPhase("Carving");
+        
+        int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
+        
+        for (int i = 0; i < caveCount; ++i) {
+            float caveX = random.nextFloat() * (float)this.levelWidth;
+            float caveY = random.nextFloat() * (float)this.levelHeight;
+            float caveZ = random.nextFloat() * (float)this.levelLength;
+    
+            int caveLen = (int)((random.nextFloat() + random.nextFloat()) * 200f);
+            
+            float theta = random.nextFloat() * (float)Math.PI * 2.0f;
+            float deltaTheta = 0.0f;
+            float phi = random.nextFloat() * (float)Math.PI * 2.0f;
+            float deltaPhi = 0.0f;
+            
+            float caveRadius = random.nextFloat() * random.nextFloat();
+            
+            for (int len = 0; len < caveLen; ++len) {
+                caveX += MathHelper.sin(theta) * MathHelper.cos(phi);
+                caveZ += MathHelper.cos(theta) * MathHelper.cos(phi);
+                caveY += MathHelper.sin(phi);
+                
+                theta += deltaTheta * 0.2f;
+                deltaTheta *= 0.9f;
+                deltaTheta += random.nextFloat() - random.nextFloat();
+                phi += deltaPhi * 0.5f;
+                phi *= 0.5f;
+                deltaPhi *= 0.75f;
+                deltaPhi += random.nextFloat() - random.nextFloat();
+                
+                if (random.nextFloat() >= 0.25f) {
+                    float centerX = caveX + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    float centerY = caveY + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    float centerZ = caveZ + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    
+                    float radius = ((float)this.levelHeight - centerY) / (float)this.levelHeight;
+                    radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
+                    radius = radius * MathHelper.sin((float)len * (float)Math.PI / (float)caveLen);
+                    
+                    this.fillOblateSpheroid(centerX, centerY, centerZ, radius, Blocks.AIR);
+                }
+            }
+        }
+    }
+
     protected List<Vec3d> flood(BlockPos blockPos, Block fillBlock, Block replaceBlock) {
         return this.flood(blockPos.getX(),  blockPos.getY(), blockPos.getZ(), fillBlock, replaceBlock);
     }
@@ -271,34 +324,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return floodedPositions;
     }
     
-    protected void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
-        for (int x = (int)(centerX - radius); x < (int)(centerX + radius); ++x) {
-            for (int y = (int)(centerY - radius); y < (int)(centerY + radius); ++y) {
-                for (int z = (int)(centerZ - radius); z < (int)(centerZ + radius); ++z) {
-                
-                    float dx = x - centerX;
-                    float dy = y - centerY;
-                    float dz = z - centerZ;
-                    
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
-                        Block block = this.getLevelBlock(x, y, z);
-                        
-                        if (block == this.defaultBlock.getBlock()) {
-                            this.setLevelBlock(x, y, z, fillBlock);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected void pregenerateLevelOrWait() {
-        if (!this.pregenerated) {
-            this.pregenerateTerrain();
-            this.pregenerated = true;
-        }
-    }
-
     protected void logPhase(String phase) {
         ModernBeta.log(Level.INFO, phase + "..");
     }
@@ -334,6 +359,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return builder.build();
     }
     
+    private void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
+        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
+            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
+                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
+                
+                    float dx = (float)x - centerX;
+                    float dy = (float)y - centerY;
+                    float dz = (float)z - centerZ;
+                    
+                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
+                        Block block = this.getLevelBlock(x, y, z);
+                        
+                        if (block == this.defaultBlock.getBlock()) {
+                            this.setLevelBlock(x, y, z, fillBlock);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int offsetX = (chunkX + this.levelWidth / 16 / 2) * 16;
         int offsetZ = (chunkZ + this.levelLength / 16 / 2) * 16;
