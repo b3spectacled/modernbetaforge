@@ -117,7 +117,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         
         switch(this.levelType) {
             case ISLAND:
-                return type == HeightmapChunk.Type.OCEAN ? seaLevel : seaLevel - 9;
+                return type == HeightmapChunk.Type.OCEAN ? seaLevel - 1 : seaLevel - 10;
             case INLAND:
                 return seaLevel;
             case FLOATING:
@@ -348,6 +348,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     // Using Classic generation for source count
+    // This is not accurate!
     private void waterLevel() {
         this.logPhase("Watering");
         
@@ -382,6 +383,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     // Using Classic generation for source count
+    // This is not accurate!
     private void meltLevel() {
         this.logPhase("Melting");
         

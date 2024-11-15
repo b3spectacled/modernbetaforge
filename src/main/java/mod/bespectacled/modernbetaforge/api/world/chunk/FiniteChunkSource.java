@@ -33,7 +33,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class FiniteChunkSource extends ChunkSource {
     private static final int MIN_WIDTH = 64;
-    private static final int MAX_WIDTH = 1024;
+    private static final int MAX_WIDTH = 512;
     private static final int MIN_HEIGHT = 64;
     private static final int MAX_HEIGHT = 256;
     
@@ -102,10 +102,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         z += this.levelLength / 2;
         
         if (x < 0 || x >= this.levelWidth || z < 0 || z >= this.levelLength) 
-            return this.getBorderHeight(x, z, type) - 1;
+            return this.getBorderHeight(x, z, type);
         
         this.pregenerateLevelOrWait();
-        return this.getLevelHighestBlock(x, z, type) - 1;
+        return this.getLevelHighestBlock(x, z, type);
     }
     
     public Block getLevelBlock(int x, int y, int z) {
@@ -138,7 +138,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         };
         
         int y;
-        for (y = this.levelHeight; testBlock.test(this.getLevelBlock(x, y - 1, z)) && y > 0; --y);
+        for (y = this.levelHeight; testBlock.test(this.getLevelBlock(x, y, z)) && y > 0; --y);
         
         return y;
     }
@@ -246,11 +246,25 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 this.setLevelBlock(x, y, z, fillBlock);
                 floodedPositions.add(pos);
                 
-                if (y - 1 >= 0)               this.tryFlood(x, y - 1, z, replaceBlock, positions);
-                if (x - 1 >= 0)               this.tryFlood(x - 1, y, z, replaceBlock, positions);
-                if (x + 1 < this.levelWidth)  this.tryFlood(x + 1, y, z, replaceBlock, positions);
-                if (z - 1 >= 0)               this.tryFlood(x, y, z - 1, replaceBlock, positions);
-                if (z + 1 < this.levelLength) this.tryFlood(x, y, z + 1, replaceBlock, positions);
+                if (y - 1 >= 0 && this.getLevelBlock(x, y - 1, z) == replaceBlock) {
+                    positions.add(new Vec3d(x, y - 1, z));
+                }
+                
+                if (x - 1 >= 0 && this.getLevelBlock(x - 1, y, z) == replaceBlock) {
+                    positions.add(new Vec3d(x - 1, y, z));
+                }
+                
+                if (x + 1 < this.levelWidth && this.getLevelBlock(x + 1, y, z) == replaceBlock) {
+                    positions.add(new Vec3d(x + 1, y, z));
+                }
+                
+                if (z - 1 >= 0 && this.getLevelBlock(x, y, z - 1) == replaceBlock) {
+                    positions.add(new Vec3d(x, y, z - 1));
+                }
+                
+                if (z + 1 < this.levelLength && this.getLevelBlock(x, y, z + 1) == replaceBlock) {
+                    positions.add(new Vec3d(x, y, z + 1));
+                }
             }
         }
         
@@ -331,14 +345,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
                     chunkPrimer.setBlockState(localX, y, localZ, block.getDefaultState());
                 }
             }
-        }
-    }
-    
-    private void tryFlood(int x, int y, int z, Block replaceBlock, ArrayDeque<Vec3d> positions) {
-        Block block = this.getLevelBlock(x, y, z);
-        
-        if (block == replaceBlock) {
-            positions.add(new Vec3d(x, y, z));
         }
     }
 }
