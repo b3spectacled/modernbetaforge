@@ -24,6 +24,7 @@ public class NbtTags {
     public static final String LEVEL_LENGTH = "levelLength";
     public static final String LEVEL_HEIGHT = "levelHeight";
     public static final String USE_INDEV_CAVES = "useIndevCaves";
+    public static final String USE_INDEV_HOUSE = "useIndevHouse";
     
     public static final String USE_MODDED_BIOMES = "useModdedBiomes";
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";

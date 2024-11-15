@@ -4,13 +4,13 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldServer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.source.IndevChunkSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -48,8 +48,8 @@ public class WorldEventHandler {
                 if (newSpawnPos != null) {
                     world.getWorldInfo().setSpawn(newSpawnPos);
                     
-                    if (chunkSource instanceof IndevChunkSource) {
-                        ((IndevChunkSource)chunkSource).buildHouse(world, newSpawnPos);
+                    if (chunkSource instanceof FiniteChunkSource) {
+                        ((FiniteChunkSource)chunkSource).buildHouse(world, newSpawnPos);
                     }
 
                     if (settings.isBonusChestEnabled()) {

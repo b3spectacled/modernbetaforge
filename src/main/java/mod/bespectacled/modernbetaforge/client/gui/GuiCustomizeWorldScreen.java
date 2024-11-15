@@ -237,6 +237,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_LENGTH, I18n.format(PREFIX + NbtTags.LEVEL_LENGTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelLength),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_HEIGHT, I18n.format(PREFIX + NbtTags.LEVEL_HEIGHT), true, this, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INDEV_CAVES, I18n.format(PREFIX + NbtTags.USE_INDEV_CAVES), true, this.settings.useIndevCaves),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INDEV_HOUSE, I18n.format(PREFIX + NbtTags.USE_INDEV_HOUSE), true, this.settings.useIndevHouse),
+            null,
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_NETHER_FEATURES, I18n.format(PREFIX + "netherFeaturesLabel"), true),
             null,
@@ -1144,6 +1146,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiTags.PG0_B_USE_LAVA_POCKETS:
                 this.settings.useLavaPockets = entryValue;
                 break;
+
+            case GuiTags.PG0_B_USE_INDEV_CAVES:
+                this.settings.useIndevCaves = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_INDEV_HOUSE:
+                this.settings.useIndevHouse = entryValue;
+                break;
                 
             case GuiTags.PG3_B_USE_BDS:
                 this.settings.useBiomeDepthScale = entryValue;
@@ -1888,7 +1897,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             
             // Disable all Indev settings when not using Indev chunkSource
             
-            for (int i = GuiTags.PG0_S_LEVEL_THEME; i <= GuiTags.PG0_B_USE_INDEV_CAVES; ++i) {
+            for (int i = GuiTags.PG0_S_LEVEL_THEME; i <= GuiTags.PG0_B_USE_INDEV_HOUSE; ++i) {
                 this.setButtonEnabled(i, chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id));
             }
             

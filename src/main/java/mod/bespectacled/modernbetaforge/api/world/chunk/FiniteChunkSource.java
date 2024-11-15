@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -17,10 +19,15 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -145,6 +152,45 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public int getLevelLength() {
         return this.levelLength;
     }
+    
+    public void buildHouse(WorldServer world, BlockPos spawnPos) {
+        if (!this.settings.useIndevHouse)
+            return;
+        
+        this.logPhase("Building");
+        
+        int spawnX = spawnPos.getX();
+        int spawnY = spawnPos.getY() + 1;
+        int spawnZ = spawnPos.getZ();
+        MutableBlockPos blockPos = new MutableBlockPos();
+        
+        Block floorBlock = Blocks.STONE;
+        Block wallBlock = Blocks.PLANKS;
+        
+        for (int x = spawnX - 3; x <= spawnX + 3; ++x) {
+            for (int y = spawnY - 2; y <= spawnY + 2; ++y) {
+                for (int z = spawnZ - 3; z <= spawnZ + 3; ++z) {
+                    Block block = (y < spawnY - 1) ? Blocks.OBSIDIAN : Blocks.AIR;
+                    
+                    if (x == spawnX - 3 || z == spawnZ - 3 || x == spawnX + 3 || z == spawnZ + 3 || y == spawnY - 2 || y == spawnY + 2) {
+                        block = floorBlock;
+                        if (y >= spawnY - 1) {
+                            block = wallBlock;
+                        }
+                    }
+                    
+                    if (z == spawnZ + 3 && x == spawnX && y >= spawnY - 1 && y <= spawnY) {
+                        block = Blocks.AIR;
+                    }
+                    
+                    world.setBlockState(blockPos.setPos(x, y, z), block.getDefaultState());
+                }
+            }
+        }
+        
+        world.setBlockState(blockPos.setPos(spawnX - 3 + 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST));
+        world.setBlockState(blockPos.setPos(spawnX + 3 - 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST));
+    }
 
     @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {
@@ -177,29 +223,38 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return true;
     }
     
-    protected void flood(int x, int y, int z, Block fillBlock) {
-        ArrayDeque<Vec3d> positions = new ArrayDeque<Vec3d>();
+    protected List<Vec3d> flood(BlockPos blockPos, Block fillBlock, Block replaceBlock) {
+        return this.flood(blockPos.getX(),  blockPos.getY(), blockPos.getZ(), fillBlock, replaceBlock);
+    }
+    
+    protected List<Vec3d> flood(int x, int y, int z, Block fillBlock, Block replaceBlock) {
+        ArrayDeque<Vec3d> positions = new ArrayDeque<>();
+        ArrayList<Vec3d> floodedPositions = new ArrayList<>();
         
-        positions.add(new Vec3d(x, y, z));
+        Vec3d startPos = new Vec3d(x, y, z);
+        positions.add(startPos);
         
         while (!positions.isEmpty()) {
-            Vec3d curPos = positions.poll();
-            x = (int)curPos.x;
-            y = (int)curPos.y;
-            z = (int)curPos.z;
+            Vec3d pos = positions.poll();
+            x = (int)pos.x;
+            y = (int)pos.y;
+            z = (int)pos.z;
             
             Block block = this.getLevelBlock(x, y, z);
     
-            if (block == Blocks.AIR) {
+            if (block == replaceBlock) {
                 this.setLevelBlock(x, y, z, fillBlock);
+                floodedPositions.add(pos);
                 
-                if (y - 1 >= 0)               this.tryFlood(x, y - 1, z, positions);
-                if (x - 1 >= 0)               this.tryFlood(x - 1, y, z, positions);
-                if (x + 1 < this.levelWidth)  this.tryFlood(x + 1, y, z, positions);
-                if (z - 1 >= 0)               this.tryFlood(x, y, z - 1, positions);
-                if (z + 1 < this.levelLength) this.tryFlood(x, y, z + 1, positions);
+                if (y - 1 >= 0)               this.tryFlood(x, y - 1, z, replaceBlock, positions);
+                if (x - 1 >= 0)               this.tryFlood(x - 1, y, z, replaceBlock, positions);
+                if (x + 1 < this.levelWidth)  this.tryFlood(x + 1, y, z, replaceBlock, positions);
+                if (z - 1 >= 0)               this.tryFlood(x, y, z - 1, replaceBlock, positions);
+                if (z + 1 < this.levelLength) this.tryFlood(x, y, z + 1, replaceBlock, positions);
             }
         }
+        
+        return floodedPositions;
     }
     
     protected void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
@@ -279,10 +334,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
-    private void tryFlood(int x, int y, int z, ArrayDeque<Vec3d> positions) {
+    private void tryFlood(int x, int y, int z, Block replaceBlock, ArrayDeque<Vec3d> positions) {
         Block block = this.getLevelBlock(x, y, z);
         
-        if (block == Blocks.AIR) {
+        if (block == replaceBlock) {
             positions.add(new Vec3d(x, y, z));
         }
     }

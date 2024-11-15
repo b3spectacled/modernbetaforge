@@ -55,6 +55,7 @@ public class GuiTags {
     public static final int PG0_S_LEVEL_LENGTH = 132;
     public static final int PG0_S_LEVEL_HEIGHT = 133;
     public static final int PG0_B_USE_INDEV_CAVES = 134;
+    public static final int PG0_B_USE_INDEV_HOUSE = 135;
     
     // Labels
     public static final int PG0_L_SURFACE_BUILDER = 1000;

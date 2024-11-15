@@ -90,6 +90,7 @@ public class ModernBetaChunkGeneratorSettings {
     public final int levelLength;
     public final int levelHeight;
     public final boolean useIndevCaves;
+    public final boolean useIndevHouse;
     
     public final int claySize;
     public final int clayCount;
@@ -302,6 +303,7 @@ public class ModernBetaChunkGeneratorSettings {
         this.levelWidth = factory.levelWidth;
         this.levelHeight = factory.levelHeight;
         this.useIndevCaves = factory.useIndevCaves;
+        this.useIndevHouse = factory.useIndevHouse;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -505,6 +507,7 @@ public class ModernBetaChunkGeneratorSettings {
         public int levelLength;
         public int levelHeight;
         public boolean useIndevCaves;
+        public boolean useIndevHouse;
         
         public int claySize;
         public int clayCount;
@@ -727,6 +730,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.levelLength = 128;
             this.levelHeight = 96;
             this.useIndevCaves = true;
+            this.useIndevHouse = true;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -947,6 +951,7 @@ public class ModernBetaChunkGeneratorSettings {
                 this.levelLength == factory.levelLength &&
                 this.levelHeight == factory.levelHeight &&
                 this.useIndevCaves == factory.useIndevCaves &&
+                this.useIndevHouse == factory.useIndevHouse &&
                 
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
@@ -1157,6 +1162,7 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.levelLength;
             hashCode = 31 * hashCode + this.levelHeight;
             hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useIndevHouse ? 1 : 0);
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1381,6 +1387,7 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.levelLength = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_LENGTH, factory.levelLength);
                 factory.levelHeight = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_HEIGHT, factory.levelHeight);
                 factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
+                factory.useIndevHouse = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_HOUSE, factory.useIndevHouse);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1595,6 +1602,7 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.LEVEL_LENGTH, factory.levelLength);
             jsonObject.addProperty(NbtTags.LEVEL_HEIGHT, factory.levelHeight);
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
+            jsonObject.addProperty(NbtTags.USE_INDEV_HOUSE, factory.useIndevHouse);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

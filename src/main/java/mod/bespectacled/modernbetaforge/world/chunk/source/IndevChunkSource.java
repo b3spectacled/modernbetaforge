@@ -11,14 +11,10 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -78,42 +74,6 @@ public class IndevChunkSource extends FiniteChunkSource {
         
         this.pregenerateLevelOrWait();
         return this.getLevelHighestBlock(x, z, type);
-    }
-    
-    public void buildHouse(WorldServer world, BlockPos spawnPos) {
-        this.logPhase("Building");
-        
-        int spawnX = spawnPos.getX();
-        int spawnY = spawnPos.getY() + 1;
-        int spawnZ = spawnPos.getZ();
-        MutableBlockPos blockPos = new MutableBlockPos();
-        
-        Block floorBlock = Blocks.STONE;
-        Block wallBlock = Blocks.PLANKS;
-        
-        for (int x = spawnX - 3; x <= spawnX + 3; ++x) {
-            for (int y = spawnY - 2; y <= spawnY + 2; ++y) {
-                for (int z = spawnZ - 3; z <= spawnZ + 3; ++z) {
-                    Block block = (y < spawnY - 1) ? Blocks.OBSIDIAN : Blocks.AIR;
-                    
-                    if (x == spawnX - 3 || z == spawnZ - 3 || x == spawnX + 3 || z == spawnZ + 3 || y == spawnY - 2 || y == spawnY + 2) {
-                        block = floorBlock;
-                        if (y >= spawnY - 1) {
-                            block = wallBlock;
-                        }
-                    }
-                    
-                    if (z == spawnZ + 3 && x == spawnX && y >= spawnY - 1 && y <= spawnY) {
-                        block = Blocks.AIR;
-                    }
-                    
-                    world.setBlockState(blockPos.setPos(x, y, z), block.getDefaultState());
-                }
-            }
-        }
-        
-        world.setBlockState(blockPos.setPos(spawnX - 3 + 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST));
-        world.setBlockState(blockPos.setPos(spawnX + 3 - 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST));
     }
 
     @Override
@@ -392,22 +352,20 @@ public class IndevChunkSource extends FiniteChunkSource {
     private void waterLevel() {
         this.logPhase("Watering");
         
-        Block fluid = this.defaultFluid.getBlock();
+        Block fluidBlock = this.defaultFluid.getBlock();
         
-        if (this.levelType == IndevType.FLOATING) {
-            return;
+        if (!(this.levelType == IndevType.FLOATING)) {
+            for (int x = 0; x < this.levelWidth; ++x) {
+                this.flood(x, this.waterLevel - 1, 0, fluidBlock, Blocks.AIR);
+                this.flood(x, this.waterLevel - 1, this.levelLength - 1, fluidBlock, Blocks.AIR);
+            }
+            
+            for (int z = 0; z < this.levelLength; ++z) {
+                this.flood(this.levelWidth - 1, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
+                this.flood(0, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
+            }
         }
-        
-        for (int x = 0; x < this.levelWidth; ++x) {
-            flood(x, this.waterLevel - 1, 0, fluid);
-            flood(x, this.waterLevel - 1, this.levelLength - 1, fluid);
-        }
-        
-        for (int z = 0; z < this.levelLength; ++z) {
-            flood(this.levelWidth - 1, this.waterLevel - 1, z, fluid);
-            flood(0, this.waterLevel - 1, z, fluid);
-        }
-        
+
         int waterSourceCount = this.levelWidth * this.levelLength / 8000;
         
         for (int i = 0; i < waterSourceCount; ++i) {
@@ -415,9 +373,8 @@ public class IndevChunkSource extends FiniteChunkSource {
             int randZ = random.nextInt(this.levelLength);
             int randY = (this.waterLevel - 1) - random.nextInt(2);
             
-            this.flood(randX, randY, randZ, fluid);
+            this.flood(randX, randY, randZ, fluidBlock, Blocks.AIR);
         }
-       
     }
     
     // Using Classic generation algorithm
@@ -435,7 +392,7 @@ public class IndevChunkSource extends FiniteChunkSource {
             int randZ = random.nextInt(this.levelLength);
             int randY = (int)((float)(this.waterLevel - 3) * random.nextFloat() * random.nextFloat());
             
-            this.flood(randX, randY, randZ, Blocks.LAVA);
+            this.flood(randX, randY, randZ, Blocks.LAVA, Blocks.AIR);
         }
     }
     
