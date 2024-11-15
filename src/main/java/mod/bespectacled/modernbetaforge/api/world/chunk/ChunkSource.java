@@ -158,39 +158,41 @@ public abstract class ChunkSource {
         ChunkContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         
-        // Carve terrain
-        if (this.settings.useCaves) {
-            this.caveCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
-        }
-        
-        if (this.settings.useRavines) {
-            this.ravineCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
-        }
-        
-        // Generate map feature placements
-        if (this.mapFeaturesEnabled) {
-            if (this.settings.useMineShafts) {
-                this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+        if (!this.skipChunk(chunkX, chunkZ)) {
+            // Carve terrain
+            if (this.settings.useCaves) {
+                this.caveCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
-            if (this.settings.useVillages) {
-                this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+            if (this.settings.useRavines) {
+                this.ravineCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
-            if (this.settings.useStrongholds) {
-                this.strongholdGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-            }
-            
-            if (this.settings.useTemples) {
-                this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-            }
-            
-            if (this.settings.useMonuments) {
-                this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-            }
-            
-            if (this.settings.useMansions) {
-                this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+            // Generate map feature placements
+            if (this.mapFeaturesEnabled) {
+                if (this.settings.useMineShafts) {
+                    this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+                
+                if (this.settings.useVillages) {
+                    this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+                
+                if (this.settings.useStrongholds) {
+                    this.strongholdGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+                
+                if (this.settings.useTemples) {
+                    this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+                
+                if (this.settings.useMonuments) {
+                    this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+                
+                if (this.settings.useMansions) {
+                    this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
             }
         }
         

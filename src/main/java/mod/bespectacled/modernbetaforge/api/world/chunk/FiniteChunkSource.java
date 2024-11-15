@@ -98,14 +98,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
     
     @Override
     public int getHeight(int x, int z, HeightmapChunk.Type type) {
-        int seaLevel = this.getSeaLevel();
-        
         x += this.levelWidth / 2;
         z += this.levelLength / 2;
         
         if (x < 0 || x >= this.levelWidth || z < 0 || z >= this.levelLength) 
-            return seaLevel;
+            return this.getBorderHeight(x, z, type) - 1;
         
+        this.pregenerateLevelOrWait();
         return this.getLevelHighestBlock(x, z, type) - 1;
     }
     
@@ -133,14 +132,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
             switch(type) {
                 case SURFACE: return block == Blocks.AIR || block == this.defaultFluid.getBlock();
                 case OCEAN: return block == Blocks.AIR;
+                case FLOOR: return block == Blocks.AIR || block == this.defaultFluid.getBlock();
                 default: return block == Blocks.AIR;
             }
         };
-
-        int y = this.levelHeight - 1;
-        while (testBlock.test(this.getLevelBlock(x, y, z)) && y > 0) {
-            --y;
-        }
+        
+        int y;
+        for (y = this.levelHeight; testBlock.test(this.getLevelBlock(x, y - 1, z)) && y > 0; --y);
         
         return y;
     }
@@ -203,6 +201,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected abstract void pregenerateTerrain();
     
     protected abstract void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    
+    protected abstract int getBorderHeight(int x, int z, HeightmapChunk.Type type);
 
     protected boolean inWorldBounds(int x, int z) {
         int halfWidth = this.levelWidth / 2;
@@ -266,7 +266,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
                     float dy = y - centerY;
                     float dz = z - centerZ;
                     
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && inLevelBounds(x, y, z)) {
+                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
                         Block block = this.getLevelBlock(x, y, z);
                         
                         if (block == this.defaultBlock.getBlock()) {

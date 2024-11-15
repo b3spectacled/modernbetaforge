@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import java.util.List;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -14,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -34,6 +37,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     private PerlinOctaveNoise gravelOctaveNoise;
     
     private int waterLevel;
+    private int groundLevel;
     
     public IndevChunkSource(
         World world,
@@ -53,28 +57,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     public int getSeaLevel() {
         return this.waterLevel;
     }
-    
-    @Override
-    public int getHeight(int x, int z, HeightmapChunk.Type type) {
-        int seaLevel = this.getSeaLevel();
-        
-        x += this.levelWidth / 2;
-        z += this.levelLength / 2;
-        
-        if (x < 0 || x >= this.levelWidth || z < 0 || z >= this.levelLength) {
-            switch(this.levelType) {
-                case ISLAND:
-                    return seaLevel - 10;
-                case FLOATING:
-                    return 0;
-                case INLAND:
-                    return seaLevel;
-            }
-        }
-        
-        this.pregenerateLevelOrWait();
-        return this.getLevelHighestBlock(x, z, type);
-    }
 
     @Override
     protected void pregenerateTerrain() {
@@ -82,6 +64,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         
         for (int layer = 0; layer < layers; ++layer) { 
             this.waterLevel = this.levelHeight - 32 - layer * 48;
+            this.groundLevel = this.waterLevel - 2;
             
             this.lowOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
             this.highOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
@@ -126,6 +109,22 @@ public class IndevChunkSource extends FiniteChunkSource {
             case FLOATING:
                 break;
         }
+    }
+    
+    @Override
+    protected int getBorderHeight(int x, int z, HeightmapChunk.Type type) {
+        int seaLevel = this.waterLevel;
+        
+        switch(this.levelType) {
+            case ISLAND:
+                return type == HeightmapChunk.Type.OCEAN ? seaLevel : seaLevel - 9;
+            case INLAND:
+                return seaLevel;
+            case FLOATING:
+                return 0;
+        }
+        
+        return seaLevel;
     }
 
     private void raiseLevel() {
@@ -348,13 +347,13 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
     
-    // Using Classic generation algorithm
+    // Using Classic generation for source count
     private void waterLevel() {
         this.logPhase("Watering");
         
         Block fluidBlock = this.defaultFluid.getBlock();
         
-        if (!(this.levelType == IndevType.FLOATING)) {
+        if (this.levelType != IndevType.FLOATING) {
             for (int x = 0; x < this.levelWidth; ++x) {
                 this.flood(x, this.waterLevel - 1, 0, fluidBlock, Blocks.AIR);
                 this.flood(x, this.waterLevel - 1, this.levelLength - 1, fluidBlock, Blocks.AIR);
@@ -369,30 +368,39 @@ public class IndevChunkSource extends FiniteChunkSource {
         int waterSourceCount = this.levelWidth * this.levelLength / 8000;
         
         for (int i = 0; i < waterSourceCount; ++i) {
-            int randX = random.nextInt(this.levelWidth);
-            int randZ = random.nextInt(this.levelLength);
-            int randY = (this.waterLevel - 1) - random.nextInt(2);
+            int randX = this.random.nextInt(this.levelWidth);
+            int randY = this.random.nextInt(this.levelHeight);
+            int randZ = this.random.nextInt(this.levelLength);
             
-            this.flood(randX, randY, randZ, fluidBlock, Blocks.AIR);
+            List<Vec3d> floodedPositions = this.flood(randX, randY, randZ, Blocks.ANVIL, Blocks.AIR);
+            
+            boolean contained = floodedPositions.size() > 0 && floodedPositions.size() < 640;
+            floodedPositions.forEach(pos ->
+                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? fluidBlock : Blocks.AIR)
+            );
         }
     }
     
-    // Using Classic generation algorithm
+    // Using Classic generation for source count
     private void meltLevel() {
         this.logPhase("Melting");
-        
-        if (this.levelType == IndevType.FLOATING) {
-            return;
-        }
         
         int lavaSourceCount = this.levelWidth * this.levelLength / 20000;
          
         for (int i = 0; i < lavaSourceCount; ++i) {
-            int randX = random.nextInt(this.levelWidth);
+            int randX = this.random.nextInt(this.levelWidth);
+            int randY = Math.min(
+                Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel)),
+                Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel))
+            );
             int randZ = random.nextInt(this.levelLength);
-            int randY = (int)((float)(this.waterLevel - 3) * random.nextFloat() * random.nextFloat());
             
-            this.flood(randX, randY, randZ, Blocks.LAVA, Blocks.AIR);
+            List<Vec3d> floodedPositions = this.flood(randX, randY, randZ, Blocks.ANVIL, Blocks.AIR);
+            
+            boolean contained = floodedPositions.size() > 0 && floodedPositions.size() < 640;
+            floodedPositions.forEach(pos ->
+                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? Blocks.LAVA : Blocks.AIR)
+            );
         }
     }
     
