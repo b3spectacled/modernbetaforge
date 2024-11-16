@@ -12,12 +12,14 @@
       "MixinStructureVillagePiecesStart",
       "MixinWorldEntitySpawner",
       "MixinWorldProviderHell",
+      "MixinMapGenStronghold",
       "accessor.AccessorChunkGeneratorHell",
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",
       "accessor.AccessorWorldServer",
       "accessor.AccessorWorldProvider",
-      "accessor.AccessorGenLayerBiome"
+      "accessor.AccessorGenLayerBiome",
+      "accessor.AccessorMapGenBase"
     ],
     "client": [
       "client.MixinEntityRenderer",
