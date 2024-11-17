@@ -4,6 +4,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -42,6 +43,7 @@ public class DebugInfoEventHandler {
 
             BlockPos playerPos = player.getPosition();
             int x = playerPos.getX();
+            int y = playerPos.getY();
             int z = playerPos.getZ();
             
             event.getLeft().add("");
@@ -81,6 +83,23 @@ public class DebugInfoEventHandler {
                     
                     String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
                     event.getLeft().add(noiseBiomeText);
+                }
+                
+                if (chunkSource instanceof FiniteChunkSource) {
+                    FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
+                    
+                    int offsetX = finiteChunkSource.getLevelWidth() / 2;
+                    int offsetZ = finiteChunkSource.getLevelLength() / 2;
+                    
+                    String finiteCoordsText = String.format("[Modern Beta] Finite XYZ: %d / %d / %d", x + offsetX, y, z + offsetZ);
+                    String finiteHeightmapText = String.format("[Modern Beta] Finite Surface Height: %d Ocean Height: %d Floor Height: %d",
+                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.SURFACE),
+                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.OCEAN),
+                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.FLOOR)
+                    );
+                    
+                    event.getLeft().add(finiteCoordsText);
+                    event.getLeft().add(finiteHeightmapText);
                 }
             }
             

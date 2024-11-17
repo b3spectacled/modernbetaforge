@@ -55,7 +55,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     private static final Map<String, List<Integer>> USED_CHUNK_SETTINGS = new LinkedHashMap<>();
-    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512 };
+    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 1024 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
     

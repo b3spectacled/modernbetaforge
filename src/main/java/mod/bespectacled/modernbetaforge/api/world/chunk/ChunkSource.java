@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
@@ -145,6 +146,9 @@ public abstract class ChunkSource {
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
+        
+        // Set cloud height in other chunk sources if needed, otherwise use config
+        ModernBetaWorldType.INSTANCE.setCloudHeight(-1);
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);

@@ -17,4 +17,4 @@ This project is licensed under MIT.
 
 ## Credits
 
-Thanks to mrburgerUS, SuperCoder7979, Arenovas, Amb0s, PaulEvs, and comp500.
+Thanks to mrburgerUS, SuperCoder7979, Arenovas, Amb0s, PaulEvs, comp500, and the folks behind RetroMCP.

@@ -17,9 +17,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModernBetaWorldType extends WorldType {
     public static final ModernBetaWorldType INSTANCE = new ModernBetaWorldType("modernbeta");
+
+    private int cloudHeight;
     
     public ModernBetaWorldType(String name) {
         super(name);
+        
+        this.cloudHeight = -1;
     }
 
     public static void register() {}
@@ -31,7 +35,11 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public float getCloudHeight() {
-        return (float)ModernBetaConfig.visualOptions.cloudHeight;
+        if (this.cloudHeight == -1) {
+            return (float)ModernBetaConfig.visualOptions.cloudHeight;
+        }
+        
+        return this.cloudHeight;
     }
     
     @Override
@@ -64,5 +72,9 @@ public class ModernBetaWorldType extends WorldType {
     @Override
     public void onCustomizeButton(Minecraft minecraft, GuiCreateWorld guiCreateWorld) {
         minecraft.displayGuiScreen(new GuiCustomizeWorldScreen(guiCreateWorld, guiCreateWorld.chunkProviderSettingsJson));
+    }
+    
+    public void setCloudHeight(int cloudHeight) {
+        this.cloudHeight = cloudHeight;
     }
 }

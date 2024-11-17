@@ -1,7 +1,6 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -13,6 +12,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -34,9 +34,12 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class FiniteChunkSource extends ChunkSource {
     private static final int MIN_WIDTH = 64;
-    private static final int MAX_WIDTH = 512;
+    private static final int MAX_WIDTH = 1024;
     private static final int MIN_HEIGHT = 64;
     private static final int MAX_HEIGHT = 256;
+    
+    protected static final Block PLACEHOLDER_BLOCK = Blocks.ANVIL;
+    protected static final int MAX_FLOODS = 640;
     
     protected final int levelWidth;
     protected final int levelLength;
@@ -104,7 +107,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             return this.getBorderHeight(x, z, type);
         
         this.pregenerateLevelOrWait();
-        return this.getLevelHighestBlock(x, z, type);
+        return this.getLevelHeight(x, z, type);
     }
     
     public Block getLevelBlock(int x, int y, int z) {
@@ -123,7 +126,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelArr[x][y][z] = block;
     }
     
-    public int getLevelHighestBlock(int x, int z, HeightmapChunk.Type type) {
+    public int getLevelHeight(int x, int z, HeightmapChunk.Type type) {
         x = MathHelper.clamp(x, 0, this.levelWidth - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
         
@@ -215,11 +218,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
 
     protected boolean inLevelBounds(int x, int y, int z) {
-        if (x < 0 || x >= this.levelWidth || y < 0 || y >= this.levelHeight || z < 0 || z >= this.levelLength) {
-            return false;
-        }
-            
-        return true;
+        return x >= 0 && x < this.levelWidth && y >= 0 && y < this.levelHeight && z >= 0 && z < this.levelLength;
+    }
+    
+    protected boolean atLevelBounds(int x, int y, int z) {
+        return x == 0 || x == this.levelWidth - 1 || y == 0 || y == this.levelHeight - 1 || z == 0 || z == this.levelLength - 1;
     }
     
     protected void pregenerateLevelOrWait() {
@@ -275,17 +278,36 @@ public abstract class FiniteChunkSource extends ChunkSource {
             }
         }
     }
-
-    protected List<Vec3d> flood(BlockPos blockPos, Block fillBlock, Block replaceBlock) {
-        return this.flood(blockPos.getX(),  blockPos.getY(), blockPos.getZ(), fillBlock, replaceBlock);
+    
+    protected int flood(int x, int y, int z, Block fillBlock, Block replaceBlock) {
+        return this.flood(x, y, z, fillBlock, replaceBlock, null);
     }
     
-    protected List<Vec3d> flood(int x, int y, int z, Block fillBlock, Block replaceBlock) {
+    /*
+     * Not the original algorithm!
+     * There may be small differences in generation compared to the original!
+     * 
+     * The algorithm should basically just be flooding downwards and outwards given a starting position, however,
+     * what I'm fairly certain the original algorithm does when flooding along map edges:
+     * 
+     * Flooding can touch edges of the map (x = 0 / z = 0 / x = levelWidth - 1 / z = levelLength - 1)
+     * if doing along-axis floods (does a check for filler block id 255 which is only done for random position floods)
+     * or flooding underground, otherwise cancel the flood.
+     * 
+     * However, there seems to be a bug where the check if x = levelWidth - 1 does not actually use x,
+     * so the original level generator allows water to generate where x = levelWidth - 1 above ground.
+     * 
+     */
+    protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, List<Vec3d> floodedPositions) {
         ArrayDeque<Vec3d> positions = new ArrayDeque<>();
-        ArrayList<Vec3d> floodedPositions = new ArrayList<>();
+        int flooded = 0;
         
-        Vec3d startPos = new Vec3d(x, y, z);
+        Vec3d startPos = new Vec3d(startX, startY, startZ);
         positions.add(startPos);
+        
+        int x = startX;
+        int y = startY;
+        int z = startZ;
         
         while (!positions.isEmpty()) {
             Vec3d pos = positions.poll();
@@ -297,31 +319,26 @@ public abstract class FiniteChunkSource extends ChunkSource {
     
             if (block == replaceBlock) {
                 this.setLevelBlock(x, y, z, fillBlock);
-                floodedPositions.add(pos);
+                flooded++;
                 
-                if (y - 1 >= 0 && this.getLevelBlock(x, y - 1, z) == replaceBlock) {
-                    positions.add(new Vec3d(x, y - 1, z));
-                }
+                if (floodedPositions != null)
+                    floodedPositions.add(pos);
                 
-                if (x - 1 >= 0 && this.getLevelBlock(x - 1, y, z) == replaceBlock) {
-                    positions.add(new Vec3d(x - 1, y, z));
-                }
+                if (floodedPositions != null && y >= this.getLevelHeight(x, z, Type.FLOOR) && this.atLevelBounds(x, y, z))
+                    return -1;
                 
-                if (x + 1 < this.levelWidth && this.getLevelBlock(x + 1, y, z) == replaceBlock) {
-                    positions.add(new Vec3d(x + 1, y, z));
-                }
+                if (floodedPositions != null && flooded > MAX_FLOODS)
+                    break;
                 
-                if (z - 1 >= 0 && this.getLevelBlock(x, y, z - 1) == replaceBlock) {
-                    positions.add(new Vec3d(x, y, z - 1));
-                }
-                
-                if (z + 1 < this.levelLength && this.getLevelBlock(x, y, z + 1) == replaceBlock) {
-                    positions.add(new Vec3d(x, y, z + 1));
-                }
+                if (y - 1 >= 0)               this.tryFlood(x, y - 1, z, replaceBlock, positions);
+                if (x - 1 >= 0)               this.tryFlood(x - 1, y, z, replaceBlock, positions);
+                if (x + 1 < this.levelWidth)  this.tryFlood(x + 1, y, z, replaceBlock, positions);
+                if (z - 1 >= 0)               this.tryFlood(x, y, z - 1, replaceBlock, positions);
+                if (z + 1 < this.levelLength) this.tryFlood(x, y, z + 1, replaceBlock, positions);
             }
         }
-        
-        return floodedPositions;
+
+        return flooded;
     }
     
     protected void logPhase(String phase) {
@@ -391,6 +408,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
                     chunkPrimer.setBlockState(localX, y, localZ, block.getDefaultState());
                 }
             }
+        }
+
+    }
+    
+    private void tryFlood(int x, int y, int z, Block replaceBlock, ArrayDeque<Vec3d> positions) {
+        Block block = this.getLevelBlock(x, y, z);
+        
+        if (block == replaceBlock) {
+            positions.add(new Vec3d(x, y, z));
         }
     }
 }
