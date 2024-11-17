@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
@@ -1866,6 +1867,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
             boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
             boolean isBetaBiome = biome instanceof BiomeBeta;
             boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
             boolean isIndev = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
@@ -1912,6 +1914,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             for (int i = GuiTags.PG1_B_USE_GRASS; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
                 this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
             }
+            
+            // Disable Emerald ore settings when using Release Biome Source or non-Modern Beta biome
+            boolean emeraldEnabled = (isFixedBiomeSource && isModernBetaBiome) ||  (!isReleaseBiomeSource && !isFixedBiomeSource);
+            this.setButtonEnabled(GuiTags.PG2_S_EMER_SIZE, emeraldEnabled);
+            this.setButtonEnabled(GuiTags.PG2_S_EMER_CNT, emeraldEnabled);
+            this.setButtonEnabled(GuiTags.PG2_S_EMER_MIN, emeraldEnabled);
+            this.setButtonEnabled(GuiTags.PG2_S_EMER_MAX, emeraldEnabled);
 
             this.setBiomeStructuresEnabled(biomeSource, singleBiome);
         }

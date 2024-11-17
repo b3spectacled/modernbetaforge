@@ -2,7 +2,6 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -11,6 +10,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -199,6 +199,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         return !this.inWorldBounds(startX, startZ);
     }
+    
+    @Override
+    protected void pruneChunk(int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        MutableBlockPos blockPos = new MutableBlockPos();
+        
+        if (this.inWorldBounds(startX, startZ))
+            return;
+        
+        for (int x = startX; x < startX + 16; ++x) {
+            for (int z = startZ; z < startZ + 16; ++z) {
+                int height = this.getHeight(x, z, HeightmapChunk.Type.OCEAN);
+                
+                for (int y = this.world.getActualHeight() - 1; y > height; --y) {
+                    if (this.world.getBlockState(blockPos.setPos(x, y, z)).getBlock() != Blocks.AIR)
+                        this.world.setBlockState(blockPos, BlockStates.AIR);
+                }
+            }
+        }
+    }
 
     protected abstract void pregenerateTerrain();
     
@@ -229,53 +250,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (!this.pregenerated) {
             this.pregenerateTerrain();
             this.pregenerated = true;
-        }
-    }
-
-    protected void carveLevel(Random random) {
-        this.logPhase("Carving");
-        
-        int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
-        
-        for (int i = 0; i < caveCount; ++i) {
-            float caveX = random.nextFloat() * (float)this.levelWidth;
-            float caveY = random.nextFloat() * (float)this.levelHeight;
-            float caveZ = random.nextFloat() * (float)this.levelLength;
-    
-            int caveLen = (int)((random.nextFloat() + random.nextFloat()) * 200f);
-            
-            float theta = random.nextFloat() * (float)Math.PI * 2.0f;
-            float deltaTheta = 0.0f;
-            float phi = random.nextFloat() * (float)Math.PI * 2.0f;
-            float deltaPhi = 0.0f;
-            
-            float caveRadius = random.nextFloat() * random.nextFloat();
-            
-            for (int len = 0; len < caveLen; ++len) {
-                caveX += MathHelper.sin(theta) * MathHelper.cos(phi);
-                caveZ += MathHelper.cos(theta) * MathHelper.cos(phi);
-                caveY += MathHelper.sin(phi);
-                
-                theta += deltaTheta * 0.2f;
-                deltaTheta *= 0.9f;
-                deltaTheta += random.nextFloat() - random.nextFloat();
-                phi += deltaPhi * 0.5f;
-                phi *= 0.5f;
-                deltaPhi *= 0.75f;
-                deltaPhi += random.nextFloat() - random.nextFloat();
-                
-                if (random.nextFloat() >= 0.25f) {
-                    float centerX = caveX + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
-                    float centerY = caveY + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
-                    float centerZ = caveZ + (random.nextFloat() * 4.0f - 2.0f) * 0.2f;
-                    
-                    float radius = ((float)this.levelHeight - centerY) / (float)this.levelHeight;
-                    radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
-                    radius = radius * MathHelper.sin((float)len * (float)Math.PI / (float)caveLen);
-                    
-                    this.fillOblateSpheroid(centerX, centerY, centerZ, radius, Blocks.AIR);
-                }
-            }
         }
     }
     
@@ -374,27 +348,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
         
         return builder.build();
-    }
-    
-    private void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
-        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
-            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
-                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
-                
-                    float dx = (float)x - centerX;
-                    float dy = (float)y - centerY;
-                    float dz = (float)z - centerZ;
-                    
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
-                        Block block = this.getLevelBlock(x, y, z);
-                        
-                        if (block == this.defaultBlock.getBlock()) {
-                            this.setLevelBlock(x, y, z, fillBlock);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {

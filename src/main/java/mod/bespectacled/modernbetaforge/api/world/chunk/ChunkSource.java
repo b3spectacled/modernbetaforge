@@ -215,6 +215,7 @@ public abstract class ChunkSource {
     
     public void populateChunk(int chunkX, int chunkZ) {
         if (this.skipChunk(chunkX, chunkZ)) {
+            this.pruneChunk(chunkX, chunkZ); // Just for Indev worlds
             return;
         }
         
@@ -541,6 +542,8 @@ public abstract class ChunkSource {
     protected boolean skipChunk(int chunkX, int chunkZ) {
         return false;
     }
+    
+    protected void pruneChunk(int chunkX, int chunkZ) { }
 
     protected BiomeInjectionRules buildBiomeInjectorRules() {
         boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;

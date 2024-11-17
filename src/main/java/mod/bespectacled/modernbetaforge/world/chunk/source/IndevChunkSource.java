@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -16,6 +17,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -91,7 +93,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
         
         if (this.settings.useIndevCaves)
-            this.carveLevel(this.random);
+            this.carveLevel();
         
         this.oreLevel();
         this.meltLevel();
@@ -305,6 +307,53 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
     
+    private void carveLevel() {
+        this.logPhase("Carving");
+        
+        int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
+        
+        for (int i = 0; i < caveCount; ++i) {
+            float caveX = this.random.nextFloat() * (float)this.levelWidth;
+            float caveY = this.random.nextFloat() * (float)this.levelHeight;
+            float caveZ = this.random.nextFloat() * (float)this.levelLength;
+    
+            int caveLen = (int)((this.random.nextFloat() + this.random.nextFloat()) * 200f);
+            
+            float theta = this.random.nextFloat() * (float)Math.PI * 2.0f;
+            float deltaTheta = 0.0f;
+            float phi = this.random.nextFloat() * (float)Math.PI * 2.0f;
+            float deltaPhi = 0.0f;
+            
+            float caveRadius = this.random.nextFloat() * this.random.nextFloat();
+            
+            for (int len = 0; len < caveLen; ++len) {
+                caveX += MathHelper.sin(theta) * MathHelper.cos(phi);
+                caveZ += MathHelper.cos(theta) * MathHelper.cos(phi);
+                caveY += MathHelper.sin(phi);
+                
+                theta += deltaTheta * 0.2f;
+                deltaTheta *= 0.9f;
+                deltaTheta += this.random.nextFloat() - this.random.nextFloat();
+                phi += deltaPhi * 0.5f;
+                phi *= 0.5f;
+                deltaPhi *= 0.75f;
+                deltaPhi += this.random.nextFloat() - this.random.nextFloat();
+                
+                if (this.random.nextFloat() >= 0.25f) {
+                    float centerX = caveX + (this.random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    float centerY = caveY + (this.random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    float centerZ = caveZ + (this.random.nextFloat() * 4.0f - 2.0f) * 0.2f;
+                    
+                    float radius = ((float)this.levelHeight - centerY) / (float)this.levelHeight;
+                    radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
+                    radius = radius * MathHelper.sin((float)len * (float)Math.PI / (float)caveLen);
+                    
+                    this.fillOblateSpheroid(centerX, centerY, centerZ, radius, Blocks.AIR);
+                }
+            }
+        }
+    }
+    
     private void oreLevel() {
         this.generateDummyOre(Blocks.COAL_ORE, 1000, 10, (this.levelHeight << 2) / 5);
         this.generateDummyOre(Blocks.IRON_ORE, 800, 8, this.levelHeight * 3 / 5);
@@ -441,6 +490,27 @@ public class IndevChunkSource extends FiniteChunkSource {
                     
                     if (y == 1 && x != 0 && z != 0 && x != this.levelWidth - 1 && z != this.levelLength - 1) {
                         y = this.levelHeight - 2;
+                    }
+                }
+            }
+        }
+    }
+    
+    private void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
+        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
+            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
+                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
+                
+                    float dx = (float)x - centerX;
+                    float dy = (float)y - centerY;
+                    float dz = (float)z - centerZ;
+                    
+                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
+                        Block block = this.getLevelBlock(x, y, z);
+                        
+                        if (block == this.defaultBlock.getBlock()) {
+                            this.setLevelBlock(x, y, z, fillBlock);
+                        }
                     }
                 }
             }
