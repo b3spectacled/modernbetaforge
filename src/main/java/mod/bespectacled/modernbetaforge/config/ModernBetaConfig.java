@@ -76,6 +76,11 @@ public class ModernBetaConfig {
         public int cloudHeight = 108;
         
         @Comment({
+            "Override default cloud height."
+        })
+        public boolean useCustomCloudHeight = false;
+        
+        @Comment({
             "Render biome colors with increasingly lower temperatures above y128"
         })
         @RequiresWorldRestart

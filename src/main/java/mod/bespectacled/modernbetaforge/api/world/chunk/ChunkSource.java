@@ -148,7 +148,7 @@ public abstract class ChunkSource {
         this.world.setSeaLevel(this.settings.seaLevel);
         
         // Set cloud height in other chunk sources if needed, otherwise use config
-        ModernBetaWorldType.INSTANCE.setCloudHeight(-1);
+        ModernBetaWorldType.INSTANCE.setCloudHeight(108);
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);

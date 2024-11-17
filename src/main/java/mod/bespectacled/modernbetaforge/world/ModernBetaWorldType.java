@@ -35,7 +35,7 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public float getCloudHeight() {
-        if (this.cloudHeight == -1) {
+        if (ModernBetaConfig.visualOptions.useCustomCloudHeight) {
             return (float)ModernBetaConfig.visualOptions.cloudHeight;
         }
         
