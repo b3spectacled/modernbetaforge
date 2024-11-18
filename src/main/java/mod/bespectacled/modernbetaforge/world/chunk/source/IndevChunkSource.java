@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -55,8 +54,13 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.levelTheme = IndevTheme.fromId(settings.levelTheme);
         this.levelType = IndevType.fromId(settings.levelType);
         this.seaLevel = this.levelType == IndevType.FLOATING ? 0 : this.levelHeight - 32;
-        
-        ModernBetaWorldType.INSTANCE.setCloudHeight(this.levelType == IndevType.FLOATING ? -16 : this.levelHeight + 2);
+
+        int cloudHeight =this.levelType == IndevType.FLOATING ?
+            -16 :
+            this.levelTheme == IndevTheme.PARADISE ?
+                this.levelHeight + 64 :
+                this.levelHeight + 2;
+        this.setCloudHeight(cloudHeight);
     }
     
     @Override

@@ -19,6 +19,8 @@ public class ModernBetaBiomeTags {
     public static final String BETA_BEACH = "beta_beach";
     public static final String BETA_SNOWY_BEACH = "beta_snowy_beach";
     
+    public static final String BETA_SKY = "beta_sky";
+    
     public static final String ALPHA = "alpha";
     public static final String ALPHA_WINTER = "alpha_winter";
     
@@ -26,5 +28,7 @@ public class ModernBetaBiomeTags {
     public static final String INFDEV_420 = "infdev_420";
     public static final String INFDEV_611 = "infdev_611";
     
-    public static final String BETA_SKY = "beta_sky";
+    public static final String INDEV_NORMAL = "indev_normal";
+    public static final String INDEV_PARADISE = "indev_paradise";
+    public static final String INDEV_WOODS = "indev_woods";
 }

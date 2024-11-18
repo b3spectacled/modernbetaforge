@@ -1,9 +1,14 @@
 package mod.bespectacled.modernbetaforge;
 
+import mod.bespectacled.modernbetaforge.event.PlayerEventHandler;
+import net.minecraftforge.common.MinecraftForge;
+
 public class ModernBetaServerProxy implements ModernBetaProxy {
     @Override
-    public void init() {}
-
+    public void preInit() { }
+    
     @Override
-    public void preInit() {}
+    public void init() {
+        MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
+    }
 }

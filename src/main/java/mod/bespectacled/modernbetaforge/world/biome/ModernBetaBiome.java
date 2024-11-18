@@ -2,7 +2,6 @@ package mod.bespectacled.modernbetaforge.world.biome;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
@@ -91,6 +90,7 @@ public abstract class ModernBetaBiome extends Biome {
     
     protected int skyColor;
     protected int fogColor;
+    protected int cloudColor;
     
     protected int grassColor;
     protected int foliageColor;
@@ -100,6 +100,7 @@ public abstract class ModernBetaBiome extends Biome {
         
         this.skyColor = -1;
         this.fogColor = -1;
+        this.cloudColor = -1;
         
         this.grassColor = -1;
         this.foliageColor = -1;
@@ -143,14 +144,15 @@ public abstract class ModernBetaBiome extends Biome {
         
         return super.getFoliageColorAtPos(blockPos);
     }
-    
-    public Optional<Integer> getFogColor() {
-        Optional<Integer> fogColor = Optional.empty();
-        
-        if (this.fogColor != -1)
-            fogColor = Optional.of(this.fogColor);
-        
-        return fogColor;
+
+    @SideOnly(Side.CLIENT)
+    public int getFogColor() {
+        return this.fogColor;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getCloudColor() {
+        return this.cloudColor;
     }
     
     @Override

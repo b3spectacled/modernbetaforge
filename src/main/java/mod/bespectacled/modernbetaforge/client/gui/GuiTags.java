@@ -89,7 +89,7 @@ public class GuiTags {
     public static final int PG1_B_SPAWN_WOLVES = 215;
     
     public static final int PG1_B_USE_MODDED_BIOMES = 216;
-    public static final int PG1_B_BIOME_SIZE = 217;
+    public static final int PG1_S_BIOME_SZ = 217;
     
     // Labels
     public static final int PG1_L_BETA = 1200;

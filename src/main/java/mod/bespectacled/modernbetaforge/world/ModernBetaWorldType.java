@@ -17,13 +17,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModernBetaWorldType extends WorldType {
     public static final ModernBetaWorldType INSTANCE = new ModernBetaWorldType("modernbeta");
-
+    
     private int cloudHeight;
     
     public ModernBetaWorldType(String name) {
         super(name);
         
-        this.cloudHeight = -1;
+        this.cloudHeight = (int)super.getCloudHeight();
     }
 
     public static void register() {}
@@ -38,7 +38,7 @@ public class ModernBetaWorldType extends WorldType {
         if (ModernBetaConfig.visualOptions.useCustomCloudHeight) {
             return (float)ModernBetaConfig.visualOptions.cloudHeight;
         }
-        
+
         return this.cloudHeight;
     }
     

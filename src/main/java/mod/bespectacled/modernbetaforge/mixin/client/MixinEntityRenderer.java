@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge.mixin.client;
 
-import java.util.Optional;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -63,10 +61,10 @@ public abstract class MixinEntityRenderer {
         Biome biome = mc.world.getBiome(playerEntity.getPosition());
         
         if (biome instanceof ModernBetaBiome) {
-            Optional<Integer> biomeFogColor = ((ModernBetaBiome)biome).getFogColor();
+            int biomeFogColor = ((ModernBetaBiome)biome).getFogColor();
 
-            if (biomeFogColor.isPresent())
-                return MathUtil.convertColorIntToVec3d(biomeFogColor.get());
+            if (biomeFogColor != -1)
+                return MathUtil.convertColorIntToVec3d(biomeFogColor);
         }
         
         return fogColor;

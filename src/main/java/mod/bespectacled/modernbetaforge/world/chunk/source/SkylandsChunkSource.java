@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -46,7 +45,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.setForestOctaveNoise(this.forestOctaveNoise);
         
         this.surfaceBuilder = new SkylandsSurfaceBuilder(this.world, this, settings);
-        ModernBetaWorldType.INSTANCE.setCloudHeight(8);
+        this.setCloudHeight(8);
     }
     
     @Override

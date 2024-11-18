@@ -24,6 +24,7 @@
     "client": [
       "client.MixinEntityRenderer",
       "client.MixinGuiCreateWorld",
+      "client.MixinWorld",
       "accessor.AccessorEntityRenderer"
     ],
     "server": []

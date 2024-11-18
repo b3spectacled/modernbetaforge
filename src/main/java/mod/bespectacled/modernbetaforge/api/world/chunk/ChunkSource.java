@@ -147,8 +147,8 @@ public abstract class ChunkSource {
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
         
-        // Set cloud height in other chunk sources if needed, otherwise use config
-        ModernBetaWorldType.INSTANCE.setCloudHeight(108);
+        // Set default cloud height
+        this.setCloudHeight(108);
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
@@ -214,8 +214,10 @@ public abstract class ChunkSource {
     }
     
     public void populateChunk(int chunkX, int chunkZ) {
+        // Prune outer chunks for finite worlds
+        this.pruneChunk(chunkX, chunkZ);
+        
         if (this.skipChunk(chunkX, chunkZ)) {
-            this.pruneChunk(chunkX, chunkZ); // Just for Indev worlds
             return;
         }
         
@@ -537,6 +539,10 @@ public abstract class ChunkSource {
     
     public SpawnLocator getSpawnLocator() {
         return SpawnLocator.DEFAULT;
+    }
+    
+    protected void setCloudHeight(int cloudHeight) {
+        ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }
     
     protected boolean skipChunk(int chunkX, int chunkZ) {

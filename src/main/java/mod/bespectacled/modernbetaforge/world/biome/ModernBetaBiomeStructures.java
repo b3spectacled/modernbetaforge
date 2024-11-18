@@ -41,6 +41,13 @@ public class ModernBetaBiomeStructures {
             addStrongholdBiome(biome);
             addVillageBiome(biome);
         }
+        
+        /* Indev */ 
+        
+        for (Biome biome : ModernBetaBiomeLists.INDEV_BIOMES) {
+            addStrongholdBiome(biome);
+            addVillageBiome(biome);
+        }
     }
     
     private static void addStrongholdBiome(Biome biome) {

@@ -12,6 +12,7 @@ public class ModernBetaBiomeLists {
     public static final List<Biome> BETA_BIOMES;
     public static final List<Biome> ALPHA_BIOMES;
     public static final List<Biome> INFDEV_BIOMES;
+    public static final List<Biome> INDEV_BIOMES;
     
     public static final List<Biome> BUILTIN_BIOMES_WITH_CUSTOM_SURFACES;
     
@@ -49,10 +50,17 @@ public class ModernBetaBiomeLists {
             ModernBetaBiomeHolders.INFDEV_611
         );
         
+        INDEV_BIOMES = Arrays.asList(
+            ModernBetaBiomeHolders.INDEV_NORMAL,
+            ModernBetaBiomeHolders.INDEV_PARADISE,
+            ModernBetaBiomeHolders.INDEV_WOODS
+        );
+        
         ALL_BIOMES = new ArrayList<>();
         ALL_BIOMES.addAll(BETA_BIOMES);
         ALL_BIOMES.addAll(ALPHA_BIOMES);
         ALL_BIOMES.addAll(INFDEV_BIOMES);
+        ALL_BIOMES.addAll(INDEV_BIOMES);
         
         BUILTIN_BIOMES_WITH_CUSTOM_SURFACES = Arrays.asList(
             // Badlands

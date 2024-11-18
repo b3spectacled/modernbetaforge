@@ -69,4 +69,13 @@ public class ModernBetaBiomeHolders {
     
     @ObjectHolder("infdev_611")
     public static final Biome INFDEV_611 = null;
+    
+    @ObjectHolder("indev_normal")
+    public static final Biome INDEV_NORMAL = null;
+    
+    @ObjectHolder("indev_paradise")
+    public static final Biome INDEV_PARADISE = null;
+    
+    @ObjectHolder("indev_woods")
+    public static final Biome INDEV_WOODS = null;
 }

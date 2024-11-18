@@ -153,6 +153,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return this.levelLength;
     }
     
+    public int getLevelHeight() {
+        return this.levelHeight;
+    }
+    
     public void buildHouse(WorldServer world, BlockPos spawnPos) {
         if (!this.settings.useIndevHouse)
             return;
@@ -270,6 +274,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      * However, there seems to be a bug where the check if x = levelWidth - 1 does not actually use x,
      * so the original level generator allows water to generate where x = levelWidth - 1 above ground.
+     * This bug is fixed here, because I'm not sure how to consistently reproduce it.
      * 
      */
     protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, List<Vec3d> floodedPositions) {

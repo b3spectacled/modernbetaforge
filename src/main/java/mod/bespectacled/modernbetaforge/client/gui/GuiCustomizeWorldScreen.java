@@ -1875,6 +1875,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !(isSkylands || isIndev));
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
+            
+            this.setButtonEnabled(GuiTags.PG0_B_USE_BEACH, !isFixedBiomeSource);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_OCEAN, !isFixedBiomeSource);
+            
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
             this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
@@ -1909,13 +1913,24 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.setFieldEnabled(i, isBetaOrPEBiomeSource);
             }
 
-            // Disable all Modern Beta biome and mob feature settings when using Release Biome Source
+            // Disable all Modern Beta biome feature settings when using Release Biome Source
+            // or non-Beta biome with Single Biome source
             
-            for (int i = GuiTags.PG1_B_USE_GRASS; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
+            for (int i = GuiTags.PG1_B_USE_FLOWERS; i <= GuiTags.PG1_B_USE_ACACIA; ++i) {
                 this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome));
             }
+
+            // Disable all Modern Beta mob feature settings when using Release Biome Source
+            // or non-Modern Beta biome with Single Biome source
             
-            // Disable Emerald ore settings when using Release Biome Source or non-Modern Beta biome
+            for (int i = GuiTags.PG1_B_SPAWN_CREATURE; i <= GuiTags.PG1_B_SPAWN_WOLVES; ++i) {
+                this.setButtonEnabled(i, isBetaOrPEBiomeSource || (isFixedBiomeSource && isModernBetaBiome));
+            }
+            
+            // Set grass specifically enabled when using Modern Beta biome
+            this.setButtonEnabled(GuiTags.PG1_B_USE_GRASS, isBetaOrPEBiomeSource || (isFixedBiomeSource && isModernBetaBiome));
+            
+            // Disable Emerald ore settings when using Release Biome Source or non-Modern Beta biome with Single Biome source
             boolean emeraldEnabled = (isFixedBiomeSource && isModernBetaBiome) ||  (!isReleaseBiomeSource && !isFixedBiomeSource);
             this.setButtonEnabled(GuiTags.PG2_S_EMER_SIZE, emeraldEnabled);
             this.setButtonEnabled(GuiTags.PG2_S_EMER_CNT, emeraldEnabled);
