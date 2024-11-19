@@ -90,14 +90,17 @@ public class DebugInfoEventHandler {
                     
                     int offsetX = finiteChunkSource.getLevelWidth() / 2;
                     int offsetZ = finiteChunkSource.getLevelLength() / 2;
+                    boolean inLevel = finiteChunkSource.inWorldBounds(x, z);
                     
+                    String finiteInLevelText = String.format("[Modern Beta] In Finite Level: %b", inLevel);
                     String finiteCoordsText = String.format("[Modern Beta] Finite XYZ: %d / %d / %d", x + offsetX, y, z + offsetZ);
                     String finiteHeightmapText = String.format("[Modern Beta] Finite Surface Height: %d Ocean Height: %d Floor Height: %d",
                         finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.SURFACE),
                         finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.OCEAN),
                         finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.FLOOR)
                     );
-                    
+
+                    event.getLeft().add(finiteInLevelText);
                     event.getLeft().add(finiteCoordsText);
                     event.getLeft().add(finiteHeightmapText);
                 }

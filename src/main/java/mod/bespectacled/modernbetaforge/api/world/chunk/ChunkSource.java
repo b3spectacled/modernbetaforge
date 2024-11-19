@@ -556,6 +556,10 @@ public abstract class ChunkSource {
     }
     
     protected boolean skipChunk(int chunkX, int chunkZ) {
+        return this.skipChunk(chunkX, chunkZ, 0);
+    }
+    
+    protected boolean skipChunk(int chunkX, int chunkZ, int padding) {
         return false;
     }
     

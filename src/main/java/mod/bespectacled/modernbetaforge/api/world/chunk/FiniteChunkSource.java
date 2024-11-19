@@ -196,12 +196,32 @@ public abstract class FiniteChunkSource extends ChunkSource {
         world.setBlockState(blockPos.setPos(spawnX + 3 - 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST));
     }
 
+    public boolean inWorldBounds(int x, int z) {
+        return this.inWorldBounds(x, z, 0);
+    }
+
+    public boolean inWorldBounds(int x, int z, int padding) {
+        x += this.levelWidth / 2;
+        z += this.levelLength / 2;
+        
+        if (x >= padding && x < this.levelWidth - padding && z >= padding && z < this.levelLength - padding) {
+            return true;
+        }
+        
+        return false;
+    }
+
     @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {
+        return this.skipChunk(chunkX, chunkZ, 0);
+    }
+
+    @Override
+    protected boolean skipChunk(int chunkX, int chunkZ, int chunkPadding) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
-        return !this.inWorldBounds(startX, startZ);
+        return !this.inWorldBounds(startX, startZ, chunkPadding << 4);
     }
     
     @Override
@@ -230,18 +250,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected abstract void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     protected abstract int getBorderHeight(int x, int z, HeightmapChunk.Type type);
-
-    protected boolean inWorldBounds(int x, int z) {
-        int halfWidth = this.levelWidth / 2;
-        int halfLength = this.levelLength / 2;
-        
-        if (x >= -halfWidth && x < halfWidth && z >= -halfLength && z < halfLength) {
-            return true;
-        }
-        
-        return false;
-    }
-
+    
     protected boolean inLevelBounds(int x, int y, int z) {
         return x >= 0 && x < this.levelWidth && y >= 0 && y < this.levelHeight && z >= 0 && z < this.levelLength;
     }

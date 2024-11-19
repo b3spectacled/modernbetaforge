@@ -1879,6 +1879,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_B_USE_BEACH, !isFixedBiomeSource);
             this.setButtonEnabled(GuiTags.PG0_B_USE_OCEAN, !isFixedBiomeSource);
             
+            this.setButtonEnabled(GuiTags.PG0_S_SEA_LEVEL, !isIndev);
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
             this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);
