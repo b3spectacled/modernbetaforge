@@ -24,17 +24,13 @@ public class CloudHeightMessage implements IMessage {
     
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.cloudHeight = MathHelper.clamp(buf.readInt(), -256, 256);
-    }
-    
-    public int getCloudHeight() {
-        return this.cloudHeight;
+        this.cloudHeight = MathHelper.clamp(buf.readInt(), -320, 320);
     }
     
     public static class CloudHeightMessageHandler implements IMessageHandler<CloudHeightMessage, IMessage> {
         @Override
         public IMessage onMessage(CloudHeightMessage message, MessageContext ctx) {
-            int cloudHeight = message.getCloudHeight();
+            int cloudHeight = message.cloudHeight;
 
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);

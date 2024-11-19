@@ -10,8 +10,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class PlayerEventHandler {
     @SubscribeEvent
     public void onPlayerEventPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        EntityPlayerMP player = (EntityPlayerMP)event.player;
         int cloudHeight = (int)ModernBetaWorldType.INSTANCE.getCloudHeight();
         
-        ModernBetaPacketHandler.INSTANCE.sendTo(new CloudHeightMessage(cloudHeight), (EntityPlayerMP)event.player);
+        ModernBetaPacketHandler.INSTANCE.sendTo(new CloudHeightMessage(cloudHeight), player);
     }
 }

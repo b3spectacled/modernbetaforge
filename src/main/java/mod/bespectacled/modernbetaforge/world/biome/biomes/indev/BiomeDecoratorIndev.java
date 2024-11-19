@@ -9,8 +9,8 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;

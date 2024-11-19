@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -15,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -85,6 +87,8 @@ public abstract class ChunkSource {
     private final BiomeInjector biomeInjector;
     private final ChunkCache<ChunkContainer> chunkCache;
     
+    private Optional<PerlinOctaveNoise> forestOctaveNoise;
+    
     public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, ModernBetaNoiseSettings noiseSettings, long seed, boolean mapFeaturesEnabled) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
@@ -143,6 +147,8 @@ public abstract class ChunkSource {
                 return new ChunkContainer(chunkPrimer, biomes);
             }
         );
+        
+        this.forestOctaveNoise = Optional.empty();
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages
         this.world.setSeaLevel(this.settings.seaLevel);
@@ -541,6 +547,10 @@ public abstract class ChunkSource {
         return SpawnLocator.DEFAULT;
     }
     
+    public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
+        return this.forestOctaveNoise;
+    }
+    
     protected void setCloudHeight(int cloudHeight) {
         ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }
@@ -550,6 +560,10 @@ public abstract class ChunkSource {
     }
     
     protected void pruneChunk(int chunkX, int chunkZ) { }
+    
+    protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
+        this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
+    }
 
     protected BiomeInjectionRules buildBiomeInjectorRules() {
         boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;

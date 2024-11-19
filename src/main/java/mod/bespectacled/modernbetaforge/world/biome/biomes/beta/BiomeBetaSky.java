@@ -10,6 +10,7 @@ public class BiomeBetaSky extends BiomeBeta {
             .setRainfall(0.0f)
             .setBaseHeight(BASE_HEIGHT_LOW)
             .setHeightVariation(HEIGHT_VARY_LOW)
+            .setRainDisabled()
         );
 
         this.skyColor = ModernBetaBiomeColors.SKYLANDS_SKY_COLOR;

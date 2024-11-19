@@ -89,7 +89,7 @@ public class BiomeDecoratorAlpha extends ModernBetaBiomeDecorator {
 
     @Override
     protected int getTreeCount(World world, Random random, Biome biome, BlockPos startPos) {
-        PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world);
+        PerlinOctaveNoise forestOctaveNoise = this.getForestOctaveNoise(world, startPos.getX() >> 4, startPos.getZ() >> 4);
         
         int startX = startPos.getX();
         int startZ = startPos.getZ();

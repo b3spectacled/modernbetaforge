@@ -45,7 +45,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
     private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
-    private Optional<PerlinOctaveNoise> forestOctaveNoise;
 
     public NoiseChunkSource(
         World world,
@@ -99,7 +98,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.beachOctaveNoise = Optional.empty();
         this.surfaceOctaveNoise = Optional.empty();
-        this.forestOctaveNoise = Optional.empty();
     }
     
     @Override
@@ -136,10 +134,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     public Optional<PerlinOctaveNoise> getSurfaceOctaveNoise() {
         return this.surfaceOctaveNoise;
-    }
-    
-    public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
-        return this.forestOctaveNoise;
     }
     
     /**
@@ -184,10 +178,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {
         this.surfaceOctaveNoise = Optional.ofNullable(surfaceOctaveNoise);
-    }
-    
-    protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
-        this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
     }
     
     /**

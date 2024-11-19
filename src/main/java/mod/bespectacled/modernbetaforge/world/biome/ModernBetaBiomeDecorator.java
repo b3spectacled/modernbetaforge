@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
@@ -214,24 +213,22 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected PerlinOctaveNoise getForestOctaveNoise(World world) {
+    protected PerlinOctaveNoise getForestOctaveNoise(World world, int chunkX, int chunkZ) {
         ChunkProviderServer chunkProviderServer = (ChunkProviderServer)world.getChunkProvider();
         IChunkGenerator chunkGenerator = chunkProviderServer.chunkGenerator;
+        Random random = new Random(world.getSeed());
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ModernBetaChunkGenerator modernBetaChunkGenerator = (ModernBetaChunkGenerator)chunkGenerator;
             ChunkSource chunkSource = modernBetaChunkGenerator.getChunkSource();
-            
-            if (chunkSource instanceof NoiseChunkSource) {
-                return ((NoiseChunkSource)chunkSource).getForestOctaveNoise().orElse(new PerlinOctaveNoise(new Random(world.getSeed()), 8, true));
-            }
+
+            return chunkSource.getForestOctaveNoise().orElse(new PerlinOctaveNoise(random, 8, true));
         }
         
-        return new PerlinOctaveNoise(new Random(world.getSeed()), 8, true);
+        return new PerlinOctaveNoise(random, 8, true);
     }
     
     private void populateOreStandard(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int minHeight, int maxHeight) {
-
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
