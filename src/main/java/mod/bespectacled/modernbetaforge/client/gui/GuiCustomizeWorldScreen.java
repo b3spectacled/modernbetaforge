@@ -18,6 +18,7 @@ import com.google.common.primitives.Ints;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
@@ -186,6 +187,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int levelWidth = getNdx(LEVEL_WIDTHS, this.settings.levelWidth);
         int levelLength = getNdx(LEVEL_WIDTHS, this.settings.levelLength);
         int levelHeight = getNdx(LEVEL_HEIGHTS, this.settings.levelHeight);
+        int levelSeaLevel = this.settings.levelType.equals(IndevType.FLOATING.id) ? 0 : this.settings.levelHeight - 32;
         
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
@@ -242,9 +244,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_WIDTH, I18n.format(PREFIX + NbtTags.LEVEL_WIDTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelWidth),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_LENGTH, I18n.format(PREFIX + NbtTags.LEVEL_LENGTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelLength),
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_HEIGHT, I18n.format(PREFIX + NbtTags.LEVEL_HEIGHT), true, this, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %d", I18n.format(PREFIX + "seaLevel"), levelSeaLevel), true),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INDEV_CAVES, I18n.format(PREFIX + NbtTags.USE_INDEV_CAVES), true, this.settings.useIndevCaves),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INDEV_HOUSE, I18n.format(PREFIX + NbtTags.USE_INDEV_HOUSE), true, this.settings.useIndevHouse),
-            null,
         
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_NETHER_FEATURES, I18n.format(PREFIX + "netherFeaturesLabel"), true),
             null,
@@ -1465,6 +1467,16 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         }
         
+        if (entry == GuiTags.PG0_S_LEVEL_HEIGHT || entry == GuiTags.PG0_S_LEVEL_TYPE) {
+            Gui gui = this.pageList.getComponent(GuiTags.PG0_L_INDEV_SEA_LEVEL);
+            if (gui != null) {
+                AccessorGuiLabel accessor = (AccessorGuiLabel)gui;
+                int levelSeaLevel = this.settings.levelType.equals(IndevType.FLOATING.id) ? 0 : this.settings.levelHeight - 32;
+                
+                accessor.getLabels().set(0, String.format("%s: %d", I18n.format(PREFIX + "seaLevel"), levelSeaLevel));
+            }
+        }
+        
         this.updateGuiEnabled();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
     }
@@ -1889,10 +1901,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
             this.setButtonEnabled(GuiTags.PG0_S_FIXED, biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id));
             
-            this.setButtonEnabled(GuiTags.PG0_B_USE_BEACH, !isFixedBiomeSource);
-            this.setButtonEnabled(GuiTags.PG0_B_USE_OCEAN, !isFixedBiomeSource);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_BEACH, !isFixedBiomeSource && !isSkylands);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_OCEAN, !isFixedBiomeSource && !isSkylands);
             
-            this.setButtonEnabled(GuiTags.PG0_S_SEA_LEVEL, !isIndev);
+            this.setButtonEnabled(GuiTags.PG0_S_SEA_LEVEL, !isIndev && !isSkylands);
             this.setButtonEnabled(GuiTags.PG0_B_USE_OLD_NETHER, !ModCompat.isBoPLoaded());
             this.setButtonEnabled(GuiTags.PG0_B_USE_NETHER_CAVES, useOldNether);
             this.setButtonEnabled(GuiTags.PG0_B_USE_FORTRESSES, useOldNether);

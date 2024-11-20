@@ -60,6 +60,8 @@ public class GuiTags {
     public static final int PG0_B_USE_INFDEV_WALLS = 136;
     public static final int PG0_B_USE_INFDEV_PYRAMIDS = 137;
     
+    public static final int PG0_L_INDEV_SEA_LEVEL = 150;
+    
     // Labels
     public static final int PG0_L_SURFACE_BUILDER = 1000;
     public static final int PG0_L_FIXED_BIOME = 1001;

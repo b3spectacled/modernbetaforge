@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -45,12 +46,26 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.setForestOctaveNoise(this.forestOctaveNoise);
         
         this.surfaceBuilder = new SkylandsSurfaceBuilder(this.world, this, settings);
+
+        // Update sea level to reflect real sea level
+        this.world.setSeaLevel(this.getSeaLevel());
+        
         this.setCloudHeight(8);
+    }
+    
+    @Override
+    public int getSeaLevel() {
+        return 0;
     }
     
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+    }
+    
+    @Override
+    protected BiomeInjectionRules buildBiomeInjectorRules() {
+        return new BiomeInjectionRules.Builder().build();
     }
 
     @Override
