@@ -22,6 +22,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaTundra;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.indev.BiomeIndevNormal;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.indev.BiomeIndevParadise;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.indev.BiomeIndevWoods;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev227;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev611;
@@ -61,6 +62,7 @@ public class ModernBetaBiomeRegistrar {
         biomeRegistry.register(new BiomeAlphaNormal(), ModernBetaBiomeTags.ALPHA, Type.FOREST);
         biomeRegistry.register(new BiomeAlphaWinter(), ModernBetaBiomeTags.ALPHA_WINTER, Type.FOREST, Type.SNOWY, Type.COLD);
         
+        biomeRegistry.register(new BiomeInfdev227(), ModernBetaBiomeTags.INFDEV_227, Type.SPARSE);
         biomeRegistry.register(new BiomeInfdev415(), ModernBetaBiomeTags.INFDEV_415, Type.FOREST);
         biomeRegistry.register(new BiomeInfdev420(), ModernBetaBiomeTags.INFDEV_420, Type.FOREST);
         biomeRegistry.register(new BiomeInfdev611(), ModernBetaBiomeTags.INFDEV_611, Type.FOREST);

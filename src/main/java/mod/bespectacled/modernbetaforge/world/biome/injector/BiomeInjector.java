@@ -30,12 +30,12 @@ public class BiomeInjector {
                 int height = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE), 0, 255);
                 int heightAbove = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE) + 1, 0, 255);
                 
-                BlockPos pos = new BlockPos(x, height, z);
-                IBlockState state = chunkPrimer.getBlockState(localX, height, localZ);
-                IBlockState stateAbove = chunkPrimer.getBlockState(localX, heightAbove, localZ);
+                BlockPos blockPos = new BlockPos(x, height, z);
+                IBlockState blockState = chunkPrimer.getBlockState(localX, height, localZ);
+                IBlockState blockStateAbove = chunkPrimer.getBlockState(localX, heightAbove, localZ);
                 Biome biome = biomes[ndx];
                 
-                BiomeInjectionContext context = new BiomeInjectionContext(pos, state, stateAbove, biome);
+                BiomeInjectionContext context = new BiomeInjectionContext(blockPos, blockState, blockStateAbove, biome);
                 Biome injectedBiome = this.getInjectedBiome(context, x, z);
                 if (injectedBiome != null) {
                     biomes[ndx] = injectedBiome;

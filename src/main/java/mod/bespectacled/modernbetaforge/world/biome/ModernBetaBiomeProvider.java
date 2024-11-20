@@ -34,8 +34,6 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         this.biomeSource = ModernBetaRegistries.BIOME.get(settings.biomeSource).apply(worldInfo);
         this.biomeCache = new ChunkCache<BiomeChunk>(
             "biomes",
-            512,
-            true,
             (chunkX, chunkZ) -> {
                 // Pregenerate chunk primer so we can retrieve post-injection biome map
                 this.chunkSource.initChunk(chunkX, chunkZ);

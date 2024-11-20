@@ -61,6 +61,9 @@ public class ModernBetaBiomeHolders {
     @ObjectHolder("alpha_winter")
     public static final Biome ALPHA_WINTER = null;
     
+    @ObjectHolder("infdev_227")
+    public static final Biome INFDEV_227 = null;
+    
     @ObjectHolder("infdev_415")
     public static final Biome INFDEV_415 = null;
     

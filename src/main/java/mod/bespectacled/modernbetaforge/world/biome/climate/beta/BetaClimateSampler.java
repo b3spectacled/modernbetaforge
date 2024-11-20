@@ -29,12 +29,7 @@ public class BetaClimateSampler {
         this.rainOctaveNoise = new SimplexOctaveNoise(new Random(seed * 39811L), 4);
         this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * 543321L), 2);
         
-        this.climateCache = new ChunkCache<>(
-            "climate", 
-            512, 
-            true, 
-            (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise)
-        );
+        this.climateCache = new ChunkCache<>("climate", (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise));
         
         this.tempScale = 0.025 / settings.tempNoiseScale;
         this.rainScale = 0.050 / settings.rainNoiseScale;

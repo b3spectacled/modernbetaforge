@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
@@ -13,8 +12,6 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
@@ -42,9 +39,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final ChunkCache<HeightmapChunk> heightmapCache;
 
     private final SurfaceBuilder surfaceBuilder;
-    
-    private Optional<PerlinOctaveNoise> beachOctaveNoise;
-    private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
 
     public NoiseChunkSource(
         World world,
@@ -69,8 +63,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.noiseCache = new ChunkCache<>(
             "noise",
-            512,
-            true,
             (chunkX, chunkZ) -> {
                 NoiseSource noiseSource = new NoiseSource(
                     this::sampleNoiseColumn,
@@ -85,26 +77,36 @@ public abstract class NoiseChunkSource extends ChunkSource {
             }
         );
         
-        this.heightmapCache = new ChunkCache<>(
-            "heightmap",
-            512, 
-            true, 
-            this::sampleHeightmap
-        );
+        this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
 
         this.surfaceBuilder = ModernBetaRegistries.SURFACE
             .getOrElse(settings.surfaceBuilder, ModernBetaBuiltInTypes.Surface.BETA.id)
             .apply(world, this, settings);
-        
-        this.beachOctaveNoise = Optional.empty();
-        this.surfaceOctaveNoise = Optional.empty();
     }
+
     
+    /**
+     * Create base chunk (only stone and water is set) given chunk coordinates.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.generateTerrain(chunkPrimer, chunkX, chunkZ);
     }
     
+    /**
+     * Build surface for given chunk primer and chunk coordinates.
+     *
+     * @param biomes Biome array for chunk
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
@@ -119,6 +121,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param type HeightmapChunk heightmap type.
      * 
      * @return The y-coordinate of top block at x/z.
+     * 
      */
     @Override
     public int getHeight(int x, int z, HeightmapChunk.Type type) {
@@ -126,14 +129,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int chunkZ = z >> 4;
         
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
-    }
-    
-    public Optional<PerlinOctaveNoise> getBeachOctaveNoise() {
-        return this.beachOctaveNoise;
-    }
-    
-    public Optional<PerlinOctaveNoise> getSurfaceOctaveNoise() {
-        return this.surfaceOctaveNoise;
     }
     
     /**
@@ -169,22 +164,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
         return density;
     }
     
-    protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
-        this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
-        
-        // Set beach noise for builtin Modern Biome surface builder
-        ModernBetaBiome.setBeachOctaveNoise(beachOctaveNoise);
-    }
-    
-    protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {
-        this.surfaceOctaveNoise = Optional.ofNullable(surfaceOctaveNoise);
-    }
-    
     /**
      * Generates the base terrain for a given chunk.
      * 
-     * @param chunk
-     * @param structureAccessor Collects structures within the chunk, so that terrain can be modified to accommodate them.
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
      */
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX * 16;

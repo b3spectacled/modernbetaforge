@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.world.World;
@@ -10,7 +10,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class ReleaseSurfaceBuilder extends SurfaceBuilder {
-    public ReleaseSurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public ReleaseSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 

@@ -57,6 +57,9 @@ public class GuiTags {
     public static final int PG0_B_USE_INDEV_CAVES = 134;
     public static final int PG0_B_USE_INDEV_HOUSE = 135;
     
+    public static final int PG0_B_USE_INFDEV_WALLS = 136;
+    public static final int PG0_B_USE_INFDEV_PYRAMIDS = 137;
+    
     // Labels
     public static final int PG0_L_SURFACE_BUILDER = 1000;
     public static final int PG0_L_FIXED_BIOME = 1001;
@@ -65,6 +68,7 @@ public class GuiTags {
     public static final int PG0_L_NETHER_FEATURES = 1004;
     public static final int PG0_L_NETHER_BOP = 1005;
     public static final int PG0_L_INDEV_FEATURES = 1006;
+    public static final int PG0_L_INFDEV_227_FEATURES = 1007;
     
     /* Page 2 */
     

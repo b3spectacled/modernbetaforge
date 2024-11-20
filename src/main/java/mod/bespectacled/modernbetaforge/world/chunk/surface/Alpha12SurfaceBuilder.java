@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -13,7 +13,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class Alpha12SurfaceBuilder extends SurfaceBuilder {
-    public Alpha12SurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public Alpha12SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 
@@ -23,10 +23,6 @@ public class Alpha12SurfaceBuilder extends SurfaceBuilder {
 
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
-        
-        int worldHeight = this.getWorldHeight();
-        int seaLevel = this.getSeaLevel();
-        boolean useSandstone = this.useSandstone();
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         Random sandstoneRandom = this.createSurfaceRandom(chunkX, chunkZ);
@@ -71,10 +67,10 @@ public class Alpha12SurfaceBuilder extends SurfaceBuilder {
                 }
                 
                 // Generate from top to bottom of world
-                for (int y = worldHeight - 1; y >= 0; y--) {
+                for (int y = this.getWorldHeight() - 1; y >= 0; y--) {
                     
                     // Place bedrock
-                    if (y <= random.nextInt(5)) {
+                    if (this.useBedrock() && y <= random.nextInt(5)) {
                         chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                         continue;
                     }
@@ -95,7 +91,7 @@ public class Alpha12SurfaceBuilder extends SurfaceBuilder {
                             topBlock = BlockStates.AIR;
                             fillerBlock = this.defaultBlock;
                             
-                        } else if (y >= seaLevel - 4 && y <= seaLevel + 1) { // Generate beaches at this y range
+                        } else if (y >= this.getSeaLevel() - 4 && y <= this.getSeaLevel() + 1) { // Generate beaches at this y range
                             topBlock = biome.topBlock;
                             fillerBlock = biome.fillerBlock;
 
@@ -110,13 +106,13 @@ public class Alpha12SurfaceBuilder extends SurfaceBuilder {
                             }
                         }
                         
-                        if (y < seaLevel && BlockStates.isAir(topBlock)) {
+                        if (y < this.getSeaLevel() && BlockStates.isAir(topBlock)) {
                             topBlock = this.defaultFluid;
                         }
 
                         runDepth = surfaceDepth;
                         
-                        if (y >= seaLevel - 1) {
+                        if (y >= this.getSeaLevel() - 1) {
                             chunkPrimer.setBlockState(localX, y, localZ, topBlock);
                         } else {
                             chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
@@ -131,7 +127,7 @@ public class Alpha12SurfaceBuilder extends SurfaceBuilder {
                     }
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
-                    if (useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
+                    if (this.useSandstone() && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
                         runDepth = sandstoneRandom.nextInt(4);
                         fillerBlock = fillerBlock.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ?
                             BlockStates.RED_SANDSTONE :

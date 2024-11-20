@@ -5,6 +5,7 @@ public class ModernBetaBuiltInTypes {
         BETA("beta", "Beta"),
         ALPHA("alpha", "Alpha"),
         SKYLANDS("skylands", "Skylands"),
+        INFDEV_227("infdev_227", "Infdev 227"),
         INFDEV_420("infdev_420", "Infdev 420"),
         INFDEV_415("infdev_415", "Infdev 415"),
         INFDEV_611("infdev_611", "Infdev 611"),
@@ -44,6 +45,7 @@ public class ModernBetaBuiltInTypes {
         ALPHA_1_2("alpha_1_2", "Alpha 1.2"),
         SKYLANDS("skylands", "Skylands"),
         INFDEV("infdev", "Infdev"),
+        INFDEV_227("infdev_227", "Infdev 227"),
         PE("pe", "Pocket Ed."),
         RELEASE("release", "Release")
         ;

@@ -18,6 +18,9 @@ public class NbtTags {
     public static final String USE_FORTRESSES = "useFortresses";
     public static final String USE_LAVA_POCKETS = "useLavaPockets";
     
+    public static final String USE_INFDEV_WALLS = "useInfdevWalls";
+    public static final String USE_INFDEV_PYRAMIDS = "useInfdevPyramids";
+    
     public static final String LEVEL_THEME = "levelTheme";
     public static final String LEVEL_TYPE = "levelType";
     public static final String LEVEL_WIDTH = "levelWidth";

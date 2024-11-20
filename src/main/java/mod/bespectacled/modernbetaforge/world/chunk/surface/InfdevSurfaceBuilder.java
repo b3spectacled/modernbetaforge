@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -13,7 +13,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class InfdevSurfaceBuilder extends SurfaceBuilder {
-    public InfdevSurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public InfdevSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 
@@ -23,10 +23,6 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
         
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
-        
-        int worldHeight = this.getWorldHeight();
-        int seaLevel = this.getSeaLevel();
-        boolean useSandstone = this.useSandstone();
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         Random bedrockRandom = this.createSurfaceRandom(chunkX, chunkZ);
@@ -67,10 +63,10 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                     continue;
                 }
                 
-                for (int y = worldHeight - 1; y >= 0; --y) {
+                for (int y = this.getWorldHeight() - 1; y >= 0; --y) {
                     
                     // Place bedrock
-                    if (y <= bedrockRandom.nextInt(5)) {
+                    if (this.useBedrock() && y <= bedrockRandom.nextInt(5)) {
                         chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                         continue;
                     }
@@ -86,7 +82,7 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                                 topBlock = BlockStates.AIR;
                                 fillerBlock = this.defaultBlock;
                                 
-                            } else if (y >= seaLevel - 4 && y <= seaLevel + 1) {
+                            } else if (y >= this.getSeaLevel() - 4 && y <= this.getSeaLevel() + 1) {
                                 topBlock = biome.topBlock;
                                 fillerBlock = biome.fillerBlock;
                                 
@@ -103,11 +99,11 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                             
                             runDepth = surfaceDepth;
                             
-                            if (y < seaLevel && BlockStates.isAir(topBlock)) { // Generate water bodies
+                            if (y < this.getSeaLevel() && BlockStates.isAir(topBlock)) { // Generate water bodies
                                 topBlock = this.defaultFluid;
                             }
                             
-                            blockState = y >= seaLevel - 1 || (y < seaLevel - 1 && BlockStates.isAir(chunkPrimer.getBlockState(localX, y + 1, localZ))) ?
+                            blockState = y >= this.getSeaLevel() - 1 || (y < this.getSeaLevel() - 1 && BlockStates.isAir(chunkPrimer.getBlockState(localX, y + 1, localZ))) ?
                                 topBlock : 
                                 fillerBlock;
                             
@@ -121,7 +117,7 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                     }
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
-                    if (useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
+                    if (this.useSandstone() && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
                         runDepth = sandstoneRandom.nextInt(4);
                         fillerBlock = fillerBlock.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ?
                             BlockStates.RED_SANDSTONE :

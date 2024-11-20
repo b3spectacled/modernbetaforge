@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -13,16 +13,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SkylandsSurfaceBuilder extends SurfaceBuilder {
-    public SkylandsSurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public SkylandsSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
-
-        int worldHeight = this.getWorldHeight();
-        boolean useSandstone = this.useSandstone();
 
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         
@@ -44,7 +41,7 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
                 IBlockState fillerBlock = biome.fillerBlock;
                 
                 // Generate from top to bottom of world
-                for (int y = worldHeight - 1; y >= 0; y--) {
+                for (int y = this.getWorldHeight() - 1; y >= 0; y--) {
                     
                     IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
                     
@@ -82,7 +79,7 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
                     chunkPrimer.setBlockState(localX, y, localZ, fillerBlock);
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
-                    if (useSandstone && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
+                    if (this.useSandstone() && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
                         runDepth = random.nextInt(4);
                         fillerBlock = fillerBlock.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ?
                             BlockStates.RED_SANDSTONE :

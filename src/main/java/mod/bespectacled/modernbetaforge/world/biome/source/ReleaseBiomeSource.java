@@ -26,12 +26,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
     public ReleaseBiomeSource(WorldInfo worldInfo) {
         super(worldInfo);
         
-        this.biomeCache = new ChunkCache<>(
-            "biome",
-            512,
-            true,
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes)
-        );
+        this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         
         String generatorOptions = worldInfo.getGeneratorOptions();
         ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.buildSettings(generatorOptions);

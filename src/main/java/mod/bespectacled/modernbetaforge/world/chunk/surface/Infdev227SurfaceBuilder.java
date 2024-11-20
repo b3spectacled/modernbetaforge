@@ -12,47 +12,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
-public class BetaSurfaceBuilder extends SurfaceBuilder {
-    public BetaSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+public class Infdev227SurfaceBuilder extends SurfaceBuilder {    
+    public Infdev227SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        double scale = 0.03125;
+        int depth = 1;
         
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
-        
-        double[] sandNoise = this.getBeachOctaveNoise().sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0, 
-            16, 16, 1,
-            scale, scale, 1.0
-        );
-        
-        double[] gravelNoise = this.getBeachOctaveNoise().sampleBeta(
-            chunkX * 16, 109.0134, chunkZ * 16, 
-            16, 1, 16, 
-            scale, 1.0, scale
-        );
-        
-        double[] surfaceNoise = this.getSurfaceOctaveNoise().sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0, 
-            16, 16, 1,
-            scale * 2.0, scale * 2.0, scale * 2.0
-        );
 
         for (int localZ = 0; localZ < 16; localZ++) {
             for (int localX = 0; localX < 16; localX++) {
                 int x = startX + localX;
                 int z = startZ + localZ;
                 
-                boolean genSandBeach = sandNoise[localZ + localX * 16] + random.nextDouble() * 0.2 > 0.0;
-                boolean genGravelBeach = gravelNoise[localZ + localX * 16] + random.nextDouble() * 0.2 > 3.0;
-                
-                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + random.nextDouble() * 0.25);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
@@ -86,30 +64,11 @@ public class BetaSurfaceBuilder extends SurfaceBuilder {
                     }
 
                     if (runDepth == -1) {
-                        if (surfaceDepth <= 0) { // Generate stone basin if noise permits
-                            topBlock = BlockStates.AIR;
-                            fillerBlock = this.defaultBlock;
-                            
-                        } else if (y >= this.getSeaLevel() - 4 && y <= this.getSeaLevel() + 1) { // Generate beaches at this y range
-                            topBlock = biome.topBlock;
-                            fillerBlock = biome.fillerBlock;
-
-                            if (genGravelBeach) {
-                                topBlock = BlockStates.AIR; // This reduces gravel beach height by 1
-                                fillerBlock = BlockStates.GRAVEL;
-                            }
-
-                            if (genSandBeach) {
-                                topBlock = BlockStates.SAND;
-                                fillerBlock = BlockStates.SAND;
-                            }
-                        }
-
                         if (y < this.getSeaLevel() && BlockStates.isAir(topBlock)) { // Generate water bodies
                             topBlock = this.defaultFluid;
                         }
 
-                        runDepth = surfaceDepth;
+                        runDepth = depth;
                         
                         if (y >= this.getSeaLevel() - 1) {
                             chunkPrimer.setBlockState(localX, y, localZ, topBlock);
@@ -129,7 +88,7 @@ public class BetaSurfaceBuilder extends SurfaceBuilder {
 
                     // Generates layer of sandstone starting at lowest block of sand, of height 1 to 4.
                     if (this.useSandstone() && runDepth == 0 && BlockStates.isEqual(fillerBlock, BlockStates.SAND)) {
-                        runDepth = random.nextInt(4);
+                        runDepth = random.nextInt(2);
                         fillerBlock = fillerBlock.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ?
                             BlockStates.RED_SANDSTONE :
                             BlockStates.SANDSTONE;

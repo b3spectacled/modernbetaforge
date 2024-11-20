@@ -28,12 +28,7 @@ public class PEClimateSampler {
         this.rainOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 39811L), 4, true);
         this.detailOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 543321L), 2, true);
         
-        this.climateCache = new ChunkCache<>(
-            "climate", 
-            512, 
-            true, 
-            (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise)
-        );
+        this.climateCache = new ChunkCache<>("climate", (chunkX, chunkZ) -> new ClimateChunk(chunkX, chunkZ, this::sampleClimateNoise));
         
         this.tempScale = 0.025 / settings.tempNoiseScale;
         this.rainScale = 0.050 / settings.rainNoiseScale;

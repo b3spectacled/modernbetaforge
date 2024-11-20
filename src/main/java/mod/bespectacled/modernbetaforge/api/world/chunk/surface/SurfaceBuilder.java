@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
@@ -32,7 +32,7 @@ public abstract class SurfaceBuilder {
     protected final IBlockState defaultFluid;
     
     private final World world;
-    private final NoiseChunkSource chunkSource;
+    private final ChunkSource chunkSource;
     private final ModernBetaChunkGeneratorSettings settings;
     private final SimplexOctaveNoise vanillaSurfaceOctaveNoise;
     private final PerlinOctaveNoise defaultBeachOctaveNoise;
@@ -44,7 +44,7 @@ public abstract class SurfaceBuilder {
         ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
-    public SurfaceBuilder(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
         
@@ -100,11 +100,19 @@ public abstract class SurfaceBuilder {
     }
     
     protected int getSeaLevel() {
-        return this.settings.seaLevel;
+        return this.chunkSource.getSeaLevel();
     }
     
     protected boolean useSandstone() {
         return this.settings.useSandstone;
+    }
+    
+    /*
+     * Probably won't add a 'useBedrock' setting to maintain congruous bedrock generation when using custom surfaces
+     * 
+     */
+    protected boolean useBedrock() {
+        return true;
     }
     
     /**
@@ -127,13 +135,14 @@ public abstract class SurfaceBuilder {
      * Also generates ocean floor surfaces if used with ReleaseChunkSource.
      * 
      * @param biome Biome with surface builder to use.
-     * @param random
-     * @param override TODO
-     * @param biomeId Biome identifier, used to check if it uses valid custom surface builder.
-     * @param region
-     * @param chunk
-     * @param mutable Mutable BlockPos at block coordinates position.
+     * @param chunkPrimer Chunk primer.
+     * @param random Random
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param override Force usage of vanilla surface builder.
+     * 
      * @return True if biome is included in valid biomes set and has run surface builder. False if not included and not run.
+     * 
      */
     protected boolean useCustomSurfaceBuilder(Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
         if (this.chunkSource instanceof ReleaseChunkSource) {

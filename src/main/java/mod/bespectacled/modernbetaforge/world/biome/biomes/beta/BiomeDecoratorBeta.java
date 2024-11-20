@@ -72,7 +72,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
             int plantCount = this.getTallGrassCount(biome);
 
-            this.populateTallGrass(world, random, biome, startPos, mutablePos, plantCount, settings.height);
+            this.populateTallGrassCount(world, random, biome, startPos, mutablePos, plantCount, settings.height);
         }
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {

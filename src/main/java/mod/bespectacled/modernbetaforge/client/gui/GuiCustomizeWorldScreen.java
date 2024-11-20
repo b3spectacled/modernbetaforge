@@ -230,6 +230,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
             new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
             
+            new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_INFDEV_227_FEATURES, I18n.format(PREFIX + "infdev227FeaturesLabel"), true),
+            null,
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INFDEV_WALLS, I18n.format(PREFIX + NbtTags.USE_INFDEV_WALLS), true, this.settings.useInfdevWalls),
+            new GuiPageButtonList.GuiButtonEntry(GuiTags.PG0_B_USE_INFDEV_PYRAMIDS, I18n.format(PREFIX + NbtTags.USE_INFDEV_PYRAMIDS), true, this.settings.useInfdevPyramids),
+            
             new GuiPageButtonList.GuiLabelEntry(GuiTags.PG0_L_INDEV_FEATURES, I18n.format(PREFIX + "indevFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiTags.PG0_S_LEVEL_THEME, I18n.format(PREFIX + NbtTags.LEVEL_THEME), true, this, 0f, IndevTheme.values().length - 1, levelThemeId),
@@ -1155,6 +1160,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 this.settings.useIndevHouse = entryValue;
                 break;
                 
+            case GuiTags.PG0_B_USE_INFDEV_WALLS:
+                this.settings.useInfdevWalls = entryValue;
+                break;
+            case GuiTags.PG0_B_USE_INFDEV_PYRAMIDS:
+                this.settings.useInfdevPyramids = entryValue;
+                break;
+                
             case GuiTags.PG3_B_USE_BDS:
                 this.settings.useBiomeDepthScale = entryValue;
                 break;
@@ -1871,6 +1883,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             boolean isBetaBiome = biome instanceof BiomeBeta;
             boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
             boolean isIndev = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+            boolean isInfdev227 = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.id);
 
             this.setButtonEnabled(GuiTags.PG0_S_SURFACE, !(isSkylands || isIndev));
             this.setButtonEnabled(GuiTags.PG0_S_CARVER, this.settings.useCaves);
@@ -1893,6 +1906,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             this.setButtonEnabled(GuiTags.PG0_S_LAVA_LAKE_CHANCE, this.settings.useLavaLakes);
             this.setButtonEnabled(GuiTags.PG0_B_USE_VILLAGE_VARIANTS, this.settings.useVillages);
             this.setButtonEnabled(GuiTags.PG0_B_USE_SANDSTONE, !(isReleaseSurface || isIndev));
+            this.setButtonEnabled(GuiTags.PG0_B_USE_INFDEV_WALLS, isInfdev227);
+            this.setButtonEnabled(GuiTags.PG0_B_USE_INFDEV_PYRAMIDS, isInfdev227);
             this.setButtonEnabled(GuiTags.PG1_B_USE_MODDED_BIOMES, isReleaseBiomeSource);
             
             this.setChunkSettingsEnabled(chunkSource);
@@ -1985,7 +2000,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     }
     
     static {
-
         USED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.BETA.id,
             ImmutableList.of(
@@ -2134,6 +2148,13 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         USED_CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INDEV.id,
             ImmutableList.of()
+        );
+        
+        USED_CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
+            ImmutableList.of(
+                GuiTags.PG3_S_HEIGH_LIM
+            )
         );
     }
 }

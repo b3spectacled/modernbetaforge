@@ -18,6 +18,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
@@ -87,6 +88,8 @@ public abstract class ChunkSource {
     private final BiomeInjector biomeInjector;
     private final ChunkCache<ChunkContainer> chunkCache;
     
+    private Optional<PerlinOctaveNoise> beachOctaveNoise;
+    private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     
     public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, ModernBetaNoiseSettings noiseSettings, long seed, boolean mapFeaturesEnabled) {
@@ -121,8 +124,6 @@ public abstract class ChunkSource {
         
         this.chunkCache = new ChunkCache<>(
             "chunk_primer",
-            512,
-            true,
             (chunkX, chunkZ) -> {
                 int startX = chunkX * 16;
                 int startZ = chunkZ * 16;
@@ -148,9 +149,11 @@ public abstract class ChunkSource {
             }
         );
         
+        this.beachOctaveNoise = Optional.empty();
+        this.surfaceOctaveNoise = Optional.empty();
         this.forestOctaveNoise = Optional.empty();
 
-        // Important for correct structure spawning when y < seaLevel, e.g. villages
+        // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         this.world.setSeaLevel(this.settings.seaLevel);
         
         // Set default cloud height
@@ -547,6 +550,14 @@ public abstract class ChunkSource {
         return SpawnLocator.DEFAULT;
     }
     
+    public Optional<PerlinOctaveNoise> getBeachOctaveNoise() {
+        return this.beachOctaveNoise;
+    }
+    
+    public Optional<PerlinOctaveNoise> getSurfaceOctaveNoise() {
+        return this.surfaceOctaveNoise;
+    }
+    
     public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
         return this.forestOctaveNoise;
     }
@@ -564,6 +575,17 @@ public abstract class ChunkSource {
     }
     
     protected void pruneChunk(int chunkX, int chunkZ) { }
+    
+    protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
+        this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
+        
+        // Set beach noise for builtin Modern Biome surface builder
+        ModernBetaBiome.setBeachOctaveNoise(beachOctaveNoise);
+    }
+    
+    protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {
+        this.surfaceOctaveNoise = Optional.ofNullable(surfaceOctaveNoise);
+    }
     
     protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
         this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);

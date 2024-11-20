@@ -13,6 +13,7 @@ createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
 createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
 createWorld.customize.custom.netherFeaturesLabel=Nether Settings
 createWorld.customize.custom.netherBoPLabel=BoP is detected, Classic Nether is incompatible.
+createWorld.customize.custom.infdev227FeaturesLabel=Infdev 20100227 Settings
 createWorld.customize.custom.indevFeaturesLabel=Indev Settings
 createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
@@ -41,6 +42,10 @@ createWorld.customize.custom.useOldNether=Classic Nether
 createWorld.customize.custom.useNetherCaves=Nether Caves
 createWorld.customize.custom.useFortresses=Nether Fortresses
 createWorld.customize.custom.useLavaPockets=Lava Pockets
+
+# Page 1 - Infdev 227 Settings
+createWorld.customize.custom.useInfdevWalls=Infdev Obsidian Walls
+createWorld.customize.custom.useInfdevPyramids=Infdev Brick Pyramids
 
 # Page 1 - Indev Settings
 createWorld.customize.custom.levelTheme=Level Theme
@@ -103,6 +108,7 @@ createWorld.customize.custom.preset.classicBeta=Classic Beta
 createWorld.customize.custom.preset.classicAlpha12=Classic Alpha 1.2
 createWorld.customize.custom.preset.classicAlpha=Classic Alpha
 createWorld.customize.custom.preset.classicAlphaWinter=Classic Alpha Winter
+createWorld.customize.custom.preset.classicInfdev227=Classic Infdev 20100227
 createWorld.customize.custom.preset.classicInfdev415=Classic Infdev 20100415
 createWorld.customize.custom.preset.classicInfdev420=Classic Infdev 20100420
 createWorld.customize.custom.preset.classicInfdev611=Classic Infdev 20100611
@@ -120,6 +126,7 @@ createWorld.customize.custom.preset.info.classicBeta=Based on Minecraft Beta 1.7
 createWorld.customize.custom.preset.info.classicAlpha12=Based on Minecraft Alpha 1.2.6
 createWorld.customize.custom.preset.info.classicAlpha=Based on Minecraft Alpha 1.1.2_01
 createWorld.customize.custom.preset.info.classicAlphaWinter=Based on Minecraft Alpha 1.1.2_01
+createWorld.customize.custom.preset.info.classicInfdev227=Based on Minecraft Infdev 20100227
 createWorld.customize.custom.preset.info.classicInfdev415=Based on Minecraft Infdev 20100415
 createWorld.customize.custom.preset.info.classicInfdev420=Based on Minecraft Infdev 20100420
 createWorld.customize.custom.preset.info.classicInfdev611=Based on Minecraft Infdev 20100611

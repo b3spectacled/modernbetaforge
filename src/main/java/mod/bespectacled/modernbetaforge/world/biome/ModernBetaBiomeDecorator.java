@@ -147,11 +147,29 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateTallGrass(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
+    protected void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
         for (int i = 0; i < count; ++i) {
+            BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
+            if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
+                tallGrassType = BlockTallGrass.EnumType.FERN;
+            }
+            
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    protected void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        
+        if (random.nextInt(chance) == 0) {
             BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
             if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
                 tallGrassType = BlockTallGrass.EnumType.FERN;

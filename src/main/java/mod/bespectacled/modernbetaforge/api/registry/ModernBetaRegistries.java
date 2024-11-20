@@ -2,7 +2,6 @@ package mod.bespectacled.modernbetaforge.api.registry;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -48,6 +47,6 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface SurfaceBuilderCreator {
-        SurfaceBuilder apply(World world, NoiseChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
+        SurfaceBuilder apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
     }
 }

@@ -84,6 +84,9 @@ public class ModernBetaChunkGeneratorSettings {
     public final boolean useFortresses;
     public final boolean useLavaPockets;
     
+    public final boolean useInfdevWalls;
+    public final boolean useInfdevPyramids;
+    
     public final String levelTheme;
     public final String levelType;
     public final int levelWidth;
@@ -297,6 +300,9 @@ public class ModernBetaChunkGeneratorSettings {
         this.useFortresses = factory.useFortresses;
         this.useLavaPockets = factory.useLavaPockets;
         
+        this.useInfdevWalls = factory.useInfdevWalls;
+        this.useInfdevPyramids = factory.useInfdevPyramids;
+        
         this.levelTheme = factory.levelTheme;
         this.levelType = factory.levelType;
         this.levelLength = factory.levelLength;
@@ -500,6 +506,9 @@ public class ModernBetaChunkGeneratorSettings {
         public boolean useNetherCaves;
         public boolean useFortresses;
         public boolean useLavaPockets;
+        
+        public boolean useInfdevWalls;
+        public boolean useInfdevPyramids;
         
         public String levelTheme;
         public String levelType;
@@ -724,6 +733,9 @@ public class ModernBetaChunkGeneratorSettings {
             this.useFortresses = true;
             this.useLavaPockets = true;
             
+            this.useInfdevWalls = true;
+            this.useInfdevPyramids = true;
+            
             this.levelTheme = IndevTheme.NORMAL.id;
             this.levelType = IndevType.ISLAND.id;
             this.levelWidth = 256;
@@ -945,6 +957,9 @@ public class ModernBetaChunkGeneratorSettings {
                 this.useFortresses == factory.useFortresses &&
                 this.useLavaPockets == factory.useLavaPockets &&
                 
+                this.useInfdevWalls == factory.useInfdevWalls &&
+                this.useInfdevPyramids == factory.useInfdevPyramids &&
+                
                 this.levelTheme.equals(factory.levelTheme) &&
                 this.levelType.equals(factory.levelType) &&
                 this.levelWidth == factory.levelWidth &&
@@ -1155,6 +1170,9 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + (this.useNetherCaves ? 1 : 0);
             hashCode = 31 * hashCode + (this.useFortresses ? 1 : 0);
             hashCode = 31 * hashCode + (this.useLavaPockets ? 1 : 0);
+
+            hashCode = 31 * hashCode + (this.useInfdevWalls ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useInfdevPyramids ? 1 : 0);
             
             hashCode = 31 * hashCode + this.levelTheme.hashCode();
             hashCode = 31 * hashCode + this.levelType.hashCode();
@@ -1381,6 +1399,9 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.useFortresses = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FORTRESSES, factory.useFortresses);
                 factory.useLavaPockets = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
                 
+                factory.useInfdevWalls = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INFDEV_WALLS, factory.useInfdevWalls);
+                factory.useInfdevPyramids = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INFDEV_PYRAMIDS, factory.useInfdevPyramids);
+                
                 factory.levelTheme = JsonUtils.getString(jsonObject, NbtTags.LEVEL_THEME, factory.levelTheme);
                 factory.levelType = JsonUtils.getString(jsonObject, NbtTags.LEVEL_TYPE, factory.levelType);
                 factory.levelWidth = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_WIDTH, factory.levelWidth);
@@ -1595,6 +1616,9 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
             jsonObject.addProperty(NbtTags.USE_FORTRESSES, factory.useFortresses);
             jsonObject.addProperty(NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
+            
+            jsonObject.addProperty(NbtTags.USE_INFDEV_WALLS, factory.useInfdevWalls);
+            jsonObject.addProperty(NbtTags.USE_INFDEV_PYRAMIDS, factory.useInfdevPyramids);
             
             jsonObject.addProperty(NbtTags.LEVEL_THEME, factory.levelTheme);
             jsonObject.addProperty(NbtTags.LEVEL_TYPE, factory.levelType);

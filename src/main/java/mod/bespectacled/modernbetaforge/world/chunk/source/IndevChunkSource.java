@@ -55,7 +55,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.levelType = IndevType.fromId(settings.levelType);
         this.seaLevel = this.levelType == IndevType.FLOATING ? 0 : this.levelHeight - 32;
 
-        int cloudHeight =this.levelType == IndevType.FLOATING ?
+        int cloudHeight = this.levelType == IndevType.FLOATING ?
             -16 :
             this.levelTheme == IndevTheme.PARADISE ?
                 this.levelHeight + 64 :
@@ -483,7 +483,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                             block = biome.topBlock.getBlock();
                             
                         } else { // Handles Island levels
-                            block = Blocks.DIRT;
+                            block = biome.fillerBlock.getBlock();
                             
                         }
                     } else if (y < this.waterLevel) { // Handles Island levels
