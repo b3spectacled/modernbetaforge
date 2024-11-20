@@ -55,6 +55,9 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.levelType = IndevType.fromId(settings.levelType);
         this.seaLevel = this.levelType == IndevType.FLOATING ? 0 : this.levelHeight - 32;
 
+        // Update sea level to reflect real sea level
+        this.world.setSeaLevel(this.getSeaLevel());
+
         int cloudHeight = this.levelType == IndevType.FLOATING ?
             -16 :
             this.levelTheme == IndevTheme.PARADISE ?
