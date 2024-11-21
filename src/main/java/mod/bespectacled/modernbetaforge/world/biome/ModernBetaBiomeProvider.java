@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -35,9 +36,12 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         this.biomeCache = new ChunkCache<BiomeChunk>(
             "biomes",
             (chunkX, chunkZ) -> {
-                // Pregenerate chunk primer so we can retrieve post-injection biome map
-                this.chunkSource.initChunk(chunkX, chunkZ);
-                return new BiomeChunk(this.chunkSource.getBiomes(chunkX, chunkZ));
+                // No need to pregenerate chunk if we know all the biomes will be the same (single biome)
+                Biome[] biomes = this.biomeSource instanceof SingleBiomeSource ?
+                    this.getBaseBiomes(null, chunkX << 4, chunkZ << 4, 16, 16) :
+                    this.chunkSource.getBiomes(chunkX, chunkZ);
+                
+                return new BiomeChunk(biomes);
             }
         );
         

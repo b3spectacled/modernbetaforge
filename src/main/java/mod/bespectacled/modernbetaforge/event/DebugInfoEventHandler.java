@@ -59,13 +59,6 @@ public class DebugInfoEventHandler {
                 String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
                 String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceBuilderName);
                 String fixedBiomeText = String.format("[Modern Beta] Fixed Biome: %s", fixedBiome);
-                
-                String heightmapText = String.format(
-                    "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE),
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
-                    chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
-                );
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 event.getLeft().add(sourceText);
@@ -73,8 +66,19 @@ public class DebugInfoEventHandler {
                 
                 if (biomeSourceName.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id))
                     event.getLeft().add(fixedBiomeText);
-                
-                event.getLeft().add(heightmapText);
+
+                if (!(chunkSource instanceof FiniteChunkSource) ||
+                    chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).hasPregenerated()
+                ) {
+                    String heightmapText = String.format(
+                        "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE),
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
+                    );
+                    
+                    event.getLeft().add(heightmapText);
+                }
                 event.getLeft().add(seaLevelText);
                 
                 if (chunkSource instanceof ReleaseChunkSource) {
@@ -94,15 +98,18 @@ public class DebugInfoEventHandler {
                     
                     String finiteInLevelText = String.format("[Modern Beta] In Finite Level: %b", inLevel);
                     String finiteCoordsText = String.format("[Modern Beta] Finite XYZ: %d / %d / %d", x + offsetX, y, z + offsetZ);
-                    String finiteHeightmapText = String.format("[Modern Beta] Finite Surface Height: %d Ocean Height: %d Floor Height: %d",
-                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.SURFACE),
-                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.OCEAN),
-                        finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.FLOOR)
-                    );
 
                     event.getLeft().add(finiteInLevelText);
                     event.getLeft().add(finiteCoordsText);
-                    event.getLeft().add(finiteHeightmapText);
+                    
+                    if (finiteChunkSource.hasPregenerated()) {
+                        String finiteHeightmapText = String.format("[Modern Beta] Finite Surface Height: %d Ocean Height: %d Floor Height: %d",
+                            finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.SURFACE),
+                            finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.OCEAN),
+                            finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.FLOOR)
+                        );
+                        event.getLeft().add(finiteHeightmapText);
+                    }
                 }
             }
             

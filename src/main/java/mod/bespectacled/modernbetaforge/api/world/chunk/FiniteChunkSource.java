@@ -210,6 +210,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         return false;
     }
+    
+    public boolean hasPregenerated() {
+        return this.pregenerated;
+    }
 
     @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {

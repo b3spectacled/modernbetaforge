@@ -562,6 +562,10 @@ public abstract class ChunkSource {
         return this.forestOctaveNoise;
     }
     
+    public World getWorld() {
+        return this.world;
+    }
+    
     protected void setCloudHeight(int cloudHeight) {
         ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }
