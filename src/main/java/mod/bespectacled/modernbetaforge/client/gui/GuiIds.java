@@ -1,8 +1,13 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.Set;
+import java.util.function.BiPredicate;
+
+import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
@@ -21,8 +26,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class GuiIds {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
-    
-    public static final Map<Integer, Predicate<ModernBetaChunkGeneratorSettings.Factory>> GUI_IDS = new HashMap<>();
+    private static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
+    private static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
     
     /* Function Buttons */
     
@@ -237,9 +242,9 @@ public class GuiIds {
     public static final int PG3_S_B_SCL_WT = 415;
     public static final int PG3_S_B_SCL_OF = 416;
     public static final int PG3_S_RIVER_SZ = 417;
-    public static final int PG3_B_USE_BDS = 418;
+    public static final int PG3_S_BIOME_SZ = 418;
+    public static final int PG3_B_USE_BDS = 419;
 
-    public static final int PG3_S_BIOME_SZ = 450;
     public static final int PG3_S_TEMP_SCL = 451;
     public static final int PG3_S_RAIN_SCL = 452;
     public static final int PG3_S_DETL_SCL = 453;
@@ -268,9 +273,9 @@ public class GuiIds {
     public static final int PG4_F_B_DPTH_OF = 514;
     public static final int PG4_F_B_SCL_WT = 515;
     public static final int PG4_F_B_SCL_OF = 516;
-    public static final int PG4_F_RIVER_SZ = 527;
+    public static final int PG4_F_RIVER_SZ = 517;
+    public static final int PG4_F_BIOME_SZ = 518;
 
-    public static final int PG4_F_BIOME_SZ = 550;
     public static final int PG4_F_TEMP_SCL = 551;
     public static final int PG4_F_RAIN_SCL = 552;
     public static final int PG4_F_DETL_SCL = 553;
@@ -396,6 +401,18 @@ public class GuiIds {
         assertOffset(PG3_S_B_SCL_OF, PG4_F_B_SCL_OF);
     }
     
+    public static Set<Integer> getGuiIds() {
+        return GUI_IDS.keySet();
+    }
+    
+    public static boolean test(Factory factory, int id) {
+        if (GUI_IDS.containsKey(id)) {
+            return GUI_IDS.get(id).test(factory, id);
+        }
+        
+        return false;
+    }
+    
     private static void assertOffset(int sliderId, int fieldId) {
         if (sliderId != offsetBackward(fieldId)) {
             String errorStr = String.format("[Modern Beta] GUI slider id %d not correctly offset with field id %d!", sliderId, fieldId);
@@ -405,10 +422,10 @@ public class GuiIds {
     }
     
     private static void add(int id) {
-        add(id, (factory) -> true);
+        add(id, (factory, guiId) -> true);
     }
     
-    private static void add(int id, Predicate<ModernBetaChunkGeneratorSettings.Factory> predicate) {
+    private static void add(int id, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer> predicate) {
         if (GUI_IDS.containsKey(id)) {
             String errorStr = String.format("[Modern Beta] GUI id %d has already been registered!", id);
             
@@ -419,7 +436,164 @@ public class GuiIds {
     }
     
     static {
-        Predicate<Factory> testSurface = factory -> {
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.BETA.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.ALPHA.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.PE.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_MAIN_NS_X,
+                GuiIds.PG3_S_MAIN_NS_Y,
+                GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
+                GuiIds.PG3_S_COORD_SCL,
+                GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
+                GuiIds.PG3_S_UPPER_LIM,
+                GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM,
+                
+                GuiIds.PG3_S_B_DPTH_WT,
+                GuiIds.PG3_S_B_DPTH_OF,
+                GuiIds.PG3_S_B_SCL_WT,
+                GuiIds.PG3_S_B_SCL_OF,
+                GuiIds.PG3_S_BIOME_SZ,
+                GuiIds.PG3_S_RIVER_SZ,
+                
+                GuiIds.PG3_B_USE_BDS
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INDEV.id,
+            ImmutableList.of()
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
+            ImmutableList.of(
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
             String chunkSource = factory.chunkSource;
             
             boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
@@ -427,36 +601,36 @@ public class GuiIds {
             
             return !isIndev && !isSkylands;
         };
-        Predicate<Factory> testCarver = factory -> factory.useCaves;
-        Predicate<Factory> testFixed = factory -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
-        Predicate<Factory> testBiomeReplacement = factory -> {
+        BiPredicate<Factory, Integer> testCarver = (factory, id) -> factory.useCaves;
+        BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+        BiPredicate<Factory, Integer> testBiomeReplacement = (factory, id) -> {
             boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             boolean isSkylands = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
             
             return !isFixedBiomeSource && !isSkylands;
         };
-        Predicate<Factory> testClassicNetherBoP = factory -> !ModCompat.isBoPLoaded();
-        Predicate<Factory> testClassicNether = factory -> factory.useOldNether && !ModCompat.isBoPLoaded();
-        Predicate<Factory> testDungeons = factory -> factory.useDungeons;
-        Predicate<Factory> testWaterLakes = factory -> factory.useWaterLakes;
-        Predicate<Factory> testLavaLakes = factory -> factory.useLavaLakes;
-        Predicate<Factory> testVillageVariants = factory -> {
+        BiPredicate<Factory, Integer> testClassicNetherBoP = (factory, id) -> !ModCompat.isBoPLoaded();
+        BiPredicate<Factory, Integer> testClassicNether = (factory, id) -> factory.useOldNether && !ModCompat.isBoPLoaded();
+        BiPredicate<Factory, Integer> testDungeons = (factory, id) -> factory.useDungeons;
+        BiPredicate<Factory, Integer> testWaterLakes = (factory, id) -> factory.useWaterLakes;
+        BiPredicate<Factory, Integer> testLavaLakes = (factory, id) -> factory.useLavaLakes;
+        BiPredicate<Factory, Integer> testVillageVariants = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             boolean hasVillages = isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
             
             return hasVillages && factory.useVillages;
         };
-        Predicate<Factory> testSandstone = factory -> {
+        BiPredicate<Factory, Integer> testSandstone = (factory, id) -> {
             boolean isReleaseSurface = factory.surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
             boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
             
             return !isReleaseSurface && !isIndev;
         };
-        Predicate<Factory> testIndev = factory -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
-        Predicate<Factory> testInfdev227 = factory -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.id);
-        Predicate<Factory> testReleaseBiomeSource = factory -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
-        Predicate<Factory> testBetaBiomeFeature = factory -> {
+        BiPredicate<Factory, Integer> testIndev = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+        BiPredicate<Factory, Integer> testInfdev227 = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.id);
+        BiPredicate<Factory, Integer> testReleaseBiomeSource = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+        BiPredicate<Factory, Integer> testBetaBiomeFeature = (factory, id) -> {
             String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             
@@ -468,7 +642,7 @@ public class GuiIds {
             
             return isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome);
         };
-        Predicate<Factory> testModernBetaBiomeFeature = factory -> {
+        BiPredicate<Factory, Integer> testModernBetaBiomeFeature = (factory, id) -> {
             String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             
@@ -480,7 +654,7 @@ public class GuiIds {
             
             return isBetaOrPEBiomeSource || (isFixedBiomeSource && isModernBetaBiome);
         };
-        Predicate<Factory> testModernBetaOre = factory -> {
+        BiPredicate<Factory, Integer> testModernBetaOre = (factory, id) -> {
             String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
 
@@ -488,40 +662,39 @@ public class GuiIds {
             boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
             
-            
             return (isFixedBiomeSource && isModernBetaBiome) ||  (!isReleaseBiomeSource && !isFixedBiomeSource);
         };
-        Predicate<Factory> testStrongholds = factory -> {
+        BiPredicate<Factory, Integer> testStrongholds = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             
             return isFixed ? STRONGHOLD.allowedBiomes.contains(biome) : true;
         };
-        Predicate<Factory> testVillages = factory -> {
+        BiPredicate<Factory, Integer> testVillages = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             
             return isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
         };
-        Predicate<Factory> testTemples = factory -> {
+        BiPredicate<Factory, Integer> testTemples = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             
             return isFixed ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
         };
-        Predicate<Factory> testMonuments = factory -> {
+        BiPredicate<Factory, Integer> testMonuments = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             
             return isFixed ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
         };
-        Predicate<Factory> testMansions = factory -> {
+        BiPredicate<Factory, Integer> testMansions = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
             
             return isFixed ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
         };
-        Predicate<Factory> testCustomBetaBiomes = factory -> {
+        BiPredicate<Factory, Integer> testCustomBetaBiomes = (factory, id) -> {
             String biomeSource = factory.biomeSource;
             boolean isBetaOrPEBiomeSource = 
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
@@ -529,13 +702,13 @@ public class GuiIds {
             
             return isBetaOrPEBiomeSource;
         };
-        Predicate<Factory> testBiomeSize = factory -> {
+        BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
             String chunkSource = factory.chunkSource;
             String biomeSource = factory.biomeSource;
             
             return chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) || biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
         };
-        Predicate<Factory> testClimateScales = factory -> {
+        BiPredicate<Factory, Integer> testClimateScales = (factory, id) -> {
             String chunkSource = factory.chunkSource;
             String biomeSource = factory.biomeSource;
 
@@ -544,6 +717,17 @@ public class GuiIds {
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+        };
+        BiPredicate<Factory, Integer> testChunkSettings = (factory, id) -> {
+            boolean enabled = false;
+            
+            if (id >= GuiIds.PG3_S_MAIN_NS_X && id <= GuiIds.PG3_B_USE_BDS) {
+                enabled = CHUNK_SETTINGS.get(factory.chunkSource).contains(id);
+            } else if (id >= offsetForward(GuiIds.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIds.PG3_B_USE_BDS)) {
+                enabled = CHUNK_SETTINGS.get(factory.chunkSource).contains(offsetBackward(id));
+            }
+            
+            return enabled;
         };
         
         add(PG0_S_CHUNK);
@@ -684,55 +868,55 @@ public class GuiIds {
         add(PG2_S_MGMA_SIZE, testClassicNether);
         add(PG2_S_MGMA_CNT, testClassicNether);
         
-        add(PG3_S_MAIN_NS_X);
-        add(PG3_S_MAIN_NS_Y);
-        add(PG3_S_MAIN_NS_Z);
-        add(PG3_S_DPTH_NS_X);
-        add(PG3_S_DPTH_NS_Z);
-        add(PG3_S_BASE_SIZE);
-        add(PG3_S_COORD_SCL);
-        add(PG3_S_HEIGH_SCL);
-        add(PG3_S_STRETCH_Y);
-        add(PG3_S_UPPER_LIM);
-        add(PG3_S_LOWER_LIM);
-        add(PG3_S_HEIGH_LIM);
+        add(PG3_S_MAIN_NS_X, testChunkSettings);
+        add(PG3_S_MAIN_NS_Y, testChunkSettings);
+        add(PG3_S_MAIN_NS_Z, testChunkSettings);
+        add(PG3_S_DPTH_NS_X, testChunkSettings);
+        add(PG3_S_DPTH_NS_Z, testChunkSettings);
+        add(PG3_S_BASE_SIZE, testChunkSettings);
+        add(PG3_S_COORD_SCL, testChunkSettings);
+        add(PG3_S_HEIGH_SCL, testChunkSettings);
+        add(PG3_S_STRETCH_Y, testChunkSettings);
+        add(PG3_S_UPPER_LIM, testChunkSettings);
+        add(PG3_S_LOWER_LIM, testChunkSettings);
+        add(PG3_S_HEIGH_LIM, testChunkSettings);
         
         add(PG3_S_TEMP_SCL, testClimateScales);
         add(PG3_S_RAIN_SCL, testClimateScales);
         add(PG3_S_DETL_SCL, testClimateScales);
         
-        add(PG3_S_B_DPTH_WT);
-        add(PG3_S_B_DPTH_OF);
-        add(PG3_S_B_SCL_WT);
-        add(PG3_S_B_SCL_OF);
+        add(PG3_S_B_DPTH_WT, testChunkSettings);
+        add(PG3_S_B_DPTH_OF, testChunkSettings);
+        add(PG3_S_B_SCL_WT, testChunkSettings);
+        add(PG3_S_B_SCL_OF, testChunkSettings);
         add(PG3_S_BIOME_SZ, testBiomeSize);
-        add(PG3_S_RIVER_SZ);
+        add(PG3_S_RIVER_SZ, testChunkSettings);
         
-        add(PG3_B_USE_BDS);
+        add(PG3_B_USE_BDS, testChunkSettings);
         
-        add(PG4_F_MAIN_NS_X);
-        add(PG4_F_MAIN_NS_Y);
-        add(PG4_F_MAIN_NS_Z);
-        add(PG4_F_DPTH_NS_X);
-        add(PG4_F_DPTH_NS_Z);
-        add(PG4_F_BASE_SIZE);
-        add(PG4_F_COORD_SCL);
-        add(PG4_F_HEIGH_SCL);
-        add(PG4_F_STRETCH_Y);
-        add(PG4_F_UPPER_LIM);
-        add(PG4_F_LOWER_LIM);
-        add(PG4_F_HEIGH_LIM);
+        add(PG4_F_MAIN_NS_X, testChunkSettings);
+        add(PG4_F_MAIN_NS_Y, testChunkSettings);
+        add(PG4_F_MAIN_NS_Z, testChunkSettings);
+        add(PG4_F_DPTH_NS_X, testChunkSettings);
+        add(PG4_F_DPTH_NS_Z, testChunkSettings);
+        add(PG4_F_BASE_SIZE, testChunkSettings);
+        add(PG4_F_COORD_SCL, testChunkSettings);
+        add(PG4_F_HEIGH_SCL, testChunkSettings);
+        add(PG4_F_STRETCH_Y, testChunkSettings);
+        add(PG4_F_UPPER_LIM, testChunkSettings);
+        add(PG4_F_LOWER_LIM, testChunkSettings);
+        add(PG4_F_HEIGH_LIM, testChunkSettings);
         
         add(PG4_F_TEMP_SCL, testClimateScales);
         add(PG4_F_RAIN_SCL, testClimateScales);
         add(PG4_F_DETL_SCL, testClimateScales);
         
-        add(PG4_F_B_DPTH_WT);
-        add(PG4_F_B_DPTH_OF);
-        add(PG4_F_B_SCL_WT);
-        add(PG4_F_B_SCL_OF);
+        add(PG4_F_B_DPTH_WT, testChunkSettings);
+        add(PG4_F_B_DPTH_OF, testChunkSettings);
+        add(PG4_F_B_SCL_WT, testChunkSettings);
+        add(PG4_F_B_SCL_OF, testChunkSettings);
         add(PG4_F_BIOME_SZ, testBiomeSize);
-        add(PG4_F_RIVER_SZ);
+        add(PG4_F_RIVER_SZ, testChunkSettings);
         
         add(PG5_DSRT_LAND, testCustomBetaBiomes);
         add(PG5_DSRT_OCEAN, testCustomBetaBiomes);

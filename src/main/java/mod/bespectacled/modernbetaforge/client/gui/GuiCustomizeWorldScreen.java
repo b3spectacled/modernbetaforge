@@ -3,15 +3,12 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
@@ -48,7 +45,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
-    private static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
     private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 1024, 2048 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
@@ -1452,7 +1448,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
-        if (entry >= GuiIds.PG3_S_MAIN_NS_X && entry <= GuiIds.PG3_S_RIVER_SZ) {
+        if (entry >= GuiIds.PG3_S_MAIN_NS_X && entry <= GuiIds.PG3_S_BIOME_SZ) {
             Gui gui = this.pageList.getComponent(GuiIds.offsetForward(entry));
             if (gui != null) {
                 ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
@@ -1848,15 +1844,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private void updateGuiButtons() {
         // Set default enabled for certain options
         if (this.pageList != null) {
-            for (Integer key : GuiIds.GUI_IDS.keySet()) {
-                java.util.function.Predicate<ModernBetaChunkGeneratorSettings.Factory> predicate = GuiIds.GUI_IDS.get(key);
-                boolean enabled = predicate.test(this.settings);
+            for (Integer key : GuiIds.getGuiIds()) {
+                boolean enabled = GuiIds.test(settings, key);
                 
                 this.setButtonEnabled(key, enabled);
                 this.setFieldEnabled(key, enabled);
             }
-
-            this.setChunkSettingsEnabled(this.settings.chunkSource);
         }
     }
     
@@ -1873,16 +1866,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             ((GuiTextField)gui).setEnabled(enabled);
         }
     }
-    
-    private void setChunkSettingsEnabled(String chunkSource) {
-        List<Integer> ids = CHUNK_SETTINGS.get(chunkSource);
-        
-        for (int i = GuiIds.PG3_S_MAIN_NS_X; i <= GuiIds.PG3_B_USE_BDS; ++i) {
-            boolean enabled = ids.contains(i);
-            this.setButtonEnabled(i, enabled);
-            this.setFieldEnabled(GuiIds.offsetForward(i), enabled);
-        }
-    }
 
     private static int getNdx(int[] arr, int val) {
         for (int i = 0; i < arr.length; ++i) {
@@ -1891,164 +1874,5 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
         
         return 0;
-    }
-    
-    static {
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.BETA.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.ALPHA.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.PE.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM,
-                
-                GuiIds.PG3_S_B_DPTH_WT,
-                GuiIds.PG3_S_B_DPTH_OF,
-                GuiIds.PG3_S_B_SCL_WT,
-                GuiIds.PG3_S_B_SCL_OF,
-                GuiIds.PG3_S_BIOME_SZ,
-                GuiIds.PG3_S_RIVER_SZ,
-                
-                GuiIds.PG3_B_USE_BDS
-            )
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INDEV.id,
-            ImmutableList.of()
-        );
-        
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_HEIGH_LIM
-            )
-        );
     }
 }
