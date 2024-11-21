@@ -34,7 +34,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class FiniteChunkSource extends ChunkSource {
     private static final int MIN_WIDTH = 64;
-    private static final int MAX_WIDTH = 2048;
+    private static final int MAX_WIDTH = 1024;
     private static final int MIN_HEIGHT = 64;
     private static final int MAX_HEIGHT = 256;
     
@@ -103,7 +103,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         x += this.levelWidth / 2;
         z += this.levelLength / 2;
         
-        if (x < 0 || x >= this.levelWidth || z < 0 || z >= this.levelLength) 
+        if (!this.inLevelBounds(x, 0, z)) 
             return this.getBorderHeight(x, z, type);
         
         this.pregenerateLevelOrWait();
