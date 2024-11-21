@@ -15,7 +15,7 @@ import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.gen.IChunkGenerator;
 
 @Mixin(WorldProviderHell.class)
-public class MixinWorldProviderHell {
+public abstract class MixinWorldProviderHell {
     @Inject(method = "createChunkGenerator", at = @At("HEAD"), cancellable = true)
     private void injectCreateChunkGenerator(CallbackInfoReturnable<IChunkGenerator> info) {
         World world = ((AccessorWorldProvider)(Object)this).getWorld();

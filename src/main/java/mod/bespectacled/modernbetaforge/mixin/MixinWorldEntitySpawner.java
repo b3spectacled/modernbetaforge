@@ -21,7 +21,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 
 @Mixin(WorldEntitySpawner.class)
-public class MixinWorldEntitySpawner {
+public abstract class MixinWorldEntitySpawner {
     @Unique private static World modernBeta_world;
     @Unique private static Biome modernBeta_biome;
     

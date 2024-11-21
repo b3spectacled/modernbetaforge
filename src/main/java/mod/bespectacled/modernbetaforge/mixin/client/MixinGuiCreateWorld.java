@@ -13,7 +13,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
 
 @Mixin(GuiCreateWorld.class)
-public class MixinGuiCreateWorld {
+public abstract class MixinGuiCreateWorld {
     @Shadow private int selectedIndex;
     @Shadow private String chunkProviderSettingsJson;
     

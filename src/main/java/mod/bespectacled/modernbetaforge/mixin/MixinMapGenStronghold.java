@@ -18,7 +18,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 
 @Mixin(MapGenStronghold.class)
-public class MixinMapGenStronghold {
+public abstract class MixinMapGenStronghold {
     @Shadow private ChunkPos[] structureCoords;
     
     @Inject(method = "generatePositions", at = @At("TAIL"), cancellable = true)
