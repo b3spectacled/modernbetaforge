@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -9,7 +10,9 @@ import org.apache.logging.log4j.Level;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteLevelDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
@@ -46,7 +49,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelHeight;
     protected final int[] levelHeightmap;
     
-    private final Block[][][] levelArr;
+    private final Block[] levelData;
     
     private boolean pregenerated;
     
@@ -65,16 +68,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelHeight = MathHelper.clamp(settings.levelHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         
-        this.levelArr = new Block[this.levelWidth][this.levelHeight][this.levelLength];
-        for (int x = 0; x < this.levelWidth; ++x) {
-            for (int z = 0; z < this.levelLength; ++z) {
-                for (int y = 0; y < this.levelHeight; ++y) {
-                    this.setLevelBlock(x, y, z, Blocks.AIR);
-                }
-            }
-        }
+        this.levelData = new Block[this.levelWidth * this.levelHeight * this.levelLength];
+        Arrays.fill(this.levelData, Blocks.AIR);
         
-        this.pregenerated = false;
+        this.pregenerated = ModernBetaConfig.generatorOptions.saveIndevLevels ? this.tryLoadLevel() : false;
     }
     
     @Override
@@ -114,8 +111,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
         x = MathHelper.clamp(x, 0, this.levelWidth - 1);
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
-        
-        return this.levelArr[x][y][z];
+
+        return this.levelData[(y * this.levelLength + z) * this.levelWidth + x];
     }
     
     public void setLevelBlock(int x, int y, int z, Block block) {
@@ -123,7 +120,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
         
-        this.levelArr[x][y][z] = block;
+        this.levelData[(y * this.levelLength + z) * this.levelWidth + x] = block;
     }
     
     public int getLevelHeight(int x, int z, HeightmapChunk.Type type) {
@@ -267,6 +264,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (!this.pregenerated) {
             this.pregenerateTerrain();
             this.pregenerated = true;
+            
+            if (ModernBetaConfig.generatorOptions.saveIndevLevels)
+                this.trySaveLevel();
         }
     }
     
@@ -389,5 +389,48 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (block == replaceBlock) {
             positions.add(new Vec3d(x, y, z));
         }
+    }
+    
+    private boolean tryLoadLevel() {
+        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+        boolean loaded = false;
+        
+        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        try {
+            dataHandler.readFromDisk();
+            Block[] readLevelData = dataHandler.getLevelData();
+            
+            for (int i = 0; i < this.levelData.length; ++i) {
+                this.levelData[i] = readLevelData[i];
+            }
+            
+            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was loaded..", FiniteLevelDataHandler.FILE_NAME));
+            loaded = true;
+        } catch (Exception e) {
+            ModernBeta.log(Level.WARN, String.format(
+                "Indev file '%s' couldn't be loaded. Level will be generated and then saved!",
+                FiniteLevelDataHandler.FILE_NAME
+            ));
+        }
+        
+        return loaded;
+    }
+    
+    private boolean trySaveLevel() {
+        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+        boolean saved = false;
+        
+        try {
+            dataHandler.setLevelData(this.levelData);
+            dataHandler.writeToDisk();
+            
+            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was saved..", FiniteLevelDataHandler.FILE_NAME));
+            saved = true;
+        } catch (Exception e) {
+            ModernBeta.log(Level.ERROR, String.format("Indev file '%s' couldn't be saved!", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.ERROR, e.getMessage());
+        }
+        
+        return saved;
     }
 }

@@ -150,6 +150,7 @@ modernbetaforge.general.guioptions.defaultpreset=Default World Preset
 modernbetaforge.general.guioptions.usemodernbetaasdefault=Default to Modern Beta World Type
 
 modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Custom Surfaces
+modernbetaforge.general.generatoroptions.saveindevlevels=[EXPERIMENTAL] Save Indev Levels
 
 modernbetaforge.general.spawnoptions.usespawnfuzz=Spawn Fuzz
 modernbetaforge.general.spawnoptions.useoldspawns=Old Player Spawns
