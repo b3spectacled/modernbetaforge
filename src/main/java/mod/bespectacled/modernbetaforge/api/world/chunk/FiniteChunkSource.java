@@ -36,6 +36,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public abstract class FiniteChunkSource extends ChunkSource {
+    private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
+    
     private static final int MIN_WIDTH = 64;
     private static final int MAX_WIDTH = 1024;
     private static final int MIN_HEIGHT = 64;
@@ -265,8 +267,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.pregenerateTerrain();
             this.pregenerated = true;
             
-            if (ModernBetaConfig.generatorOptions.saveIndevLevels)
+            if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
                 this.trySaveLevel();
+                
+                if (DEBUG_LEVEL_DATA_HANDLER) {
+                    this.debugLevelDataHandler();
+                }
+            }
         }
     }
     
@@ -432,5 +439,38 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
         
         return saved;
+    }
+    
+    private void debugLevelDataHandler() {
+        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+
+        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));try {
+            dataHandler.readFromDisk();
+            Block[] readLevelData = dataHandler.getLevelData();
+            
+            for (int i = 0; i < this.levelData.length; ++i) {
+                Block expected = this.levelData[i];
+                Block found = readLevelData[i];
+                
+                if (expected != found) {
+                    ModernBeta.log(
+                        Level.INFO,     
+                        String.format(
+                            "Level data did not match, expected %s, found %s at index %d!",
+                            expected.getRegistryName(),
+                            found.getRegistryName(),
+                            i
+                        )
+                    );
+                }
+            }
+            
+            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was debugged..", FiniteLevelDataHandler.FILE_NAME));
+        } catch (Exception e) {
+            ModernBeta.log(Level.WARN, String.format(
+                "Indev file '%s' couldn't be loaded. Level will be generated and then saved!",
+                FiniteLevelDataHandler.FILE_NAME
+            ));
+        }
     }
 }
