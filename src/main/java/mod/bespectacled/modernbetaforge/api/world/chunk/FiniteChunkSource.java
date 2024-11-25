@@ -21,6 +21,8 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
@@ -376,14 +378,29 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
 
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        int offsetX = (chunkX + this.levelWidth / 16 / 2) * 16;
-        int offsetZ = (chunkZ + this.levelLength / 16 / 2) * 16;
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        
+        int offsetX = this.levelWidth / 2;
+        int offsetZ = this.levelLength / 2;
+        
+        // Create and populate block sources
+        BlockSourceDefault defaultSource = new BlockSourceDefault();
+        BlockSourceRules blockSources = new BlockSourceRules.Builder()
+            .add((x, y, z) -> defaultSource.sample(x, y, z))
+            .build(this.defaultBlock);
         
         for (int localX = 0; localX < 16; ++localX) {
+            int x = localX + startX;
+            
             for (int localZ = 0; localZ < 16; ++localZ) {
+                int z = localZ + startZ;
+                
                 for (int y = this.levelHeight - 1; y >= 0; --y) {
-                    Block block = this.getLevelBlock(offsetX + localX, y, offsetZ + localZ);
-                    chunkPrimer.setBlockState(localX, y, localZ, block.getDefaultState());
+                    Block block = this.getLevelBlock(x + offsetX, y, z + offsetZ);
+                    defaultSource.setBlockState(block.getDefaultState());
+                    
+                    chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }
         }

@@ -14,6 +14,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
 import net.minecraft.block.state.IBlockState;
@@ -104,9 +105,9 @@ public class Infdev227ChunkSource extends ChunkSource {
         Random random = new Random();
         
         // Create and populate block sources
-        BlockStateContainer container = new BlockStateContainer();
+        BlockSourceDefault defaultSource = new BlockSourceDefault();
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
-            .add((x, y, z) -> container.getBlockState())
+            .add((x, y, z) -> defaultSource.sample(x, y, z))
             .build(this.defaultBlock);
         
         for (int localX = 0; localX < 16; ++localX) {
@@ -166,7 +167,7 @@ public class Infdev227ChunkSource extends ChunkSource {
                         }
                     }
                     
-                    container.setBlockState(blockState);
+                    defaultSource.setBlockState(blockState);
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }
@@ -210,21 +211,5 @@ public class Infdev227ChunkSource extends ChunkSource {
         }
         
         return heightmap;
-    }
-    
-    private static class BlockStateContainer {
-        private IBlockState blockState;
-        
-        public BlockStateContainer() {
-            this.blockState = BlockStates.AIR;
-        }
-        
-        public IBlockState getBlockState() {
-            return this.blockState;
-        }
-        
-        public void setBlockState(IBlockState blockState) {
-            this.blockState = blockState;
-        }
     }
 }
