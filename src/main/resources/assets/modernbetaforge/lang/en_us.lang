@@ -144,6 +144,7 @@ modernbetaforge.general.guioptions=GUI Options
 modernbetaforge.general.generatoroptions=Generator Options
 modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
+modernbetaforge.general.serveroptions=Server Options
 
 modernbetaforge.general.guioptions.custompresets=Custom World Presets
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
@@ -162,3 +163,5 @@ modernbetaforge.general.visualoptions.useoldfogcolorblending=Old Fog Color Blend
 modernbetaforge.general.visualoptions.cloudheight=Cloud Height
 modernbetaforge.general.visualoptions.usecustomcloudheight=Custom Cloud Height
 modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Temperature Gradient
+
+modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients

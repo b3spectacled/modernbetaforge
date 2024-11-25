@@ -49,8 +49,8 @@ public class FiniteLevelDataHandler {
         File file = new File(this.worldDirectory, FILE_NAME);
 
         try(FileOutputStream fos = new FileOutputStream(file);
-            GZIPOutputStream gis = new GZIPOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(gis)
+            GZIPOutputStream gos = new GZIPOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(gos)
         ) {
             oos.writeObject(this.levelData);
         }

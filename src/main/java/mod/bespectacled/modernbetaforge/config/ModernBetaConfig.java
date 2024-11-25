@@ -16,6 +16,7 @@ public class ModernBetaConfig {
     public static CategoryGenerator generatorOptions = new CategoryGenerator();
     public static CategoryVisual visualOptions = new CategoryVisual();
     public static CategorySpawn spawnOptions = new CategorySpawn();
+    public static CategoryServer serverOptions = new CategoryServer();
     
     public static class CategoryGui {
         @Comment({
@@ -105,6 +106,14 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean useOldSpawns = true;
+    }
+    
+    public static class CategoryServer {
+        @Comment({
+            "Send world cloud height to joining clients"
+        })
+        @RequiresWorldRestart
+        public boolean sendCloudHeight = true;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)

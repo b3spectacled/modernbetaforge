@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.event;
 
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.network.CloudHeightMessage;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -13,6 +14,7 @@ public class PlayerEventHandler {
         EntityPlayerMP player = (EntityPlayerMP)event.player;
         int cloudHeight = (int)ModernBetaWorldType.INSTANCE.getCloudHeight();
         
-        ModernBetaPacketHandler.INSTANCE.sendTo(new CloudHeightMessage(cloudHeight), player);
+        if (ModernBetaConfig.serverOptions.sendCloudHeight)
+            ModernBetaPacketHandler.INSTANCE.sendTo(new CloudHeightMessage(cloudHeight), player);
     }
 }
