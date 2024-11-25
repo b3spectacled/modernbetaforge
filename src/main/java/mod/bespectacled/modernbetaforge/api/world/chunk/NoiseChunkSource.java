@@ -290,7 +290,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                 int ndx = z + x * 16;
                                 
                                 // Capture topmost solid/fluid block height.
-                                if (y < this.seaLevel || isSolid) {
+                                if (y < this.getSeaLevel() || isSolid) {
                                     heightmapOcean[ndx] = height;
                                 }
                                 
@@ -337,7 +337,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             IBlockState blockState = BlockStates.AIR;
             if (density > 0.0) {
                 blockState = this.defaultBlock;
-            } else if (y < this.seaLevel) {
+            } else if (y < this.getSeaLevel()) {
                 blockState = this.defaultFluid;
             }
             
