@@ -184,7 +184,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         // Create and populate block sources
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
             .add(baseBlockSource)
-            .build(this.defaultBlock);
+            .build();
 
         // Sample initial noise.
         // Base noise should be added after this,

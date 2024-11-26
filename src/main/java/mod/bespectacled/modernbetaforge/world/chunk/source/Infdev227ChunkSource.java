@@ -108,7 +108,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         BlockSourceDefault defaultSource = new BlockSourceDefault();
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
             .add((x, y, z) -> defaultSource.sample(x, y, z))
-            .build(this.defaultBlock);
+            .build();
         
         for (int localX = 0; localX < 16; ++localX) {
             int x = startX + localX;

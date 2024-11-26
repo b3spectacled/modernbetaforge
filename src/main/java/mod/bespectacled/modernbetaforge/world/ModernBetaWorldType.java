@@ -18,12 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModernBetaWorldType extends WorldType {
     public static final ModernBetaWorldType INSTANCE = new ModernBetaWorldType("modernbeta");
     
-    private int cloudHeight;
+    private float cloudHeight;
     
     public ModernBetaWorldType(String name) {
         super(name);
         
-        this.cloudHeight = (int)super.getCloudHeight();
+        this.cloudHeight = super.getCloudHeight();
     }
 
     public static void register() {}

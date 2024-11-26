@@ -46,7 +46,7 @@ public class ModernBetaConfig {
         public String[] biomesWithCustomSurfaces = {};
         
         @Comment({
-            "[EXPERIMENTAL] Save Indev level to separate file and try to load instead of regenerating level"
+            "Save Indev level to separate file and try to load instead of regenerating level"
         })
         @RequiresWorldRestart
         public boolean saveIndevLevels = false;
