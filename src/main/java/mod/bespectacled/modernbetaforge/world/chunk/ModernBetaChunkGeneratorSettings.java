@@ -741,7 +741,7 @@ public class ModernBetaChunkGeneratorSettings {
             this.levelType = IndevType.ISLAND.id;
             this.levelWidth = 256;
             this.levelLength = 256;
-            this.levelHeight = 96;
+            this.levelHeight = 64;
             this.levelHouse = IndevHouse.OAK.id;
             this.useIndevCaves = true;
             
