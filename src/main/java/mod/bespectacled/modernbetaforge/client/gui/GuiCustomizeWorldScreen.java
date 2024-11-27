@@ -175,7 +175,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int levelWidth = getNdx(LEVEL_WIDTHS, this.settings.levelWidth);
         int levelLength = getNdx(LEVEL_WIDTHS, this.settings.levelLength);
         int levelHeight = getNdx(LEVEL_HEIGHTS, this.settings.levelHeight);
-        int levelSeaLevel = this.settings.levelType.equals(IndevType.FLOATING.id) ? 0 : this.settings.levelHeight - 32;
+        int levelSeaLevel = this.getLevelSeaLevel();
+        String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
         
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
@@ -232,7 +233,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_WIDTH, I18n.format(PREFIX + NbtTags.LEVEL_WIDTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelWidth),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_LENGTH, I18n.format(PREFIX + NbtTags.LEVEL_LENGTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelLength),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_HEIGHT, I18n.format(PREFIX + NbtTags.LEVEL_HEIGHT), true, this, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
-            new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %d", I18n.format(PREFIX + "seaLevel"), levelSeaLevel), true),
+            new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr), true),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_INDEV_CAVES, I18n.format(PREFIX + NbtTags.USE_INDEV_CAVES), true, this.settings.useIndevCaves),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_INDEV_HOUSE, I18n.format(PREFIX + NbtTags.USE_INDEV_HOUSE), true, this.settings.useIndevHouse),
         
@@ -1455,13 +1456,14 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
         }
         
-        if (entry == GuiIds.PG0_S_LEVEL_HEIGHT || entry == GuiIds.PG0_S_LEVEL_TYPE) {
+        if (entry == GuiIds.PG0_S_LEVEL_HEIGHT || entry == GuiIds.PG0_S_LEVEL_TYPE || entry == GuiIds.PG0_S_CHUNK) {
             Gui gui = this.pageList.getComponent(GuiIds.PG0_L_INDEV_SEA_LEVEL);
             if (gui != null) {
                 AccessorGuiLabel accessor = (AccessorGuiLabel)gui;
-                int levelSeaLevel = this.settings.levelType.equals(IndevType.FLOATING.id) ? 0 : this.settings.levelHeight - 32;
+                int levelSeaLevel = this.getLevelSeaLevel();
+                String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
                 
-                accessor.getLabels().set(0, String.format("%s: %d", I18n.format(PREFIX + "seaLevel"), levelSeaLevel));
+                accessor.getLabels().set(0, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr));
             }
         }
         
@@ -1865,6 +1867,23 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         if (gui != null && gui instanceof GuiTextField) {
             ((GuiTextField)gui).setEnabled(enabled);
         }
+    }
+    
+    private int getLevelSeaLevel() {
+        String chunkSource = this.settings.chunkSource;
+        String levelType = this.settings.levelType;
+        int levelHeight = this.settings.levelHeight;
+
+        int levelSeaLevel = -1;
+        if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id)) {
+            levelSeaLevel = levelType.equals(IndevType.FLOATING.id) ? 0 : levelHeight - 32;
+        } else if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id)) {
+            levelSeaLevel = levelHeight / 2;
+        } else {
+            levelSeaLevel = -1;
+        }
+        
+        return levelSeaLevel;
     }
 
     private static int getNdx(int[] arr, int val) {

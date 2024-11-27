@@ -61,22 +61,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.topSlide = noiseSettings.topSlideSettings;
         this.bottomSlide = noiseSettings.bottomSlideSettings;
         
-        this.noiseCache = new ChunkCache<>(
-            "noise",
-            (chunkX, chunkZ) -> {
-                NoiseSource noiseSource = new NoiseSource(
-                    this::sampleNoiseColumn,
-                    this.noiseSizeX,
-                    this.noiseSizeY,
-                    this.noiseSizeZ
-                );
-                
-                noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ);
-                
-                return noiseSource;
-            }
-        );
-        
+        this.noiseCache = new ChunkCache<>("noise", this::sampleInitialNoise);
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
 
         this.surfaceBuilder = ModernBetaRegistries.SURFACE
@@ -235,6 +220,28 @@ public abstract class NoiseChunkSource extends ChunkSource {
         }
     }
     
+    /**
+     * Sample initial noise for a given chunk.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     * @return NoiseSource containing initial noise values for the chunk.
+     */
+    private NoiseSource sampleInitialNoise(int chunkX, int chunkZ) {
+        NoiseSource noiseSource = new NoiseSource(
+            this::sampleNoiseColumn,
+            this.noiseSizeX,
+            this.noiseSizeY,
+            this.noiseSizeZ
+        );
+        
+        noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ);
+        
+        return noiseSource;
+    }
+
+
     /**
      * Generates a heightmap for the chunk containing the given x/z coordinates
      * and returns to {@link #getHeight(int, int, net.minecraft.world.Heightmap.Type)} 

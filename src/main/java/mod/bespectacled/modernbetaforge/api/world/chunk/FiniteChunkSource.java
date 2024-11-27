@@ -168,9 +168,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int spawnY = spawnPos.getY() + 1;
         int spawnZ = spawnPos.getZ();
         MutableBlockPos blockPos = new MutableBlockPos();
-        
-        Block floorBlock = Blocks.STONE;
+
         Block wallBlock = Blocks.PLANKS;
+        Block floorBlock = Blocks.STONE;
         
         for (int x = spawnX - 3; x <= spawnX + 3; ++x) {
             for (int y = spawnY - 2; y <= spawnY + 2; ++y) {
@@ -274,6 +274,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 
                 if (DEBUG_LEVEL_DATA_HANDLER) {
                     this.debugLevelDataHandler();
+                }
+            }
+        }
+    }
+    
+    protected void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
+        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
+            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
+                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
+                
+                    float dx = (float)x - centerX;
+                    float dy = (float)y - centerY;
+                    float dz = (float)z - centerZ;
+                    
+                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
+                        Block block = this.getLevelBlock(x, y, z);
+                        
+                        if (block == this.defaultBlock.getBlock()) {
+                            this.setLevelBlock(x, y, z, fillBlock);
+                        }
+                    }
                 }
             }
         }

@@ -108,8 +108,6 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.waterLevel();
         this.plantLevel();
         this.assembleLevel();
-        
-        this.world.setSeaLevel(this.getSeaLevel());
     }
 
     @Override
@@ -218,8 +216,10 @@ public class IndevChunkSource extends FiniteChunkSource {
             
             for (int z = 0; z < this.levelLength; ++z) {
                 double normalizedZ = Math.max(normalizedX, Math.abs(z / (this.levelLength - 1.0) - 0.5) * 2.0);
-                normalizedZ = normalizedZ * normalizedZ * normalizedZ;
                 int worldZ = z - this.levelLength / 2;
+                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
+                
+                normalizedZ = normalizedZ * normalizedZ * normalizedZ;
 
                 int dirtDepth = (int)(this.soilOctaveNoise.sampleXY(x, z) / 24.0) - 4;
                 int dirtThreshold = this.levelHeightmap[x + z * this.levelWidth] + seaLevel;
@@ -250,7 +250,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                     Block block = Blocks.AIR;
                      
                     if (y <= dirtThreshold)
-                        block = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ).fillerBlock.getBlock();
+                        block = biome.fillerBlock.getBlock();
                      
                     if (y <= stoneThreshold)
                         block = Blocks.STONE;
@@ -362,6 +362,12 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void oreLevel() {
+        // Given 256x256x64 level:
+        // 1000 coal count = 2560 attempts < y51
+        // 800 iron count = 2048 attempts < y38
+        // 500 gold count = 1280 attempts < y25
+        // 800 diamond count = 2048 attempts < y12
+        
         this.generateDummyOre(Blocks.COAL_ORE, 1000, 10, (this.levelHeight << 2) / 5);
         this.generateDummyOre(Blocks.IRON_ORE, 800, 8, this.levelHeight * 3 / 5);
         this.generateDummyOre(Blocks.GOLD_ORE, 500, 6, (this.levelHeight << 1) / 5);
@@ -372,14 +378,13 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.logPhase("Melting");
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 2000;
-         
         for (int i = 0; i < lavaSourceCount; ++i) {
             int randX = this.random.nextInt(this.levelWidth);
             int randY = Math.min(
                 Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel)),
                 Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel))
             );
-            int randZ = random.nextInt(this.levelLength);
+            int randZ = this.random.nextInt(this.levelLength);
             
             List<Vec3d> floodedPositions = new ArrayList<>();
             int numFlooded = this.flood(randX, randY, randZ, Blocks.ANVIL, Blocks.AIR, floodedPositions);
@@ -497,27 +502,6 @@ public class IndevChunkSource extends FiniteChunkSource {
                     
                     if (y == 1 && x != 0 && z != 0 && x != this.levelWidth - 1 && z != this.levelLength - 1) {
                         y = this.levelHeight - 2;
-                    }
-                }
-            }
-        }
-    }
-    
-    private void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
-        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
-            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
-                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
-                
-                    float dx = (float)x - centerX;
-                    float dy = (float)y - centerY;
-                    float dz = (float)z - centerZ;
-                    
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
-                        Block block = this.getLevelBlock(x, y, z);
-                        
-                        if (block == this.defaultBlock.getBlock()) {
-                            this.setLevelBlock(x, y, z, fillBlock);
-                        }
                     }
                 }
             }

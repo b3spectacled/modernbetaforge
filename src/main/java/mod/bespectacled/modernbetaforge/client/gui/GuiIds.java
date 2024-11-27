@@ -473,13 +473,17 @@ public class GuiIds {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
             ImmutableList.of(
                 GuiIds.PG3_S_MAIN_NS_X,
                 GuiIds.PG3_S_MAIN_NS_Y,
                 GuiIds.PG3_S_MAIN_NS_Z,
+                GuiIds.PG3_S_DPTH_NS_X,
+                GuiIds.PG3_S_DPTH_NS_Z,
+                GuiIds.PG3_S_BASE_SIZE,
                 GuiIds.PG3_S_COORD_SCL,
                 GuiIds.PG3_S_HEIGH_SCL,
+                GuiIds.PG3_S_STRETCH_Y,
                 GuiIds.PG3_S_UPPER_LIM,
                 GuiIds.PG3_S_LOWER_LIM,
                 GuiIds.PG3_S_HEIGH_LIM
@@ -503,19 +507,22 @@ public class GuiIds {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
             ImmutableList.of(
                 GuiIds.PG3_S_MAIN_NS_X,
                 GuiIds.PG3_S_MAIN_NS_Y,
                 GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
                 GuiIds.PG3_S_COORD_SCL,
                 GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
                 GuiIds.PG3_S_UPPER_LIM,
                 GuiIds.PG3_S_LOWER_LIM,
+                GuiIds.PG3_S_HEIGH_LIM
+            )
+        );
+        
+        CHUNK_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
+            ImmutableList.of(
                 GuiIds.PG3_S_HEIGH_LIM
             )
         );
@@ -587,10 +594,8 @@ public class GuiIds {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
-            ImmutableList.of(
-                GuiIds.PG3_S_HEIGH_LIM
-            )
+            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id,
+            ImmutableList.of()
         );
         
         BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
@@ -598,8 +603,9 @@ public class GuiIds {
             
             boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
             boolean isIndev = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
             
-            return !isIndev && !isSkylands;
+            return !(isIndev || isClassic) && !isSkylands;
         };
         BiPredicate<Factory, Integer> testCarver = (factory, id) -> factory.useCaves;
         BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
@@ -624,10 +630,17 @@ public class GuiIds {
         BiPredicate<Factory, Integer> testSandstone = (factory, id) -> {
             boolean isReleaseSurface = factory.surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
             boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
             
-            return !isReleaseSurface && !isIndev;
+            return !isReleaseSurface && !(isIndev || isClassic);
         };
         BiPredicate<Factory, Integer> testIndev = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+        BiPredicate<Factory, Integer> testFinite = (factory, id) -> {
+            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
+            
+            return isIndev || isClassic;
+        };
         BiPredicate<Factory, Integer> testInfdev227 = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.id);
         BiPredicate<Factory, Integer> testReleaseBiomeSource = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
         BiPredicate<Factory, Integer> testBetaBiomeFeature = (factory, id) -> {
@@ -720,11 +733,12 @@ public class GuiIds {
         };
         BiPredicate<Factory, Integer> testChunkSettings = (factory, id) -> {
             boolean enabled = false;
+            List<Integer> settings = CHUNK_SETTINGS.get(factory.chunkSource);
             
             if (id >= GuiIds.PG3_S_MAIN_NS_X && id <= GuiIds.PG3_B_USE_BDS) {
-                enabled = CHUNK_SETTINGS.get(factory.chunkSource).contains(id);
+                enabled = settings.contains(id);
             } else if (id >= offsetForward(GuiIds.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIds.PG3_B_USE_BDS)) {
-                enabled = CHUNK_SETTINGS.get(factory.chunkSource).contains(offsetBackward(id));
+                enabled = settings.contains(offsetBackward(id));
             }
             
             return enabled;
@@ -766,11 +780,11 @@ public class GuiIds {
         
         add(PG0_S_LEVEL_THEME, testIndev);
         add(PG0_S_LEVEL_TYPE, testIndev);
-        add(PG0_S_LEVEL_WIDTH, testIndev);
-        add(PG0_S_LEVEL_LENGTH, testIndev);
-        add(PG0_S_LEVEL_HEIGHT, testIndev);
-        add(PG0_B_USE_INDEV_CAVES, testIndev);
-        add(PG0_B_USE_INDEV_HOUSE, testIndev);
+        add(PG0_S_LEVEL_WIDTH, testFinite);
+        add(PG0_S_LEVEL_LENGTH, testFinite);
+        add(PG0_S_LEVEL_HEIGHT, testFinite);
+        add(PG0_B_USE_INDEV_CAVES, testFinite);
+        add(PG0_B_USE_INDEV_HOUSE, testFinite);
         
         add(PG0_B_USE_INFDEV_WALLS, testInfdev227);
         add(PG0_B_USE_INFDEV_PYRAMIDS, testInfdev227);

@@ -86,7 +86,7 @@ public abstract class ChunkSource {
     private final WoodlandMansion woodlandMansionGenerator;
 
     private final BiomeInjector biomeInjector;
-    private final ChunkCache<ChunkContainer> chunkCache;
+    private final ChunkCache<ChunkPrimerContainer> chunkCache;
     
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
     private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
@@ -122,32 +122,7 @@ public abstract class ChunkSource {
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
         this.biomeProvider.setChunkSource(this);
         
-        this.chunkCache = new ChunkCache<>(
-            "chunk_primer",
-            (chunkX, chunkZ) -> {
-                int startX = chunkX * 16;
-                int startZ = chunkZ * 16;
-                
-                ChunkPrimer chunkPrimer = new ChunkPrimer();
-                Biome[] biomes = new Biome[256];
-                
-                // Generate base terrain
-                this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
-                
-                // Generate base biome map
-                this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
-                
-                // Populate biome-specific surface
-                this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
-                
-                // Post-process biome map
-                if (this.biomeInjector != null) {
-                    this.biomeInjector.getInjectedBiomes(biomes, chunkPrimer, this, chunkX, chunkZ);
-                }
-                
-                return new ChunkContainer(chunkPrimer, biomes);
-            }
-        );
+        this.chunkCache = new ChunkCache<>("chunk_primer", this::provideChunkPrimerContainer);
         
         this.beachOctaveNoise = Optional.empty();
         this.surfaceOctaveNoise = Optional.empty();
@@ -168,7 +143,7 @@ public abstract class ChunkSource {
     
     public Chunk provideChunk(int chunkX, int chunkZ) {
         // Retrieve chunk primer from cache
-        ChunkContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
+        ChunkPrimerContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         
         if (!this.skipChunk(chunkX, chunkZ)) {
@@ -525,10 +500,6 @@ public abstract class ChunkSource {
             this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, null);
         }
     }
-    
-    public void initChunk(int chunkX, int chunkZ) {
-        this.chunkCache.get(chunkX, chunkZ);
-    }
 
     public Biome[] getBiomes(int chunkX, int chunkZ) {
         return this.chunkCache.get(chunkX, chunkZ).biomes;
@@ -648,11 +619,35 @@ public abstract class ChunkSource {
         return blockState.getBlock() == this.defaultFluid.getBlock();
     }
     
-    public static class ChunkContainer {
+    private ChunkPrimerContainer provideChunkPrimerContainer(int chunkX, int chunkZ) {
+        int startX = chunkX * 16;
+        int startZ = chunkZ * 16;
+        
+        ChunkPrimer chunkPrimer = new ChunkPrimer();
+        Biome[] biomes = new Biome[256];
+        
+        // Generate base terrain
+        this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
+        
+        // Generate base biome map
+        this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
+        
+        // Populate biome-specific surface
+        this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+        
+        // Post-process biome map
+        if (this.biomeInjector != null) {
+            this.biomeInjector.getInjectedBiomes(biomes, chunkPrimer, this, chunkX, chunkZ);
+        }
+        
+        return new ChunkPrimerContainer(chunkPrimer, biomes);
+    }
+    
+    private static class ChunkPrimerContainer {
         public final ChunkPrimer chunkPrimer;
         public final Biome[] biomes;
         
-        public ChunkContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
+        public ChunkPrimerContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
             this.chunkPrimer = chunkPrimer;
             this.biomes = biomes;
         }
