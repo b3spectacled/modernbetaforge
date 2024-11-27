@@ -23,6 +23,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
@@ -54,6 +55,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int[] levelHeightmap;
     
     private final Block[] levelData;
+    private final IndevHouse levelHouse;
     
     private boolean pregenerated;
     
@@ -74,6 +76,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         this.levelData = new Block[this.levelWidth * this.levelHeight * this.levelLength];
         Arrays.fill(this.levelData, Blocks.AIR);
+        this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
         
         this.pregenerated = ModernBetaConfig.generatorOptions.saveIndevLevels ? this.tryLoadLevel() : false;
     }
@@ -159,7 +162,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     public void buildHouse(WorldServer world, BlockPos spawnPos) {
-        if (!this.settings.useIndevHouse)
+        if (this.levelHouse == IndevHouse.NONE)
             return;
         
         this.logPhase("Building");
@@ -169,8 +172,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int spawnZ = spawnPos.getZ();
         MutableBlockPos blockPos = new MutableBlockPos();
 
-        Block wallBlock = Blocks.PLANKS;
-        Block floorBlock = Blocks.STONE;
+        Block wallBlock = this.levelHouse.wallBlock;
+        Block floorBlock = this.levelHouse.floorBlock;
         
         for (int x = spawnX - 3; x <= spawnX + 3; ++x) {
             for (int y = spawnY - 2; y <= spawnY + 2; ++y) {

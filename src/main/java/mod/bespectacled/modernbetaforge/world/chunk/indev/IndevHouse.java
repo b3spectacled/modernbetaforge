@@ -22,10 +22,10 @@ public enum IndevHouse {
         this(id, null, null);
     }
     
-    public static IndevTheme fromId(String id) {
-        for (IndevTheme theme : IndevTheme.values()) {
-            if (theme.id.equalsIgnoreCase(id)) {
-                return theme;
+    public static IndevHouse fromId(String id) {
+        for (IndevHouse house : IndevHouse.values()) {
+            if (house.id.equalsIgnoreCase(id)) {
+                return house;
             }
         }
         

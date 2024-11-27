@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.client.gui.Gui;
@@ -175,6 +176,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         int levelWidth = getNdx(LEVEL_WIDTHS, this.settings.levelWidth);
         int levelLength = getNdx(LEVEL_WIDTHS, this.settings.levelLength);
         int levelHeight = getNdx(LEVEL_HEIGHTS, this.settings.levelHeight);
+        int levelHouseId = IndevHouse.fromId(this.settings.levelHouse).ordinal();
         int levelSeaLevel = this.getLevelSeaLevel();
         String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
         
@@ -234,8 +236,8 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_LENGTH, I18n.format(PREFIX + NbtTags.LEVEL_LENGTH), true, this, 0f, LEVEL_WIDTHS.length - 1, levelLength),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_HEIGHT, I18n.format(PREFIX + NbtTags.LEVEL_HEIGHT), true, this, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr), true),
+            new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LEVEL_HOUSE, I18n.format(PREFIX + NbtTags.LEVEL_HOUSE), true, this, 0f, IndevHouse.values().length - 1, levelHouseId),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_INDEV_CAVES, I18n.format(PREFIX + NbtTags.USE_INDEV_CAVES), true, this.settings.useIndevCaves),
-            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_INDEV_HOUSE, I18n.format(PREFIX + NbtTags.USE_INDEV_HOUSE), true, this.settings.useIndevHouse),
         
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_NETHER_FEATURES, I18n.format(PREFIX + "netherFeaturesLabel"), true),
             null,
@@ -1147,9 +1149,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiIds.PG0_B_USE_INDEV_CAVES:
                 this.settings.useIndevCaves = entryValue;
                 break;
-            case GuiIds.PG0_B_USE_INDEV_HOUSE:
-                this.settings.useIndevHouse = entryValue;
-                break;
                 
             case GuiIds.PG0_B_USE_INFDEV_WALLS:
                 this.settings.useInfdevWalls = entryValue;
@@ -1277,6 +1276,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiIds.PG0_S_LEVEL_HEIGHT:
                 this.settings.levelHeight = LEVEL_HEIGHTS[(int)entryValue];
+                break;
+            case GuiIds.PG0_S_LEVEL_HOUSE:
+                this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
                 break;
 
             case GuiIds.PG2_S_CLAY_SIZE:
@@ -1734,6 +1736,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             }
             case GuiIds.PG0_S_LEVEL_TYPE: {
                 String key = IndevType.values()[(int)entryValue].id;
+                return key.substring(0, 1).toUpperCase() + key.substring(1);
+            }
+            case GuiIds.PG0_S_LEVEL_HOUSE: {
+                String key = IndevHouse.values()[(int)entryValue].id;
                 return key.substring(0, 1).toUpperCase() + key.substring(1);
             }
             

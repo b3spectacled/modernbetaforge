@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
@@ -92,8 +93,8 @@ public class ModernBetaChunkGeneratorSettings {
     public final int levelWidth;
     public final int levelLength;
     public final int levelHeight;
+    public final String levelHouse;
     public final boolean useIndevCaves;
-    public final boolean useIndevHouse;
     
     public final int claySize;
     public final int clayCount;
@@ -308,8 +309,8 @@ public class ModernBetaChunkGeneratorSettings {
         this.levelLength = factory.levelLength;
         this.levelWidth = factory.levelWidth;
         this.levelHeight = factory.levelHeight;
+        this.levelHouse = factory.levelHouse;
         this.useIndevCaves = factory.useIndevCaves;
-        this.useIndevHouse = factory.useIndevHouse;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -515,8 +516,8 @@ public class ModernBetaChunkGeneratorSettings {
         public int levelWidth;
         public int levelLength;
         public int levelHeight;
+        public String levelHouse;
         public boolean useIndevCaves;
-        public boolean useIndevHouse;
         
         public int claySize;
         public int clayCount;
@@ -741,8 +742,8 @@ public class ModernBetaChunkGeneratorSettings {
             this.levelWidth = 256;
             this.levelLength = 256;
             this.levelHeight = 96;
+            this.levelHouse = IndevHouse.OAK.id;
             this.useIndevCaves = true;
-            this.useIndevHouse = true;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -965,8 +966,8 @@ public class ModernBetaChunkGeneratorSettings {
                 this.levelWidth == factory.levelWidth &&
                 this.levelLength == factory.levelLength &&
                 this.levelHeight == factory.levelHeight &&
+                this.levelHouse.equals(factory.levelHouse) &&
                 this.useIndevCaves == factory.useIndevCaves &&
-                this.useIndevHouse == factory.useIndevHouse &&
                 
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
@@ -1179,8 +1180,8 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.levelWidth;
             hashCode = 31 * hashCode + this.levelLength;
             hashCode = 31 * hashCode + this.levelHeight;
+            hashCode = 31 * hashCode + this.levelHouse.hashCode();
             hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
-            hashCode = 31 * hashCode + (this.useIndevHouse ? 1 : 0);
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1407,8 +1408,8 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.levelWidth = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_WIDTH, factory.levelWidth);
                 factory.levelLength = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_LENGTH, factory.levelLength);
                 factory.levelHeight = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_HEIGHT, factory.levelHeight);
+                factory.levelHouse = JsonUtils.getString(jsonObject, NbtTags.LEVEL_HOUSE, factory.levelHouse);
                 factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
-                factory.useIndevHouse = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_HOUSE, factory.useIndevHouse);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1625,8 +1626,8 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.LEVEL_WIDTH, factory.levelWidth);
             jsonObject.addProperty(NbtTags.LEVEL_LENGTH, factory.levelLength);
             jsonObject.addProperty(NbtTags.LEVEL_HEIGHT, factory.levelHeight);
+            jsonObject.addProperty(NbtTags.LEVEL_HOUSE, factory.levelHouse);
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
-            jsonObject.addProperty(NbtTags.USE_INDEV_HOUSE, factory.useIndevHouse);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

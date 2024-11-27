@@ -46,9 +46,6 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.setForestOctaveNoise(this.forestOctaveNoise);
         
         this.surfaceBuilder = new SkylandsSurfaceBuilder(this.world, this, settings);
-
-        // Update sea level to reflect real sea level
-        this.world.setSeaLevel(this.getSeaLevel());
         
         this.setCloudHeight(8);
     }

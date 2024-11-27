@@ -26,8 +26,8 @@ public class NbtTags {
     public static final String LEVEL_WIDTH = "levelWidth";
     public static final String LEVEL_LENGTH = "levelLength";
     public static final String LEVEL_HEIGHT = "levelHeight";
+    public static final String LEVEL_HOUSE = "levelHouse";
     public static final String USE_INDEV_CAVES = "useIndevCaves";
-    public static final String USE_INDEV_HOUSE = "useIndevHouse";
     
     public static final String USE_MODDED_BIOMES = "useModdedBiomes";
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
@@ -141,4 +141,6 @@ public class NbtTags {
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";
     public static final String DEPR_BEACH_BIOME = "beachBiome";
+    
+    public static final String DEPR_USE_INDEV_HOUSE = "useIndevHouse";
 }

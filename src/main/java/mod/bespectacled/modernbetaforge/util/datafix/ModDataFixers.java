@@ -17,6 +17,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_2_0_0 = 1200;
     private static final int DATA_VERSION_V1_2_2_2 = 1222;
     private static final int DATA_VERSION_V1_3_0_0 = 1300;
+    private static final int DATA_VERSION_V1_3_1_0 = 1310;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -121,6 +122,23 @@ public class ModDataFixers {
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<String> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
+                
+                return fixGeneratorSettings(compound, registryKeys);
+            }
+        }
+    );
+    
+    public static final ModDataFix INDEV_HOUSE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_3_1_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<String> registryKeys = Arrays.asList(DataFixTags.FIX_USE_INDEV_HOUSE);
                 
                 return fixGeneratorSettings(compound, registryKeys);
             }

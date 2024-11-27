@@ -14,6 +14,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import net.minecraft.util.JsonUtils;
 
 public class DataFixers {
@@ -159,6 +160,12 @@ public class DataFixers {
     
     public static void fixSingleBiome(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.DEPR_FIXED_BIOME, factory.singleBiome);
+    }
+    
+    public static void fixIndevHouse(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        boolean useIndevHouse = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_INDEV_HOUSE, true);
+        
+        factory.levelHouse = useIndevHouse ? IndevHouse.OAK.id : IndevHouse.NONE.id;
     }
     
     @SuppressWarnings("unchecked")

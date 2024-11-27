@@ -127,9 +127,6 @@ public abstract class ChunkSource {
         this.beachOctaveNoise = Optional.empty();
         this.surfaceOctaveNoise = Optional.empty();
         this.forestOctaveNoise = Optional.empty();
-
-        // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
-        this.world.setSeaLevel(this.settings.seaLevel);
         
         // Set default cloud height
         this.setCloudHeight(108);

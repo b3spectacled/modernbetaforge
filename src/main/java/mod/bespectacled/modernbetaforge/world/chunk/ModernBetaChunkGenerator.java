@@ -27,6 +27,9 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.chunkSource = ModernBetaRegistries.CHUNK
             .get(settings.chunkSource)
             .apply(world, this, settings, noiseSettings, seed, mapFeaturesEnabled);
+
+        // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
+        world.setSeaLevel(this.chunkSource.getSeaLevel());
     }
     
     /*

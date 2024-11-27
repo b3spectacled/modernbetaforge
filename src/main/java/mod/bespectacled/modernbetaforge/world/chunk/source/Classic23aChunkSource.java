@@ -52,6 +52,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.soilOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         
         this.seaLevel = this.levelHeight / 2;
+        
         this.setCloudHeight(this.levelHeight + 2);
     }
     

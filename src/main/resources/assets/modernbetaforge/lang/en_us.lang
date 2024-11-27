@@ -53,8 +53,8 @@ createWorld.customize.custom.levelType=Level Type
 createWorld.customize.custom.levelWidth=Level Width
 createWorld.customize.custom.levelLength=Level Length
 createWorld.customize.custom.levelHeight=Level Height
+createWorld.customize.custom.levelHouse=Indev House
 createWorld.customize.custom.useIndevCaves=Indev Caves
-createWorld.customize.custom.useIndevHouse=Indev House
 
 # Page 2 - Features
 createWorld.customize.custom.useTallGrass=Tall Grass

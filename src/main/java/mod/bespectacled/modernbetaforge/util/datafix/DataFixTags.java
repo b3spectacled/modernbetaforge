@@ -17,4 +17,5 @@ public class DataFixTags {
     public static final String SURFACE_BUILDER = "surfaceBuilder";
     public static final String SURFACE_SKYLANDS = "surfaceBuilder_skylands";
     public static final String FIX_SINGLE_BIOME = "fix_singleBiome";
+    public static final String FIX_USE_INDEV_HOUSE = "fix_useIndevHouse";
 }

@@ -55,9 +55,6 @@ public class Infdev227ChunkSource extends ChunkSource {
             .get(this.settings.surfaceBuilder)
             .apply(world, this, chunkGeneratorSettings);
         
-        // Update sea level to reflect real sea level
-        this.world.setSeaLevel(this.getSeaLevel());
-        
         // Cloud height was y128 in this version
         this.setCloudHeight(128);
     }

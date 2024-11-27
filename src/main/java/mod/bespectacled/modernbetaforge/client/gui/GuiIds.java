@@ -82,8 +82,8 @@ public class GuiIds {
     public static final int PG0_S_LEVEL_WIDTH = 131;
     public static final int PG0_S_LEVEL_LENGTH = 132;
     public static final int PG0_S_LEVEL_HEIGHT = 133;
-    public static final int PG0_B_USE_INDEV_CAVES = 134;
-    public static final int PG0_B_USE_INDEV_HOUSE = 135;
+    public static final int PG0_S_LEVEL_HOUSE = 134;
+    public static final int PG0_B_USE_INDEV_CAVES = 135;
     
     public static final int PG0_B_USE_INFDEV_WALLS = 136;
     public static final int PG0_B_USE_INFDEV_PYRAMIDS = 137;
@@ -783,8 +783,8 @@ public class GuiIds {
         add(PG0_S_LEVEL_WIDTH, testFinite);
         add(PG0_S_LEVEL_LENGTH, testFinite);
         add(PG0_S_LEVEL_HEIGHT, testFinite);
+        add(PG0_S_LEVEL_HOUSE, testFinite);
         add(PG0_B_USE_INDEV_CAVES, testFinite);
-        add(PG0_B_USE_INDEV_HOUSE, testFinite);
         
         add(PG0_B_USE_INFDEV_WALLS, testInfdev227);
         add(PG0_B_USE_INFDEV_PYRAMIDS, testInfdev227);
