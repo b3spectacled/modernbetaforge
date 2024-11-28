@@ -53,7 +53,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         
         this.seaLevel = this.levelHeight / 2;
         
-        this.setCloudHeight(this.levelHeight + 2);
+        this.setCloudHeight(this.seaLevel + 34);
     }
     
     @Override
