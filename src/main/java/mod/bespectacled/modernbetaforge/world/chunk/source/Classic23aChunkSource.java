@@ -74,6 +74,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.waterLevel();
         this.meltLevel();
         this.growLevel();
+        this.assembleLevel();
     }
 
     @Override
@@ -343,6 +344,21 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                     
                     this.setLevelBlock(x, height, z, surfaceBlock);
                 }
+            }
+        }
+    }
+    
+    /*
+     * Not present in original source,
+     * but a bedrock layer needs to be added.
+     * 
+     */
+    private void assembleLevel() {
+        this.logPhase("Assembling");
+        
+        for (int x = 0; x < this.levelWidth; ++x) {
+            for (int z = 0; z < this.levelLength; ++z) {
+                this.setLevelBlock(x, 0, z, Blocks.BEDROCK);
             }
         }
     }
