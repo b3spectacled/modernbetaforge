@@ -87,13 +87,13 @@ public class IndevChunkSource extends FiniteChunkSource {
             this.waterLevel = this.levelHeight - 32 - layer * 48;
             this.groundLevel = this.waterLevel - 2;
             
-            this.lowOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
-            this.highOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
+            this.lowOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
+            this.highOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
             this.selectorOctaveNoise = new PerlinOctaveNoise(this.random, 6, false);
             this.islandOctaveNoise = new PerlinOctaveNoise(this.random, 2, false);
             
-            this.erodeSelectorOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
-            this.erodeOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
+            this.erodeSelectorOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
+            this.erodeOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
             
             this.soilOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
             this.floatingOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);

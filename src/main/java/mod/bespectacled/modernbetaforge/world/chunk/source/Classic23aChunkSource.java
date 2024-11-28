@@ -42,12 +42,12 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     ) {
         super(world, chunkGenerator, chunkGeneratorSettings, noiseSettings, seed, mapFeaturesEnabled);
         
-        this.lowOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
-        this.highOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
+        this.lowOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
+        this.highOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
         this.selectorOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         
-        this.erodeSelectorOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
-        this.erodeOctaveNoise = new PerlinOctaveNoiseCombined(new PerlinOctaveNoise(this.random, 8, false), new PerlinOctaveNoise(this.random, 8, false));
+        this.erodeSelectorOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
+        this.erodeOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
         
         this.soilOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         
