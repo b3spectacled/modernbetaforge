@@ -66,7 +66,10 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.raiseLevel();
         this.erodeLevel();
         this.soilLevel();
-        this.carveLevel();
+        
+        if (this.settings.useIndevCaves)
+            this.carveLevel();
+        
         this.oreLevel();
         this.waterLevel();
         this.meltLevel();
