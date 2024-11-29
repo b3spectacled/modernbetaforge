@@ -88,6 +88,10 @@ public class GuiIds {
     public static final int PG0_B_USE_INFDEV_WALLS = 136;
     public static final int PG0_B_USE_INFDEV_PYRAMIDS = 137;
     
+    public static final int PG0_S_CAVE_HEIGHT = 138;
+    public static final int PG0_S_CAVE_COUNT = 140;
+    public static final int PG0_S_CAVE_CHANCE = 141;
+    
     public static final int PG0_L_INDEV_SEA_LEVEL = 150;
     
     // Labels
@@ -743,6 +747,11 @@ public class GuiIds {
             
             return enabled;
         };
+        BiPredicate<Factory, Integer> testBetaCarver = (factory, id) -> {
+            String caveCarver = factory.caveCarver;
+            
+            return !caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.id);
+        };
         
         add(PG0_S_CHUNK);
         add(PG0_S_BIOME);
@@ -756,6 +765,9 @@ public class GuiIds {
         
         add(PG0_S_SEA_LEVEL, testSurface);
         add(PG0_B_USE_CAVES);
+        add(PG0_S_CAVE_HEIGHT, testBetaCarver);
+        add(PG0_S_CAVE_COUNT, testBetaCarver);
+        add(PG0_S_CAVE_CHANCE, testBetaCarver);
         add(PG0_B_USE_HOLDS, testStrongholds);
         add(PG0_B_USE_VILLAGES, testVillages);
         add(PG0_B_USE_VILLAGE_VARIANTS, testVillageVariants);

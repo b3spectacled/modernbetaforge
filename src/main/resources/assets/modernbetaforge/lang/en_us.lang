@@ -34,6 +34,9 @@ createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.replaceBeachBiomes=Beach Biomes
 
 # Page 1 - Other Feature Settings
+createWorld.customize.custom.caveHeight=Cave Height
+createWorld.customize.custom.caveCount=Cave Count
+createWorld.customize.custom.caveChance=Cave Rarity
 createWorld.customize.custom.useVillageVariants=Village Variants
 createWorld.customize.custom.useSandstone=Sandstone
 

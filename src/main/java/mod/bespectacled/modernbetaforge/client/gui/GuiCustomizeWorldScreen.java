@@ -54,6 +54,12 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_ADDITIONAL_WIDTH = 96;
     private static final int BIOME_FIELD_ADDITIONAL_WIDTH = 36;
     
+    private static final int MIN_CAVE_HEIGHT = 9;
+    private static final int MAX_CAVE_HEIGHT = 255;
+    private static final int MIN_CAVE_COUNT = 1;
+    private static final int MAX_CAVE_COUNT = 100;
+    private static final int MIN_CAVE_CHANCE = 1;
+    private static final int MAX_CAVE_CHANCE = 100;
     private static final float MAX_HEIGHT = 255.0f;
     private static final float MIN_BIOME_SCALE = 0.1f;
     private static final float MAX_BIOME_SCALE = 8.0f;
@@ -205,7 +211,11 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_BASIC_FEATURES, I18n.format(PREFIX + "overworldFeaturesLabel"), true),
             null,
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_SEA_LEVEL, I18n.format(PREFIX + "seaLevel"), true, this, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_CAVES, I18n.format(PREFIX + "useCaves"), true, this.settings.useCaves),
+            new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_CAVE_HEIGHT, I18n.format(PREFIX + NbtTags.CAVE_HEIGHT), true, this, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT, (float)this.settings.caveHeight),
+            new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_CAVE_COUNT, I18n.format(PREFIX + NbtTags.CAVE_COUNT), true, this, MIN_CAVE_COUNT, MAX_CAVE_COUNT, (float)this.settings.caveCount),
+            new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_CAVE_CHANCE, I18n.format(PREFIX + NbtTags.CAVE_CHANCE), true, this, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE, (float)this.settings.caveChance),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_RAVINES, I18n.format(PREFIX + "useRavines"), true, this.settings.useRavines),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_SHAFTS, I18n.format(PREFIX + "useMineShafts"), true, this.settings.useMineShafts),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_VILLAGES, I18n.format(PREFIX + "useVillages"), true, this.settings.useVillages),
@@ -221,7 +231,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_LAVA_LAKES, I18n.format(PREFIX + "useLavaLakes"), true, this.settings.useLavaLakes),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_LAVA_LAKE_CHANCE, I18n.format(PREFIX + "lavaLakeChance"), true, this, 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
             new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_LAVA_OCEANS, I18n.format(PREFIX + "useLavaOceans"), true, this.settings.useLavaOceans),
-            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_USE_SANDSTONE, I18n.format(PREFIX + NbtTags.USE_SANDSTONE), true, this.settings.useSandstone),
+            null,
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG0_L_INFDEV_227_FEATURES, I18n.format(PREFIX + "infdev227FeaturesLabel"), true),
             null,
@@ -1248,6 +1258,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             
             case GuiIds.PG0_S_SEA_LEVEL:
                 this.settings.seaLevel = (int)entryValue;
+                break;
+            case GuiIds.PG0_S_CAVE_HEIGHT:
+                this.settings.caveHeight = (int)entryValue;
+                break;
+            case GuiIds.PG0_S_CAVE_COUNT:
+                this.settings.caveCount = (int)entryValue;
+                break;
+            case GuiIds.PG0_S_CAVE_CHANCE:
+                this.settings.caveChance = (int)entryValue;
                 break;
             case GuiIds.PG0_S_DUNGEON_CHANCE:
                 this.settings.dungeonChance = (int)entryValue;

@@ -76,8 +76,8 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerCaveCarvers() {
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.id, new MapGenBetaCave());
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, new MapGenCaves());
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.id, settings -> new MapGenBetaCave(settings));
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, settings -> new MapGenCaves());
     }
     
     public static void registerDataFixes() {

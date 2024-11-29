@@ -60,6 +60,9 @@ public class ModernBetaChunkGeneratorSettings {
     public final int riverSize;
     
     public final boolean useCaves;
+    public final int caveHeight;
+    public final int caveCount;
+    public final int caveChance;
     public final boolean useDungeons;
     public final int dungeonChance;
     
@@ -270,6 +273,9 @@ public class ModernBetaChunkGeneratorSettings {
         this.riverSize = factory.riverSize;
         
         this.useCaves = factory.useCaves;
+        this.caveHeight = factory.caveHeight;
+        this.caveCount = factory.caveCount;
+        this.caveChance = factory.caveChance;
         this.useDungeons = factory.useDungeons;
         this.dungeonChance = factory.dungeonChance;
         
@@ -483,6 +489,9 @@ public class ModernBetaChunkGeneratorSettings {
         public int riverSize;
         
         public boolean useCaves;
+        public int caveHeight;
+        public int caveCount;
+        public int caveChance;
         public boolean useDungeons;
         public int dungeonChance;
         
@@ -710,6 +719,9 @@ public class ModernBetaChunkGeneratorSettings {
             this.riverSize = 4;
             
             this.useCaves = true;
+            this.caveHeight = 128;
+            this.caveCount = 40;
+            this.caveChance= 15;
             this.useDungeons = true;
             this.dungeonChance = 8;
             
@@ -933,6 +945,9 @@ public class ModernBetaChunkGeneratorSettings {
                 this.riverSize == factory.riverSize &&
                 
                 this.useCaves == factory.useCaves &&
+                this.caveHeight == factory.caveHeight &&
+                this.caveCount == factory.caveCount &&
+                this.caveChance == factory.caveChance &&
                 this.useDungeons == factory.useDungeons &&
                 this.dungeonChance == factory.dungeonChance &&
                 
@@ -1147,6 +1162,9 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.riverSize;
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
+            hashCode = 31 * hashCode + this.caveHeight;
+            hashCode = 31 * hashCode + this.caveCount;
+            hashCode = 31 * hashCode + this.caveChance;
             hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
             hashCode = 31 * hashCode + this.dungeonChance;
             
@@ -1375,6 +1393,9 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, "useCaves", factory.useCaves);
+                factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
+                factory.caveCount = JsonUtils.getInt(jsonObject, NbtTags.CAVE_COUNT, factory.caveCount);
+                factory.caveChance = JsonUtils.getInt(jsonObject, NbtTags.CAVE_CHANCE, factory.caveChance);
                 factory.useDungeons = JsonUtils.getBoolean(jsonObject, "useDungeons", factory.useDungeons);
                 factory.dungeonChance = JsonUtils.getInt(jsonObject, "dungeonChance", factory.dungeonChance);
                 
@@ -1593,6 +1614,9 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             
             jsonObject.addProperty("useCaves", factory.useCaves);
+            jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
+            jsonObject.addProperty(NbtTags.CAVE_COUNT, factory.caveCount);
+            jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
             jsonObject.addProperty("useDungeons", factory.useDungeons);
             jsonObject.addProperty("dungeonChance", factory.dungeonChance);
             

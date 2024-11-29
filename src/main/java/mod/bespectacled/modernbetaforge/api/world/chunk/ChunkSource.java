@@ -108,7 +108,7 @@ public abstract class ChunkSource {
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
 
-        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver), InitMapGenEvent.EventType.CAVE);
+        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver).apply(settings), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
         
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);
@@ -129,7 +129,7 @@ public abstract class ChunkSource {
         this.forestOctaveNoise = Optional.empty();
         
         // Set default cloud height
-        this.setCloudHeight(108);
+        this.setCloudHeight(this.worldHeight - 20);
     }
     
     public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);

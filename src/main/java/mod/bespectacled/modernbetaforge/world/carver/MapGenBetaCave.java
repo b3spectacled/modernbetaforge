@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.MathHelper;
@@ -12,16 +13,26 @@ import net.minecraft.world.gen.MapGenBase;
 public class MapGenBetaCave extends MapGenBase {
     private final Block fluidBlock;
     private final Block flowingBlock;
+    private final int caveHeight;
+    private final int caveCount;
+    private final int caveChance;
     
-    public MapGenBetaCave(Block fluidBlock, Block flowingBlock) {
+    public MapGenBetaCave(Block fluidBlock, Block flowingBlock, int caveHeight, int caveCount, int caveChance) {
         super();
         
         this.fluidBlock = fluidBlock;
         this.flowingBlock = flowingBlock;
+        this.caveHeight = MathHelper.clamp(caveHeight, 9, 255);
+        this.caveCount = caveCount;
+        this.caveChance = caveChance;
+    }
+    
+    public MapGenBetaCave(ModernBetaChunkGeneratorSettings settings) {
+        this(Blocks.WATER, Blocks.FLOWING_WATER, settings.caveHeight, settings.caveCount, settings.caveChance);
     }
     
     public MapGenBetaCave() {
-        this(Blocks.WATER, Blocks.FLOWING_WATER);
+        this(Blocks.WATER, Blocks.FLOWING_WATER, 128, 40, 15);
     }
     
     @Override
@@ -62,23 +73,27 @@ public class MapGenBetaCave extends MapGenBase {
             for (int j = 0; j < tunnelCount; ++j) {
                 float tunnelC = this.rand.nextFloat() * 3.141593F * 2.0F;
                 float f1 = ((this.rand.nextFloat() - 0.5F) * 2.0F) / 8F;
-                float tunnelSysWidth = getTunnelSystemWidth(this.rand);
+                float tunnelSysWidth = this.getTunnelSystemWidth(this.rand);
 
                 this.carveTunnels(chunkPrimer, originChunkX, originChunkZ, x, y, z, tunnelSysWidth, tunnelC, f1, 0, 0, this.getTunnelWHRatio());
             }
         }
     }
     
+    protected int getBaseCaveHeight() {
+        return this.caveHeight;
+    }
+    
     protected int getBaseCaveCount() {
-        return 40;
+        return this.caveCount;
     }
     
     protected int getRegionalCaveChance() {
-        return 15;
+        return this.caveChance;
     }
 
     protected int getCaveY(Random random) {
-        return random.nextInt(random.nextInt(120) + 8);
+        return random.nextInt(random.nextInt(this.getBaseCaveHeight() - 8) + 8);
     }
 
     protected float getTunnelSystemWidth(Random random) {
@@ -105,7 +120,7 @@ public class MapGenBetaCave extends MapGenBase {
     }
 
     private void carveCave(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
-        carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, 1.0F + this.rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5);
+        this.carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, 1.0F + this.rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5);
     }
     
     private void carveTunnels(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z, float tunnelSysWidth, float tunnelC, float f1, int branch, int branchCount, double tunnelWHRatio) {
@@ -151,8 +166,8 @@ public class MapGenBetaCave extends MapGenBase {
             f2 += (newRandom.nextFloat() - newRandom.nextFloat()) * newRandom.nextFloat() * 4F;
 
             if (!noStarts && branch == randBranch && tunnelSysWidth > 1.0F) {
-                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, tunnelC - 1.570796F, f1 / 3F, branch, branchCount, 1.0);
-                carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, tunnelC + 1.570796F, f1 / 3F, branch, branchCount, 1.0);
+                this.carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, tunnelC - 1.570796F, f1 / 3F, branch, branchCount, 1.0);
+                this.carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, newRandom.nextFloat() * 0.5F + 0.5F, tunnelC + 1.570796F, f1 / 3F, branch, branchCount, 1.0);
                 return;
             }
 
@@ -160,11 +175,11 @@ public class MapGenBetaCave extends MapGenBase {
                 continue;
             }
 
-            if (!canCarveBranch(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
+            if (!this.canCarveBranch(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
                 return;
             }
             
-            carveRegion(chunkPrimer, 0, 64, chunkX, chunkZ, x, y, z, yaw, pitch); 
+            this.carveRegion(chunkPrimer, 0, 64, chunkX, chunkZ, x, y, z, yaw, pitch); 
 
             if (noStarts) {
                 break;
@@ -200,8 +215,8 @@ public class MapGenBetaCave extends MapGenBase {
         if (minY < 1) {
             minY = 1;
         }
-        if (maxY > 120) {
-            maxY = 120;
+        if (maxY > this.getBaseCaveHeight() - 8) {
+            maxY = this.getBaseCaveHeight() - 8;
         }
 
         if (minZ < 0) {
@@ -262,7 +277,7 @@ public class MapGenBetaCave extends MapGenBase {
             for (int relZ = relMinZ; relZ < relMaxZ; relZ++) {
                 for (int relY = maxY + 1; relY >= minY - 1; relY--) {
 
-                    if (relY < 0 || relY >= 128) {
+                    if (relY < 0 || relY >= this.getBaseCaveHeight()) {
                         continue;
                     }
 
@@ -272,7 +287,7 @@ public class MapGenBetaCave extends MapGenBase {
                         return true;
                     }
 
-                    if (relY != minY - 1 && isOnBoundary(relMinX, relMaxX, relMinZ, relMaxZ, relX, relZ)) {
+                    if (relY != minY - 1 && this.isOnBoundary(relMinX, relMaxX, relMinZ, relMaxZ, relX, relZ)) {
                         relY = minY;
                     }
                 }

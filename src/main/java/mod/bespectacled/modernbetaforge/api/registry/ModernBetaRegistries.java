@@ -16,7 +16,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<BiomeSourceCreator> BIOME;
     public static final ModernBetaRegistry<ModernBetaNoiseSettings> NOISE;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
-    public static final ModernBetaRegistry<MapGenBase> CARVER;
+    public static final ModernBetaRegistry<CaveCarverCreator> CARVER;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     
     static {
@@ -48,5 +48,10 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface SurfaceBuilderCreator {
         SurfaceBuilder apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface CaveCarverCreator {
+        MapGenBase apply(ModernBetaChunkGeneratorSettings settings);
     }
 }

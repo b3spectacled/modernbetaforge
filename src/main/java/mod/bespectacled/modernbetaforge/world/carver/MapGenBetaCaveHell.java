@@ -8,22 +8,12 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public class MapGenBetaCaveHell extends MapGenBetaCave {
     public MapGenBetaCaveHell() {
-        super(Blocks.LAVA, Blocks.FLOWING_LAVA);
-    }
-    
-    @Override
-    protected int getBaseCaveCount() {
-        return 10;
-    }
-    
-    @Override
-    protected int getRegionalCaveChance() {
-        return 5;
+        super(Blocks.LAVA, Blocks.FLOWING_LAVA, 128, 10, 5);
     }
     
     @Override
     protected int getCaveY(Random random) {
-        return random.nextInt(128);
+        return random.nextInt(this.getBaseCaveHeight());
     }
     
     @Override
