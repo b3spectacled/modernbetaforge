@@ -108,7 +108,7 @@ public class FiniteLevelDataHandler {
         
         private Block[] buildLevelData() {
             if (this.levelData.length != this.levelWidth * this.levelHeight * this.levelLength) {
-                throw new IllegalStateException("Indev level size from file is not correct!");
+                throw new IllegalStateException("Stored Indev level size from file was somehow corrupted!");
             }
             
             Block[] blockData = new Block[this.levelData.length];

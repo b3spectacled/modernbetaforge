@@ -45,7 +45,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.storage.loot.LootTableList;
 
 public abstract class FiniteChunkSource extends ChunkSource {
-    private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
+    private static final boolean DEBUG_LEVEL_DATA_HANDLER = true;
     
     private static final int MIN_WIDTH = 64;
     private static final int MAX_WIDTH = 1024;
@@ -60,10 +60,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelHeight;
     protected final int[] levelHeightmap;
     
-    private final Block[] levelData;
     private final IndevHouse levelHouse;
-    
-    private boolean pregenerated;
+    private final LevelDataContainer levelDataContainer;
     
     public FiniteChunkSource(
         World world,
@@ -80,11 +78,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelHeight = MathHelper.clamp(settings.levelHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         
-        this.levelData = new Block[this.levelWidth * this.levelHeight * this.levelLength];
-        Arrays.fill(this.levelData, Blocks.AIR);
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
-        
-        this.pregenerated = ModernBetaConfig.generatorOptions.saveIndevLevels ? this.tryLoadLevel() : false;
+        this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
+            this.tryLoadLevel() :
+            new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
     }
     
     @Override
@@ -125,7 +122,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
 
-        return this.levelData[(y * this.levelLength + z) * this.levelWidth + x];
+        return this.levelDataContainer.levelData[(y * this.levelLength + z) * this.levelWidth + x];
     }
     
     public void setLevelBlock(int x, int y, int z, Block block) {
@@ -133,7 +130,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
         
-        this.levelData[(y * this.levelLength + z) * this.levelWidth + x] = block;
+        this.levelDataContainer.levelData[(y * this.levelLength + z) * this.levelWidth + x] = block;
     }
     
     public int getLevelHeight(int x, int z, HeightmapChunk.Type type) {
@@ -233,7 +230,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     public boolean hasPregenerated() {
-        return this.pregenerated;
+        return this.levelDataContainer.generated;
     }
 
     @Override
@@ -285,9 +282,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     protected void pregenerateLevelOrWait() {
-        if (!this.pregenerated) {
+        if (!this.levelDataContainer.generated) {
             this.pregenerateTerrain();
-            this.pregenerated = true;
+            this.levelDataContainer.generated = true;
             
             if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
                 this.trySaveLevel();
@@ -456,29 +453,32 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
-    private boolean tryLoadLevel() {
+    private LevelDataContainer tryLoadLevel() {
         FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
-        boolean loaded = false;
+        LevelDataContainer levelDataContainer;
         
         ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));
         try {
             dataHandler.readFromDisk();
-            Block[] readLevelData = dataHandler.getLevelData();
+            Block[] levelData = dataHandler.getLevelData();
             
-            for (int i = 0; i < this.levelData.length; ++i) {
-                this.levelData[i] = readLevelData[i];
+            if (levelData.length != this.levelWidth * this.levelHeight * this.levelLength) {
+                throw new IllegalStateException("Indev level size from file was somehow corrupted!");
             }
+
+            levelDataContainer = new LevelDataContainer(levelData);
             
             ModernBeta.log(Level.INFO, String.format("Indev file '%s' was loaded..", FiniteLevelDataHandler.FILE_NAME));
-            loaded = true;
         } catch (Exception e) {
+            levelDataContainer = new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
+            
             ModernBeta.log(Level.WARN, String.format(
                 "Indev file '%s' couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
         }
         
-        return loaded;
+        return levelDataContainer;
     }
     
     private boolean trySaveLevel() {
@@ -486,7 +486,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         boolean saved = false;
         
         try {
-            dataHandler.setLevelData(this.levelData);
+            dataHandler.setLevelData(this.levelDataContainer.levelData);
             dataHandler.writeToDisk();
             
             ModernBeta.log(Level.INFO, String.format("Indev file '%s' was saved..", FiniteLevelDataHandler.FILE_NAME));
@@ -502,12 +502,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private void debugLevelDataHandler() {
         FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
 
-        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));try {
+        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        try {
             dataHandler.readFromDisk();
             Block[] readLevelData = dataHandler.getLevelData();
             
-            for (int i = 0; i < this.levelData.length; ++i) {
-                Block expected = this.levelData[i];
+            for (int i = 0; i < this.levelDataContainer.levelData.length; ++i) {
+                Block expected = this.levelDataContainer.levelData[i];
                 Block found = readLevelData[i];
                 
                 if (expected != found) {
@@ -529,6 +530,23 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 "Indev file '%s' couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
+        }
+    }
+    
+    private static class LevelDataContainer {
+        private final Block[] levelData;
+        private boolean generated;
+        
+        private LevelDataContainer(int levelWidth, int levelHeight, int levelLength) {
+            this.levelData = new Block[levelWidth * levelHeight * levelLength];
+            Arrays.fill(this.levelData, Blocks.AIR);
+            
+            this.generated = false;
+        }
+        
+        private LevelDataContainer(Block[] levelData) {
+            this.levelData = levelData;
+            this.generated = true;
         }
     }
 }
