@@ -8,6 +8,8 @@ import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldServer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
@@ -35,6 +37,7 @@ public class WorldEventHandlerCommon {
             if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
+                ModernBetaChunkGeneratorSettings generatorSettings = chunkSource.getChunkGeneratorSettings();
                 
                 BlockPos newSpawnPos = useOldSpawns ?
                     chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
@@ -44,13 +47,16 @@ public class WorldEventHandlerCommon {
                     world.getWorldInfo().setSpawn(newSpawnPos);
                     
                     if (chunkSource instanceof FiniteChunkSource) {
-                        ((FiniteChunkSource)chunkSource).buildHouse(world, newSpawnPos);
+                        ((FiniteChunkSource)chunkSource).buildHouse(world, newSpawnPos, settings.isBonusChestEnabled());
                     }
 
                     if (settings.isBonusChestEnabled()) {
                         AccessorWorldServer accessor = (AccessorWorldServer)world;
                         
-                        accessor.invokeCreateBonusChest();
+                        // Handle bonus chest placement in Indev house generation method
+                        if (!(chunkSource instanceof FiniteChunkSource && IndevHouse.fromId(generatorSettings.levelHouse) != IndevHouse.NONE)) {
+                            accessor.invokeCreateBonusChest();
+                        }
                     }
                     
                     event.setCanceled(true);

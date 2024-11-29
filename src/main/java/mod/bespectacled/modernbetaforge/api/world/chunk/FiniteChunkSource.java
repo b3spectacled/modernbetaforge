@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -26,8 +27,12 @@ import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -37,6 +42,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.feature.WorldGeneratorBonusChest;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public abstract class FiniteChunkSource extends ChunkSource {
     private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
@@ -161,7 +169,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return this.levelHeight;
     }
     
-    public void buildHouse(WorldServer world, BlockPos spawnPos) {
+    public void buildHouse(WorldServer world, BlockPos spawnPos, boolean isBonusChestEnabled) {
         if (this.levelHouse == IndevHouse.NONE)
             return;
         
@@ -171,6 +179,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int spawnY = spawnPos.getY() + 1;
         int spawnZ = spawnPos.getZ();
         MutableBlockPos blockPos = new MutableBlockPos();
+        Random random = new Random(world.getSeed());
 
         Block wallBlock = this.levelHouse.wallBlock;
         Block floorBlock = this.levelHouse.floorBlock;
@@ -198,6 +207,16 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         world.setBlockState(blockPos.setPos(spawnX - 3 + 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST));
         world.setBlockState(blockPos.setPos(spawnX + 3 - 1, spawnY, spawnZ), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST));
+        
+        if (isBonusChestEnabled) {
+            IBlockState chestState = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH);
+            world.setBlockState(blockPos.setPos(spawnX, spawnY - 1, spawnZ - 2),  chestState, 2);
+            
+            TileEntity tileEntity = world.getTileEntity(blockPos);
+            if (tileEntity instanceof TileEntityChest) {
+                ((TileEntityChest)tileEntity).setLootTable(LootTableList.CHESTS_SPAWN_BONUS_CHEST, random.nextLong());
+            }
+        }
     }
 
     public boolean inWorldBounds(int x, int z) {
