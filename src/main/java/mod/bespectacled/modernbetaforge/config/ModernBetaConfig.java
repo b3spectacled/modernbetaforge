@@ -49,7 +49,7 @@ public class ModernBetaConfig {
             "Save Indev level to separate file and try to load instead of regenerating level"
         })
         @RequiresWorldRestart
-        public boolean saveIndevLevels = false;
+        public boolean saveIndevLevels = true;
     }
 
     public static class CategoryVisual {
