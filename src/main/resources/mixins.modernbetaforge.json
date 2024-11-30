@@ -19,7 +19,8 @@
       "accessor.AccessorWorldServer",
       "accessor.AccessorWorldProvider",
       "accessor.AccessorGenLayerBiome",
-      "accessor.AccessorMapGenBase"
+      "accessor.AccessorMapGenBase",
+      "accessor.AccessorMinecraftServer"
     ],
     "client": [
       "client.MixinEntityRenderer",

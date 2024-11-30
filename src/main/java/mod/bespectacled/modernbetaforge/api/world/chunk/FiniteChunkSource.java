@@ -17,6 +17,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteLevelDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMinecraftServer;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
@@ -173,7 +174,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (this.levelHouse == IndevHouse.NONE)
             return;
         
-        this.logPhase("Building");
+        this.setPhase("Building");
         
         int spawnX = spawnPos.getX();
         int spawnY = spawnPos.getY() + 1;
@@ -385,8 +386,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return flooded;
     }
     
-    protected void logPhase(String phase) {
+    protected void setPhase(String phase) {
         ModernBeta.log(Level.INFO, phase + "..");
+        
+        if (this.world.getMinecraftServer() != null) {
+            AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
+            accessor.invokeSetUserMessage(phase + "..");
+        }
     }
     
     protected BiomeInjectionRules buildBiomeInjectorRules() {

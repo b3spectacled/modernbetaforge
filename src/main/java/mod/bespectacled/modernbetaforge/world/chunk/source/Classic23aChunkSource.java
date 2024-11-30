@@ -122,7 +122,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void raiseLevel() {
-        this.logPhase("Raising");
+        this.setPhase("Raising");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             for (int z = 0; z < this.levelLength; ++z) {
@@ -146,7 +146,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void erodeLevel() {
-        this.logPhase("Eroding");
+        this.setPhase("Eroding");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             for (int z = 0; z < this.levelLength; ++z) {
@@ -164,7 +164,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void soilLevel() {
-        this.logPhase("Soiling");
+        this.setPhase("Soiling");
         int seaLevel = this.getSeaLevel();
         MutableBlockPos blockPos = new MutableBlockPos();
         
@@ -206,7 +206,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void carveLevel() {
-        this.logPhase("Carving");
+        this.setPhase("Carving");
         
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64;
         
@@ -260,7 +260,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
 
     private void waterLevel() {
-        this.logPhase("Watering");
+        this.setPhase("Watering");
 
         Block fluidBlock = this.defaultFluid.getBlock();
         int seaLevel = this.getSeaLevel();
@@ -291,7 +291,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void meltLevel() {
-        this.logPhase("Melting");
+        this.setPhase("Melting");
         
         int attempts = 0;
         
@@ -312,7 +312,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void growLevel() {
-        this.logPhase("Growing");
+        this.setPhase("Growing");
 
         this.sandOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         this.gravelOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
@@ -354,7 +354,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
      * 
      */
     private void assembleLevel() {
-        this.logPhase("Assembling");
+        this.setPhase("Assembling");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             for (int z = 0; z < this.levelLength; ++z) {

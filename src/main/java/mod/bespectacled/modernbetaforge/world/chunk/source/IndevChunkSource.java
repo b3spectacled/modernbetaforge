@@ -149,7 +149,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void raiseLevel() {
-        this.logPhase("Raising");
+        this.setPhase("Raising");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             double normalizedX = Math.abs((x / (this.levelWidth - 1.0) - 0.5) * 2.0);
@@ -196,7 +196,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void erodeLevel() {
-        this.logPhase("Eroding");
+        this.setPhase("Eroding");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             for (int z = 0; z < this.levelLength; ++z) {
@@ -214,7 +214,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void soilLevel() {
-        this.logPhase("Soiling");
+        this.setPhase("Soiling");
         int seaLevel = this.waterLevel;
         MutableBlockPos blockPos = new MutableBlockPos();
         
@@ -277,7 +277,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void growLevel() {
-        this.logPhase("Growing");
+        this.setPhase("Growing");
         int surfaceLevel = this.waterLevel - 1;
         
         if (this.levelTheme == IndevTheme.PARADISE)
@@ -323,7 +323,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void carveLevel() {
-        this.logPhase("Carving");
+        this.setPhase("Carving");
         
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
         
@@ -383,7 +383,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void meltLevel() {
-        this.logPhase("Melting");
+        this.setPhase("Melting");
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 2000;
         for (int i = 0; i < lavaSourceCount; ++i) {
@@ -417,7 +417,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void waterLevel() {
-        this.logPhase("Watering");
+        this.setPhase("Watering");
         
         Block fluidBlock = this.defaultFluid.getBlock();
     
@@ -450,7 +450,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void plantLevel() {
-        this.logPhase("Planting");
+        this.setPhase("Planting");
         for (int x = 0; x < this.levelWidth; ++x) {
             int worldX = x - this.levelWidth / 2;
             
@@ -476,7 +476,7 @@ public class IndevChunkSource extends FiniteChunkSource {
      * 
      */
     private void assembleLevel() {
-        this.logPhase("Assembling");
+        this.setPhase("Assembling");
         
         for (int x = 0; x < this.levelWidth; ++x) {
             int worldX = x - this.levelWidth / 2;
