@@ -747,10 +747,10 @@ public class GuiIds {
             
             return enabled;
         };
-        BiPredicate<Factory, Integer> testBetaCarver = (factory, id) -> {
+        BiPredicate<Factory, Integer> testCarverSettings = (factory, id) -> {
             String caveCarver = factory.caveCarver;
             
-            return !caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.id);
+            return !caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.id) && factory.useCaves;
         };
         
         add(PG0_S_CHUNK);
@@ -765,9 +765,9 @@ public class GuiIds {
         
         add(PG0_S_SEA_LEVEL, testSurface);
         add(PG0_B_USE_CAVES);
-        add(PG0_S_CAVE_HEIGHT, testBetaCarver);
-        add(PG0_S_CAVE_COUNT, testBetaCarver);
-        add(PG0_S_CAVE_CHANCE, testBetaCarver);
+        add(PG0_S_CAVE_HEIGHT, testCarverSettings);
+        add(PG0_S_CAVE_COUNT, testCarverSettings);
+        add(PG0_S_CAVE_CHANCE, testCarverSettings);
         add(PG0_B_USE_HOLDS, testStrongholds);
         add(PG0_B_USE_VILLAGES, testVillages);
         add(PG0_B_USE_VILLAGE_VARIANTS, testVillageVariants);
