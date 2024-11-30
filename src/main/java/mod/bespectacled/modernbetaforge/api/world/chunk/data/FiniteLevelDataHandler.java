@@ -13,10 +13,10 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource.LevelDataContainer;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -37,12 +37,12 @@ public class FiniteLevelDataHandler {
         );
     }
     
-    public void setLevelData(Block[] blockData) {
-        this.levelData.setLevelData(blockData);
+    public void setLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
+        this.levelData.setLevelData(levelData, levelMap);
     }
     
-    public Block[] getLevelData() {
-        return this.levelData.buildLevelData();
+    public LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
+        return this.levelData.getLevelData(levelWidth, levelHeight, levelLength);
     }
     
     public void writeToDisk() throws IOException {
@@ -73,66 +73,49 @@ public class FiniteLevelDataHandler {
         private final int levelWidth;
         private final int levelHeight;
         private final int levelLength;
-        private final byte[] levelData; 
-        private final BiMap<Byte, String> levelMap;
+        
+        private byte[] levelData; 
+        private BiMap<Byte, String> levelMap;
         
         private FiniteLevelData(int levelWidth, int levelHeight, int levelLength) {
             this.levelWidth = levelWidth;
             this.levelHeight = levelHeight;
             this.levelLength = levelLength;
-            this.levelData = new byte[this.levelWidth * this.levelHeight * this.levelLength];
-            this.levelMap = HashBiMap.create();
         }
         
-        private void setLevelData(Block[] blockData) {
-            byte id = 0;
-            
-            for (int i = 0; i < blockData.length; ++i) {
-                Block block = blockData[i];
-                String registryName = ForgeRegistries.BLOCKS.getKey(block).toString();
-                
-                if (!this.levelMap.containsValue(registryName)) {
-                    this.levelMap.put(id++, registryName);
-                }
-                
-                if (this.levelMap.size() > 255) {
-                    throw new IndexOutOfBoundsException("Level data block map size exceeded 255!");
-                }
-                
-                this.levelData[i] = this.levelMap.inverse().get(registryName);
-            }
+        private void setLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
+            this.levelData = levelData;
+            this.levelMap = levelMap;
             
             ModernBeta.log(Level.DEBUG, String.format("Packed byte array of size %d", this.levelData.length));
             ModernBeta.log(Level.DEBUG, String.format("Packed block map of size %d", this.levelMap.size()));
         }
         
-        private Block[] buildLevelData() {
+        private LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
+            if (this.levelWidth != levelWidth || this.levelHeight != levelHeight || this.levelLength != levelLength) {
+                throw new IllegalStateException("Stored Indev level dimensions were somehow corrupted!");
+            }
+            
             if (this.levelData.length != this.levelWidth * this.levelHeight * this.levelLength) {
                 throw new IllegalStateException("Stored Indev level size from file was somehow corrupted!");
             }
             
-            Block[] blockData = new Block[this.levelData.length];
-            for (int i = 0; i < this.levelData.length; ++i) {
-                String registryName = this.levelMap.get(this.levelData[i]);
-                Block block;
-                
+            for (String registryName : this.levelMap.values()) {
                 if (registryName == null) {
-                    throw new NullPointerException("Block registry name is null!");
+                    throw new NullPointerException("Stored block registry name is null!");
                 }
                 
-                block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(registryName));
+                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(registryName));
                 
                 if (block == null) {
-                    throw new NullPointerException("Block was not found in Forge registry!");
+                    throw new NullPointerException("Stored block was not found in Forge registry!");
                 }
-                
-                blockData[i] = block;
             }
             
             ModernBeta.log(Level.DEBUG, String.format("Unpacked byte array of size %d", this.levelData.length));
             ModernBeta.log(Level.DEBUG, String.format("Unpacked block map of size %d", this.levelMap.size()));
             
-            return blockData;
+            return new LevelDataContainer(this.levelData, this.levelMap);
         }
     }
 }

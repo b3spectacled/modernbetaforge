@@ -46,7 +46,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 @SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
-    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024 };
+    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
     
