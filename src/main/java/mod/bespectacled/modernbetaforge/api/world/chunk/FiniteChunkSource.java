@@ -475,6 +475,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
+            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
         
         return levelDataContainer;
@@ -492,7 +493,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             saved = true;
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FiniteLevelDataHandler.FILE_NAME));
-            ModernBeta.log(Level.ERROR, e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
         }
         
         return saved;
@@ -533,6 +534,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
+            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
     }
     
