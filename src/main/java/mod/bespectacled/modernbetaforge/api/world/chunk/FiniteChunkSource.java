@@ -462,17 +462,17 @@ public abstract class FiniteChunkSource extends ChunkSource {
         FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
         LevelDataContainer levelDataContainer;
         
-        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteLevelDataHandler.FILE_NAME));
         try {
             dataHandler.readFromDisk();
             levelDataContainer = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
             
-            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was loaded..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was loaded..", FiniteLevelDataHandler.FILE_NAME));
         } catch (Exception e) {
             levelDataContainer = new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
             
             ModernBeta.log(Level.WARN, String.format(
-                "Indev file '%s' is corrupted and couldn't be loaded. Level will be regenerated and then saved!",
+                "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
         }
@@ -488,10 +488,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
             dataHandler.setLevelData(this.levelDataContainer.levelData, this.levelDataContainer.levelMap);
             dataHandler.writeToDisk();
             
-            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was saved..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was saved..", FiniteLevelDataHandler.FILE_NAME));
             saved = true;
         } catch (Exception e) {
-            ModernBeta.log(Level.ERROR, String.format("Indev file '%s' couldn't be saved!", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FiniteLevelDataHandler.FILE_NAME));
             ModernBeta.log(Level.ERROR, e.getMessage());
         }
         
@@ -501,7 +501,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private void debugLevelDataHandler() {
         FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
 
-        ModernBeta.log(Level.INFO, String.format("Attempting to read Indev file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteLevelDataHandler.FILE_NAME));
         try {
             dataHandler.readFromDisk();
             LevelDataContainer readLevelData = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
@@ -527,10 +527,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 }
             }
             
-            ModernBeta.log(Level.INFO, String.format("Indev file '%s' was validated with no errors found..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was validated with no errors found..", FiniteLevelDataHandler.FILE_NAME));
         } catch (Exception e) {
             ModernBeta.log(Level.WARN, String.format(
-                "Indev file '%s' couldn't be loaded. Level will be generated and then saved!",
+                "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteLevelDataHandler.FILE_NAME
             ));
         }

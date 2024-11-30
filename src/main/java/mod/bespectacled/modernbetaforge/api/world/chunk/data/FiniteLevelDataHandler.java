@@ -93,11 +93,11 @@ public class FiniteLevelDataHandler {
         
         private LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
             if (this.levelWidth != levelWidth || this.levelHeight != levelHeight || this.levelLength != levelLength) {
-                throw new IllegalStateException("Stored Indev level dimensions were somehow corrupted!");
+                throw new IllegalStateException("Stored level dimensions were somehow corrupted!");
             }
             
             if (this.levelData.length != this.levelWidth * this.levelHeight * this.levelLength) {
-                throw new IllegalStateException("Stored Indev level size from file was somehow corrupted!");
+                throw new IllegalStateException("Stored level size from file was somehow corrupted!");
             }
             
             for (String registryName : this.levelMap.values()) {
