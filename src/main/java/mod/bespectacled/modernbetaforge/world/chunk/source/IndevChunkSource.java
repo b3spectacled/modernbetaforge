@@ -152,6 +152,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.setPhase("Raising");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             double normalizedX = Math.abs((x / (this.levelWidth - 1.0) - 0.5) * 2.0);
             
             for (int z = 0; z < this.levelLength; ++z) {
@@ -199,6 +200,8 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.setPhase("Eroding");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
+            
             for (int z = 0; z < this.levelLength; ++z) {
                 double erodeSelector = this.erodeSelectorOctaveNoise.sample(x << 1, z << 1) / 8.0;
                 int erodeNoise = this.erodeOctaveNoise.sample(x << 1, z << 1) > 0.0 ? 1 : 0;
@@ -219,6 +222,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         MutableBlockPos blockPos = new MutableBlockPos();
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             double normalizedX = Math.abs((x / (this.levelWidth - 1.0) - 0.5) * 2.0);
             int worldX = x - this.levelWidth / 2;
             
@@ -284,6 +288,8 @@ public class IndevChunkSource extends FiniteChunkSource {
             surfaceLevel += 2;
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
+            
             for (int z = 0; z < this.levelLength; ++z) {
                 boolean genSand = sandOctaveNoise.sampleXY(x, z) > 8.0;
                 boolean genGravel = gravelOctaveNoise.sampleXY(x, z) > 12.0;
@@ -328,6 +334,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
         
         for (int i = 0; i < caveCount; ++i) {
+            this.setPhaseProgress(i / (float)(caveCount - 1));
             float caveX = this.random.nextFloat() * (float)this.levelWidth;
             float caveY = this.random.nextFloat() * (float)this.levelHeight;
             float caveZ = this.random.nextFloat() * (float)this.levelLength;
@@ -387,6 +394,10 @@ public class IndevChunkSource extends FiniteChunkSource {
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 2000;
         for (int i = 0; i < lavaSourceCount; ++i) {
+            if (i % 100 == 0) {
+                this.setPhaseProgress(i / (float)(lavaSourceCount - 1));
+            }
+            
             int randX = this.random.nextInt(this.levelWidth);
             int randY = Math.min(
                 Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel)),
@@ -423,6 +434,10 @@ public class IndevChunkSource extends FiniteChunkSource {
     
         int waterSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 1000;
         for (int i = 0; i < waterSourceCount; ++i) {
+            if (i % 100 == 0) {
+                this.setPhaseProgress(i / (float)(waterSourceCount - 1));
+            }
+            
             int randX = this.random.nextInt(this.levelWidth);
             int randY = this.random.nextInt(this.levelHeight);
             int randZ = this.random.nextInt(this.levelLength);
@@ -452,6 +467,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     private void plantLevel() {
         this.setPhase("Planting");
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
@@ -479,6 +495,7 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.setPhase("Assembling");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {

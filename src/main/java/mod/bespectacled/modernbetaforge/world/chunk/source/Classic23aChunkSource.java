@@ -125,6 +125,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.setPhase("Raising");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
+            
             for (int z = 0; z < this.levelLength; ++z) {
                 double heightLow = this.lowOctaveNoise.sample(x * 1.3f, z * 1.3f) / 8.0 - 8.0;
                 double heightHigh = this.highOctaveNoise.sample(x * 1.3f, z * 1.3f) / 6.0 + 6.0;
@@ -149,6 +151,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.setPhase("Eroding");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
+            
             for (int z = 0; z < this.levelLength; ++z) {
                 double erodeSelector = this.erodeSelectorOctaveNoise.sample(x << 1, z << 1) / 8.0;
                 int erodeNoise = this.erodeOctaveNoise.sample(x << 1, z << 1) > 0.0 ? 1 : 0;
@@ -169,6 +173,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         MutableBlockPos blockPos = new MutableBlockPos();
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
@@ -211,6 +216,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64;
         
         for (int i = 0; i < caveCount; ++i) {
+            this.setPhaseProgress(i / (float)(caveCount - 1));
             float caveX = this.random.nextFloat() * (float)this.levelWidth;
             float caveY = this.random.nextFloat() * (float)this.levelHeight;
             float caveZ = this.random.nextFloat() * (float)this.levelLength;
@@ -278,6 +284,10 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         
         int waterSourceCount = this.levelWidth * this.levelLength / 200;
         for (int i = 0; i < waterSourceCount; ++i) {
+            if (i % 100 == 0) {
+                this.setPhaseProgress(i / (float)(waterSourceCount - 1));
+            }
+            
             int randX = this.random.nextInt(this.levelWidth);
             int randY = seaLevel - 1 - this.random.nextInt(3);
             int randZ = this.random.nextInt(this.levelLength);
@@ -297,6 +307,10 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 10000;
         for (int i = 0; i < lavaSourceCount; ++i) {
+            if (i % 100 == 0) {
+                this.setPhaseProgress(i / (float)(lavaSourceCount - 1));
+            }
+            
             int randX = this.random.nextInt(this.levelWidth);
             int randY = this.random.nextInt(this.getSeaLevel() - 4);
             int randZ = this.random.nextInt(this.levelLength);
@@ -319,6 +333,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         int seaLevel = this.getSeaLevel();
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
@@ -357,6 +372,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.setPhase("Assembling");
         
         for (int x = 0; x < this.levelWidth; ++x) {
+            this.setPhaseProgress(x / (float)(this.levelWidth - 1));
+            
             for (int z = 0; z < this.levelLength; ++z) {
                 this.setLevelBlock(x, 0, z, Blocks.BEDROCK);
             }

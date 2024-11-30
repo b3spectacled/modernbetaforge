@@ -69,6 +69,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private final IndevHouse levelHouse;
     private final LevelDataContainer levelDataContainer;
     
+    private String phase;
+    private float phaseProgress;
+    
     public FiniteChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
@@ -387,11 +390,24 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     protected void setPhase(String phase) {
-        ModernBeta.log(Level.INFO, phase + "..");
+        this.phase = phase;
         
         if (this.world.getMinecraftServer() != null) {
             AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
-            accessor.invokeSetUserMessage(phase + "..");
+            accessor.invokeSetUserMessage(this.phase + "..");
+        }
+        
+        ModernBeta.log(Level.INFO, this.phase + "..");
+    }
+    
+    protected void setPhaseProgress(float phaseProgress) {
+        this.phaseProgress = phaseProgress;
+
+        if (this.world.getMinecraftServer() != null) {
+            AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
+            String progressStr = String.format("%s.. %d", this.phase, (int)(this.phaseProgress * 100.0f));
+            
+            accessor.invokeSetUserMessage(progressStr);
         }
     }
     
