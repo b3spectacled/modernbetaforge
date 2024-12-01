@@ -23,6 +23,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
@@ -36,6 +37,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
@@ -68,6 +70,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private final GuiCreateWorld parent;
     
+    private final Predicate<String> floatFilter;
+    private final Predicate<String> intFilter;
+    private final Predicate<String> intBiomeSizeFilter;
+    private final Predicate<String> intRiverSizeFilter;
+    
+    private final ModernBetaChunkGeneratorSettings.Factory defaultSettings;
+    private ModernBetaChunkGeneratorSettings.Factory settings;
+    
+    private final Random random;
+    
     protected String title;
     protected String subtitle;
     protected String pageTitle;
@@ -87,15 +99,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private int confirmMode;
     private boolean confirmDismissed;
     
-    private final Predicate<String> floatFilter;
-    private final Predicate<String> intFilter;
-    private final Predicate<String> intBiomeSizeFilter;
-    private final Predicate<String> intRiverSizeFilter;
-    
-    private final ModernBetaChunkGeneratorSettings.Factory defaultSettings;
-    private ModernBetaChunkGeneratorSettings.Factory settings;
-    
-    private final Random random;
+    private boolean clicked;
 
     public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
@@ -1076,6 +1080,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.updateGuiButtons();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+        this.playSound();
     }
 
     @Override
@@ -1389,6 +1394,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.updateGuiButtons();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+        this.playSound();
     }
 
     @Override
@@ -1560,6 +1566,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
+        
+        this.clicked = true;
     }
 
     @Override
@@ -1575,6 +1583,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.pageList.mouseReleased(mouseX, mouseY, state);
+        
+        this.clicked = false;
     }
 
     private String getFormattedValue(int entry, float entryValue) {
@@ -1815,6 +1825,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return prefix ? String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName) : biomeName;
+    }
+    
+    private void playSound() {
+        if (!this.clicked)
+            this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
     private static int getNdx(int[] arr, int val) {
