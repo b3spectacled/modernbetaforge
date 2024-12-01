@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -20,7 +21,6 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMinecraftServer;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -70,6 +70,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private final LevelDataContainer levelDataContainer;
     
     private String phase;
+    @SuppressWarnings("unused")
     private float phaseProgress;
     
     public FiniteChunkSource(
@@ -314,7 +315,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
                     float dy = (float)y - centerY;
                     float dz = (float)z - centerZ;
                     
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inLevelBounds(x, y, z)) {
+                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inCaveBounds(x, y, z)) {
                         Block block = this.getLevelBlock(x, y, z);
                         
                         if (block == this.defaultBlock.getBlock()) {
@@ -331,15 +332,17 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /*
-     * Not the original algorithm!
-     * There may be small differences in generation compared to the original!
+     * Not the original algorithm, but did extensive testing/reverse engineering against a modded instance of Indev,
+     * so this is accurate except in one case -- doing edge floods for Inland worlds; this shouldn't seem possible given
+     * that the edges should never be exposed, but for some reason some underground pockets along the level edge still
+     * flood.
      * 
      * The algorithm should basically just be flooding downwards and outwards given a starting position, however,
      * what I'm fairly certain the original algorithm does when flooding along map edges:
      * 
-     * Flooding can touch edges of the map (x = 0 / z = 0 / x = levelWidth - 1 / z = levelLength - 1)
-     * if doing along-axis floods (does a check for filler block id 255 which is only done for random position floods)
-     * or flooding underground, otherwise cancel the flood.
+     * Flooding can touch edges of the map (x = 0 / z = 0 / x = levelWidth - 1 / z = levelLength - 1 / y = 0 / y = levelHeight - 1)
+     * if doing edge floods (does a check for filler block id 255 which is only done for random position floods),
+     * otherwise cancel the flood.
      * 
      * However, there seems to be a bug where the check if x = levelWidth - 1 does not actually use x,
      * so the original level generator allows water to generate where x = levelWidth - 1 above ground.
@@ -347,7 +350,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      */
     protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, List<Vec3d> floodedPositions) {
-        ArrayDeque<Vec3d> positions = new ArrayDeque<>();
+        Deque<Vec3d> positions = new ArrayDeque<>();
         int flooded = 0;
         
         Vec3d startPos = new Vec3d(startX, startY, startZ);
@@ -372,10 +375,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 if (floodedPositions != null)
                     floodedPositions.add(pos);
                 
-                if (floodedPositions != null && y >= this.getLevelHeight(x, z, Type.FLOOR) && this.atLevelBounds(x, y, z))
+                if (floodedPositions != null && this.atLevelBounds(x, y, z))
                     return -1;
                 
-                if (floodedPositions != null && flooded > MAX_FLOODS)
+                if (floodedPositions != null && flooded >= MAX_FLOODS)
                     break;
                 
                 if (y - 1 >= 0)               this.tryFlood(x, y - 1, z, replaceBlock, positions);
@@ -403,12 +406,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected void setPhaseProgress(float phaseProgress) {
         this.phaseProgress = phaseProgress;
 
+        /*
         if (this.world.getMinecraftServer() != null) {
             AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
             String progressStr = String.format("%s.. %d", this.phase, (int)(this.phaseProgress * 100.0f));
             
             accessor.invokeSetUserMessage(progressStr);
         }
+        */
     }
     
     protected BiomeInjectionRules buildBiomeInjectorRules() {
@@ -469,10 +474,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 }
             }
         }
-
     }
     
-    private void tryFlood(int x, int y, int z, Block replaceBlock, ArrayDeque<Vec3d> positions) {
+    private boolean inCaveBounds(int x, int y, int z) {
+        return x > 0 && x < this.levelWidth - 1 && y > 0 && y < this.levelHeight - 1 && z > 0 && z < this.levelLength - 1;
+    }
+    
+    private void tryFlood(int x, int y, int z, Block replaceBlock, Deque<Vec3d> positions) {
         Block block = this.getLevelBlock(x, y, z);
         
         if (block == replaceBlock) {

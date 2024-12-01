@@ -99,28 +99,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         return type == HeightmapChunk.Type.OCEAN ? seaLevel - 1 : seaLevel - 3;
     }
     
-    @Override
-    protected void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
-        for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
-            for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
-                for (int z = (int)(centerZ - radius); z <= (int)(centerZ + radius); ++z) {
-                
-                    float dx = (float)x - centerX;
-                    float dy = (float)y - centerY;
-                    float dz = (float)z - centerZ;
-                    
-                    if ((dx * dx + dy * dy * 2.0f + dz * dz) < radius * radius && this.inCaveBounds(x, y, z)) {
-                        Block block = this.getLevelBlock(x, y, z);
-                        
-                        if (block == this.defaultBlock.getBlock()) {
-                            this.setLevelBlock(x, y, z, fillBlock);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     private void raiseLevel() {
         this.setPhase("Raising");
         
@@ -398,9 +376,5 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                 this.random.nextFloat();
             }
         }
-    }
-    
-    private boolean inCaveBounds(int x, int y, int z) {
-        return x >= 1 && x < this.levelWidth - 1 && y >= 1 && y < this.levelHeight - 1 && z >= 1 && z < this.levelLength - 1;
     }
 }

@@ -3,6 +3,9 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -391,6 +394,7 @@ public class IndevChunkSource extends FiniteChunkSource {
 
     private void meltLevel() {
         this.setPhase("Melting");
+        long totalFlooded = 0;
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 2000;
         for (int i = 0; i < lavaSourceCount; ++i) {
@@ -406,13 +410,19 @@ public class IndevChunkSource extends FiniteChunkSource {
             int randZ = this.random.nextInt(this.levelLength);
             
             List<Vec3d> floodedPositions = new ArrayList<>();
-            int numFlooded = this.flood(randX, randY, randZ, Blocks.ANVIL, Blocks.AIR, floodedPositions);
+            int numFlooded = this.flood(randX, randY, randZ, PLACEHOLDER_BLOCK, Blocks.AIR, floodedPositions);
             
             boolean contained = numFlooded > 0 && numFlooded < MAX_FLOODS;
+            if (contained) {
+                totalFlooded += numFlooded;
+            }
+            
             floodedPositions.forEach(pos ->
                 this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? Blocks.LAVA : Blocks.AIR)
             );
         }
+
+        ModernBeta.log(Level.DEBUG, String.format("Flood filled %d tiles", totalFlooded));
     }
     
     private void updateLevel() {
@@ -429,6 +439,7 @@ public class IndevChunkSource extends FiniteChunkSource {
 
     private void waterLevel() {
         this.setPhase("Watering");
+        long totalFlooded = 0;
         
         Block fluidBlock = this.defaultFluid.getBlock();
     
@@ -446,22 +457,30 @@ public class IndevChunkSource extends FiniteChunkSource {
             int numFlooded = this.flood(randX, randY, randZ, PLACEHOLDER_BLOCK, Blocks.AIR, floodedPositions);
             
             boolean contained = numFlooded > 0 && numFlooded < MAX_FLOODS;
+            if (contained) {
+                totalFlooded += numFlooded;
+            }
+            
             floodedPositions.forEach(pos ->
                 this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? fluidBlock : Blocks.AIR)
             );
         }
         
+        ModernBeta.log(Level.DEBUG, String.format("Flood filled %d tiles", totalFlooded));
+        
         if (this.levelType != IndevType.FLOATING) {
             for (int x = 0; x < this.levelWidth; ++x) {
-                this.flood(x, this.waterLevel - 1, 0, fluidBlock, Blocks.AIR);
-                this.flood(x, this.waterLevel - 1, this.levelLength - 1, fluidBlock, Blocks.AIR);
+                totalFlooded += this.flood(x, this.waterLevel - 1, 0, fluidBlock, Blocks.AIR);
+                totalFlooded += this.flood(x, this.waterLevel - 1, this.levelLength - 1, fluidBlock, Blocks.AIR);
             }
             
             for (int z = 0; z < this.levelLength; ++z) {
-                this.flood(this.levelWidth - 1, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
-                this.flood(0, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
+                totalFlooded += this.flood(this.levelWidth - 1, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
+                totalFlooded += this.flood(0, this.waterLevel - 1, z, fluidBlock, Blocks.AIR);
             }
         }
+        
+        ModernBeta.log(Level.DEBUG, String.format("Flood filled %d tiles, including edges", totalFlooded));
     }
 
     private void plantLevel() {
