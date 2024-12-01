@@ -30,7 +30,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     private static final int MAX_PRESET_LENGTH = 8000;
     
-    private final GuiCustomizeWorldScreen parent;
+    private final GuiScreenCustomizeWorld parent;
     private final List<Info> presets;
     
     private ListPreset list;
@@ -40,7 +40,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private String shareText;
     private String listText;
     
-    public GuiScreenCustomizePresets(GuiCustomizeWorldScreen guiCustomizeWorldScreen) {
+    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld guiCustomizeWorldScreen) {
         this.title = "Customize World Presets";
         this.parent = guiCustomizeWorldScreen;
         this.presets = this.loadPresets();
@@ -59,7 +59,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
-        this.export.setText(this.parent.saveValues());
+        this.export.setText(this.parent.getSettingsString());
         
         this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.presets.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
@@ -110,7 +110,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.drawDefaultBackground();
         
         this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 8, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
         this.drawString(this.fontRenderer, this.shareText, 50, 30, 10526880);
         this.drawString(this.fontRenderer, this.listText, 50, 70, 10526880);
         this.export.drawTextBox();

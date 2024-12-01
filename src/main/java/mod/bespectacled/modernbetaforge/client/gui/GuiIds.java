@@ -23,7 +23,10 @@ import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiIds {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     private static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
@@ -48,7 +51,7 @@ public class GuiIds {
     public static final int PG0_S_SURFACE = 102;
     public static final int PG0_S_CARVER = 103;
     
-    public static final int PG0_S_FIXED = 104;
+    public static final int PG0_B_FIXED = 104;
     
     public static final int PG0_B_USE_OCEAN = 105;
     public static final int PG0_B_USE_BEACH = 106;
@@ -758,7 +761,7 @@ public class GuiIds {
         add(PG0_S_SURFACE, testSurface);
         add(PG0_S_CARVER, testCarver);
         
-        add(PG0_S_FIXED, testFixed);
+        add(PG0_B_FIXED, testFixed);
         
         add(PG0_B_USE_OCEAN, testBiomeReplacement);
         add(PG0_B_USE_BEACH, testBiomeReplacement);

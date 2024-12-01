@@ -41,11 +41,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
-@SuppressWarnings("deprecation")
 @SideOnly(Side.CLIENT)
-public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
+public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
     private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
@@ -104,7 +102,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private final Random random;
 
-    public GuiCustomizeWorldScreen(GuiScreen guiScreen, String string) {
+    public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
         this.subtitle = "Page 1 of 6";
         this.pageTitle = "Basic Settings";
@@ -169,8 +167,15 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     }
     
     private void createPagedList() {
-        IForgeRegistry<Biome> biomes = ForgeRegistries.BIOMES;
-        int biomeId = biomes.getValues().indexOf(biomes.getValue(new ResourceLocation(this.settings.singleBiome)));
+        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(this.settings.singleBiome));
+        String biomeName = biome.getBiomeName();
+        
+        // Truncate if biome name is too long to fit in button
+        if (biomeName.length() > 18) {
+            biomeName = biomeName.substring(0, 18) + "...";
+        }
+        
+        String fixedBiomeStr = String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName);
         
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
@@ -199,7 +204,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_CHUNK, I18n.format(PREFIX + NbtTags.CHUNK_SOURCE), true, this, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_BIOME, I18n.format(PREFIX + NbtTags.BIOME_SOURCE), true, this, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_SURFACE, I18n.format(PREFIX + NbtTags.SURFACE_BUILDER), true, this, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId),
-            new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_FIXED, I18n.format(PREFIX + "fixedBiome"), true, this, 0f, (float)(biomes.getValues().size() - 1), biomeId),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG0_B_FIXED, I18n.format(PREFIX + "fixedBiome"), true, true),
             new GuiPageButtonList.GuiSlideEntry(GuiIds.PG0_S_CARVER, I18n.format(PREFIX + NbtTags.CAVE_CARVER), true, this, 0f, ModernBetaRegistries.CARVER.getKeys().size() - 1, caveCarverId),
             null,
 
@@ -651,6 +656,9 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_OCEAN);
         this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_BEACH);
         
+        // Set biome text for Single Biome button
+        this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, fixedBiomeStr);
+        
         // Set text here instead of at instantiation, so updated text length is utilized
         this.setInitialText(this.pageList, GuiIds.PG5_DSRT_LAND, this.settings.desertBiomeBase);
         this.setInitialText(this.pageList, GuiIds.PG5_DSRT_OCEAN, this.settings.desertBiomeOcean);
@@ -1040,6 +1048,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     @Override
     public void setEntryValue(int entry, boolean entryValue) {
         switch (entry) {
+            case GuiIds.PG0_B_FIXED:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this));
+                break;
+        
             case GuiIds.PG0_B_USE_OCEAN:
                 this.settings.replaceOceanBiomes = entryValue;
                 break;
@@ -1276,9 +1288,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiIds.PG0_S_LAVA_LAKE_CHANCE:
                 this.settings.lavaLakeChance = (int)entryValue;
-                break;
-            case GuiIds.PG0_S_FIXED:
-                this.settings.singleBiome = ForgeRegistries.BIOMES.getValues().get((int)entryValue).getRegistryName().toString();
                 break;
                 
             case GuiIds.PG0_S_LEVEL_THEME:
@@ -1517,7 +1526,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             
-            this.mc.getTextureManager().bindTexture(GuiCustomizeWorldScreen.OPTIONS_BACKGROUND);
+            this.mc.getTextureManager().bindTexture(GuiScreenCustomizeWorld.OPTIONS_BACKGROUND);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -1537,7 +1546,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
         }
     }
 
-    public String saveValues() {
+    public String getSettingsString() {
         return this.settings.toString().replace("\n", "");
     }
 
@@ -1721,10 +1730,6 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
             case GuiIds.PG0_S_LEVEL_LENGTH: return String.format("%d", LEVEL_WIDTHS[(int)entryValue]);
             case GuiIds.PG0_S_LEVEL_HEIGHT: return String.format("%d", LEVEL_HEIGHTS[(int)entryValue]);
             
-            case GuiIds.PG0_S_FIXED: {
-                Biome biome = ForgeRegistries.BIOMES.getValues().get((int)entryValue);
-                return (biome != null) ? biome.getBiomeName() : "?";
-            }
             case GuiIds.PG0_S_CHUNK: {
                 String key = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
                 boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Chunk.values()).anyMatch(i -> i.id.equals(key));
@@ -1791,7 +1796,7 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiIds.FUNC_DFLT:
                 this.restoreDefaults();
-                this.mc.displayGuiScreen(new GuiCustomizeWorldScreen(this.parent, this.settings.toString()));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
                 break;
         }
         
@@ -1866,6 +1871,10 @@ public class GuiCustomizeWorldScreen extends GuiScreen implements GuiSlider.Form
     
     private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
         ((GuiTextField)pageList.getComponent(id)).setText(initial);
+    }
+    
+    private void setInitialTextButton(GuiPageButtonList pageList, int id, String initial) {
+        ((GuiButton)pageList.getComponent(id)).displayString = initial;
     }
     
     private void updateGuiButtons() {

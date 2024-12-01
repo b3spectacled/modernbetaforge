@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world;
 
-import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizeWorldScreen;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -71,7 +71,7 @@ public class ModernBetaWorldType extends WorldType {
     @SideOnly(Side.CLIENT)
     @Override
     public void onCustomizeButton(Minecraft minecraft, GuiCreateWorld guiCreateWorld) {
-        minecraft.displayGuiScreen(new GuiCustomizeWorldScreen(guiCreateWorld, guiCreateWorld.chunkProviderSettingsJson));
+        minecraft.displayGuiScreen(new GuiScreenCustomizeWorld(guiCreateWorld, guiCreateWorld.chunkProviderSettingsJson));
     }
     
     public void setCloudHeight(int cloudHeight) {
