@@ -106,7 +106,7 @@ createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
 # Single Biome Customization
-createWorld.customize.custom.biomes.title=Customize Single Biome
+createWorld.customize.custom.biomes.title=Customize Biome
 createWorld.customize.custom.biomes.select=Use Biome
 
 ## World Customization Presets

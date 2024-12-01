@@ -167,16 +167,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void createPagedList() {
-        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(this.settings.singleBiome));
-        String biomeName = biome.getBiomeName();
-        
-        // Truncate if biome name is too long to fit in button
-        if (biomeName.length() > 18) {
-            biomeName = biomeName.substring(0, 18) + "...";
-        }
-        
-        String fixedBiomeStr = String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName);
-        
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
@@ -657,7 +647,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_BEACH);
         
         // Set biome text for Single Biome button
-        this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, fixedBiomeStr);
+        this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, this.getFormattedBiomeName(this.settings.singleBiome, true, 18));
         
         // Set text here instead of at instantiation, so updated text length is utilized
         this.setInitialText(this.pageList, GuiIds.PG5_DSRT_LAND, this.settings.desertBiomeBase);
@@ -1049,7 +1039,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setEntryValue(int entry, boolean entryValue) {
         switch (entry) {
             case GuiIds.PG0_B_FIXED:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str));
                 break;
         
             case GuiIds.PG0_B_USE_OCEAN:
@@ -1545,6 +1535,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
         }
     }
+    
+    public ModernBetaChunkGeneratorSettings.Factory getDefaultSettings() {
+        return ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.defaultSettings.toString());
+    }
 
     public String getSettingsString() {
         return this.settings.toString().replace("\n", "");
@@ -1556,6 +1550,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         } else {
             this.settings = new ModernBetaChunkGeneratorSettings.Factory();
         }
+    }
+
+    public void setSettingsModified(boolean settingsModified) {
+        this.settingsModified = settingsModified;
+        this.defaults.enabled = settingsModified;
     }
 
     @Override
@@ -1771,11 +1770,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
 
-    private void setSettingsModified(boolean settingsModified) {
-        this.settingsModified = settingsModified;
-        this.defaults.enabled = settingsModified;
-    }
-
     private void restoreDefaults() {
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
         this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
@@ -1918,6 +1912,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return levelSeaLevel;
+    }
+    
+    private String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(registryName));
+        String biomeName = biome.getBiomeName();
+        
+        // Truncate if biome name is too long to fit in button
+        if (truncateLen > 0 && biomeName.length() > truncateLen) {
+            biomeName = biomeName.substring(0, truncateLen) + "...";
+        }
+        
+        return prefix ? String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName) : biomeName;
     }
 
     private static int getNdx(int[] arr, int val) {

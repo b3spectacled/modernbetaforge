@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import org.lwjgl.input.Keyboard;
 
@@ -25,33 +26,36 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     
     private final GuiScreenCustomizeWorld parent;
-    private final List<Info> presets;
-    
+    private final BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer;
+    private final List<Info> biomes;
+
+    private ModernBetaChunkGeneratorSettings.Factory settings;
     private ListPreset list;
     private GuiButton select;
-    private ModernBetaChunkGeneratorSettings.Factory settings;
     
     protected String title;
     
-    public GuiScreenCustomizeBiome(GuiScreenCustomizeWorld guiCustomizeWorldScreen) {
+    public GuiScreenCustomizeBiome(
+        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer
+    ) {
         this.title = "Customize Single Biome";
         this.parent = guiCustomizeWorldScreen;
-        this.presets = this.loadPresets();
+        this.consumer = consumer;
+        this.biomes = this.loadBiomes();
     }
     
     @Override
     public void initGui() {
         this.buttonList.clear();
-        Keyboard.enableRepeatEvents(true);
         
         this.title = I18n.format("createWorld.customize.custom.biomes.title");
         
-        this.list = new ListPreset();
+        this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
+        this.list = new ListPreset(this.settings.singleBiome);
         
         this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.custom.biomes.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
-        
-        this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         
         this.updateButtonValidity();
     }
@@ -77,6 +81,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         switch (guiButton.id) {
             case 0:
                 this.parent.loadValues(this.settings.toString());
+                this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case 1:
@@ -100,20 +105,20 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     }
     
     private boolean hasValidSelection() {
-        return this.list.selected > -1 && this.list.selected < this.presets.size();
+        return this.list.selected > -1 && this.list.selected < this.biomes.size();
     }
     
-    private List<Info> loadPresets() {
-        List<Info> presets = new ArrayList<>();
+    private List<Info> loadBiomes() {
+        List<Info> biomes = new ArrayList<>();
         
         for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
             String name = biome.getBiomeName();
             String registryName = biome.getRegistryName().toString();
             
-            presets.add(new Info(name, registryName));
+            biomes.add(new Info(name, registryName));
         }
         
-        return presets;
+        return biomes;
     }
     
     @SideOnly(Side.CLIENT)
@@ -122,7 +127,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         
         public int selected;
         
-        public ListPreset() {
+        public ListPreset(String initialBiome) {
             super(
                 GuiScreenCustomizeBiome.this.mc,
                 GuiScreenCustomizeBiome.this.width,
@@ -131,12 +136,20 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
                 GuiScreenCustomizeBiome.this.height - 32,
                 SLOT_HEIGHT
             );
+            
             this.selected = -1;
+            for (int i = 0; i < GuiScreenCustomizeBiome.this.biomes.size(); ++i) {
+                Info info = GuiScreenCustomizeBiome.this.biomes.get(i);
+                
+                if (info.registryName.equals(initialBiome)) {
+                    this.selected = i;
+                }
+            }
         }
         
         @Override
         protected int getSize() {
-            return GuiScreenCustomizeBiome.this.presets.size();
+            return GuiScreenCustomizeBiome.this.biomes.size();
         }
         
         @Override
@@ -144,10 +157,14 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
             this.selected = selected;
             
             GuiScreenCustomizeBiome.this.updateButtonValidity();
-            GuiScreenCustomizeBiome.this.settings.singleBiome = GuiScreenCustomizeBiome.this.presets.get(GuiScreenCustomizeBiome.this.list.selected).registryName;
+            GuiScreenCustomizeBiome.this.consumer.accept(
+                GuiScreenCustomizeBiome.this.biomes.get(GuiScreenCustomizeBiome.this.list.selected).registryName,
+                GuiScreenCustomizeBiome.this.settings
+            );
             
             if (doubleClicked) {
                 GuiScreenCustomizeBiome.this.parent.loadValues(GuiScreenCustomizeBiome.this.settings.toString());
+                GuiScreenCustomizeBiome.this.parent.setSettingsModified(!GuiScreenCustomizeBiome.this.settings.equals(GuiScreenCustomizeBiome.this.parent.getDefaultSettings()));
                 GuiScreenCustomizeBiome.this.mc.displayGuiScreen(GuiScreenCustomizeBiome.this.parent);
             } 
         }
@@ -206,8 +223,8 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         }
         
         @Override
-        protected void drawSlot(int preset, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
-            Info info = GuiScreenCustomizeBiome.this.presets.get(preset);
+        protected void drawSlot(int biome, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
+            Info info = GuiScreenCustomizeBiome.this.biomes.get(biome);
             int paddingY = 3;
             int paddingL = 6;
             
