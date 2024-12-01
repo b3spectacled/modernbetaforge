@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -349,7 +348,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * This bug is fixed here, because I'm not sure how to consistently reproduce it.
      * 
      */
-    protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, List<Vec3d> floodedPositions) {
+    protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, Vec3d[] floodedPositions) {
         Deque<Vec3d> positions = new ArrayDeque<>();
         int flooded = 0;
         
@@ -370,10 +369,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     
             if (block == replaceBlock) {
                 this.setLevelBlock(x, y, z, fillBlock);
-                flooded++;
                 
                 if (floodedPositions != null)
-                    floodedPositions.add(pos);
+                    floodedPositions[flooded] = pos;
+                
+                flooded++;
                 
                 if (floodedPositions != null && this.atLevelBounds(x, y, z))
                     return -1;

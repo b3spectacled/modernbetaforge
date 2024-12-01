@@ -1,8 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
@@ -408,18 +405,21 @@ public class IndevChunkSource extends FiniteChunkSource {
                 Math.min(this.random.nextInt(this.groundLevel), this.random.nextInt(this.groundLevel))
             );
             int randZ = this.random.nextInt(this.levelLength);
-            
-            List<Vec3d> floodedPositions = new ArrayList<>();
+
+            Vec3d[] floodedPositions = new Vec3d[MAX_FLOODS];
             int numFlooded = this.flood(randX, randY, randZ, PLACEHOLDER_BLOCK, Blocks.AIR, floodedPositions);
             
             boolean contained = numFlooded > 0 && numFlooded < MAX_FLOODS;
             if (contained) {
                 totalFlooded += numFlooded;
             }
-            
-            floodedPositions.forEach(pos ->
-                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? Blocks.LAVA : Blocks.AIR)
-            );
+
+            int ndx = 0;
+            while (ndx < MAX_FLOODS && floodedPositions[ndx] != null) {
+                Vec3d pos = floodedPositions[ndx++];
+                
+                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? Blocks.LAVA : Blocks.AIR);
+            }
         }
 
         ModernBeta.log(Level.DEBUG, String.format("Flood filled %d tiles", totalFlooded));
@@ -453,17 +453,20 @@ public class IndevChunkSource extends FiniteChunkSource {
             int randY = this.random.nextInt(this.levelHeight);
             int randZ = this.random.nextInt(this.levelLength);
 
-            List<Vec3d> floodedPositions = new ArrayList<>();
+            Vec3d[] floodedPositions = new Vec3d[MAX_FLOODS];
             int numFlooded = this.flood(randX, randY, randZ, PLACEHOLDER_BLOCK, Blocks.AIR, floodedPositions);
             
             boolean contained = numFlooded > 0 && numFlooded < MAX_FLOODS;
             if (contained) {
                 totalFlooded += numFlooded;
             }
-            
-            floodedPositions.forEach(pos ->
-                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? fluidBlock : Blocks.AIR)
-            );
+
+            int ndx = 0;
+            while (ndx < MAX_FLOODS && floodedPositions[ndx] != null) {
+                Vec3d pos = floodedPositions[ndx++];
+                
+                this.setLevelBlock((int)pos.x, (int)pos.y, (int)pos.z, contained ? fluidBlock : Blocks.AIR);
+            }
         }
         
         ModernBeta.log(Level.DEBUG, String.format("Flood filled %d tiles", totalFlooded));
@@ -496,7 +499,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                 for (int y = 0; y < this.levelHeight - 2; ++y) {
                     Block block = this.getLevelBlock(x, y, z);
                     Block blockUp = this.getLevelBlock(x, y + 1, z);
-                    
+
                     if (block.equals(biome.fillerBlock.getBlock()) && blockUp.equals(Blocks.AIR)) {
                         this.setLevelBlock(x, y, z, biome.topBlock.getBlock());
                     }
