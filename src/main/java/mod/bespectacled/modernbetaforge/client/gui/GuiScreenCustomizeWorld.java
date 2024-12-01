@@ -47,10 +47,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
-    
-    private static final int MAX_TEXT_LENGTH = 120;
     private static final int PAGELIST_ADDITIONAL_WIDTH = 96;
-    private static final int BIOME_FIELD_ADDITIONAL_WIDTH = 36;
     
     private static final int MIN_CAVE_HEIGHT = 9;
     private static final int MAX_CAVE_HEIGHT = 255;
@@ -93,7 +90,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private final Predicate<String> floatFilter;
     private final Predicate<String> intFilter;
-    private final Predicate<String> stringFilter;
     private final Predicate<String> intBiomeSizeFilter;
     private final Predicate<String> intRiverSizeFilter;
     
@@ -130,13 +126,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 Integer entryValue = Ints.tryParse(entryString);
                 
                 return entryString.isEmpty() || (entryValue != null && entryValue >= 0 && entryValue <= (int)MAX_HEIGHT);
-            }
-        };
-        
-        this.stringFilter = new Predicate<String>() {
-            @Override
-            public boolean apply(@Nullable String entryString) {
-                return entryString.isEmpty() || entryString != null;
             }
         };
         
@@ -476,101 +465,101 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_DSRT_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_DSRT_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_DSRT_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_DSRT_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_DSRT_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_DSRT_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_FRST_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_FRST_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_FRST_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_FRST_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_FRST_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_FRST_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_ICED_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_ICED_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_ICED_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_ICED_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_ICED_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_ICED_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_PLNS_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_PLNS_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_PLNS_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_PLNS_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_PLNS_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_PLNS_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_RAIN_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_RAIN_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_RAIN_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_RAIN_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_RAIN_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_RAIN_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SAVA_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SAVA_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SAVA_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SAVA_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SAVA_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SAVA_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SHRB_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SHRB_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SHRB_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SHRB_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SHRB_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SHRB_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SEAS_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SEAS_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SEAS_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SEAS_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SEAS_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SEAS_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SWMP_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SWMP_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SWMP_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SWMP_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_SWMP_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_SWMP_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TAIG_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TAIG_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TAIG_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TAIG_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TAIG_BEACH, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TAIG_BEACH, "", true, true),
             
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES), true),
             null,
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TUND_LAND, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TUND_LAND, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TUND_OCEAN, "", false, this.stringFilter),
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TUND_OCEAN, "", true, true),
             new GuiPageButtonList.GuiLabelEntry(GuiIds.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":", false),
-            new GuiPageButtonList.EditBoxEntry(GuiIds.PG5_TUND_BEACH, "", false, this.stringFilter)
+            new GuiPageButtonList.GuiButtonEntry(GuiIds.PG5_TUND_BEACH, "", true, true)
         };
         
         if (ModCompat.isBoPLoaded()) {
@@ -601,98 +590,53 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
         
-        // Increase text length for biome fields
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_DSRT_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_DSRT_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_DSRT_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_FRST_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_FRST_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_FRST_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_ICED_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_ICED_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_ICED_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_PLNS_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_PLNS_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_PLNS_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_RAIN_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_RAIN_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_RAIN_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SAVA_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SAVA_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SAVA_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SHRB_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SHRB_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SHRB_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SEAS_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SEAS_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SEAS_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SWMP_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SWMP_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_SWMP_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TAIG_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TAIG_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TAIG_BEACH);
-        
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_LAND);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_OCEAN);
-        this.increaseMaxTextLength(this.pageList, GuiIds.PG5_TUND_BEACH);
-        
         // Set biome text for Single Biome button
         this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, this.getFormattedBiomeName(this.settings.singleBiome, true, 18));
         
-        // Set text here instead of at instantiation, so updated text length is utilized
-        this.setInitialText(this.pageList, GuiIds.PG5_DSRT_LAND, this.settings.desertBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_DSRT_OCEAN, this.settings.desertBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_DSRT_BEACH, this.settings.desertBiomeBeach);
+        // Set biome text for Beta Biome buttons
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_LAND, this.getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_OCEAN, this.getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_BEACH, this.getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_FRST_LAND, this.settings.forestBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_FRST_OCEAN, this.settings.forestBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_FRST_BEACH, this.settings.forestBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_LAND, this.getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_OCEAN, this.getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_BEACH, this.getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_ICED_LAND, this.settings.iceDesertBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_ICED_OCEAN, this.settings.iceDesertBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_ICED_BEACH, this.settings.iceDesertBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_LAND, this.getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_OCEAN, this.getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_BEACH, this.getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_PLNS_LAND, this.settings.plainsBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_PLNS_OCEAN, this.settings.plainsBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_PLNS_BEACH, this.settings.plainsBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_LAND, this.getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_OCEAN, this.getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_BEACH, this.getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_RAIN_LAND, this.settings.rainforestBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_RAIN_OCEAN, this.settings.rainforestBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_RAIN_BEACH, this.settings.rainforestBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_LAND, this.getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_OCEAN, this.getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_BEACH, this.getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_SAVA_LAND, this.settings.savannaBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_SAVA_OCEAN, this.settings.savannaBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_SAVA_BEACH, this.settings.savannaBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_LAND, this.getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_OCEAN, this.getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_BEACH, this.getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_SHRB_LAND, this.settings.shrublandBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_SHRB_OCEAN, this.settings.shrublandBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_SHRB_BEACH, this.settings.shrublandBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_LAND, this.getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_OCEAN, this.getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_BEACH, this.getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_SEAS_LAND, this.settings.seasonalForestBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_SEAS_OCEAN, this.settings.seasonalForestBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_SEAS_BEACH, this.settings.seasonalForestBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_LAND, this.getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_OCEAN, this.getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_BEACH, this.getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_SWMP_LAND, this.settings.swamplandBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_SWMP_OCEAN, this.settings.swamplandBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_SWMP_BEACH, this.settings.swamplandBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_LAND, this.getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_OCEAN, this.getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_BEACH, this.getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_TAIG_LAND, this.settings.taigaBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_TAIG_OCEAN, this.settings.taigaBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_TAIG_BEACH, this.settings.taigaBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_LAND, this.getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_OCEAN, this.getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_BEACH, this.getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
         
-        this.setInitialText(this.pageList, GuiIds.PG5_TUND_LAND, this.settings.tundraBiomeBase);
-        this.setInitialText(this.pageList, GuiIds.PG5_TUND_OCEAN, this.settings.tundraBiomeOcean);
-        this.setInitialText(this.pageList, GuiIds.PG5_TUND_BEACH, this.settings.tundraBiomeBeach);
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_LAND, this.getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_OCEAN, this.getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_BEACH, this.getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
 
         this.updatePageControls();
     }
@@ -759,160 +703,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, String string) {
-        if (entry >= GuiIds.PG5_DSRT_LAND && entry <= GuiIds.PG5_TUND_BEACH) {
-            String entryBiome = string;
-            
-            String newEntryBiome = "";
-            switch (entry) {
-                case GuiIds.PG5_DSRT_LAND:
-                    this.settings.desertBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.desertBiomeBase;
-                    break;
-                case GuiIds.PG5_DSRT_OCEAN:
-                    this.settings.desertBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.desertBiomeOcean;
-                    break;
-                case GuiIds.PG5_DSRT_BEACH:
-                    this.settings.desertBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.desertBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_FRST_LAND:
-                    this.settings.forestBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.forestBiomeBase;
-                    break;
-                case GuiIds.PG5_FRST_OCEAN:
-                    this.settings.forestBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.forestBiomeOcean;
-                    break;
-                case GuiIds.PG5_FRST_BEACH:
-                    this.settings.forestBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.forestBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_ICED_LAND:
-                    this.settings.iceDesertBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.iceDesertBiomeBase;
-                    break;
-                case GuiIds.PG5_ICED_OCEAN:
-                    this.settings.iceDesertBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.iceDesertBiomeOcean;
-                    break;
-                case GuiIds.PG5_ICED_BEACH:
-                    this.settings.iceDesertBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.iceDesertBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_PLNS_LAND:
-                    this.settings.plainsBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.plainsBiomeBase;
-                    break;
-                case GuiIds.PG5_PLNS_OCEAN:
-                    this.settings.plainsBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.plainsBiomeOcean;
-                    break;
-                case GuiIds.PG5_PLNS_BEACH:
-                    this.settings.plainsBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.plainsBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_RAIN_LAND:
-                    this.settings.rainforestBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.rainforestBiomeBase;
-                    break;
-                case GuiIds.PG5_RAIN_OCEAN:
-                    this.settings.rainforestBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.rainforestBiomeOcean;
-                    break;
-                case GuiIds.PG5_RAIN_BEACH:
-                    this.settings.rainforestBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.rainforestBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_SAVA_LAND:
-                    this.settings.savannaBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.savannaBiomeBase;
-                    break;
-                case GuiIds.PG5_SAVA_OCEAN:
-                    this.settings.savannaBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.savannaBiomeOcean;
-                    break;
-                case GuiIds.PG5_SAVA_BEACH:
-                    this.settings.savannaBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.savannaBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_SHRB_LAND:
-                    this.settings.shrublandBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.shrublandBiomeBase;
-                    break;
-                case GuiIds.PG5_SHRB_OCEAN:
-                    this.settings.shrublandBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.shrublandBiomeOcean;
-                    break;
-                case GuiIds.PG5_SHRB_BEACH:
-                    this.settings.shrublandBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.shrublandBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_SEAS_LAND:
-                    this.settings.seasonalForestBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.seasonalForestBiomeBase;
-                    break;
-                case GuiIds.PG5_SEAS_OCEAN:
-                    this.settings.seasonalForestBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.seasonalForestBiomeOcean;
-                    break;
-                case GuiIds.PG5_SEAS_BEACH:
-                    this.settings.seasonalForestBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.seasonalForestBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_SWMP_LAND:
-                    this.settings.swamplandBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.swamplandBiomeBase;
-                    break;
-                case GuiIds.PG5_SWMP_OCEAN:
-                    this.settings.swamplandBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.swamplandBiomeOcean;
-                    break;
-                case GuiIds.PG5_SWMP_BEACH:
-                    this.settings.swamplandBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.swamplandBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_TAIG_LAND:
-                    this.settings.taigaBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.taigaBiomeBase;
-                    break;
-                case GuiIds.PG5_TAIG_OCEAN:
-                    this.settings.taigaBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.taigaBiomeOcean;
-                    break;
-                case GuiIds.PG5_TAIG_BEACH:
-                    this.settings.taigaBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.taigaBiomeBeach;
-                    break;
-                    
-                case GuiIds.PG5_TUND_LAND:
-                    this.settings.tundraBiomeBase = entryBiome;
-                    newEntryBiome = this.settings.tundraBiomeBase;
-                    break;
-                case GuiIds.PG5_TUND_OCEAN:
-                    this.settings.tundraBiomeOcean = entryBiome;
-                    newEntryBiome = this.settings.tundraBiomeOcean;
-                    break;
-                case GuiIds.PG5_TUND_BEACH:
-                    this.settings.tundraBiomeBeach = entryBiome;
-                    newEntryBiome = this.settings.tundraBiomeBeach;
-                    break;
-            }
-            
-            if (newEntryBiome.equals(entryBiome)) {
-                ((GuiTextField)this.pageList.getComponent(entry)).setText(newEntryBiome);
-            }
-            
-        } else if (entry == GuiIds.PG4_F_BIOME_SZ || entry == GuiIds.PG4_F_RIVER_SZ) {
+        if (entry == GuiIds.PG4_F_BIOME_SZ || entry == GuiIds.PG4_F_RIVER_SZ) {
             int entryValue = 0;
             
             try {
@@ -1039,7 +830,117 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setEntryValue(int entry, boolean entryValue) {
         switch (entry) {
             case GuiIds.PG0_B_FIXED:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
+                break;
+                
+            case GuiIds.PG5_DSRT_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase));
+                break;
+            case GuiIds.PG5_DSRT_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean));
+                break;
+            case GuiIds.PG5_DSRT_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_FRST_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase));
+                break;
+            case GuiIds.PG5_FRST_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean));
+                break;
+            case GuiIds.PG5_FRST_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_ICED_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase));
+                break;
+            case GuiIds.PG5_ICED_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean));
+                break;
+            case GuiIds.PG5_ICED_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_PLNS_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase));
+                break;
+            case GuiIds.PG5_PLNS_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean));
+                break;
+            case GuiIds.PG5_PLNS_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_RAIN_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase));
+                break;
+            case GuiIds.PG5_RAIN_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean));
+                break;
+            case GuiIds.PG5_RAIN_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_SAVA_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase));
+                break;
+            case GuiIds.PG5_SAVA_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean));
+                break;
+            case GuiIds.PG5_SAVA_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_SHRB_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase));
+                break;
+            case GuiIds.PG5_SHRB_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean));
+                break;
+            case GuiIds.PG5_SHRB_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_SEAS_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase));
+                break;
+            case GuiIds.PG5_SEAS_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean));
+                break;
+            case GuiIds.PG5_SEAS_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_SWMP_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase));
+                break;
+            case GuiIds.PG5_SWMP_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean));
+                break;
+            case GuiIds.PG5_SWMP_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_TAIG_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase));
+                break;
+            case GuiIds.PG5_TAIG_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean));
+                break;
+            case GuiIds.PG5_TAIG_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach));
+                break;
+                
+            case GuiIds.PG5_TUND_LAND:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase));
+                break;
+            case GuiIds.PG5_TUND_OCEAN:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean));
+                break;
+            case GuiIds.PG5_TUND_BEACH:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach));
                 break;
         
             case GuiIds.PG0_B_USE_OCEAN:
@@ -1856,15 +1757,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         guiText.setText(guiTextString);
         
         this.setEntryValue(guiTextId, guiTextString);
-    }
-    
-    private void increaseMaxTextLength(GuiPageButtonList pageList, int id) {
-        ((GuiTextField)pageList.getComponent(id)).setMaxStringLength(MAX_TEXT_LENGTH);
-        ((GuiTextField)pageList.getComponent(id)).width += BIOME_FIELD_ADDITIONAL_WIDTH;
-    }
-    
-    private void setInitialText(GuiPageButtonList pageList, int id, String initial) {
-        ((GuiTextField)pageList.getComponent(id)).setText(initial);
     }
     
     private void setInitialTextButton(GuiPageButtonList pageList, int id, String initial) {

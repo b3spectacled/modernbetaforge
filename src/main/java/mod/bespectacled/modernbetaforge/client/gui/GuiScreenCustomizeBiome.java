@@ -27,6 +27,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     
     private final GuiScreenCustomizeWorld parent;
     private final BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer;
+    private final String initialBiome;
     private final List<Info> biomes;
 
     private ModernBetaChunkGeneratorSettings.Factory settings;
@@ -37,11 +38,13 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     
     public GuiScreenCustomizeBiome(
         GuiScreenCustomizeWorld guiCustomizeWorldScreen,
-        BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer
+        BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer,
+        String initialBiome
     ) {
         this.title = "Customize Single Biome";
         this.parent = guiCustomizeWorldScreen;
         this.consumer = consumer;
+        this.initialBiome = initialBiome;
         this.biomes = this.loadBiomes();
     }
     
@@ -52,7 +55,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         this.title = I18n.format("createWorld.customize.custom.biomes.title");
         
         this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
-        this.list = new ListPreset(this.settings.singleBiome);
+        this.list = new ListPreset(this.initialBiome);
         
         this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.custom.biomes.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
