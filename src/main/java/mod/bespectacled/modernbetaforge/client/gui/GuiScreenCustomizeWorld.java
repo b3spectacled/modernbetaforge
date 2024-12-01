@@ -17,6 +17,7 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
+import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -35,10 +36,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -1807,7 +1806,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
-        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(registryName));
+        Biome biome = BiomeUtil.getBiome(registryName, "generator");
         String biomeName = biome.getBiomeName();
         
         // Truncate if biome name is too long to fit in button
