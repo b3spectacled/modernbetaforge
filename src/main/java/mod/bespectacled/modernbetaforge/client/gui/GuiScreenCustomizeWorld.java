@@ -100,6 +100,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private boolean confirmDismissed;
     
     private boolean clicked;
+    private boolean randomClicked;
 
     public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
@@ -1480,8 +1481,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                     Gui guiComponent = guiEntry.getComponent1();
                     Gui guiComponent2 = guiEntry.getComponent2();
+                    Gui guiComponentFixed = this.pageList.getComponent(GuiIds.PG0_B_FIXED);
                     
-                    if (guiComponent instanceof GuiButton) {
+                    if (guiComponent instanceof GuiButton && guiComponent != guiComponentFixed) {
                         GuiButton guiButtonComponent = (GuiButton)guiComponent;
                         
                         if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
@@ -1489,11 +1491,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
                             
                         } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
+                            this.randomClicked = true;
                             ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
+                            this.randomClicked = false;
                         }
                     }
                     
-                    if (guiComponent2 instanceof GuiButton) {
+                    if (guiComponent2 instanceof GuiButton && guiComponent2 != guiComponentFixed) {
                         GuiButton guiButtonComponent = (GuiButton)guiComponent2;
                         
                         if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
@@ -1501,7 +1505,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
                             
                         } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
+                            this.randomClicked = true;
                             ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
+                            this.randomClicked = false;
                         }
                     }
                     
@@ -1559,21 +1565,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
+        this.clicked = true;
         
+        super.mouseClicked(mouseX, mouseY, mouseButton);
         if (this.confirmMode != 0 || this.confirmDismissed) {
             return;
         }
-        
-        this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
-        
-        this.clicked = true;
     }
 
     @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        super.mouseReleased(mouseX, mouseY, state);
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        this.pageList.mouseReleased(mouseX, mouseY, mouseButton);
+        this.clicked = false;
         
+        super.mouseReleased(mouseX, mouseY, mouseButton);
         if (this.confirmDismissed) {
             this.confirmDismissed = false;
             return;
@@ -1581,10 +1587,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.confirmMode != 0) {
             return;
         }
-        
-        this.pageList.mouseReleased(mouseX, mouseY, state);
-        
-        this.clicked = false;
     }
 
     private String getFormattedValue(int entry, float entryValue) {
@@ -1828,8 +1830,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void playSound() {
-        if (!this.clicked)
+        if (!this.clicked && !this.randomClicked) {
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
     }
 
     private static int getNdx(int[] arr, int val) {
