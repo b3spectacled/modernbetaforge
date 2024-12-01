@@ -53,7 +53,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
     
     private static final int MIN_WIDTH = 64;
-    private static final int MAX_WIDTH = 2048;
+    private static final int MAX_WIDTH = 2560;
     private static final int MIN_HEIGHT = 64;
     private static final int MAX_HEIGHT = 256;
     
