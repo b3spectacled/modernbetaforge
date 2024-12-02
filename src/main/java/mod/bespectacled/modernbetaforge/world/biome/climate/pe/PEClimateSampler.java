@@ -20,7 +20,7 @@ public class PEClimateSampler {
     private final double detailScale;
     
     public PEClimateSampler(long seed) {
-        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
+        this(seed, ModernBetaChunkGeneratorSettings.build());
     }
     
     public PEClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {

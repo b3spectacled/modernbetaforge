@@ -322,7 +322,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             // Create new world info with Customized world type,
             // so biome provider will accept custom biome sizes
             ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
-            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.buildSettings(worldInfo.getGeneratorOptions());
+            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions());
             
             factory.biomeSize = settings.biomeSize;
             factory.riverSize = settings.riverSize;

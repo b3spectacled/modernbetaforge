@@ -47,7 +47,7 @@ public abstract class MixinWorldEntitySpawner {
     private static List<SpawnListEntry> injectPerformWorldGenSpawning(List<SpawnListEntry> spawnEntries) {
         if (modernBeta_world != null && modernBeta_biome != null) {
             if (modernBeta_world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType) {
-                ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.buildSettings(modernBeta_world.getWorldInfo().getGeneratorOptions());         
+                ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(modernBeta_world.getWorldInfo().getGeneratorOptions());         
                 return ModernBetaBiomeMobs.modifySpawnList(new ArrayList<>(spawnEntries), EnumCreatureType.CREATURE, modernBeta_biome, settings);
             }
         }

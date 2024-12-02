@@ -29,8 +29,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         super(worldInfo);
         
         this.settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
-            new ModernBetaChunkGeneratorSettings.Factory().build();
+            ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
+            ModernBetaChunkGeneratorSettings.build();
 
         this.biomeSource = ModernBetaRegistries.BIOME.get(settings.biomeSource).apply(worldInfo);
         this.biomeCache = new ChunkCache<BiomeChunk>(

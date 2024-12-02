@@ -60,7 +60,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
     public void decorate(World world, Random random, BlockPos startPos) {
         super.decorate(world, random, startPos);
         
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         ChunkPos chunkPos = new ChunkPos(startPos);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         

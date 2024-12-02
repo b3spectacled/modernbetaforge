@@ -20,8 +20,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         super(world, seed, mapFeaturesEnabled, generatorOptions);
         
         ModernBetaChunkGeneratorSettings settings = generatorOptions != null ?
-            ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorOptions).build() :
-            new ModernBetaChunkGeneratorSettings.Factory().build();
+            ModernBetaChunkGeneratorSettings.build(generatorOptions) :
+            ModernBetaChunkGeneratorSettings.build();
         
         ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE.getOrElse(settings.chunkSource, ModernBetaNoiseSettings.BETA);
         this.chunkSource = ModernBetaRegistries.CHUNK

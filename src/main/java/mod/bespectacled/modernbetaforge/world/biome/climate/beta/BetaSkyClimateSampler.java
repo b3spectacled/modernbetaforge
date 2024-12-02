@@ -15,7 +15,7 @@ public class BetaSkyClimateSampler {
     private final double tempScale;
     
     public BetaSkyClimateSampler(long seed) {
-        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
+        this(seed, ModernBetaChunkGeneratorSettings.build());
     }
     
     public BetaSkyClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {

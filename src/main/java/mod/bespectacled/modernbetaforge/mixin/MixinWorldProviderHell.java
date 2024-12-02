@@ -23,7 +23,7 @@ public abstract class MixinWorldProviderHell {
         if (world.getWorldType() instanceof ModernBetaWorldType) {
             // Need to grab generator settings from Overworld dimension since each dimension has its own generator settings
             String generatorOptions = world.getMinecraftServer().getWorld(DimensionType.OVERWORLD.getId()).getWorldInfo().getGeneratorOptions();
-            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.buildSettings(generatorOptions);
+            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(generatorOptions);
             
             if (settings.useOldNether) {
                 info.setReturnValue(new ModernBetaChunkGeneratorHell(world, world.getWorldInfo().isMapFeaturesEnabled(), world.getSeed(), generatorOptions));

@@ -49,7 +49,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     protected abstract int getTreeCount(World world, Random random, Biome biome, BlockPos startPos);
     
     protected void populateOres(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos) {
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         
         // Ore generators
         this.worldGenClay = new WorldGenClay(settings.claySize);

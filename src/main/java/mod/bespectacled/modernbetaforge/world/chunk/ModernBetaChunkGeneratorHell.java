@@ -65,7 +65,7 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
     public ModernBetaChunkGeneratorHell(World world, boolean mapFeaturesEnabled, long seed, String generatorOptions) {
         super(world, mapFeaturesEnabled, seed);
         
-        this.settings = ModernBetaChunkGeneratorSettings.buildSettings(generatorOptions);
+        this.settings = ModernBetaChunkGeneratorSettings.build(generatorOptions);
         this.world = world;
         this.mapFeaturesEnabled = mapFeaturesEnabled;
         

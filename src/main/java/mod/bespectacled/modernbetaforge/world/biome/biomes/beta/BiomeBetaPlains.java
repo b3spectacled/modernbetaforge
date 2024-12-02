@@ -51,7 +51,7 @@ public class BiomeBetaPlains extends BiomeBeta {
     public void decorate(World world, Random random, BlockPos startPos) {
         super.decorate(world, random, startPos);
         
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         ChunkPos chunkPos = new ChunkPos(startPos);
         
         if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {

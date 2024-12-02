@@ -24,8 +24,8 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
         super(worldInfo);
         
         ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(worldInfo.getGeneratorOptions()).build() :
-            new ModernBetaChunkGeneratorSettings.Factory().build();
+            ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
+            ModernBetaChunkGeneratorSettings.build();
         
         this.climateMap = new ClimateMap(settings);
         this.climateSampler = new PEClimateSampler(worldInfo.getSeed(), settings);

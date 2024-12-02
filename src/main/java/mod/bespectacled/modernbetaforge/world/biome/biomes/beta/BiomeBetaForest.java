@@ -5,8 +5,14 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBirchTree;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeBetaForest extends BiomeBeta {
     private static final WorldGenBirchTree BIRCH_TREE_FEATURE = new WorldGenBirchTree(false, false);
@@ -22,6 +28,18 @@ public class BiomeBetaForest extends BiomeBeta {
         this.skyColor = ModernBetaBiomeColors.BETA_TEMP_SKY_COLOR;
         
         this.populateAdditionalMobs(null, true, WOLF_FOREST);
+    }
+    
+    @Override
+    public void decorate(World world, Random random, BlockPos startPos) {
+        super.decorate(world, random, startPos);
+        
+        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ChunkPos chunkPos = new ChunkPos(startPos);
+        
+        if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
+            this.addDoublePlants(world, random, startPos, random.nextInt(5) - 3);
+        }
     }
     
     @Override
@@ -46,4 +64,30 @@ public class BiomeBetaForest extends BiomeBeta {
         return this.getRandomTreeFeature(random);
     }
     
+    public void addDoublePlants(World world, Random random, BlockPos startPos, int flowerNdx) {
+        for (int i = 0; i < flowerNdx; ++i) {
+            int flowerType = random.nextInt(3);
+
+            if (flowerType == 0) {
+                DOUBLE_PLANT_GENERATOR.setPlantType(BlockDoublePlant.EnumPlantType.SYRINGA);
+                
+            } else if (flowerType == 1) {
+                DOUBLE_PLANT_GENERATOR.setPlantType(BlockDoublePlant.EnumPlantType.ROSE);
+                
+            } else if (flowerType == 2) {
+                DOUBLE_PLANT_GENERATOR.setPlantType(BlockDoublePlant.EnumPlantType.PAEONIA);
+                
+            }
+
+            for (int j = 0; j < 5; ++j) {
+                int x = random.nextInt(16) + 8;
+                int y = random.nextInt(16) + 8;
+                int z = random.nextInt(world.getHeight(startPos.add(x, 0, y)).getY() + 32);
+
+                if (DOUBLE_PLANT_GENERATOR.generate(world, random, new BlockPos(startPos.getX() + x, z, startPos.getZ() + y))) {
+                    break;
+                }
+            }
+        }
+    }
 }

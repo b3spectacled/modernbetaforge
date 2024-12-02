@@ -1340,7 +1340,7 @@ public class ModernBetaChunkGeneratorSettings {
             return hashCode;
         }
         
-        public ModernBetaChunkGeneratorSettings build() {
+        private ModernBetaChunkGeneratorSettings build() {
             return new ModernBetaChunkGeneratorSettings(this);
         }
         
@@ -1793,7 +1793,11 @@ public class ModernBetaChunkGeneratorSettings {
         }
     }
     
-    public static ModernBetaChunkGeneratorSettings buildSettings(String generatorSettings) {
+    public static ModernBetaChunkGeneratorSettings build() {
+        return new ModernBetaChunkGeneratorSettings.Factory().build();
+    }
+    
+    public static ModernBetaChunkGeneratorSettings build(String generatorSettings) {
         return ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
     }
 }

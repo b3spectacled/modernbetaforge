@@ -14,7 +14,7 @@ public class PESkyClimateSampler {
     private final double tempScale;
     
     public PESkyClimateSampler(long seed) {
-        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
+        this(seed, ModernBetaChunkGeneratorSettings.build());
     }
     
     public PESkyClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {

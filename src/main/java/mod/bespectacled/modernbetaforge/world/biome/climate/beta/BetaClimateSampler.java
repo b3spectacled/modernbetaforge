@@ -21,7 +21,7 @@ public class BetaClimateSampler {
     private final double detailScale;
     
     public BetaClimateSampler(long seed) {
-        this(seed, new ModernBetaChunkGeneratorSettings.Factory().build());
+        this(seed, ModernBetaChunkGeneratorSettings.build());
     }
     
     public BetaClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
