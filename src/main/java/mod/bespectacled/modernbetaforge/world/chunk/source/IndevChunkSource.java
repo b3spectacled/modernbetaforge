@@ -229,7 +229,6 @@ public class IndevChunkSource extends FiniteChunkSource {
             for (int z = 0; z < this.levelLength; ++z) {
                 double normalizedZ = Math.max(normalizedX, Math.abs(z / (this.levelLength - 1.0) - 0.5) * 2.0);
                 int worldZ = z - this.levelLength / 2;
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
                 
                 normalizedZ = normalizedZ * normalizedZ * normalizedZ;
 
@@ -262,7 +261,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                     Block block = Blocks.AIR;
                      
                     if (y <= dirtThreshold)
-                        block = biome.fillerBlock.getBlock();
+                        block = Blocks.DIRT;
                      
                     if (y <= stoneThreshold)
                         block = Blocks.STONE;
@@ -490,18 +489,14 @@ public class IndevChunkSource extends FiniteChunkSource {
         this.setPhase("Planting");
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
-            int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
-                int worldZ = z - this.levelLength / 2;
-                
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
                 for (int y = 0; y < this.levelHeight - 2; ++y) {
                     Block block = this.getLevelBlock(x, y, z);
                     Block blockUp = this.getLevelBlock(x, y + 1, z);
 
-                    if (block.equals(biome.fillerBlock.getBlock()) && blockUp.equals(Blocks.AIR)) {
-                        this.setLevelBlock(x, y, z, biome.topBlock.getBlock());
+                    if (block.equals(Blocks.DIRT) && blockUp.equals(Blocks.AIR)) {
+                        this.setLevelBlock(x, y, z, Blocks.GRASS);
                     }
                 }
             }
@@ -518,12 +513,8 @@ public class IndevChunkSource extends FiniteChunkSource {
         
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
-            int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
-                int worldZ = z - this.levelLength / 2;
-                
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
                 for (int y = 0; y < this.levelHeight; ++y) {
                     Block block = Blocks.AIR;
                     
@@ -535,10 +526,10 @@ public class IndevChunkSource extends FiniteChunkSource {
                         
                     } else if (y < this.groundLevel) { // Handles Inland levels
                         if (this.groundLevel > this.waterLevel && this.defaultFluid.getBlock() == Blocks.WATER) {
-                            block = biome.topBlock.getBlock();
+                            block = Blocks.GRASS;
                             
                         } else { // Handles Island levels
-                            block = biome.fillerBlock.getBlock();
+                            block = Blocks.DIRT;
                             
                         }
                     } else if (y < this.waterLevel) { // Handles Island levels

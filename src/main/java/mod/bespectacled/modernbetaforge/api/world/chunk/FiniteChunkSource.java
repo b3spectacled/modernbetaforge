@@ -465,11 +465,20 @@ public abstract class FiniteChunkSource extends ChunkSource {
             
             for (int localZ = 0; localZ < 16; ++localZ) {
                 int z = localZ + startZ;
+                Biome biome = this.biomeProvider.getBiomeSource().getBiome(x, z);
                 
                 for (int y = this.levelHeight - 1; y >= 0; --y) {
                     Block block = this.getLevelBlock(x + offsetX, y, z + offsetZ);
-                    defaultSource.setBlockState(block.getDefaultState());
+                    IBlockState blockState = block.getDefaultState();
                     
+                    // Replace grass/dirt blocks with biome top/filler blocks
+                    if (block == Blocks.GRASS || block == biome.topBlock.getBlock()) {
+                        blockState = biome.topBlock;
+                    } else if (block == Blocks.DIRT || block == biome.fillerBlock.getBlock()) {
+                        blockState = biome.fillerBlock;
+                    }
+                    
+                    defaultSource.setBlockState(blockState);
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }

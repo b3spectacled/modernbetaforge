@@ -16,7 +16,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class Classic23aChunkSource extends FiniteChunkSource {
@@ -156,7 +155,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
             
             for (int z = 0; z < this.levelLength; ++z) {
                 int worldZ = z - this.levelLength / 2;
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
                 
                 int dirtDepth = (int)(this.soilOctaveNoise.sampleXY(x, z) / 24.0) - 4;
                 int dirtThreshold = this.levelHeightmap[x + z * this.levelWidth] + seaLevel;
@@ -177,7 +175,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                     Block block = Blocks.AIR;
                      
                     if (y <= dirtThreshold)
-                        block = biome.fillerBlock.getBlock();
+                        block = Blocks.DIRT;
                      
                     if (y <= stoneThreshold)
                         block = Blocks.STONE;
@@ -312,12 +310,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
-            int worldX = x - this.levelWidth / 2;
             
             for (int z = 0; z < this.levelLength; ++z) {
-                int worldZ = z - this.levelLength / 2;
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(worldX, worldZ);
-                
                 boolean genSand = sandOctaveNoise.sampleXY(x, z) > 8.0;
                 boolean genGravel = gravelOctaveNoise.sampleXY(x, z) > 12.0;
 
@@ -329,7 +323,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                 }
      
                 if (blockUp == Blocks.AIR) {
-                    Block surfaceBlock = biome.topBlock.getBlock();
+                    Block surfaceBlock = Blocks.GRASS;
                     
                     if (height <= seaLevel - 1 && genSand) {
                         surfaceBlock = Blocks.SAND;
