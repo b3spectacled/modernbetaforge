@@ -12,6 +12,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,27 +27,35 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeBiome extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
+    private static final int MAX_SEARCH_LENGTH = 40;
+    private static final int SEARCH_BAR_LENGTH = 360;
     
     private final GuiScreenCustomizeWorld parent;
     private final BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer;
     private final String initialBiome;
+    private final String searchBiome;
     private final List<Info> biomes;
 
     private ModernBetaChunkGeneratorSettings.Factory settings;
     private ListPreset list;
+    private GuiTextField searchBar;
     private GuiButton select;
+    private GuiButton search;
+    private String searchText;
     
     protected String title;
     
     public GuiScreenCustomizeBiome(
         GuiScreenCustomizeWorld guiCustomizeWorldScreen,
         BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer,
-        String initialBiome
+        String initialBiome,
+        String searchBiome
     ) {
         this.title = "Customize Single Biome";
         this.parent = guiCustomizeWorldScreen;
         this.consumer = consumer;
         this.initialBiome = initialBiome;
+        this.searchBiome = searchBiome;
         this.biomes = this.loadBiomes();
     }
     
@@ -55,12 +64,18 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         this.buttonList.clear();
         
         this.title = I18n.format("createWorld.customize.custom.biomes.title");
+        this.searchText = I18n.format("createWorld.customize.biomes.search.info");
         
         this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialBiome);
         
-        this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.custom.biomes.select")));
+        this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
+        this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
+        this.searchBar.setText(this.searchBiome);
+        
+        this.select = this.addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.biomes.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 100, 20, I18n.format("createWorld.customize.biomes.search")));
         
         this.updateButtonValidity();
     }
@@ -78,7 +93,20 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
+        this.searchBar.mouseClicked(mouseX, mouseY, clicked);
+        
         super.mouseClicked(mouseX, mouseY, clicked);
+    }
+    
+    @Override
+    protected void keyTyped(char character, int keyCode) throws IOException {
+        if (!this.searchBar.textboxKeyTyped(character, keyCode)) {
+            super.keyTyped(character, keyCode);
+        }
+        
+        if (keyCode == 28 || keyCode == 156) {
+            this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText()));
+        }
     }
     
     @Override
@@ -92,6 +120,9 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
             case 1:
                 this.mc.displayGuiScreen(this.parent);
                 break;
+            case 2:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText()));
+                break;
         }
     }
     
@@ -100,9 +131,17 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         this.drawDefaultBackground();
         
         this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 20, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
+        this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, 10526880);
+        this.searchBar.drawTextBox();
         
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+    
+    @Override
+    public void updateScreen() {
+        this.searchBar.updateCursorCounter();
+        super.updateScreen();
     }
     
     public void updateButtonValidity() {
@@ -119,8 +158,11 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
             String name = biome.getBiomeName();
             String registryName = biome.getRegistryName().toString();
+            boolean containsSearchBiome = name.contains(this.searchBiome) || registryName.contains(this.searchBiome);
             
-            biomes.add(new Info(name, registryName));
+            if (this.searchBiome == null || this.searchBiome.isEmpty() || containsSearchBiome) {
+                biomes.add(new Info(name, registryName));
+            }
         }
         
         return biomes;
@@ -132,7 +174,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     
     @SideOnly(Side.CLIENT)
     public class ListPreset extends GuiSlot {
-        private static final int LIST_PADDING_TOP = 32;
+        private static final int LIST_PADDING_TOP = 66;
         
         public int selected;
         

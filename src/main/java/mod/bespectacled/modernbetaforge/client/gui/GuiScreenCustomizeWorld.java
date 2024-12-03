@@ -838,117 +838,117 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setEntryValue(int entry, boolean entryValue) {
         switch (entry) {
             case GuiIds.PG0_B_FIXED:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome, ""));
                 break;
                 
             case GuiIds.PG5_DSRT_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase, ""));
                 break;
             case GuiIds.PG5_DSRT_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean, ""));
                 break;
             case GuiIds.PG5_DSRT_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_FRST_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase, ""));
                 break;
             case GuiIds.PG5_FRST_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean, ""));
                 break;
             case GuiIds.PG5_FRST_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_ICED_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase, ""));
                 break;
             case GuiIds.PG5_ICED_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean, ""));
                 break;
             case GuiIds.PG5_ICED_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_PLNS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase, ""));
                 break;
             case GuiIds.PG5_PLNS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean, ""));
                 break;
             case GuiIds.PG5_PLNS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_RAIN_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase, ""));
                 break;
             case GuiIds.PG5_RAIN_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean, ""));
                 break;
             case GuiIds.PG5_RAIN_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_SAVA_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase, ""));
                 break;
             case GuiIds.PG5_SAVA_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean, ""));
                 break;
             case GuiIds.PG5_SAVA_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_SHRB_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase, ""));
                 break;
             case GuiIds.PG5_SHRB_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean, ""));
                 break;
             case GuiIds.PG5_SHRB_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_SEAS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase, ""));
                 break;
             case GuiIds.PG5_SEAS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean, ""));
                 break;
             case GuiIds.PG5_SEAS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_SWMP_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase, ""));
                 break;
             case GuiIds.PG5_SWMP_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean, ""));
                 break;
             case GuiIds.PG5_SWMP_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_TAIG_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase, ""));
                 break;
             case GuiIds.PG5_TAIG_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean, ""));
                 break;
             case GuiIds.PG5_TAIG_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach, ""));
                 break;
                 
             case GuiIds.PG5_TUND_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase, ""));
                 break;
             case GuiIds.PG5_TUND_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean, ""));
                 break;
             case GuiIds.PG5_TUND_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach, ""));
                 break;
         
             case GuiIds.PG0_B_USE_OCEAN:

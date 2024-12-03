@@ -36,11 +36,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final List<Info> presets;
     
     private ListPreset list;
-    private GuiButton select;
     private GuiTextField export;
-    protected String title;
+    private GuiButton select;
     private String shareText;
     private String listText;
+    
+    protected String title;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld guiCustomizeWorldScreen) {
         this.title = "Customize World Presets";
@@ -88,9 +89,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     @Override
-    protected void keyTyped(char character, int integer) throws IOException {
-        if (!this.export.textboxKeyTyped(character, integer)) {
-            super.keyTyped(character, integer);
+    protected void keyTyped(char character, int keyCode) throws IOException {
+        if (!this.export.textboxKeyTyped(character, keyCode)) {
+            super.keyTyped(character, keyCode);
         }
     }
     
