@@ -40,7 +40,6 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     private ListPreset list;
     private GuiTextField searchBar;
     private GuiButton select;
-    private GuiButton search;
     private String searchText;
     
     protected String title;
@@ -75,7 +74,8 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         
         this.select = this.addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.biomes.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 100, 20, I18n.format("createWorld.customize.biomes.search")));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.biomes.search")));
+        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.biomes.reset")));
         
         this.updateButtonValidity();
     }
@@ -122,6 +122,9 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
                 break;
             case 2:
                 this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText()));
+                break;
+            case 3:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, ""));
                 break;
         }
     }

@@ -108,6 +108,7 @@ createWorld.customize.custom.beachBiome=Beach Biome
 # Single Biome Customization
 createWorld.customize.custom.biomes.title=Customize Biome
 createWorld.customize.biomes.select=Use Biome
+createWorld.customize.biomes.reset=Reset
 createWorld.customize.biomes.search=Search
 createWorld.customize.biomes.search.info=Search biomes by name or registry name..
 
