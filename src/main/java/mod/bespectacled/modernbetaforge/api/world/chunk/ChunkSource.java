@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -306,6 +307,7 @@ public abstract class ChunkSource {
         
         // Get biome provider to check for climate sampler
         ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
+        BiomeSource biomeSource = biomeProvider.getBiomeSource();
 
         // Generate snow / ice
         if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
@@ -318,8 +320,8 @@ public abstract class ChunkSource {
 
                     BlockPos blockPosDown = mutablePos.setPos(x, y, z).down();
                     
-                    if (biomeProvider.getBiomeSource() instanceof ClimateSampler) {
-                        ClimateSampler climateSampler = (ClimateSampler)biomeProvider.getBiomeSource();
+                    if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
+                        ClimateSampler climateSampler = (ClimateSampler)biomeSource;
                         
                         double temp = climateSampler.sample(x, z).temp();
                         temp = temp - ((double)(y - 64) / 64.0) * 0.3;

@@ -67,6 +67,11 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
         return ModernBetaConfig.visualOptions.useBetaBiomeColors && !this.climateMap.isModifiedMap();
     }
     
+    @Override
+    public boolean sampleForFeatureGeneration() {
+        return !this.climateMap.isModifiedMap();
+    }
+    
     private Biome getBiomeByType(int x, int z, ClimateType type) {
         Clime clime = this.climateSampler.sampleClime(x, z);
         double temp = clime.temp();
