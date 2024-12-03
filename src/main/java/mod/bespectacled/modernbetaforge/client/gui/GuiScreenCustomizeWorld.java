@@ -1492,6 +1492,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
                     this.randomClicked = false;
                     this.updateGuiButtons();
+                    this.setSettingsModified(!this.settings.equals(this.defaultSettings));
                 }
                              
                 break;
