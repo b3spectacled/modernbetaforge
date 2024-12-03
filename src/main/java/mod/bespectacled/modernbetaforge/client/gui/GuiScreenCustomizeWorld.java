@@ -3,8 +3,13 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -48,7 +53,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
+    private static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> BIOME_BUTTONS = new HashMap<>();
     private static final int PAGELIST_ADDITIONAL_WIDTH = 96;
+    private static final int BIOME_TRUNCATE_LEN = 18;
     
     private static final int MIN_CAVE_HEIGHT = 9;
     private static final int MAX_CAVE_HEIGHT = 255;
@@ -595,52 +602,52 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
         
         // Set biome text for Single Biome button
-        this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, this.getFormattedBiomeName(this.settings.singleBiome, true, 18));
+        this.setInitialTextButton(this.pageList, GuiIds.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, true, BIOME_TRUNCATE_LEN));
         
         // Set biome text for Beta Biome buttons
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_LAND, this.getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_OCEAN, this.getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_BEACH, this.getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_LAND, this.getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_OCEAN, this.getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_BEACH, this.getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_LAND, this.getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_OCEAN, this.getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_BEACH, this.getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_LAND, this.getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_OCEAN, this.getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_BEACH, this.getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_LAND, this.getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_OCEAN, this.getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_BEACH, this.getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_LAND, this.getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_OCEAN, this.getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_BEACH, this.getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_LAND, this.getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_OCEAN, this.getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_BEACH, this.getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_LAND, this.getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_OCEAN, this.getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_BEACH, this.getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_LAND, this.getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_OCEAN, this.getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_BEACH, this.getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_LAND, this.getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_OCEAN, this.getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_BEACH, this.getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
         
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_LAND, this.getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_OCEAN, this.getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
-        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_BEACH, this.getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
+        this.setInitialTextButton(this.pageList, GuiIds.PG5_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
 
         this.updatePageControls();
     }
@@ -1476,41 +1483,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case GuiIds.FUNC_RAND: // Randomize
+                Set<Gui> biomeButtonComponents = this.getBiomeButtonComponents();
+                
                 for (int page = 0; page < this.pageList.getSize(); ++page) {
+                    this.randomClicked = true;
+
                     GuiPageButtonList.GuiEntry guiEntry = this.pageList.getListEntry(page);
-                    
-                    Gui guiComponent = guiEntry.getComponent1();
-                    Gui guiComponent2 = guiEntry.getComponent2();
-                    Gui guiComponentFixed = this.pageList.getComponent(GuiIds.PG0_B_FIXED);
-                    
-                    if (guiComponent instanceof GuiButton && guiComponent != guiComponentFixed) {
-                        GuiButton guiButtonComponent = (GuiButton)guiComponent;
-                        
-                        if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
-                            float randomFloat = ((GuiSlider)guiButtonComponent).getSliderPosition() * (0.75f + this.random.nextFloat() * 0.5f) + (this.random.nextFloat() * 0.1f - 0.05f);
-                            ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
-                            
-                        } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
-                            this.randomClicked = true;
-                            ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
-                            this.randomClicked = false;
-                        }
-                    }
-                    
-                    if (guiComponent2 instanceof GuiButton && guiComponent2 != guiComponentFixed) {
-                        GuiButton guiButtonComponent = (GuiButton)guiComponent2;
-                        
-                        if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
-                            float randomFloat = ((GuiSlider)guiButtonComponent).getSliderPosition() * (0.75f + this.random.nextFloat() * 0.5f) + (this.random.nextFloat() * 0.1f - 0.05f);
-                            ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
-                            
-                        } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
-                            this.randomClicked = true;
-                            ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
-                            this.randomClicked = false;
-                        }
-                    }
-                    
+                    this.randomizeGuiComponent(guiEntry.getComponent1(), biomeButtonComponents);
+                    this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents);
+
+                    this.randomClicked = false;
                     this.updateGuiButtons();
                 }
                              
@@ -1586,6 +1568,37 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         if (this.confirmMode != 0) {
             return;
+        }
+    }
+    
+    private void randomizeGuiComponent(Gui guiComponent, Set<Gui> biomeButtonComponents) {
+        if (guiComponent instanceof GuiButton) {
+            GuiButton guiButtonComponent = (GuiButton)guiComponent;
+            
+            if (!biomeButtonComponents.contains(guiButtonComponent)) {
+                if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
+                    float randomFloat = ((GuiSlider)guiButtonComponent).getSliderPosition() * (0.75f + this.random.nextFloat() * 0.5f) + (this.random.nextFloat() * 0.1f - 0.05f);
+                    ((GuiSlider)guiButtonComponent).setSliderPosition(MathHelper.clamp(randomFloat, 0.0f, 1.0f));
+                    
+                } else if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled) {
+                    ((GuiListButton)guiButtonComponent).setValue(this.random.nextBoolean());
+                }
+            } else if (biomeButtonComponents.contains(guiButtonComponent)) {
+                int buttonId = BIOME_BUTTONS.keySet()
+                    .stream()
+                    .filter(id -> this.pageList.getComponent(id) == guiButtonComponent)
+                    .findFirst()
+                    .orElse(-1);
+                
+                if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled && buttonId != -1) {
+                    String registryName = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
+                    boolean prefix = buttonId == GuiIds.PG0_B_FIXED;
+                    int truncateLen = buttonId == GuiIds.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
+                    
+                    BIOME_BUTTONS.get(buttonId).accept(registryName, this.settings);
+                    this.setInitialTextButton(this.pageList, buttonId, getFormattedBiomeName(registryName, prefix, truncateLen));
+                }
+            }
         }
     }
 
@@ -1817,7 +1830,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return levelSeaLevel;
     }
     
-    private String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
+    private void playSound() {
+        if (!this.clicked && !this.randomClicked) {
+            this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
+    }
+    
+    private Set<Gui> getBiomeButtonComponents() {
+        return BIOME_BUTTONS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
+    }
+    
+    private static String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
         Biome biome = BiomeUtil.getBiome(registryName, "generator");
         String biomeName = biome.getBiomeName();
         
@@ -1828,12 +1851,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         return prefix ? String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName) : biomeName;
     }
-    
-    private void playSound() {
-        if (!this.clicked && !this.randomClicked) {
-            this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-        }
-    }
 
     private static int getNdx(int[] arr, int val) {
         for (int i = 0; i < arr.length; ++i) {
@@ -1842,5 +1859,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return 0;
+    }
+    
+    static {
+        BIOME_BUTTONS.put(GuiIds.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
     }
 }

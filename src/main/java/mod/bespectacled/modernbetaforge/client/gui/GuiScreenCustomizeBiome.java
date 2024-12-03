@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import org.lwjgl.input.Keyboard;
 
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -124,6 +126,10 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         return biomes;
     }
     
+    private void playSound() {
+        this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+    
     @SideOnly(Side.CLIENT)
     public class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 32;
@@ -166,6 +172,8 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
             );
             
             if (doubleClicked) {
+                GuiScreenCustomizeBiome.this.playSound();
+                
                 GuiScreenCustomizeBiome.this.parent.loadValues(GuiScreenCustomizeBiome.this.settings.toString());
                 GuiScreenCustomizeBiome.this.parent.setSettingsModified(!GuiScreenCustomizeBiome.this.settings.equals(GuiScreenCustomizeBiome.this.parent.getDefaultSettings()));
                 GuiScreenCustomizeBiome.this.mc.displayGuiScreen(GuiScreenCustomizeBiome.this.parent);

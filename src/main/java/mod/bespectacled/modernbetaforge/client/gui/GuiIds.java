@@ -714,13 +714,29 @@ public class GuiIds {
             
             return isFixed ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
         };
-        BiPredicate<Factory, Integer> testCustomBetaBiomes = (factory, id) -> {
+        BiPredicate<Factory, Integer> testCustomBetaBiomeBase = (factory, id) -> {
             String biomeSource = factory.biomeSource;
             boolean isBetaOrPEBiomeSource = 
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
                 biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
             
             return isBetaOrPEBiomeSource;
+        };
+        BiPredicate<Factory, Integer> testCustomBetaBiomeOcean = (factory, id) -> {
+            String biomeSource = factory.biomeSource;
+            boolean isBetaOrPEBiomeSource = 
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+            
+            return isBetaOrPEBiomeSource && factory.replaceOceanBiomes;
+        };
+        BiPredicate<Factory, Integer> testCustomBetaBiomeBeach = (factory, id) -> {
+            String biomeSource = factory.biomeSource;
+            boolean isBetaOrPEBiomeSource = 
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
+                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+            
+            return isBetaOrPEBiomeSource && factory.replaceBeachBiomes;
         };
         BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
             String chunkSource = factory.chunkSource;
@@ -947,48 +963,48 @@ public class GuiIds {
         add(PG4_F_BIOME_SZ, testBiomeSize);
         add(PG4_F_RIVER_SZ, testChunkSettings);
         
-        add(PG5_DSRT_LAND, testCustomBetaBiomes);
-        add(PG5_DSRT_OCEAN, testCustomBetaBiomes);
-        add(PG5_DSRT_BEACH, testCustomBetaBiomes);
+        add(PG5_DSRT_LAND, testCustomBetaBiomeBase);
+        add(PG5_DSRT_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_DSRT_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_FRST_LAND, testCustomBetaBiomes);
-        add(PG5_FRST_OCEAN, testCustomBetaBiomes);
-        add(PG5_FRST_BEACH, testCustomBetaBiomes);
+        add(PG5_FRST_LAND, testCustomBetaBiomeBase);
+        add(PG5_FRST_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_FRST_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_ICED_LAND, testCustomBetaBiomes);
-        add(PG5_ICED_OCEAN, testCustomBetaBiomes);
-        add(PG5_ICED_BEACH, testCustomBetaBiomes);
+        add(PG5_ICED_LAND, testCustomBetaBiomeBase);
+        add(PG5_ICED_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_ICED_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_PLNS_LAND, testCustomBetaBiomes);
-        add(PG5_PLNS_OCEAN, testCustomBetaBiomes);
-        add(PG5_PLNS_BEACH, testCustomBetaBiomes);
+        add(PG5_PLNS_LAND, testCustomBetaBiomeBase);
+        add(PG5_PLNS_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_PLNS_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_RAIN_LAND, testCustomBetaBiomes);
-        add(PG5_RAIN_OCEAN, testCustomBetaBiomes);
-        add(PG5_RAIN_BEACH, testCustomBetaBiomes);
+        add(PG5_RAIN_LAND, testCustomBetaBiomeBase);
+        add(PG5_RAIN_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_RAIN_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_SAVA_LAND, testCustomBetaBiomes);
-        add(PG5_SAVA_OCEAN, testCustomBetaBiomes);
-        add(PG5_SAVA_BEACH, testCustomBetaBiomes);
+        add(PG5_SAVA_LAND, testCustomBetaBiomeBase);
+        add(PG5_SAVA_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_SAVA_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_SHRB_LAND, testCustomBetaBiomes);
-        add(PG5_SHRB_OCEAN, testCustomBetaBiomes);
-        add(PG5_SHRB_BEACH, testCustomBetaBiomes);
+        add(PG5_SHRB_LAND, testCustomBetaBiomeBase);
+        add(PG5_SHRB_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_SHRB_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_SEAS_LAND, testCustomBetaBiomes);
-        add(PG5_SEAS_OCEAN, testCustomBetaBiomes);
-        add(PG5_SEAS_BEACH, testCustomBetaBiomes);
+        add(PG5_SEAS_LAND, testCustomBetaBiomeBase);
+        add(PG5_SEAS_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_SEAS_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_SWMP_LAND, testCustomBetaBiomes);
-        add(PG5_SWMP_OCEAN, testCustomBetaBiomes);
-        add(PG5_SWMP_BEACH, testCustomBetaBiomes);
+        add(PG5_SWMP_LAND, testCustomBetaBiomeBase);
+        add(PG5_SWMP_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_SWMP_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_TAIG_LAND, testCustomBetaBiomes);
-        add(PG5_TAIG_OCEAN, testCustomBetaBiomes);
-        add(PG5_TAIG_BEACH, testCustomBetaBiomes);
+        add(PG5_TAIG_LAND, testCustomBetaBiomeBase);
+        add(PG5_TAIG_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_TAIG_BEACH, testCustomBetaBiomeBeach);
         
-        add(PG5_TUND_LAND, testCustomBetaBiomes);
-        add(PG5_TUND_OCEAN, testCustomBetaBiomes);
-        add(PG5_TUND_BEACH, testCustomBetaBiomes);
+        add(PG5_TUND_LAND, testCustomBetaBiomeBase);
+        add(PG5_TUND_OCEAN, testCustomBetaBiomeOcean);
+        add(PG5_TUND_BEACH, testCustomBetaBiomeBeach);
     }
 }
