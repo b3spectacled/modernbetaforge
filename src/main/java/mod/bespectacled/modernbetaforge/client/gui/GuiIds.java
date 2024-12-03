@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
 import com.google.common.collect.ImmutableList;
@@ -29,8 +30,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiIds {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
-    private static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     private static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
+    private static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
+    private static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     
     /* Function Buttons */
     
@@ -92,8 +94,8 @@ public class GuiIds {
     public static final int PG0_B_USE_INFDEV_PYRAMIDS = 137;
     
     public static final int PG0_S_CAVE_HEIGHT = 138;
-    public static final int PG0_S_CAVE_COUNT = 140;
-    public static final int PG0_S_CAVE_CHANCE = 141;
+    public static final int PG0_S_CAVE_COUNT = 139;
+    public static final int PG0_S_CAVE_CHANCE = 140;
     
     public static final int PG0_L_INDEV_SEA_LEVEL = 150;
     
@@ -250,11 +252,12 @@ public class GuiIds {
     public static final int PG3_S_B_SCL_OF = 416;
     public static final int PG3_S_RIVER_SZ = 417;
     public static final int PG3_S_BIOME_SZ = 418;
-    public static final int PG3_B_USE_BDS = 419;
 
-    public static final int PG3_S_TEMP_SCL = 451;
-    public static final int PG3_S_RAIN_SCL = 452;
-    public static final int PG3_S_DETL_SCL = 453;
+    public static final int PG3_S_TEMP_SCL = 419;
+    public static final int PG3_S_RAIN_SCL = 420;
+    public static final int PG3_S_DETL_SCL = 421;
+
+    public static final int PG3_B_USE_BDS = 450;
     
     // Labels
     public static final int PG3_L_BETA_LABL = 1400;
@@ -283,9 +286,9 @@ public class GuiIds {
     public static final int PG4_F_RIVER_SZ = 517;
     public static final int PG4_F_BIOME_SZ = 518;
 
-    public static final int PG4_F_TEMP_SCL = 551;
-    public static final int PG4_F_RAIN_SCL = 552;
-    public static final int PG4_F_DETL_SCL = 553;
+    public static final int PG4_F_TEMP_SCL = 519;
+    public static final int PG4_F_RAIN_SCL = 520;
+    public static final int PG4_F_DETL_SCL = 521;
     
     // Labels
     public static final int PG4_L_MAIN_NS_X = 1500;
@@ -408,11 +411,19 @@ public class GuiIds {
         assertOffset(PG3_S_B_SCL_OF, PG4_F_B_SCL_OF);
     }
     
+    public static Set<Integer> getBiomeGuiIds() {
+        return GUI_BIOMES.keySet();
+    }
+    
+    public static void updateBiomeSetting(int id, String registryName, Factory factory) {
+        GUI_BIOMES.get(id).accept(registryName, factory);
+    }
+    
     public static Set<Integer> getGuiIds() {
         return GUI_IDS.keySet();
     }
     
-    public static boolean test(Factory factory, int id) {
+    public static boolean testGuiEnabled(Factory factory, int id) {
         if (GUI_IDS.containsKey(id)) {
             return GUI_IDS.get(id).test(factory, id);
         }
@@ -604,6 +615,52 @@ public class GuiIds {
             ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id,
             ImmutableList.of()
         );
+        
+        GUI_BIOMES.put(GuiIds.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
+        
+        GUI_BIOMES.put(GuiIds.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
+        GUI_BIOMES.put(GuiIds.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
+        GUI_BIOMES.put(GuiIds.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
         
         BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
             String chunkSource = factory.chunkSource;
