@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class FiniteLevelDataHandler {
     public static final String FILE_NAME = "mblevel.dat";
     
+    private static final int FINITE_VERSION_V1_3_1_0 = 1310;
+    
     private final File worldDirectory;
     private FiniteLevelData levelData;
     
@@ -43,6 +45,10 @@ public class FiniteLevelDataHandler {
     
     public LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
         return this.levelData.getLevelData(levelWidth, levelHeight, levelLength);
+    }
+    
+    private static int getFiniteVersion() {
+        return FINITE_VERSION_V1_3_1_0;
     }
     
     public void writeToDisk() throws IOException {
@@ -70,6 +76,8 @@ public class FiniteLevelDataHandler {
     private static class FiniteLevelData implements Serializable {
         private static final long serialVersionUID = 4163598858586006355L;
         
+        private final int levelVersion = FiniteLevelDataHandler.getFiniteVersion();
+        
         private final int levelWidth;
         private final int levelHeight;
         private final int levelLength;
@@ -92,6 +100,16 @@ public class FiniteLevelDataHandler {
         }
         
         private LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
+            if (this.levelVersion < FiniteLevelDataHandler.getFiniteVersion()) {
+                String errorStr = String.format(
+                    "Stored level version %d is older than current version %d!",
+                    this.levelVersion,
+                    FiniteLevelDataHandler.getFiniteVersion()
+                );
+                
+                throw new IllegalStateException(errorStr);
+            }
+            
             if (this.levelWidth != levelWidth || this.levelHeight != levelHeight || this.levelLength != levelLength) {
                 throw new IllegalStateException("Stored level dimensions were somehow corrupted!");
             }

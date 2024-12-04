@@ -472,9 +472,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
                     IBlockState blockState = block.getDefaultState();
                     
                     // Replace grass/dirt blocks with biome top/filler blocks
-                    if (block == Blocks.GRASS || block == biome.topBlock.getBlock()) {
+                    if (block == Blocks.GRASS) {
                         blockState = biome.topBlock;
-                    } else if (block == Blocks.DIRT || block == biome.fillerBlock.getBlock()) {
+                    } else if (block == Blocks.DIRT) {
                         blockState = biome.fillerBlock;
                     }
                     
