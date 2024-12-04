@@ -161,9 +161,12 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
             String name = biome.getBiomeName();
             String registryName = biome.getRegistryName().toString();
-            boolean containsSearchBiome = name.contains(this.searchBiome) || registryName.contains(this.searchBiome);
             
-            if (this.searchBiome == null || this.searchBiome.isEmpty() || containsSearchBiome) {
+            if (this.searchBiome == null ||
+                this.searchBiome.isEmpty() ||
+                name.toLowerCase().contains(this.searchBiome.toLowerCase()) ||
+                registryName.toLowerCase().contains(this.searchBiome.toLowerCase())
+            ) {
                 biomes.add(new Info(name, registryName));
             }
         }
