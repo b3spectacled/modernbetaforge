@@ -199,10 +199,6 @@ public abstract class ChunkSource {
         // Prune outer chunks for finite worlds
         this.pruneChunk(chunkX, chunkZ);
         
-        if (this.skipChunk(chunkX, chunkZ)) {
-            return;
-        }
-        
         BlockFalling.fallInstantly = true;
         
         int startX = chunkX * 16;
@@ -213,96 +209,98 @@ public abstract class ChunkSource {
         ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
-        Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
-        
-        this.random.setSeed(this.world.getSeed());
-        long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
-        long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
-        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
+        if (!this.skipChunk(chunkX, chunkZ)) {
+            Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
+            
+            this.random.setSeed(this.world.getSeed());
+            long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
+            long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
+            this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
 
-        ForgeEventFactory.onChunkPopulate(true, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
-        
-        // Actually generate map features here
-        if (this.mapFeaturesEnabled) {
-            if (this.settings.useMineShafts) {
-                this.mineshaftGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
+            ForgeEventFactory.onChunkPopulate(true, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
             
-            if (this.settings.useVillages) {
-                hasVillageGenerated = this.villageGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
-            
-            if (this.settings.useStrongholds) {
-                this.strongholdGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
-            
-            if (this.settings.useTemples) {
-                this.scatteredFeatureGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
-            
-            if (this.settings.useMonuments) {
-                this.oceanMonumentGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
-            
-            if (this.settings.useMansions) {
-                this.woodlandMansionGenerator.generateStructure(this.world, this.random, chunkPos);
-            }
-        }
-        
-        // Reset seed for generation accuracy
-        this.random.setSeed(this.world.getSeed());
-        randomLong0 = (this.random.nextLong() / 2L) * 2L + 1L;
-        randomLong1 = (this.random.nextLong() / 2L) * 2L + 1L;
-        this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
-        
-        // Generate lakes, dungeons
-        
-        if (!hasVillageGenerated &&
-            this.settings.useWaterLakes && 
-            TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
-        ) {
-            if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
-                int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(this.settings.height);
-                int z = startZ + this.random.nextInt(16) + 8;
+            // Actually generate map features here
+            if (this.mapFeaturesEnabled) {
+                if (this.settings.useMineShafts) {
+                    this.mineshaftGenerator.generateStructure(this.world, this.random, chunkPos);
+                }
                 
-                (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
-            }
-        }
-        
-        if (!hasVillageGenerated &&
-            this.settings.useLavaLakes &&
-            TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
-        ) {
-            if (random.nextInt(this.settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
-                int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(this.random.nextInt(this.settings.height - 8) + 8);
-                int z = startZ + this.random.nextInt(16) + 8;
+                if (this.settings.useVillages) {
+                    hasVillageGenerated = this.villageGenerator.generateStructure(this.world, this.random, chunkPos);
+                }
                 
-                if (y < 64 || this.random.nextInt(10) == 0) {
-                    (new WorldGenLakes(Blocks.LAVA)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
+                if (this.settings.useStrongholds) {
+                    this.strongholdGenerator.generateStructure(this.world, this.random, chunkPos);
+                }
+                
+                if (this.settings.useTemples) {
+                    this.scatteredFeatureGenerator.generateStructure(this.world, this.random, chunkPos);
+                }
+                
+                if (this.settings.useMonuments) {
+                    this.oceanMonumentGenerator.generateStructure(this.world, this.random, chunkPos);
+                }
+                
+                if (this.settings.useMansions) {
+                    this.woodlandMansionGenerator.generateStructure(this.world, this.random, chunkPos);
                 }
             }
-        }
-        
-        if (this.settings.useDungeons && 
-            TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
-        ) {
-            for (int i = 0; i < this.settings.dungeonChance; i++) {
-                int x = startX + this.random.nextInt(16) + 8;
-                int y = this.random.nextInt(this.settings.height);
-                int z = startZ + this.random.nextInt(16) + 8;
-                
-                new WorldGenDungeons().generate(this.world, this.random, mutablePos.setPos(x, y, z));
+            
+            // Reset seed for generation accuracy
+            this.random.setSeed(this.world.getSeed());
+            randomLong0 = (this.random.nextLong() / 2L) * 2L + 1L;
+            randomLong1 = (this.random.nextLong() / 2L) * 2L + 1L;
+            this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
+            
+            // Generate lakes, dungeons
+            
+            if (!hasVillageGenerated &&
+                this.settings.useWaterLakes && 
+                TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
+            ) {
+                if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
+                    int x = startX + this.random.nextInt(16) + 8;
+                    int y = this.random.nextInt(this.settings.height);
+                    int z = startZ + this.random.nextInt(16) + 8;
+                    
+                    (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
+                }
             }
-        }
-        
-        // Generate biome decorations
-        biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
-        
-        // Generate animals
-        if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
-            WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
+            
+            if (!hasVillageGenerated &&
+                this.settings.useLavaLakes &&
+                TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
+            ) {
+                if (random.nextInt(this.settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
+                    int x = startX + this.random.nextInt(16) + 8;
+                    int y = this.random.nextInt(this.random.nextInt(this.settings.height - 8) + 8);
+                    int z = startZ + this.random.nextInt(16) + 8;
+                    
+                    if (y < 64 || this.random.nextInt(10) == 0) {
+                        (new WorldGenLakes(Blocks.LAVA)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
+                    }
+                }
+            }
+            
+            if (this.settings.useDungeons && 
+                TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
+            ) {
+                for (int i = 0; i < this.settings.dungeonChance; i++) {
+                    int x = startX + this.random.nextInt(16) + 8;
+                    int y = this.random.nextInt(this.settings.height);
+                    int z = startZ + this.random.nextInt(16) + 8;
+                    
+                    new WorldGenDungeons().generate(this.world, this.random, mutablePos.setPos(x, y, z));
+                }
+            }
+            
+            // Generate biome decorations
+            biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
+            
+            // Generate animals
+            if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+                WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
+            }
         }
         
         // Get biome provider to check for climate sampler
