@@ -664,8 +664,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.done = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_DONE, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.done")));
         this.randomize = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_RAND, this.width / 2 - 92, this.height - 27, 90, 20, I18n.format(PREFIX + "randomize")));
-        this.previousPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PREV, 20, 5, 80, 20, I18n.format(PREFIX + "prev")));
-        this.nextPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_NEXT, this.width - 100, 5, 80, 20, I18n.format(PREFIX + "next")));
+        this.previousPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PREV, this.width / 2 - 205, 7, 80, 20, I18n.format(PREFIX + "prev")));
+        this.nextPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_NEXT, this.width / 2 + 125, 7, 80, 20, I18n.format(PREFIX + "next")));
         this.defaults = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_DFLT, this.width / 2 - 187, this.height - 27, 90, 20, I18n.format(PREFIX + "defaults")));
         this.presets = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PRST, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "presets")));
         
