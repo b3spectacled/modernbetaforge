@@ -316,30 +316,34 @@ public abstract class ChunkSource {
                     int z = dZ + startZ + 8;
                     int y = this.world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
 
+                    Biome biome = this.biomeProvider.getBiome(mutablePos);
                     BlockPos blockPosDown = mutablePos.setPos(x, y, z).down();
                     
+                    boolean canSetIce = false;
+                    boolean canSetSnow = false;
+                    
                     if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
-                        ClimateSampler climateSampler = (ClimateSampler)biomeSource;
-                        
-                        double temp = climateSampler.sample(x, z).temp();
+                        double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
                         temp = temp - ((double)(y - 64) / 64.0) * 0.3;
                         
-                        if (BiomeBeta.canSetIce(this.world, blockPosDown, false, temp)) {
-                            this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
-                        }
+                        canSetIce = BiomeBeta.canSetIceBeta(this.world, blockPosDown, false, temp);
+                        canSetSnow = BiomeBeta.canSetSnowBeta(this.world, mutablePos, temp);
                         
-                        if (BiomeBeta.canSetSnow(this.world, mutablePos, temp)) {
-                            this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
-                        }
+                    } else if (biome instanceof ModernBetaBiome) {
+                        ModernBetaBiome modernBetaBiome = (ModernBetaBiome)biome;
+                        double temp = (double)biome.getDefaultTemperature();
+                        
+                        canSetIce = modernBetaBiome.canSetIce(this.world, blockPosDown, false, temp);
+                        canSetSnow = modernBetaBiome.canSetSnow(this.world, mutablePos, temp);
+                        
                     } else {
-                        if (this.world.canBlockFreezeWater(blockPosDown)) {
-                            this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
-                        }
+                        canSetIce = this.world.canBlockFreezeWater(blockPosDown);
+                        canSetSnow = this.world.canSnowAt(mutablePos, true);
                         
-                        if (this.world.canSnowAt(mutablePos, true)) {
-                            this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
-                        }
                     }
+                    
+                    if (canSetIce) this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
+                    if (canSetSnow) this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
                 }
             }
         }

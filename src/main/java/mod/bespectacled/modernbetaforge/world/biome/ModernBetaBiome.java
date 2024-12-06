@@ -164,6 +164,14 @@ public abstract class ModernBetaBiome extends Biome {
         return this.getRandomTreeFeature(random);
     }
     
+    public boolean canSetIce(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
+        return world.canBlockFreezeWater(blockPos);
+    }
+    
+    public boolean canSetSnow(World world, BlockPos blockPos, double temp) {
+        return world.canSnowAt(blockPos, true);
+    }
+    
     @Override
     public void genTerrainBlocks(World worldIn, Random random, ChunkPrimer chunkPrimer, int x, int z, double surfaceNoise) {
         int seaLevel = worldIn.getSeaLevel();

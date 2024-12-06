@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class BiomeBetaSky extends BiomeBeta {
     public BiomeBetaSky() {
@@ -28,5 +30,18 @@ public class BiomeBetaSky extends BiomeBeta {
         this.additionalWaterCreatures.clear();
         this.additionalCaveCreatures.clear();
     }
-    
+
+    @Override
+    public boolean canSetIce(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
+        temp = temp - ((double)(blockPos.getY() + 1 - 64) / 64.0) * 0.3;
+        
+        return canSetIceBeta(world, blockPos, doWaterCheck, temp);
+    }
+
+    @Override
+    public boolean canSetSnow(World world, BlockPos blockPos, double temp) {
+        temp = temp - ((double)(blockPos.getY() - 64) / 64.0) * 0.3;
+        
+        return canSetSnowBeta(world, blockPos, temp);
+    }
 }

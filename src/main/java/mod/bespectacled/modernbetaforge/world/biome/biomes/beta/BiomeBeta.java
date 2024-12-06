@@ -84,11 +84,12 @@ public abstract class BiomeBeta extends ModernBetaBiome {
         
         return super.getFoliageColorAtPos(blockPos);
     }
-
-    public static boolean canSetIce(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
+    
+    public static boolean canSetIceBeta(World world, BlockPos blockPos, boolean doWaterCheck, double temp) {
         if (temp >= 0.5) {
             return false;
         }
+        
         if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
             IBlockState blockState = world.getBlockState(blockPos);
             Block block = blockState.getBlock();
@@ -111,19 +112,22 @@ public abstract class BiomeBeta extends ModernBetaBiome {
                 }
             }
         }
+        
         return false;
     }
-
-    public static boolean canSetSnow(World world, BlockPos blockPos, double temp) {
+    
+    public static boolean canSetSnowBeta(World world, BlockPos blockPos, double temp) {
         if (temp >= 0.5) {
             return false;
         }
+        
         if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
             IBlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock().isAir(blockState, world, blockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, blockPos)) {
                 return true;
             }
         }
+        
         return false;
     }
     
