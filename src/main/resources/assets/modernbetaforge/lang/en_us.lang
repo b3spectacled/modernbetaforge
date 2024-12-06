@@ -105,6 +105,49 @@ createWorld.customize.custom.baseBiome=Base Biome
 createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
+# Main Settings Names
+createWorld.customize.custom.chunkSource.beta=Beta
+createWorld.customize.custom.chunkSource.alpha=Alpha
+createWorld.customize.custom.chunkSource.skylands=Skylands
+createWorld.customize.custom.chunkSource.infdev_227=Infdev 227
+createWorld.customize.custom.chunkSource.infdev_420=Infdev 420
+createWorld.customize.custom.chunkSource.infdev_415=Infdev 415
+createWorld.customize.custom.chunkSource.infdev_611=Infdev 611
+createWorld.customize.custom.chunkSource.pe=Pocket Ed.
+createWorld.customize.custom.chunkSource.release=Release
+createWorld.customize.custom.chunkSource.indev=Indev
+createWorld.customize.custom.chunkSource.classic_0_0_23a=c0.0.023a
+
+createWorld.customize.custom.biomeSource.beta=Beta
+createWorld.customize.custom.biomeSource.single=Single Biome
+createWorld.customize.custom.biomeSource.pe=Pocket Ed.
+createWorld.customize.custom.biomeSource.release=Release
+
+createWorld.customize.custom.surfaceBuilder.beta=Beta
+createWorld.customize.custom.surfaceBuilder.alpha=Alpha
+createWorld.customize.custom.surfaceBuilder.alpha_1_2=Alpha 1.2
+createWorld.customize.custom.surfaceBuilder.skylands=Skylands
+createWorld.customize.custom.surfaceBuilder.infdev=Infdev
+createWorld.customize.custom.surfaceBuilder.infdev_227=Infdev 227
+createWorld.customize.custom.surfaceBuilder.pe=Pocket Ed.
+createWorld.customize.custom.surfaceBuilder.release=Release
+
+createWorld.customize.custom.caveCarver.beta=Beta
+createWorld.customize.custom.caveCarver.release=Release
+
+# Indev Settings Names
+createWorld.customize.custom.levelTheme.normal=Normal
+createWorld.customize.custom.levelTheme.paradise=Paradise
+createWorld.customize.custom.levelTheme.woods=Woods
+
+createWorld.customize.custom.levelType.island=Island
+createWorld.customize.custom.levelType.floating=Floating
+createWorld.customize.custom.levelType.inland=Inland
+
+createWorld.customize.custom.levelHouse.oak=Oak
+createWorld.customize.custom.levelHouse.mossy=Mossy
+createWorld.customize.custom.levelHouse.none=None
+
 # Single Biome Customization
 createWorld.customize.custom.biomes.title=Customize Biome
 createWorld.customize.biomes.select=Use Biome

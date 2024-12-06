@@ -2,7 +2,6 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -1668,39 +1667,38 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             case GuiIds.PG0_S_CHUNK: {
                 String key = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
-                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Chunk.values()).anyMatch(i -> i.id.equals(key));
                 
-                return contains ? ModernBetaBuiltInTypes.Chunk.valueOf(key.toUpperCase()).name : key;
+                return I18n.format(PREFIX + "chunkSource." + key);
             }
             case GuiIds.PG0_S_BIOME: {
                 String key = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
-                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Biome.values()).anyMatch(i -> i.id.equals(key));
                 
-                return contains ? ModernBetaBuiltInTypes.Biome.valueOf(key.toUpperCase()).name : key;
+                return I18n.format(PREFIX + "biomeSource." + key);
             }
             case GuiIds.PG0_S_SURFACE: {
                 String key = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
-                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Surface.values()).anyMatch(i -> i.id.equals(key));
                 
-                return contains ? ModernBetaBuiltInTypes.Surface.valueOf(key.toUpperCase()).name : key;
+                return I18n.format(PREFIX + "surfaceBuilder." + key);
             }
             case GuiIds.PG0_S_CARVER: {
                 String key = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
-                boolean contains = Arrays.stream(ModernBetaBuiltInTypes.Carver.values()).anyMatch(i -> i.id.equals(key));
                 
-                return contains ? ModernBetaBuiltInTypes.Carver.valueOf(key.toUpperCase()).name : key;
+                return I18n.format(PREFIX + "caveCarver." + key);
             }
             case GuiIds.PG0_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
-                return key.substring(0, 1).toUpperCase() + key.substring(1);
+                
+                return I18n.format(PREFIX + "levelTheme." + key);
             }
             case GuiIds.PG0_S_LEVEL_TYPE: {
                 String key = IndevType.values()[(int)entryValue].id;
-                return key.substring(0, 1).toUpperCase() + key.substring(1);
+                
+                return I18n.format(PREFIX + "levelType." + key);
             }
             case GuiIds.PG0_S_LEVEL_HOUSE: {
                 String key = IndevHouse.values()[(int)entryValue].id;
-                return key.substring(0, 1).toUpperCase() + key.substring(1);
+                
+                return I18n.format(PREFIX + "levelHouse." + key);
             }
             
             default: return String.format("%d", (int)entryValue);

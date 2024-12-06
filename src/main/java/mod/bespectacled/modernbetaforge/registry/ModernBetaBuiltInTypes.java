@@ -2,76 +2,63 @@ package mod.bespectacled.modernbetaforge.registry;
 
 public class ModernBetaBuiltInTypes {
     public enum Chunk {
-        BETA("beta", "Beta"),
-        ALPHA("alpha", "Alpha"),
-        SKYLANDS("skylands", "Skylands"),
-        INFDEV_227("infdev_227", "Infdev 227"),
-        INFDEV_420("infdev_420", "Infdev 420"),
-        INFDEV_415("infdev_415", "Infdev 415"),
-        INFDEV_611("infdev_611", "Infdev 611"),
-        PE("pe", "Pocket Ed."),
-        RELEASE("release", "Release"),
-        INDEV("indev", "Indev"),
-        CLASSIC_0_0_23A("classic_0_0_23a", "c0.0.23a")
-        ;
+        BETA("beta"),
+        ALPHA("alpha"),
+        SKYLANDS("skylands"),
+        INFDEV_227("infdev_227"),
+        INFDEV_420("infdev_420"),
+        INFDEV_415("infdev_415"),
+        INFDEV_611("infdev_611"),
+        PE("pe"),
+        RELEASE("release"),
+        INDEV("indev"),
+        CLASSIC_0_0_23A("classic_0_0_23a");
         
         public final String id;
-        public final String name;
         
-        private Chunk(String id, String name) {
+        private Chunk(String id) {
             this.id = id;
-            this.name = name;
         }
     }
     
     public enum Biome {
-        BETA("beta", "Beta"),
-        SINGLE("single", "Single"),
-        PE("pe", "Pocket Ed."),
-        RELEASE("release", "Release")
-        ;
+        BETA("beta"),
+        SINGLE("single"),
+        PE("pe"),
+        RELEASE("release");
         
         public final String id;
-        public final String name;
         
-        private Biome(String id, String name) {
+        private Biome(String id) {
             this.id = id;
-            this.name = name;
         }
     }
     
     public enum Surface {
-        BETA("beta", "Beta"),
-        ALPHA("alpha", "Alpha"),
-        ALPHA_1_2("alpha_1_2", "Alpha 1.2"),
-        SKYLANDS("skylands", "Skylands"),
-        INFDEV("infdev", "Infdev"),
-        INFDEV_227("infdev_227", "Infdev 227"),
-        PE("pe", "Pocket Ed."),
-        RELEASE("release", "Release")
-        ;
+        BETA("beta"),
+        ALPHA("alpha"),
+        ALPHA_1_2("alpha_1_2"),
+        SKYLANDS("skylands"),
+        INFDEV("infdev"),
+        INFDEV_227("infdev_227"),
+        PE("pe"),
+        RELEASE("release");
         
         public final String id;
-        public final String name;
         
-        private Surface(String id, String name) {
+        private Surface(String id) {
             this.id = id;
-            this.name = name;
         }
     }
     
     public enum Carver {
-        BETA("beta", "Beta"),
-        RELEASE("release", "Release")
-        ;
+        BETA("beta"),
+        RELEASE("release");
         
         public final String id;
-        public final String name;
         
-        private Carver(String id, String name) {
+        private Carver(String id) {
             this.id = id;
-            this.name = name;
         }
-        
     }
 }
