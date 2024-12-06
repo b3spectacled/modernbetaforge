@@ -144,6 +144,9 @@ public abstract class ChunkSource {
         ChunkPrimerContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         
+        // Populate biome-specific surface
+        this.provideSurface(chunkContainer.biomes, chunkPrimer, chunkX, chunkZ);
+        
         if (!this.skipChunk(chunkX, chunkZ)) {
             // Carve terrain
             if (this.settings.useCaves) {
@@ -632,9 +635,6 @@ public abstract class ChunkSource {
         
         // Generate base biome map
         this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
-        
-        // Populate biome-specific surface
-        this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
         
         // Post-process biome map
         if (this.biomeInjector != null) {
