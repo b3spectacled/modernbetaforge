@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.world.World;
@@ -24,17 +25,20 @@ public class MixinStructureVillagePiecesVillage {
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-            StructureComponent component = (StructureComponent)(Object)this;
-            StructureBoundingBox box = component.getBoundingBox();
             
-            int height = 
-                chunkSource.getHeight(box.minX, box.minZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.minX, box.maxZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.maxX, box.minZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.maxX, box.maxZ, Type.STRUCTURE);
-            height /= 4;
-            
-            info.setReturnValue(height + 1);
+            if (!(chunkSource instanceof FiniteChunkSource)) {
+                StructureComponent component = (StructureComponent)(Object)this;
+                StructureBoundingBox box = component.getBoundingBox();
+                
+                int height = 
+                    chunkSource.getHeight(box.minX, box.minZ, Type.STRUCTURE) +
+                    chunkSource.getHeight(box.minX, box.maxZ, Type.STRUCTURE) +
+                    chunkSource.getHeight(box.maxX, box.minZ, Type.STRUCTURE) +
+                    chunkSource.getHeight(box.maxX, box.maxZ, Type.STRUCTURE);
+                height /= 4;
+                
+                info.setReturnValue(height + 1);
+            }
         }
     }
 }

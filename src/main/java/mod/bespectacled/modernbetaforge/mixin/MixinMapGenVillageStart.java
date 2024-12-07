@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorStructureStart;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
@@ -34,32 +35,34 @@ public class MixinMapGenVillageStart {
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-            ChunkCache<ComponentChunk> componentCache = chunkSource.getComponentCache();
-            
-            int numComponents = 0;
-            
-            AccessorStructureStart accessor = (AccessorStructureStart)this;
-            for (StructureComponent component : accessor.getComponents()) {
-                if (component instanceof StructureVillagePieces.Road) {
-                    continue;
-                }
 
-                StructureBoundingBox box = component.getBoundingBox();
+            if (!(chunkSource instanceof FiniteChunkSource)) {
+                ChunkCache<ComponentChunk> componentCache = chunkSource.getComponentCache();
+                AccessorStructureStart accessor = (AccessorStructureStart)this;
                 
-                int minChunkX = box.minX >> 4;
-                int minChunkZ = box.minZ >> 4;
-                int maxChunkX = box.maxX >> 4;
-                int maxChunkZ = box.maxZ >> 4;
-                
-                for (int cZ = minChunkZ - 1; cZ <= maxChunkZ + 1; ++cZ) {
-                    for (int cX = minChunkX - 1; cX <= maxChunkX + 1; ++cX) {
-                        componentCache.get(cX, cZ).addComponent(component);
+                int numComponents = 0;
+                for (StructureComponent component : accessor.getComponents()) {
+                    if (component instanceof StructureVillagePieces.Road) {
+                        continue;
                     }
+    
+                    StructureBoundingBox box = component.getBoundingBox();
+                    
+                    int minChunkX = box.minX >> 4;
+                    int minChunkZ = box.minZ >> 4;
+                    int maxChunkX = box.maxX >> 4;
+                    int maxChunkZ = box.maxZ >> 4;
+                    
+                    for (int cZ = minChunkZ - 1; cZ <= maxChunkZ + 1; ++cZ) {
+                        for (int cX = minChunkX - 1; cX <= maxChunkX + 1; ++cX) {
+                            componentCache.get(cX, cZ).addComponent(component);
+                        }
+                    }
+                    numComponents++;
                 }
-                numComponents++;
+                
+                ModernBeta.log(Level.DEBUG, String.format("Start at %d/%d. Number of village components: %d", x, z, numComponents));
             }
-            
-            ModernBeta.log(Level.DEBUG, String.format("Start at %d/%d. Number of village components: %d", x, z, numComponents));
         }
     }           
 }
