@@ -35,7 +35,7 @@ public interface SpawnLocator {
                         if (distance < r2) {
                             int y = chunkSource.getHeight(dX, dZ, HeightmapChunk.Type.SURFACE);
                             
-                            if (y > 16) {
+                            if (y > 32) {
                                 return new BlockPos(dX, y + 1, dZ);
                             }
                         }
