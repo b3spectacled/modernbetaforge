@@ -4,6 +4,12 @@ generator.modernbeta=Modern Beta
 
 ## World Customization
 
+# Page Buttons
+createWorld.customize.custom.nextPage=>
+createWorld.customize.custom.prevPage=<
+createWorld.customize.custom.lastPage=>>
+createWorld.customize.custom.firstPage=<<
+
 # Page Titles
 createWorld.customize.custom.page4=Beta/PE Climates (Expert Users Only!)
 createWorld.customize.custom.page5=Biome Feature Settings

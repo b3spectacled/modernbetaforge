@@ -13,6 +13,8 @@
       "MixinWorldEntitySpawner",
       "MixinWorldProviderHell",
       "MixinMapGenStronghold",
+      "MixinMapGenVillageStart",
+      "MixinStructureVillagePiecesVillage",
       "accessor.AccessorChunkGeneratorHell",
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",
@@ -20,7 +22,8 @@
       "accessor.AccessorWorldProvider",
       "accessor.AccessorGenLayerBiome",
       "accessor.AccessorMapGenBase",
-      "accessor.AccessorMinecraftServer"
+      "accessor.AccessorMinecraftServer",
+      "accessor.AccessorMapGenStructure"
     ],
     "client": [
       "client.MixinEntityRenderer",

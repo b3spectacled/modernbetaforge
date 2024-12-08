@@ -13,20 +13,23 @@ public class HeightmapChunk {
     public enum Type {
         SURFACE,
         OCEAN,
-        FLOOR
+        FLOOR,
+        STRUCTURE
     }
     
     private final short heightmapSurface[];
     private final short heightmapOcean[];
     private final short heightmapFloor[];
+    private final short heightmapStructure[];
 
-    public HeightmapChunk(short[] heightmapSurface, short[] heightmapOcean, short[] heightmapFloor) {
-        if (heightmapSurface.length != 256 || heightmapOcean.length != 256 || heightmapFloor.length != 256) 
+    public HeightmapChunk(short[] heightmapSurface, short[] heightmapOcean, short[] heightmapFloor, short[] heightmapStructure) {
+        if (heightmapSurface.length != 256 || heightmapOcean.length != 256 || heightmapFloor.length != 256 || heightmapStructure.length != 256) 
             throw new IllegalArgumentException("[Modern Beta] Heightmap is an invalid size!");
 
         this.heightmapSurface = heightmapSurface;
         this.heightmapOcean = heightmapOcean;
         this.heightmapFloor = heightmapFloor;
+        this.heightmapStructure = heightmapStructure;
     }
     
     public int getHeight(int x, int z, HeightmapChunk.Type type) {
@@ -42,6 +45,9 @@ public class HeightmapChunk {
                 break;
             case FLOOR:
                 height = this.heightmapFloor[ndx];
+                break;
+            case STRUCTURE:
+                height = this.heightmapStructure[ndx];
                 break;
             default:
                 height = this.heightmapSurface[ndx];

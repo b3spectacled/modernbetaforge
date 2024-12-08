@@ -97,6 +97,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton confirm;
     private GuiButton cancel;
     private GuiButton presets;
+    private GuiButton firstPage;
+    private GuiButton lastPage;
     
     private boolean settingsModified;
     private int confirmMode;
@@ -663,10 +665,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.done = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_DONE, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.done")));
         this.randomize = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_RAND, this.width / 2 - 92, this.height - 27, 90, 20, I18n.format(PREFIX + "randomize")));
-        this.previousPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PREV, this.width / 2 - 205, 7, 80, 20, I18n.format(PREFIX + "prev")));
-        this.nextPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_NEXT, this.width / 2 + 125, 7, 80, 20, I18n.format(PREFIX + "next")));
+        this.previousPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PREV, this.width / 2 - 180, 7, 40, 20, I18n.format(PREFIX + "prevPage")));
+        this.nextPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_NEXT, this.width / 2 + 140, 7, 40, 20, I18n.format(PREFIX + "nextPage")));
         this.defaults = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_DFLT, this.width / 2 - 187, this.height - 27, 90, 20, I18n.format(PREFIX + "defaults")));
         this.presets = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_PRST, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "presets")));
+        this.firstPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_FRST, this.width / 2 - 205, 7, 20, 20, I18n.format(PREFIX + "firstPage")));
+        this.lastPage = this.<GuiButton>addButton(new GuiButton(GuiIds.FUNC_LAST, this.width / 2 + 185, 7, 20, 20, I18n.format(PREFIX + "lastPage")));
         
         this.defaults.enabled = this.settingsModified;
         
@@ -1519,6 +1523,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.confirmMode = 0;
                 this.exitConfirmation();
                 break;
+            case GuiIds.FUNC_FRST:
+                this.firstPage();
+                this.updatePageControls();
+                break;
+            case GuiIds.FUNC_LAST:
+                this.lastPage();
+                this.updatePageControls();
+                break;
         }
     }
 
@@ -1743,6 +1755,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.nextPage.enabled = !setConfirm;
         this.defaults.enabled = (this.settingsModified && !setConfirm);
         this.presets.enabled = !setConfirm;
+        this.lastPage.enabled = !setConfirm;
+        this.firstPage.enabled = !setConfirm;
         this.pageList.setActive(!setConfirm);
     }
     
@@ -1754,6 +1768,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
         this.pageTitle = this.pageNames[page];
         this.randomize.enabled = page < this.pageList.getPageCount() - 2 || page == 5;
+        this.firstPage.enabled = this.previousPage.enabled;
+        this.lastPage.enabled = this.nextPage.enabled;
+    }
+    
+    private void firstPage() {
+        if (this.pageList.getPage() > 0) {
+            this.pageList.setPage(0);
+        }
+    }
+    
+    private void lastPage() {
+        if (this.pageList.getPage() < this.pageList.getPageCount() - 1) {
+            this.pageList.setPage(this.pageList.getPageCount() - 1);
+        }
     }
     
     private void modifyFocusValue(float amount) {

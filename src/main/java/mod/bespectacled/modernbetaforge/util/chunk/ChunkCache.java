@@ -44,12 +44,28 @@ public class ChunkCache<T> {
     
     public void clear() {
         long stamp = this.lock.writeLock();
+        
         try {
             this.chunkMap.clear();
             this.chunkMap.trim();
         } finally {
             this.lock.unlock(stamp);
         }
+    }
+    
+    public T remove(int chunkX, int chunkZ) {
+        T chunk;
+
+        long key = ChunkPos.asLong(chunkX, chunkZ);
+        long stamp = this.lock.writeLock();
+        
+        try {
+            chunk = this.chunkMap.remove(key);
+        } finally {
+            this.lock.unlock(stamp);
+        }
+        
+        return chunk;
     }
     
     public T get(int chunkX, int chunkZ) {

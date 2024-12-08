@@ -243,6 +243,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
 
     @Override
+    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
+
+    @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {
         return this.skipChunk(chunkX, chunkZ, 0);
     }
@@ -457,7 +460,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         // Create and populate block sources
         BlockSourceDefault defaultSource = new BlockSourceDefault();
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
-            .add((x, y, z) -> defaultSource.sample(x, y, z))
+            .add(defaultSource)
             .build();
         
         for (int localX = 0; localX < 16; ++localX) {

@@ -82,7 +82,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         int[] heightmap = this.heightmapCache.get(chunkX, chunkZ); 
         int height = heightmap[(z & 0xF) + (x & 0xF) * 16];
         
-        if (type == HeightmapChunk.Type.OCEAN && height < this.seaLevel)
+        if (type == HeightmapChunk.Type.OCEAN || type == HeightmapChunk.Type.STRUCTURE && height < this.seaLevel)
             height = this.seaLevel;
         
         return height + 1;
@@ -104,7 +104,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         // Create and populate block sources
         BlockSourceDefault defaultSource = new BlockSourceDefault();
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
-            .add((x, y, z) -> defaultSource.sample(x, y, z))
+            .add(defaultSource)
             .build();
         
         for (int localX = 0; localX < 16; ++localX) {

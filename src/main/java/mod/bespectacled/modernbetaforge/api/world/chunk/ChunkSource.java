@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -29,13 +30,18 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourcePostProcess;
+import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
@@ -49,6 +55,7 @@ import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -57,6 +64,8 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class ChunkSource {
+    private static final int MAX_RENDER_DISTANCE_AREA = 1024;
+    
     protected static final int OCEAN_MIN_DEPTH = 4;
     protected static final int DEEP_OCEAN_MIN_DEPTH = 16;
     
@@ -75,11 +84,13 @@ public abstract class ChunkSource {
     protected final int worldHeight;
     protected final int seaLevel;
     
+    protected final MapGenVillage villageGenerator;
+    protected final ChunkCache<ComponentChunk> componentCache;
+    
     private final MapGenBase caveCarver;
     private final MapGenBase ravineCarver; 
     
     private final MapGenStronghold strongholdGenerator;
-    private final MapGenVillage villageGenerator;
     private final MapGenMineshaft mineshaftGenerator;
     
     private final MapGenScatteredFeature scatteredFeatureGenerator;
@@ -108,12 +119,14 @@ public abstract class ChunkSource {
         
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
+        
+        this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
+        this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
 
         this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver).apply(settings), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
         
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);
-        this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.mineshaftGenerator = (MapGenMineshaft)TerrainGen.getModdedMapGen(new MapGenMineshaft(), InitMapGenEvent.EventType.MINESHAFT);
         
         this.oceanMonumentGenerator = (StructureOceanMonument)TerrainGen.getModdedMapGen(new StructureOceanMonument(), InitMapGenEvent.EventType.OCEAN_MONUMENT);
@@ -144,16 +157,28 @@ public abstract class ChunkSource {
         ChunkPrimerContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         
-        // Populate biome-specific surface
-        this.provideSurface(chunkContainer.biomes, chunkPrimer, chunkX, chunkZ);
-        
         if (!this.skipChunk(chunkX, chunkZ)) {
+            // Generate village feature placements here, for structure weight sampling
+            if (this.mapFeaturesEnabled) {
+                if (this.settings.useVillages) {
+                    this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+            }
+            
+            boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
+            
+            // Post-process chunk
+            this.providePostProcessedChunk(chunkPrimer, chunkX, chunkZ);
+            
+            // Populate biome-specific surface
+            this.provideSurface(chunkContainer.biomes, chunkPrimer, chunkX, chunkZ);
+            
             // Carve terrain
-            if (this.settings.useCaves) {
+            if (this.settings.useCaves && !villageGenerated) {
                 this.caveCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
-            if (this.settings.useRavines) {
+            if (this.settings.useRavines && !villageGenerated) {
                 this.ravineCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
@@ -161,10 +186,6 @@ public abstract class ChunkSource {
             if (this.mapFeaturesEnabled) {
                 if (this.settings.useMineShafts) {
                     this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-                
-                if (this.settings.useVillages) {
-                    this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
                 }
                 
                 if (this.settings.useStrongholds) {
@@ -541,6 +562,51 @@ public abstract class ChunkSource {
         return this.world;
     }
     
+    public ChunkCache<ComponentChunk> getComponentCache() {
+        return this.componentCache;
+    }
+    
+    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+    
+        List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
+        StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
+        MutableBlockPos mutablePos = new MutableBlockPos();
+        
+        BlockSourcePostProcess postProcessSource = new BlockSourcePostProcess(this.defaultBlock, this.defaultFluid, this.getSeaLevel());
+        BlockSourceRules blockSources = new BlockSourceRules.Builder()
+            .add(postProcessSource)
+            .build();
+    
+        for (int localZ = 0; localZ < 16; ++localZ) {
+            int z = localZ + startZ;
+            
+            for (int localX = 0; localX < 16; ++ localX) {
+                int x = localX + startX;
+                
+                for (int y = 0; y < this.worldHeight; ++y) {
+                    IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
+                    
+                    double density = blockState.equals(this.defaultBlock) ? 25.0 : -25.0;
+                    double clampedDensity = MathHelper.clamp(density / 200.0, -1.0, 1.0);
+                    clampedDensity = clampedDensity / 2.0 - clampedDensity * clampedDensity * clampedDensity / 24.0;
+                    
+                    mutablePos.setPos(x, y, z);
+                    clampedDensity += weightSampler.sample(mutablePos, this);
+                    
+                    postProcessSource.setBlockState(blockState);
+                    postProcessSource.setDensity(clampedDensity);
+                    chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
+                }
+            }
+        }
+        
+        // Remove chunk after processing to make room for other chunks;
+        // will lead to some chunks not getting processed if not cleared.
+        this.componentCache.remove(chunkX, chunkZ);
+    }
+
     protected void setCloudHeight(int cloudHeight) {
         ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }

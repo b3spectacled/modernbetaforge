@@ -253,6 +253,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @return A HeightmapChunk, containing an array of ints containing the heights for the entire chunk.
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
+        short minStructureHeight = 32;
         short minHeight = 0;
         short worldMinY = 0;
         short worldHeight = (short)this.worldHeight;
@@ -262,10 +263,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
         short[] heightmapSurface = new short[256];
         short[] heightmapOcean = new short[256];
         short[] heightmapFloor = new short[256];
+        short[] heightmapStructure = new short[256];
         
         Arrays.fill(heightmapSurface, minHeight);
         Arrays.fill(heightmapOcean, minHeight);
         Arrays.fill(heightmapFloor, worldMinY);
+        Arrays.fill(heightmapStructure, minStructureHeight);
         
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
             for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
@@ -299,6 +302,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                 // Capture topmost solid/fluid block height.
                                 if (y < this.getSeaLevel() || isSolid) {
                                     heightmapOcean[ndx] = height;
+                                    heightmapStructure[ndx] = height;
                                 }
                                 
                                 // Capture topmost solid block height.
@@ -326,7 +330,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         }
         
         // Construct new heightmap cache from generated heightmap array
-        return new HeightmapChunk(heightmapSurface, heightmapOcean, heightmapFloor);
+        return new HeightmapChunk(heightmapSurface, heightmapOcean, heightmapFloor, heightmapStructure);
     }
     
     /**
