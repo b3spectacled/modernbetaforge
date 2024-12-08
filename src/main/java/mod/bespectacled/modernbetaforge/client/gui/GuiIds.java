@@ -44,6 +44,8 @@ public class GuiIds {
     public static final int FUNC_PRST = 65;
     public static final int FUNC_CONF = 66;
     public static final int FUNC_CNCL = 67;
+    public static final int FUNC_FRST = 70;
+    public static final int FUNC_LAST = 71;
     
     /* Page 1 */
     

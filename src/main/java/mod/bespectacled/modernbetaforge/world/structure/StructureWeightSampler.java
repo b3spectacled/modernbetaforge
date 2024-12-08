@@ -22,7 +22,6 @@ public class StructureWeightSampler {
         int posX = blockPos.getX();
         int posY = blockPos.getY();
         int posZ = blockPos.getZ();
-        int padding = 0;
         
         double density = 0.0;
         
@@ -36,8 +35,8 @@ public class StructureWeightSampler {
                 chunkSource.getHeight(box.maxX, box.maxZ, Type.STRUCTURE);
             height /= 4;
             
-            int x = Math.max(0, Math.max(box.minX - padding - posX, posX - box.maxX + padding));
-            int z = Math.max(0, Math.max(box.minZ - padding - posZ, posZ - box.maxZ + padding));
+            int x = Math.max(0, Math.max(box.minX - posX, posX - box.maxX));
+            int z = Math.max(0, Math.max(box.minZ - posZ, posZ - box.maxZ));
             int y = posY - height - 1;
             
             density += getStructureWeight(x, y, z) * 0.8;
