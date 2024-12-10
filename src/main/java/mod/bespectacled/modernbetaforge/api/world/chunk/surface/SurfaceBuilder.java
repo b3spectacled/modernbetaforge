@@ -18,14 +18,10 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 
 public abstract class SurfaceBuilder {
     protected final IBlockState defaultBlock;
@@ -145,18 +141,6 @@ public abstract class SurfaceBuilder {
      * 
      */
     protected boolean useCustomSurfaceBuilder(Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
-        if (this.chunkSource instanceof ReleaseChunkSource) {
-            ReleaseChunkSource releaseChunkSource = (ReleaseChunkSource)this.chunkSource;
-            Biome noiseBiome = releaseChunkSource.getNoiseBiome(x, z);
-            
-            if (BiomeDictionary.hasType(noiseBiome, Type.OCEAN)) {
-                double surfaceNoise = this.vanillaSurfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
-                Biomes.OCEAN.genTerrainBlocks(world, random, chunkPrimer, z, x, surfaceNoise);
-                
-                return true;
-            }
-        }
-        
         if (this.biomesWithCustomSurfaces.contains(biome) || override) {
             double surfaceNoise = this.vanillaSurfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
             
