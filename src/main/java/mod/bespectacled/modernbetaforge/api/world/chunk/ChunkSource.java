@@ -177,7 +177,7 @@ public abstract class ChunkSource {
             
             // Post-process biome map, after surface generation
             if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.POST);
+                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
             }
             
             // Carve terrain
@@ -661,14 +661,14 @@ public abstract class ChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST);
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
 
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE);
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
         }
         
         return builder.build();
@@ -711,7 +711,7 @@ public abstract class ChunkSource {
         
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.PRE);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);

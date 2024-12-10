@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 public enum BiomeInjectionStep {
-    PRE, // Before surface generation
-    POST // After surface generation
+    PRE_SURFACE, // Before surface generation
+    POST_SURFACE // After surface generation
 }

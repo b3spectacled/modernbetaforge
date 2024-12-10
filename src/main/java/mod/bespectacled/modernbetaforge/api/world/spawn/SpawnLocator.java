@@ -24,6 +24,7 @@ public interface SpawnLocator {
             int centerX = spawnPos.getX();
             int centerZ = spawnPos.getZ();
             int radius = 64;
+            int minAdjacent = 9;
             
             while(true) {
                 int r2 = radius * radius;
@@ -36,7 +37,22 @@ public interface SpawnLocator {
                             int y = chunkSource.getHeight(dX, dZ, HeightmapChunk.Type.SURFACE);
                             
                             if (y > 32) {
-                                return new BlockPos(dX, y + 1, dZ);
+                                // Check if there are surrounding blocks, relevant for skylands worlds
+                                int numAdjacent = 0;
+                                for (int aX = dX - 1; aX <= dX + 1; ++aX) {
+                                    for (int aZ = dZ - 1; aZ <= dZ + 1; ++aZ) {
+                                        int aY = chunkSource.getHeight(aX, aZ, HeightmapChunk.Type.SURFACE);
+                                        
+                                        if (aY >= y - 2 && aY <= y + 2) {
+                                            numAdjacent++;
+                                        }
+                                    }
+                                }
+                                
+                                // Only spawn if the spawn position is surrounded by blocks
+                                if (numAdjacent >= minAdjacent) {
+                                    return new BlockPos(dX, y + 1, dZ);
+                                }
                             }
                         }
                     }
