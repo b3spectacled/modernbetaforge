@@ -1,39 +1,30 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeInjectionRules {
-    public static final byte BASE = -1;
-    public static final byte BEACH = 0;
-    public static final byte OCEAN = 1;
-    public static final byte DEEP_OCEAN = 2;
-    public static final byte RIVER = 3;
+    private final Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap;
     
-    public static final Map<Byte, String> RULES_IDS = ImmutableMap.of(
-        BASE, "BASE",
-        BEACH, "BEACH",
-        OCEAN, "OCEAN",
-        DEEP_OCEAN, "DEEP_OCEAN",
-        RIVER, "RIVER"
-    );
-    
-    private final List<BiomeInjectionRule> rules;
-    
-    private BiomeInjectionRules(List<BiomeInjectionRule> rules) {
-        this.rules = rules;
+    private BiomeInjectionRules(Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap) {
+        this.ruleMap = ruleMap;
     }
     
-    public Biome test(BiomeInjectionContext context, int x, int z) {
-        for (BiomeInjectionRule rule : this.rules) {
+    public Biome test(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
+        List<BiomeInjectionRule> rules = this.ruleMap.get(step);
+        
+        if (rules == null) {
+            return null;
+        }
+        
+        for (BiomeInjectionRule rule : rules) {
             Biome biome = rule.test(context).apply(x, z);
             
             if (biome != null)
@@ -42,45 +33,36 @@ public class BiomeInjectionRules {
         
         return null;
     }
-    
-    public byte testId(BiomeInjectionContext context, int x, int z) {
-        for (BiomeInjectionRule rule : this.rules) {
-            byte id = rule.testId(context);
-            
-            if (id != BASE)
-                return id;
-        }
-        
-        return BASE;
-    }
 
     public static class Builder {
-        private final List<BiomeInjectionRule> rules;
+        private final Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap;
         
         public Builder() {
-            this.rules = new ArrayList<>();
+            this.ruleMap = new LinkedHashMap<>();
         }
         
-        public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, byte id) {
-            this.rules.add(new BiomeInjectionRule(rule, resolver, id));
+        public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, BiomeInjectionStep step) {
+            if (!this.ruleMap.containsKey(step)) {
+                this.ruleMap.put(step, new LinkedList<>());
+            }
+            
+            this.ruleMap.get(step).add(new BiomeInjectionRule(rule, resolver));
             
             return this;
         }
         
         public BiomeInjectionRules build() {
-            return new BiomeInjectionRules(this.rules);
+            return new BiomeInjectionRules(this.ruleMap);
         }
     }
     
     private static class BiomeInjectionRule {
         private final Predicate<BiomeInjectionContext> rule;
         private final BiomeInjectionResolver resolver;
-        private final byte id;
         
-        public BiomeInjectionRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, byte id) {
+        public BiomeInjectionRule(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver) {
             this.rule = rule;
             this.resolver = resolver;
-            this.id = id;
         }
         
         public BiomeInjectionResolver test(BiomeInjectionContext context) {
@@ -88,13 +70,6 @@ public class BiomeInjectionRules {
                 return this.resolver;
             
             return BiomeInjectionResolver.DEFAULT;
-        }
-        
-        public Byte testId(BiomeInjectionContext context) {
-            if (this.rule.test(context))
-                return this.id;
-            
-            return BASE;
         }
     }
     

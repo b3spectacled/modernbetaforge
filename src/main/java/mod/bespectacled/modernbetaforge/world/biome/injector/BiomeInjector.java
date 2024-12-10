@@ -17,7 +17,7 @@ public class BiomeInjector {
         this.rules = rules;
     }
     
-    public void getInjectedBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ) {
+    public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ, BiomeInjectionStep step) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
 
@@ -36,7 +36,7 @@ public class BiomeInjector {
                 Biome biome = biomes[ndx];
                 
                 BiomeInjectionContext context = new BiomeInjectionContext(blockPos, blockState, blockStateAbove, biome);
-                Biome injectedBiome = this.getInjectedBiome(context, x, z);
+                Biome injectedBiome = this.getInjectedBiome(context, x, z, step);
                 if (injectedBiome != null) {
                     biomes[ndx] = injectedBiome;
                 }
@@ -44,12 +44,7 @@ public class BiomeInjector {
         }
     }
     
-    private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z) {
-        return this.rules.test(context, x, z);
-    }
-    
-    @SuppressWarnings("unused")
-    private byte getInjectionId(BiomeInjectionContext context, int x, int z) {
-        return this.rules.testId(context, x, z);
+    private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
+        return this.rules.test(context, x, z, step);
     }
 }

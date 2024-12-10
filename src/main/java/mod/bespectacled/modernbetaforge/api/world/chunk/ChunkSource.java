@@ -26,6 +26,7 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -156,6 +157,7 @@ public abstract class ChunkSource {
         // Retrieve chunk primer from cache
         ChunkPrimerContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
+        Biome[] biomes = chunkContainer.biomes;
         
         if (!this.skipChunk(chunkX, chunkZ)) {
             // Generate village feature placements here, for structure weight sampling
@@ -172,6 +174,11 @@ public abstract class ChunkSource {
             
             // Populate biome-specific surface
             this.provideSurface(chunkContainer.biomes, chunkPrimer, chunkX, chunkZ);
+            
+            // Post-process biome map, after surface generation
+            if (this.biomeInjector != null) {
+                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.POST);
+            }
             
             // Carve terrain
             if (this.settings.useCaves && !villageGenerated) {
@@ -212,7 +219,7 @@ public abstract class ChunkSource {
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
         for (int i = 0; i < biomeArray.length; ++i) {
-            biomeArray[i] = (byte)Biome.getIdForBiome(chunkContainer.biomes[i]);
+            biomeArray[i] = (byte)Biome.getIdForBiome(biomes[i]);
         }
         
         chunk.generateSkylightMap();
@@ -654,14 +661,14 @@ public abstract class ChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionRules.BEACH);
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST);
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
 
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionRules.DEEP_OCEAN);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionRules.OCEAN);
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE);
         }
         
         return builder.build();
@@ -702,9 +709,9 @@ public abstract class ChunkSource {
         // Generate base biome map
         this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
         
-        // Post-process biome map
+        // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
-            this.biomeInjector.getInjectedBiomes(biomes, chunkPrimer, this, chunkX, chunkZ);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.PRE);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);

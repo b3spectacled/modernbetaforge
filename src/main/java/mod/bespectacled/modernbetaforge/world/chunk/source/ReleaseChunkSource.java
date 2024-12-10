@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
@@ -111,20 +112,20 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
             
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionRules.BEACH);
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST);
         }
         
         if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
     
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionRules.DEEP_OCEAN);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionRules.OCEAN);
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE);
         }
         
         if (this.biomeProvider.getBiomeSource() instanceof BiomeResolverRiver) {
             BiomeResolverRiver biomeResolverRiver = (BiomeResolverRiver)this.biomeProvider.getBiomeSource();
             
-            builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, BiomeInjectionRules.RIVER);
+            builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, BiomeInjectionStep.PRE);
         }
         
         return builder.build();
