@@ -9,6 +9,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -30,13 +31,7 @@ public class MixinStructureVillagePiecesVillage {
                 StructureComponent component = (StructureComponent)(Object)this;
                 StructureBoundingBox box = component.getBoundingBox();
                 
-                int height = 
-                    chunkSource.getHeight(box.minX, box.minZ, Type.STRUCTURE) +
-                    chunkSource.getHeight(box.minX, box.maxZ, Type.STRUCTURE) +
-                    chunkSource.getHeight(box.maxX, box.minZ, Type.STRUCTURE) +
-                    chunkSource.getHeight(box.maxX, box.maxZ, Type.STRUCTURE);
-                height /= 4;
-                
+                int height = StructureWeightSampler.getStructureHeight(box, chunkSource);
                 info.setReturnValue(height + 1);
             }
         }

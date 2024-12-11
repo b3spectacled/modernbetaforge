@@ -28,13 +28,7 @@ public class StructureWeightSampler {
         for (StructureComponent component : this.structureComponents) {
             StructureBoundingBox box = component.getBoundingBox();
             
-            int height = 
-                chunkSource.getHeight(box.minX, box.minZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.minX, box.maxZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.maxX, box.minZ, Type.STRUCTURE) +
-                chunkSource.getHeight(box.maxX, box.maxZ, Type.STRUCTURE);
-            height /= 4;
-            
+            int height = getStructureHeight(box, chunkSource);
             int x = Math.max(0, Math.max(box.minX - posX, posX - box.maxX));
             int z = Math.max(0, Math.max(box.minZ - posZ, posZ - box.maxZ));
             int y = posY - height - 1;
@@ -43,6 +37,13 @@ public class StructureWeightSampler {
         }
         
         return density;
+    }
+    
+    public static int getStructureHeight(StructureBoundingBox boundingBox, ChunkSource chunkSource) {
+        int centerX = boundingBox.minX + boundingBox.getXSize() / 2;
+        int centerZ = boundingBox.minZ + boundingBox.getZSize() / 2;
+        
+        return chunkSource.getHeight(centerX, centerZ, Type.STRUCTURE);
     }
     
     private static double getStructureWeight(int x, int y, int z) {
