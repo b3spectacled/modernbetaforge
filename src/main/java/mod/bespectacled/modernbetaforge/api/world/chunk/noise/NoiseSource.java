@@ -111,7 +111,17 @@ public class NoiseSource {
         int ndx = 0;
         for (int localNoiseX = 0; localNoiseX < this.noiseResX; ++localNoiseX) {
             for (int localNoiseZ = 0; localNoiseZ < this.noiseResZ; ++localNoiseZ) {
-                this.noiseColumnSampler.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, settings);
+                this.noiseColumnSampler.sampleNoiseColumn(
+                    buffer,
+                    startNoiseX,
+                    startNoiseZ,
+                    localNoiseX,
+                    localNoiseZ,
+                    this.noiseResX - 1,
+                    this.noiseResZ - 1,
+                    this.noiseResY - 1,
+                    settings
+                );
                 
                 for (int nY = 0; nY < this.noiseResY; ++nY) {
                     noise[ndx++] = buffer[nY];
@@ -124,6 +134,16 @@ public class NoiseSource {
 
     @FunctionalInterface
     public static interface NoiseColumnSampler {
-        public void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ, ModernBetaChunkGeneratorSettings settings);
+        public void sampleNoiseColumn(
+            double[] buffer,
+            int startNoiseX,
+            int startNoiseZ,
+            int localNoiseX,
+            int localNoiseZ,
+            int noiseSizeX,
+            int noiseSizeZ,
+            int noiseSizeY,
+            ModernBetaChunkGeneratorSettings settings
+        );
     }
 }

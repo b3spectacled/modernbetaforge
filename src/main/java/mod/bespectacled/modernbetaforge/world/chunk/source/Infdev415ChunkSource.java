@@ -52,8 +52,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         int startNoiseX,
         int startNoiseZ,
         int localNoiseX,
-        int localNoiseZ,
-        ModernBetaChunkGeneratorSettings settings
+        int localNoiseZ
     ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;

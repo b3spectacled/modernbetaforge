@@ -123,15 +123,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
      * @param localNoiseX Current subchunk index along x-axis.
      * @param localNoiseZ Current subchunk index along z-axis.
-     * @param settings Chunk source settings
      */
     protected abstract void sampleNoiseColumn(
         double[] buffer,
         int startNoiseX,
         int startNoiseZ,
         int localNoiseX,
-        int localNoiseZ,
-        ModernBetaChunkGeneratorSettings settings
+        int localNoiseZ
     );
     
     /**
@@ -246,7 +244,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     private NoiseSource createBaseNoiseSource(int chunkX, int chunkZ) {
         NoiseSource noiseSource = new NoiseSource(
-            this::sampleNoiseColumn,
+            (buffer, startX, startZ, localX, localZ, sizeX, sizeZ, sizeY, settings) -> this.sampleNoiseColumn(
+                buffer,
+                startX,
+                startZ,
+                localX,
+                localZ
+            ),
             this.noiseSizeX,
             this.noiseSizeY,
             this.noiseSizeZ
