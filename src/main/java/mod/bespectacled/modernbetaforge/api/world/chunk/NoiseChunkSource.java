@@ -340,11 +340,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                 noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseZ(deltaZ));
                                 
                                 density.reset();
-                                noiseSources.forEach(noiseProvider -> {
-                                    if (noiseProvider.sampleForHeight()) { 
-                                        density.add(noiseProvider.sample());
-                                    }
-                                });
+                                noiseSources.forEach(noiseProvider ->  density.add(noiseProvider.sample()));
                                 
                                 boolean isSolid = density.get() > 0.0;
                                 

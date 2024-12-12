@@ -11,8 +11,6 @@ public class NoiseSource {
     private final int noiseResZ;
     private final int noiseSize;
     
-    private final boolean sampleForHeight;
-    
     private double[] noise;
 
     private double lowerNW;
@@ -39,8 +37,7 @@ public class NoiseSource {
         NoiseColumnSampler noiseColumnSampler,
         int noiseSizeX, 
         int noiseSizeY, 
-        int noiseSizeZ,
-        boolean sampleForHeight
+        int noiseSizeZ
     ) {
         this.noiseColumnSampler = noiseColumnSampler;
         
@@ -48,17 +45,6 @@ public class NoiseSource {
         this.noiseResY = noiseSizeY + 1;
         this.noiseResZ = noiseSizeZ + 1;
         this.noiseSize = this.noiseResX * this.noiseResY * this.noiseResZ;
-        
-        this.sampleForHeight = sampleForHeight;
-    }
-    
-    public NoiseSource(
-        NoiseColumnSampler noiseColumnSampler,
-        int noiseSizeX, 
-        int noiseSizeY, 
-        int noiseSizeZ
-    ) {
-        this(noiseColumnSampler, noiseSizeX, noiseSizeY, noiseSizeZ, true);
     }
     
     public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
@@ -98,10 +84,6 @@ public class NoiseSource {
     
     public final double sample() {
         return this.density;
-    }
-    
-    public final boolean sampleForHeight() {
-        return this.sampleForHeight;
     }
 
     private double[] sampleNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
