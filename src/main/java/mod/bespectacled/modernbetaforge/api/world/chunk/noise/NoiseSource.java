@@ -13,8 +13,6 @@ public class NoiseSource {
     
     private final boolean sampleForHeight;
     
-    protected final ModernBetaChunkGeneratorSettings settings;
-    
     private double[] noise;
 
     private double lowerNW;
@@ -42,8 +40,7 @@ public class NoiseSource {
         int noiseSizeX, 
         int noiseSizeY, 
         int noiseSizeZ,
-        boolean sampleForHeight,
-        ModernBetaChunkGeneratorSettings settings
+        boolean sampleForHeight
     ) {
         this.noiseColumnSampler = noiseColumnSampler;
         
@@ -53,22 +50,19 @@ public class NoiseSource {
         this.noiseSize = this.noiseResX * this.noiseResY * this.noiseResZ;
         
         this.sampleForHeight = sampleForHeight;
-        
-        this.settings = settings;
     }
     
     public NoiseSource(
         NoiseColumnSampler noiseColumnSampler,
         int noiseSizeX, 
         int noiseSizeY, 
-        int noiseSizeZ,
-        ModernBetaChunkGeneratorSettings settings
+        int noiseSizeZ
     ) {
-        this(noiseColumnSampler, noiseSizeX, noiseSizeY, noiseSizeZ, true, settings);
+        this(noiseColumnSampler, noiseSizeX, noiseSizeY, noiseSizeZ, true);
     }
     
-    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ) {
-        this.noise = this.sampleNoise(startNoiseX, startNoiseZ);
+    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
+        this.noise = this.sampleNoise(startNoiseX, startNoiseZ, settings);
         
         if (this.noise.length != this.noiseSize)
             throw new IllegalStateException("[Modern Beta] Noise array length is invalid!");
@@ -110,14 +104,14 @@ public class NoiseSource {
         return this.sampleForHeight;
     }
 
-    private double[] sampleNoise(int startNoiseX, int startNoiseZ) {
+    private double[] sampleNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
         double[] buffer = new double[this.noiseResY];
         double[] noise = new double[this.noiseSize];
         
         int ndx = 0;
         for (int localNoiseX = 0; localNoiseX < this.noiseResX; ++localNoiseX) {
             for (int localNoiseZ = 0; localNoiseZ < this.noiseResZ; ++localNoiseZ) {
-                this.noiseColumnSampler.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+                this.noiseColumnSampler.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, settings);
                 
                 for (int nY = 0; nY < this.noiseResY; ++nY) {
                     noise[ndx++] = buffer[nY];
@@ -130,6 +124,6 @@ public class NoiseSource {
 
     @FunctionalInterface
     public static interface NoiseColumnSampler {
-        public void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+        public void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ, ModernBetaChunkGeneratorSettings settings);
     }
 }

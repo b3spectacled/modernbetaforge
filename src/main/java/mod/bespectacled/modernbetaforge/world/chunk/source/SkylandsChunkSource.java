@@ -66,7 +66,14 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     }
 
     @Override
-    protected void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+    protected void sampleNoiseColumn(
+        double[] buffer,
+        int startNoiseX,
+        int startNoiseZ,
+        int localNoiseX,
+        int localNoiseZ,
+        ModernBetaChunkGeneratorSettings settings
+    ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         

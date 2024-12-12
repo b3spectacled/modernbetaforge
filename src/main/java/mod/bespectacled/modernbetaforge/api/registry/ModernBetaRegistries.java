@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.api.registry;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -15,7 +15,7 @@ import net.minecraft.world.storage.WorldInfo;
 public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK;
     public static final ModernBetaRegistry<BiomeSourceCreator> BIOME;
-    public static final ModernBetaRegistry<NoiseSource> NOISE;
+    public static final ModernBetaRegistry<NoiseColumnSampler> NOISE;
     public static final ModernBetaRegistry<ModernBetaNoiseSettings> NOISE_SETTINGS;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
     public static final ModernBetaRegistry<CaveCarverCreator> CARVER;

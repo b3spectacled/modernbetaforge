@@ -63,7 +63,8 @@ public class BetaChunkSource extends NoiseChunkSource {
         int startNoiseX,
         int startNoiseZ,
         int localNoiseX,
-        int localNoiseZ
+        int localNoiseZ,
+        ModernBetaChunkGeneratorSettings settings
     ) {
         int horizNoiseResolution = 16 / (this.noiseSizeX + 1);
         int x = (startNoiseX / this.noiseSizeX * 16) + localNoiseX * horizNoiseResolution + horizNoiseResolution / 2;

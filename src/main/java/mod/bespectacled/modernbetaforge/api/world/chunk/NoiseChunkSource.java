@@ -123,8 +123,16 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
      * @param localNoiseX Current subchunk index along x-axis.
      * @param localNoiseZ Current subchunk index along z-axis.
+     * @param settings Chunk source settings
      */
-    protected abstract void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+    protected abstract void sampleNoiseColumn(
+        double[] buffer,
+        int startNoiseX,
+        int startNoiseZ,
+        int localNoiseX,
+        int localNoiseZ,
+        ModernBetaChunkGeneratorSettings settings
+    );
     
     /**
      * Interpolates density to set terrain curve at top and bottom of the world.
@@ -161,7 +169,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         // Create and populate noise providers
         List<NoiseSource> noiseSources = new LinkedList<>();
-        noiseSources.addAll(ModernBetaRegistries.NOISE.getEntries());
+        ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
+            new NoiseSource(
+                sampler,
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
 
         // Create and populate block sources
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
@@ -171,7 +186,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         // Sample initial noise.
         // Base noise should be added after this,
         // since base noise is sampled when fetched from cache.
-        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ));
+        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(
+            chunkX * this.noiseSizeX,
+            chunkZ * this.noiseSizeZ,
+            this.settings
+        ));
         noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
         
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
@@ -230,11 +249,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
             this::sampleNoiseColumn,
             this.noiseSizeX,
             this.noiseSizeY,
-            this.noiseSizeZ,
-            this.settings
+            this.noiseSizeZ
         );
         
-        noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ);
+        noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ, this.settings);
         
         return noiseSource;
     }
@@ -259,12 +277,23 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         // Create and populate noise providers
         List<NoiseSource> noiseSources = new LinkedList<>();
-        noiseSources.addAll(ModernBetaRegistries.NOISE.getEntries());
+        ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
+            new NoiseSource(
+                sampler,
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
 
         // Sample initial noise.
         // Base noise should be added after this,
         // since base noise is sampled when fetched from cache.
-        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ));
+        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(
+            chunkX * this.noiseSizeX,
+            chunkZ * this.noiseSizeZ,
+            this.settings
+        ));
         noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
         
         short[] heightmapSurface = new short[256];
