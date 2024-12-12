@@ -29,10 +29,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIds {
+    public static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
+    public static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
+    public static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
+    
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
-    private static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
-    private static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
-    private static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     
     /* Function Buttons */
     
@@ -815,7 +816,7 @@ public class GuiIds {
         };
         BiPredicate<Factory, Integer> testChunkSettings = (factory, id) -> {
             boolean enabled = false;
-            List<Integer> settings = CHUNK_SETTINGS.get(factory.chunkSource);
+            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, ImmutableList.of());
             
             if (id >= GuiIds.PG3_S_MAIN_NS_X && id <= GuiIds.PG3_B_USE_BDS) {
                 enabled = settings.contains(id);

@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -61,14 +61,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.topSlide = noiseSettings.topSlideSettings;
         this.bottomSlide = noiseSettings.bottomSlideSettings;
         
-        this.noiseCache = new ChunkCache<>("noise", this::sampleInitialNoise);
+        this.noiseCache = new ChunkCache<>("noise", this::createBaseNoiseSource);
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
 
         this.surfaceBuilder = ModernBetaRegistries.SURFACE
             .getOrElse(settings.surfaceBuilder, ModernBetaBuiltInTypes.Surface.BETA.id)
             .apply(world, this, settings);
     }
-
     
     /**
      * Create base chunk (only stone and water is set) given chunk coordinates.
@@ -161,21 +160,19 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int startZ = chunkZ * 16;
         
         // Create and populate noise providers
-        List<NoiseSource> noiseSources = new ArrayList<>();
-        
-        NoiseSource baseNoiseSource = this.noiseCache.get(chunkX, chunkZ);
-        BlockSource baseBlockSource = this.getBaseBlockSource(baseNoiseSource);
-        
+        List<NoiseSource> noiseSources = new LinkedList<>();
+        noiseSources.addAll(ModernBetaRegistries.NOISE.getEntries());
+
         // Create and populate block sources
         BlockSourceRules blockSources = new BlockSourceRules.Builder()
-            .add(baseBlockSource)
+            .add(this.getBaseBlockSource(noiseSources))
             .build();
 
         // Sample initial noise.
         // Base noise should be added after this,
         // since base noise is sampled when fetched from cache.
         noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ));
-        noiseSources.add(baseNoiseSource);
+        noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
         
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
             int noiseX = subChunkX;
@@ -228,19 +225,19 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @return NoiseSource containing initial noise values for the chunk.
      */
-    private NoiseSource sampleInitialNoise(int chunkX, int chunkZ) {
+    private NoiseSource createBaseNoiseSource(int chunkX, int chunkZ) {
         NoiseSource noiseSource = new NoiseSource(
             this::sampleNoiseColumn,
             this.noiseSizeX,
             this.noiseSizeY,
-            this.noiseSizeZ
+            this.noiseSizeZ,
+            this.settings
         );
         
         noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ);
         
         return noiseSource;
     }
-
 
     /**
      * Generates a heightmap for the chunk containing the given x/z coordinates
@@ -258,7 +255,17 @@ public abstract class NoiseChunkSource extends ChunkSource {
         short worldMinY = 0;
         short worldHeight = (short)this.worldHeight;
         
-        NoiseSource noiseSource = this.noiseCache.get(chunkX, chunkZ);
+        DensityContainer density = new DensityContainer();
+        
+        // Create and populate noise providers
+        List<NoiseSource> noiseSources = new LinkedList<>();
+        noiseSources.addAll(ModernBetaRegistries.NOISE.getEntries());
+
+        // Sample initial noise.
+        // Base noise should be added after this,
+        // since base noise is sampled when fetched from cache.
+        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(chunkX * this.noiseSizeX, chunkZ * this.noiseSizeZ));
+        noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
         
         short[] heightmapSurface = new short[256];
         short[] heightmapOcean = new short[256];
@@ -269,32 +276,44 @@ public abstract class NoiseChunkSource extends ChunkSource {
         Arrays.fill(heightmapOcean, minHeight);
         Arrays.fill(heightmapFloor, worldMinY);
         Arrays.fill(heightmapStructure, minStructureHeight);
-        
+
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
+            int noiseX = subChunkX;
+            
             for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
+                int noiseZ = subChunkZ;
+                
                 for (int subChunkY = 0; subChunkY < this.noiseSizeY; ++subChunkY) {
-                    noiseSource.sampleNoiseCorners(subChunkX, subChunkY, subChunkZ);
+                    int noiseY = subChunkY;
+                    
+                    noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseCorners(noiseX, noiseY, noiseZ));
                     
                     for (int subY = 0; subY < this.verticalNoiseResolution; ++subY) {
                         int y = subY + subChunkY * this.verticalNoiseResolution;
 
                         double deltaY = subY / (double)this.verticalNoiseResolution;
-                        noiseSource.sampleNoiseY(deltaY);
+                        noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseY(deltaY));
                         
                         for (int subX = 0; subX < this.horizontalNoiseResolution; ++subX) {
                             int x = subX + subChunkX * this.horizontalNoiseResolution;
                             
                             double deltaX = subX / (double)this.horizontalNoiseResolution;
-                            noiseSource.sampleNoiseX(deltaX);
+                            noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseX(deltaX));
                             
                             for (int subZ = 0; subZ < this.horizontalNoiseResolution; ++subZ) {
                                 int z = subZ + subChunkZ * this.horizontalNoiseResolution;
                                 
                                 double deltaZ = subZ / (double)this.horizontalNoiseResolution;
-                                noiseSource.sampleNoiseZ(deltaZ);
+                                noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseZ(deltaZ));
                                 
-                                double density = noiseSource.sample();
-                                boolean isSolid = density > 0.0;
+                                density.reset();
+                                noiseSources.forEach(noiseProvider -> {
+                                    if (noiseProvider.sampleForHeight()) { 
+                                        density.add(noiseProvider.sample());
+                                    }
+                                });
+                                
+                                boolean isSolid = density.get() > 0.0;
                                 
                                 short height = (short)y;
                                 int ndx = z + x * 16;
@@ -341,12 +360,15 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
-    private BlockSource getBaseBlockSource(NoiseSource noiseSource) {
+    private BlockSource getBaseBlockSource(List<NoiseSource> noiseSources) {
+        DensityContainer density = new DensityContainer();
+        
         return (x, y, z) -> {
-            double density = noiseSource.sample();
+            density.reset();
+            noiseSources.forEach(noiseSource -> density.add(noiseSource.sample()));
             
             IBlockState blockState = BlockStates.AIR;
-            if (density > 0.0) {
+            if (density.get() > 0.0) {
                 blockState = this.defaultBlock;
             } else if (y < this.getSeaLevel()) {
                 blockState = this.defaultFluid;
@@ -354,5 +376,25 @@ public abstract class NoiseChunkSource extends ChunkSource {
             
             return blockState;
         };
+    }
+    
+    private static class DensityContainer {
+        private double density;
+        
+        private DensityContainer() {
+            this.density = 0.0;
+        }
+        
+        private void reset() {
+            this.density = 0.0;
+        }
+        
+        private void add(double density) {
+            this.density += density;
+        }
+        
+        private double get() {
+            return this.density;
+        }
     }
 }

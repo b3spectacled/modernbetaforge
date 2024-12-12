@@ -60,6 +60,7 @@ public class ModernBeta {
         
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
+        ModernBetaBuiltInRegistries.registerNoiseSources();
         ModernBetaBuiltInRegistries.registerNoiseSettings();
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();

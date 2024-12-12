@@ -54,15 +54,17 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.RELEASE.id, ReleaseBiomeSource::new);
     }
     
+    public static void registerNoiseSources() { }
+    
     public static void registerNoiseSettings() {
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.BETA.id, ModernBetaNoiseSettings.BETA);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.ALPHA.id, ModernBetaNoiseSettings.ALPHA);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, ModernBetaNoiseSettings.SKYLANDS);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, ModernBetaNoiseSettings.INFDEV_611);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, ModernBetaNoiseSettings.INFDEV_420);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, ModernBetaNoiseSettings.INFDEV_415);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.PE.id, ModernBetaNoiseSettings.PE);
-        ModernBetaRegistries.NOISE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.BETA.id, ModernBetaNoiseSettings.BETA);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.ALPHA.id, ModernBetaNoiseSettings.ALPHA);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id, ModernBetaNoiseSettings.SKYLANDS);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.id, ModernBetaNoiseSettings.INFDEV_611);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.id, ModernBetaNoiseSettings.INFDEV_420);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.id, ModernBetaNoiseSettings.INFDEV_415);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.PE.id, ModernBetaNoiseSettings.PE);
+        ModernBetaRegistries.NOISE_SETTINGS.register(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaNoiseSettings.RELEASE);
     }
     
     public static void registerSurfaceBuilders() {
