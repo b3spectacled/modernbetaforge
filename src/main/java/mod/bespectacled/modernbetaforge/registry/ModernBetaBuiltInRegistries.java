@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.registry;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
@@ -30,6 +32,8 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import net.minecraft.world.gen.MapGenCaves;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModernBetaBuiltInRegistries {
     
@@ -100,5 +104,25 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.SURFACE_SKYLANDS, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSkylandsSurface));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SINGLE_BIOME, new DataFix(NbtTags.DEPR_FIXED_BIOME, DataFixers::fixSingleBiome));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_USE_INDEV_HOUSE, new DataFix(NbtTags.DEPR_USE_INDEV_HOUSE, DataFixers::fixIndevHouse));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void registerPresets() {
+        ModernBetaClientRegistries.PRESET.register("classic_beta", GuiCustomizePresets.PRESET_CLASSIC_BETA);
+        ModernBetaClientRegistries.PRESET.register("classic_alpha_1_2", GuiCustomizePresets.PRESET_CLASSIC_ALPHA_1_2);
+        ModernBetaClientRegistries.PRESET.register("classic_alpha", GuiCustomizePresets.PRESET_CLASSIC_ALPHA);
+        ModernBetaClientRegistries.PRESET.register("classic_alpha_winter", GuiCustomizePresets.PRESET_CLASSIC_ALPHA_WINTER);
+        ModernBetaClientRegistries.PRESET.register("classic_infdev_611", GuiCustomizePresets.PRESET_CLASSIC_INFDEV_611);
+        ModernBetaClientRegistries.PRESET.register("classic_infdev_420", GuiCustomizePresets.PRESET_CLASSIC_INFDEV_420);
+        ModernBetaClientRegistries.PRESET.register("classic_infdev_415", GuiCustomizePresets.PRESET_CLASSIC_INFDEV_415);
+        ModernBetaClientRegistries.PRESET.register("classic_infdev_227", GuiCustomizePresets.PRESET_CLASSIC_INFDEV_227);
+        ModernBetaClientRegistries.PRESET.register("classic_indev_island", GuiCustomizePresets.PRESET_CLASSIC_INDEV_ISLAND);
+        ModernBetaClientRegistries.PRESET.register("classic_0_0_23a", GuiCustomizePresets.PRESET_CLASSIC_0_0_23A);
+        ModernBetaClientRegistries.PRESET.register("classic_skylands", GuiCustomizePresets.PRESET_CLASSIC_SKYLANDS);
+        ModernBetaClientRegistries.PRESET.register("beta_skylands", GuiCustomizePresets.PRESET_BETA_SKYLANDS);
+        ModernBetaClientRegistries.PRESET.register("beta_pe", GuiCustomizePresets.PRESET_BETA_PE);
+        ModernBetaClientRegistries.PRESET.register("beta_realistic", GuiCustomizePresets.PRESET_BETA_REALISTIC);
+        ModernBetaClientRegistries.PRESET.register("beta_plus", GuiCustomizePresets.PRESET_BETA_PLUS);
+        ModernBetaClientRegistries.PRESET.register("beta_release", GuiCustomizePresets.PRESET_BETA_REALISTIC);
     }
 }

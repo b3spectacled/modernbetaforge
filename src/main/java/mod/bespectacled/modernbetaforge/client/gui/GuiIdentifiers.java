@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiIds {
+public class GuiIdentifiers {
     public static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
     public static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
     public static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
@@ -460,152 +460,152 @@ public class GuiIds {
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.BETA.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.ALPHA.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
             ImmutableList.of(
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
 
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.PE.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.RELEASE.id,
             ImmutableList.of(
-                GuiIds.PG3_S_MAIN_NS_X,
-                GuiIds.PG3_S_MAIN_NS_Y,
-                GuiIds.PG3_S_MAIN_NS_Z,
-                GuiIds.PG3_S_DPTH_NS_X,
-                GuiIds.PG3_S_DPTH_NS_Z,
-                GuiIds.PG3_S_BASE_SIZE,
-                GuiIds.PG3_S_COORD_SCL,
-                GuiIds.PG3_S_HEIGH_SCL,
-                GuiIds.PG3_S_STRETCH_Y,
-                GuiIds.PG3_S_UPPER_LIM,
-                GuiIds.PG3_S_LOWER_LIM,
-                GuiIds.PG3_S_HEIGH_LIM,
+                GuiIdentifiers.PG3_S_MAIN_NS_X,
+                GuiIdentifiers.PG3_S_MAIN_NS_Y,
+                GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_DPTH_NS_X,
+                GuiIdentifiers.PG3_S_DPTH_NS_Z,
+                GuiIdentifiers.PG3_S_BASE_SIZE,
+                GuiIdentifiers.PG3_S_COORD_SCL,
+                GuiIdentifiers.PG3_S_HEIGH_SCL,
+                GuiIdentifiers.PG3_S_STRETCH_Y,
+                GuiIdentifiers.PG3_S_UPPER_LIM,
+                GuiIdentifiers.PG3_S_LOWER_LIM,
+                GuiIdentifiers.PG3_S_HEIGH_LIM,
                 
-                GuiIds.PG3_S_B_DPTH_WT,
-                GuiIds.PG3_S_B_DPTH_OF,
-                GuiIds.PG3_S_B_SCL_WT,
-                GuiIds.PG3_S_B_SCL_OF,
-                GuiIds.PG3_S_BIOME_SZ,
-                GuiIds.PG3_S_RIVER_SZ,
+                GuiIdentifiers.PG3_S_B_DPTH_WT,
+                GuiIdentifiers.PG3_S_B_DPTH_OF,
+                GuiIdentifiers.PG3_S_B_SCL_WT,
+                GuiIdentifiers.PG3_S_B_SCL_OF,
+                GuiIdentifiers.PG3_S_BIOME_SZ,
+                GuiIdentifiers.PG3_S_RIVER_SZ,
                 
-                GuiIds.PG3_B_USE_BDS
+                GuiIdentifiers.PG3_B_USE_BDS
             )
         );
         
@@ -619,51 +619,51 @@ public class GuiIds {
             ImmutableList.of()
         );
         
-        GUI_BIOMES.put(GuiIds.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIds.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
-        GUI_BIOMES.put(GuiIds.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
-        GUI_BIOMES.put(GuiIds.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
+        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
         
         BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
             String chunkSource = factory.chunkSource;
@@ -818,9 +818,9 @@ public class GuiIds {
             boolean enabled = false;
             List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, ImmutableList.of());
             
-            if (id >= GuiIds.PG3_S_MAIN_NS_X && id <= GuiIds.PG3_B_USE_BDS) {
+            if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
                 enabled = settings.contains(id);
-            } else if (id >= offsetForward(GuiIds.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIds.PG3_B_USE_BDS)) {
+            } else if (id >= offsetForward(GuiIdentifiers.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIdentifiers.PG3_B_USE_BDS)) {
                 enabled = settings.contains(offsetBackward(id));
             }
             

@@ -3,13 +3,12 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.function.Supplier;
 
 import org.lwjgl.input.Keyboard;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets.Preset;
+import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -143,25 +142,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         String name;
         String desc;
         
-        for (Preset p : GuiCustomizePresets.PRESETS) {
+        for (GuiCustomizePreset p : ModernBetaClientRegistries.PRESET.getEntries()) {
             name = I18n.format(p.name);
             desc = I18n.format(p.desc);
             texture = ModernBeta.createId(p.texture);
             factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(p.settings);
             
             presets.add(new Info(name, desc, texture, factory));
-        }
-        
-        for (Entry<Supplier<Boolean>, Preset> e : GuiCustomizePresets.PRESETS_ALT) {
-            if (e.getKey().get()) {
-                Preset p = e.getValue();
-                name = I18n.format(p.name);
-                desc = I18n.format(p.desc);
-                texture = ModernBeta.createId(p.texture);
-                factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(p.settings);
-                
-                presets.add(new Info(name, desc, texture, factory));
-            }
         }
         
         String[] customPresets = ModernBetaConfig.guiOptions.customPresets;

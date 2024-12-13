@@ -36,10 +36,10 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     
     implementation 'com.google.guava:guava:21.0'
-    implementation 'org.spongepowered:mixin:0.8.5-SNAPSHOT'
+    implementation 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
     implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
     
-    annotationProcessor 'org.spongepowered:mixin:0.8.5-SNAPSHOT'
+    annotationProcessor 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
     annotationProcessor 'com.google.code.gson:gson:2.8.9'
     annotationProcessor 'com.google.guava:guava:21.0'
     annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'

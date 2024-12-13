@@ -22,22 +22,27 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = ModernBeta.MODID, name = ModernBeta.NAME, version = ModernBeta.VERSION, acceptedMinecraftVersions = ModernBeta.MCVERSION)
+@Mod(
+    modid = ModernBeta.MODID,
+    name = ModernBeta.NAME,
+    version = ModernBeta.VERSION,
+    acceptedMinecraftVersions = ModernBeta.MCVERSION
+)
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
     public static final String VERSION = "1.3.3.0";
     public static final String MCVERSION = "1.12.2";
     public static final int DATA_VERSION = 1310;
-
-    private static Logger logger = LogManager.getLogger(MODID);
+    
+    private static final Logger LOGGER = LogManager.getLogger(MODID);
     
     public static ResourceLocation createId(String name) {
         return new ResourceLocation(MODID, name);
     }
     
     public static void log(Level level, String message) {
-        logger.log(level, "{}", message);
+        LOGGER.log(level, "{}", message);
     }
     
     @SidedProxy(
