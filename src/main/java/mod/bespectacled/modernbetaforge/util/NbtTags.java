@@ -138,6 +138,8 @@ public class NbtTags {
     public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
     public static final String TAIGA_BIOMES = "taigaBiomes";
     public static final String TUNDRA_BIOMES = "tundraBiomes";
+    
+    public static final String ADDITIONAL_SETTINGS = "additionalSettings";
 
     /* OLD */
     public static final String DEPR_FIXED_BIOME = "fixedBiome";
