@@ -115,6 +115,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
     }
     
+    @Override
+    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.providePostProcessedChunkNoise(chunkPrimer, chunkX, chunkZ);
+    }
+    
     /**
      * Generates noise for a column at startNoiseX + localNoiseX / startNoiseZ + localNoiseZ.
      * 

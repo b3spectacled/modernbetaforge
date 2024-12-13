@@ -573,7 +573,9 @@ public abstract class ChunkSource {
         return this.componentCache;
     }
     
-    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    protected abstract void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    
+    protected void providePostProcessedChunkNoise(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
     
@@ -589,7 +591,7 @@ public abstract class ChunkSource {
         for (int localZ = 0; localZ < 16; ++localZ) {
             int z = localZ + startZ;
             
-            for (int localX = 0; localX < 16; ++ localX) {
+            for (int localX = 0; localX < 16; ++localX) {
                 int x = localX + startX;
                 
                 for (int y = 0; y < this.worldHeight; ++y) {

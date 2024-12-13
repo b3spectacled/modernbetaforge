@@ -17,6 +17,10 @@ public class GuiCustomizePreset {
         this(settings, texture, name, "");
     }
     
+    public GuiCustomizePreset(String settings, String name) {
+        this(settings, "textures/misc/unknown_pack.png", name, "");
+    }
+    
     public static String texture(String filename) {
         return String.format("textures/gui/presets/%s", filename);
     }

@@ -94,6 +94,11 @@ public class Infdev227ChunkSource extends ChunkSource {
         return this.settings.seaLevel + 1;
     }
     
+    @Override
+    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.providePostProcessedChunkNoise(chunkPrimer, chunkX, chunkZ);
+    }
+    
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
