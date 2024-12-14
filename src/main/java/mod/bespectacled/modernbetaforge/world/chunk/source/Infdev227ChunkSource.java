@@ -65,9 +65,12 @@ public class Infdev227ChunkSource extends ChunkSource {
     }
 
     @Override
-    public void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.generateTerrain(chunkPrimer, chunkX, chunkZ);
     }
+
+    @Override
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
@@ -94,11 +97,6 @@ public class Infdev227ChunkSource extends ChunkSource {
         return this.settings.seaLevel + 1;
     }
     
-    @Override
-    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.providePostProcessedChunkNoise(chunkPrimer, chunkX, chunkZ);
-    }
-    
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
@@ -110,6 +108,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         BlockSourceDefault defaultSource = new BlockSourceDefault(this.defaultBlock);
         BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
             .add(defaultSource)
+            .add(this.blockSources)
             .build();
         
         for (int localX = 0; localX < 16; ++localX) {

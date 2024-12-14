@@ -98,9 +98,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public SpawnLocator getSpawnLocator() {
         return new IndevSpawnLocator();
     }
-
+    
     @Override
-    public void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -111,6 +111,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.generateBorder(chunkPrimer, chunkX, chunkZ);
         }
     }
+
+    @Override
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
 
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
@@ -242,9 +245,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public boolean hasPregenerated() {
         return this.levelDataContainer.generated;
     }
-
-    @Override
-    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
 
     @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {
@@ -462,6 +462,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         BlockSourceDefault defaultSource = new BlockSourceDefault(this.defaultBlock);
         BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
             .add(defaultSource)
+            .add(this.blockSources)
             .build();
         
         for (int localX = 0; localX < 16; ++localX) {

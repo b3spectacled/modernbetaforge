@@ -4,6 +4,7 @@ import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,7 +24,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ModernBetaChunkGeneratorSettings.build(generatorOptions) :
             ModernBetaChunkGeneratorSettings.build();
         
-        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTINGS.getOrElse(settings.chunkSource, ModernBetaNoiseSettings.BETA);
+        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.getOrElse(settings.chunkSource, ModernBetaNoiseSettings.BETA);
         this.chunkSource = ModernBetaRegistries.CHUNK
             .get(settings.chunkSource)
             .apply(world, this, settings, noiseSettings, seed, mapFeaturesEnabled);
@@ -37,13 +38,17 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
      * 
      */
     @Override
-    public void setBlocksInChunk(int x, int z, ChunkPrimer primer) {
-        this.chunkSource.provideBaseChunk(primer, x, z);
+    public void setBlocksInChunk(int x, int z, ChunkPrimer chunkPrimer) {
+        this.chunkSource.provideInitialChunk(chunkPrimer, x, z);
     }
 
     @Override
     public Chunk generateChunk(int chunkX, int chunkZ) {
-        return this.chunkSource.provideChunk(chunkX, chunkZ);
+        DebugUtil.startDebug(DebugUtil.SECTION_GEN_CHUNK);
+        Chunk chunk = this.chunkSource.provideChunk(chunkX, chunkZ);
+        DebugUtil.endDebug(DebugUtil.SECTION_GEN_CHUNK);
+        
+        return chunk;
     }
 
     @Override

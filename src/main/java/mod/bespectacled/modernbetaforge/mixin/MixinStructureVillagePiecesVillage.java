@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ public class MixinStructureVillagePiecesVillage {
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
             
-            if (!(chunkSource instanceof FiniteChunkSource)) {
+            if (chunkSource instanceof NoiseChunkSource) {
                 StructureComponent component = (StructureComponent)(Object)this;
                 StructureBoundingBox box = component.getBoundingBox();
                 

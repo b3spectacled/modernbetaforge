@@ -1,7 +1,10 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
+import java.util.Random;
+
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
@@ -16,18 +19,20 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK;
     public static final ModernBetaRegistry<BiomeSourceCreator> BIOME;
     public static final ModernBetaRegistry<NoiseColumnSampler> NOISE;
-    public static final ModernBetaRegistry<ModernBetaNoiseSettings> NOISE_SETTINGS;
+    public static final ModernBetaRegistry<ModernBetaNoiseSettings> NOISE_SETTING;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
     public static final ModernBetaRegistry<CaveCarverCreator> CARVER;
+    public static final ModernBetaRegistry<BlockSourceCreator> BLOCK;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     
     static {
         CHUNK = new ModernBetaRegistry<>("CHUNK");
         BIOME = new ModernBetaRegistry<>("BIOME");
         NOISE = new ModernBetaRegistry<>("NOISE");
-        NOISE_SETTINGS = new ModernBetaRegistry<>("NOISE_SETTINGS");
+        NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
         SURFACE = new ModernBetaRegistry<>("SURFACE");
         CARVER = new ModernBetaRegistry<>("CARVER");
+        BLOCK = new ModernBetaRegistry<>("BLOCK");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
     }
     
@@ -56,5 +61,10 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface CaveCarverCreator {
         MapGenBase apply(ModernBetaChunkGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface BlockSourceCreator {
+        BlockSource apply(Random random, ModernBetaChunkGeneratorSettings settings);
     }
 }

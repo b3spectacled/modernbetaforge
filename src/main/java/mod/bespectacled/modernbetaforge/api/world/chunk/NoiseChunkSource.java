@@ -18,10 +18,14 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSett
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class NoiseChunkSource extends ChunkSource {
     protected final int verticalNoiseResolution;   // Number of blocks in a vertical subchunk
@@ -70,7 +74,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Create base chunk (only stone and water is set) given chunk coordinates.
+     * Create initial chunk given chunk coordinates.
+     * Used to sample for biome injection.
      *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -78,8 +83,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      */
     @Override
-    public void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.generateTerrain(chunkPrimer, chunkX, chunkZ);
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.generateTerrain(chunkPrimer, chunkX, chunkZ, false);
+    }
+    
+    /**
+     * Create processed chunk given chunk coordinates.
+     * Used to actually generate terrain
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
+    @Override
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.generateTerrain(chunkPrimer, chunkX, chunkZ, true);
     }
     
     /**
@@ -113,11 +132,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int chunkZ = z >> 4;
         
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
-    }
-    
-    @Override
-    protected void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.providePostProcessedChunkNoise(chunkPrimer, chunkX, chunkZ);
     }
     
     /**
@@ -166,25 +180,35 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, boolean generateFullChunk) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
-        // Create and populate noise providers
-        List<NoiseSource> noiseSources = new LinkedList<>();
-        ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
-            new NoiseSource(
-                sampler,
-                this.noiseSizeX,
-                this.noiseSizeY,
-                this.noiseSizeZ
-            )
-        ));
+        List<StructureComponent> structureComponents = generateFullChunk ?
+            this.componentCache.get(chunkX, chunkZ).getComponents() :
+            null;
+        
+        StructureWeightSampler weightSampler = generateFullChunk ?
+            new StructureWeightSampler(structureComponents) :
+            null;
 
-        // Create and populate block sources
-        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
-            .add(this.getInitialBlockSource(noiseSources))
-            .build();
+        List<NoiseSource> noiseSources = new LinkedList<>();
+        BlockSourceRules.Builder blockSourcesBuilder = new BlockSourceRules
+            .Builder(this.defaultBlock)
+            .add(this.getInitialBlockSource(noiseSources, weightSampler));
+        
+        if (generateFullChunk) {
+            ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
+                new NoiseSource(
+                    sampler,
+                    this.noiseSizeX,
+                    this.noiseSizeY,
+                    this.noiseSizeZ
+                )
+            ));
+            
+            blockSourcesBuilder.add(this.blockSources);
+        }
 
         // Sample initial noise.
         // Base noise should be added after this,
@@ -195,6 +219,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
             this.settings
         ));
         noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
+        
+        // Build block source rules
+        BlockSourceRules blockSources = blockSourcesBuilder.build();
         
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
             int noiseX = subChunkX;
@@ -227,15 +254,18 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                 double deltaZ = subZ / (double)this.horizontalNoiseResolution;
                                 noiseSources.forEach(noiseProvider -> noiseProvider.sampleNoiseZ(deltaZ));
                                 
-                                IBlockState blockState = blockSources.sample(x, y, z);
-                                if (blockState.equals(BlockStates.AIR)) continue;
-                                
-                                chunkPrimer.setBlockState(localX, y, localZ, blockState);
+                                chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                             }
                         }
                     }
                 }
             }
+        }
+        
+        if (generateFullChunk) {
+            // Remove chunk after processing to make room for other chunks;
+            // will lead to some chunks not getting processed if not cleared.
+            this.componentCache.remove(chunkX, chunkZ);
         }
     }
     
@@ -394,15 +424,25 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
-    private BlockSource getInitialBlockSource(List<NoiseSource> noiseSources) {
-        DensityContainer density = new DensityContainer();
+    private BlockSource getInitialBlockSource(List<NoiseSource> noiseSources, StructureWeightSampler weightSampler) {
+        DensityContainer densityContainer = new DensityContainer();
+        MutableBlockPos mutablePos = new MutableBlockPos();
         
         return (x, y, z) -> {
-            density.reset();
-            noiseSources.forEach(noiseSource -> density.add(noiseSource.sample()));
+            densityContainer.reset();
+            noiseSources.forEach(noiseSource -> densityContainer.add(noiseSource.sample()));
+            
+            double density = densityContainer.get();
+            
+            if (weightSampler != null) {
+                density = MathHelper.clamp(density / 200.0, -1.0, 1.0);
+                density = density / 2.0 - density * density * density / 24.0;
+                
+                density += weightSampler.sample(mutablePos.setPos(x, y, z), this);
+            }
             
             IBlockState blockState = BlockStates.AIR;
-            if (density.get() > 0.0) {
+            if (density > 0.0) {
                 blockState = null;
             } else if (y < this.getSeaLevel()) {
                 blockState = this.defaultFluid;

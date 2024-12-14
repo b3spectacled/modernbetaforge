@@ -15,6 +15,7 @@
       "MixinMapGenStronghold",
       "MixinMapGenVillageStart",
       "MixinStructureVillagePiecesVillage",
+      "MixinChunkGeneratorOverworld",
       "accessor.AccessorChunkGeneratorHell",
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",

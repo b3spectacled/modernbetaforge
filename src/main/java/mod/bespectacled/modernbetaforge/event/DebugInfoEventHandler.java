@@ -6,6 +6,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
+import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -18,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -111,6 +113,9 @@ public class DebugInfoEventHandler {
                         event.getLeft().add(finiteHeightmapText);
                     }
                 }
+                
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK));
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK));
             }
             
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
@@ -130,7 +135,14 @@ public class DebugInfoEventHandler {
                 String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
                 event.getLeft().add(baseBiomeText);
             }
+            
+            if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {
+                String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
+                String totalTime = DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
+                
+                if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
+                if (!totalTime.isEmpty()) event.getLeft().add("[Modern Beta] " + totalTime);
+            }
         }
-        
     }
 }

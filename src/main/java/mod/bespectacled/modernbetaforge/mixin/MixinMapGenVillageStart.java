@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorStructureStart;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
@@ -36,7 +36,7 @@ public class MixinMapGenVillageStart {
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
 
-            if (!(chunkSource instanceof FiniteChunkSource)) {
+            if (chunkSource instanceof NoiseChunkSource) {
                 ChunkCache<ComponentChunk> componentCache = chunkSource.getComponentCache();
                 AccessorStructureStart accessor = (AccessorStructureStart)this;
                 

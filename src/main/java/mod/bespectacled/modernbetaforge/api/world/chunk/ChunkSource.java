@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -32,18 +33,13 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourcePostProcess;
-import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
-import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
@@ -57,7 +53,6 @@ import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -86,6 +81,8 @@ public abstract class ChunkSource {
     protected final int worldHeight;
     protected final int seaLevel;
     
+    protected final List<BlockSource> blockSources;
+    
     protected final MapGenVillage villageGenerator;
     protected final ChunkCache<ComponentChunk> componentCache;
     
@@ -100,13 +97,20 @@ public abstract class ChunkSource {
     private final WoodlandMansion woodlandMansionGenerator;
 
     private final BiomeInjector biomeInjector;
-    private final ChunkCache<ChunkPrimerContainer> chunkCache;
+    private final ChunkCache<ChunkPrimerContainer> initialChunkCache;
     
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
     private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     
-    public ChunkSource(World world, ModernBetaChunkGenerator chunkGenerator, ModernBetaChunkGeneratorSettings chunkGeneratorSettings, ModernBetaNoiseSettings noiseSettings, long seed, boolean mapFeaturesEnabled) {
+    public ChunkSource(
+        World world,
+        ModernBetaChunkGenerator chunkGenerator,
+        ModernBetaChunkGeneratorSettings chunkGeneratorSettings,        
+        ModernBetaNoiseSettings noiseSettings,
+        long seed,
+        boolean mapFeaturesEnabled
+    ) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
@@ -121,6 +125,12 @@ public abstract class ChunkSource {
         
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
+        
+        this.blockSources = ModernBetaRegistries.BLOCK
+            .getEntries()
+            .stream()
+            .map(e -> e.apply(new Random(seed), this.settings))
+            .collect(Collectors.toList());
         
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
@@ -138,7 +148,7 @@ public abstract class ChunkSource {
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
         this.biomeProvider.setChunkSource(this);
         
-        this.chunkCache = new ChunkCache<>("chunk_primer", this::provideChunkPrimerContainer);
+        this.initialChunkCache = new ChunkCache<>("initial_chunk_primer", this::provideInitialChunkPrimerContainer);
         
         this.beachOctaveNoise = Optional.empty();
         this.surfaceOctaveNoise = Optional.empty();
@@ -148,7 +158,9 @@ public abstract class ChunkSource {
         this.setCloudHeight(this.worldHeight - 20);
     }
     
-    public abstract void provideBaseChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    
+    public abstract void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
@@ -156,7 +168,7 @@ public abstract class ChunkSource {
     
     public Chunk provideChunk(int chunkX, int chunkZ) {
         // Retrieve chunk primer from cache
-        ChunkPrimerContainer chunkContainer = this.chunkCache.get(chunkX, chunkZ);
+        ChunkPrimerContainer chunkContainer = this.initialChunkCache.get(chunkX, chunkZ);
         ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
         Biome[] biomes = chunkContainer.biomes;
         
@@ -170,11 +182,11 @@ public abstract class ChunkSource {
             
             boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
             
-            // Post-process chunk
-            this.providePostProcessedChunk(chunkPrimer, chunkX, chunkZ);
+            // Generate processed chunk
+            this.provideProcessedChunk(chunkPrimer, chunkX, chunkZ);
             
             // Populate biome-specific surface
-            this.provideSurface(chunkContainer.biomes, chunkPrimer, chunkX, chunkZ);
+            this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
             
             // Post-process biome map, after surface generation
             if (this.biomeInjector != null) {
@@ -535,7 +547,7 @@ public abstract class ChunkSource {
     }
 
     public Biome[] getBiomes(int chunkX, int chunkZ) {
-        return this.chunkCache.get(chunkX, chunkZ).biomes;
+        return this.initialChunkCache.get(chunkX, chunkZ).biomes;
     }
 
     public int getSeaLevel() {
@@ -572,54 +584,6 @@ public abstract class ChunkSource {
     
     public ChunkCache<ComponentChunk> getComponentCache() {
         return this.componentCache;
-    }
-    
-    protected abstract void providePostProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
-    
-    protected void providePostProcessedChunkNoise(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        int startX = chunkX << 4;
-        int startZ = chunkZ << 4;
-    
-        List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
-        StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
-        MutableBlockPos mutablePos = new MutableBlockPos();
-        
-        BlockSourcePostProcess postProcessSource = new BlockSourcePostProcess(
-            ImmutableSet.of(BlockStates.BRICK, BlockStates.OBSIDIAN),
-            this.defaultBlock,
-            this.defaultFluid,
-            this.getSeaLevel()
-        );
-        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
-            .add(postProcessSource)
-            .build();
-    
-        for (int localZ = 0; localZ < 16; ++localZ) {
-            int z = localZ + startZ;
-            
-            for (int localX = 0; localX < 16; ++localX) {
-                int x = localX + startX;
-                
-                for (int y = 0; y < this.worldHeight; ++y) {
-                    IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
-                    
-                    double density = blockState.equals(this.defaultBlock) ? 25.0 : -25.0;
-                    double clampedDensity = MathHelper.clamp(density / 200.0, -1.0, 1.0);
-                    clampedDensity = clampedDensity / 2.0 - clampedDensity * clampedDensity * clampedDensity / 24.0;
-                    
-                    mutablePos.setPos(x, y, z);
-                    clampedDensity += weightSampler.sample(mutablePos, this);
-                    
-                    postProcessSource.setBlockState(blockState);
-                    postProcessSource.setDensity(clampedDensity);
-                    chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
-                }
-            }
-        }
-        
-        // Remove chunk after processing to make room for other chunks;
-        // will lead to some chunks not getting processed if not cleared.
-        this.componentCache.remove(chunkX, chunkZ);
     }
 
     protected void setCloudHeight(int cloudHeight) {
@@ -704,7 +668,7 @@ public abstract class ChunkSource {
         return blockState.getBlock() == this.defaultFluid.getBlock();
     }
     
-    private ChunkPrimerContainer provideChunkPrimerContainer(int chunkX, int chunkZ) {
+    private ChunkPrimerContainer provideInitialChunkPrimerContainer(int chunkX, int chunkZ) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
@@ -712,7 +676,7 @@ public abstract class ChunkSource {
         Biome[] biomes = new Biome[256];
         
         // Generate base terrain
-        this.provideBaseChunk(chunkPrimer, chunkX, chunkZ);
+        this.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
         
         // Generate base biome map
         this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
