@@ -180,35 +180,34 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, boolean generateFullChunk) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, boolean withVillages) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
-        List<StructureComponent> structureComponents = generateFullChunk ?
+        List<StructureComponent> structureComponents = withVillages ?
             this.componentCache.get(chunkX, chunkZ).getComponents() :
             null;
         
-        StructureWeightSampler weightSampler = generateFullChunk ?
+        StructureWeightSampler weightSampler = withVillages ?
             new StructureWeightSampler(structureComponents) :
             null;
 
+        // Populate noise sources
         List<NoiseSource> noiseSources = new LinkedList<>();
-        BlockSourceRules.Builder blockSourcesBuilder = new BlockSourceRules
-            .Builder(this.defaultBlock)
-            .add(this.getInitialBlockSource(noiseSources, weightSampler));
+        ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
+            new NoiseSource(
+                sampler,
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
         
-        if (generateFullChunk) {
-            ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
-                new NoiseSource(
-                    sampler,
-                    this.noiseSizeX,
-                    this.noiseSizeY,
-                    this.noiseSizeZ
-                )
-            ));
-            
-            blockSourcesBuilder.add(this.blockSources);
-        }
+        // Build block source rules
+        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
+            .add(this.getInitialBlockSource(noiseSources, weightSampler))
+            .add(this.blockSources)
+            .build();
 
         // Sample initial noise.
         // Base noise should be added after this,
@@ -219,9 +218,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
             this.settings
         ));
         noiseSources.add(this.noiseCache.get(chunkX, chunkZ));
-        
-        // Build block source rules
-        BlockSourceRules blockSources = blockSourcesBuilder.build();
         
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
             int noiseX = subChunkX;
@@ -262,7 +258,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             }
         }
         
-        if (generateFullChunk) {
+        if (withVillages) {
             // Remove chunk after processing to make room for other chunks;
             // will lead to some chunks not getting processed if not cleared.
             this.componentCache.remove(chunkX, chunkZ);

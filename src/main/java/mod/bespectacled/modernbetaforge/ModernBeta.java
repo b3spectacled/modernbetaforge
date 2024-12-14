@@ -69,6 +69,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerNoiseSettings();
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
+        ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();

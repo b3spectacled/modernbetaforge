@@ -86,6 +86,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, settings -> new MapGenCaves());
     }
     
+    public static void registerBlockSources() { }
+    
     public static void registerDataFixes() {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.DESERT_BIOMES, new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FOREST_BIOMES, new DataFix(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes));
