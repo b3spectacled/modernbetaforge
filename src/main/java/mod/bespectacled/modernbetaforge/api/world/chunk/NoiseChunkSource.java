@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
@@ -16,7 +17,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
@@ -182,8 +182,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
         ));
 
         // Create and populate block sources
-        BlockSourceRules blockSources = new BlockSourceRules.Builder()
-            .add(this.getBaseBlockSource(noiseSources))
+        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
+            .add(this.getInitialBlockSource(noiseSources))
             .build();
 
         // Sample initial noise.
@@ -394,7 +394,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
-    private BlockSource getBaseBlockSource(List<NoiseSource> noiseSources) {
+    private BlockSource getInitialBlockSource(List<NoiseSource> noiseSources) {
         DensityContainer density = new DensityContainer();
         
         return (x, y, z) -> {
@@ -403,7 +403,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             
             IBlockState blockState = BlockStates.AIR;
             if (density.get() > 0.0) {
-                blockState = this.defaultBlock;
+                blockState = null;
             } else if (y < this.getSeaLevel()) {
                 blockState = this.defaultFluid;
             }

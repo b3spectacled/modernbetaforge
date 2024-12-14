@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
@@ -583,8 +584,13 @@ public abstract class ChunkSource {
         StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
-        BlockSourcePostProcess postProcessSource = new BlockSourcePostProcess(this.defaultBlock, this.defaultFluid, this.getSeaLevel());
-        BlockSourceRules blockSources = new BlockSourceRules.Builder()
+        BlockSourcePostProcess postProcessSource = new BlockSourcePostProcess(
+            ImmutableSet.of(BlockStates.BRICK, BlockStates.OBSIDIAN),
+            this.defaultBlock,
+            this.defaultFluid,
+            this.getSeaLevel()
+        );
+        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
             .add(postProcessSource)
             .build();
     

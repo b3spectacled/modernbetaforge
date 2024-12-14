@@ -28,6 +28,7 @@ public class BlockStates {
     public static final IBlockState LAVA = Blocks.LAVA.getDefaultState();
     public static final IBlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
     public static final IBlockState OBSIDIAN = Blocks.OBSIDIAN.getDefaultState();
+    public static final IBlockState BRICK = Blocks.BRICK_BLOCK.getDefaultState();
     
     public static final IBlockState GRASS = Blocks.TALLGRASS.getDefaultState();
     public static final IBlockState FERN = Blocks.TALLGRASS.getStateFromMeta(2);

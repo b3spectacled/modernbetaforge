@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.chunk.blocksource;
+package mod.bespectacled.modernbetaforge.api.world.chunk.blocksource;
 
 import net.minecraft.block.state.IBlockState;
 

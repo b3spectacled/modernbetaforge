@@ -107,8 +107,8 @@ public class Infdev227ChunkSource extends ChunkSource {
         Random random = new Random();
         
         // Create and populate block sources
-        BlockSourceDefault defaultSource = new BlockSourceDefault();
-        BlockSourceRules blockSources = new BlockSourceRules.Builder()
+        BlockSourceDefault defaultSource = new BlockSourceDefault(this.defaultBlock);
+        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
             .add(defaultSource)
             .build();
         

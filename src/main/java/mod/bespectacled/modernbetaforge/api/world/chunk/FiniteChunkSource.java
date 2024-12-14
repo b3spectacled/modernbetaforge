@@ -459,8 +459,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int offsetZ = this.levelLength / 2;
         
         // Create and populate block sources
-        BlockSourceDefault defaultSource = new BlockSourceDefault();
-        BlockSourceRules blockSources = new BlockSourceRules.Builder()
+        BlockSourceDefault defaultSource = new BlockSourceDefault(this.defaultBlock);
+        BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
             .add(defaultSource)
             .build();
         

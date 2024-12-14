@@ -1,16 +1,19 @@
 package mod.bespectacled.modernbetaforge.world.chunk.blocksource;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
-import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import net.minecraft.block.state.IBlockState;
 
 public class BlockSourceRules implements BlockSource {
     private final List<BlockSource> rules;
+    private final IBlockState defaultBlock;
     
-    private BlockSourceRules(List<BlockSource> blockSources) {
-        this.rules = blockSources;
+    private BlockSourceRules(List<BlockSource> rules, IBlockState defaultBlock) {
+        this.rules = rules;
+        this.defaultBlock = defaultBlock;
     }
 
     @Override
@@ -23,14 +26,16 @@ public class BlockSourceRules implements BlockSource {
             return blockState;
         }
         
-        return BlockStates.AIR;
+        return this.defaultBlock;
     }
     
     public static class Builder {
         private final List<BlockSource> rules;
+        private final IBlockState defaultBlock;
         
-        public Builder() {
-            this.rules = new ArrayList<>();
+        public Builder(IBlockState defaultBlock) {
+            this.rules = new LinkedList<>();
+            this.defaultBlock = defaultBlock;
         }
         
         public Builder add(BlockSource blockSource) {
@@ -39,8 +44,14 @@ public class BlockSourceRules implements BlockSource {
             return this;
         }
         
+        public Builder add(Collection<BlockSource> blockSources) {
+            this.rules.addAll(blockSources);
+            
+            return this;
+        }
+        
         public BlockSourceRules build() {
-            return new BlockSourceRules(this.rules);
+            return new BlockSourceRules(this.rules, this.defaultBlock);
         }
     }
 }

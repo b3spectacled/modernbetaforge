@@ -1,16 +1,16 @@
 package mod.bespectacled.modernbetaforge.world.chunk.blocksource;
 
-import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+
+import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 
 public class BlockSourcePostProcess implements BlockSource {
-    private final Set<Block> baseBlocks;
-    private final IBlockState defaultBlock;
+    private final BlockSourceRules blockSources;
+    private final Set<IBlockState> whitelist;
     private final IBlockState defaultFluid;
     private final int seaLevel;
     
@@ -18,17 +18,21 @@ public class BlockSourcePostProcess implements BlockSource {
     private double density;
     
     public BlockSourcePostProcess(IBlockState defaultBlock, IBlockState defaultFluid, int seaLevel) {
-        this.baseBlocks = new HashSet<>();
-        this.defaultBlock = defaultBlock;
+        this(ImmutableSet.of(), defaultBlock,  defaultFluid, seaLevel);
+    }
+    
+    public BlockSourcePostProcess(Set<IBlockState> whitelist, IBlockState defaultBlock, IBlockState defaultFluid, int seaLevel) {
+        this.blockSources = new BlockSourceRules.Builder(defaultBlock)
+            .add(this::sampleWhitelisted)
+            .add(this::sampleInitial)
+            .build();
+        
+        this.whitelist = whitelist;
         this.defaultFluid = defaultFluid;
         this.seaLevel = seaLevel;
         
         this.blockState = BlockStates.AIR;
         this.density = 0.0;
-        
-        this.baseBlocks.add(this.defaultBlock.getBlock());
-        this.baseBlocks.add(this.defaultFluid.getBlock());
-        this.baseBlocks.add(Blocks.AIR);
     }
     
     public void setBlockState(IBlockState blockState) {
@@ -41,14 +45,26 @@ public class BlockSourcePostProcess implements BlockSource {
 
     @Override
     public IBlockState sample(int x, int y, int z) {
-        IBlockState blockState = this.baseBlocks.contains(this.blockState.getBlock()) ? BlockStates.AIR : this.blockState;
+        return this.blockSources.sample(x, y, z);
+    }
+    
+    public IBlockState sampleInitial(int x, int y, int z) {
+        IBlockState blockState = BlockStates.AIR;
         
         if (this.density > 0.0) {
-            blockState = this.defaultBlock;
+            blockState = null;
         } else if (y < this.seaLevel) {
             blockState = this.defaultFluid;
         }
         
         return blockState;
+    }
+    
+    public IBlockState sampleWhitelisted(int x, int y, int z) {
+        if (this.whitelist.contains(this.blockState)) {
+            return this.blockState;
+        }
+        
+        return null;
     }
 }
