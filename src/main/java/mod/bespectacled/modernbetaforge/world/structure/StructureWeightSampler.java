@@ -19,6 +19,10 @@ public class StructureWeightSampler {
     }
     
     public double sample(BlockPos blockPos, ChunkSource chunkSource) {
+        if (this.structureComponents == null) {
+            return 0.0;
+        }
+        
         int posX = blockPos.getX();
         int posY = blockPos.getY();
         int posZ = blockPos.getZ();

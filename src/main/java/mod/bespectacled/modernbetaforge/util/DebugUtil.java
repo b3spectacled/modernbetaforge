@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DebugUtil {
-    public static final String SECTION_GEN_CHUNK = "modernbetaforge.generateChunk";   // ~0.0065s per chunk (1.3.3.0)
+    public static final String SECTION_GEN_CHUNK = "modernbetaforge.generateChunk";   // ~0.0042s per chunk (as of 1.3.3.0)
     public static final String SECTION_GEN_CHUNK_VANILLA = "minecraft.generateChunk"; // ~0.0026s per chunk
     
     public static final Map<String, Long> TOTAL_TIME = new HashMap<>();
