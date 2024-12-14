@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.lang.reflect.Type;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -235,8 +237,6 @@ public class ModernBetaChunkGeneratorSettings {
     public final String tundraBiomeOcean;
     public final String tundraBiomeBeach;
     
-    public final String additionalSettings;
-    
     private ModernBetaChunkGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
@@ -449,8 +449,6 @@ public class ModernBetaChunkGeneratorSettings {
         this.tundraBiomeBase = factory.tundraBiomeBase;
         this.tundraBiomeOcean = factory.tundraBiomeOcean;
         this.tundraBiomeBeach = factory.tundraBiomeBeach;
-        
-        this.additionalSettings = factory.additionalSettings;
     }
     
     public static class Factory {
@@ -667,8 +665,6 @@ public class ModernBetaChunkGeneratorSettings {
         public String tundraBiomeBase;
         public String tundraBiomeOcean;
         public String tundraBiomeBeach;
-        
-        public String additionalSettings;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -898,8 +894,6 @@ public class ModernBetaChunkGeneratorSettings {
             this.tundraBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
             this.tundraBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
             this.tundraBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
-            
-            this.additionalSettings = "";
         }
 
         @Override
@@ -1126,9 +1120,8 @@ public class ModernBetaChunkGeneratorSettings {
                 
                 this.tundraBiomeBase.equals(factory.tundraBiomeBase) &&
                 this.tundraBiomeOcean.equals(factory.tundraBiomeOcean) &&
-                this.tundraBiomeBeach.equals(factory.tundraBiomeBeach) &&
+                this.tundraBiomeBeach.equals(factory.tundraBiomeBeach)
                 
-                this.additionalSettings.equals(factory.additionalSettings)
                 ;
         }
         
@@ -1345,8 +1338,6 @@ public class ModernBetaChunkGeneratorSettings {
             hashCode = 31 * hashCode + this.tundraBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.tundraBiomeOcean.hashCode();
             hashCode = 31 * hashCode + this.tundraBiomeBeach.hashCode();
-            
-            hashCode = 31 * hashCode + this.additionalSettings.hashCode();
             
             return hashCode;
         }
@@ -1579,9 +1570,10 @@ public class ModernBetaChunkGeneratorSettings {
                 factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
                 factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
                 
-                factory.additionalSettings = JsonUtils.getString(jsonObject, NbtTags.ADDITIONAL_SETTINGS, factory.additionalSettings);
-                
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                ModernBeta.log(Level.ERROR, "[Modern Beta] Failed to deserialize generator settings!");
+                ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            }
             
             return factory;
         }
@@ -1801,8 +1793,6 @@ public class ModernBetaChunkGeneratorSettings {
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
-            
-            jsonObject.addProperty(NbtTags.ADDITIONAL_SETTINGS, factory.additionalSettings);
             
             return jsonObject;
         }
