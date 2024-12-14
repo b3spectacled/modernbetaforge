@@ -49,8 +49,8 @@ public class BiomeDecoratorInfdev227 extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             for (int localX = 0; localX < 16; ++localX) {
                 for (int localZ = 0; localZ < 16; ++localZ) {
-                    int x = localX + startX;
-                    int z = localZ + startZ;
+                    int x = localX + startX + 8;
+                    int z = localZ + startZ + 8;
                     int y = world.getHeight(x, z);
                     
                     if (Math.random() < 0.02) {

@@ -341,11 +341,11 @@ public abstract class ChunkSource {
 
         // Generate snow / ice
         if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
-            for(int dX = 0; dX < 16; dX++) {
-                for(int dZ = 0; dZ < 16; dZ++) {
+            for(int localX = 0; localX < 16; localX++) {
+                for(int localZ = 0; localZ < 16; localZ++) {
                     // Adding 8 is important to prevent runaway chunk loading
-                    int x = dX + startX + 8; 
-                    int z = dZ + startZ + 8;
+                    int x = localX + startX + 8; 
+                    int z = localZ + startZ + 8;
                     int y = this.world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
 
                     Biome biome = this.biomeProvider.getBiome(mutablePos);
