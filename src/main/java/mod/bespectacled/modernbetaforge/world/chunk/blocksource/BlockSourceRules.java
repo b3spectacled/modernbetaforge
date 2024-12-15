@@ -5,9 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import net.minecraft.block.state.IBlockState;
 
 public class BlockSourceRules implements BlockSource {
+    private static boolean DEBUG = false;
+    
     private final List<BlockSource> rules;
     private final IBlockState defaultBlock;
     
@@ -26,7 +29,11 @@ public class BlockSourceRules implements BlockSource {
             return blockState;
         }
         
-        return this.defaultBlock;
+        return DEBUG ? BlockStates.AIR : this.defaultBlock;
+    }
+    
+    public static void setDebug() {
+        DEBUG = true;
     }
     
     public static class Builder {
