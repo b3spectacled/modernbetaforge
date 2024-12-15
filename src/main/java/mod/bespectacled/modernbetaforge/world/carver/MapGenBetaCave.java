@@ -1,6 +1,9 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.Random;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import net.minecraft.block.Block;
@@ -11,6 +14,8 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 
 public class MapGenBetaCave extends MapGenBase {
+    private static final Set<Block> CARVABLE;
+    
     private final Block fluidBlock;
     private final Block flowingBlock;
     private final int caveHeight;
@@ -105,7 +110,7 @@ public class MapGenBetaCave extends MapGenBase {
     }
     
     protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (block == Blocks.STONE || block == Blocks.DIRT || block == Blocks.GRASS) {
+        if (CARVABLE.contains(block)) {
             if (localY - 1 < 10) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
@@ -304,5 +309,15 @@ public class MapGenBetaCave extends MapGenBase {
 
     private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int relX, int relZ) {
         return relX != minX && relX != maxX - 1 && relZ != minZ && relZ != maxZ - 1;
+    }
+    
+    static {
+        CARVABLE = new ImmutableSet.Builder<Block>()
+            .add(Blocks.STONE)
+            .add(Blocks.GRASS)
+            .add(Blocks.DIRT)
+            .add(Blocks.COAL_ORE)
+            .add(Blocks.IRON_ORE)
+            .build();
     }
 }

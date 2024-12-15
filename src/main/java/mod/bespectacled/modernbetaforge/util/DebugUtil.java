@@ -37,7 +37,7 @@ public class DebugUtil {
         long totalTime = TOTAL_TIME.get(section);
         long iterations = ITERATIONS.get(section);
 
-        return String.format("Average time (in s) for section '%s': %f", section, totalTime / (double)iterations / 1000.0);
+        return String.format("Average time for section '%s': %fs", section, totalTime / (double)iterations / 1000.0);
     }
     
     public static synchronized String getTotalTime(String section) {
@@ -46,6 +46,6 @@ public class DebugUtil {
         
         long totalTime = TOTAL_TIME.get(section);
 
-        return String.format("Total time (in s) for section '%s': %f", section, totalTime / 1000.0);
+        return String.format("Total time for section '%s': %fs", section, totalTime / 1000.0);
     }
 }
