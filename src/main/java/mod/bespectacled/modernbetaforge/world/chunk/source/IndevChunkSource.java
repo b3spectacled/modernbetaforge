@@ -10,7 +10,6 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.block.Block;
@@ -44,12 +43,9 @@ public class IndevChunkSource extends FiniteChunkSource {
     public IndevChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings chunkGeneratorSettings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings chunkGeneratorSettings
     ) {
-        super(world, chunkGenerator, chunkGeneratorSettings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, chunkGeneratorSettings);
         
         this.levelTheme = IndevTheme.fromId(settings.levelTheme);
         this.levelType = IndevType.fromId(settings.levelType);

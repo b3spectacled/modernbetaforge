@@ -32,7 +32,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -106,18 +105,15 @@ public abstract class ChunkSource {
     public ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings chunkGeneratorSettings,        
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings chunkGeneratorSettings
     ) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         
         this.world = world;
-        this.seed = seed;
-        this.mapFeaturesEnabled = mapFeaturesEnabled;
+        this.seed = world.getSeed();
+        this.mapFeaturesEnabled = world.getWorldInfo().isMapFeaturesEnabled();
         this.random = new Random(seed);
         
         this.defaultBlock = BlockStates.STONE;
@@ -129,13 +125,13 @@ public abstract class ChunkSource {
         this.blockSources = ModernBetaRegistries.BLOCK
             .getEntries()
             .stream()
-            .map(e -> e.apply(new Random(seed), this.settings))
+            .map(e -> e.apply(this.world, this, this.settings))
             .collect(Collectors.toList());
         
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
 
-        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver).apply(settings), InitMapGenEvent.EventType.CAVE);
+        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver).apply(this.world, this, settings), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
         
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);

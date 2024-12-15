@@ -49,12 +49,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
     public NoiseChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings settings
     ) {
-        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, settings);
+        
+        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
         
         this.verticalNoiseResolution = noiseSettings.sizeVertical * 4;
         this.horizontalNoiseResolution = noiseSettings.sizeHorizontal * 4;

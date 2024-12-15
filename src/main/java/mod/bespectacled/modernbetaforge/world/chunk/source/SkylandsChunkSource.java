@@ -6,7 +6,6 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -25,12 +24,9 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     public SkylandsChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings settings
     ) {
-        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, settings);
 
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

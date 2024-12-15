@@ -5,7 +5,6 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
 import net.minecraft.world.World;
 
@@ -24,24 +23,18 @@ public class AlphaChunkSource extends NoiseChunkSource {
     public AlphaChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings settings
     ) {
-        this(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled, false);
+        this(world, chunkGenerator, settings, false);
     }
     
     public AlphaChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaChunkGeneratorSettings settings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled,
         boolean isInfdev611
     ) {
-        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, settings);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

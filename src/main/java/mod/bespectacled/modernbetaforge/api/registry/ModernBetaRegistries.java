@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
-import java.util.Random;
-
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
@@ -41,10 +39,7 @@ public class ModernBetaRegistries {
         ChunkSource apply(
             World world,
             ModernBetaChunkGenerator chunkGenerator,
-            ModernBetaChunkGeneratorSettings chunkGeneratorSettings,
-            ModernBetaNoiseSettings noiseSettings,
-            long seed,
-            boolean mapFeaturesEnabled
+            ModernBetaChunkGeneratorSettings settings
         );
     }
     
@@ -54,17 +49,22 @@ public class ModernBetaRegistries {
     }
     
     @FunctionalInterface
+    public static interface NoiseSamplerCreator {
+        NoiseColumnSampler apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
     public static interface SurfaceBuilderCreator {
         SurfaceBuilder apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface CaveCarverCreator {
-        MapGenBase apply(ModernBetaChunkGeneratorSettings settings);
+        MapGenBase apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface BlockSourceCreator {
-        BlockSource apply(Random random, ModernBetaChunkGeneratorSettings settings);
+        BlockSource apply(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings);
     }
 }

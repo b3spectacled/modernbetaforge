@@ -5,7 +5,6 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import net.minecraft.world.World;
 
 public class Infdev611ChunkSource extends AlphaChunkSource {
@@ -16,12 +15,9 @@ public class Infdev611ChunkSource extends AlphaChunkSource {
     public Infdev611ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings settings
     ) {
-        super(world, chunkGenerator, settings, noiseSettings, seed, mapFeaturesEnabled, true);
+        super(world, chunkGenerator, settings, true);
 
         // Invoke noise constructors to seed surface and forest noise generators correctly,
         // and also spin up new instance of Random since class member has been used in super constructor.

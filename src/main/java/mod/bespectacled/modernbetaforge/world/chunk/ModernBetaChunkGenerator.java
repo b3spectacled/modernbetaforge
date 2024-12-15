@@ -17,17 +17,16 @@ import net.minecraft.world.gen.ChunkGeneratorOverworld;
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final ChunkSource chunkSource;
     
-    public ModernBetaChunkGenerator(World world, long seed, boolean mapFeaturesEnabled, String generatorOptions) {
-        super(world, seed, mapFeaturesEnabled, generatorOptions);
+    public ModernBetaChunkGenerator(World world, String generatorOptions) {
+        super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         
         ModernBetaChunkGeneratorSettings settings = generatorOptions != null ?
             ModernBetaChunkGeneratorSettings.build(generatorOptions) :
             ModernBetaChunkGeneratorSettings.build();
         
-        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.getOrElse(settings.chunkSource, ModernBetaNoiseSettings.BETA);
         this.chunkSource = ModernBetaRegistries.CHUNK
             .get(settings.chunkSource)
-            .apply(world, this, settings, noiseSettings, seed, mapFeaturesEnabled);
+            .apply(world, this, settings);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());

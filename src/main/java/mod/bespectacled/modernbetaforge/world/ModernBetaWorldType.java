@@ -49,7 +49,7 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public IChunkGenerator getChunkGenerator(World world, String generatorOptions) {
-        return new ModernBetaChunkGenerator(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
+        return new ModernBetaChunkGenerator(world, generatorOptions);
     }
     
     @Override

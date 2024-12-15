@@ -11,7 +11,6 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -34,12 +33,9 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     public Classic23aChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings chunkGeneratorSettings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings chunkGeneratorSettings
     ) {
-        super(world, chunkGenerator, chunkGeneratorSettings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, chunkGeneratorSettings);
         
         this.lowOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
         this.highOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);

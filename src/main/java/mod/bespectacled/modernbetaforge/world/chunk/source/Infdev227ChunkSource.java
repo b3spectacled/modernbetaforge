@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
@@ -37,12 +36,10 @@ public class Infdev227ChunkSource extends ChunkSource {
     public Infdev227ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings chunkGeneratorSettings,
-        ModernBetaNoiseSettings noiseSettings,
-        long seed,
-        boolean mapFeaturesEnabled
+        ModernBetaChunkGeneratorSettings chunkGeneratorSettings
     ) {
-        super(world, chunkGenerator, chunkGeneratorSettings, noiseSettings, seed, mapFeaturesEnabled);
+        super(world, chunkGenerator, chunkGeneratorSettings);
+        
         this.heightNoise0 = new PerlinOctaveNoise(this.random, 16, true);
         this.heightNoise1 = new PerlinOctaveNoise(this.random, 16, true);
         this.highOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);

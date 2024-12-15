@@ -82,8 +82,8 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerCaveCarvers() {
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.id, settings -> new MapGenBetaCave(settings));
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, settings -> new MapGenCaves());
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.id, (world, chunkSource, settings) -> new MapGenBetaCave(settings));
+        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.id, (world, chunkSource, settings) -> new MapGenCaves());
     }
     
     public static void registerBlockSources() { }
