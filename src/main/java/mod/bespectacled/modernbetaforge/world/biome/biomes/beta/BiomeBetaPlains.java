@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.material.Material;
@@ -51,7 +51,7 @@ public class BiomeBetaPlains extends BiomeBeta {
     public void decorate(World world, Random random, BlockPos startPos) {
         super.decorate(world, random, startPos);
         
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         ChunkPos chunkPos = new ChunkPos(startPos);
         
         if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {

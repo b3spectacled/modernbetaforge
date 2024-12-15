@@ -14,8 +14,8 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings.Factory;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
@@ -30,8 +30,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiIdentifiers {
     public static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
-    public static final Map<Integer, BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
-    public static final Map<Integer, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
+    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
+    public static final Map<Integer, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     
@@ -446,7 +446,7 @@ public class GuiIdentifiers {
         add(id, (factory, guiId) -> true);
     }
     
-    private static void add(int id, BiPredicate<ModernBetaChunkGeneratorSettings.Factory, Integer> predicate) {
+    private static void add(int id, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer> predicate) {
         if (GUI_IDS.containsKey(id)) {
             String errorStr = String.format("[Modern Beta] GUI id %d has already been registered!", id);
             

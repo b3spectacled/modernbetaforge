@@ -4,13 +4,13 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class ReleaseSurfaceBuilder extends SurfaceBuilder {
-    public ReleaseSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public ReleaseSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(world, chunkSource, settings);
     }
 

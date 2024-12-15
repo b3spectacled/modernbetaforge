@@ -15,11 +15,11 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.DensityChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
+import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
+import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -49,7 +49,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     public NoiseChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         super(world, chunkGenerator, settings);
         

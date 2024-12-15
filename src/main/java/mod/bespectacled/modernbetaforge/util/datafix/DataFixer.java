@@ -7,10 +7,10 @@ import com.google.gson.JsonObject;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class DataFixer {
-    public static void runDataFixer(String registryKey, ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject, String worldName) {
+    public static void runDataFixer(String registryKey, ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject, String worldName) {
         DataFix dataFix = ModernBetaRegistries.DATA_FIX.get(registryKey);
         
         if (jsonObject.has(dataFix.getTag())) {

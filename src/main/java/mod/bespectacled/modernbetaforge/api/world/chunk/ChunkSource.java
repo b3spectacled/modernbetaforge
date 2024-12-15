@@ -31,7 +31,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -66,7 +66,7 @@ public abstract class ChunkSource {
     protected static final int DEEP_OCEAN_MIN_DEPTH = 16;
     
     protected final ModernBetaChunkGenerator chunkGenerator;
-    protected final ModernBetaChunkGeneratorSettings settings;
+    protected final ModernBetaGeneratorSettings settings;
     protected final ModernBetaBiomeProvider biomeProvider;
     
     protected final World world;
@@ -105,7 +105,7 @@ public abstract class ChunkSource {
     public ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings chunkGeneratorSettings
+        ModernBetaGeneratorSettings chunkGeneratorSettings
     ) {
         this.chunkGenerator = chunkGenerator;
         this.settings = chunkGeneratorSettings;
@@ -554,7 +554,7 @@ public abstract class ChunkSource {
         return this.defaultFluid;
     }
     
-    public ModernBetaChunkGeneratorSettings getChunkGeneratorSettings() {
+    public ModernBetaGeneratorSettings getChunkGeneratorSettings() {
         return this.settings;
     }
     

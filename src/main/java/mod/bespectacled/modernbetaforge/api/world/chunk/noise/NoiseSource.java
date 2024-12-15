@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.noise;
 
 import mod.bespectacled.modernbetaforge.util.MathUtil;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class NoiseSource {
     private final NoiseColumnSampler noiseColumnSampler;
@@ -47,7 +47,7 @@ public class NoiseSource {
         this.noiseSize = this.noiseResX * this.noiseResY * this.noiseResZ;
     }
     
-    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
+    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, ModernBetaGeneratorSettings settings) {
         this.noise = this.sampleNoise(startNoiseX, startNoiseZ, settings);
         
         if (this.noise.length != this.noiseSize)
@@ -86,7 +86,7 @@ public class NoiseSource {
         return this.density;
     }
 
-    private double[] sampleNoise(int startNoiseX, int startNoiseZ, ModernBetaChunkGeneratorSettings settings) {
+    private double[] sampleNoise(int startNoiseX, int startNoiseZ, ModernBetaGeneratorSettings settings) {
         double[] buffer = new double[this.noiseResY];
         double[] noise = new double[this.noiseSize];
         
@@ -125,7 +125,7 @@ public class NoiseSource {
             int noiseSizeX,
             int noiseSizeZ,
             int noiseSizeY,
-            ModernBetaChunkGeneratorSettings settings
+            ModernBetaGeneratorSettings settings
         );
     }
 }

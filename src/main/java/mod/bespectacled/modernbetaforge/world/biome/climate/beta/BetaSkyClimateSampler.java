@@ -5,7 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.SkyClimateChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class BetaSkyClimateSampler {
     private final SimplexOctaveNoise tempOctaveNoise;
@@ -15,10 +15,10 @@ public class BetaSkyClimateSampler {
     private final double tempScale;
     
     public BetaSkyClimateSampler(long seed) {
-        this(seed, ModernBetaChunkGeneratorSettings.build());
+        this(seed, ModernBetaGeneratorSettings.build());
     }
     
-    public BetaSkyClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+    public BetaSkyClimateSampler(long seed, ModernBetaGeneratorSettings settings) {
         this.tempOctaveNoise = new SimplexOctaveNoise(new Random(seed * 9871L), 4);
         
         this.skyClimateCache = new ChunkCache<>(

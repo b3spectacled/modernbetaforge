@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome;
 
 import java.util.List;
 
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
@@ -12,7 +12,7 @@ public class ModernBetaBiomeMobs {
         List<SpawnListEntry> spawnEntries,
         EnumCreatureType creatureType,
         Biome biome,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         if (biome instanceof ModernBetaBiome) {
             ModernBetaBiome modernBetaBiome = (ModernBetaBiome)biome;

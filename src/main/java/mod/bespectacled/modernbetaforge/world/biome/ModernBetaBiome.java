@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenFancyOak;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -160,7 +160,7 @@ public abstract class ModernBetaBiome extends Biome {
         return (random.nextInt(10) == 0) ? BIG_TREE_FEATURE : TREE_FEATURE;
     }
     
-    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaGeneratorSettings settings) {
         return this.getRandomTreeFeature(random);
     }
     

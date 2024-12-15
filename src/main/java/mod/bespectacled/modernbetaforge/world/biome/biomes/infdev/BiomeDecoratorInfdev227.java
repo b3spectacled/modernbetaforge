@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.infdev;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +18,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class BiomeDecoratorInfdev227 extends ModernBetaBiomeDecorator {
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
         int startX = startPos.getX();

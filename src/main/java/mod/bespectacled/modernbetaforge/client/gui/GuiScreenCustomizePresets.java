@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -137,7 +137,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private List<Info> loadPresets() {
         List<Info> presets = new ArrayList<>();
         
-        ModernBetaChunkGeneratorSettings.Factory factory;
+        ModernBetaGeneratorSettings.Factory factory;
         ResourceLocation texture;
         String name;
         String desc;
@@ -146,7 +146,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             name = I18n.format(p.name);
             desc = I18n.format(p.desc);
             texture = ModernBeta.createId(p.texture);
-            factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(p.settings);
+            factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(p.settings);
             
             presets.add(new Info(name, desc, texture, factory));
         }
@@ -156,7 +156,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             String customPreset = customPresets[i];
             name = I18n.format("createWorld.customize.custom.preset.custom").concat(String.format(" %d", i + 1));
             texture = new ResourceLocation("textures/misc/unknown_pack.png");
-            factory = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(customPreset);
+            factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(customPreset);
             
             presets.add(new Info(name, texture, factory));
         }
@@ -326,16 +326,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         public String name;
         public String desc;
         public ResourceLocation texture;
-        public ModernBetaChunkGeneratorSettings.Factory settings;
+        public ModernBetaGeneratorSettings.Factory settings;
         
-        public Info(String name, String desc, ResourceLocation texture, ModernBetaChunkGeneratorSettings.Factory factory) {
+        public Info(String name, String desc, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory) {
             this.name = name;
             this.desc = desc;
             this.texture = texture;
             this.settings = factory;
         }
         
-        public Info(String name, ResourceLocation texture, ModernBetaChunkGeneratorSettings.Factory factory) {
+        public Info(String name, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory) {
             this(name, "", texture, factory);
         }
     }

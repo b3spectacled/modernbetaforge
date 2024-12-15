@@ -4,7 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.World;
 
 public class Infdev611ChunkSource extends AlphaChunkSource {
@@ -15,7 +15,7 @@ public class Infdev611ChunkSource extends AlphaChunkSource {
     public Infdev611ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         super(world, chunkGenerator, settings, true);
 

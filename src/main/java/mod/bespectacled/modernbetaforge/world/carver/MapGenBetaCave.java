@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.MathHelper;
@@ -32,7 +32,7 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveChance = caveChance;
     }
     
-    public MapGenBetaCave(ModernBetaChunkGeneratorSettings settings) {
+    public MapGenBetaCave(ModernBetaGeneratorSettings settings) {
         this(Blocks.WATER, Blocks.FLOWING_WATER, settings.caveHeight, settings.caveCount, settings.caveChance);
     }
     

@@ -11,7 +11,7 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
 import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateSampler;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -23,9 +23,9 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     public BetaBiomeSource(WorldInfo worldInfo) {
         super(worldInfo);
         
-        ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaChunkGeneratorSettings.build();
+        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
+            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
+            ModernBetaGeneratorSettings.build();
         
         this.climateMap = new ClimateMap(settings);
         this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings);

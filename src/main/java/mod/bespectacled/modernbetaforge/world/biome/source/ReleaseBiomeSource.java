@@ -7,7 +7,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
@@ -29,7 +29,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         
         String generatorOptions = worldInfo.getGeneratorOptions();
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(generatorOptions);
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(generatorOptions);
         
         GenLayer[] genLayers = ModernBetaGenLayer.initLayers(worldInfo.getSeed(), worldInfo.getTerrainType(), settings);
         genLayers = getModdedBiomeGenerators(worldInfo.getTerrainType(), worldInfo.getSeed(), genLayers);

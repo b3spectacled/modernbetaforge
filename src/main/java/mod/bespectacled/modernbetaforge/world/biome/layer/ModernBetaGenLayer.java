@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.biome.layer;
 
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -16,7 +16,7 @@ import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 
 public class ModernBetaGenLayer {
-    public static GenLayer[] initLayers(long seed, WorldType worldType, ModernBetaChunkGeneratorSettings settings) {
+    public static GenLayer[] initLayers(long seed, WorldType worldType, ModernBetaGeneratorSettings settings) {
         ChunkGeneratorSettings vanillaSettings = new ChunkGeneratorSettings.Factory().build();
         int biomeSize = settings.biomeSize;
         
@@ -59,7 +59,7 @@ public class ModernBetaGenLayer {
         GenLayer parent,
         WorldType worldType,
         ChunkGeneratorSettings vanillaSettings,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         GenLayer biomeLayer = new GenLayerBiomeExtended(200L, parent, worldType, vanillaSettings, settings);
         biomeLayer = GenLayerZoom.magnify(1000L, biomeLayer, 2);

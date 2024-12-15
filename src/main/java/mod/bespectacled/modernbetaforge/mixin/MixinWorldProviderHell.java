@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldProvider;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorHell;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderHell;
@@ -23,7 +23,7 @@ public abstract class MixinWorldProviderHell {
         if (world.getWorldType() instanceof ModernBetaWorldType) {
             // Need to grab generator settings from Overworld dimension since each dimension has its own generator settings
             String generatorOptions = world.getMinecraftServer().getWorld(DimensionType.OVERWORLD.getId()).getWorldInfo().getGeneratorOptions();
-            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(generatorOptions);
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(generatorOptions);
             
             if (settings.useOldNether) {
                 info.setReturnValue(new ModernBetaChunkGeneratorHell(world, world.getWorldInfo().isMapFeaturesEnabled(), world.getSeed(), generatorOptions));

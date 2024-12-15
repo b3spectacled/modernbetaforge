@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGenLayerBiome;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -24,7 +24,7 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
         GenLayer parent,
         WorldType worldType,
         ChunkGeneratorSettings vanillaSettings,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         super(seed, parent, worldType, vanillaSettings);
         

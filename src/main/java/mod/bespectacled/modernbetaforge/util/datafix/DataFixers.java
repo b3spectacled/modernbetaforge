@@ -13,8 +13,8 @@ import com.google.gson.JsonObject;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.JsonUtils;
 
 public class DataFixers {
@@ -53,7 +53,7 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.id, ModernBetaBuiltInTypes.Surface.INFDEV.id)
         .build();
     
-    public static void fixDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
          factory.desertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.desertBiomeBase);
@@ -61,7 +61,7 @@ public class DataFixers {
          factory.desertBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.desertBiomeBeach);
     }
     
-    public static void fixForestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixForestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.FOREST_BIOMES);
         
         factory.forestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.forestBiomeBase);
@@ -69,7 +69,7 @@ public class DataFixers {
         factory.forestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.forestBiomeBeach);
     }
     
-    public static void fixIceDesertBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixIceDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.ICE_DESERT_BIOMES);
         
         factory.iceDesertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.iceDesertBiomeBase);
@@ -77,7 +77,7 @@ public class DataFixers {
         factory.iceDesertBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.iceDesertBiomeBeach);
     }
     
-    public static void fixPlainsBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixPlainsBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.PLAINS_BIOMES);
         
         factory.plainsBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.plainsBiomeBase);
@@ -85,7 +85,7 @@ public class DataFixers {
         factory.plainsBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.plainsBiomeBeach);
     }
     
-    public static void fixRainforestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixRainforestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.RAINFOREST_BIOMES);
         
         factory.rainforestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.rainforestBiomeBase);
@@ -93,7 +93,7 @@ public class DataFixers {
         factory.rainforestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.rainforestBiomeBeach);
     }
     
-    public static void fixSavannaBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSavannaBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SAVANNA_BIOMES);
         
         factory.savannaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.savannaBiomeBase);
@@ -101,7 +101,7 @@ public class DataFixers {
         factory.savannaBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.savannaBiomeBeach);
     }
     
-    public static void fixShrublandBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixShrublandBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SHRUBLAND_BIOMES);
         
         factory.shrublandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.shrublandBiomeBase);
@@ -109,7 +109,7 @@ public class DataFixers {
         factory.shrublandBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.shrublandBiomeBeach);
     }
     
-    public static void fixSeasonalForestBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSeasonalForestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
         
         factory.seasonalForestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.seasonalForestBiomeBase);
@@ -117,7 +117,7 @@ public class DataFixers {
         factory.seasonalForestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.seasonalForestBiomeBeach);
     }
     
-    public static void fixSwamplandBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSwamplandBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SWAMPLAND_BIOMES);
         
         factory.swamplandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.swamplandBiomeBase);
@@ -125,7 +125,7 @@ public class DataFixers {
         factory.swamplandBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.swamplandBiomeBeach);
     }
     
-    public static void fixTaigaBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixTaigaBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TAIGA_BIOMES);
         
         factory.taigaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.taigaBiomeBase);
@@ -133,7 +133,7 @@ public class DataFixers {
         factory.taigaBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.taigaBiomeBeach);
     }
 
-    public static void fixTundraBiomes(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixTundraBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TUNDRA_BIOMES);
         
         factory.tundraBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.tundraBiomeBase);
@@ -141,28 +141,28 @@ public class DataFixers {
         factory.tundraBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.tundraBiomeBeach);
     }
     
-    public static void fixSandstone(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSandstone(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, factory.useSandstone);
     }
     
-    public static void fixWolves(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixWolves(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(factory.chunkSource, factory.spawnWolves);
     }
     
-    public static void fixSurfaces(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSurfaces(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(factory.chunkSource, factory.surfaceBuilder);
     }
     
-    public static void fixSkylandsSurface(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSkylandsSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id))
             factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
     }
     
-    public static void fixSingleBiome(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSingleBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.DEPR_FIXED_BIOME, factory.singleBiome);
     }
     
-    public static void fixIndevHouse(ModernBetaChunkGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixIndevHouse(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         boolean useIndevHouse = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_INDEV_HOUSE, true);
         
         factory.levelHouse = useIndevHouse ? IndevHouse.OAK.id : IndevHouse.NONE.id;
@@ -181,9 +181,9 @@ public class DataFixers {
     
     public static class DataFix {
         private final String tag;
-        private final BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFixConsumer;
+        private final BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> dataFixConsumer;
         
-        public DataFix(String tag, BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> dataFixConsumer) {
+        public DataFix(String tag, BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> dataFixConsumer) {
             this.tag = tag;
             this.dataFixConsumer = dataFixConsumer;
         }
@@ -192,7 +192,7 @@ public class DataFixers {
             return this.tag;
         }
         
-        public BiConsumer<ModernBetaChunkGeneratorSettings.Factory, JsonObject> getDataFixConsumer() {
+        public BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> getDataFixConsumer() {
             return this.dataFixConsumer;
         }
     }

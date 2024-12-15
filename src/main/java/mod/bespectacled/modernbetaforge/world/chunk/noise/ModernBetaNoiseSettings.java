@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.chunk;
+package mod.bespectacled.modernbetaforge.world.chunk.noise;
 
 public class ModernBetaNoiseSettings {
     public static final ModernBetaNoiseSettings BETA = new ModernBetaNoiseSettings(2, 1, new SlideSettings(-10, 3, 0), new SlideSettings(15, 3, 0));

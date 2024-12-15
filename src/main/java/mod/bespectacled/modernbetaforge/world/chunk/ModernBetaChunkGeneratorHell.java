@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorChunkGeneratorHel
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.EnumCreatureType;
@@ -45,7 +46,7 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
-    private final ModernBetaChunkGeneratorSettings settings;
+    private final ModernBetaGeneratorSettings settings;
     private final World world;
     private final boolean mapFeaturesEnabled;
     
@@ -65,7 +66,7 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
     public ModernBetaChunkGeneratorHell(World world, boolean mapFeaturesEnabled, long seed, String generatorOptions) {
         super(world, mapFeaturesEnabled, seed);
         
-        this.settings = ModernBetaChunkGeneratorSettings.build(generatorOptions);
+        this.settings = ModernBetaGeneratorSettings.build(generatorOptions);
         this.world = world;
         this.mapFeaturesEnabled = mapFeaturesEnabled;
         

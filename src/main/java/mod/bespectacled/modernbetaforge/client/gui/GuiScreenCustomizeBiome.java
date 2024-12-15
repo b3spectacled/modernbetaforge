@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 
 import org.lwjgl.input.Keyboard;
 
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,12 +31,12 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     private static final int SEARCH_BAR_LENGTH = 360;
     
     private final GuiScreenCustomizeWorld parent;
-    private final BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer;
+    private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
     private final String initialBiome;
     private final String searchBiome;
     private final List<Info> biomes;
 
-    private ModernBetaChunkGeneratorSettings.Factory settings;
+    private ModernBetaGeneratorSettings.Factory settings;
     private ListPreset list;
     private GuiTextField searchBar;
     private GuiButton select;
@@ -46,7 +46,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     
     public GuiScreenCustomizeBiome(
         GuiScreenCustomizeWorld guiCustomizeWorldScreen,
-        BiConsumer<String, ModernBetaChunkGeneratorSettings.Factory> consumer,
+        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome,
         String searchBiome
     ) {
@@ -65,7 +65,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         this.title = I18n.format("createWorld.customize.custom.biomes.title");
         this.searchText = I18n.format("createWorld.customize.biomes.search.info");
         
-        this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
+        this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialBiome);
         
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);

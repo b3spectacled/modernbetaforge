@@ -4,7 +4,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
 import net.minecraft.world.World;
 
@@ -23,7 +23,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
     public AlphaChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         this(world, chunkGenerator, settings, false);
     }
@@ -31,7 +31,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
     public AlphaChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings,
+        ModernBetaGeneratorSettings settings,
         boolean isInfdev611
     ) {
         super(world, chunkGenerator, settings);

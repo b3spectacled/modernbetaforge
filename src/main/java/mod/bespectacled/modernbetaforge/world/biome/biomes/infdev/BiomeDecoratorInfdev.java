@@ -4,7 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
     
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
         int startX = startPos.getX();

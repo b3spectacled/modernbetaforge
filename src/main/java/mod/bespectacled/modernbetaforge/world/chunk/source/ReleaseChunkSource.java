@@ -14,7 +14,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +45,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     public ReleaseChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaChunkGeneratorSettings settings
+        ModernBetaGeneratorSettings settings
     ) {
         super(world, chunkGenerator, settings);
         
@@ -319,7 +319,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             // Create new world info with Customized world type,
             // so biome provider will accept custom biome sizes
             ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
-            ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions());
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions());
             
             factory.biomeSize = settings.biomeSize;
             factory.riverSize = settings.riverSize;

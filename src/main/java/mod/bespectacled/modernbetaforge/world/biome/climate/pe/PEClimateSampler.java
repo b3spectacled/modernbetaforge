@@ -5,7 +5,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ClimateChunk;
 import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.math.MathHelper;
 
 public class PEClimateSampler {
@@ -20,10 +20,10 @@ public class PEClimateSampler {
     private final double detailScale;
     
     public PEClimateSampler(long seed) {
-        this(seed, ModernBetaChunkGeneratorSettings.build());
+        this(seed, ModernBetaGeneratorSettings.build());
     }
     
-    public PEClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+    public PEClimateSampler(long seed, ModernBetaGeneratorSettings settings) {
         this.tempOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 9871L), 4, true);
         this.rainOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 39811L), 4, true);
         this.detailOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 543321L), 2, true);

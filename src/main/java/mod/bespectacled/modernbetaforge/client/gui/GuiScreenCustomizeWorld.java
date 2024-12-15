@@ -21,10 +21,10 @@ import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -78,8 +78,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private final Predicate<String> intBiomeSizeFilter;
     private final Predicate<String> intRiverSizeFilter;
     
-    private final ModernBetaChunkGeneratorSettings.Factory defaultSettings;
-    private ModernBetaChunkGeneratorSettings.Factory settings;
+    private final ModernBetaGeneratorSettings.Factory defaultSettings;
+    private ModernBetaGeneratorSettings.Factory settings;
     
     private final Random random;
     
@@ -157,7 +157,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
-        this.defaultSettings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
+        this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)guiScreen;
         
@@ -1450,8 +1450,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
-    public ModernBetaChunkGeneratorSettings.Factory getDefaultSettings() {
-        return ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(this.defaultSettings.toString());
+    public ModernBetaGeneratorSettings.Factory getDefaultSettings() {
+        return ModernBetaGeneratorSettings.Factory.jsonToFactory(this.defaultSettings.toString());
     }
 
     public String getSettingsString() {
@@ -1460,9 +1460,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void loadValues(String string) {
         if (string != null && !string.isEmpty()) {
-            this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(string);
+            this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(string);
         } else {
-            this.settings = new ModernBetaChunkGeneratorSettings.Factory();
+            this.settings = new ModernBetaGeneratorSettings.Factory();
         }
     }
 
@@ -1719,7 +1719,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private void restoreDefaults() {
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
-        this.settings = ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(defaultPreset);
+        this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         
         this.createPagedList();
         this.setSettingsModified(false);

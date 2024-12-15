@@ -11,7 +11,7 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
 import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PEClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PESkyClimateSampler;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -23,9 +23,9 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
     public PEBiomeSource(WorldInfo worldInfo) {
         super(worldInfo);
         
-        ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaChunkGeneratorSettings.build();
+        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
+            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
+            ModernBetaGeneratorSettings.build();
         
         this.climateMap = new ClimateMap(settings);
         this.climateSampler = new PEClimateSampler(worldInfo.getSeed(), settings);

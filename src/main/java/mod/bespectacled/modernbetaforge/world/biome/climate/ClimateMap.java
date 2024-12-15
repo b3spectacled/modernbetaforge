@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 
 public class ClimateMap {
@@ -14,7 +14,7 @@ public class ClimateMap {
     private final ClimateMapping[] climateTable;
     private final boolean modifiedMap;
     
-    public ClimateMap(ModernBetaChunkGeneratorSettings settings) {
+    public ClimateMap(ModernBetaGeneratorSettings settings) {
         this.climateMap = new LinkedHashMap<>();
         this.climateTable = new ClimateMapping[4096];
         
@@ -35,7 +35,7 @@ public class ClimateMap {
         return this.modifiedMap;
     }
     
-    private void populateBiomeMap(ModernBetaChunkGeneratorSettings settings) {
+    private void populateBiomeMap(ModernBetaGeneratorSettings settings) {
         ClimateMapping iceDesert = new ClimateMapping(
             settings.iceDesertBiomeBase,
             settings.iceDesertBiomeOcean,

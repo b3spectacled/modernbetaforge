@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.source;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -12,9 +12,9 @@ public class SingleBiomeSource extends BiomeSource {
     public SingleBiomeSource(WorldInfo worldInfo) {
         super(worldInfo);
         
-        ModernBetaChunkGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaChunkGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaChunkGeneratorSettings.build();
+        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
+            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
+            ModernBetaGeneratorSettings.build();
         
         this.biome = BiomeUtil.getBiome(settings.singleBiome, "singleBiome");
     }

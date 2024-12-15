@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
@@ -47,7 +47,7 @@ public abstract class MixinWorldEntitySpawner {
     private static List<SpawnListEntry> injectPerformWorldGenSpawning(List<SpawnListEntry> spawnEntries) {
         if (modernBeta_world != null && modernBeta_biome != null) {
             if (modernBeta_world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType) {
-                ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(modernBeta_world.getWorldInfo().getGeneratorOptions());         
+                ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(modernBeta_world.getWorldInfo().getGeneratorOptions());         
                 return ModernBetaBiomeMobs.modifySpawnList(new ArrayList<>(spawnEntries), EnumCreatureType.CREATURE, modernBeta_biome, settings);
             }
         }

@@ -5,7 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -41,7 +41,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
     }
     
     @Override
-    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaChunkGeneratorSettings settings) {
+    public WorldGenAbstractTree getRandomTreeFeature(Random random, ModernBetaGeneratorSettings settings) {
         if (!settings.useJungleTrees)
             return this.getRandomTreeFeature(random);
         
@@ -60,7 +60,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
     public void decorate(World world, Random random, BlockPos startPos) {
         super.decorate(world, random, startPos);
         
-        ModernBetaChunkGeneratorSettings settings = ModernBetaChunkGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
         ChunkPos chunkPos = new ChunkPos(startPos);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         

@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.chunk;
+package mod.bespectacled.modernbetaforge.world.setting;
 
 import java.lang.reflect.Type;
 
@@ -24,7 +24,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 
-public class ModernBetaChunkGeneratorSettings {
+public class ModernBetaGeneratorSettings {
     public final String chunkSource;
     public final String biomeSource;
     public final String surfaceBuilder;
@@ -237,7 +237,7 @@ public class ModernBetaChunkGeneratorSettings {
     public final String tundraBiomeOcean;
     public final String tundraBiomeBeach;
     
-    private ModernBetaChunkGeneratorSettings(Factory factory) {
+    private ModernBetaGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
         this.surfaceBuilder = factory.surfaceBuilder;
@@ -1342,8 +1342,8 @@ public class ModernBetaChunkGeneratorSettings {
             return hashCode;
         }
         
-        private ModernBetaChunkGeneratorSettings build() {
-            return new ModernBetaChunkGeneratorSettings(this);
+        private ModernBetaGeneratorSettings build() {
+            return new ModernBetaGeneratorSettings(this);
         }
         
         static {
@@ -1798,11 +1798,11 @@ public class ModernBetaChunkGeneratorSettings {
         }
     }
     
-    public static ModernBetaChunkGeneratorSettings build() {
-        return new ModernBetaChunkGeneratorSettings.Factory().build();
+    public static ModernBetaGeneratorSettings build() {
+        return new ModernBetaGeneratorSettings.Factory().build();
     }
     
-    public static ModernBetaChunkGeneratorSettings build(String generatorSettings) {
-        return ModernBetaChunkGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
+    public static ModernBetaGeneratorSettings build(String generatorSettings) {
+        return ModernBetaGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
     }
 }

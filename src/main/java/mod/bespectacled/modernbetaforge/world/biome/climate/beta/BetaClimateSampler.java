@@ -6,7 +6,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ClimateChunk;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.math.MathHelper;
 
 public class BetaClimateSampler {
@@ -21,10 +21,10 @@ public class BetaClimateSampler {
     private final double detailScale;
     
     public BetaClimateSampler(long seed) {
-        this(seed, ModernBetaChunkGeneratorSettings.build());
+        this(seed, ModernBetaGeneratorSettings.build());
     }
     
-    public BetaClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+    public BetaClimateSampler(long seed, ModernBetaGeneratorSettings settings) {
         this.tempOctaveNoise = new SimplexOctaveNoise(new Random(seed * 9871L), 4);
         this.rainOctaveNoise = new SimplexOctaveNoise(new Random(seed * 39811L), 4);
         this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * 543321L), 2);

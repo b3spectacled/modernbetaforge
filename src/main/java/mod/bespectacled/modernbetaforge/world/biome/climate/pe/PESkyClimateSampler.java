@@ -4,7 +4,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.SkyClimateChunk;
 import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class PESkyClimateSampler {
     private final PerlinOctaveNoise tempOctaveNoise;
@@ -14,10 +14,10 @@ public class PESkyClimateSampler {
     private final double tempScale;
     
     public PESkyClimateSampler(long seed) {
-        this(seed, ModernBetaChunkGeneratorSettings.build());
+        this(seed, ModernBetaGeneratorSettings.build());
     }
     
-    public PESkyClimateSampler(long seed, ModernBetaChunkGeneratorSettings settings) {
+    public PESkyClimateSampler(long seed, ModernBetaGeneratorSettings settings) {
         this.tempOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 9871L), 4, true);
         
         this.skyClimateCache = new ChunkCache<>(

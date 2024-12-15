@@ -5,6 +5,7 @@ import java.util.List;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,9 +21,9 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         
-        ModernBetaChunkGeneratorSettings settings = generatorOptions != null ?
-            ModernBetaChunkGeneratorSettings.build(generatorOptions) :
-            ModernBetaChunkGeneratorSettings.build();
+        ModernBetaGeneratorSettings settings = generatorOptions != null ?
+            ModernBetaGeneratorSettings.build(generatorOptions) :
+            ModernBetaGeneratorSettings.build();
         
         this.chunkSource = ModernBetaRegistries.CHUNK
             .get(settings.chunkSource)

@@ -17,7 +17,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -29,7 +29,7 @@ public abstract class SurfaceBuilder {
     
     private final World world;
     private final ChunkSource chunkSource;
-    private final ModernBetaChunkGeneratorSettings settings;
+    private final ModernBetaGeneratorSettings settings;
     private final SimplexOctaveNoise vanillaSurfaceOctaveNoise;
     private final PerlinOctaveNoise defaultBeachOctaveNoise;
     private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
@@ -40,7 +40,7 @@ public abstract class SurfaceBuilder {
         ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
-    public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaChunkGeneratorSettings settings) {
+    public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
         
