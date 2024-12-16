@@ -17,7 +17,7 @@ import net.minecraft.world.storage.WorldInfo;
 public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK;
     public static final ModernBetaRegistry<BiomeSourceCreator> BIOME;
-    public static final ModernBetaRegistry<NoiseColumnSampler> NOISE;
+    public static final ModernBetaRegistry<NoiseSamplerCreator> NOISE;
     public static final ModernBetaRegistry<ModernBetaNoiseSettings> NOISE_SETTING;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
     public static final ModernBetaRegistry<CaveCarverCreator> CARVER;

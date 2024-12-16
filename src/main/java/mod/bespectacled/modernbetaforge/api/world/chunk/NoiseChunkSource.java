@@ -361,7 +361,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         noiseSources.add(this.createInitialNoiseSource(chunkX, chunkZ));
         ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
             new NoiseSource(
-                sampler,
+                sampler.apply(this.world, this, this.settings),
                 this.noiseSizeX,
                 this.noiseSizeY,
                 this.noiseSizeZ
