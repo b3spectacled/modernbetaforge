@@ -9,6 +9,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class BiomeUtil {
+    public static Biome getBiome(String biomeId) {
+        return getBiome(biomeId, "");
+    }
+    
     public static Biome getBiome(String biomeId, String context) {
         Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeId));
         

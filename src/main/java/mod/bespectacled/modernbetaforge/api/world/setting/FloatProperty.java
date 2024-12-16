@@ -7,12 +7,12 @@ import com.google.common.primitives.Floats;
 import net.minecraft.util.math.MathHelper;
 
 public class FloatProperty extends RangedProperty<Float> {
-    public FloatProperty(float value, float minValue, float maxValue) {
-        super(value, minValue, maxValue);
+    public FloatProperty(float value, float minValue, float maxValue, PropertyGuiType guiType) {
+        super(value, minValue, maxValue, guiType);
     }
     
     public FloatProperty(float value) {
-        this(value, Float.MIN_VALUE, Float.MAX_VALUE);
+        this(value, Float.MIN_VALUE, Float.MAX_VALUE, PropertyGuiType.FIELD);
     }
     
     @Override

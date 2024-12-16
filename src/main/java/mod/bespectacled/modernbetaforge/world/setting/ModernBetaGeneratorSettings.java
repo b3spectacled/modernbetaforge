@@ -23,6 +23,7 @@ import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.Property;
+import mod.bespectacled.modernbetaforge.api.world.setting.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -920,11 +921,21 @@ public class ModernBetaGeneratorSettings {
                     
                 } else if (property instanceof FloatProperty) {
                     FloatProperty floatProperty = (FloatProperty)property;
-                    this.customProperties.put(key, new FloatProperty(floatProperty.getValue(), floatProperty.getMinValue(), floatProperty.getMaxValue()));
+                    float value = floatProperty.getValue();
+                    float minValue = floatProperty.getMinValue();
+                    float maxValue = floatProperty.getMaxValue();
+                    PropertyGuiType type = floatProperty.getGuiType();
+                    
+                    this.customProperties.put(key, new FloatProperty(value, minValue, maxValue, type));
                     
                 } else if (property instanceof IntProperty) {
                     IntProperty intProperty = (IntProperty)property;
-                    this.customProperties.put(key, new IntProperty(intProperty.getValue(), intProperty.getMinValue(), intProperty.getMaxValue()));
+                    int value = intProperty.getValue();
+                    int minValue = intProperty.getMinValue();
+                    int maxValue = intProperty.getMaxValue();
+                    PropertyGuiType type = intProperty.getGuiType();
+                    
+                    this.customProperties.put(key, new IntProperty(value, minValue, maxValue, type));
                     
                 } else if (property instanceof StringProperty) {
                     StringProperty stringProperty = (StringProperty)property;
@@ -1624,12 +1635,22 @@ public class ModernBetaGeneratorSettings {
                         factory.customProperties.put(key, new BooleanProperty(value));
                         
                     } else if (property instanceof FloatProperty && JsonUtils.hasField(jsonObject, key)) {
-                        float value = JsonUtils.getFloat(jsonObject, key, ((FloatProperty)property).getValue());
-                        factory.customProperties.put(key, new FloatProperty(value));
+                        FloatProperty floatProperty = (FloatProperty)property;
+                        float value = JsonUtils.getFloat(jsonObject, key, floatProperty.getValue());
+                        float minValue = floatProperty.getMinValue();
+                        float maxValue = floatProperty.getMaxValue();
+                        PropertyGuiType guiType = floatProperty.getGuiType();
+                        
+                        factory.customProperties.put(key, new FloatProperty(value, minValue, maxValue, guiType));
                         
                     } else if (property instanceof IntProperty && JsonUtils.hasField(jsonObject, key)) {
-                        int value = JsonUtils.getInt(jsonObject, key, ((IntProperty)property).getValue());
-                        factory.customProperties.put(key, new IntProperty(value));
+                        IntProperty intProperty = (IntProperty)property;
+                        int value = JsonUtils.getInt(jsonObject, key, intProperty.getValue());
+                        int minValue = intProperty.getMinValue();
+                        int maxValue = intProperty.getMaxValue();
+                        PropertyGuiType guiType = intProperty.getGuiType();
+                        
+                        factory.customProperties.put(key, new IntProperty(value, minValue, maxValue, guiType));
                         
                     } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key)) {
                         String value = JsonUtils.getString(jsonObject, key, ((StringProperty)property).getValue());

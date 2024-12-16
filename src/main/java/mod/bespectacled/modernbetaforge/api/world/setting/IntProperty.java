@@ -6,12 +6,12 @@ import com.google.common.primitives.Ints;
 import net.minecraft.util.math.MathHelper;
 
 public class IntProperty extends RangedProperty<Integer> {
-    public IntProperty(int value) {
-        this(value, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public IntProperty(int value, int minValue, int maxValue, PropertyGuiType guiType) {
+        super(value, minValue, maxValue, guiType);
     }
     
-    public IntProperty(int value, int minValue, int maxValue) {
-        super(value, minValue, maxValue);
+    public IntProperty(int value) {
+        this(value, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);
     }
 
     @Override

@@ -22,6 +22,7 @@ import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.Property;
+import mod.bespectacled.modernbetaforge.api.world.setting.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -827,13 +828,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             String key = this.customIds.get(entry);
             Property<?> property = this.settings.customProperties.get(key);
             
-            if (property instanceof FloatProperty) {
+            if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.FIELD) {
                 FloatProperty floatProperty = (FloatProperty)property;
                 
                 floatProperty.setValue(MathHelper.clamp(entryValue, floatProperty.getMinValue(), floatProperty.getMaxValue()));
                 newEntryValue = floatProperty.getValue();
                 
-            } else if (property instanceof IntProperty) {
+            } else if (property instanceof IntProperty && ((IntProperty)property).getGuiType() == PropertyGuiType.FIELD) {
                 IntProperty intProperty = (IntProperty)property;
                 
                 intProperty.setValue((int)MathHelper.clamp(entryValue, intProperty.getMinValue(), intProperty.getMaxValue()));
@@ -1418,13 +1419,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> settingsProperty = this.settings.customProperties.get(key);
+            Property<?> property = this.settings.customProperties.get(key);
             
-            if (settingsProperty instanceof ListProperty) {
-                ListProperty listProperty = (ListProperty)settingsProperty;
+            if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.SLIDER) {
+                FloatProperty floatProperty = (FloatProperty)property;
+            
+                floatProperty.setValue(entryValue);
+            } else if (property instanceof IntProperty && ((IntProperty)property).getGuiType() == PropertyGuiType.SLIDER) {
+                IntProperty intProperty = (IntProperty)property;
+            
+                intProperty.setValue((int)entryValue);
+            } else if (property instanceof ListProperty) {
+                ListProperty listProperty = (ListProperty)property;
                 
                 listProperty.setValue(listProperty.getValues()[(int)entryValue]);
-            } 
+            }
         }
         
         if (entry >= GuiIdentifiers.PG3_S_MAIN_NS_X && entry <= GuiIdentifiers.PG3_S_DETL_SCL) {
@@ -1639,39 +1648,63 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int ndx = 0;
         for (String key : ModernBetaRegistries.PROPERTY.getKeys()) {
             Property<?> settingsProperty = this.settings.customProperties.get(key);
-            Property<?> registryProperty = ModernBetaRegistries.PROPERTY.get(key);
             
             if (settingsProperty instanceof BooleanProperty) {
-                BooleanProperty settingsBoolean = (BooleanProperty)settingsProperty;
+                BooleanProperty booleanProperty = (BooleanProperty)settingsProperty;
                 
                 pageList[ndx++] = this.createGuiLabel(this.customId++, key);
-                pageList[ndx++] = this.createGuiButton(this.customId, "enabled", settingsBoolean.getValue());
+                pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
                 
             } else if (settingsProperty instanceof FloatProperty) {
-                FloatProperty settingsFloat = (FloatProperty)settingsProperty;
-                FloatProperty registryFloat = (FloatProperty)registryProperty;
-                String formattedValue = String.format("%2.3f", settingsFloat.getValue());
+                FloatProperty floatProperty = (FloatProperty)settingsProperty;
+                String formattedValue = String.format("%2.3f", floatProperty.getValue());
                 
                 pageList[ndx++] = this.createGuiLabel(this.customId++, key);
-                pageList[ndx++] = this.createGuiField(this.customId, formattedValue, registryFloat.getStringPredicate());
+                
+                switch(floatProperty.getGuiType()) {
+                    case FIELD:
+                        pageList[ndx++] = this.createGuiField(this.customId, formattedValue, floatProperty.getStringPredicate());
+                        break;
+                    case SLIDER:
+                        pageList[ndx++] = this.createGuiSlider(
+                            this.customId,
+                            "entry",
+                            floatProperty.getMinValue(),
+                            floatProperty.getMaxValue(), 
+                            floatProperty.getValue()
+                        );
+                        break;
+                }
                 
             } else if (settingsProperty instanceof IntProperty) {
-                IntProperty settingsInt = (IntProperty)settingsProperty;
-                IntProperty registryInt = (IntProperty)registryProperty;
-                String formattedValue = String.format("%d", settingsInt.getValue());
+                IntProperty intProperty = (IntProperty)settingsProperty;
+                String formattedValue = String.format("%d", intProperty.getValue());
                 
                 pageList[ndx++] = this.createGuiLabel(this.customId++, key);
-                pageList[ndx++] = this.createGuiField(this.customId, formattedValue, registryInt.getStringPredicate());
+                
+                switch(intProperty.getGuiType()) {
+                    case FIELD:
+                        pageList[ndx++] = this.createGuiField(this.customId, formattedValue, intProperty.getStringPredicate());
+                        break;
+                    case SLIDER:
+                        pageList[ndx++] = this.createGuiSlider(
+                            this.customId,
+                            "entry",
+                            intProperty.getMinValue(),
+                            intProperty.getMaxValue(), 
+                            intProperty.getValue()
+                        );
+                        break;
+                }
                 
             } else if (settingsProperty instanceof ListProperty) {
-                ListProperty settingsList = (ListProperty)settingsProperty;
-                ListProperty registryList = (ListProperty)registryProperty;
-                int listNdx = registryList.indexOf(settingsList.getValue());
+                ListProperty listProperty = (ListProperty)settingsProperty;
+                int listNdx = listProperty.indexOf(listProperty.getValue());
                 
                 if (listNdx == -1) listNdx = 0;
                 
                 pageList[ndx++] = this.createGuiLabel(this.customId++, key);
-                pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, registryList.getValues().length - 1, listNdx);
+                pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
             
             } else if (settingsProperty instanceof StringProperty) {
                 StringProperty stringProperty = (StringProperty)settingsProperty;
