@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -462,7 +463,7 @@ public class ModernBetaGeneratorSettings {
         this.tundraBiomeOcean = factory.tundraBiomeOcean;
         this.tundraBiomeBeach = factory.tundraBiomeBeach;
         
-        this.customProperties = factory.customProperties;
+        this.customProperties = ImmutableMap.copyOf(factory.customProperties);
     }
     
     public static class Factory {
