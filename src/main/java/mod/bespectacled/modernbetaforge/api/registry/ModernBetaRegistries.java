@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.api.world.setting.Property;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
@@ -21,6 +22,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
     public static final ModernBetaRegistry<CaveCarverCreator> CARVER;
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK;
+    public static final ModernBetaRegistry<Property<?>> PROPERTY;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     
     static {
@@ -31,6 +33,7 @@ public class ModernBetaRegistries {
         SURFACE = new ModernBetaRegistry<>("SURFACE");
         CARVER = new ModernBetaRegistry<>("CARVER");
         BLOCK = new ModernBetaRegistry<>("BLOCK");
+        PROPERTY = new ModernBetaRegistry<>("PROPERTY");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
     }
     

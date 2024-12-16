@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.registry;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
@@ -87,6 +88,10 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerBlockSources() { }
+    
+    public static void registerProperties() {
+        ModernBetaRegistries.PROPERTY.register("newTestProperty", new IntProperty(4));
+    }
     
     public static void registerDataFixes() {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.DESERT_BIOMES, new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes));

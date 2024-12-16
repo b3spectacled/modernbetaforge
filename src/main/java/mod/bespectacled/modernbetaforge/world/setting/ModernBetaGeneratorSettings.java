@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.setting;
 
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 
@@ -15,6 +17,12 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.Property;
+import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
@@ -237,6 +245,8 @@ public class ModernBetaGeneratorSettings {
     public final String tundraBiomeOcean;
     public final String tundraBiomeBeach;
     
+    public final Map<String, Property<?>> customProperties;
+    
     private ModernBetaGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
         this.biomeSource = factory.biomeSource;
@@ -449,6 +459,8 @@ public class ModernBetaGeneratorSettings {
         this.tundraBiomeBase = factory.tundraBiomeBase;
         this.tundraBiomeOcean = factory.tundraBiomeOcean;
         this.tundraBiomeBeach = factory.tundraBiomeBeach;
+        
+        this.customProperties = factory.customProperties;
     }
     
     public static class Factory {
@@ -665,6 +677,8 @@ public class ModernBetaGeneratorSettings {
         public String tundraBiomeBase;
         public String tundraBiomeOcean;
         public String tundraBiomeBeach;
+        
+        public Map<String, Property<?>> customProperties;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -894,6 +908,29 @@ public class ModernBetaGeneratorSettings {
             this.tundraBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
             this.tundraBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
             this.tundraBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
+            
+            this.customProperties = new LinkedHashMap<>();
+            ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
+                Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
+                
+                if (property instanceof BooleanProperty) {
+                    BooleanProperty booleanProperty = (BooleanProperty)property;
+                    this.customProperties.put(key, new BooleanProperty(booleanProperty.getValue()));
+                    
+                } else if (property instanceof FloatProperty) {
+                    FloatProperty floatProperty = (FloatProperty)property;
+                    this.customProperties.put(key, new FloatProperty(floatProperty.getValue(), floatProperty.getMinValue(), floatProperty.getMaxValue()));
+                    
+                } else if (property instanceof IntProperty) {
+                    IntProperty intProperty = (IntProperty)property;
+                    this.customProperties.put(key, new FloatProperty(intProperty.getValue(), intProperty.getMinValue(), intProperty.getMaxValue()));
+                    
+                } else if (property instanceof StringProperty) {
+                    StringProperty stringProperty = (StringProperty)property;
+                    this.customProperties.put(key, new StringProperty(stringProperty.getValue()));
+                    
+                }
+            });
         }
 
         @Override
@@ -1120,7 +1157,9 @@ public class ModernBetaGeneratorSettings {
                 
                 this.tundraBiomeBase.equals(factory.tundraBiomeBase) &&
                 this.tundraBiomeOcean.equals(factory.tundraBiomeOcean) &&
-                this.tundraBiomeBeach.equals(factory.tundraBiomeBeach)
+                this.tundraBiomeBeach.equals(factory.tundraBiomeBeach) &&
+                
+                this.customProperties.equals(factory.customProperties)
                 
                 ;
         }
@@ -1338,6 +1377,8 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.tundraBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.tundraBiomeOcean.hashCode();
             hashCode = 31 * hashCode + this.tundraBiomeBeach.hashCode();
+            
+            hashCode = 31 * hashCode + this.customProperties.hashCode();
             
             return hashCode;
         }
@@ -1570,6 +1611,28 @@ public class ModernBetaGeneratorSettings {
                 factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
                 factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
                 
+                ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
+                    Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
+                    
+                    if (property instanceof BooleanProperty && JsonUtils.hasField(jsonObject, key)) {
+                        boolean value = JsonUtils.getBoolean(jsonObject, key, ((BooleanProperty)property).getValue());
+                        factory.customProperties.put(key, new BooleanProperty(value));
+                        
+                    } else if (property instanceof FloatProperty && JsonUtils.hasField(jsonObject, key)) {
+                        float value = JsonUtils.getFloat(jsonObject, key, ((FloatProperty)property).getValue());
+                        factory.customProperties.put(key, new FloatProperty(value));
+                        
+                    } else if (property instanceof IntProperty && JsonUtils.hasField(jsonObject, key)) {
+                        int value = JsonUtils.getInt(jsonObject, key, ((IntProperty)property).getValue());
+                        factory.customProperties.put(key, new IntProperty(value));
+                        
+                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key)) {
+                        String value = JsonUtils.getString(jsonObject, key, ((StringProperty)property).getValue());
+                        factory.customProperties.put(key, new StringProperty(value));
+                        
+                    }
+                });
+                
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, "[Modern Beta] Failed to deserialize generator settings!");
                 ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
@@ -1793,6 +1856,24 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
+            
+            factory.customProperties.keySet().forEach(key -> {
+                Property<?> property = factory.customProperties.get(key);
+                
+                if (property instanceof BooleanProperty) {
+                    jsonObject.addProperty(key, ((BooleanProperty)property).getValue());
+                    
+                } else if (property instanceof FloatProperty) {
+                    jsonObject.addProperty(key, ((FloatProperty)property).getValue());
+                    
+                } else if (property instanceof IntProperty) {
+                    jsonObject.addProperty(key, ((IntProperty)property).getValue());
+                    
+                } else if (property instanceof StringProperty) {
+                    jsonObject.addProperty(key, ((StringProperty)property).getValue());
+                    
+                }
+            });
             
             return jsonObject;
         }

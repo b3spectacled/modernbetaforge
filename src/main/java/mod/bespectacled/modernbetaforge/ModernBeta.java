@@ -57,7 +57,7 @@ public class ModernBeta {
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event)  {
+    public void init(FMLInitializationEvent event) {
         ModernBetaWorldType.register();
         
         ModernBetaBiomeStructures.registerStructures();
@@ -70,6 +70,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
+        ModernBetaBuiltInRegistries.registerProperties();
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();
