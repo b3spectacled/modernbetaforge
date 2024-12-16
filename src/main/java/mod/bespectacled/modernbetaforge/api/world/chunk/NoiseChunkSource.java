@@ -304,7 +304,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     private NoiseSource createInitialNoiseSource(int chunkX, int chunkZ) {
         NoiseSource noiseSource = new NoiseSource(
-            (buffer, startX, startZ, localX, localZ, sizeX, sizeZ, sizeY, settings) -> this.sampleNoiseColumn(
+            (buffer, startX, startZ, localX, localZ, sizeX, sizeZ, sizeY) -> this.sampleNoiseColumn(
                 buffer,
                 startX,
                 startZ,

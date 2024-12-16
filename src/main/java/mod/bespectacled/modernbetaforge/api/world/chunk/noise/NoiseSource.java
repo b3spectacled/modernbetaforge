@@ -48,7 +48,7 @@ public class NoiseSource {
     }
     
     public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, ModernBetaGeneratorSettings settings) {
-        this.noise = this.sampleNoise(startNoiseX, startNoiseZ, settings);
+        this.noise = this.sampleNoise(startNoiseX, startNoiseZ);
         
         if (this.noise.length != this.noiseSize)
             throw new IllegalStateException("[Modern Beta] Noise array length is invalid!");
@@ -86,7 +86,7 @@ public class NoiseSource {
         return this.density;
     }
 
-    private double[] sampleNoise(int startNoiseX, int startNoiseZ, ModernBetaGeneratorSettings settings) {
+    private double[] sampleNoise(int startNoiseX, int startNoiseZ) {
         double[] buffer = new double[this.noiseResY];
         double[] noise = new double[this.noiseSize];
         
@@ -101,8 +101,7 @@ public class NoiseSource {
                     localNoiseZ,
                     this.noiseResX - 1,
                     this.noiseResZ - 1,
-                    this.noiseResY - 1,
-                    settings
+                    this.noiseResY - 1
                 );
                 
                 for (int nY = 0; nY < this.noiseResY; ++nY) {
@@ -124,8 +123,7 @@ public class NoiseSource {
             int localNoiseZ,
             int noiseSizeX,
             int noiseSizeZ,
-            int noiseSizeY,
-            ModernBetaGeneratorSettings settings
+            int noiseSizeY
         );
     }
 }
