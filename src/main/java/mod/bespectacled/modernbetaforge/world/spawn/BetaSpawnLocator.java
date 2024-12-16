@@ -21,7 +21,8 @@ public class BetaSpawnLocator implements SpawnLocator {
         
         NoiseChunkSource noiseChunkSource = (NoiseChunkSource)chunkSource;
         PerlinOctaveNoise beachOctaveNoise = noiseChunkSource.getBeachOctaveNoise().get();
-        
+
+        boolean failed = false;
         int x = 0;
         int z = 0;
         int attempts = 0;
@@ -30,8 +31,10 @@ public class BetaSpawnLocator implements SpawnLocator {
         
         while(!this.isSandAt(x, z, chunkSource, biomeSource, beachOctaveNoise)) {
             if (attempts > 10000) {
+                failed = true;
                 x = 0;
                 z = 0;
+                
                 break;
             }
             
@@ -41,7 +44,7 @@ public class BetaSpawnLocator implements SpawnLocator {
             attempts++;
         }
         
-        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR) + 1;
+        int y = chunkSource.getHeight(x, z, failed ? HeightmapChunk.Type.OCEAN : HeightmapChunk.Type.FLOOR) + 1;
         
         return new BlockPos(x, y, z);
     }

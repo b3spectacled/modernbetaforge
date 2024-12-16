@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -145,7 +144,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         for (GuiCustomizePreset p : ModernBetaClientRegistries.PRESET.getEntries()) {
             name = I18n.format(p.name);
             desc = I18n.format(p.desc);
-            texture = ModernBeta.createId(p.texture);
+            texture = new ResourceLocation(p.modId, p.texture);
             factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(p.settings);
             
             presets.add(new Info(name, desc, texture, factory));
