@@ -2,7 +2,11 @@ package mod.bespectacled.modernbetaforge.registry;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
@@ -90,7 +94,11 @@ public class ModernBetaBuiltInRegistries {
     public static void registerBlockSources() { }
     
     public static void registerProperties() {
-        ModernBetaRegistries.PROPERTY.register("newTestProperty", new IntProperty(4));
+        ModernBetaRegistries.PROPERTY.register("booleanProp", new BooleanProperty(true));
+        ModernBetaRegistries.PROPERTY.register("intProp", new IntProperty(4, -5, 500));
+        ModernBetaRegistries.PROPERTY.register("floatProp", new FloatProperty(13.0f, 0.0f, 500.0f));
+        ModernBetaRegistries.PROPERTY.register("stringProp", new StringProperty("test"));
+        ModernBetaRegistries.PROPERTY.register("listProp", new ListProperty("test1", new String[] {"test0", "test1", "test2"}));
     }
     
     public static void registerDataFixes() {

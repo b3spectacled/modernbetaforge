@@ -21,6 +21,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.Property;
 import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
@@ -923,11 +924,15 @@ public class ModernBetaGeneratorSettings {
                     
                 } else if (property instanceof IntProperty) {
                     IntProperty intProperty = (IntProperty)property;
-                    this.customProperties.put(key, new FloatProperty(intProperty.getValue(), intProperty.getMinValue(), intProperty.getMaxValue()));
+                    this.customProperties.put(key, new IntProperty(intProperty.getValue(), intProperty.getMinValue(), intProperty.getMaxValue()));
                     
                 } else if (property instanceof StringProperty) {
                     StringProperty stringProperty = (StringProperty)property;
                     this.customProperties.put(key, new StringProperty(stringProperty.getValue()));
+                    
+                } else if (property instanceof ListProperty) {
+                    ListProperty listProperty = (ListProperty)property;
+                    this.customProperties.put(key, new ListProperty(listProperty.getValue(), listProperty.getValues()));
                     
                 }
             });
@@ -1630,6 +1635,10 @@ public class ModernBetaGeneratorSettings {
                         String value = JsonUtils.getString(jsonObject, key, ((StringProperty)property).getValue());
                         factory.customProperties.put(key, new StringProperty(value));
                         
+                    } else if (property instanceof ListProperty && JsonUtils.hasField(jsonObject, key)) {
+                        String value = JsonUtils.getString(jsonObject, key, ((ListProperty)property).getValue());
+                        factory.customProperties.put(key, new ListProperty(value, ((ListProperty)property).getValues()));
+                        
                     }
                 });
                 
@@ -1871,6 +1880,9 @@ public class ModernBetaGeneratorSettings {
                     
                 } else if (property instanceof StringProperty) {
                     jsonObject.addProperty(key, ((StringProperty)property).getValue());
+                    
+                } else if (property instanceof ListProperty) {
+                    jsonObject.addProperty(key, ((ListProperty)property).getValue());
                     
                 }
             });

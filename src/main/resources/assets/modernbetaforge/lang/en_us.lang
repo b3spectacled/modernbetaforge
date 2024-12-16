@@ -9,10 +9,13 @@ createWorld.customize.custom.nextPage=>
 createWorld.customize.custom.prevPage=<
 createWorld.customize.custom.lastPage=>>
 createWorld.customize.custom.firstPage=<<
+createWorld.customize.custom.enabled=Enabled
+createWorld.customize.custom.entry=Entry
 
 # Page Titles
 createWorld.customize.custom.page4=Beta/PE Climates (Expert Users Only!)
 createWorld.customize.custom.page5=Biome Feature Settings
+createWorld.customize.custom.page6=Custom Settings
 
 # Page Labels
 createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
@@ -225,3 +228,10 @@ modernbetaforge.general.visualoptions.usecustomcloudheight=Custom Cloud Height
 modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Temperature Gradient
 
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
+
+## Test Properties (Not used!)
+createWorld.customize.custom.booleanProp=Boolean Prop
+createWorld.customize.custom.intProp=Int Prop
+createWorld.customize.custom.floatProp=Float Prop
+createWorld.customize.custom.stringProp=String Prop
+createWorld.customize.custom.listProp=List Prop

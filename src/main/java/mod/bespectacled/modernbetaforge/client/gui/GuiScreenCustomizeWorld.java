@@ -3,7 +3,9 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,6 +17,12 @@ import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
+import mod.bespectacled.modernbetaforge.api.world.setting.Property;
+import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
@@ -106,7 +114,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private boolean clicked;
     private boolean randomClicked;
-
+    
+    private int customId;
+    private Map<Integer, String> customIds;
+    
     public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
         this.subtitle = "Page 1 of 6";
@@ -117,7 +128,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             I18n.format(PREFIX + "page1"),
             I18n.format(PREFIX + "page2"),
             I18n.format(PREFIX + "page3"),
-            I18n.format(PREFIX + "page4")
+            I18n.format(PREFIX + "page4"),
+            I18n.format(PREFIX + "page6")
         };
         
         this.floatFilter = new Predicate<String>() {
@@ -273,7 +285,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_MODDED_BIOMES, NbtTags.USE_MODDED_BIOMES, this.settings.useModdedBiomes),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG1_L_MODS, String.format("%s: %s", I18n.format(PREFIX + "modsLabel"), loadedModsList)),
         
-            this.createGuiLabel(GuiIdentifiers.PG1_L_MOBS, I18n.format(PREFIX + "mobSpawnLabel")),
+            this.createGuiLabel(GuiIdentifiers.PG1_L_MOBS, "mobSpawnLabel"),
             null,
             this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_CREATURE, NbtTags.SPAWN_NEW_CREATURE_MOBS, this.settings.spawnNewCreatureMobs),
             this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_MONSTER, NbtTags.SPAWN_NEW_MONSTER_MOBS, this.settings.spawnNewMonsterMobs),
@@ -420,53 +432,53 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         GuiPageButtonList.GuiListEntry[] pageList4 = {
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_SCL, I18n.format(PREFIX + "heightScale") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_STRETCH_Y, I18n.format(PREFIX + "stretchY") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
             
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel")),
             null,
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
             
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseNoiseLabel")),
             null,
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE) + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intBiomeSizeFilter),
+            this.createGuiField(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intBiomeSizeFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RIVER_SZ, I18n.format(PREFIX + "riverRarity") + ":"),
-            this.createGuiFieldNoPrefix(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intRiverSizeFilter)
+            this.createGuiField(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intRiverSizeFilter)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList5 = {
@@ -570,13 +582,19 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG5_TUND_BEACH, "", true)
         };
         
+        GuiPageButtonList.GuiListEntry[] pageList6 = this.createCustomPropertyPage();
+        
         if (ModCompat.isBoPLoaded()) {
             GuiPageButtonList.GuiListEntry[] newPageList0 = new GuiPageButtonList.GuiListEntry[pageList0.length + 2];
             System.arraycopy(pageList0, 0, newPageList0, 0, pageList0.length);
-            newPageList0[pageList0.length] = new GuiPageButtonList.GuiLabelEntry(GuiIdentifiers.PG0_L_NETHER_BOP, I18n.format(PREFIX + "netherBoPLabel"), true);
+            newPageList0[pageList0.length] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "netherBoPLabel");
             newPageList0[pageList0.length + 1] = null;
             pageList0 = newPageList0;
         }
+        
+        GuiPageButtonList.GuiListEntry[][] pages = pageList6 == null ?
+            new GuiPageButtonList.GuiListEntry[][] { pageList0, pageList1, pageList2, pageList3, pageList4, pageList5 } :
+            new GuiPageButtonList.GuiListEntry[][] { pageList0, pageList1, pageList2, pageList3, pageList4, pageList5, pageList6 };
         
         this.pageList = new GuiPageButtonList(
             this.mc,
@@ -586,14 +604,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.height - 32,
             25,
             this,
-            new GuiPageButtonList.GuiListEntry[][] {
-                pageList0,
-                pageList1,
-                pageList2,
-                pageList3,
-                pageList4,
-                pageList5
-            }
+            pages
         );
         
         this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
@@ -688,6 +699,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         GuiIdentifiers.assertOffsets();
+        
+        this.customId = 0;
+        this.customIds = new LinkedHashMap<>();
+        
         this.createPagedList();
         
         if (curPage != 0) {
@@ -712,125 +727,134 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     @Override
-    public void setEntryValue(int entry, String string) {
-        if (entry == GuiIdentifiers.PG4_F_BIOME_SZ || entry == GuiIdentifiers.PG4_F_RIVER_SZ) {
-            int entryValue = 0;
-            
-            try {
-                entryValue = Integer.parseInt(string);
-            } catch (NumberFormatException ex) {}
-            
-            int newEntryValue = 0;
-            switch(entry) {
-                case GuiIdentifiers.PG4_F_BIOME_SZ:
-                    this.settings.biomeSize = MathHelper.clamp(entryValue, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
-                    newEntryValue = this.settings.biomeSize;
-                    break;
-                case GuiIdentifiers.PG4_F_RIVER_SZ:
-                    this.settings.riverSize = MathHelper.clamp(entryValue, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
-                    newEntryValue = this.settings.riverSize;
-                    break;
-            }
-            
-            if (newEntryValue != entryValue && entryValue != 0) {
-                ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
-            }
-            
-            ((GuiSlider)this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry))).setSliderValue(newEntryValue, false);
+    public void setEntryValue(int entry, String entryString) {
+        float entryValue = 0.0f;
         
-        } else {
-            float entryValue = 0.0f;
+        try {
+            entryValue = Float.parseFloat(entryString);
             
-            try {
-                entryValue = Float.parseFloat(string);
+        } catch (NumberFormatException ex) {}
+        
+        float newEntryValue = 0.0f;
+        switch (entry) {
+            case GuiIdentifiers.PG4_F_MAIN_NS_X:
+                this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                newEntryValue = this.settings.mainNoiseScaleX;
+                break;
+            case GuiIdentifiers.PG4_F_MAIN_NS_Y:
+                this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                newEntryValue = this.settings.mainNoiseScaleY;
+                break;
+            case GuiIdentifiers.PG4_F_MAIN_NS_Z:
+                this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                newEntryValue = this.settings.mainNoiseScaleZ;
+                break;
+            case GuiIdentifiers.PG4_F_DPTH_NS_X:
+                this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
+                newEntryValue = this.settings.depthNoiseScaleX;
+                break;
+            case GuiIdentifiers.PG4_F_DPTH_NS_Z:
+                this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
+                newEntryValue = this.settings.depthNoiseScaleZ;
+                break;
+            case GuiIdentifiers.PG4_F_BASE_SIZE:
+                this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
+                newEntryValue = this.settings.baseSize;
+                break;
+            case GuiIdentifiers.PG4_F_COORD_SCL:
+                this.settings.coordinateScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
+                newEntryValue = this.settings.coordinateScale;
+                break;
+            case GuiIdentifiers.PG4_F_HEIGH_SCL:
+                this.settings.heightScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
+                newEntryValue = this.settings.heightScale;
+                break;
+            case GuiIdentifiers.PG4_F_STRETCH_Y:
+                this.settings.stretchY = MathHelper.clamp(entryValue, 0.01f, 50.0f);
+                newEntryValue = this.settings.stretchY;
+                break;
+            case GuiIdentifiers.PG4_F_UPPER_LIM:
+                this.settings.upperLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                newEntryValue = this.settings.upperLimitScale;
+                break;
+            case GuiIdentifiers.PG4_F_LOWER_LIM:
+                this.settings.lowerLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                newEntryValue = this.settings.lowerLimitScale;
+                break;
+            case GuiIdentifiers.PG4_F_HEIGH_LIM:
+                this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
+                newEntryValue = this.settings.height;
+                break;
+            case GuiIdentifiers.PG4_F_TEMP_SCL:
+                this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                newEntryValue = this.settings.tempNoiseScale;
+                break;
+            case GuiIdentifiers.PG4_F_RAIN_SCL:
+                this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                newEntryValue = this.settings.rainNoiseScale;
+                break;
+            case GuiIdentifiers.PG4_F_DETL_SCL:
+                this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                newEntryValue = this.settings.detailNoiseScale;
+                break;
+            case GuiIdentifiers.PG4_F_B_DPTH_WT:
+                this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                newEntryValue = this.settings.biomeDepthWeight;
+                break;
+            case GuiIdentifiers.PG4_F_B_DPTH_OF:
+                this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                newEntryValue = this.settings.biomeDepthOffset;
+                break;
+            case GuiIdentifiers.PG4_F_B_SCL_WT:
+                this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                newEntryValue = this.settings.biomeScaleWeight;
+                break;
+            case GuiIdentifiers.PG4_F_B_SCL_OF:
+                this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                newEntryValue = this.settings.biomeScaleOffset;
+                break;
+            case GuiIdentifiers.PG4_F_BIOME_SZ:
+                this.settings.biomeSize = (int)MathHelper.clamp(entryValue, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                newEntryValue = this.settings.biomeSize;
+                break;
+            case GuiIdentifiers.PG4_F_RIVER_SZ:
+                this.settings.riverSize = (int)MathHelper.clamp(entryValue, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
+                newEntryValue = this.settings.riverSize;
+                break;
+        }
+        
+        if (this.customIds.containsKey(entry)) {
+            String key = this.customIds.get(entry);
+            Property<?> property = this.settings.customProperties.get(key);
+            
+            if (property instanceof FloatProperty) {
+                FloatProperty floatProperty = (FloatProperty)property;
                 
-            } catch (NumberFormatException ex) {}
-            
-            float newEntryValue = 0.0f;
-            switch (entry) {
-                case GuiIdentifiers.PG4_F_MAIN_NS_X:
-                    this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                    newEntryValue = this.settings.mainNoiseScaleX;
-                    break;
-                case GuiIdentifiers.PG4_F_MAIN_NS_Y:
-                    this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                    newEntryValue = this.settings.mainNoiseScaleY;
-                    break;
-                case GuiIdentifiers.PG4_F_MAIN_NS_Z:
-                    this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                    newEntryValue = this.settings.mainNoiseScaleZ;
-                    break;
-                case GuiIdentifiers.PG4_F_DPTH_NS_X:
-                    this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
-                    newEntryValue = this.settings.depthNoiseScaleX;
-                    break;
-                case GuiIdentifiers.PG4_F_DPTH_NS_Z:
-                    this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
-                    newEntryValue = this.settings.depthNoiseScaleZ;
-                    break;
-                case GuiIdentifiers.PG4_F_BASE_SIZE:
-                    this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
-                    newEntryValue = this.settings.baseSize;
-                    break;
-                case GuiIdentifiers.PG4_F_COORD_SCL:
-                    this.settings.coordinateScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
-                    newEntryValue = this.settings.coordinateScale;
-                    break;
-                case GuiIdentifiers.PG4_F_HEIGH_SCL:
-                    this.settings.heightScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
-                    newEntryValue = this.settings.heightScale;
-                    break;
-                case GuiIdentifiers.PG4_F_STRETCH_Y:
-                    this.settings.stretchY = MathHelper.clamp(entryValue, 0.01f, 50.0f);
-                    newEntryValue = this.settings.stretchY;
-                    break;
-                case GuiIdentifiers.PG4_F_UPPER_LIM:
-                    this.settings.upperLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                    newEntryValue = this.settings.upperLimitScale;
-                    break;
-                case GuiIdentifiers.PG4_F_LOWER_LIM:
-                    this.settings.lowerLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                    newEntryValue = this.settings.lowerLimitScale;
-                    break;
-                case GuiIdentifiers.PG4_F_HEIGH_LIM:
-                    this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
-                    newEntryValue = this.settings.height;
-                    break;
-                case GuiIdentifiers.PG4_F_TEMP_SCL:
-                    this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                    newEntryValue = this.settings.tempNoiseScale;
-                    break;
-                case GuiIdentifiers.PG4_F_RAIN_SCL:
-                    this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                    newEntryValue = this.settings.rainNoiseScale;
-                    break;
-                case GuiIdentifiers.PG4_F_DETL_SCL:
-                    this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                    newEntryValue = this.settings.detailNoiseScale;
-                    break;
-                case GuiIdentifiers.PG4_F_B_DPTH_WT:
-                    this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
-                    newEntryValue = this.settings.biomeDepthWeight;
-                    break;
-                case GuiIdentifiers.PG4_F_B_DPTH_OF:
-                    this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
-                    newEntryValue = this.settings.biomeDepthOffset;
-                    break;
-                case GuiIdentifiers.PG4_F_B_SCL_WT:
-                    this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
-                    newEntryValue = this.settings.biomeScaleWeight;
-                    break;
-                case GuiIdentifiers.PG4_F_B_SCL_OF:
-                    this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
-                    newEntryValue = this.settings.biomeScaleOffset;
-                    break;
+                floatProperty.setValue(MathHelper.clamp(entryValue, floatProperty.getMinValue(), floatProperty.getMaxValue()));
+                newEntryValue = floatProperty.getValue();
+                
+            } else if (property instanceof IntProperty) {
+                IntProperty intProperty = (IntProperty)property;
+                
+                intProperty.setValue((int)MathHelper.clamp(entryValue, intProperty.getMinValue(), intProperty.getMaxValue()));
+                newEntryValue = intProperty.getValue();
+                
+            } else if (property instanceof StringProperty) {
+                StringProperty stringProperty = (StringProperty)property;
+                
+                stringProperty.setValue(entryString);
             }
-            
-            if (newEntryValue != entryValue && entryValue != 0.0f) {
-                ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
+        }
+        
+        if (newEntryValue != entryValue && entryValue != 0.0f) {
+            ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
+        }
+        
+        if (entry >= GuiIdentifiers.PG4_F_MAIN_NS_X && entry <= GuiIdentifiers.PG4_F_DETL_SCL) {
+            Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry));
+            if (gui != null) {
+                ((GuiSlider)gui).setSliderValue(newEntryValue, false);
             }
-            
-            ((GuiSlider)this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry))).setSliderValue(newEntryValue, false);
         }
         
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
@@ -1083,6 +1107,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG3_B_USE_BDS:
                 this.settings.useBiomeDepthScale = entryValue;
                 break;
+        }
+        
+        if (this.customIds.containsKey(entry)) {
+            String key = this.customIds.get(entry);
+            Property<?> property = this.settings.customProperties.get(key);
+            
+            if (property instanceof BooleanProperty) {
+                BooleanProperty booleanProperty = (BooleanProperty)property;
+                
+                booleanProperty.setValue(entryValue);
+            }
         }
         
         this.updateGuiButtons();
@@ -1381,6 +1416,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
+        if (this.customIds.containsKey(entry)) {
+            String key = this.customIds.get(entry);
+            Property<?> settingsProperty = this.settings.customProperties.get(key);
+            
+            if (settingsProperty instanceof ListProperty) {
+                ListProperty listProperty = (ListProperty)settingsProperty;
+                
+                listProperty.setValue(listProperty.getValues()[(int)entryValue]);
+            } 
+        }
+        
         if (entry >= GuiIdentifiers.PG3_S_MAIN_NS_X && entry <= GuiIdentifiers.PG3_S_DETL_SCL) {
             Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetForward(entry));
             if (gui != null) {
@@ -1580,6 +1626,67 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
+    private GuiPageButtonList.GuiListEntry[] createCustomPropertyPage() {
+        if (ModernBetaRegistries.PROPERTY.getKeys().size() == 0) {
+            return null;
+        }
+        
+        // Get total number of page list entries,
+        // and add an additional entry for float/int/string properties to accommodate label entry
+        int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size();
+        GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries * 2];
+        
+        int ndx = 0;
+        for (String key : ModernBetaRegistries.PROPERTY.getKeys()) {
+            Property<?> settingsProperty = this.settings.customProperties.get(key);
+            Property<?> registryProperty = ModernBetaRegistries.PROPERTY.get(key);
+            
+            if (settingsProperty instanceof BooleanProperty) {
+                BooleanProperty settingsBoolean = (BooleanProperty)settingsProperty;
+                
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiButton(this.customId, "enabled", settingsBoolean.getValue());
+                
+            } else if (settingsProperty instanceof FloatProperty) {
+                FloatProperty settingsFloat = (FloatProperty)settingsProperty;
+                FloatProperty registryFloat = (FloatProperty)registryProperty;
+                String formattedValue = String.format("%2.3f", settingsFloat.getValue());
+                
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiField(this.customId, formattedValue, registryFloat.getStringPredicate());
+                
+            } else if (settingsProperty instanceof IntProperty) {
+                IntProperty settingsInt = (IntProperty)settingsProperty;
+                IntProperty registryInt = (IntProperty)registryProperty;
+                String formattedValue = String.format("%d", settingsInt.getValue());
+                
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiField(this.customId, formattedValue, registryInt.getStringPredicate());
+                
+            } else if (settingsProperty instanceof ListProperty) {
+                ListProperty settingsList = (ListProperty)settingsProperty;
+                ListProperty registryList = (ListProperty)registryProperty;
+                int listNdx = registryList.indexOf(settingsList.getValue());
+                
+                if (listNdx == -1) listNdx = 0;
+                
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, registryList.getValues().length - 1, listNdx);
+            
+            } else if (settingsProperty instanceof StringProperty) {
+                StringProperty stringProperty = (StringProperty)settingsProperty;
+                
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
+                
+            }
+            
+            this.customIds.put(this.customId++, key);
+        }
+        
+        return pageList;
+    }
+    
     private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, String tag) {
         return new GuiPageButtonList.GuiLabelEntry(id, I18n.format(PREFIX + tag), true);
     }
@@ -1596,13 +1703,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return new GuiPageButtonList.GuiButtonEntry(id, I18n.format(PREFIX + tag), true, initialValue);
     }
     
-    @SuppressWarnings("unused")
-    private GuiPageButtonList.EditBoxEntry createGuiField(int id, String tag, Predicate<String> predicate) {
-        return new GuiPageButtonList.EditBoxEntry(id, I18n.format(PREFIX + tag), true, predicate);
-    }
-    
-    private GuiPageButtonList.EditBoxEntry createGuiFieldNoPrefix(int id, String tag, Predicate<String> predicate) {
-        return new GuiPageButtonList.EditBoxEntry(id, tag, true, predicate);
+    private GuiPageButtonList.EditBoxEntry createGuiField(int id, String formattedValue, Predicate<String> predicate) {
+        return new GuiPageButtonList.EditBoxEntry(id, formattedValue, true, predicate);
     }
     
     private void randomizeGuiComponent(Gui guiComponent, Set<Gui> biomeButtonComponents, Set<Gui> baseButtonComponents) {
@@ -1650,6 +1752,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private String getFormattedValue(int entry, float entryValue) {
+        if (this.customIds.containsKey(entry)) {
+            Property<?> property = this.settings.customProperties.get(this.customIds.get(entry));
+            
+            if (property instanceof FloatProperty) {
+                return String.format("%2.3f", entryValue);
+            
+            } else if (property instanceof IntProperty) {
+                return String.format("%d", (int)entryValue);
+                
+            } else if (property instanceof ListProperty) {
+                ListProperty listProperty = (ListProperty)property;
+                
+                return listProperty.getValues()[(int)entryValue];
+            }
+        }
+        
         switch (entry) {
             case GuiIdentifiers.PG3_S_MAIN_NS_X:
             case GuiIdentifiers.PG3_S_MAIN_NS_Y:
@@ -1692,10 +1810,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG4_F_B_SCL_WT:
             case GuiIdentifiers.PG4_F_B_SCL_OF:
                 return String.format("%2.3f", entryValue);
-                
-            case GuiIdentifiers.PG4_F_BIOME_SZ:
-            case GuiIdentifiers.PG4_F_RIVER_SZ:
-                return String.format("%d", entryValue);
                 
             case GuiIdentifiers.PG0_S_LEVEL_WIDTH: return String.format("%d", LEVEL_WIDTHS[(int)entryValue]);
             case GuiIdentifiers.PG0_S_LEVEL_LENGTH: return String.format("%d", LEVEL_WIDTHS[(int)entryValue]);

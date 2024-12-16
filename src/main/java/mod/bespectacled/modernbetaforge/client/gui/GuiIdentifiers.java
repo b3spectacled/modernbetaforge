@@ -383,8 +383,8 @@ public class GuiIdentifiers {
     public static final int PG5_TUND_LABL = 1613;
     
     /* Page 7 - Custom Properties */
-    public static int CUSTOM_INITIAL_ID = 5000;
-    public static int CUSTOM_ID = 5000;
+    
+    public static final int CUSTOM_INITIAL_ID = 5000;
     
     public static int offsetForward(int entry) {
         return entry + 100;
