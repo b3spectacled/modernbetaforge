@@ -700,7 +700,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         GuiIdentifiers.assertOffsets();
         
-        this.customId = 0;
+        this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
         this.customIds = new LinkedHashMap<>();
         
         this.createPagedList();
