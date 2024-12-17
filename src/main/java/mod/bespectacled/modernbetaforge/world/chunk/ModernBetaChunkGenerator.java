@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -26,11 +27,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ModernBetaGeneratorSettings.build();
         
         this.chunkSource = ModernBetaRegistries.CHUNK
-            .get(settings.chunkSource)
+            .get(new ResourceLocation(settings.chunkSource))
             .apply(world, this, settings);
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());
+        
+        DebugUtil.resetDebug(DebugUtil.SECTION_GEN_CHUNK);
     }
     
     /*

@@ -34,6 +34,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
 
 public class ModernBetaGeneratorSettings {
     public final String chunkSource;
@@ -248,7 +249,7 @@ public class ModernBetaGeneratorSettings {
     public final String tundraBiomeOcean;
     public final String tundraBiomeBeach;
     
-    private final Map<String, Property<?>> customProperties;
+    private final Map<ResourceLocation, Property<?>> customProperties;
     
     private ModernBetaGeneratorSettings(Factory factory) {
         this.chunkSource = factory.chunkSource;
@@ -467,7 +468,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public boolean getCustomBoolean(String registryName) {
-        Property<?> property = this.customProperties.get(registryName);
+        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
         
         if (property != null && property instanceof BooleanProperty) {
             return ((BooleanProperty)property).getValue();
@@ -477,7 +478,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public float getCustomFloat(String registryName) {
-        Property<?> property = this.customProperties.get(registryName);
+        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
         
         if (property != null && property instanceof FloatProperty) {
             return ((FloatProperty)property).getValue();
@@ -487,7 +488,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public int getCustomInt(String registryName) {
-        Property<?> property = this.customProperties.get(registryName);
+        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
         
         if (property != null && property instanceof IntProperty) {
             return ((IntProperty)property).getValue();
@@ -497,7 +498,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public String getCustomString(String registryName) {
-        Property<?> property = this.customProperties.get(registryName);
+        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
         
         if (property != null && property instanceof StringProperty) {
             return ((StringProperty)property).getValue();
@@ -507,7 +508,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public String getCustomListString(String registryName) {
-        Property<?> property = this.customProperties.get(registryName);
+        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
         
         if (property != null && property instanceof ListProperty) {
             return ((ListProperty)property).getValue();
@@ -731,7 +732,7 @@ public class ModernBetaGeneratorSettings {
         public String tundraBiomeOcean;
         public String tundraBiomeBeach;
         
-        public Map<String, Property<?>> customProperties;
+        public Map<ResourceLocation, Property<?>> customProperties;
         
         public static Factory jsonToFactory(String string) {
             if (string.isEmpty()) {
@@ -751,10 +752,10 @@ public class ModernBetaGeneratorSettings {
         }
         
         public Factory() {
-            this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.id;
-            this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.id;
-            this.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.id;
-            this.caveCarver = ModernBetaBuiltInTypes.Carver.BETA.id;
+            this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString();
+            this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.getRegistryString();
+            this.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.getRegistryString();
+            this.caveCarver = ModernBetaBuiltInTypes.Carver.BETA.getRegistryString();
             
             this.singleBiome = Biomes.PLAINS.getRegistryName().toString();
             
@@ -918,49 +919,49 @@ public class ModernBetaGeneratorSettings {
             
             this.useModdedBiomes = true;
             
-            this.desertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
-            this.desertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.desertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_DESERT).toString();
+            this.desertBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_DESERT).toString();
+            this.desertBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.desertBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_DESERT).toString();
             
-            this.forestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_FOREST).toString();
-            this.forestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.forestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.forestBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_FOREST).toString();
+            this.forestBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.forestBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.iceDesertBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
-            this.iceDesertBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
-            this.iceDesertBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
+            this.iceDesertBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.iceDesertBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.iceDesertBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.plainsBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_PLAINS).toString();
-            this.plainsBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.plainsBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.plainsBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_PLAINS).toString();
+            this.plainsBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.plainsBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.rainforestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_RAINFOREST).toString();
-            this.rainforestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.rainforestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.rainforestBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_RAINFOREST).toString();
+            this.rainforestBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.rainforestBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.savannaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SAVANNA).toString();
-            this.savannaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.savannaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.savannaBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SAVANNA).toString();
+            this.savannaBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.savannaBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.shrublandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SHRUBLAND).toString();
-            this.shrublandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.shrublandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.shrublandBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SHRUBLAND).toString();
+            this.shrublandBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.shrublandBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.seasonalForestBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString();
-            this.seasonalForestBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.seasonalForestBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.seasonalForestBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SEASONAL_FOREST).toString();
+            this.seasonalForestBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.seasonalForestBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.swamplandBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_SWAMPLAND).toString();
-            this.swamplandBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_OCEAN).toString();
-            this.swamplandBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_BEACH).toString();
+            this.swamplandBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SWAMPLAND).toString();
+            this.swamplandBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
+            this.swamplandBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_BEACH).toString();
             
-            this.taigaBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TAIGA).toString();
-            this.taigaBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
-            this.taigaBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
+            this.taigaBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_TAIGA).toString();
+            this.taigaBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.taigaBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
-            this.tundraBiomeBase = ModernBeta.createId(ModernBetaBiomeTags.BETA_TUNDRA).toString();
-            this.tundraBiomeOcean = ModernBeta.createId(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
-            this.tundraBiomeBeach = ModernBeta.createId(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
+            this.tundraBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_TUNDRA).toString();
+            this.tundraBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_FROZEN_OCEAN).toString();
+            this.tundraBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
             this.customProperties = new LinkedHashMap<>();
             ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
@@ -1681,34 +1682,34 @@ public class ModernBetaGeneratorSettings {
                 ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
                     Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
                     
-                    if (property instanceof BooleanProperty && JsonUtils.hasField(jsonObject, key)) {
-                        boolean value = JsonUtils.getBoolean(jsonObject, key, ((BooleanProperty)property).getValue());
+                    if (property instanceof BooleanProperty && JsonUtils.hasField(jsonObject, key.toString())) {
+                        boolean value = JsonUtils.getBoolean(jsonObject, key.toString(), ((BooleanProperty)property).getValue());
                         factory.customProperties.put(key, new BooleanProperty(value));
                         
-                    } else if (property instanceof FloatProperty && JsonUtils.hasField(jsonObject, key)) {
+                    } else if (property instanceof FloatProperty && JsonUtils.hasField(jsonObject, key.toString())) {
                         FloatProperty floatProperty = (FloatProperty)property;
-                        float value = JsonUtils.getFloat(jsonObject, key, floatProperty.getValue());
+                        float value = JsonUtils.getFloat(jsonObject, key.toString(), floatProperty.getValue());
                         float minValue = floatProperty.getMinValue();
                         float maxValue = floatProperty.getMaxValue();
                         PropertyGuiType guiType = floatProperty.getGuiType();
                         
                         factory.customProperties.put(key, new FloatProperty(value, minValue, maxValue, guiType));
                         
-                    } else if (property instanceof IntProperty && JsonUtils.hasField(jsonObject, key)) {
+                    } else if (property instanceof IntProperty && JsonUtils.hasField(jsonObject, key.toString())) {
                         IntProperty intProperty = (IntProperty)property;
-                        int value = JsonUtils.getInt(jsonObject, key, intProperty.getValue());
+                        int value = JsonUtils.getInt(jsonObject, key.toString(), intProperty.getValue());
                         int minValue = intProperty.getMinValue();
                         int maxValue = intProperty.getMaxValue();
                         PropertyGuiType guiType = intProperty.getGuiType();
                         
                         factory.customProperties.put(key, new IntProperty(value, minValue, maxValue, guiType));
                         
-                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key)) {
-                        String value = JsonUtils.getString(jsonObject, key, ((StringProperty)property).getValue());
+                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key.toString())) {
+                        String value = JsonUtils.getString(jsonObject, key.toString(), ((StringProperty)property).getValue());
                         factory.customProperties.put(key, new StringProperty(value));
                         
-                    } else if (property instanceof ListProperty && JsonUtils.hasField(jsonObject, key)) {
-                        String value = JsonUtils.getString(jsonObject, key, ((ListProperty)property).getValue());
+                    } else if (property instanceof ListProperty && JsonUtils.hasField(jsonObject, key.toString())) {
+                        String value = JsonUtils.getString(jsonObject, key.toString(), ((ListProperty)property).getValue());
                         factory.customProperties.put(key, new ListProperty(value, ((ListProperty)property).getValues()));
                         
                     }
@@ -1942,19 +1943,19 @@ public class ModernBetaGeneratorSettings {
                 Property<?> property = factory.customProperties.get(key);
                 
                 if (property instanceof BooleanProperty) {
-                    jsonObject.addProperty(key, ((BooleanProperty)property).getValue());
+                    jsonObject.addProperty(key.toString(), ((BooleanProperty)property).getValue());
                     
                 } else if (property instanceof FloatProperty) {
-                    jsonObject.addProperty(key, ((FloatProperty)property).getValue());
+                    jsonObject.addProperty(key.toString(), ((FloatProperty)property).getValue());
                     
                 } else if (property instanceof IntProperty) {
-                    jsonObject.addProperty(key, ((IntProperty)property).getValue());
+                    jsonObject.addProperty(key.toString(), ((IntProperty)property).getValue());
                     
                 } else if (property instanceof StringProperty) {
-                    jsonObject.addProperty(key, ((StringProperty)property).getValue());
+                    jsonObject.addProperty(key.toString(), ((StringProperty)property).getValue());
                     
                 } else if (property instanceof ListProperty) {
-                    jsonObject.addProperty(key, ((ListProperty)property).getValue());
+                    jsonObject.addProperty(key.toString(), ((ListProperty)property).getValue());
                     
                 }
             });

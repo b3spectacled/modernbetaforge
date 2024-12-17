@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.IFixType;
 import net.minecraft.util.datafix.IFixableData;
@@ -18,6 +19,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_2_2_2 = 1222;
     private static final int DATA_VERSION_V1_3_0_0 = 1300;
     private static final int DATA_VERSION_V1_3_1_0 = 1310;
+    private static final int DATA_VERSION_V1_4_0_0 = 1400;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -43,7 +45,7 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(
+                List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.DESERT_BIOMES,
                     DataFixTags.FOREST_BIOMES,
                     DataFixTags.ICE_DESERT_BIOMES,
@@ -75,7 +77,7 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(
+                List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.USE_SANDSTONE,
                     DataFixTags.SPAWN_WOLVES,
                     DataFixTags.SURFACE_BUILDER,
@@ -99,7 +101,7 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(
+                List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.SURFACE_SKYLANDS,
 
                     // Added in 1.3.0.0 to replace fixedBiome
@@ -121,7 +123,7 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
+                List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
                 
                 return fixGeneratorSettings(compound, registryKeys);
             }
@@ -138,14 +140,36 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<String> registryKeys = Arrays.asList(DataFixTags.FIX_USE_INDEV_HOUSE);
+                List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_USE_INDEV_HOUSE);
                 
                 return fixGeneratorSettings(compound, registryKeys);
             }
         }
     );
     
-    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<String> registryKeys) {
+    public static final ModDataFix RESOURCE_LOCATION_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_4_0_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+                    DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+                    DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+                    DataFixTags.FIX_RESOURCE_LOCATION_CARVER
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys);
+            }
+        }
+    );
+    
+    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys) {
         String worldName = getWorldName(compound);
         
         if (isModernBetaWorld(compound) && compound.hasKey("generatorOptions")) {
@@ -159,7 +183,7 @@ public class ModDataFixers {
                 jsonObject = new JsonObject();      
             }
             
-            for (String registryKey : registryKeys) {
+            for (ResourceLocation registryKey : registryKeys) {
                 DataFixer.runDataFixer(registryKey, factory, jsonObject, worldName);
             }
             

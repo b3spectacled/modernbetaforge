@@ -1,21 +1,28 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraft.util.ResourceLocation;
+
 public class DataFixTags {
-    public static final String DESERT_BIOMES = "desertBiomes";
-    public static final String FOREST_BIOMES = "forestBiomes";
-    public static final String ICE_DESERT_BIOMES = "iceDesertBiomes";
-    public static final String PLAINS_BIOMES = "plainsBiomes";
-    public static final String RAINFOREST_BIOMES = "rainforestBiomes";
-    public static final String SAVANNA_BIOMES = "savannaBiomes";
-    public static final String SHRUBLAND_BIOMES = "shrublandBiomes";
-    public static final String SEASONAL_FOREST_BIOMES = "seasonalForestBiomes";
-    public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
-    public static final String TAIGA_BIOMES = "taigaBiomes";
-    public static final String TUNDRA_BIOMES = "tundraBiomes";
-    public static final String USE_SANDSTONE = "useSandstone";
-    public static final String SPAWN_WOLVES = "spawnWolves";
-    public static final String SURFACE_BUILDER = "surfaceBuilder";
-    public static final String SURFACE_SKYLANDS = "surfaceBuilder_skylands";
-    public static final String FIX_SINGLE_BIOME = "fix_singleBiome";
-    public static final String FIX_USE_INDEV_HOUSE = "fix_useIndevHouse";
+    public static final ResourceLocation DESERT_BIOMES = ModernBeta.createRegistryKey("desertBiomes");
+    public static final ResourceLocation FOREST_BIOMES = ModernBeta.createRegistryKey("forestBiomes");
+    public static final ResourceLocation ICE_DESERT_BIOMES = ModernBeta.createRegistryKey("iceDesertBiomes");
+    public static final ResourceLocation PLAINS_BIOMES = ModernBeta.createRegistryKey("plainsBiomes");
+    public static final ResourceLocation RAINFOREST_BIOMES = ModernBeta.createRegistryKey("rainforestBiomes");
+    public static final ResourceLocation SAVANNA_BIOMES = ModernBeta.createRegistryKey("savannaBiomes");
+    public static final ResourceLocation SHRUBLAND_BIOMES = ModernBeta.createRegistryKey("shrublandBiomes");
+    public static final ResourceLocation SEASONAL_FOREST_BIOMES = ModernBeta.createRegistryKey("seasonalForestBiomes");
+    public static final ResourceLocation SWAMPLAND_BIOMES = ModernBeta.createRegistryKey("swamplandBiomes");
+    public static final ResourceLocation TAIGA_BIOMES = ModernBeta.createRegistryKey("taigaBiomes");
+    public static final ResourceLocation TUNDRA_BIOMES = ModernBeta.createRegistryKey("tundraBiomes");
+    public static final ResourceLocation USE_SANDSTONE = ModernBeta.createRegistryKey("useSandstone");
+    public static final ResourceLocation SPAWN_WOLVES = ModernBeta.createRegistryKey("spawnWolves");
+    public static final ResourceLocation SURFACE_BUILDER = ModernBeta.createRegistryKey("surfaceBuilder");
+    public static final ResourceLocation SURFACE_SKYLANDS = ModernBeta.createRegistryKey("surfaceBuilder_skylands");
+    public static final ResourceLocation FIX_SINGLE_BIOME = ModernBeta.createRegistryKey("fix_singleBiome");
+    public static final ResourceLocation FIX_USE_INDEV_HOUSE = ModernBeta.createRegistryKey("fix_useIndevHouse");
+    public static final ResourceLocation FIX_RESOURCE_LOCATION_CHUNK = ModernBeta.createRegistryKey("fix_resourceLocation_chunk");
+    public static final ResourceLocation FIX_RESOURCE_LOCATION_BIOME = ModernBeta.createRegistryKey("fix_resourceLocation_biome");
+    public static final ResourceLocation FIX_RESOURCE_LOCATION_SURFACE = ModernBeta.createRegistryKey("fix_resourceLocation_surface");
+    public static final ResourceLocation FIX_RESOURCE_LOCATION_CARVER = ModernBeta.createRegistryKey("fix_resourceLocation_carver");
 }

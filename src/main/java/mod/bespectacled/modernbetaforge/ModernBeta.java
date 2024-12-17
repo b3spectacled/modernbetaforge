@@ -33,11 +33,11 @@ public class ModernBeta {
     public static final String NAME = "Modern Beta Forge";
     public static final String VERSION = "1.4.0.0";
     public static final String MCVERSION = "1.12.2";
-    public static final int DATA_VERSION = 1310;
+    public static final int DATA_VERSION = 1400;
     
     private static final Logger LOGGER = LogManager.getLogger(MODID);
     
-    public static ResourceLocation createId(String name) {
+    public static ResourceLocation createRegistryKey(String name) {
         return new ResourceLocation(MODID, name);
     }
     
@@ -57,7 +57,7 @@ public class ModernBeta {
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void init(FMLInitializationEvent event) throws Exception {
         ModernBetaWorldType.register();
         
         ModernBetaBiomeStructures.registerStructures();

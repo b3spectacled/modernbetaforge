@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DebugUtil {
-    public static final String SECTION_GEN_CHUNK = "modernbetaforge.generateChunk";   // ~0.0042s per chunk (as of 1.3.3.0)
+    public static final String SECTION_GEN_CHUNK = "modernbeta.generateChunk";   // ~0.0042s per chunk (as of 1.3.3.0)
     public static final String SECTION_GEN_CHUNK_VANILLA = "minecraft.generateChunk"; // ~0.0026s per chunk
     
     public static final Map<String, Long> TOTAL_TIME = new HashMap<>();
@@ -37,7 +37,7 @@ public class DebugUtil {
         long totalTime = TOTAL_TIME.get(section);
         long iterations = ITERATIONS.get(section);
 
-        return String.format("Average time for section '%s': %fs", section, totalTime / (double)iterations / 1000.0);
+        return String.format("Avg time for '%s': %fs", section, totalTime / (double)iterations / 1000.0);
     }
     
     public static synchronized String getTotalTime(String section) {
@@ -46,6 +46,18 @@ public class DebugUtil {
         
         long totalTime = TOTAL_TIME.get(section);
 
-        return String.format("Total time for section '%s': %fs", section, totalTime / 1000.0);
+        return String.format("Total time for '%s': %fs", section, totalTime / 1000.0);
+    }
+    
+    public static synchronized void resetDebug(String section) {
+        TOTAL_TIME.put(section, 0L);
+        CURRENT_TIME.put(section, 0L);
+        ITERATIONS.put(section, 0L);
+    }
+    
+    public static synchronized void resetDebug() {
+        TOTAL_TIME.clear();
+        CURRENT_TIME.clear();
+        ITERATIONS.clear();
     }
 }

@@ -9,69 +9,72 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraft.util.ResourceLocation;
 
 public final class ModernBetaRegistry<T> {
     private final String name;
-    private final Map<String, T> map; // Use LinkedHashMap so entries are displayed in order if retrieved as list.
+    private final Map<ResourceLocation, T> registryEntries;
     
     protected ModernBetaRegistry(String name) {
         this.name = name;
-        this.map = new LinkedHashMap<String, T>();
-    }
-    
-    public void register(String key, T entry) {
-        if (this.contains(key)) 
-            throw new IllegalArgumentException("[Modern Beta] Registry " + this.name + " already contains entry named " + key);
         
-        this.map.put(key, entry);
+        // Use LinkedHashMap so entries are displayed in order if retrieved as list.
+        this.registryEntries = new LinkedHashMap<>();
     }
     
-    public T get(String key) {
-        if (!this.contains(key))
-            throw new NoSuchElementException("[Modern Beta] Registry " + this.name + " does not contain entry named " + key);
+    public void register(ResourceLocation registryKey, T entry) {
+        if (this.contains(registryKey)) 
+            throw new IllegalArgumentException("[Modern Beta] Registry " + this.name + " already contains entry named " + registryKey);
         
-        return this.map.get(key);
+        this.registryEntries.put(registryKey, entry);
     }
     
-    public T getOrElse(String key, String alternate) {
-        if (!this.contains(key)) {
-            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", key, this.name);
+    public T get(ResourceLocation registryKey) {
+        if (!this.contains(registryKey))
+            throw new NoSuchElementException("[Modern Beta] Registry " + this.name + " does not contain entry named " + registryKey);
+        
+        return this.registryEntries.get(registryKey);
+    }
+    
+    public T getOrElse(ResourceLocation registryKey, ResourceLocation alternateKey) {
+        if (!this.contains(registryKey)) {
+            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", registryKey, this.name);
             ModernBeta.log(Level.WARN, warning);
             
-            return this.get(alternate);
+            return this.get(alternateKey);
         }
         
-        return this.map.get(key);
+        return this.registryEntries.get(registryKey);
     }
     
-    public T getOrElse(String key, T alternate) {
-        if (!this.contains(key)) {
-            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", key, this.name);
+    public T getOrElse(ResourceLocation registryKey, T alternateValue) {
+        if (!this.contains(registryKey)) {
+            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate entry.", registryKey, this.name);
             ModernBeta.log(Level.WARN, warning);
             
-            return alternate;
+            return alternateValue;
         }
         
-        return this.map.get(key);
+        return this.registryEntries.get(registryKey);
     }
     
-    public boolean contains(String key) {
-        return this.map.containsKey(key);
+    public boolean contains(ResourceLocation registryKey) {
+        return this.registryEntries.containsKey(registryKey);
     }
     
     public boolean contains(T value) {
-        return this.map.containsValue(value);
+        return this.registryEntries.containsValue(value);
     }
     
     public List<T> getEntries() {
-        return this.map.entrySet()
+        return this.registryEntries.entrySet()
             .stream()
             .map(e -> e.getValue())
             .collect(Collectors.toList());
     }
     
-    public List<String> getKeys() {
-        return this.map.keySet()
+    public List<ResourceLocation> getKeys() {
+        return this.registryEntries.keySet()
             .stream()
             .collect(Collectors.toList());
     }

@@ -115,34 +115,34 @@ createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
 # Main Settings Names
-createWorld.customize.custom.chunkSource.beta=Beta
-createWorld.customize.custom.chunkSource.alpha=Alpha
-createWorld.customize.custom.chunkSource.skylands=Skylands
-createWorld.customize.custom.chunkSource.infdev_227=Infdev 227
-createWorld.customize.custom.chunkSource.infdev_420=Infdev 420
-createWorld.customize.custom.chunkSource.infdev_415=Infdev 415
-createWorld.customize.custom.chunkSource.infdev_611=Infdev 611
-createWorld.customize.custom.chunkSource.pe=Pocket Ed.
-createWorld.customize.custom.chunkSource.release=Release
-createWorld.customize.custom.chunkSource.indev=Indev
-createWorld.customize.custom.chunkSource.classic_0_0_23a=c0.0.023a
+createWorld.customize.custom.chunkSource.modernbetaforge.beta=Beta
+createWorld.customize.custom.chunkSource.modernbetaforge.alpha=Alpha
+createWorld.customize.custom.chunkSource.modernbetaforge.skylands=Skylands
+createWorld.customize.custom.chunkSource.modernbetaforge.infdev_227=Infdev 227
+createWorld.customize.custom.chunkSource.modernbetaforge.infdev_420=Infdev 420
+createWorld.customize.custom.chunkSource.modernbetaforge.infdev_415=Infdev 415
+createWorld.customize.custom.chunkSource.modernbetaforge.infdev_611=Infdev 611
+createWorld.customize.custom.chunkSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.chunkSource.modernbetaforge.release=Release
+createWorld.customize.custom.chunkSource.modernbetaforge.indev=Indev
+createWorld.customize.custom.chunkSource.modernbetaforge.classic_0_0_23a=c0.0.023a
 
-createWorld.customize.custom.biomeSource.beta=Beta
-createWorld.customize.custom.biomeSource.single=Single Biome
-createWorld.customize.custom.biomeSource.pe=Pocket Ed.
-createWorld.customize.custom.biomeSource.release=Release
+createWorld.customize.custom.biomeSource.modernbetaforge.beta=Beta
+createWorld.customize.custom.biomeSource.modernbetaforge.single=Single Biome
+createWorld.customize.custom.biomeSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.biomeSource.modernbetaforge.release=Release
 
-createWorld.customize.custom.surfaceBuilder.beta=Beta
-createWorld.customize.custom.surfaceBuilder.alpha=Alpha
-createWorld.customize.custom.surfaceBuilder.alpha_1_2=Alpha 1.2
-createWorld.customize.custom.surfaceBuilder.skylands=Skylands
-createWorld.customize.custom.surfaceBuilder.infdev=Infdev
-createWorld.customize.custom.surfaceBuilder.infdev_227=Infdev 227
-createWorld.customize.custom.surfaceBuilder.pe=Pocket Ed.
-createWorld.customize.custom.surfaceBuilder.release=Release
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.beta=Beta
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.alpha=Alpha
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.alpha_1_2=Alpha 1.2
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.skylands=Skylands
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.infdev=Infdev
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.infdev_227=Infdev 227
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.surfaceBuilder.modernbetaforge.release=Release
 
-createWorld.customize.custom.caveCarver.beta=Beta
-createWorld.customize.custom.caveCarver.release=Release
+createWorld.customize.custom.caveCarver.modernbetaforge.beta=Beta
+createWorld.customize.custom.caveCarver.modernbetaforge.release=Release
 
 # Indev Settings Names
 createWorld.customize.custom.levelTheme.normal=Normal

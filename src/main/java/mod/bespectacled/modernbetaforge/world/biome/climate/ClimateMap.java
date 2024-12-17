@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 public class ClimateMap {
@@ -176,9 +177,9 @@ public class ClimateMap {
         public final boolean containsOnlyBetaBiomes;
         
         public ClimateMapping(String baseBiome, String oceanBiome, String beachBiome) {
-            this.baseBiome = BiomeUtil.getBiome(baseBiome, "landBiome");
-            this.oceanBiome = BiomeUtil.getBiome(oceanBiome, "oceanBiome");
-            this.beachBiome = BiomeUtil.getBiome(beachBiome, "beachBiome");
+            this.baseBiome = BiomeUtil.getBiome(new ResourceLocation(baseBiome), "landBiome");
+            this.oceanBiome = BiomeUtil.getBiome(new ResourceLocation(oceanBiome), "oceanBiome");
+            this.beachBiome = BiomeUtil.getBiome(new ResourceLocation(beachBiome), "beachBiome");
             
             this.containsOnlyBetaBiomes = 
                 ModernBetaBiomeLists.BETA_BIOMES.contains(this.baseBiome) &&

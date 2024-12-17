@@ -9,15 +9,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class BiomeUtil {
-    public static Biome getBiome(String biomeId) {
-        return getBiome(biomeId, "");
+    public static Biome getBiome(ResourceLocation biomeKey) {
+        return getBiome(biomeKey, "");
     }
     
-    public static Biome getBiome(String biomeId, String context) {
-        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeId));
+    public static Biome getBiome(ResourceLocation biomeKey, String context) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(biomeKey);
         
         if (biome == null) {
-            String errorStr = String.format("[Modern Beta] Biome '%s' does not exist! Please check your %s settings.", biomeId, context);
+            String errorStr = String.format("[Modern Beta] Biome '%s' does not exist! Please check your %s settings.", biomeKey.toString(), context);
             
             throw new IllegalArgumentException(errorStr);
         }

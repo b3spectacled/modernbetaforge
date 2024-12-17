@@ -47,6 +47,14 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     public GuiScreenCustomizeBiome(
         GuiScreenCustomizeWorld guiCustomizeWorldScreen,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        String initialBiome
+    ) {
+        this(guiCustomizeWorldScreen, consumer, initialBiome, "");
+    }
+    
+    public GuiScreenCustomizeBiome(
+        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome,
         String searchBiome
     ) {
@@ -198,7 +206,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
             for (int i = 0; i < GuiScreenCustomizeBiome.this.biomes.size(); ++i) {
                 Info info = GuiScreenCustomizeBiome.this.biomes.get(i);
                 
-                if (info.registryName.equals(initialBiome)) {
+                if (info.registryName.equals(initialBiome.toString())) {
                     this.selected = i;
                 }
             }

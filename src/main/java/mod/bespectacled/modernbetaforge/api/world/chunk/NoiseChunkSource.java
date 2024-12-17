@@ -21,6 +21,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -59,7 +60,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     ) {
         super(world, chunkGenerator, settings);
         
-        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
+        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(new ResourceLocation(settings.chunkSource));
         
         this.verticalNoiseResolution = noiseSettings.sizeVertical * 4;
         this.horizontalNoiseResolution = noiseSettings.sizeHorizontal * 4;
@@ -76,7 +77,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
 
         this.surfaceBuilder = ModernBetaRegistries.SURFACE
-            .getOrElse(settings.surfaceBuilder, ModernBetaBuiltInTypes.Surface.BETA.id)
+            .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
             .apply(world, this, settings);
     }
     

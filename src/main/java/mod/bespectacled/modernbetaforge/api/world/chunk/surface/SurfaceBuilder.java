@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -64,7 +65,7 @@ public abstract class SurfaceBuilder {
         this.biomesWithCustomSurfaces.addAll(
             Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
                 .stream()
-                .map(id -> BiomeUtil.getBiome(id, "custom surface config"))
+                .map(id -> BiomeUtil.getBiome(new ResourceLocation(id), "custom_surfaces"))
                 .collect(Collectors.toList())
         );
         

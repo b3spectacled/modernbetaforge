@@ -330,7 +330,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @return Whether the given x/z coordinates are within the level area.
      */
     public boolean inWorldBounds(int x, int z) {
-        return this.inWorldBounds(x, z);
+        x += this.levelWidth / 2;
+        z += this.levelLength / 2;
+        
+        if (x >= 0 && x < this.levelWidth && z >= 0 && z < this.levelLength) {
+            return true;
+        }
+        
+        return false;
     }
     
     /**

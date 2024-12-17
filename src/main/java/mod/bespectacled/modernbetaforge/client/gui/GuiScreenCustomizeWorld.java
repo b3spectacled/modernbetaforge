@@ -49,6 +49,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
@@ -178,10 +179,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void createPagedList() {
-        int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(this.settings.chunkSource);
-        int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(this.settings.biomeSource);
-        int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(this.settings.surfaceBuilder);
-        int caveCarverId = ModernBetaRegistries.CARVER.getKeys().indexOf(this.settings.caveCarver);
+        int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
+        int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
+        int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(new ResourceLocation(this.settings.surfaceBuilder));
+        int caveCarverId = ModernBetaRegistries.CARVER.getKeys().indexOf(new ResourceLocation(this.settings.caveCarver));
         
         int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
         int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
@@ -826,7 +827,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(key);
+            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
             
             if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.FIELD) {
                 FloatProperty floatProperty = (FloatProperty)property;
@@ -865,117 +866,117 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setEntryValue(int entry, boolean entryValue) {
         switch (entry) {
             case GuiIdentifiers.PG0_B_FIXED:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
                 break;
                 
             case GuiIdentifiers.PG5_DSRT_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase));
                 break;
             case GuiIdentifiers.PG5_DSRT_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_DSRT_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_FRST_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase));
                 break;
             case GuiIdentifiers.PG5_FRST_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_FRST_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_ICED_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase));
                 break;
             case GuiIdentifiers.PG5_ICED_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_ICED_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_PLNS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase));
                 break;
             case GuiIdentifiers.PG5_PLNS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_PLNS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_RAIN_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase));
                 break;
             case GuiIdentifiers.PG5_RAIN_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_RAIN_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_SAVA_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase));
                 break;
             case GuiIdentifiers.PG5_SAVA_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_SAVA_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_SHRB_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase));
                 break;
             case GuiIdentifiers.PG5_SHRB_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_SHRB_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_SEAS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase));
                 break;
             case GuiIdentifiers.PG5_SEAS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_SEAS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_SWMP_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase));
                 break;
             case GuiIdentifiers.PG5_SWMP_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_SWMP_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_TAIG_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase));
                 break;
             case GuiIdentifiers.PG5_TAIG_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_TAIG_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach));
                 break;
                 
             case GuiIdentifiers.PG5_TUND_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase));
                 break;
             case GuiIdentifiers.PG5_TUND_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean));
                 break;
             case GuiIdentifiers.PG5_TUND_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach));
                 break;
         
             case GuiIdentifiers.PG0_B_USE_OCEAN:
@@ -1112,7 +1113,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(key);
+            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
             
             if (property instanceof BooleanProperty) {
                 BooleanProperty booleanProperty = (BooleanProperty)property;
@@ -1194,16 +1195,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 break;
                 
             case GuiIdentifiers.PG0_S_CHUNK:
-                this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
+                this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue).toString();
                 break;
             case GuiIdentifiers.PG0_S_BIOME:
-                this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+                this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue).toString();
                 break;
             case GuiIdentifiers.PG0_S_SURFACE:
-                this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
+                this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue).toString();
                 break;
             case GuiIdentifiers.PG0_S_CARVER:
-                this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
+                this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue).toString();
                 break;
             
             case GuiIdentifiers.PG0_S_SEA_LEVEL:
@@ -1419,7 +1420,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(key);
+            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
             
             if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.SLIDER) {
                 FloatProperty floatProperty = (FloatProperty)property;
@@ -1646,20 +1647,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries * 2];
         
         int ndx = 0;
-        for (String key : ModernBetaRegistries.PROPERTY.getKeys()) {
+        for (ResourceLocation key : ModernBetaRegistries.PROPERTY.getKeys()) {
             Property<?> settingsProperty = this.settings.customProperties.get(key);
             
             if (settingsProperty instanceof BooleanProperty) {
                 BooleanProperty booleanProperty = (BooleanProperty)settingsProperty;
                 
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
                 pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
                 
             } else if (settingsProperty instanceof FloatProperty) {
                 FloatProperty floatProperty = (FloatProperty)settingsProperty;
                 String formattedValue = String.format("%2.3f", floatProperty.getValue());
                 
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
                 
                 switch(floatProperty.getGuiType()) {
                     case FIELD:
@@ -1680,7 +1681,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 IntProperty intProperty = (IntProperty)settingsProperty;
                 String formattedValue = String.format("%d", intProperty.getValue());
                 
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
                 
                 switch(intProperty.getGuiType()) {
                     case FIELD:
@@ -1703,18 +1704,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 
                 if (listNdx == -1) listNdx = 0;
                 
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
                 pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
             
             } else if (settingsProperty instanceof StringProperty) {
                 StringProperty stringProperty = (StringProperty)settingsProperty;
                 
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key);
+                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
                 pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
                 
             }
             
-            this.customIds.put(this.customId++, key);
+            this.customIds.put(this.customId++, key.toString());
         }
         
         return pageList;
@@ -1761,12 +1762,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     .orElse(-1);
                 
                 if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled && buttonId != -1) {
-                    String registryName = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
+                    String registryKey = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
                     boolean prefix = buttonId == GuiIdentifiers.PG0_B_FIXED;
                     int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
                     
-                    GuiIdentifiers.updateBiomeSetting(buttonId, registryName, this.settings);
-                    this.setInitialTextButton(this.pageList, buttonId, getFormattedBiomeName(registryName, prefix, truncateLen));
+                    GuiIdentifiers.updateBiomeSetting(buttonId, registryKey, this.settings);
+                    this.setInitialTextButton(this.pageList, buttonId, getFormattedBiomeName(registryKey, prefix, truncateLen));
                 }
                 
             } else {
@@ -1786,7 +1787,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private String getFormattedValue(int entry, float entryValue) {
         if (this.customIds.containsKey(entry)) {
-            Property<?> property = this.settings.customProperties.get(this.customIds.get(entry));
+            Property<?> property = this.settings.customProperties.get(new ResourceLocation(this.customIds.get(entry)));
             
             if (property instanceof FloatProperty) {
                 return String.format("%2.3f", entryValue);
@@ -1849,24 +1850,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG0_S_LEVEL_HEIGHT: return String.format("%d", LEVEL_HEIGHTS[(int)entryValue]);
             
             case GuiIdentifiers.PG0_S_CHUNK: {
-                String key = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "chunkSource." + key);
+                return I18n.format(PREFIX + "chunkSource." + registryKey.getNamespace() + "." + registryKey.getPath());
             }
             case GuiIdentifiers.PG0_S_BIOME: {
-                String key = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "biomeSource." + key);
+                return I18n.format(PREFIX + "biomeSource." + registryKey.getNamespace() + "." + registryKey.getPath());
             }
             case GuiIdentifiers.PG0_S_SURFACE: {
-                String key = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "surfaceBuilder." + key);
+                return I18n.format(PREFIX + "surfaceBuilder." + registryKey.getNamespace() + "." + registryKey.getPath());
             }
             case GuiIdentifiers.PG0_S_CARVER: {
-                String key = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "caveCarver." + key);
+                return I18n.format(PREFIX + "caveCarver." + registryKey.getNamespace() + "." + registryKey.getPath());
             }
             case GuiIdentifiers.PG0_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
@@ -2030,9 +2031,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int levelHeight = this.settings.levelHeight;
 
         int levelSeaLevel = -1;
-        if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id)) {
+        if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString())) {
             levelSeaLevel = levelType.equals(IndevType.FLOATING.id) ? 0 : levelHeight - 32;
-        } else if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id)) {
+        } else if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString())) {
             levelSeaLevel = levelHeight / 2;
         } else {
             levelSeaLevel = -1;
@@ -2065,8 +2066,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return GuiIdentifiers.getBiomeGuiIds().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
     }
     
-    private static String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
-        Biome biome = BiomeUtil.getBiome(registryName, "generator");
+    private static String getFormattedBiomeName(String registryKey, boolean prefix, int truncateLen) {
+        Biome biome = BiomeUtil.getBiome(new ResourceLocation(registryKey), "generator");
         String biomeName = biome.getBiomeName();
         
         // Truncate if biome name is too long to fit in button

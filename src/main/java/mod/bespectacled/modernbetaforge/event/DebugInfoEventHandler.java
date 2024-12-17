@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.server.MinecraftServer;
@@ -52,21 +53,32 @@ public class DebugInfoEventHandler {
             
             if (chunkGenerator instanceof ModernBetaChunkGenerator) {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
+                ModernBetaGeneratorSettings settings = chunkSource.getGeneratorSettings();
                 
-                String chunkSourceName = chunkSource.getGeneratorSettings().chunkSource;
-                String biomeSourceName = chunkSource.getGeneratorSettings().biomeSource;
-                String surfaceBuilderName = chunkSource.getGeneratorSettings().surfaceBuilder;
-                String fixedBiome = chunkSource.getGeneratorSettings().singleBiome;
+                String chunkKey = settings.chunkSource;
+                String biomeKey = settings.biomeSource;
+                String surfaceKey = settings.surfaceBuilder;
+                String carverKey = settings.caveCarver;
+                String fixedBiome = settings.singleBiome;
                 
-                String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
-                String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceBuilderName);
+                String chunkText = String.format("[Modern Beta] Chunk Source: %s", chunkKey);
+                String biomeText = String.format("[Modern Beta] Biome Source: %s", biomeKey);
+                String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceKey);
+                String carverText = String.format("[Modern Beta] Cave Carver: %s", carverKey);
                 String fixedBiomeText = String.format("[Modern Beta] Fixed Biome: %s", fixedBiome);
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
-                event.getLeft().add(sourceText);
+                event.getLeft().add(chunkText);
+                event.getLeft().add(biomeText);
                 event.getLeft().add(surfaceText);
+                if (settings.useCaves) event.getLeft().add(carverText);
+                event.getLeft().add("");
                 
-                if (biomeSourceName.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id))
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK));
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK));
+                event.getLeft().add("");
+
+                if (biomeKey.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString()))
                     event.getLeft().add(fixedBiomeText);
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||
@@ -113,9 +125,6 @@ public class DebugInfoEventHandler {
                         event.getLeft().add(finiteHeightmapText);
                     }
                 }
-                
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK));
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK));
             }
             
             if (biomeProvider instanceof ModernBetaBiomeProvider) {

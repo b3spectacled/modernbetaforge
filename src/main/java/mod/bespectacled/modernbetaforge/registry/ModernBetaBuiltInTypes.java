@@ -1,5 +1,8 @@
 package mod.bespectacled.modernbetaforge.registry;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraft.util.ResourceLocation;
+
 public class ModernBetaBuiltInTypes {
     public enum Chunk {
         BETA("beta"),
@@ -14,10 +17,22 @@ public class ModernBetaBuiltInTypes {
         INDEV("indev"),
         CLASSIC_0_0_23A("classic_0_0_23a");
         
-        public final String id;
+        private final String id;
         
         private Chunk(String id) {
             this.id = id;
+        }
+        
+        public ResourceLocation getRegistryKey() {
+            return ModernBeta.createRegistryKey(this.id);
+        }
+        
+        public String getRegistryString() {
+            return this.getRegistryKey().toString();
+        }
+        
+        public String getId() {
+            return this.id;
         }
     }
     
@@ -27,10 +42,22 @@ public class ModernBetaBuiltInTypes {
         PE("pe"),
         RELEASE("release");
         
-        public final String id;
+        private final String id;
         
         private Biome(String id) {
             this.id = id;
+        }
+        
+        public ResourceLocation getRegistryKey() {
+            return ModernBeta.createRegistryKey(this.id);
+        }
+        
+        public String getRegistryString() {
+            return this.getRegistryKey().toString();
+        }
+        
+        public String getId() {
+            return this.id;
         }
     }
     
@@ -44,10 +71,22 @@ public class ModernBetaBuiltInTypes {
         PE("pe"),
         RELEASE("release");
         
-        public final String id;
+        private final String id;
         
         private Surface(String id) {
             this.id = id;
+        }
+        
+        public ResourceLocation getRegistryKey() {
+            return ModernBeta.createRegistryKey(this.id);
+        }
+        
+        public String getRegistryString() {
+            return this.getRegistryKey().toString();
+        }
+        
+        public String getId() {
+            return this.id;
         }
     }
     
@@ -55,10 +94,22 @@ public class ModernBetaBuiltInTypes {
         BETA("beta"),
         RELEASE("release");
         
-        public final String id;
+        private final String id;
         
         private Carver(String id) {
             this.id = id;
+        }
+        
+        public ResourceLocation getRegistryKey() {
+            return ModernBeta.createRegistryKey(this.id);
+        }
+        
+        public String getRegistryString() {
+            return this.getRegistryKey().toString();
+        }
+        
+        public String getId() {
+            return this.id;
         }
     }
 }

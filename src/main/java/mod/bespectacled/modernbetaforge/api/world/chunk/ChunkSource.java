@@ -37,6 +37,7 @@ import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -138,7 +139,7 @@ public abstract class ChunkSource {
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
         this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
 
-        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(settings.caveCarver).apply(this.world, this, settings), InitMapGenEvent.EventType.CAVE);
+        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(new ResourceLocation(this.settings.caveCarver)).apply(this.world, this, settings), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
         
         this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);

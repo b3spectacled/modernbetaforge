@@ -422,8 +422,8 @@ public class GuiIdentifiers {
         return GUI_BIOMES.keySet();
     }
     
-    public static void updateBiomeSetting(int id, String registryName, Factory factory) {
-        GUI_BIOMES.get(id).accept(registryName, factory);
+    public static void updateBiomeSetting(int id, String registryKey, Factory factory) {
+        GUI_BIOMES.get(id).accept(registryKey, factory);
     }
     
     public static Set<Integer> getGuiIds() {
@@ -462,7 +462,7 @@ public class GuiIdentifiers {
     
     static {
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.BETA.id,
+            ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -480,7 +480,7 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.ALPHA.id,
+            ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -498,7 +498,7 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -516,7 +516,7 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_420.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -532,7 +532,7 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -546,14 +546,14 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_227.id,
+            ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.SKYLANDS.id,
+            ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -569,7 +569,7 @@ public class GuiIdentifiers {
         );
 
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.PE.id,
+            ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -587,7 +587,7 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.RELEASE.id,
+            ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -614,12 +614,12 @@ public class GuiIdentifiers {
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INDEV.id,
+            ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString(),
             ImmutableList.of()
         );
         
         CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id,
+            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString(),
             ImmutableList.of()
         );
         
@@ -670,19 +670,17 @@ public class GuiIdentifiers {
         GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
         
         BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
-            String chunkSource = factory.chunkSource;
-            
-            boolean isSkylands = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
-            boolean isIndev = chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
+            boolean isSkylands = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString());
+            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
             
             return !(isIndev || isClassic) && !isSkylands;
         };
         BiPredicate<Factory, Integer> testCarver = (factory, id) -> factory.useCaves;
-        BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+        BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
         BiPredicate<Factory, Integer> testBiomeReplacement = (factory, id) -> {
-            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
-            boolean isSkylands = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.id);
+            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
+            boolean isSkylands = factory.biomeSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString());
             
             return !isFixedBiomeSource && !isSkylands;
         };
@@ -693,130 +691,118 @@ public class GuiIdentifiers {
         BiPredicate<Factory, Integer> testLavaLakes = (factory, id) -> factory.useLavaLakes;
         BiPredicate<Factory, Integer> testVillageVariants = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             boolean hasVillages = isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
             
             return hasVillages && factory.useVillages;
         };
         BiPredicate<Factory, Integer> testSandstone = (factory, id) -> {
-            boolean isReleaseSurface = factory.surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.id);
-            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
+            boolean isReleaseSurface = factory.surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.getRegistryString());
+            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
             
             return !isReleaseSurface && !(isIndev || isClassic);
         };
-        BiPredicate<Factory, Integer> testIndev = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
+        BiPredicate<Factory, Integer> testIndev = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
         BiPredicate<Factory, Integer> testFinite = (factory, id) -> {
-            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.id);
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.id);
+            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
+            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
             
             return isIndev || isClassic;
         };
-        BiPredicate<Factory, Integer> testInfdev227 = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.id);
-        BiPredicate<Factory, Integer> testReleaseBiomeSource = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+        BiPredicate<Factory, Integer> testInfdev227 = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString());
+        BiPredicate<Factory, Integer> testReleaseBiomeSource = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
         BiPredicate<Factory, Integer> testBetaBiomeFeature = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             
             boolean isBetaOrPEBiomeSource = 
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
-            boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
+            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             boolean isBetaBiome = biome instanceof BiomeBeta;
             
             return isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome);
         };
         BiPredicate<Factory, Integer> testModernBetaBiomeFeature = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
             
             boolean isBetaOrPEBiomeSource = 
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
-            boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
+            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
             
             return isBetaOrPEBiomeSource || (isFixedBiomeSource && isModernBetaBiome);
         };
         BiPredicate<Factory, Integer> testModernBetaOre = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
 
-            boolean isReleaseBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
-            boolean isFixedBiomeSource = biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
+            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
             
             return (isFixedBiomeSource && isModernBetaBiome) ||  (!isReleaseBiomeSource && !isFixedBiomeSource);
         };
         BiPredicate<Factory, Integer> testStrongholds = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
             return isFixed ? STRONGHOLD.allowedBiomes.contains(biome) : true;
         };
         BiPredicate<Factory, Integer> testVillages = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
             return isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
         };
         BiPredicate<Factory, Integer> testTemples = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
             return isFixed ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
         };
         BiPredicate<Factory, Integer> testMonuments = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
             return isFixed ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
         };
         BiPredicate<Factory, Integer> testMansions = (factory, id) -> {
             Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.id);
+            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
             return isFixed ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
         };
         BiPredicate<Factory, Integer> testCustomBetaBiomeBase = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             boolean isBetaOrPEBiomeSource = 
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
             
             return isBetaOrPEBiomeSource;
         };
         BiPredicate<Factory, Integer> testCustomBetaBiomeOcean = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             boolean isBetaOrPEBiomeSource = 
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
             
             return isBetaOrPEBiomeSource && factory.replaceOceanBiomes;
         };
         BiPredicate<Factory, Integer> testCustomBetaBiomeBeach = (factory, id) -> {
-            String biomeSource = factory.biomeSource;
             boolean isBetaOrPEBiomeSource = 
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
             
             return isBetaOrPEBiomeSource && factory.replaceBeachBiomes;
         };
         BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
-            String chunkSource = factory.chunkSource;
-            String biomeSource = factory.biomeSource;
-            
-            return chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.id) || biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.id);
+            return factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString()) || factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
         };
         BiPredicate<Factory, Integer> testClimateScales = (factory, id) -> {
-            String chunkSource = factory.chunkSource;
-            String biomeSource = factory.biomeSource;
-
             return 
-                chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.id) ||
-                chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.id) ||
-                biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.id);
+                factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
+                factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString()) ||
+                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
         };
         BiPredicate<Factory, Integer> testChunkSettings = (factory, id) -> {
             boolean enabled = false;
@@ -831,9 +817,7 @@ public class GuiIdentifiers {
             return enabled;
         };
         BiPredicate<Factory, Integer> testCarverSettings = (factory, id) -> {
-            String caveCarver = factory.caveCarver;
-            
-            return !caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.id) && factory.useCaves;
+            return !factory.caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryString()) && factory.useCaves;
         };
         
         add(PG0_S_CHUNK);
