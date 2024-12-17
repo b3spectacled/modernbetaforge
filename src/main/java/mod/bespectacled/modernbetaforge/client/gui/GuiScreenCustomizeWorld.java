@@ -13,13 +13,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;

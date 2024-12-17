@@ -467,54 +467,54 @@ public class ModernBetaGeneratorSettings {
         this.customProperties = ImmutableMap.copyOf(factory.customProperties);
     }
     
-    public boolean getCustomBoolean(String registryName) {
-        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
+    public boolean getCustomBoolean(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof BooleanProperty) {
             return ((BooleanProperty)property).getValue();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] Boolean Property '%s' was not found!", registryName));
+        throw new IllegalArgumentException(String.format("[Modern Beta] Boolean Property '%s' was not found!", registryKey));
     }
     
-    public float getCustomFloat(String registryName) {
-        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
+    public float getCustomFloat(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof FloatProperty) {
             return ((FloatProperty)property).getValue();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] Float Property '%s' was not found!", registryName));
+        throw new IllegalArgumentException(String.format("[Modern Beta] Float Property '%s' was not found!", registryKey));
     }
     
-    public int getCustomInt(String registryName) {
-        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
+    public int getCustomInt(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof IntProperty) {
             return ((IntProperty)property).getValue();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] Int Property '%s' was not found!", registryName));
+        throw new IllegalArgumentException(String.format("[Modern Beta] Int Property '%s' was not found!", registryKey));
     }
     
-    public String getCustomString(String registryName) {
-        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
+    public String getCustomString(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof StringProperty) {
             return ((StringProperty)property).getValue();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] String Property '%s' was not found!", registryName));
+        throw new IllegalArgumentException(String.format("[Modern Beta] String Property '%s' was not found!", registryKey));
     }
     
-    public String getCustomListString(String registryName) {
-        Property<?> property = this.customProperties.get(new ResourceLocation(registryName));
+    public String getCustomListString(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof ListProperty) {
             return ((ListProperty)property).getValue();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryName));
+        throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryKey));
     }
     
     public static class Factory {
