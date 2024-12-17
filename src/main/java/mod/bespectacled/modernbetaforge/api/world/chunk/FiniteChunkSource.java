@@ -14,7 +14,7 @@ import com.google.common.collect.HashBiMap;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
-import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteLevelDataHandler;
+import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMinecraftServer;
@@ -72,6 +72,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
     @SuppressWarnings("unused")
     private float phaseProgress;
     
+    /**
+     * Constructs an abstract FiniteChunkSource with necessary level information.
+     * 
+     * @param world The world.
+     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
+     * @param chunkGeneratorSettings The generator settings.
+     */
     public FiniteChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
@@ -90,11 +97,28 @@ public abstract class FiniteChunkSource extends ChunkSource {
             new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
     }
     
+    /**
+     * Inherited from {@link ChunkSource#getSpawnLocator() getSpawnLocator}.
+     * Uses {@link IndevSpawnLocator} by default.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public SpawnLocator getSpawnLocator() {
         return new IndevSpawnLocator();
     }
     
+    /**
+     * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
@@ -107,13 +131,42 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.generateBorder(chunkPrimer, chunkX, chunkZ);
         }
     }
-
+    
+    /**
+     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int) provideProcessedChunk}.
+     * This is unused.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
 
+    /**
+     * Inherited from {@link ChunkSource#provideSurface(Biome[], ChunkPrimer, int, int) provideSurface}.
+     * This is unused.
+     *
+     * @param biomes Biome array for chunk
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     @Override
     public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
     
+    /**
+     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Samples height from the generated level data.
+     *
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param type HeightmapChunk heightmap type.
+     * @return The y-coordinate of top block at x/z.
+     * 
+     */
     @Override
     public int getHeight(int x, int z, HeightmapChunk.Type type) {
         x += this.levelWidth / 2;
@@ -126,6 +179,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return this.getLevelHeight(x, z, type);
     }
     
+    /**
+     * Gets a block given coordinates from level data.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param y y-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @return The block at the given coordinates.
+     */
     public Block getLevelBlock(int x, int y, int z) {
         x = MathHelper.clamp(x, 0, this.levelWidth - 1);
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
@@ -134,6 +195,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return this.levelDataContainer.getLevelBlock(x, y, z, this.levelWidth, this.levelLength);
     }
     
+    /**
+     * Sets a block into level data at the given coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param y y-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param block The block to set in level data.
+     */
     public void setLevelBlock(int x, int y, int z, Block block) {
         x = MathHelper.clamp(x, 0, this.levelWidth - 1);
         y = MathHelper.clamp(y, 0, this.levelHeight - 1);
@@ -142,6 +211,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelDataContainer.setLevelBlock(x, y, z, this.levelWidth, this.levelLength, block);
     }
     
+    /**
+     * Gets the height from level data given x/z coordinates and the heightmap type.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param type {@link HeightmapChunk.Type}.
+     * @return The y-coordinate of top block at x/z.
+     */
     public int getLevelHeight(int x, int z, HeightmapChunk.Type type) {
         x = MathHelper.clamp(x, 0, this.levelWidth - 1);
         z = MathHelper.clamp(z, 0, this.levelLength - 1);
@@ -161,18 +238,40 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return y;
     }
     
+    /**
+     * Gets the finite level width.
+     * 
+     * @return The level width.
+     */
     public int getLevelWidth() {
         return this.levelWidth;
     }
     
+    /**
+     * Getse the finite level length.
+     * 
+     * @return The level length.
+     */
     public int getLevelLength() {
         return this.levelLength;
     }
     
+    /**
+     * Getse the finite level height.
+     * 
+     * @return The level height.
+     */
     public int getLevelHeight() {
         return this.levelHeight;
     }
     
+    /**
+     * Generates the Indev starting house at the given coordinates.
+     * 
+     * @param world
+     * @param spawnPos The player spawn block position.
+     * @param isBonusChestEnabled Whether the bonus chest should be generated in the house.
+     */
     public void buildHouse(WorldServer world, BlockPos spawnPos, boolean isBonusChestEnabled) {
         if (this.levelHouse == IndevHouse.NONE)
             return;
@@ -223,38 +322,49 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
 
+    /**
+     * Indicates whether the given x/z world coordinates are within the level area.
+     * 
+     * @param x x-coordinate in block coordinates in world space.
+     * @param z z-coordinate in block coordinates in world space.
+     * @return Whether the given x/z coordinates are within the level area.
+     */
     public boolean inWorldBounds(int x, int z) {
-        return this.inWorldBounds(x, z, 0);
-    }
-
-    public boolean inWorldBounds(int x, int z, int padding) {
-        x += this.levelWidth / 2;
-        z += this.levelLength / 2;
-        
-        if (x >= padding && x < this.levelWidth - padding && z >= padding && z < this.levelLength - padding) {
-            return true;
-        }
-        
-        return false;
+        return this.inWorldBounds(x, z);
     }
     
+    /**
+     * Indicates whether the level data has been generated.
+     * 
+     * @return Whether the level is generated and data can be fetched from the level data.
+     */
     public boolean hasPregenerated() {
         return this.levelDataContainer.generated;
     }
 
+    /**
+     * Indicate whether the chunk at the given coordinates should be skipped.
+     * The chunk is skipped if the chunk coordinates being tested are outside of level bounds.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return Whether the chunk should be skipped.
+     */
     @Override
     protected boolean skipChunk(int chunkX, int chunkZ) {
-        return this.skipChunk(chunkX, chunkZ, 0);
-    }
-
-    @Override
-    protected boolean skipChunk(int chunkX, int chunkZ, int chunkPadding) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
-        return !this.inWorldBounds(startX, startZ, chunkPadding << 4);
+        return !this.inWorldBounds(startX, startZ);
     }
     
+    /**
+     * Prunes the chuck at the given coordinates.
+     * The chunk is pruned if the chunk coordinates being tested are outside of level bounds.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     @Override
     protected void pruneChunk(int chunkX, int chunkZ) {
         int startX = chunkX << 4;
@@ -276,20 +386,58 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
 
+    /**
+     * Generates the level data.
+     */
     protected abstract void pregenerateTerrain();
     
+    /**
+     * Generates the world chunks outside of the level bounds.
+     * 
+     * @param chunkPrimer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     protected abstract void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
+    /**
+     * Sample height at given x/z coordinate for coordinates outside of the level bounds.
+     *
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param type {@link HeightmapChunk.Type}.
+     * @return The y-coordinate of top block at x/z outside of the level bounds.
+     */
     protected abstract int getBorderHeight(int x, int z, HeightmapChunk.Type type);
     
+    /**
+     * Indicates whether the given level coordinates are within the level area.
+     * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @return Whether the given x/z coordinates are within the level area.
+     */
     protected boolean inLevelBounds(int x, int y, int z) {
         return x >= 0 && x < this.levelWidth && y >= 0 && y < this.levelHeight && z >= 0 && z < this.levelLength;
     }
-    
+
+    /**
+     * Indicates whether the given level coordinates are at the level bounds.
+     * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @return Whether the given x/z coordinates are at the level bounds.
+     */
     protected boolean atLevelBounds(int x, int y, int z) {
         return x == 0 || x == this.levelWidth - 1 || y == 0 || y == this.levelHeight - 1 || z == 0 || z == this.levelLength - 1;
     }
     
+    /**
+     * Checks if the level data has generated yet, if not, then generates the level data.
+     * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
+     */
     protected void pregenerateLevelOrWait() {
         if (!this.levelDataContainer.generated) {
             this.pregenerateTerrain();
@@ -305,6 +453,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
+    /**
+     * Fills a space in level data in a spheroid shape. Used to carve caves.
+     * 
+     * @param centerX x-coordinate in block coordinates in level space.
+     * @param centerY y-coordinate in block coordinates in level space.
+     * @param centerZ z-coordinate in block coordinates in level space.
+     * @param radius Radius of spheroid shape.
+     * @param fillBlock Block to fill into space.
+     */
     protected void fillOblateSpheroid(float centerX, float centerY, float centerZ, float radius, Block fillBlock) {
         for (int x = (int)(centerX - radius); x <= (int)(centerX + radius); ++x) {
             for (int y = (int)(centerY - radius); y <= (int)(centerY + radius); ++y) {
@@ -326,11 +483,29 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
+    /**
+     * Floods the level downward and outward from a given starting position and fill/replace blocks.
+     * Does not provide the array of flooded positions to keep track, thus it will attempt to flood as many blocks as possible.
+     * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @param fillBlock The block to fill the space with.
+     * @param replaceBlock The block to replace.
+     * @return
+     */
     protected int flood(int x, int y, int z, Block fillBlock, Block replaceBlock) {
         return this.flood(x, y, z, fillBlock, replaceBlock, null);
     }
     
-    /*
+    /**
+     * Floods the level downward and outward from a given starting position and fill/replace blocks.
+     * If `floodedPositions` is provided, then the method will only fill up to {@link #MAX_FLOODS} positions and then return.
+     * The intent is to use a test block as the `fillBlock` (see {@link #PLACEHOLDER_BLOCK}), then fill with the actual fill block if the number of floods is below {@link #MAX_FLOODS}.
+     * Otherwise you should refill with the original block using the array positions.
+     * 
+     * More comments below:
+     * 
      * Not the original algorithm, but did extensive testing/reverse engineering against a modded instance of Indev,
      * so this is accurate except in one case -- doing edge floods for Inland worlds; this shouldn't seem possible given
      * that the edges should never be exposed, but for some reason some underground pockets along the level edge still
@@ -347,6 +522,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * so the original level generator allows water to generate where x = levelWidth - 1 above ground.
      * This bug is fixed here, because I'm not sure how to consistently reproduce it.
      * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @param fillBlock The block to fill the space with.
+     * @param replaceBlock The block to replace.
+     * @param floodedPositions The array of Vec3d positions that have been filled. This is used to track positions to quickly fill with another block type.
+     * @return
      */
     protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, Vec3d[] floodedPositions) {
         Deque<Vec3d> positions = new ArrayDeque<>();
@@ -392,6 +574,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return flooded;
     }
     
+    /**
+     * Sets the current generation phase for the level. This is printed to the console and the level loading screen.
+     * 
+     * @param phase Generation phase.
+     */
     protected void setPhase(String phase) {
         this.phase = phase;
         
@@ -403,6 +590,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
         ModernBeta.log(Level.INFO, this.phase + "..");
     }
     
+    /**
+     * Sets the current generation phase progress for the level. Currently unused.
+     * 
+     * @param phaseProgress The decimal phase progress. (i.e. 50% -> 0.5)
+     */
     protected void setPhaseProgress(float phaseProgress) {
         this.phaseProgress = phaseProgress;
 
@@ -416,9 +608,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         */
     }
     
+    /**
+     * Builds the ruleset used for biome injection.
+     * 
+     * @return The built biome injection rules.
+     */
     protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
@@ -447,6 +644,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return builder.build();
     }
 
+    
+    /**
+     * Takes the level data and sets it into the chunk primer for the actual terrain generation.
+     * 
+     * @param chunkPrimer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
@@ -486,10 +691,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
+    /**
+     * Indicates whether the given level coordinates are within the cave carving bounds.
+     * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @return Whether the given x/z coordinates are within the cave carving bounds.
+     */
     private boolean inCaveBounds(int x, int y, int z) {
         return x > 0 && x < this.levelWidth - 1 && y > 0 && y < this.levelHeight - 1 && z > 0 && z < this.levelLength - 1;
     }
     
+    /**
+     * Tries adding the level coordinates to the positions queue for flooding.
+     * 
+     * @param x x-coordinate in block coordinates in level space.
+     * @param y y-coordinate in block coordinates in level space.
+     * @param z z-coordinate in block coordinates in level space.
+     * @param replaceBlock The block to fill.
+     * @param positions Deque containing positions to flood.
+     */
     private void tryFlood(int x, int y, int z, Block replaceBlock, Deque<Vec3d> positions) {
         Block block = this.getLevelBlock(x, y, z);
         
@@ -498,22 +720,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
+    /**
+     * Attempts to load a saved finite level from disk. If successful, then level data will be populated and returned for world generation.
+     * 
+     * @return LevelDataContainer containing level data and level block map.
+     */
     private LevelDataContainer tryLoadLevel() {
-        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
         LevelDataContainer levelDataContainer;
         
-        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
         try {
             dataHandler.readFromDisk();
             levelDataContainer = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
             
-            ModernBeta.log(Level.INFO, String.format("Level file '%s' was loaded..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was loaded..", FiniteDataHandler.FILE_NAME));
         } catch (Exception e) {
             levelDataContainer = new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
             
             ModernBeta.log(Level.WARN, String.format(
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
-                FiniteLevelDataHandler.FILE_NAME
+                FiniteDataHandler.FILE_NAME
             ));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
@@ -521,28 +748,37 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return levelDataContainer;
     }
     
+    /**
+     * Attempts to save finite level data to disk. If successful, then the level data can be loaded later to avoid regenerating the entire level.
+     * 
+     * @return Whether the file was successfully saved.
+     */
     private boolean trySaveLevel() {
-        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
         boolean saved = false;
         
         try {
             dataHandler.setLevelData(this.levelDataContainer.levelData, this.levelDataContainer.levelMap);
             dataHandler.writeToDisk();
             
-            ModernBeta.log(Level.INFO, String.format("Level file '%s' was saved..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was saved..", FiniteDataHandler.FILE_NAME));
             saved = true;
         } catch (Exception e) {
-            ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FiniteDataHandler.FILE_NAME));
             ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
         }
         
         return saved;
     }
     
+    /**
+     * Debugs the level data handler. If {@link #DEBUG_LEVEL_DATA_HANDLER} is set to true then this will be run after the level is saved.
+     * The level file is read from disk and compared to the currently loaded level data to ensure data integrity.
+     */ 
     private void debugLevelDataHandler() {
-        FiniteLevelDataHandler dataHandler = new FiniteLevelDataHandler(this.world, this);
+        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
 
-        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteLevelDataHandler.FILE_NAME));
+        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
         try {
             dataHandler.readFromDisk();
             LevelDataContainer readLevelData = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
@@ -568,11 +804,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 }
             }
             
-            ModernBeta.log(Level.INFO, String.format("Level file '%s' was validated with no errors found..", FiniteLevelDataHandler.FILE_NAME));
+            ModernBeta.log(Level.INFO, String.format("Level file '%s' was validated with no errors found..", FiniteDataHandler.FILE_NAME));
         } catch (Exception e) {
             ModernBeta.log(Level.WARN, String.format(
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
-                FiniteLevelDataHandler.FILE_NAME
+                FiniteDataHandler.FILE_NAME
             ));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
@@ -586,6 +822,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
         private byte blockId;
         private boolean generated;
         
+        /**
+         * Constructs a LevelDataContainer for level data.
+         * The level data is a 1D byte area of size {@link FiniteChunkSource#levelWidth} * {@link FiniteChunkSource#levelHeight} * {@link FiniteChunkSource#levelLength}.
+         * The level data is mapped to block references with a BiMap matching byte ids to block string identifiers and block references.
+         * 
+         * @param levelWidth The level width.
+         * @param levelHeight The level height.
+         * @param levelLength The level length.
+         */
         public LevelDataContainer(int levelWidth, int levelHeight, int levelLength) {
             this.levelData = new byte[levelWidth * levelHeight * levelLength];
             this.levelMap = HashBiMap.create();
@@ -598,6 +843,12 @@ public abstract class FiniteChunkSource extends ChunkSource {
             Arrays.fill(this.levelData, this.levelMap.inverse().get(Blocks.AIR.getRegistryName().toString()));
         }
         
+        /**
+         * Constructs a LevelDataContainer from existing level data. This is called when reading level data from disk.
+         * 
+         * @param levelData Read level data.
+         * @param levelMap Read level byte-block id map.
+         */
         public LevelDataContainer(byte[] levelData, BiMap<Byte, String> levelMap) {
             this.levelData = levelData;
             this.levelMap = levelMap;
@@ -605,6 +856,16 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.generated = true;
         }
         
+        /**
+         * Gets a block given coordinates from level data.
+         * 
+         * @param x x-coordinate in block coordinates in level space.
+         * @param y y-coordinate in block coordinates in level space.
+         * @param z z-coordinate in block coordinates in level space.
+         * @param levelWidth The level width, used to offset the index into the level data array.
+         * @param levelLength The level length, used to offset the index into the level dat array.
+         * @return The block at the given coordinates.
+         */
         private Block getLevelBlock(int x, int y, int z, int levelWidth, int levelLength) {
             byte blockId = this.levelData[(y * levelLength + z) * levelWidth + x];
             
@@ -617,7 +878,17 @@ public abstract class FiniteChunkSource extends ChunkSource {
             return this.levelBlockMap.get(blockId);
         }
         
-        public void setLevelBlock(int x, int y, int z, int levelWidth, int levelLength, Block block) {
+        /**
+         * Sets a block into level data at the given coordinates.
+         * 
+         * @param x x-coordinate in block coordinates.
+         * @param y y-coordinate in block coordinates.
+         * @param z z-coordinate in block coordinates.
+         * @param levelWidth The level width, used to offset the index into the level data array.
+         * @param levelLength The level length, used to offset the index into the level dat array.
+         * @param block The block to set in level data.
+         */
+        private void setLevelBlock(int x, int y, int z, int levelWidth, int levelLength, Block block) {
             String registryName = ForgeRegistries.BLOCKS.getKey(block).toString();
             
             if (!this.levelMap.containsValue(registryName)) {

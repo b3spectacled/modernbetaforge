@@ -102,6 +102,13 @@ public abstract class ChunkSource {
     private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
     
+    /**
+     * Constructs an abstract ChunkSource to hold basic underlying terrain generation information.
+     * 
+     * @param world The world.
+     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
+     * @param chunkGeneratorSettings The generator settings.
+     */
     public ChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
@@ -154,14 +161,61 @@ public abstract class ChunkSource {
         this.setCloudHeight(this.worldHeight - 20);
     }
     
+    /**
+     * Create initial chunk given chunk coordinates.
+     * Used to sample for biome injection and creation of initial biome map.
+     * Called in {@link #provideInitialChunkPrimerContainer(int, int) provideInitialChunkPrimerContainer} and subsequently {@link #provideChunk(int, int) provideChunk}.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     public abstract void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
+    /**
+     * Create processed chunk given chunk coordinates.
+     * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
+     * This does not need to be implemented and can be left empty, if you don't wish to do additional processing.
+     * Called in {@link #provideChunk(int, int) provideChunk}.
+     *
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     public abstract void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
-    
+
+    /**
+     * Build surface for given chunk primer and chunk coordinates.
+     * Called in {@link #provideChunk(int, int) provideChunk}.
+     *
+     * @param biomes Biome array for chunk
+     * @param chunkPrimer Chunk primer
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * 
+     */
     public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
+    /**
+     * Sample height at given x/z coordinate.
+     *
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param type {@link HeightmapChunk.Type}.
+     * @return The y-coordinate of top block at x/z.
+     */
     public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
     
+    /**
+     * Creates an entire chunk, with terrain, surfaces, caves, biomes, and structure placements generated.
+     * Called in {@link ModernBetaChunkGenerator#generateChunk(int, int) generateChunk}.
+     *
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return The completed chunk.
+     */
     public Chunk provideChunk(int chunkX, int chunkZ) {
         // Retrieve chunk primer from cache
         ChunkPrimerContainer chunkContainer = this.initialChunkCache.get(chunkX, chunkZ);
@@ -235,6 +289,13 @@ public abstract class ChunkSource {
         return chunk;
     }
     
+    /**
+     * Populates the chunk with generated structures and biome feature decorations (i.e. trees, plants, lakes, etc.).
+     * Called in {@link ModernBetaChunkGenerator#populate(int, int) populate}.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     public void populateChunk(int chunkX, int chunkZ) {
         // Prune outer chunks for finite worlds
         this.pruneChunk(chunkX, chunkZ);
@@ -393,6 +454,15 @@ public abstract class ChunkSource {
         BlockFalling.fallInstantly = false;
     }
     
+    /**
+     * Generates the Ocean Monument structure, in a given chunk.
+     * Called in {@link ModernBetaChunkGenerator#generateStructures(Chunk, int, int) generateStructures}.
+     * 
+     * @param chunk 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return Whether the ocean monument generated.
+     */
     public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
         if (this.skipChunk(chunkX, chunkZ)) {
             return false;
@@ -407,6 +477,14 @@ public abstract class ChunkSource {
         return generated;
     }
     
+    /**
+     * Gets a list of possible mob spawns from the biome retrieved at a given position and creature type.
+     * Called in {@link ModernBetaChunkGenerator#getPossibleCreatures(EnumCreatureType, BlockPos) getPossibleCreatures}.
+     * 
+     * @param enumCreatureType The creature type, listed in {@link EnumCreatureType}
+     * @param blockPos The block position, used to retrieve the biome.
+     * @return List of possible mob spawns from the biome at the given position.
+     */
     public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType enumCreatureType, BlockPos blockPos) {
         if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
             return ImmutableList.of();
@@ -436,6 +514,15 @@ public abstract class ChunkSource {
         return spawnEntries;
     }
     
+    /**
+     * Used to test if a given block position is in a structure.
+     * Called in {@link ModernBetaChunkGenerator#isInsideStructure(World, String, BlockPos) isInsideStructure}.
+     * 
+     * @param world
+     * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
+     * @param blockPos The block position used to test.
+     * @return Whether the block position overlaps a structure.
+     */
     public boolean isInsideStructure(World world, String structureName, BlockPos blockPos) {
         if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
             return false;
@@ -472,6 +559,16 @@ public abstract class ChunkSource {
         return false;
     }
     
+    /**
+     * Finds the location of the nearest specified structure.
+     * Called in {@link ModernBetaChunkGenerator#getNearestStructurePos(World, String, BlockPos, boolean) getNearestStructurePos}.
+     * 
+     * @param world
+     * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
+     * @param blockPos The initial block position.
+     * @param findUnexplored
+     * @return The block position of the nearest specified structure.
+     */
     public BlockPos getNearestStructurePos(World world, String structureName, BlockPos blockPos, boolean findUnexplored) {
         if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
             return null;
@@ -508,6 +605,13 @@ public abstract class ChunkSource {
         return null;
     }
     
+    /**
+     * Called in {@link ModernBetaChunkGenerator#recreateStructures(Chunk, int, int) recreateStructures}.
+     * 
+     * @param chunk
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {
         if (this.skipChunk(chunkX, chunkZ)) {
             return;
@@ -542,78 +646,168 @@ public abstract class ChunkSource {
         }
     }
 
+    
+    /**
+     * Gets post-biome injection biome array for a given chunk.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return The biome array for the given chunk.
+     */
     public Biome[] getBiomes(int chunkX, int chunkZ) {
         return this.initialChunkCache.get(chunkX, chunkZ).biomes;
     }
 
+    /**
+     * Gets the chunk source sea level set in the chunk generator settings.
+     * 
+     * @return The chunk source sea level.
+     */
     public int getSeaLevel() {
         return this.settings.seaLevel;
     }
     
+    /**
+     * Gets the default fluid for the chunk source, either water or lava.
+     * 
+     * @return The default fluid blockstate.
+     */
     public IBlockState getDefaultFluid() {
         return this.defaultFluid;
     }
     
-    public ModernBetaGeneratorSettings getChunkGeneratorSettings() {
+    /**
+     * Gets the chunk generator settings.
+     * 
+     * @return The {@link ModernBetaGeneratorSettings} settings.
+     */
+    public ModernBetaGeneratorSettings getGeneratorSettings() {
         return this.settings;
     }
     
+    
+    /**
+     * Gets the spawn locator used to initially place the player spawn.
+     * 
+     * @return The spawn locator, {@link SpawnLocator#DEFAULT} by default. 
+     */
     public SpawnLocator getSpawnLocator() {
         return SpawnLocator.DEFAULT;
     }
     
+    /**
+     * Gets the PerlinOctaveNoise sampler used for beach generation.
+     * 
+     * @return An optional containing the noise sampler, may be null.
+     */
     public Optional<PerlinOctaveNoise> getBeachOctaveNoise() {
         return this.beachOctaveNoise;
     }
     
+    /**
+     * Gets the PerlinOctaveNoise sampler used for surface generation.
+     * 
+     * @return An optional containing the noise sampler, may be null.
+     */
     public Optional<PerlinOctaveNoise> getSurfaceOctaveNoise() {
         return this.surfaceOctaveNoise;
     }
     
+    /**
+     * Gets the PerlinOctaveNoise sampler used for tree placement.
+     * 
+     * @return An optional containing the noise sampler, may be null.
+     */
     public Optional<PerlinOctaveNoise> getForestOctaveNoise() {
         return this.forestOctaveNoise;
     }
     
+    /**
+     * Gets the associated world object.
+     * 
+     * @return The world object.
+     */
     public World getWorld() {
         return this.world;
     }
     
+    /**
+     * Gets the cache containing all nearby chunks with references to village components.
+     * 
+     * @return The chunk cache for chunks containing village components.
+     */
     public ChunkCache<ComponentChunk> getComponentCache() {
         return this.componentCache;
     }
 
+    /**
+     * Sets the cloud height in the {@link ModernBetaWorldType} world type.
+     * 
+     * @param cloudHeight y-coordinate of the new cloud height, in block coordinates.
+     */
     protected void setCloudHeight(int cloudHeight) {
         ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }
     
+    /**
+     * Indicate whether the chunk at the given coordinates should be skipped.
+     * This is called in several generation methods and used by {@link FiniteChunkSource}.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return Whether the chunk should be skipped.
+     */
     protected boolean skipChunk(int chunkX, int chunkZ) {
-        return this.skipChunk(chunkX, chunkZ, 0);
-    }
-    
-    protected boolean skipChunk(int chunkX, int chunkZ, int padding) {
         return false;
     }
     
+    /**
+     * Prunes the chuck at the given coordinates.
+     * This is used by {@link FiniteChunkSource}.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     */
     protected void pruneChunk(int chunkX, int chunkZ) { }
     
+    /**
+     * Sets the default PerlinOctaveNoise sampler used for beach generation for the default surface generator in {@link ModernBetaBiome}.
+     * 
+     * @param beachOctaveNoise The noise sampler, may be null.
+     */
     protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
         
         // Set beach noise for builtin Modern Biome surface builder
         ModernBetaBiome.setBeachOctaveNoise(beachOctaveNoise);
     }
-    
+
+    /**
+     * Sets the PerlinOctaveNoise sampler used for surface generation.
+     * 
+     * @param surfaceOctaveNoise The noise sampler, may be null.
+     */
     protected void setSurfaceOctaveNoise(PerlinOctaveNoise surfaceOctaveNoise) {
         this.surfaceOctaveNoise = Optional.ofNullable(surfaceOctaveNoise);
     }
     
+    /**
+     * Sets the PerlinOctaveNoise sampler used for tree placement.
+     * 
+     * @param forestOctaveNoise The noise sampler, may be null.
+     */
     protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
         this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
     }
 
+    /**
+     * Builds the ruleset used for biome injection.
+     * 
+     * @return The built biome injection rules.
+     */
     protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
@@ -642,12 +836,24 @@ public abstract class ChunkSource {
         return builder.build();
     }
 
+    /**
+     * Tests whether a given height is where a beach generates.
+     * 
+     * @param topHeight y-coordinate of the highest block for a particular position.
+     * @return Whether the given height for a position is at the depth where beaches generated.
+     */
     protected boolean atBeachDepth(int topHeight) {
         int seaLevel = this.getSeaLevel();
         
         return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
     }
-    
+
+    /**
+     * Tests whether a given block state is a beach (sand) block.
+     * 
+     * @param blockState Block state to be tested.
+     * @return Whether the given block state is a sand block.
+     */
     protected boolean isBeachBlock(IBlockState blockState) {
         Block block = blockState.getBlock();
         
@@ -656,14 +862,34 @@ public abstract class ChunkSource {
         return block == Blocks.SAND;
     }
     
+    /**
+     * Tests whether a given height is at ocean depth.
+     * 
+     * @param topHeight y-coordinate of the highest block for a particular position.
+     * @param oceanDepth The height depth to test the height against.
+     * @return Whether the given height is below the ocean depth value.
+     */
     protected boolean atOceanDepth(int topHeight, int oceanDepth) {
         return topHeight < this.getSeaLevel() - oceanDepth;
     }
-    
+
+    /**
+     * Tests whether a given block state is the default fluid block.
+     * 
+     * @param blockState Block state to be tested.
+     * @return Whether the given block state is the default fluid block.
+     */
     protected boolean isFluidBlock(IBlockState blockState) {
         return blockState.getBlock() == this.defaultFluid.getBlock();
     }
     
+    /**
+     * Generates the initial chunk and modified biome array after biome injection.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return A container with the base chunk primer and modified biome array.
+     */
     private ChunkPrimerContainer provideInitialChunkPrimerContainer(int chunkX, int chunkZ) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
@@ -689,6 +915,12 @@ public abstract class ChunkSource {
         public final ChunkPrimer chunkPrimer;
         public final Biome[] biomes;
         
+        /**
+         * Constructs a container that holds a chunk primer and biome array.
+         * 
+         * @param chunkPrimer
+         * @param biomes
+         */
         public ChunkPrimerContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
             this.chunkPrimer = chunkPrimer;
             this.biomes = biomes;

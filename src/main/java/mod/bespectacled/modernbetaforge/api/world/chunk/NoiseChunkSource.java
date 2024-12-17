@@ -6,18 +6,17 @@ import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
-import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.DensityChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
-import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
-import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
@@ -46,6 +45,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     private final SurfaceBuilder surfaceBuilder;
 
+    /**
+     * Constructs an abstract NoiseChunkSource with necessary noise setting information.
+     * 
+     * @param world The world.
+     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
+     * @param chunkGeneratorSettings The generator settings.
+     */
     public NoiseChunkSource(
         World world,
         ModernBetaChunkGenerator chunkGenerator,
@@ -53,7 +59,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     ) {
         super(world, chunkGenerator, settings);
         
-        ModernBetaNoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
+        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
         
         this.verticalNoiseResolution = noiseSettings.sizeVertical * 4;
         this.horizontalNoiseResolution = noiseSettings.sizeHorizontal * 4;
@@ -75,8 +81,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Create initial chunk given chunk coordinates.
-     * Used to sample for biome injection.
+     * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
      *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -89,8 +94,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Create processed chunk given chunk coordinates.
-     * Used to actually generate terrain
+     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int) provideProcessedChunk}.
+     * Used to actually generate terrain, after collection of village component placements.
      *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -103,7 +108,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Build surface for given chunk primer and chunk coordinates.
+     * Inherited from {@link ChunkSource#provideSurface(Biome[], ChunkPrimer, int, int) provideSurface}.
      *
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
@@ -117,13 +122,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Sample height at given x/z coordinate. Initially generates heightmap for entire chunk, 
-     * if chunk containing x/z coordinates has never been sampled.
+     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Initially generates heightmap for entire chunk, if chunk containing x/z coordinates has never been sampled.
      *
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * @param type HeightmapChunk heightmap type.
-     * 
+     * @param type {@link HeightmapChunk.Type}.
      * @return The y-coordinate of top block at x/z.
      * 
      */
@@ -133,6 +137,26 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int chunkZ = z >> 4;
         
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
+    }
+    
+    /**
+     * Get top slide, used to interpolate density to set terrain curve at top of the world.
+     * 
+     * @return Slide settings used to interpolate terrain at top of the world.
+     * 
+     */
+    public SlideSettings getTopSlide() {
+        return this.topSlide;
+    }
+    
+    /**
+     * Get bottom slide, used to interpolate density to set terrain curve at bottom of the world.
+     * 
+     * @return Slide settings used to interpolate terrain at bottom of the world.
+     * 
+     */
+    public SlideSettings getBottomSlide() {
+        return this.bottomSlide;
     }
     
     /**
@@ -157,19 +181,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @param density Base density.
      * @param noiseY y-coordinate in noise coordinates.
-     * 
      * @return Modified noise density.
      */
     protected double applySlides(double density, int noiseY) {
-        if (this.topSlide.slideSize > 0.0) {
-            double delta = ((double)(this.noiseSizeY - noiseY) - this.topSlide.slideOffset) / this.topSlide.slideSize;
-            density = MathUtil.clampedLerp(this.topSlide.slideTarget, density, delta);
-        }
-        
-        if (this.bottomSlide.slideSize > 0.0) {
-            double delta = ((double)noiseY - this.bottomSlide.slideOffset) / this.bottomSlide.slideSize;
-            density = MathUtil.clampedLerp(this.bottomSlide.slideTarget, density, delta);
-        }
+        density = this.topSlide.applyTopSlide(density, noiseY, this.noiseSizeY);
+        density = this.bottomSlide.applyBottomSlide(density, noiseY);
         
         return density;
     }
@@ -223,12 +239,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     /**
      * Generates a heightmap for the chunk containing the given x/z coordinates
-     * and returns to {@link #getHeight(int, int, net.minecraft.world.Heightmap.Type)} 
+     * and returns to {@link #getHeight(int, int, net.minecraft.world.Heightmap.Type) getHeight} 
      * to cache and return the height.
      * 
      * @param chunkX x-coordinate in chunk coordinates to sample all y-values for.
      * @param chunkZ z-coordinate in chunk coordinates to sample all y-values for.
-     * 
      * @return A HeightmapChunk, containing an array of ints containing the heights for the entire chunk.
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
@@ -299,7 +314,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
      * @return NoiseSource containing initial noise values for the chunk.
      */
     private NoiseSource createInitialNoiseSource(int chunkX, int chunkZ) {
@@ -324,7 +338,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @param noiseSource Primary noise provider to sample density noise.
      * @param blockSource Default block source
-     * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
     private BlockSource getInitialBlockSource(DensityChunk densityChunk, StructureWeightSampler weightSampler) {
@@ -349,6 +362,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
         };
     }
     
+    /**
+     * Samples and interpolates all terrain densities for a given chunk. This information is cached for later use.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return Container of interpolated densities, to be cached and used in other methods for terrain generation and height sampling.
+     */
     private DensityChunk sampleDensities(int chunkX, int chunkZ) {
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
@@ -373,8 +393,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         // since base noise is sampled when fetched from cache.
         noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(
             chunkX * this.noiseSizeX,
-            chunkZ * this.noiseSizeZ,
-            this.settings
+            chunkZ * this.noiseSizeZ
         ));
 
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {

@@ -22,35 +22,65 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class FiniteLevelDataHandler {
+public class FiniteDataHandler {
     public static final String FILE_NAME = "mblevel.dat";
     
     private static final int FINITE_VERSION_V1_3_1_0 = 1310;
     
     private final File worldDirectory;
-    private FiniteLevelData levelData;
+    private FiniteData finiteData;
     
-    public FiniteLevelDataHandler(World world, FiniteChunkSource chunkSource) {
+    /**
+     * Constructs a new finite data handler.
+     * 
+     * @param world
+     * @param finiteChunkSource
+     */
+    public FiniteDataHandler(World world, FiniteChunkSource finiteChunkSource) {
         this.worldDirectory = world.getSaveHandler().getWorldDirectory();
-        this.levelData = new FiniteLevelData(
-            chunkSource.getLevelWidth(),
-            chunkSource.getLevelHeight(),
-            chunkSource.getLevelLength()
+        this.finiteData = new FiniteData(
+            finiteChunkSource.getLevelWidth(),
+            finiteChunkSource.getLevelHeight(),
+            finiteChunkSource.getLevelLength()
         );
     }
     
+    /**
+     * Sets given byte level data array into the finite data container.
+     * 
+     * @param levelData Level byte array provided by FiniteChunkSource object.
+     * @param levelMap Level byte-string id map.
+     */
     public void setLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
-        this.levelData.setLevelData(levelData, levelMap);
+        this.finiteData.setLevelData(levelData, levelMap);
     }
     
+    /**
+     * Gets a new LevelDataContainer populated from the loaded finite data.
+     * 
+     * @param levelWidth The level width.
+     * @param levelHeight The level height.
+     * @param levelLength The level length
+     * @return A new LevelDataContainer populated from the loaded finite data.
+     */
     public LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
-        return this.levelData.getLevelData(levelWidth, levelHeight, levelLength);
+        return this.finiteData.getLevelData(levelWidth, levelHeight, levelLength);
     }
     
+    /**
+     * Gets the data version for the data handler.
+     * 
+     * @return The current data version.
+     */
     private static int getFiniteVersion() {
         return FINITE_VERSION_V1_3_1_0;
     }
     
+    /**
+     * Attempts to write the current finite data to disk. Uses GZIP compression.
+     * 
+     * @throws IOException if the finite data can't be written to disk
+     */
     public void writeToDisk() throws IOException {
         File file = new File(this.worldDirectory, FILE_NAME);
 
@@ -58,10 +88,16 @@ public class FiniteLevelDataHandler {
             GZIPOutputStream gos = new GZIPOutputStream(fos);
             ObjectOutputStream oos = new ObjectOutputStream(gos)
         ) {
-            oos.writeObject(this.levelData);
+            oos.writeObject(this.finiteData);
         }
     }
     
+    /**
+     * Attempts to read finite data from disk. Uses GZIP compression.
+     * 
+     * @throws IOException if the finite data can't be read from disk
+     * @throws ClassNotFoundException if the finite data class is not found (when would this happen?)
+     */
     public void readFromDisk() throws IOException, ClassNotFoundException {
         File file = new File(this.worldDirectory, FILE_NAME);
         
@@ -69,14 +105,14 @@ public class FiniteLevelDataHandler {
             GZIPInputStream gis = new GZIPInputStream(fis);
             ObjectInputStream ois = new ObjectInputStream(gis)
         ) {
-            this.levelData = (FiniteLevelData)ois.readObject();
+            this.finiteData = (FiniteData)ois.readObject();
         }
     }
     
-    private static class FiniteLevelData implements Serializable {
+    private static class FiniteData implements Serializable {
         private static final long serialVersionUID = 4163598858586006355L;
         
-        private final int levelVersion = FiniteLevelDataHandler.getFiniteVersion();
+        private final int levelVersion = FiniteDataHandler.getFiniteVersion();
         
         private final int levelWidth;
         private final int levelHeight;
@@ -85,12 +121,25 @@ public class FiniteLevelDataHandler {
         private byte[] levelData; 
         private BiMap<Byte, String> levelMap;
         
-        private FiniteLevelData(int levelWidth, int levelHeight, int levelLength) {
+        /**
+         * Constructs a new FiniteData container with level dimensions.
+         * 
+         * @param levelWidth The level width.
+         * @param levelHeight The level height.
+         * @param levelLength The level length.
+         */
+        private FiniteData(int levelWidth, int levelHeight, int levelLength) {
             this.levelWidth = levelWidth;
             this.levelHeight = levelHeight;
             this.levelLength = levelLength;
         }
         
+        /**
+         * Sets given byte level data array into the finite data container.
+         * 
+         * @param levelData Level byte array provided by FiniteChunkSource object.
+         * @param levelMap Level byte-string id map.
+         */
         private void setLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
             this.levelData = levelData;
             this.levelMap = levelMap;
@@ -98,13 +147,23 @@ public class FiniteLevelDataHandler {
             ModernBeta.log(Level.DEBUG, String.format("Packed byte array of size %d", this.levelData.length));
             ModernBeta.log(Level.DEBUG, String.format("Packed block map of size %d", this.levelMap.size()));
         }
-        
-        private LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
-            if (this.levelVersion < FiniteLevelDataHandler.getFiniteVersion()) {
+
+        /**
+         * Gets a new LevelDataContainer populated from the loaded finite data.
+         * 
+         * @param levelWidth The level width.
+         * @param levelHeight The level height.
+         * @param levelLength The level length
+         * @return A new LevelDataContainer populated from the loaded finite data.
+         * @throws IllegalStateException if the finite data information was somehow corrupted.
+         * @throws NullPointerException if the loaded block data does not have corresponding Forge registry entries.
+         */
+        private LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) throws IllegalStateException, NullPointerException {
+            if (this.levelVersion < FiniteDataHandler.getFiniteVersion()) {
                 String errorStr = String.format(
                     "Stored level version %d is older than current version %d!",
                     this.levelVersion,
-                    FiniteLevelDataHandler.getFiniteVersion()
+                    FiniteDataHandler.getFiniteVersion()
                 );
                 
                 throw new IllegalStateException(errorStr);

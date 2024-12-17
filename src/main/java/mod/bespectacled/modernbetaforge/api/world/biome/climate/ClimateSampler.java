@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.api.world.biome.climate;
 
 /**
  * Implemented by a climate sampler to provide temperatures and rainfall values,
- * for use by a biome provider or chunk provider.
+ * for use by a biome source or chunk source.
  *
  */
 public interface ClimateSampler {
@@ -11,7 +11,6 @@ public interface ClimateSampler {
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * 
      * @return A Clime containing temperature/rainfall values in range [0.0, 1.0] sampled at position.
      */
     Clime sample(int x, int z);

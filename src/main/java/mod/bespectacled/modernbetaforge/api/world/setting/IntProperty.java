@@ -6,10 +6,27 @@ import com.google.common.primitives.Ints;
 import net.minecraft.util.math.MathHelper;
 
 public class IntProperty extends RangedProperty<Integer> {
+    /**
+     * Constructs a new IntProperty with minimum and maximum value constraints.
+     * 
+     * @param value The initial int property value.
+     * @param minValue The minimum int property value.
+     * @param maxValue The maximum int property value.
+     * @param guiType The {@link PropertyGuiType}.
+     */
     public IntProperty(int value, int minValue, int maxValue, PropertyGuiType guiType) {
         super(value, minValue, maxValue, guiType);
     }
     
+    /**
+     * Constructs a new IntProperty with {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE} value constraints.
+     * The PropertyGuiType is set to {@link PropertyGuiType#FIELD}.
+     * 
+     * @param value The initial int property value.
+     * @param minValue The minimum int property value.
+     * @param maxValue The maximum int property value.
+     * @param guiType The {@link PropertyGuiType}.
+     */
     public IntProperty(int value) {
         this(value, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);
     }

@@ -5,13 +5,10 @@ import net.minecraft.world.storage.WorldInfo;
 
 public abstract class BiomeSource {
     protected final WorldInfo worldInfo;
-    
     /**
-     * Constructs a Modern Beta biome provider initialized with seed.
-     * Additional settings are supplied in NbtCompound parameter.
+     * Constructs a Modern Beta biome source, given the world's worldInfo.
      * 
-     * @param worldInfo WorldInfo.
-     * 
+     * @param worldInfo WorldInfo associated with the world.
      */
     public BiomeSource(WorldInfo worldInfo) {
         this.worldInfo = worldInfo;

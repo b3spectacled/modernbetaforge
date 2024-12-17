@@ -79,8 +79,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
     @Override
     protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getChunkGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getChunkGeneratorSettings().replaceBeachBiomes;
+        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
     

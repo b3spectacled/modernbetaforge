@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 
 public interface SpawnLocator {
     /**
-     * Locate initial player spawn point.
+     * Locates initial player spawn point.
      * 
      * @param spawnPos Starting player spawn block position.
      * @param chunkSource Modern Beta chunk source.
@@ -18,6 +18,10 @@ public interface SpawnLocator {
      */
     BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource);
     
+    /**
+     * The default spawn locator.
+     * This will attempt to find solid ground with adjacent blocks to spawn the player.
+     */
     public static final SpawnLocator DEFAULT = new SpawnLocator() {
         @Override
         public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {

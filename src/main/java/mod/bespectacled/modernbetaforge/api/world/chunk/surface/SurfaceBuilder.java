@@ -40,6 +40,13 @@ public abstract class SurfaceBuilder {
         ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
+    /**
+     * Constructs a new abstract SurfaceBuilder with basic surface information.
+     * 
+     * @param world The world object.
+     * @param chunkSource Associated chunkSource object.
+     * @param chunkGeneratorSettings The generator settings.
+     */
     public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
@@ -83,29 +90,58 @@ public abstract class SurfaceBuilder {
      */
     public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
+    /**
+     * Gets the PerlinOctaveNoise sampler used for beach generation.
+     * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
+     * 
+     * @return The noise sampler.
+     */
     protected PerlinOctaveNoise getBeachOctaveNoise() {
         return this.chunkSource.getBeachOctaveNoise().orElse(this.defaultBeachOctaveNoise);
     }
     
+    /**
+     * Gets the PerlinOctaveNoise sampler used for surface generation.
+     * Will try to use the sampler from {@link ChunkSource#getSurfaceOctaveNoise() getSurfaceOctaveNoise} if possible, otherwise a default sampler.
+     * 
+     * @return The noise sampler.
+     */
     protected PerlinOctaveNoise getSurfaceOctaveNoise() {
         return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
     }
     
+    /**
+     * Gets the world height, from generator settings.
+     * 
+     * @return The world height.
+     */
     protected int getWorldHeight() {
         return this.settings.height;
     }
     
+    /**
+     * Gets the sea level, from the chunk source.
+     * 
+     * @return The sea level.
+     */
     protected int getSeaLevel() {
         return this.chunkSource.getSeaLevel();
     }
     
+    /**
+     * Indicates whether sandstone should be generated underneath beaches or deserts, from the generator settings.
+     * 
+     * @return Whether sandstone should be generated.
+     */
     protected boolean useSandstone() {
         return this.settings.useSandstone;
     }
     
-    /*
+    /**
+     * Indiates whether bedrock should be generated at the bottom of the world.
      * Probably won't add a 'useBedrock' setting to maintain congruous bedrock generation when using custom surfaces
      * 
+     * @return Whether bedrock should be generated.
      */
     protected boolean useBedrock() {
         return true;
@@ -116,7 +152,6 @@ public abstract class SurfaceBuilder {
      * 
      * @param chunkX x-coordinate in chunk coordinates.
      * @param chunkZ z-coordinate in chunk coordinates.
-     * 
      * @return New Random object initialized with chunk coordinates for seed.
      */
     protected Random createSurfaceRandom(int chunkX, int chunkZ) {
@@ -127,8 +162,7 @@ public abstract class SurfaceBuilder {
     
     /**
      * Use a biome-specific surface builder, at a given x/z-coordinate and topmost y-coordinate.
-     * Valid biomes are checked on per-biome basis using identifier from BIOMES_WITH_CUSTOM_SURFACES set.
-     * Also generates ocean floor surfaces if used with ReleaseChunkSource.
+     * Valid biomes are checked on per-biome basis using identifier from {@link #biomesWithCustomSurfaces} set.
      * 
      * @param biome Biome with surface builder to use.
      * @param chunkPrimer Chunk primer.
@@ -136,7 +170,6 @@ public abstract class SurfaceBuilder {
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param override Force usage of vanilla surface builder.
-     * 
      * @return True if biome is included in valid biomes set and has run surface builder. False if not included and not run.
      * 
      */

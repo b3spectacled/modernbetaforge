@@ -53,10 +53,10 @@ public class DebugInfoEventHandler {
             if (chunkGenerator instanceof ModernBetaChunkGenerator) {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
                 
-                String chunkSourceName = chunkSource.getChunkGeneratorSettings().chunkSource;
-                String biomeSourceName = chunkSource.getChunkGeneratorSettings().biomeSource;
-                String surfaceBuilderName = chunkSource.getChunkGeneratorSettings().surfaceBuilder;
-                String fixedBiome = chunkSource.getChunkGeneratorSettings().singleBiome;
+                String chunkSourceName = chunkSource.getGeneratorSettings().chunkSource;
+                String biomeSourceName = chunkSource.getGeneratorSettings().biomeSource;
+                String surfaceBuilderName = chunkSource.getGeneratorSettings().surfaceBuilder;
+                String fixedBiome = chunkSource.getGeneratorSettings().singleBiome;
                 
                 String sourceText = String.format("[Modern Beta] Chunk Source: %s Biome Source: %s", chunkSourceName, biomeSourceName);
                 String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceBuilderName);
