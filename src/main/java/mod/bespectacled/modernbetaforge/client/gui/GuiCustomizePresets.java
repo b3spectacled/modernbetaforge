@@ -24,115 +24,67 @@ public class GuiCustomizePresets {
     public static final String SETTINGS_BETA_RELEASE = "{\"chunkSource\":\"modernbetaforge:release\",\"biomeSource\":\"modernbetaforge:beta\",\"surfaceBuilder\":\"modernbetaforge:beta\",\"singleBiome\":\"minecraft:plains\",\"replaceOceanBiomes\":true,\"replaceBeachBiomes\":true,\"coordinateScale\":684.412,\"heightScale\":684.412,\"lowerLimitScale\":512.0,\"upperLimitScale\":512.0,\"depthNoiseScaleX\":200.0,\"depthNoiseScaleZ\":200.0,\"depthNoiseScaleExponent\":0.5,\"mainNoiseScaleX\":80.0,\"mainNoiseScaleY\":160.0,\"mainNoiseScaleZ\":80.0,\"baseSize\":8.5,\"stretchY\":12.0,\"seaLevel\":63,\"height\":255,\"tempNoiseScale\":1.0,\"rainNoiseScale\":1.0,\"detailNoiseScale\":1.0,\"biomeDepthWeight\":1.0,\"biomeDepthOffset\":0.0,\"biomeScaleWeight\":1.0,\"biomeScaleOffset\":0.0,\"useBiomeDepthScale\":true,\"useCaves\":true,\"useDungeons\":true,\"dungeonChance\":8,\"useStrongholds\":true,\"useVillages\":true,\"useVillageVariants\":true,\"useMineShafts\":true,\"useTemples\":true,\"useMonuments\":true,\"useMansions\":true,\"useRavines\":true,\"useWaterLakes\":true,\"waterLakeChance\":4,\"useLavaLakes\":true,\"lavaLakeChance\":80,\"useLavaOceans\":false,\"useSandstone\":true,\"claySize\":33,\"clayCount\":10,\"clayMinHeight\":0,\"clayMaxHeight\":128,\"dirtSize\":33,\"dirtCount\":20,\"dirtMinHeight\":0,\"dirtMaxHeight\":128,\"gravelSize\":33,\"gravelCount\":10,\"gravelMinHeight\":0,\"gravelMaxHeight\":128,\"graniteSize\":33,\"graniteCount\":10,\"graniteMinHeight\":0,\"graniteMaxHeight\":80,\"dioriteSize\":33,\"dioriteCount\":10,\"dioriteMinHeight\":0,\"dioriteMaxHeight\":80,\"andesiteSize\":33,\"andesiteCount\":10,\"andesiteMinHeight\":0,\"andesiteMaxHeight\":80,\"coalSize\":17,\"coalCount\":20,\"coalMinHeight\":0,\"coalMaxHeight\":128,\"ironSize\":9,\"ironCount\":20,\"ironMinHeight\":0,\"ironMaxHeight\":64,\"goldSize\":9,\"goldCount\":2,\"goldMinHeight\":0,\"goldMaxHeight\":32,\"redstoneSize\":8,\"redstoneCount\":8,\"redstoneMinHeight\":0,\"redstoneMaxHeight\":16,\"diamondSize\":8,\"diamondCount\":1,\"diamondMinHeight\":0,\"diamondMaxHeight\":16,\"lapisSize\":7,\"lapisCount\":1,\"lapisCenterHeight\":16,\"lapisSpread\":16,\"emeraldSize\":3,\"emeraldCount\":1,\"emeraldMinHeight\":95,\"emeraldMaxHeight\":128,\"useTallGrass\":true,\"useNewFlowers\":true,\"useLilyPads\":true,\"useMelons\":true,\"useDesertWells\":true,\"useFossils\":true,\"useBirchTrees\":true,\"usePineTrees\":true,\"useSwampTrees\":true,\"useJungleTrees\":true,\"useAcaciaTrees\":true,\"spawnNewCreatureMobs\":true,\"spawnNewMonsterMobs\":true,\"spawnWaterMobs\":true,\"spawnAmbientMobs\":true,\"spawnWolves\":true,\"desertBiomeBase\":\"modernbetaforge:beta_desert\",\"desertBiomeOcean\":\"modernbetaforge:beta_ocean\",\"desertBiomeBeach\":\"modernbetaforge:beta_desert\",\"forestBiomeBase\":\"modernbetaforge:beta_forest\",\"forestBiomeOcean\":\"modernbetaforge:beta_ocean\",\"forestBiomeBeach\":\"modernbetaforge:beta_beach\",\"iceDesertBiomeBase\":\"modernbetaforge:beta_tundra\",\"iceDesertBiomeOcean\":\"modernbetaforge:beta_frozen_ocean\",\"iceDesertBiomeBeach\":\"modernbetaforge:beta_snowy_beach\",\"plainsBiomeBase\":\"modernbetaforge:beta_plains\",\"plainsBiomeOcean\":\"modernbetaforge:beta_ocean\",\"plainsBiomeBeach\":\"modernbetaforge:beta_beach\",\"rainforestBiomeBase\":\"modernbetaforge:beta_rainforest\",\"rainforestBiomeOcean\":\"modernbetaforge:beta_ocean\",\"rainforestBiomeBeach\":\"modernbetaforge:beta_beach\",\"savannaBiomeBase\":\"modernbetaforge:beta_savanna\",\"savannaBiomeOcean\":\"modernbetaforge:beta_ocean\",\"savannaBiomeBeach\":\"modernbetaforge:beta_beach\",\"shrublandBiomeBase\":\"modernbetaforge:beta_shrubland\",\"shrublandBiomeOcean\":\"modernbetaforge:beta_ocean\",\"shrublandBiomeBeach\":\"modernbetaforge:beta_beach\",\"seasonalForestBiomeBase\":\"modernbetaforge:beta_seasonal_forest\",\"seasonalForestBiomeOcean\":\"modernbetaforge:beta_ocean\",\"seasonalForestBiomeBeach\":\"modernbetaforge:beta_beach\",\"swamplandBiomeBase\":\"modernbetaforge:beta_swampland\",\"swamplandBiomeOcean\":\"modernbetaforge:beta_ocean\",\"swamplandBiomeBeach\":\"modernbetaforge:beta_beach\",\"taigaBiomeBase\":\"modernbetaforge:beta_taiga\",\"taigaBiomeOcean\":\"modernbetaforge:beta_frozen_ocean\",\"taigaBiomeBeach\":\"modernbetaforge:beta_snowy_beach\",\"tundraBiomeBase\":\"modernbetaforge:beta_tundra\",\"tundraBiomeOcean\":\"modernbetaforge:beta_frozen_ocean\",\"tundraBiomeBeach\":\"modernbetaforge:beta_snowy_beach\"}";
     
     public static final GuiCustomizePreset PRESET_CLASSIC_BETA = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_BETA,
-        GuiCustomizePreset.texture("classic_beta.png"),
-        GuiCustomizePreset.name("classicBeta"),
-        GuiCustomizePreset.info("classicBeta")
+        GuiCustomizePresets.SETTINGS_CLASSIC_BETA
     );
         
     public static final GuiCustomizePreset PRESET_CLASSIC_ALPHA_1_2 = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA_1_2,
-        GuiCustomizePreset.texture("classic_beta.png"),
-        GuiCustomizePreset.name("classicAlpha12"),
-        GuiCustomizePreset.info("classicAlpha12")
+        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA_1_2
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_ALPHA = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA,
-        GuiCustomizePreset.texture("classic_alpha.png"),
-        GuiCustomizePreset.name("classicAlpha"),
-        GuiCustomizePreset.info("classicAlpha")
+        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_ALPHA_WINTER = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA_WINTER,
-        GuiCustomizePreset.texture("classic_alpha_winter.png"),
-        GuiCustomizePreset.name("classicAlphaWinter"),
-        GuiCustomizePreset.info("classicAlphaWinter")
+        GuiCustomizePresets.SETTINGS_CLASSIC_ALPHA_WINTER
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_INFDEV_611 = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_611,
-        GuiCustomizePreset.texture("classic_infdev_611.png"),
-        GuiCustomizePreset.name("classicInfdev611"),
-        GuiCustomizePreset.info("classicInfdev611")
+        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_611
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_INFDEV_420 = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_420,
-        GuiCustomizePreset.texture("classic_infdev_420.png"),
-        GuiCustomizePreset.name("classicInfdev420"),
-        GuiCustomizePreset.info("classicInfdev420")
+        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_420
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_INFDEV_415 = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_415,
-        GuiCustomizePreset.texture("classic_infdev_415.png"),
-        GuiCustomizePreset.name("classicInfdev415"),
-        GuiCustomizePreset.info("classicInfdev415")
+        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_415
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_INFDEV_227 = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_227,
-        GuiCustomizePreset.texture("classic_infdev_227.png"),
-        GuiCustomizePreset.name("classicInfdev227"),
-        GuiCustomizePreset.info("classicInfdev227")
+        GuiCustomizePresets.SETTINGS_CLASSIC_INFDEV_227
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_INDEV_ISLAND = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_INDEV_ISLAND,
-        GuiCustomizePreset.texture("classic_indev_island.png"),
-        GuiCustomizePreset.name("classicIndevIsland"),
-        GuiCustomizePreset.info("classicIndevIsland")
+        GuiCustomizePresets.SETTINGS_CLASSIC_INDEV_ISLAND
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_0_0_23A = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_0_0_23A,
-        GuiCustomizePreset.texture("classic_0_0_23a.png"),
-        GuiCustomizePreset.name("classic23a"),
-        GuiCustomizePreset.info("classic23a")
+        GuiCustomizePresets.SETTINGS_CLASSIC_0_0_23A
     );
     
     public static final GuiCustomizePreset PRESET_CLASSIC_SKYLANDS = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_CLASSIC_SKYLANDS,
-        GuiCustomizePreset.texture("classic_skylands.png"),
-        GuiCustomizePreset.name("classicSkylands"),
-        GuiCustomizePreset.info("classicSkylands")
+        GuiCustomizePresets.SETTINGS_CLASSIC_SKYLANDS
     );
     
     public static final GuiCustomizePreset PRESET_BETA_SKYLANDS = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_BETA_SKYLANDS,
-        GuiCustomizePreset.texture("beta_skylands.png"),
-        GuiCustomizePreset.name("betaSkylands"),
-        GuiCustomizePreset.info("betaSkylands")
+        GuiCustomizePresets.SETTINGS_BETA_SKYLANDS
     );
     
     public static final GuiCustomizePreset PRESET_BETA_PE = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_BETA_PE,
-        GuiCustomizePreset.texture("beta_pe.png"),
-        GuiCustomizePreset.name("betaPE"),
-        GuiCustomizePreset.info("betaPE")
+        GuiCustomizePresets.SETTINGS_BETA_PE
     );
     
     public static final GuiCustomizePreset PRESET_BETA_REALISTIC = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_BETA_REALISTIC,
-        GuiCustomizePreset.texture("beta_realistic.png"),
-        GuiCustomizePreset.name("betaRealistic"),
-        GuiCustomizePreset.info("betaRealistic")
+        GuiCustomizePresets.SETTINGS_BETA_REALISTIC
     );
     
     public static final GuiCustomizePreset PRESET_BETA_PLUS = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_BETA_PLUS,
-        GuiCustomizePreset.texture("beta_plus.png"),
-        GuiCustomizePreset.name("betaPlus"),
-        GuiCustomizePreset.info("betaPlus")
+        GuiCustomizePresets.SETTINGS_BETA_PLUS
     );
     
     public static final GuiCustomizePreset PRESET_BETA_RELEASE = new GuiCustomizePreset(
-        GuiCustomizePresets.SETTINGS_BETA_RELEASE,
-        GuiCustomizePreset.texture("beta_release.png"),
-        GuiCustomizePreset.name("betaRelease"),
-        GuiCustomizePreset.info("betaRelease")
+        GuiCustomizePresets.SETTINGS_BETA_RELEASE
     );
 }
 

@@ -136,20 +136,22 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private List<Info> loadPresets() {
         List<Info> presets = new ArrayList<>();
         
-        ModernBetaGeneratorSettings.Factory factory;
-        ResourceLocation texture;
         String name;
         String desc;
+        ResourceLocation texture;
+        ModernBetaGeneratorSettings.Factory factory;
         
-        for (GuiCustomizePreset p : ModernBetaClientRegistries.PRESET.getEntries()) {
-            name = I18n.format(p.name);
-            desc = I18n.format(p.desc);
-            texture = new ResourceLocation(p.modId, p.texture);
-            factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(p.settings);
+        for (ResourceLocation key : ModernBetaClientRegistries.PRESET.getKeys()) {
+            GuiCustomizePreset preset = ModernBetaClientRegistries.PRESET.get(key);
+            
+            name = GuiCustomizePreset.formatName(key);
+            desc = GuiCustomizePreset.formatInfo(key);
+            texture = GuiCustomizePreset.formatTexture(key);
+            factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(preset.settings);
             
             presets.add(new Info(name, desc, texture, factory));
         }
-        
+
         String[] customPresets = ModernBetaConfig.guiOptions.customPresets;
         for (int i = 0; i < customPresets.length; ++i) {
             String customPreset = customPresets[i];

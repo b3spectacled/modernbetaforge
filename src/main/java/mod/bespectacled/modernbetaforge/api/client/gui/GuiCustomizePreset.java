@@ -1,94 +1,54 @@
 package mod.bespectacled.modernbetaforge.api.client.gui;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiCustomizePreset {
-    public final String modId;
     public final String settings;
-    public final String texture;
-    public final String name;
-    public final String desc;
     
     /**
-     * Constructs a preset with all the fields specified.
+     * Constructs a new world customization preset.
      * 
-     * @param modId The unique mod identifier. 
      * @param settings The preset settings string that you can get from the in-game GUI.
-     * @param texture The preset texture asset location.
-     * @param name The name of the preset. The localization prefix will be automatically attached.
-     * @param desc The description of the preset. The localization prefix will be automatically attached.
      */
-    public GuiCustomizePreset(String modId, String settings, String texture, String name, String desc) {
-        this.modId = modId;
+    public GuiCustomizePreset(String settings) {
         this.settings = settings;
-        this.texture = texture;
-        this.name = name;
-        this.desc = desc;
     }
     
     /**
-     * Constructs a preset with all the fields specified, with default Modern Beta mod id.
+     * Gets a formatted resource location for the preset texture directory, given a resource location.
      * 
-     * @param settings The preset settings string that you can get from the in-game GUI.
-     * @param texture The preset texture asset location.
-     * @param name The name of the preset. The localization prefix will be automatically attached.
-     * @param desc The description of the preset. The localization prefix will be automatically attached.
+     * @param registryKey The resource location of the preset.
+     * 
+     * @return Formatted file directory resource location.
      */
-    public GuiCustomizePreset(String settings, String texture, String name, String desc) {
-        this(ModernBeta.MODID, settings, texture, name, desc);
+    public static ResourceLocation formatTexture(ResourceLocation registryKey) {
+        return new ResourceLocation(registryKey.getNamespace(), String.format("textures/gui/presets/%s.png", registryKey.getPath()));
     }
     
     /**
-     * Constructs a preset with all the fields specified, with default Modern Beta mod id and no description.
+     * Gets a formatted string for the preset name localization, given a resource location.
      * 
-     * @param settings The preset settings string that you can get from the in-game GUI.
-     * @param texture The preset texture asset location.
-     * @param name The name of the preset. The localization prefix will be automatically attached.
-     */
-    public GuiCustomizePreset(String settings, String texture, String name) {
-        this(settings, texture, name, "");
-    }
-    
-    /**
-     * Constructs a preset with all the fields specified, with default Modern Beta mod id, no description, and no preset texture specified.
-     * 
-     * @param settings The preset settings string that you can get from the in-game GUI.
-     * @param name The name of the preset. The localization prefix will be automatically attached.
-     */
-    public GuiCustomizePreset(String settings, String name) {
-        this(settings, "textures/misc/unknown_pack.png", name, "");
-    }
-    
-    /**
-     * Gets a formatted string for the preset texture directory, given a filename string.
-     * 
-     * @param filename The filename of the preset texture
-     * 
-     * @return Formatted file directory string.
-     */
-    public static String texture(String filename) {
-        return String.format("textures/gui/presets/%s", filename);
-    }
-    
-    /**
-     * Gets a formatted string for the preset name localization, given a name id string.
-     * 
-     * @param name The name id of the preset.
+     * @param registryKey The resource location of the preset.
      * 
      * @return Formatted localization string
      */
-    public static String name(String name) {
-        return String.format("createWorld.customize.custom.preset.%s", name);
+    public static String formatName(ResourceLocation registryKey) {
+        String formattedRegistryKey = registryKey.getNamespace() + "." + registryKey.getPath();
+        
+        return I18n.format(String.format("createWorld.customize.custom.preset.%s", formattedRegistryKey));
     }
     
     /**
-     * Gets a formatted string for the preset description localization, given a name id string.
+     * Gets a formatted string for the preset description localization, given a resource location.
      * 
-     * @param name The name id of the preset.
+     * @param registryKey The resource location of the preset.
      * 
      * @return Formatted localization string
      */
-    public static String info(String name) {
-        return String.format("createWorld.customize.custom.preset.info.%s", name);
+    public static String formatInfo(ResourceLocation registryKey) {
+        String formattedRegistryKey = registryKey.getNamespace() + "." + registryKey.getPath();
+        
+        return I18n.format(String.format("createWorld.customize.custom.preset.info.%s", formattedRegistryKey));
     }
 }
