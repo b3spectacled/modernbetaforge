@@ -37,12 +37,12 @@ public class ModernBeta {
     
     private static final Logger LOGGER = LogManager.getLogger(MODID);
     
-    public static ResourceLocation createRegistryKey(String name) {
-        return new ResourceLocation(MODID, name);
-    }
-    
     public static void log(Level level, String message) {
         LOGGER.log(level, "{}", message);
+    }
+    
+    public static ResourceLocation createRegistryKey(String name) {
+        return new ResourceLocation(MODID, name);
     }
     
     @SidedProxy(
@@ -70,7 +70,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
-        // ModernBetaBuiltInRegistries.registerProperties();
+        ModernBetaBuiltInRegistries.registerProperties();
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         ModDataFixer.INSTANCE.registerModDataFixes();

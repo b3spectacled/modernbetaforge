@@ -230,8 +230,9 @@ modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Tempera
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
 
 ## Test Properties (Not used!)
-createWorld.customize.custom.booleanProp=Boolean Prop
-createWorld.customize.custom.intProp=Int Prop
-createWorld.customize.custom.floatProp=Float Prop
-createWorld.customize.custom.stringProp=String Prop
-createWorld.customize.custom.listProp=List Prop
+createWorld.customize.custom.modernbetaforge=Modern Beta Forge
+createWorld.customize.custom.modernbetaforge.booleanprop=Boolean Prop
+createWorld.customize.custom.modernbetaforge.intprop=Int Prop
+createWorld.customize.custom.modernbetaforge.floatprop=Float Prop
+createWorld.customize.custom.modernbetaforge.stringprop=String Prop
+createWorld.customize.custom.modernbetaforge.listprop=List Prop

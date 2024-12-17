@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,10 +13,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
@@ -1643,79 +1647,100 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         // Get total number of page list entries,
         // and add an additional entry for float/int/string properties to accommodate label entry
-        int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size();
-        GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries * 2];
+        int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size() * 2;
         
-        int ndx = 0;
+        // Build map based on mod ID
+        Map<String, List<ResourceLocation>> modKeys = new LinkedHashMap<>();
         for (ResourceLocation key : ModernBetaRegistries.PROPERTY.getKeys()) {
-            Property<?> settingsProperty = this.settings.customProperties.get(key);
+            String namespace = key.getNamespace();
             
-            if (settingsProperty instanceof BooleanProperty) {
-                BooleanProperty booleanProperty = (BooleanProperty)settingsProperty;
-                
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
-                pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
-                
-            } else if (settingsProperty instanceof FloatProperty) {
-                FloatProperty floatProperty = (FloatProperty)settingsProperty;
-                String formattedValue = String.format("%2.3f", floatProperty.getValue());
-                
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
-                
-                switch(floatProperty.getGuiType()) {
-                    case FIELD:
-                        pageList[ndx++] = this.createGuiField(this.customId, formattedValue, floatProperty.getStringPredicate());
-                        break;
-                    case SLIDER:
-                        pageList[ndx++] = this.createGuiSlider(
-                            this.customId,
-                            "entry",
-                            floatProperty.getMinValue(),
-                            floatProperty.getMaxValue(), 
-                            floatProperty.getValue()
-                        );
-                        break;
-                }
-                
-            } else if (settingsProperty instanceof IntProperty) {
-                IntProperty intProperty = (IntProperty)settingsProperty;
-                String formattedValue = String.format("%d", intProperty.getValue());
-                
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
-                
-                switch(intProperty.getGuiType()) {
-                    case FIELD:
-                        pageList[ndx++] = this.createGuiField(this.customId, formattedValue, intProperty.getStringPredicate());
-                        break;
-                    case SLIDER:
-                        pageList[ndx++] = this.createGuiSlider(
-                            this.customId,
-                            "entry",
-                            intProperty.getMinValue(),
-                            intProperty.getMaxValue(), 
-                            intProperty.getValue()
-                        );
-                        break;
-                }
-                
-            } else if (settingsProperty instanceof ListProperty) {
-                ListProperty listProperty = (ListProperty)settingsProperty;
-                int listNdx = listProperty.indexOf(listProperty.getValue());
-                
-                if (listNdx == -1) listNdx = 0;
-                
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
-                pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
-            
-            } else if (settingsProperty instanceof StringProperty) {
-                StringProperty stringProperty = (StringProperty)settingsProperty;
-                
-                pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
-                pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
-                
+            if (!modKeys.containsKey(namespace)) {
+                modKeys.put(namespace, new LinkedList<>());
+                numEntries += 2;
             }
             
-            this.customIds.put(this.customId++, key.toString());
+            modKeys.get(namespace).add(key);
+        }
+        
+        GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
+        
+        int ndx = 0;
+        for (String namespace : modKeys.keySet()) {
+            List<ResourceLocation> keys = modKeys.get(namespace);
+            
+            pageList[ndx++] = this.createGuiLabel(this.customId++, namespace);
+            pageList[ndx++] = null;
+            
+            for (ResourceLocation key : keys) {
+                Property<?> settingsProperty = this.settings.customProperties.get(key);
+                
+                if (settingsProperty instanceof BooleanProperty) {
+                    BooleanProperty booleanProperty = (BooleanProperty)settingsProperty;
+                    
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
+                    
+                } else if (settingsProperty instanceof FloatProperty) {
+                    FloatProperty floatProperty = (FloatProperty)settingsProperty;
+                    String formattedValue = String.format("%2.3f", floatProperty.getValue());
+                    
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    
+                    switch(floatProperty.getGuiType()) {
+                        case FIELD:
+                            pageList[ndx++] = this.createGuiField(this.customId, formattedValue, floatProperty.getStringPredicate());
+                            break;
+                        case SLIDER:
+                            pageList[ndx++] = this.createGuiSlider(
+                                this.customId,
+                                "entry",
+                                floatProperty.getMinValue(),
+                                floatProperty.getMaxValue(), 
+                                floatProperty.getValue()
+                            );
+                            break;
+                    }
+                    
+                } else if (settingsProperty instanceof IntProperty) {
+                    IntProperty intProperty = (IntProperty)settingsProperty;
+                    String formattedValue = String.format("%d", intProperty.getValue());
+                    
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    
+                    switch(intProperty.getGuiType()) {
+                        case FIELD:
+                            pageList[ndx++] = this.createGuiField(this.customId, formattedValue, intProperty.getStringPredicate());
+                            break;
+                        case SLIDER:
+                            pageList[ndx++] = this.createGuiSlider(
+                                this.customId,
+                                "entry",
+                                intProperty.getMinValue(),
+                                intProperty.getMaxValue(), 
+                                intProperty.getValue()
+                            );
+                            break;
+                    }
+                    
+                } else if (settingsProperty instanceof ListProperty) {
+                    ListProperty listProperty = (ListProperty)settingsProperty;
+                    int listNdx = listProperty.indexOf(listProperty.getValue());
+                    
+                    if (listNdx == -1) listNdx = 0;
+                    
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
+                
+                } else if (settingsProperty instanceof StringProperty) {
+                    StringProperty stringProperty = (StringProperty)settingsProperty;
+                    
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
+                    
+                }
+                
+                this.customIds.put(this.customId++, key.toString());
+            }
         }
         
         return pageList;
