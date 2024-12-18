@@ -7,17 +7,22 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
@@ -659,6 +664,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setInitialTextButton(this.pageList, GuiIdentifiers.PG5_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
         this.setInitialTextButton(this.pageList, GuiIdentifiers.PG5_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
         this.setInitialTextButton(this.pageList, GuiIdentifiers.PG5_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
+        
+        for (Entry<Integer, String> entry : this.customIds.entrySet()) {
+            Property<?> property = this.settings.customProperties.get(new ResourceLocation(entry.getValue()));
+            
+            if (property instanceof BiomeProperty) {
+                BiomeProperty biomeProperty = (BiomeProperty)property;
+                
+                this.setInitialTextButton(this.pageList, entry.getKey(), getFormattedBiomeName(biomeProperty.getValue(), false, -1));
+            }
+        }
 
         this.updatePageControls();
     }
@@ -1114,12 +1129,23 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
+            ResourceLocation registryKey = new ResourceLocation(key);
+            
+            Property<?> property = this.settings.customProperties.get(registryKey);
             
             if (property instanceof BooleanProperty) {
                 BooleanProperty booleanProperty = (BooleanProperty)property;
                 
                 booleanProperty.setValue(entryValue);
+                
+            } else if (property instanceof BiomeProperty) {
+                BiomeProperty biomeProperty = (BiomeProperty)property;
+                
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(
+                    this,
+                    (str, factory) -> ((BiomeProperty)factory.customProperties.get(registryKey)).setValue(str),
+                    biomeProperty.getValue()
+                ));
             }
         }
         
@@ -1669,19 +1695,19 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageList[ndx++] = null;
             
             for (ResourceLocation key : keys) {
-                Property<?> settingsProperty = this.settings.customProperties.get(key);
+                Property<?> property = this.settings.customProperties.get(key);
                 
-                if (settingsProperty instanceof BooleanProperty) {
-                    BooleanProperty booleanProperty = (BooleanProperty)settingsProperty;
+                if (property instanceof BooleanProperty) {
+                    BooleanProperty booleanProperty = (BooleanProperty)property;
                     
-                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
                     pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
                     
-                } else if (settingsProperty instanceof FloatProperty) {
-                    FloatProperty floatProperty = (FloatProperty)settingsProperty;
+                } else if (property instanceof FloatProperty) {
+                    FloatProperty floatProperty = (FloatProperty)property;
                     String formattedValue = String.format("%2.3f", floatProperty.getValue());
                     
-                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
                     
                     switch(floatProperty.getGuiType()) {
                         case FIELD:
@@ -1698,11 +1724,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             break;
                     }
                     
-                } else if (settingsProperty instanceof IntProperty) {
-                    IntProperty intProperty = (IntProperty)settingsProperty;
+                } else if (property instanceof IntProperty) {
+                    IntProperty intProperty = (IntProperty)property;
                     String formattedValue = String.format("%d", intProperty.getValue());
                     
-                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
                     
                     switch(intProperty.getGuiType()) {
                         case FIELD:
@@ -1719,19 +1745,23 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             break;
                     }
                     
-                } else if (settingsProperty instanceof ListProperty) {
-                    ListProperty listProperty = (ListProperty)settingsProperty;
+                } else if (property instanceof ListProperty) {
+                    ListProperty listProperty = (ListProperty)property;
                     int listNdx = listProperty.indexOf(listProperty.getValue());
                     
                     if (listNdx == -1) listNdx = 0;
                     
-                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
                     pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
                 
-                } else if (settingsProperty instanceof StringProperty) {
-                    StringProperty stringProperty = (StringProperty)settingsProperty;
+                } else if (property instanceof BiomeProperty) {
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
+                    pageList[ndx++] = this.createGuiButton(this.customId, "enabled", true);
+                
+                } else if (property instanceof StringProperty) {
+                    StringProperty stringProperty = (StringProperty)property;
                     
-                    pageList[ndx++] = this.createGuiLabel(this.customId++, key.getNamespace() + "." + key.getPath());
+                    pageList[ndx++] = this.createGuiLabel(this.customId++, this.getFormattedRegistryString(key));
                     pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
                     
                 }
@@ -1874,22 +1904,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG0_S_CHUNK: {
                 ResourceLocation registryKey = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "chunkSource." + registryKey.getNamespace() + "." + registryKey.getPath());
+                return I18n.format(PREFIX + "chunkSource." + this.getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_BIOME: {
                 ResourceLocation registryKey = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "biomeSource." + registryKey.getNamespace() + "." + registryKey.getPath());
+                return I18n.format(PREFIX + "biomeSource." + this.getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_SURFACE: {
                 ResourceLocation registryKey = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "surfaceBuilder." + registryKey.getNamespace() + "." + registryKey.getPath());
+                return I18n.format(PREFIX + "surfaceBuilder." + this.getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_CARVER: {
                 ResourceLocation registryKey = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "caveCarver." + registryKey.getNamespace() + "." + registryKey.getPath());
+                return I18n.format(PREFIX + "caveCarver." + this.getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
@@ -2086,6 +2116,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private Set<Gui> getBiomeButtonComponents() {
         return GuiIdentifiers.getBiomeGuiIds().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
+    }
+    
+    private String getFormattedRegistryString(ResourceLocation registryKey) {
+        return registryKey.getNamespace() + "." + registryKey.getPath();
     }
     
     private static String getFormattedBiomeName(String registryKey, boolean prefix, int truncateLen) {

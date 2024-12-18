@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.api.world.setting;
 
 import java.util.Arrays;
 
-public class ListProperty extends Property<String> {
+public class ListProperty extends StringProperty {
     private final String[] values;
     
     /**

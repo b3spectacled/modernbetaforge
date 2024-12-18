@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.registry;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
@@ -101,6 +102,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp"), new FloatProperty(13.0f, 0.0f, 500.0f, PropertyGuiType.FIELD));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("stringProp"), new StringProperty("test"));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("listProp"), new ListProperty("test1", new String[] { "test0", "test1", "test2" }));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty("minecraft:plains"));
     }
     
     public static void registerDataFixes() {

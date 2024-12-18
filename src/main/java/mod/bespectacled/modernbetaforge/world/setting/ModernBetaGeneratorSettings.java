@@ -19,6 +19,7 @@ import com.google.gson.JsonSerializer;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
@@ -989,13 +990,17 @@ public class ModernBetaGeneratorSettings {
                     
                     this.customProperties.put(key, new IntProperty(value, minValue, maxValue, type));
                     
-                } else if (property instanceof StringProperty) {
-                    StringProperty stringProperty = (StringProperty)property;
-                    this.customProperties.put(key, new StringProperty(stringProperty.getValue()));
-                    
                 } else if (property instanceof ListProperty) {
                     ListProperty listProperty = (ListProperty)property;
                     this.customProperties.put(key, new ListProperty(listProperty.getValue(), listProperty.getValues()));
+                    
+                } else if (property instanceof BiomeProperty) {
+                    BiomeProperty biomeProperty = (BiomeProperty)property;
+                    this.customProperties.put(key, new BiomeProperty(biomeProperty.getValue()));
+                    
+                } else if (property instanceof StringProperty) {
+                    StringProperty stringProperty = (StringProperty)property;
+                    this.customProperties.put(key, new StringProperty(stringProperty.getValue()));
                     
                 }
             });
@@ -1704,15 +1709,19 @@ public class ModernBetaGeneratorSettings {
                         
                         factory.customProperties.put(key, new IntProperty(value, minValue, maxValue, guiType));
                         
-                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        String value = JsonUtils.getString(jsonObject, key.toString(), ((StringProperty)property).getValue());
-                        factory.customProperties.put(key, new StringProperty(value));
-                        
                     } else if (property instanceof ListProperty && JsonUtils.hasField(jsonObject, key.toString())) {
                         String value = JsonUtils.getString(jsonObject, key.toString(), ((ListProperty)property).getValue());
                         factory.customProperties.put(key, new ListProperty(value, ((ListProperty)property).getValues()));
                         
-                    }
+                    } else if (property instanceof BiomeProperty && JsonUtils.hasField(jsonObject, key.toString())) { 
+                        String value = JsonUtils.getString(jsonObject, key.toString(), ((BiomeProperty)property).getValue());
+                        factory.customProperties.put(key, new BiomeProperty(value));
+                        
+                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key.toString())) {
+                        String value = JsonUtils.getString(jsonObject, key.toString(), ((StringProperty)property).getValue());
+                        factory.customProperties.put(key, new StringProperty(value));
+                        
+                    } 
                 });
                 
             } catch (Exception e) {
@@ -1954,10 +1963,8 @@ public class ModernBetaGeneratorSettings {
                 } else if (property instanceof StringProperty) {
                     jsonObject.addProperty(key.toString(), ((StringProperty)property).getValue());
                     
-                } else if (property instanceof ListProperty) {
-                    jsonObject.addProperty(key.toString(), ((ListProperty)property).getValue());
-                    
                 }
+                
             });
             
             return jsonObject;
