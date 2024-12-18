@@ -182,6 +182,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void createPagedList() {
+        this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
+        this.customIds = new LinkedHashMap<>();
+        
         int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
         int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
         int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(new ResourceLocation(this.settings.surfaceBuilder));
@@ -714,9 +717,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         GuiIdentifiers.assertOffsets();
-        
-        this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
-        this.customIds = new LinkedHashMap<>();
         
         this.createPagedList();
         

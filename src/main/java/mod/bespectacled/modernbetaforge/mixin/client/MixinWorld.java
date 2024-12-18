@@ -16,7 +16,7 @@ import net.minecraft.world.biome.Biome;
 
 @Mixin(World.class)
 public abstract class MixinWorld {
-    @Inject(method = "getCloudColorBody", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getCloudColorBody", at = @At("HEAD"), cancellable = true, remap = false)
     private void injectGetCloudColorBody(float partialTicks, CallbackInfoReturnable<Vec3d> info) {
         WorldClient world = (WorldClient)(Object)this;
         Biome biome = world.getBiome(Minecraft.getMinecraft().getRenderViewEntity().getPosition());
