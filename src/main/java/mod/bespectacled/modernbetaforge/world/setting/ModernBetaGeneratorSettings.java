@@ -36,6 +36,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 
 public class ModernBetaGeneratorSettings {
     public final String chunkSource;
@@ -513,6 +514,16 @@ public class ModernBetaGeneratorSettings {
         
         if (property != null && property instanceof ListProperty) {
             return ((ListProperty)property).getValue();
+        }
+        
+        throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryKey));
+    }
+    
+    public Biome getCustomBiome(ResourceLocation registryKey) {
+        Property<?> property = this.customProperties.get(registryKey);
+        
+        if (property != null && property instanceof BiomeProperty) {
+            return ((BiomeProperty)property).getBiome();
         }
         
         throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryKey));
