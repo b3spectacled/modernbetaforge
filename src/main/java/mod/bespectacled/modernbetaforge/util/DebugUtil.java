@@ -49,6 +49,15 @@ public class DebugUtil {
         return String.format("Total time for '%s': %fs", section, totalTime / 1000.0);
     }
     
+    public static synchronized String getIterations(String section) {
+        if (!ITERATIONS.containsKey(section))
+            return "";
+        
+        long iterations = ITERATIONS.get(section);
+        
+        return String.format("Iterations for '%s': %d", section, iterations);
+    }
+    
     public static synchronized void resetDebug(String section) {
         TOTAL_TIME.put(section, 0L);
         CURRENT_TIME.put(section, 0L);

@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.world;
 
+import java.util.Random;
+
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -44,7 +46,13 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public double getHorizon(World world) {
-        return 0.0;
+        return -512.0;
+    }
+    
+    @Override
+    public boolean handleSlimeSpawnReduction(Random random, World world) {
+        // Disable slime chunk spawning for short worlds (e.g. Indev worlds)
+        return world.getSeaLevel() < 40 ? true : super.handleSlimeSpawnReduction(random, world);
     }
     
     @Override

@@ -75,7 +75,7 @@ public class DebugInfoEventHandler {
                 event.getLeft().add("");
                 
                 event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK));
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK));
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK));
                 event.getLeft().add("");
 
                 if (biomeKey.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString()))
@@ -147,10 +147,10 @@ public class DebugInfoEventHandler {
             
             if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {
                 String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
-                String totalTime = DebugUtil.getTotalTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
+                String iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
                 
                 if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
-                if (!totalTime.isEmpty()) event.getLeft().add("[Modern Beta] " + totalTime);
+                if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
             }
         }
     }

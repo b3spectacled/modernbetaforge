@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.api.registry;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource.NoiseColumnSampler;
@@ -53,7 +54,7 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface NoiseSamplerCreator {
-        NoiseColumnSampler apply(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        NoiseColumnSampler apply(World world, NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
