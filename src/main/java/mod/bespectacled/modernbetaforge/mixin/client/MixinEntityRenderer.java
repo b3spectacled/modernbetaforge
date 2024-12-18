@@ -79,9 +79,9 @@ public abstract class MixinEntityRenderer {
                 float g = (float)fogColor.y;
                 float b = (float)fogColor.z;
                 
-                r = r * (celestialAngle * 0.94F + 0.06F);
-                g = g * (celestialAngle * 0.94F + 0.06F);
-                b = b * (celestialAngle * 0.91F + 0.09F);
+                r *= (celestialAngle * 0.94F + 0.06F);
+                g *= (celestialAngle * 0.94F + 0.06F);
+                b *= (celestialAngle * 0.91F + 0.09F);
                 
                 fogColor = new Vec3d(r, g, b);
             }
