@@ -137,7 +137,7 @@ public abstract class ChunkSource {
             .collect(Collectors.toList());
         
         this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
-        this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
+        this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA + MAX_RENDER_DISTANCE_AREA / 2, ComponentChunk::new);
 
         this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(new ResourceLocation(this.settings.caveCarver)).apply(this.world, this, settings), InitMapGenEvent.EventType.CAVE);
         this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);

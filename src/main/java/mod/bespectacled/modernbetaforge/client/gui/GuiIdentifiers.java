@@ -34,6 +34,7 @@ public class GuiIdentifiers {
     public static final Map<Integer, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
+    private static final BiPredicate<Factory, Integer> TEST_CHUNK_SETTINGS;
     
     /* Function Buttons */
     
@@ -668,6 +669,19 @@ public class GuiIdentifiers {
         GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
         GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
         GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
+
+        TEST_CHUNK_SETTINGS = (factory, id) -> {
+            boolean enabled = false;
+            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, ImmutableList.of());
+            
+            if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
+                enabled = settings.contains(id);
+            } else if (id >= offsetForward(GuiIdentifiers.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIdentifiers.PG3_B_USE_BDS)) {
+                enabled = settings.contains(offsetBackward(id));
+            }
+            
+            return enabled;
+        };
         
         BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
             boolean isSkylands = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString());
@@ -804,20 +818,11 @@ public class GuiIdentifiers {
                 factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString()) ||
                 factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
         };
-        BiPredicate<Factory, Integer> testChunkSettings = (factory, id) -> {
-            boolean enabled = false;
-            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, ImmutableList.of());
-            
-            if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
-                enabled = settings.contains(id);
-            } else if (id >= offsetForward(GuiIdentifiers.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIdentifiers.PG3_B_USE_BDS)) {
-                enabled = settings.contains(offsetBackward(id));
-            }
-            
-            return enabled;
-        };
         BiPredicate<Factory, Integer> testCarverSettings = (factory, id) -> {
             return !factory.caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryString()) && factory.useCaves;
+        };
+        BiPredicate<Factory, Integer> testBiomeDepthOverride = (factory, id) -> {
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
         };
         
         add(PG0_S_CHUNK);
@@ -961,55 +966,55 @@ public class GuiIdentifiers {
         add(PG2_S_MGMA_SIZE, testClassicNether);
         add(PG2_S_MGMA_CNT, testClassicNether);
         
-        add(PG3_S_MAIN_NS_X, testChunkSettings);
-        add(PG3_S_MAIN_NS_Y, testChunkSettings);
-        add(PG3_S_MAIN_NS_Z, testChunkSettings);
-        add(PG3_S_DPTH_NS_X, testChunkSettings);
-        add(PG3_S_DPTH_NS_Z, testChunkSettings);
-        add(PG3_S_BASE_SIZE, testChunkSettings);
-        add(PG3_S_COORD_SCL, testChunkSettings);
-        add(PG3_S_HEIGH_SCL, testChunkSettings);
-        add(PG3_S_STRETCH_Y, testChunkSettings);
-        add(PG3_S_UPPER_LIM, testChunkSettings);
-        add(PG3_S_LOWER_LIM, testChunkSettings);
-        add(PG3_S_HEIGH_LIM, testChunkSettings);
+        add(PG3_S_MAIN_NS_X, TEST_CHUNK_SETTINGS);
+        add(PG3_S_MAIN_NS_Y, TEST_CHUNK_SETTINGS);
+        add(PG3_S_MAIN_NS_Z, TEST_CHUNK_SETTINGS);
+        add(PG3_S_DPTH_NS_X, TEST_CHUNK_SETTINGS);
+        add(PG3_S_DPTH_NS_Z, TEST_CHUNK_SETTINGS);
+        add(PG3_S_BASE_SIZE, TEST_CHUNK_SETTINGS);
+        add(PG3_S_COORD_SCL, TEST_CHUNK_SETTINGS);
+        add(PG3_S_HEIGH_SCL, TEST_CHUNK_SETTINGS);
+        add(PG3_S_STRETCH_Y, TEST_CHUNK_SETTINGS);
+        add(PG3_S_UPPER_LIM, TEST_CHUNK_SETTINGS);
+        add(PG3_S_LOWER_LIM, TEST_CHUNK_SETTINGS);
+        add(PG3_S_HEIGH_LIM, TEST_CHUNK_SETTINGS);
         
         add(PG3_S_TEMP_SCL, testClimateScales);
         add(PG3_S_RAIN_SCL, testClimateScales);
         add(PG3_S_DETL_SCL, testClimateScales);
         
-        add(PG3_S_B_DPTH_WT, testChunkSettings);
-        add(PG3_S_B_DPTH_OF, testChunkSettings);
-        add(PG3_S_B_SCL_WT, testChunkSettings);
-        add(PG3_S_B_SCL_OF, testChunkSettings);
+        add(PG3_S_B_DPTH_WT, TEST_CHUNK_SETTINGS);
+        add(PG3_S_B_DPTH_OF, TEST_CHUNK_SETTINGS);
+        add(PG3_S_B_SCL_WT, TEST_CHUNK_SETTINGS);
+        add(PG3_S_B_SCL_OF, TEST_CHUNK_SETTINGS);
         add(PG3_S_BIOME_SZ, testBiomeSize);
-        add(PG3_S_RIVER_SZ, testChunkSettings);
+        add(PG3_S_RIVER_SZ, TEST_CHUNK_SETTINGS);
         
-        add(PG3_B_USE_BDS, testChunkSettings);
+        add(PG3_B_USE_BDS, testBiomeDepthOverride);
         
-        add(PG4_F_MAIN_NS_X, testChunkSettings);
-        add(PG4_F_MAIN_NS_Y, testChunkSettings);
-        add(PG4_F_MAIN_NS_Z, testChunkSettings);
-        add(PG4_F_DPTH_NS_X, testChunkSettings);
-        add(PG4_F_DPTH_NS_Z, testChunkSettings);
-        add(PG4_F_BASE_SIZE, testChunkSettings);
-        add(PG4_F_COORD_SCL, testChunkSettings);
-        add(PG4_F_HEIGH_SCL, testChunkSettings);
-        add(PG4_F_STRETCH_Y, testChunkSettings);
-        add(PG4_F_UPPER_LIM, testChunkSettings);
-        add(PG4_F_LOWER_LIM, testChunkSettings);
-        add(PG4_F_HEIGH_LIM, testChunkSettings);
+        add(PG4_F_MAIN_NS_X, TEST_CHUNK_SETTINGS);
+        add(PG4_F_MAIN_NS_Y, TEST_CHUNK_SETTINGS);
+        add(PG4_F_MAIN_NS_Z, TEST_CHUNK_SETTINGS);
+        add(PG4_F_DPTH_NS_X, TEST_CHUNK_SETTINGS);
+        add(PG4_F_DPTH_NS_Z, TEST_CHUNK_SETTINGS);
+        add(PG4_F_BASE_SIZE, TEST_CHUNK_SETTINGS);
+        add(PG4_F_COORD_SCL, TEST_CHUNK_SETTINGS);
+        add(PG4_F_HEIGH_SCL, TEST_CHUNK_SETTINGS);
+        add(PG4_F_STRETCH_Y, TEST_CHUNK_SETTINGS);
+        add(PG4_F_UPPER_LIM, TEST_CHUNK_SETTINGS);
+        add(PG4_F_LOWER_LIM, TEST_CHUNK_SETTINGS);
+        add(PG4_F_HEIGH_LIM, TEST_CHUNK_SETTINGS);
         
         add(PG4_F_TEMP_SCL, testClimateScales);
         add(PG4_F_RAIN_SCL, testClimateScales);
         add(PG4_F_DETL_SCL, testClimateScales);
         
-        add(PG4_F_B_DPTH_WT, testChunkSettings);
-        add(PG4_F_B_DPTH_OF, testChunkSettings);
-        add(PG4_F_B_SCL_WT, testChunkSettings);
-        add(PG4_F_B_SCL_OF, testChunkSettings);
+        add(PG4_F_B_DPTH_WT, TEST_CHUNK_SETTINGS);
+        add(PG4_F_B_DPTH_OF, TEST_CHUNK_SETTINGS);
+        add(PG4_F_B_SCL_WT, TEST_CHUNK_SETTINGS);
+        add(PG4_F_B_SCL_OF, TEST_CHUNK_SETTINGS);
         add(PG4_F_BIOME_SZ, testBiomeSize);
-        add(PG4_F_RIVER_SZ, testChunkSettings);
+        add(PG4_F_RIVER_SZ, TEST_CHUNK_SETTINGS);
         
         add(PG5_DSRT_LAND, testCustomBetaBiomeBase);
         add(PG5_DSRT_OCEAN, testCustomBetaBiomeOcean);
