@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,6 +24,9 @@ import net.minecraft.world.biome.Biome;
 public abstract class MixinEntityRenderer {
     @Unique private static int modernBeta_renderDistance = 16;
     @Unique private static float modernBeta_fogWeight = calculateFogWeight(16);
+    @Unique private static float modernBeta_partialTicks = 0.0f;
+    
+    @Shadow private Minecraft mc;
     
     @Inject(method = "updateFogColor(F)V", at = @At("HEAD"))
     private void recalculateFogWeight(float partialTicks, CallbackInfo info) {
@@ -32,6 +36,8 @@ public abstract class MixinEntityRenderer {
             modernBeta_renderDistance = mc.gameSettings.renderDistanceChunks;
             modernBeta_fogWeight = calculateFogWeight(modernBeta_renderDistance);
         }
+        
+        modernBeta_partialTicks = partialTicks;
     }
     
     @ModifyVariable(
@@ -63,8 +69,22 @@ public abstract class MixinEntityRenderer {
         if (biome instanceof ModernBetaBiome) {
             int biomeFogColor = ((ModernBetaBiome)biome).getFogColor();
 
-            if (biomeFogColor != -1)
-                return MathUtil.convertColorIntToVec3d(biomeFogColor);
+            if (biomeFogColor != -1) {
+                float celestialAngle = this.mc.world.getCelestialAngle(modernBeta_partialTicks);
+                celestialAngle = MathHelper.cos(celestialAngle * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
+                celestialAngle = MathHelper.clamp(celestialAngle, 0.0f, 1.0f);
+                
+                fogColor = MathUtil.convertColorIntToVec3d(biomeFogColor);
+                float r = (float)fogColor.x;
+                float g = (float)fogColor.y;
+                float b = (float)fogColor.z;
+                
+                r = r * (celestialAngle * 0.94F + 0.06F);
+                g = g * (celestialAngle * 0.94F + 0.06F);
+                b = b * (celestialAngle * 0.91F + 0.09F);
+                
+                fogColor = new Vec3d(r, g, b);
+            }
         }
         
         return fogColor;
