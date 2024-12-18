@@ -14,13 +14,10 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
@@ -1991,7 +1988,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.nextPage.enabled = page != this.pageList.getPageCount() - 1;
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
         this.pageTitle = this.pageNames[page];
-        this.randomize.enabled = page < this.pageList.getPageCount() - 2 || page == 5;
+        this.randomize.enabled = page < 4;
         this.firstPage.enabled = this.previousPage.enabled;
         this.lastPage.enabled = this.nextPage.enabled;
     }
