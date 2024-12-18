@@ -526,7 +526,7 @@ public class ModernBetaGeneratorSettings {
             return ((BiomeProperty)property).getBiome();
         }
         
-        throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryKey));
+        throw new IllegalArgumentException(String.format("[Modern Beta] Biome Property '%s' was not found!", registryKey));
     }
     
     public static class Factory {
