@@ -8,14 +8,13 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
+import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -39,7 +38,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    private final NoiseBiomeSource noiseBiomeSource;
+    private final BiomeSource noiseBiomeSource;
 
     public ReleaseChunkSource(
         World world,
@@ -57,19 +56,14 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         BiomeSource biomeSource = this.biomeProvider.getBiomeSource();
-        this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource ?
-            (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(world.getWorldInfo());
+        this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource || biomeSource instanceof SingleBiomeSource ?
+            biomeSource : new ReleaseNoiseBiomeSource(world.getWorldInfo(), settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
         
         this.setCloudHeight(128);
-    }
-
-    @Override
-    public SpawnLocator getSpawnLocator() {
-        return new BetaSpawnLocator();
     }
 
     public Biome getNoiseBiome(int x, int z) {
@@ -309,10 +303,12 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         }
     }
 
-    private static class ReleaseNoiseBiomeSource implements NoiseBiomeSource {
+    private static class ReleaseNoiseBiomeSource extends BiomeSource implements NoiseBiomeSource {
         private final BiomeProvider biomeProvider;
     
-        public ReleaseNoiseBiomeSource(WorldInfo worldInfo) {
+        public ReleaseNoiseBiomeSource(WorldInfo worldInfo, ModernBetaGeneratorSettings settings) {
+            super(worldInfo.getSeed(), settings);
+            
             WorldInfo newWorldInfo = new WorldInfo(worldInfo);
             WorldSettings worldSettings = new WorldSettings(worldInfo).setGeneratorOptions(worldInfo.getGeneratorOptions());
             

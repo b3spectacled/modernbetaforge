@@ -813,18 +813,15 @@ public class GuiIdentifiers {
             return isBetaOrPEBiomeSource && factory.replaceBeachBiomes;
         };
         BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
             
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource) || isReleaseBiomeSource;
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource || isReleaseBiomeSource;
         };
         BiPredicate<Factory, Integer> testRiverSize = (factory, id) -> {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
-            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
+            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource) || isReleaseBiomeSource;
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource;
         };
         BiPredicate<Factory, Integer> testClimateScales = (factory, id) -> {
             return 
@@ -839,8 +836,9 @@ public class GuiIdentifiers {
         BiPredicate<Factory, Integer> testBiomeDepthOverride = (factory, id) -> {
             ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
             BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource);
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource && !(biomeSource instanceof NoiseBiomeSource);
         };
         
         add(PG0_S_CHUNK);
