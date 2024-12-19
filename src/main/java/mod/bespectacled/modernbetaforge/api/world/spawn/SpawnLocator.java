@@ -40,7 +40,7 @@ public interface SpawnLocator {
                         if (distance < r2) {
                             int y = chunkSource.getHeight(dX, dZ, HeightmapChunk.Type.SURFACE);
                             
-                            if (y > 32) {
+                            if (y > chunkSource.getSeaLevel()) {
                                 // Check if there are surrounding blocks, relevant for skylands worlds
                                 int numAdjacent = 0;
                                 for (int aX = dX - 1; aX <= dX + 1; ++aX) {
