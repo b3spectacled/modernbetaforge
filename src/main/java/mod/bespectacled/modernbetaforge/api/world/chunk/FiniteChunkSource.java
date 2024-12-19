@@ -100,11 +100,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Inherited from {@link ChunkSource#getSpawnLocator() getSpawnLocator}.
      * Uses {@link IndevSpawnLocator} by default.
-     *
-     * @param chunkPrimer Chunk primer
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * 
      */
     @Override
     public SpawnLocator getSpawnLocator() {
@@ -248,7 +243,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Getse the finite level length.
+     * Gets the finite level length.
      * 
      * @return The level length.
      */
@@ -257,7 +252,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Getse the finite level height.
+     * Gets the finite level height.
      * 
      * @return The level height.
      */
@@ -268,7 +263,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Generates the Indev starting house at the given coordinates.
      * 
-     * @param world
+     * @param world The world object.
      * @param spawnPos The player spawn block position.
      * @param isBonusChestEnabled Whether the bonus chest should be generated in the house.
      */
@@ -401,7 +396,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Generates the world chunks outside of the level bounds.
      * 
-     * @param chunkPrimer
+     * @param chunkPrimer The chunk primer.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
@@ -499,7 +494,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @param z z-coordinate in block coordinates in level space.
      * @param fillBlock The block to fill the space with.
      * @param replaceBlock The block to replace.
-     * @return
+     * @return Number of flooded blocks if not exceeding {@link #MAX_FLOODS} or if floodedPositions is null. -1 otherwise.
      */
     protected int flood(int x, int y, int z, Block fillBlock, Block replaceBlock) {
         return this.flood(x, y, z, fillBlock, replaceBlock, null);
@@ -529,13 +524,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * so the original level generator allows water to generate where x = levelWidth - 1 above ground.
      * This bug is fixed here, because I'm not sure how to consistently reproduce it.
      * 
-     * @param x x-coordinate in block coordinates in level space.
-     * @param y y-coordinate in block coordinates in level space.
-     * @param z z-coordinate in block coordinates in level space.
+     * @param startX x-coordinate in block coordinates in level space.
+     * @param startY y-coordinate in block coordinates in level space.
+     * @param startZ z-coordinate in block coordinates in level space.
      * @param fillBlock The block to fill the space with.
      * @param replaceBlock The block to replace.
      * @param floodedPositions The array of Vec3d positions that have been filled. This is used to track positions to quickly fill with another block type.
-     * @return
+     * @return Number of flooded blocks if not exceeding {@link #MAX_FLOODS} or if floodedPositions is null. -1 otherwise.
      */
     protected int flood(int startX, int startY, int startZ, Block fillBlock, Block replaceBlock, Vec3d[] floodedPositions) {
         Deque<Vec3d> positions = new ArrayDeque<>();
@@ -600,7 +595,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Sets the current generation phase progress for the level. Currently unused.
      * 
-     * @param phaseProgress The decimal phase progress. (i.e. 50% -> 0.5)
+     * @param phaseProgress The decimal phase progress. (i.e. 50% equals 0.5)
      */
     protected void setPhaseProgress(float phaseProgress) {
         this.phaseProgress = phaseProgress;

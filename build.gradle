@@ -21,10 +21,11 @@ version = projectMCVersion + '-' + projectVersion
 group = projectGroup
 archivesBaseName = projectName
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-compileJava {
+java {
     sourceCompatibility = '8'
     targetCompatibility = '8'
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {

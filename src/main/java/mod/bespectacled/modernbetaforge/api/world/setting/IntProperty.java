@@ -23,9 +23,6 @@ public class IntProperty extends RangedProperty<Integer> {
      * The PropertyGuiType is set to {@link PropertyGuiType#FIELD}.
      * 
      * @param value The initial int property value.
-     * @param minValue The minimum int property value.
-     * @param maxValue The maximum int property value.
-     * @param guiType The {@link PropertyGuiType}.
      */
     public IntProperty(int value) {
         this(value, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);

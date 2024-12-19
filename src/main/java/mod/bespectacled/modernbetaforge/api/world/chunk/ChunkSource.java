@@ -108,7 +108,7 @@ public abstract class ChunkSource {
      * 
      * @param world The world.
      * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
-     * @param chunkGeneratorSettings The generator settings.
+     * @param settings The generator settings.
      */
     public ChunkSource(
         World world,
@@ -459,7 +459,7 @@ public abstract class ChunkSource {
      * Generates the Ocean Monument structure, in a given chunk.
      * Called in {@link ModernBetaChunkGenerator#generateStructures(Chunk, int, int) generateStructures}.
      * 
-     * @param chunk 
+     * @param chunk The world chunk.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * @return Whether the ocean monument generated.
@@ -519,7 +519,7 @@ public abstract class ChunkSource {
      * Used to test if a given block position is in a structure.
      * Called in {@link ModernBetaChunkGenerator#isInsideStructure(World, String, BlockPos) isInsideStructure}.
      * 
-     * @param world
+     * @param world The world object.
      * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
      * @param blockPos The block position used to test.
      * @return Whether the block position overlaps a structure.
@@ -564,10 +564,10 @@ public abstract class ChunkSource {
      * Finds the location of the nearest specified structure.
      * Called in {@link ModernBetaChunkGenerator#getNearestStructurePos(World, String, BlockPos, boolean) getNearestStructurePos}.
      * 
-     * @param world
+     * @param world THe world object.
      * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
      * @param blockPos The initial block position.
-     * @param findUnexplored
+     * @param findUnexplored findUnexplored.
      * @return The block position of the nearest specified structure.
      */
     public BlockPos getNearestStructurePos(World world, String structureName, BlockPos blockPos, boolean findUnexplored) {
@@ -609,7 +609,7 @@ public abstract class ChunkSource {
     /**
      * Called in {@link ModernBetaChunkGenerator#recreateStructures(Chunk, int, int) recreateStructures}.
      * 
-     * @param chunk
+     * @param chunk The chunk.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */

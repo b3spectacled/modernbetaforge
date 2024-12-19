@@ -24,9 +24,6 @@ public class FloatProperty extends RangedProperty<Float> {
      * The PropertyGuiType is set to {@link PropertyGuiType#FIELD}.
      * 
      * @param value The initial float property value.
-     * @param minValue The minimum float property value.
-     * @param maxValue The maximum float property value.
-     * @param guiType The {@link PropertyGuiType}.
      */
     public FloatProperty(float value) {
         this(value, Float.MIN_VALUE, Float.MAX_VALUE, PropertyGuiType.FIELD);

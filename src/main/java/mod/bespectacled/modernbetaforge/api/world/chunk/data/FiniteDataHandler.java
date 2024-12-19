@@ -33,8 +33,8 @@ public class FiniteDataHandler {
     /**
      * Constructs a new finite data handler.
      * 
-     * @param world
-     * @param finiteChunkSource
+     * @param world The world object.
+     * @param finiteChunkSource The Finite chunk source.
      */
     public FiniteDataHandler(World world, FiniteChunkSource finiteChunkSource) {
         this.worldDirectory = world.getSaveHandler().getWorldDirectory();

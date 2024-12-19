@@ -51,7 +51,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @param world The world.
      * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
-     * @param chunkGeneratorSettings The generator settings.
+     * @param settings The generator settings.
      */
     public NoiseChunkSource(
         World world,

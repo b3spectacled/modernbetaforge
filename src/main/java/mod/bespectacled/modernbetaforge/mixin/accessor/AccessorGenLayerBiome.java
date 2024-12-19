@@ -10,9 +10,9 @@ import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 @Mixin(GenLayerBiome.class)
 public interface AccessorGenLayerBiome {
-    @Accessor
+    @Accessor(remap = false)
     List<BiomeEntry>[] getBiomes();
     
-    @Accessor("biomes")
+    @Accessor(value = "biomes", remap = false)
     void setBiomes(List<BiomeEntry>[] biomes);
 }

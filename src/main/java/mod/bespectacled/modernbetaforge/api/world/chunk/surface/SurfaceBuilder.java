@@ -46,7 +46,7 @@ public abstract class SurfaceBuilder {
      * 
      * @param world The world object.
      * @param chunkSource Associated chunkSource object.
-     * @param chunkGeneratorSettings The generator settings.
+     * @param settings The generator settings.
      */
     public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
@@ -86,8 +86,6 @@ public abstract class SurfaceBuilder {
      * @param chunkPrimer Blockstate data for the chunk.
      * @param chunkX x-coordinate in chunk coordinates.
      * @param chunkZ z-coordinate in chunk coordinates.
-     * 
-     * @return New Random object initialized with chunk coordinates for seed.
      */
     public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
