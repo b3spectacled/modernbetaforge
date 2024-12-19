@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
-import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
@@ -38,7 +37,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    private final BiomeSource noiseBiomeSource;
+    private final NoiseBiomeSource noiseBiomeSource;
 
     public ReleaseChunkSource(
         World world,
@@ -56,8 +55,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         BiomeSource biomeSource = this.biomeProvider.getBiomeSource();
-        this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource || biomeSource instanceof SingleBiomeSource ?
-            biomeSource : new ReleaseNoiseBiomeSource(world.getWorldInfo(), settings);
+        this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource ?
+            (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(world.getWorldInfo(), settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

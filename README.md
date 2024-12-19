@@ -1,6 +1,6 @@
 # Modern Beta for Forge 1.12.2
 
-![Modern Beta Banner](https://i.imgur.com/LFROVPX.png)
+![Modern Beta Banner](https://i.imgur.com/3PTQZ2m.png)
 
 Modern Beta partially ported from Fabric to Forge for Minecraft 1.12.2.
 

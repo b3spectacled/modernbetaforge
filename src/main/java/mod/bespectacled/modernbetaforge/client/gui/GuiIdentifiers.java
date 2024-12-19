@@ -836,9 +836,8 @@ public class GuiIdentifiers {
         BiPredicate<Factory, Integer> testBiomeDepthOverride = (factory, id) -> {
             ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
             BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
-            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
             
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource && !(biomeSource instanceof NoiseBiomeSource);
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource);
         };
         
         add(PG0_S_CHUNK);
