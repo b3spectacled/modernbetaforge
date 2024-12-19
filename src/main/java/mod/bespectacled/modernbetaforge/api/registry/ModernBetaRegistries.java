@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.storage.WorldInfo;
 
 public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK;
@@ -49,7 +48,7 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface BiomeSourceCreator {
-        BiomeSource apply(WorldInfo worldInfo);
+        BiomeSource apply(long seed, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface

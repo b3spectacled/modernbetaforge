@@ -6,17 +6,12 @@ import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.WorldInfo;
 
 public class SingleBiomeSource extends BiomeSource implements NoiseBiomeSource {
     private final Biome biome;
 
-    public SingleBiomeSource(WorldInfo worldInfo) {
-        super(worldInfo);
-        
-        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaGeneratorSettings.build();
+    public SingleBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.biome = BiomeUtil.getBiome(new ResourceLocation(settings.singleBiome), "singleBiome");
     }

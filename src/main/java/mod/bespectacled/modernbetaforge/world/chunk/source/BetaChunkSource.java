@@ -41,7 +41,7 @@ public class BetaChunkSource extends NoiseChunkSource {
         
         this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
             (ClimateSampler)this.biomeProvider.getBiomeSource() :
-            new BetaBiomeSource(world.getWorldInfo());
+            new BetaBiomeSource(world.getSeed(), settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

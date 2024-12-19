@@ -24,7 +24,6 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -310,25 +309,17 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         }
     }
 
-    private static class ReleaseNoiseBiomeSource extends BiomeSource implements NoiseBiomeSource {
+    private static class ReleaseNoiseBiomeSource implements NoiseBiomeSource {
         private final BiomeProvider biomeProvider;
     
         public ReleaseNoiseBiomeSource(WorldInfo worldInfo) {
-            super(worldInfo);
-    
-            // Create new world info with Customized world type,
-            // so biome provider will accept custom biome sizes
-            ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions());
+            WorldInfo newWorldInfo = new WorldInfo(worldInfo);
+            WorldSettings worldSettings = new WorldSettings(worldInfo).setGeneratorOptions(worldInfo.getGeneratorOptions());
             
-            factory.biomeSize = settings.biomeSize;
-            factory.riverSize = settings.riverSize;
+            newWorldInfo.populateFromWorldSettings(worldSettings);
+            newWorldInfo.setTerrainType(WorldType.CUSTOMIZED);
             
-            WorldInfo vanillaWorldInfo = new WorldInfo(worldInfo);
-            vanillaWorldInfo.populateFromWorldSettings(new WorldSettings(worldInfo).setGeneratorOptions(factory.toString()));
-            vanillaWorldInfo.setTerrainType(WorldType.CUSTOMIZED);
-            
-            this.biomeProvider = new BiomeProvider(vanillaWorldInfo);
+            this.biomeProvider = new BiomeProvider(newWorldInfo);
         }
     
         @Override

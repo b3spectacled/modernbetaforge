@@ -6,6 +6,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
@@ -13,7 +14,6 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,16 +23,13 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
     private final ChunkCache<BiomeChunk> biomeCache;
     private final GenLayer biomeLayer;
 
-    public ReleaseBiomeSource(WorldInfo worldInfo) {
-        super(worldInfo);
+    public ReleaseBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         
-        String generatorOptions = worldInfo.getGeneratorOptions();
-        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(generatorOptions);
-        
-        GenLayer[] genLayers = ModernBetaGenLayer.initLayers(worldInfo.getSeed(), worldInfo.getTerrainType(), settings);
-        genLayers = getModdedBiomeGenerators(worldInfo.getTerrainType(), worldInfo.getSeed(), genLayers);
+        GenLayer[] genLayers = ModernBetaGenLayer.initLayers(seed, ModernBetaWorldType.INSTANCE, settings);
+        genLayers = getModdedBiomeGenerators(ModernBetaWorldType.INSTANCE, seed, genLayers);
         
         this.biomeLayer = genLayers[1];
     }

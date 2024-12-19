@@ -10,6 +10,9 @@ import java.util.function.BiPredicate;
 
 import com.google.common.collect.ImmutableList;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
@@ -672,7 +675,8 @@ public class GuiIdentifiers {
 
         TEST_CHUNK_SETTINGS = (factory, id) -> {
             boolean enabled = false;
-            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, ImmutableList.of());
+            List<Integer> defaultSettings = CHUNK_SETTINGS.get(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString());
+            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, defaultSettings);
             
             if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
                 enabled = settings.contains(id);
@@ -809,7 +813,18 @@ public class GuiIdentifiers {
             return isBetaOrPEBiomeSource && factory.replaceBeachBiomes;
         };
         BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
-            return factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString()) || factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
+            
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource) || isReleaseBiomeSource;
+        };
+        BiPredicate<Factory, Integer> testRiverSize = (factory, id) -> {
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
+            
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource) || isReleaseBiomeSource;
         };
         BiPredicate<Factory, Integer> testClimateScales = (factory, id) -> {
             return 
@@ -822,7 +837,10 @@ public class GuiIdentifiers {
             return !factory.caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryString()) && factory.useCaves;
         };
         BiPredicate<Factory, Integer> testBiomeDepthOverride = (factory, id) -> {
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            
+            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource);
         };
         
         add(PG0_S_CHUNK);
@@ -988,7 +1006,7 @@ public class GuiIdentifiers {
         add(PG3_S_B_SCL_WT, TEST_CHUNK_SETTINGS);
         add(PG3_S_B_SCL_OF, TEST_CHUNK_SETTINGS);
         add(PG3_S_BIOME_SZ, testBiomeSize);
-        add(PG3_S_RIVER_SZ, TEST_CHUNK_SETTINGS);
+        add(PG3_S_RIVER_SZ, testRiverSize);
         
         add(PG3_B_USE_BDS, testBiomeDepthOverride);
         

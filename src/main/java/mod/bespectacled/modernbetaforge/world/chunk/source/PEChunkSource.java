@@ -48,7 +48,7 @@ public class PEChunkSource extends NoiseChunkSource {
         
         this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
             (ClimateSampler)this.biomeProvider.getBiomeSource() :
-            new PEBiomeSource(world.getWorldInfo());
+            new PEBiomeSource(world.getSeed(), settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

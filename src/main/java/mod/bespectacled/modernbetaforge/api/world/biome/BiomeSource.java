@@ -1,17 +1,21 @@
 package mod.bespectacled.modernbetaforge.api.world.biome;
 
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.WorldInfo;
 
 public abstract class BiomeSource {
-    protected final WorldInfo worldInfo;
+    protected final long seed;
+    protected final ModernBetaGeneratorSettings settings;
+    
     /**
-     * Constructs a Modern Beta biome source, given the world's worldInfo.
+     * Constructs a Modern Beta biome source, given the world's seed and generator settings.
      * 
-     * @param worldInfo WorldInfo associated with the world.
+     * @param seed The world seed.
+     * @param settings The generator settings.
      */
-    public BiomeSource(WorldInfo worldInfo) {
-        this.worldInfo = worldInfo;
+    public BiomeSource(long seed, ModernBetaGeneratorSettings settings) {
+        this.seed = seed;
+        this.settings = settings;
     }
     
     /**

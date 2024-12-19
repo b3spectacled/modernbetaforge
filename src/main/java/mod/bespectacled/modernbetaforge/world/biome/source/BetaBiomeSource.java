@@ -13,23 +13,18 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaClimateSamp
 import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateSampler;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.WorldInfo;
 
 public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
     private final ClimateMap climateMap;
     private final BetaClimateSampler climateSampler;
     private final BetaSkyClimateSampler skyClimateSampler;
     
-    public BetaBiomeSource(WorldInfo worldInfo) {
-        super(worldInfo);
-        
-        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaGeneratorSettings.build();
-        
+    public BetaBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
+
         this.climateMap = new ClimateMap(settings);
-        this.climateSampler = new BetaClimateSampler(worldInfo.getSeed(), settings);
-        this.skyClimateSampler = new BetaSkyClimateSampler(worldInfo.getSeed(), settings);
+        this.climateSampler = new BetaClimateSampler(seed, settings);
+        this.skyClimateSampler = new BetaSkyClimateSampler(seed, settings);
     }
 
     @Override

@@ -13,23 +13,18 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PEClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.climate.pe.PESkyClimateSampler;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.WorldInfo;
 
 public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
     private final ClimateMap climateMap;
     private final PEClimateSampler climateSampler;
     private final PESkyClimateSampler skyClimateSampler;
     
-    public PEBiomeSource(WorldInfo worldInfo) {
-        super(worldInfo);
-        
-        ModernBetaGeneratorSettings settings = worldInfo.getGeneratorOptions() != null ?
-            ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
-            ModernBetaGeneratorSettings.build();
+    public PEBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.climateMap = new ClimateMap(settings);
-        this.climateSampler = new PEClimateSampler(worldInfo.getSeed(), settings);
-        this.skyClimateSampler = new PESkyClimateSampler(worldInfo.getSeed(), settings);
+        this.climateSampler = new PEClimateSampler(seed, settings);
+        this.skyClimateSampler = new PESkyClimateSampler(seed, settings);
     }
 
     @Override

@@ -5,6 +5,9 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
@@ -28,12 +31,16 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     
     public ModernBetaBiomeProvider(WorldInfo worldInfo) {
         super(worldInfo);
+        
+        ModernBeta.log(Level.INFO, "TERRAIN TYPE: " + worldInfo.getTerrainType().getName());
 
         this.settings = worldInfo.getGeneratorOptions() != null ?
             ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
             ModernBetaGeneratorSettings.build();
 
-        this.biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(settings.biomeSource)).apply(worldInfo);
+        this.biomeSource = ModernBetaRegistries.BIOME
+            .get(new ResourceLocation(this.settings.biomeSource))
+            .apply(worldInfo.getSeed(), this.settings);
         this.biomeCache = new ChunkCache<BiomeChunk>(
             "biomes",
             (chunkX, chunkZ) -> {

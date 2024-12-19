@@ -148,6 +148,6 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.PRESET.register(ModernBeta.createRegistryKey("beta_pe"), GuiCustomizePresets.PRESET_BETA_PE);
         ModernBetaClientRegistries.PRESET.register(ModernBeta.createRegistryKey("beta_realistic"), GuiCustomizePresets.PRESET_BETA_REALISTIC);
         ModernBetaClientRegistries.PRESET.register(ModernBeta.createRegistryKey("beta_plus"), GuiCustomizePresets.PRESET_BETA_PLUS);
-        ModernBetaClientRegistries.PRESET.register(ModernBeta.createRegistryKey("beta_release"), GuiCustomizePresets.PRESET_BETA_REALISTIC);
+        ModernBetaClientRegistries.PRESET.register(ModernBeta.createRegistryKey("beta_release"), GuiCustomizePresets.PRESET_BETA_RELEASE);
     }
 }
