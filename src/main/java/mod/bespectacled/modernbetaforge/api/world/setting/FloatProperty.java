@@ -1,12 +1,17 @@
 package mod.bespectacled.modernbetaforge.api.world.setting;
 
-
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
+import com.google.gson.JsonObject;
 
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
+import net.minecraft.client.gui.GuiPageButtonList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class FloatProperty extends RangedProperty<Float> {
+public final class FloatProperty extends RangedProperty<Float> {
     /**
      * Constructs a new FloatProperty with minimum and maximum value constraints.
      * 
@@ -37,6 +42,21 @@ public class FloatProperty extends RangedProperty<Float> {
     @Override
     public String getType() {
         return "float";
+    }
+    
+    @Override
+    public void visitFactory(FactoryPropertyVisitor visitor, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+        visitor.visit(this, factory, registryKey, jsonObject);
+    }
+
+    @Override
+    public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
+        return visitor.visit(this, guiIdentifier);
+    }
+
+    @Override
+    public String getFormatter() {
+        return "%2.3f";
     }
 
     @Override

@@ -56,7 +56,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
     @Override
     public void populate(int chunkX, int chunkZ) {
-        this.chunkSource.populateChunk(chunkX, chunkZ);
+        this.chunkSource.populateChunk(this, chunkX, chunkZ);
     }
     
     /*

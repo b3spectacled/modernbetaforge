@@ -37,6 +37,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -45,6 +46,7 @@ import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
+import net.minecraft.client.gui.GuiSlider.FormatHelper;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -209,385 +211,385 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            this.createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId),
-            this.createGuiButton(GuiIdentifiers.PG0_B_FIXED, "fixedBiome", true),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CARVER.getKeys().size() - 1, caveCarverId),
+            createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId, this),
+            createGuiButton(GuiIdentifiers.PG0_B_FIXED, "fixedBiome", true),
+            createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CARVER.getKeys().size() - 1, caveCarverId, this),
             null,
 
-            this.createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "biomeReplacementLabel"),
+            createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "biomeReplacementLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_OCEAN, NbtTags.REPLACE_OCEAN_BIOMES, this.settings.replaceOceanBiomes),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_BEACH, NbtTags.REPLACE_BEACH_BIOMES, this.settings.replaceBeachBiomes),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_OCEAN, NbtTags.REPLACE_OCEAN_BIOMES, this.settings.replaceOceanBiomes),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_BEACH, NbtTags.REPLACE_BEACH_BIOMES, this.settings.replaceBeachBiomes),
             
-            this.createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, "overworldFeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, "overworldFeaturesLabel"),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, "seaLevel", 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_SANDSTONE, NbtTags.USE_SANDSTONE, this.settings.useSandstone),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_CAVES, "useCaves", this.settings.useCaves),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT, (float)this.settings.caveHeight),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, MIN_CAVE_COUNT, MAX_CAVE_COUNT, (float)this.settings.caveCount),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE, (float)this.settings.caveChance),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_RAVINES, "useRavines", this.settings.useRavines),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_SHAFTS, "useMineShafts", this.settings.useMineShafts),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGES, "useVillages", this.settings.useVillages),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS, NbtTags.USE_VILLAGE_VARIANTS, this.settings.useVillageVariants),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_HOLDS, "useStrongholds", this.settings.useStrongholds),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_TEMPLES, "useTemples", this.settings.useTemples),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_MONUMENTS, "useMonuments", this.settings.useMonuments),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_MANSIONS, "useMansions", this.settings.useMansions),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_DUNGEONS, "useDungeons", this.settings.useDungeons),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, "dungeonChance", 1.0f, 100.0f, (float)this.settings.dungeonChance),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_WATER_LAKES, "useWaterLakes", this.settings.useWaterLakes),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, "waterLakeChance", 1.0f, 100.0f, (float)this.settings.waterLakeChance),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, "useLavaLakes", this.settings.useLavaLakes),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, "lavaLakeChance", 10.0f, 100.0f, (float)this.settings.lavaLakeChance),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_OCEANS, "useLavaOceans", this.settings.useLavaOceans),
+            createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, "seaLevel", 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_SANDSTONE, NbtTags.USE_SANDSTONE, this.settings.useSandstone),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_CAVES, "useCaves", this.settings.useCaves),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT, (float)this.settings.caveHeight, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, MIN_CAVE_COUNT, MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_RAVINES, "useRavines", this.settings.useRavines),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_SHAFTS, "useMineShafts", this.settings.useMineShafts),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGES, "useVillages", this.settings.useVillages),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS, NbtTags.USE_VILLAGE_VARIANTS, this.settings.useVillageVariants),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_HOLDS, "useStrongholds", this.settings.useStrongholds),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_TEMPLES, "useTemples", this.settings.useTemples),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_MONUMENTS, "useMonuments", this.settings.useMonuments),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_MANSIONS, "useMansions", this.settings.useMansions),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_DUNGEONS, "useDungeons", this.settings.useDungeons),
+            createGuiSlider(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, "dungeonChance", 1.0f, 100.0f, (float)this.settings.dungeonChance, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_WATER_LAKES, "useWaterLakes", this.settings.useWaterLakes),
+            createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, "waterLakeChance", 1.0f, 100.0f, (float)this.settings.waterLakeChance, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, "useLavaLakes", this.settings.useLavaLakes),
+            createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, "lavaLakeChance", 10.0f, 100.0f, (float)this.settings.lavaLakeChance, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_OCEANS, "useLavaOceans", this.settings.useLavaOceans),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG0_L_INFDEV_227_FEATURES, "infdev227FeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG0_L_INFDEV_227_FEATURES, "infdev227FeaturesLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_INFDEV_WALLS, NbtTags.USE_INFDEV_WALLS, this.settings.useInfdevWalls),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_INFDEV_PYRAMIDS, NbtTags.USE_INFDEV_PYRAMIDS, this.settings.useInfdevPyramids),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_INFDEV_WALLS, NbtTags.USE_INFDEV_WALLS, this.settings.useInfdevWalls),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_INFDEV_PYRAMIDS, NbtTags.USE_INFDEV_PYRAMIDS, this.settings.useInfdevPyramids),
             
-            this.createGuiLabel(GuiIdentifiers.PG0_L_INDEV_FEATURES, "indevFeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG0_L_INDEV_FEATURES, "indevFeaturesLabel"),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_THEME, NbtTags.LEVEL_THEME, 0f, IndevTheme.values().length - 1, levelThemeId),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_TYPE, NbtTags.LEVEL_TYPE, 0f, IndevType.values().length - 1, levelTypeId),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_WIDTH, NbtTags.LEVEL_WIDTH, 0f, LEVEL_WIDTHS.length - 1, levelWidth),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_LENGTH, NbtTags.LEVEL_LENGTH, 0f, LEVEL_WIDTHS.length - 1, levelLength),
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_HEIGHT, NbtTags.LEVEL_HEIGHT, 0f, LEVEL_HEIGHTS.length - 1, levelHeight),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr)),                                                                                                                                     
-            this.createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_HOUSE, NbtTags.LEVEL_HOUSE, 0f, IndevHouse.values().length - 1, levelHouseId),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_INDEV_CAVES, NbtTags.USE_INDEV_CAVES, this.settings.useIndevCaves),
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_THEME, NbtTags.LEVEL_THEME, 0f, IndevTheme.values().length - 1, levelThemeId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_TYPE, NbtTags.LEVEL_TYPE, 0f, IndevType.values().length - 1, levelTypeId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_WIDTH, NbtTags.LEVEL_WIDTH, 0f, LEVEL_WIDTHS.length - 1, levelWidth, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_LENGTH, NbtTags.LEVEL_LENGTH, 0f, LEVEL_WIDTHS.length - 1, levelLength, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_HEIGHT, NbtTags.LEVEL_HEIGHT, 0f, LEVEL_HEIGHTS.length - 1, levelHeight, this),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr)),                                                                                                                                     
+            createGuiSlider(GuiIdentifiers.PG0_S_LEVEL_HOUSE, NbtTags.LEVEL_HOUSE, 0f, IndevHouse.values().length - 1, levelHouseId, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_INDEV_CAVES, NbtTags.USE_INDEV_CAVES, this.settings.useIndevCaves),
         
-            this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "netherFeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "netherFeaturesLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_OLD_NETHER, NbtTags.USE_OLD_NETHER, this.settings.useOldNether),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_NETHER_CAVES, NbtTags.USE_NETHER_CAVES, this.settings.useNetherCaves),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_FORTRESSES, NbtTags.USE_FORTRESSES, this.settings.useFortresses),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_POCKETS, NbtTags.USE_LAVA_POCKETS, this.settings.useLavaPockets)
+            createGuiButton(GuiIdentifiers.PG0_B_USE_OLD_NETHER, NbtTags.USE_OLD_NETHER, this.settings.useOldNether),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_NETHER_CAVES, NbtTags.USE_NETHER_CAVES, this.settings.useNetherCaves),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_FORTRESSES, NbtTags.USE_FORTRESSES, this.settings.useFortresses),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_POCKETS, NbtTags.USE_LAVA_POCKETS, this.settings.useLavaPockets)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList1 = {
-            this.createGuiLabel(GuiIdentifiers.PG1_L_BETA, "betaFeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG1_L_BETA, "betaFeaturesLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_PADS, NbtTags.USE_LILY_PADS, this.settings.useLilyPads),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_MELONS, NbtTags.USE_MELONS, this.settings.useMelons),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_PADS, NbtTags.USE_LILY_PADS, this.settings.useLilyPads),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_MELONS, NbtTags.USE_MELONS, this.settings.useMelons),
 
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_WELLS, NbtTags.USE_DESERT_WELLS, this.settings.useDesertWells),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_FOSSILS, NbtTags.USE_FOSSILS, this.settings.useFossils),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_WELLS, NbtTags.USE_DESERT_WELLS, this.settings.useDesertWells),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_FOSSILS, NbtTags.USE_FOSSILS, this.settings.useFossils),
 
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_BIRCH, NbtTags.USE_BIRCH_TREES, this.settings.useBirchTrees),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_PINE, NbtTags.USE_PINE_TREES, this.settings.usePineTrees),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_BIRCH, NbtTags.USE_BIRCH_TREES, this.settings.useBirchTrees),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_PINE, NbtTags.USE_PINE_TREES, this.settings.usePineTrees),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG1_L_RELEASE, "releaseFeaturesLabel"),
+            createGuiLabel(GuiIdentifiers.PG1_L_RELEASE, "releaseFeaturesLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG1_B_USE_MODDED_BIOMES, NbtTags.USE_MODDED_BIOMES, this.settings.useModdedBiomes),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG1_L_MODS, String.format("%s: %s", I18n.format(PREFIX + "modsLabel"), loadedModsList)),
+            createGuiButton(GuiIdentifiers.PG1_B_USE_MODDED_BIOMES, NbtTags.USE_MODDED_BIOMES, this.settings.useModdedBiomes),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG1_L_MODS, String.format("%s: %s", I18n.format(PREFIX + "modsLabel"), loadedModsList)),
         
-            this.createGuiLabel(GuiIdentifiers.PG1_L_MOBS, "mobSpawnLabel"),
+            createGuiLabel(GuiIdentifiers.PG1_L_MOBS, "mobSpawnLabel"),
             null,
-            this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_CREATURE, NbtTags.SPAWN_NEW_CREATURE_MOBS, this.settings.spawnNewCreatureMobs),
-            this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_MONSTER, NbtTags.SPAWN_NEW_MONSTER_MOBS, this.settings.spawnNewMonsterMobs),
-            this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_WATER, NbtTags.SPAWN_WATER_MOBS, this.settings.spawnWaterMobs),
-            this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_AMBIENT, NbtTags.SPAWN_AMBIENT_MOBS, this.settings.spawnAmbientMobs),
-            this.createGuiButton(GuiIdentifiers.PG1_B_SPAWN_WOLVES, NbtTags.SPAWN_WOLVES, this.settings.spawnWolves),
+            createGuiButton(GuiIdentifiers.PG1_B_SPAWN_CREATURE, NbtTags.SPAWN_NEW_CREATURE_MOBS, this.settings.spawnNewCreatureMobs),
+            createGuiButton(GuiIdentifiers.PG1_B_SPAWN_MONSTER, NbtTags.SPAWN_NEW_MONSTER_MOBS, this.settings.spawnNewMonsterMobs),
+            createGuiButton(GuiIdentifiers.PG1_B_SPAWN_WATER, NbtTags.SPAWN_WATER_MOBS, this.settings.spawnWaterMobs),
+            createGuiButton(GuiIdentifiers.PG1_B_SPAWN_AMBIENT, NbtTags.SPAWN_AMBIENT_MOBS, this.settings.spawnAmbientMobs),
+            createGuiButton(GuiIdentifiers.PG1_B_SPAWN_WOLVES, NbtTags.SPAWN_WOLVES, this.settings.spawnWolves),
             null
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_CLAY_NAME, I18n.format("tile.clay.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_CLAY_NAME, I18n.format("tile.clay.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_CLAY_SIZE, "size", 1.0f, 50.0f, (float)this.settings.claySize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_CLAY_CNT, "count", 0.0f, 40.0f, (float)this.settings.clayCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_CLAY_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_CLAY_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_CLAY_SIZE, "size", 1.0f, 50.0f, (float)this.settings.claySize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_CLAY_CNT, "count", 0.0f, 40.0f, (float)this.settings.clayCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_CLAY_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.clayMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_CLAY_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.clayMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIRT_NAME, I18n.format("tile.dirt.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIRT_NAME, I18n.format("tile.dirt.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIRT_SIZE, "size", 1.0f, 50.0f, (float)this.settings.dirtSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIRT_CNT, "count", 0.0f, 40.0f, (float)this.settings.dirtCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIRT_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIRT_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIRT_SIZE, "size", 1.0f, 50.0f, (float)this.settings.dirtSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIRT_CNT, "count", 0.0f, 40.0f, (float)this.settings.dirtCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIRT_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dirtMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIRT_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dirtMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GRAV_NAME, I18n.format("tile.gravel.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GRAV_NAME, I18n.format("tile.gravel.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAV_SIZE, "size", 1.0f, 50.0f, (float)this.settings.gravelSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAV_CNT, "count", 0.0f, 40.0f, (float)this.settings.gravelCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAV_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAV_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAV_SIZE, "size", 1.0f, 50.0f, (float)this.settings.gravelSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAV_CNT, "count", 0.0f, 40.0f, (float)this.settings.gravelCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAV_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.gravelMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAV_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.gravelMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GRAN_NAME, I18n.format("tile.stone.granite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GRAN_NAME, I18n.format("tile.stone.granite.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAN_SIZE, "size", 1.0f, 50.0f, (float)this.settings.graniteSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAN_CNT, "count", 0.0f, 40.0f, (float)this.settings.graniteCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAN_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GRAN_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAN_SIZE, "size", 1.0f, 50.0f, (float)this.settings.graniteSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAN_CNT, "count", 0.0f, 40.0f, (float)this.settings.graniteCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAN_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.graniteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GRAN_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.graniteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIOR_NAME, I18n.format("tile.stone.diorite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIOR_NAME, I18n.format("tile.stone.diorite.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIOR_SIZE, "size", 1.0f, 50.0f, (float)this.settings.dioriteSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIOR_CNT, "count", 0.0f, 40.0f, (float)this.settings.dioriteCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIOR_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIOR_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIOR_SIZE, "size", 1.0f, 50.0f, (float)this.settings.dioriteSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIOR_CNT, "count", 0.0f, 40.0f, (float)this.settings.dioriteCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIOR_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIOR_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.dioriteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_ANDE_NAME, I18n.format("tile.stone.andesite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_ANDE_NAME, I18n.format("tile.stone.andesite.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_ANDE_SIZE, "size", 1.0f, 50.0f, (float)this.settings.andesiteSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_ANDE_CNT, "count", 0.0f, 40.0f, (float)this.settings.andesiteCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_ANDE_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_ANDE_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_ANDE_SIZE, "size", 1.0f, 50.0f, (float)this.settings.andesiteSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_ANDE_CNT, "count", 0.0f, 40.0f, (float)this.settings.andesiteCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_ANDE_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_ANDE_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.andesiteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_COAL_NAME, I18n.format("tile.oreCoal.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_COAL_NAME, I18n.format("tile.oreCoal.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_COAL_SIZE, "size", 1.0f, 50.0f, (float)this.settings.coalSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_COAL_CNT, "count", 0.0f, 40.0f, (float)this.settings.coalCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_COAL_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_COAL_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_COAL_SIZE, "size", 1.0f, 50.0f, (float)this.settings.coalSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_COAL_CNT, "count", 0.0f, 40.0f, (float)this.settings.coalCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_COAL_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.coalMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_COAL_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.coalMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_IRON_NAME, I18n.format("tile.oreIron.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_IRON_NAME, I18n.format("tile.oreIron.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_IRON_SIZE, "size", 1.0f, 50.0f, (float)this.settings.ironSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_IRON_CNT, "count", 0.0f, 40.0f, (float)this.settings.ironCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_IRON_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_IRON_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_IRON_SIZE, "size", 1.0f, 50.0f, (float)this.settings.ironSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_IRON_CNT, "count", 0.0f, 40.0f, (float)this.settings.ironCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_IRON_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.ironMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_IRON_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.ironMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GOLD_NAME, I18n.format("tile.oreGold.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_GOLD_NAME, I18n.format("tile.oreGold.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GOLD_SIZE, "size", 1.0f, 50.0f, (float)this.settings.goldSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GOLD_CNT, "count", 0.0f, 40.0f, (float)this.settings.goldCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GOLD_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_GOLD_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_GOLD_SIZE, "size", 1.0f, 50.0f, (float)this.settings.goldSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GOLD_CNT, "count", 0.0f, 40.0f, (float)this.settings.goldCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GOLD_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.goldMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_GOLD_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.goldMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_REDS_NAME, I18n.format("tile.oreRedstone.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_REDS_NAME, I18n.format("tile.oreRedstone.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_REDS_SIZE, "size", 1.0f, 50.0f, (float)this.settings.redstoneSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_REDS_CNT, "count", 0.0f, 40.0f, (float)this.settings.redstoneCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_REDS_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_REDS_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_REDS_SIZE, "size", 1.0f, 50.0f, (float)this.settings.redstoneSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_REDS_CNT, "count", 0.0f, 40.0f, (float)this.settings.redstoneCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_REDS_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_REDS_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.redstoneMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIAM_NAME, I18n.format("tile.oreDiamond.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_DIAM_NAME, I18n.format("tile.oreDiamond.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIAM_SIZE, "size", 1.0f, 50.0f, (float)this.settings.diamondSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIAM_CNT, "count", 0.0f, 40.0f, (float)this.settings.diamondCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIAM_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_DIAM_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIAM_SIZE, "size", 1.0f, 50.0f, (float)this.settings.diamondSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIAM_CNT, "count", 0.0f, 40.0f, (float)this.settings.diamondCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIAM_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.diamondMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_DIAM_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.diamondMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_LAPS_NAME, I18n.format("tile.oreLapis.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_LAPS_NAME, I18n.format("tile.oreLapis.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_LAPS_SIZE, "size", 1.0f, 50.0f, (float)this.settings.lapisSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_LAPS_CNT, "count", 0.0f, 40.0f, (float)this.settings.lapisCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_LAPS_CTR, "center", 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_LAPS_SPR, "spread", 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread),
+            createGuiSlider(GuiIdentifiers.PG2_S_LAPS_SIZE, "size", 1.0f, 50.0f, (float)this.settings.lapisSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_LAPS_CNT, "count", 0.0f, 40.0f, (float)this.settings.lapisCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_LAPS_CTR, "center", 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_LAPS_SPR, "spread", 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_EMER_NAME, I18n.format("tile.oreEmerald.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_EMER_NAME, I18n.format("tile.oreEmerald.name")),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_EMER_SIZE, "size", 1.0f, 50.0f, (float)this.settings.emeraldSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_EMER_CNT, "count", 0.0f, 40.0f, (float)this.settings.emeraldCount),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_EMER_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_EMER_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight),
+            createGuiSlider(GuiIdentifiers.PG2_S_EMER_SIZE, "size", 1.0f, 50.0f, (float)this.settings.emeraldSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_EMER_CNT, "count", 0.0f, 40.0f, (float)this.settings.emeraldCount, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_EMER_MIN, "minHeight", 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_EMER_MAX, "maxHeight", 0.0f, MAX_HEIGHT, (float)this.settings.emeraldMaxHeight, this),
 
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_QRTZ_SIZE, "size", 1.0f, 50.0f, (float)this.settings.quartzSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_QRTZ_CNT, "count", 0.0f, 40.0f, (float)this.settings.quartzCount),
+            createGuiSlider(GuiIdentifiers.PG2_S_QRTZ_SIZE, "size", 1.0f, 50.0f, (float)this.settings.quartzSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_QRTZ_CNT, "count", 0.0f, 40.0f, (float)this.settings.quartzCount, this),
 
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG2_S_MGMA_SIZE, "size", 1.0f, 50.0f, (float)this.settings.magmaSize),
-            this.createGuiSlider(GuiIdentifiers.PG2_S_MGMA_CNT, "count", 0.0f, 40.0f, (float)this.settings.magmaCount),
+            createGuiSlider(GuiIdentifiers.PG2_S_MGMA_SIZE, "size", 1.0f, 50.0f, (float)this.settings.magmaSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_MGMA_CNT, "count", 0.0f, 40.0f, (float)this.settings.magmaCount, this),
         };
         
         GuiPageButtonList.GuiListEntry[] pageList3 = {
-            this.createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_X, "mainNoiseScaleX", 1.0f, 5000.0f, this.settings.mainNoiseScaleX),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_Y, "mainNoiseScaleY", 1.0f, 5000.0f, this.settings.mainNoiseScaleY),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_Z, "mainNoiseScaleZ", 1.0f, 5000.0f, this.settings.mainNoiseScaleZ),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_DPTH_NS_X, "depthNoiseScaleX", 1.0f, 2000.0f, this.settings.depthNoiseScaleX),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_DPTH_NS_Z, "depthNoiseScaleZ", 1.0f, 2000.0f, this.settings.depthNoiseScaleZ),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_BASE_SIZE, "baseSize", 1.0f, 25.0f, this.settings.baseSize),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_COORD_SCL, "coordinateScale", 1.0f, 6000.0f, this.settings.coordinateScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_HEIGH_SCL, "heightScale", 1.0f, 6000.0f, this.settings.heightScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_STRETCH_Y, "stretchY", 0.01f, 50.0f, this.settings.stretchY),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_UPPER_LIM, "upperLimitScale", 1.0f, 5000.0f, this.settings.upperLimitScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_LOWER_LIM, "lowerLimitScale", 1.0f, 5000.0f, this.settings.lowerLimitScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_HEIGH_LIM, NbtTags.HEIGHT, 1.0f, MAX_HEIGHT, this.settings.height),
+            createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_X, "mainNoiseScaleX", 1.0f, 5000.0f, this.settings.mainNoiseScaleX, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_Y, "mainNoiseScaleY", 1.0f, 5000.0f, this.settings.mainNoiseScaleY, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_MAIN_NS_Z, "mainNoiseScaleZ", 1.0f, 5000.0f, this.settings.mainNoiseScaleZ, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DPTH_NS_X, "depthNoiseScaleX", 1.0f, 2000.0f, this.settings.depthNoiseScaleX, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DPTH_NS_Z, "depthNoiseScaleZ", 1.0f, 2000.0f, this.settings.depthNoiseScaleZ, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_BASE_SIZE, "baseSize", 1.0f, 25.0f, this.settings.baseSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_COORD_SCL, "coordinateScale", 1.0f, 6000.0f, this.settings.coordinateScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_HEIGH_SCL, "heightScale", 1.0f, 6000.0f, this.settings.heightScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_STRETCH_Y, "stretchY", 0.01f, 50.0f, this.settings.stretchY, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_UPPER_LIM, "upperLimitScale", 1.0f, 5000.0f, this.settings.upperLimitScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_LOWER_LIM, "lowerLimitScale", 1.0f, 5000.0f, this.settings.lowerLimitScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_HEIGH_LIM, NbtTags.HEIGHT, 1.0f, MAX_HEIGHT, this.settings.height, this),
             
-            this.createGuiLabel(GuiIdentifiers.PG3_L_BETA_LABL, "betaNoiseLabel"),
+            createGuiLabel(GuiIdentifiers.PG3_L_BETA_LABL, "betaNoiseLabel"),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG3_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale),
+            createGuiSlider(GuiIdentifiers.PG3_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG3_L_RELE_LABL, "releaseNoiseLabel"),
+            createGuiLabel(GuiIdentifiers.PG3_L_RELE_LABL, "releaseNoiseLabel"),
             null,
-            this.createGuiSlider(GuiIdentifiers.PG3_S_B_DPTH_WT, "biomeDepthWeight", MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_B_DPTH_OF, "biomeDepthOffset", MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_B_SCL_WT, "biomeScaleWeight", MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_B_SCL_OF, "biomeScaleOffset", MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_BIOME_SZ, NbtTags.BIOME_SIZE, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.biomeSize),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_RIVER_SZ, "riverRarity", MIN_RIVER_SIZE, MAX_RIVER_SIZE, this.settings.riverSize),
-            this.createGuiButton(GuiIdentifiers.PG3_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale)
+            createGuiSlider(GuiIdentifiers.PG3_S_B_DPTH_WT, "biomeDepthWeight", MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_B_DPTH_OF, "biomeDepthOffset", MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_B_SCL_WT, "biomeScaleWeight", MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_B_SCL_OF, "biomeScaleOffset", MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_BIOME_SZ, NbtTags.BIOME_SIZE, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.biomeSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_RIVER_SZ, "riverRarity", MIN_RIVER_SIZE, MAX_RIVER_SIZE, this.settings.riverSize, this),
+            createGuiButton(GuiIdentifiers.PG3_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList4 = {
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_SCL, I18n.format(PREFIX + "heightScale") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_STRETCH_Y, I18n.format(PREFIX + "stretchY") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_X, I18n.format(PREFIX + "mainNoiseScaleX") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Y, I18n.format(PREFIX + "mainNoiseScaleY") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_MAIN_NS_Z, I18n.format(PREFIX + "mainNoiseScaleZ") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_X, I18n.format(PREFIX + "depthNoiseScaleX") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DPTH_NS_Z, I18n.format(PREFIX + "depthNoiseScaleZ") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BASE_SIZE, I18n.format(PREFIX + "baseSize") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_COORD_SCL, I18n.format(PREFIX + "coordinateScale") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_SCL, I18n.format(PREFIX + "heightScale") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_STRETCH_Y, I18n.format(PREFIX + "stretchY") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_UPPER_LIM, I18n.format(PREFIX + "upperLimitScale") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_LOWER_LIM, I18n.format(PREFIX + "lowerLimitScale") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_BETA_LABL, I18n.format(PREFIX + "betaNoiseLabel")),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RAIN_SCL, I18n.format(PREFIX + NbtTags.RAIN_NOISE_SCALE) + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseNoiseLabel")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_RELE_LABL, I18n.format(PREFIX + "releaseNoiseLabel")),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE) + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intBiomeSizeFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RIVER_SZ, I18n.format(PREFIX + "riverRarity") + ":"),
-            this.createGuiField(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intRiverSizeFilter)
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_WT, I18n.format(PREFIX + "biomeDepthWeight") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_DPTH_OF, I18n.format(PREFIX + "biomeDepthOffset") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_WT, I18n.format(PREFIX + "biomeScaleWeight") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_B_SCL_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE) + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intBiomeSizeFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RIVER_SZ, I18n.format(PREFIX + "riverRarity") + ":"),
+            createGuiField(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intRiverSizeFilter)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList5 = {
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_DSRT_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_DSRT_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_DSRT_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_DSRT_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_DSRT_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_DSRT_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_FRST_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_FRST_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_FRST_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_FRST_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_FRST_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_FRST_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_ICED_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_ICED_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_ICED_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_ICED_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_ICED_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_ICED_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_PLNS_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_PLNS_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_PLNS_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_PLNS_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_PLNS_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_PLNS_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_RAIN_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_RAIN_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_RAIN_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_RAIN_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_RAIN_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_RAIN_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SAVA_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SAVA_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SAVA_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SAVA_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SAVA_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SAVA_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SHRB_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SHRB_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SHRB_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SHRB_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SHRB_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SHRB_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SEAS_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SEAS_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SEAS_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SEAS_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SEAS_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SEAS_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SWMP_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SWMP_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_SWMP_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SWMP_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SWMP_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_SWMP_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TAIG_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TAIG_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TAIG_BEACH, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TAIG_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TAIG_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TAIG_BEACH, "", true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES)),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TUND_LAND, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TUND_OCEAN, "", true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
-            this.createGuiButton(GuiIdentifiers.PG5_TUND_BEACH, "", true)
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TUND_LAND, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_OCEAN_LABL, I18n.format(PREFIX + NbtTags.OCEAN_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TUND_OCEAN, "", true),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
+            createGuiButton(GuiIdentifiers.PG5_TUND_BEACH, "", true)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList6 = this.createCustomPropertyPage();
@@ -595,7 +597,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (ModCompat.isBoPLoaded()) {
             GuiPageButtonList.GuiListEntry[] newPageList0 = new GuiPageButtonList.GuiListEntry[pageList0.length + 2];
             System.arraycopy(pageList0, 0, newPageList0, 0, pageList0.length);
-            newPageList0[pageList0.length] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "netherBoPLabel");
+            newPageList0[pageList0.length] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "netherBoPLabel");
             newPageList0[pageList0.length + 1] = null;
             pageList0 = newPageList0;
         }
@@ -1699,99 +1701,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         for (String namespace : modKeys.keySet()) {
             List<ResourceLocation> keys = modKeys.get(namespace);
             
-            pageList[ndx++] = this.createGuiLabel(this.customId++, namespace);
+            pageList[ndx++] = createGuiLabel(this.customId++, namespace);
             pageList[ndx++] = null;
             
             for (ResourceLocation key : keys) {
                 Property<?> property = this.settings.customProperties.get(key);
-                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + this.getFormattedRegistryString(key)) + ":");
                 
-                if (property instanceof BooleanProperty) {
-                    BooleanProperty booleanProperty = (BooleanProperty)property;
-                    
-                    pageList[ndx++] = this.createGuiButton(this.customId, "enabled", booleanProperty.getValue());
-                    
-                } else if (property instanceof FloatProperty) {
-                    FloatProperty floatProperty = (FloatProperty)property;
-                    String formattedValue = String.format("%2.3f", floatProperty.getValue());
-                    
-                    switch(floatProperty.getGuiType()) {
-                        case FIELD:
-                            pageList[ndx++] = this.createGuiField(this.customId, formattedValue, floatProperty.getStringPredicate());
-                            break;
-                        case SLIDER:
-                            pageList[ndx++] = this.createGuiSlider(
-                                this.customId,
-                                "entry",
-                                floatProperty.getMinValue(),
-                                floatProperty.getMaxValue(), 
-                                floatProperty.getValue()
-                            );
-                            break;
-                    }
-                    
-                } else if (property instanceof IntProperty) {
-                    IntProperty intProperty = (IntProperty)property;
-                    String formattedValue = String.format("%d", intProperty.getValue());
-                    
-                    switch(intProperty.getGuiType()) {
-                        case FIELD:
-                            pageList[ndx++] = this.createGuiField(this.customId, formattedValue, intProperty.getStringPredicate());
-                            break;
-                        case SLIDER:
-                            pageList[ndx++] = this.createGuiSlider(
-                                this.customId,
-                                "entry",
-                                intProperty.getMinValue(),
-                                intProperty.getMaxValue(), 
-                                intProperty.getValue()
-                            );
-                            break;
-                    }
-                    
-                } else if (property instanceof ListProperty) {
-                    ListProperty listProperty = (ListProperty)property;
-                    int listNdx = listProperty.indexOf(listProperty.getValue());
-                    
-                    if (listNdx == -1) listNdx = 0;
-                    
-                    pageList[ndx++] = this.createGuiSlider(this.customId, "entry", 0.0f, listProperty.getValues().length - 1, listNdx);
-                
-                } else if (property instanceof BiomeProperty) {
-                    pageList[ndx++] = this.createGuiButton(this.customId, "enabled", true);
-                
-                } else if (property instanceof StringProperty) {
-                    StringProperty stringProperty = (StringProperty)property;
-                    
-                    pageList[ndx++] = this.createGuiField(this.customId, stringProperty.getValue(), string -> true);
-                    
-                }
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + getFormattedRegistryString(key)) + ":");
+                pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVistor(), this.customId);
                 
                 this.customIds.put(this.customId++, key.toString());
             }
         }
         
         return pageList;
-    }
-    
-    private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, String tag) {
-        return new GuiPageButtonList.GuiLabelEntry(id, I18n.format(PREFIX + tag), true);
-    }
-    
-    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, String tag) {
-        return new GuiPageButtonList.GuiLabelEntry(id, tag, true);
-    }
-    
-    private GuiPageButtonList.GuiSlideEntry createGuiSlider(int id, String tag, float minValue, float maxValue, float initialValue) {
-        return new GuiPageButtonList.GuiSlideEntry(id, I18n.format(PREFIX + tag), true, this, minValue, maxValue, initialValue);
-    }
-    
-    private GuiPageButtonList.GuiButtonEntry createGuiButton(int id, String tag, boolean initialValue) {
-        return new GuiPageButtonList.GuiButtonEntry(id, I18n.format(PREFIX + tag), true, initialValue);
-    }
-    
-    private GuiPageButtonList.EditBoxEntry createGuiField(int id, String formattedValue, Predicate<String> predicate) {
-        return new GuiPageButtonList.EditBoxEntry(id, formattedValue, true, predicate);
     }
     
     private void randomizeGuiComponent(Gui guiComponent, Set<Gui> biomeButtonComponents, Set<Gui> baseButtonComponents) {
@@ -1905,22 +1828,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG0_S_CHUNK: {
                 ResourceLocation registryKey = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "chunkSource." + this.getFormattedRegistryString(registryKey));
+                return I18n.format(PREFIX + "chunkSource." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_BIOME: {
                 ResourceLocation registryKey = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "biomeSource." + this.getFormattedRegistryString(registryKey));
+                return I18n.format(PREFIX + "biomeSource." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_SURFACE: {
                 ResourceLocation registryKey = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "surfaceBuilder." + this.getFormattedRegistryString(registryKey));
+                return I18n.format(PREFIX + "surfaceBuilder." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_CARVER: {
                 ResourceLocation registryKey = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "caveCarver." + this.getFormattedRegistryString(registryKey));
+                return I18n.format(PREFIX + "caveCarver." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
@@ -2119,8 +2042,28 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return GuiIdentifiers.getBiomeGuiIds().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
     }
     
-    private String getFormattedRegistryString(ResourceLocation registryKey) {
+    private static String getFormattedRegistryString(ResourceLocation registryKey) {
         return registryKey.getNamespace() + "." + registryKey.getPath();
+    }
+    
+    private static GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, String tag) {
+        return new GuiPageButtonList.GuiLabelEntry(id, I18n.format(PREFIX + tag), true);
+    }
+    
+    private static GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, String tag) {
+        return new GuiPageButtonList.GuiLabelEntry(id, tag, true);
+    }
+    
+    private static GuiPageButtonList.GuiSlideEntry createGuiSlider(int id, String tag, float minValue, float maxValue, float initialValue, FormatHelper formatHelper) {
+        return new GuiPageButtonList.GuiSlideEntry(id, I18n.format(PREFIX + tag), true, formatHelper, minValue, maxValue, initialValue);
+    }
+    
+    private static GuiPageButtonList.GuiButtonEntry createGuiButton(int id, String tag, boolean initialValue) {
+        return new GuiPageButtonList.GuiButtonEntry(id, I18n.format(PREFIX + tag), true, initialValue);
+    }
+    
+    private static GuiPageButtonList.EditBoxEntry createGuiField(int id, String formattedValue, Predicate<String> predicate) {
+        return new GuiPageButtonList.EditBoxEntry(id, formattedValue, true, predicate);
     }
     
     private static String getFormattedBiomeName(String registryKey, boolean prefix, int truncateLen) {
@@ -2142,5 +2085,81 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return 0;
+    }
+
+    private class CreateGuiPropertyVistor implements GuiPropertyVisitor {
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(BooleanProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", property.getValue());
+        }
+
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(FloatProperty property, int guiIdentifier) {
+            String formattedValue = String.format(property.getFormatter(), property.getValue());
+            
+            switch(property.getGuiType()) {
+                case FIELD:
+                    return createGuiField(guiIdentifier, formattedValue, property.getStringPredicate());
+                case SLIDER:
+                    return createGuiSlider(
+                        guiIdentifier,
+                        "entry",
+                        property.getMinValue(),
+                        property.getMaxValue(), 
+                        property.getValue(),
+                        GuiScreenCustomizeWorld.this
+                    );
+                default: 
+                    return createGuiField(guiIdentifier, formattedValue, property.getStringPredicate());
+            }
+        }
+
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(IntProperty property, int guiIdentifier) {
+            String formattedValue = String.format(property.getFormatter(), property.getValue());
+            
+            switch(property.getGuiType()) {
+                case FIELD:
+                    return createGuiField(guiIdentifier, formattedValue, property.getStringPredicate());
+                case SLIDER:
+                    return createGuiSlider(
+                        guiIdentifier,
+                        "entry",
+                        property.getMinValue(),
+                        property.getMaxValue(), 
+                        property.getValue(),
+                        GuiScreenCustomizeWorld.this
+                    );
+                default: 
+                    return createGuiField(guiIdentifier, formattedValue, property.getStringPredicate());
+            }
+        }
+
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(StringProperty property, int guiIdentifier) {
+            return createGuiField(guiIdentifier, property.getValue(), string -> true);
+        }
+
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(ListProperty property, int guiIdentifier) {
+            int listNdx = property.indexOf(property.getValue());
+            if (listNdx == -1) 
+                listNdx = 0;
+            
+            return createGuiSlider(
+                guiIdentifier,
+                "entry",
+                0.0f,
+                property.getValues().length - 1,
+                listNdx, 
+                GuiScreenCustomizeWorld.this
+            );
+        }
+
+        @Override
+        public GuiPageButtonList.GuiListEntry visit(BiomeProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", true);
+        }
+        
     }
 }

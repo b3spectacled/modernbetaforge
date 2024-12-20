@@ -45,6 +45,7 @@ import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
@@ -66,7 +67,6 @@ public abstract class ChunkSource {
     protected static final int OCEAN_MIN_DEPTH = 4;
     protected static final int DEEP_OCEAN_MIN_DEPTH = 16;
     
-    protected final ModernBetaChunkGenerator chunkGenerator;
     protected final ModernBetaGeneratorSettings settings;
     protected final ModernBetaBiomeProvider biomeProvider;
     
@@ -115,7 +115,6 @@ public abstract class ChunkSource {
         ModernBetaChunkGenerator chunkGenerator,
         ModernBetaGeneratorSettings settings
     ) {
-        this.chunkGenerator = chunkGenerator;
         this.settings = settings;
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         
@@ -146,7 +145,7 @@ public abstract class ChunkSource {
         this.mineshaftGenerator = (MapGenMineshaft)TerrainGen.getModdedMapGen(new MapGenMineshaft(), InitMapGenEvent.EventType.MINESHAFT);
         
         this.oceanMonumentGenerator = (StructureOceanMonument)TerrainGen.getModdedMapGen(new StructureOceanMonument(), InitMapGenEvent.EventType.OCEAN_MONUMENT);
-        this.woodlandMansionGenerator = (WoodlandMansion)TerrainGen.getModdedMapGen(new WoodlandMansion(this.chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
+        this.woodlandMansionGenerator = (WoodlandMansion)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
         this.scatteredFeatureGenerator = (MapGenScatteredFeature)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
 
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
@@ -294,10 +293,11 @@ public abstract class ChunkSource {
      * Populates the chunk with generated structures and biome feature decorations (i.e. trees, plants, lakes, etc.).
      * Called in {@link ModernBetaChunkGenerator#populate(int, int) populate}.
      * 
+     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for feature population.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    public void populateChunk(int chunkX, int chunkZ) {
+    public void populateChunk(IChunkGenerator chunkGenerator, int chunkX, int chunkZ) {
         // Prune outer chunks for finite worlds
         this.pruneChunk(chunkX, chunkZ);
         
@@ -319,7 +319,7 @@ public abstract class ChunkSource {
             long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
             this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
 
-            ForgeEventFactory.onChunkPopulate(true, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
+            ForgeEventFactory.onChunkPopulate(true, chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
             
             // Actually generate map features here
             if (this.mapFeaturesEnabled) {
@@ -358,7 +358,7 @@ public abstract class ChunkSource {
             
             if (!hasVillageGenerated &&
                 this.settings.useWaterLakes && 
-                TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
+                TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
             ) {
                 if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
                     int x = startX + this.random.nextInt(16) + 8;
@@ -371,7 +371,7 @@ public abstract class ChunkSource {
             
             if (!hasVillageGenerated &&
                 this.settings.useLavaLakes &&
-                TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
+                TerrainGen.populate(chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
             ) {
                 if (random.nextInt(this.settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
                     int x = startX + this.random.nextInt(16) + 8;
@@ -385,7 +385,7 @@ public abstract class ChunkSource {
             }
             
             if (this.settings.useDungeons && 
-                TerrainGen.populate(this.chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
+                TerrainGen.populate(chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
             ) {
                 for (int i = 0; i < this.settings.dungeonChance; i++) {
                     int x = startX + this.random.nextInt(16) + 8;
@@ -400,7 +400,7 @@ public abstract class ChunkSource {
             biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
             
             // Generate animals
-            if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+            if (TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
                 WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
             }
         }
@@ -410,7 +410,7 @@ public abstract class ChunkSource {
         BiomeSource biomeSource = biomeProvider.getBiomeSource();
 
         // Generate snow / ice
-        if (TerrainGen.populate(this.chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
+        if (TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
             for(int localX = 0; localX < 16; localX++) {
                 for(int localZ = 0; localZ < 16; localZ++) {
                     // Adding 8 is important to prevent runaway chunk loading
@@ -450,7 +450,7 @@ public abstract class ChunkSource {
             }
         }
         
-        ForgeEventFactory.onChunkPopulate(false, this.chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
+        ForgeEventFactory.onChunkPopulate(false, chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
         
         BlockFalling.fallInstantly = false;
     }

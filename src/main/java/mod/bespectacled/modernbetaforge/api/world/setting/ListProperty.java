@@ -2,7 +2,15 @@ package mod.bespectacled.modernbetaforge.api.world.setting;
 
 import java.util.Arrays;
 
-public class ListProperty extends StringProperty {
+import com.google.gson.JsonObject;
+
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
+import net.minecraft.client.gui.GuiPageButtonList;
+import net.minecraft.util.ResourceLocation;
+
+public final class ListProperty extends StringProperty {
     private final String[] values;
     
     /**
@@ -20,6 +28,16 @@ public class ListProperty extends StringProperty {
     @Override
     public String getType() {
         return "list";
+    }
+
+    @Override
+    public void visitFactory(FactoryPropertyVisitor visitor, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+        visitor.visit(this, factory, registryKey, jsonObject);
+    }
+
+    @Override
+    public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
+        return visitor.visit(this, guiIdentifier);
     }
     
     /**

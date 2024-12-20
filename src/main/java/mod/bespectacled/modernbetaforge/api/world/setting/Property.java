@@ -1,6 +1,13 @@
 package mod.bespectacled.modernbetaforge.api.world.setting;
 
+import com.google.gson.JsonObject;
+
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
+import net.minecraft.client.gui.GuiPageButtonList;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class Property<T> {
     private T value;
@@ -21,6 +28,32 @@ public abstract class Property<T> {
      * @return The property type
      */
     public abstract String getType();
+    
+    /**
+     * Accept a Factory visitor for the property.
+     * 
+     * @param visitor The property visitor.
+     * @param factory The generator settings factory.
+     * @param registryKey The registry key associated with this property.
+     * @param jsonObject The JSON object to read/write the property from/to.
+     */
+    public abstract void visitFactory(FactoryPropertyVisitor visitor, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject);
+    
+    /**
+     * Accept a GUI visitor for the property.
+     * 
+     * @param visitor The property visitor.
+     * @param guiIdentifier The id of the GUI button.
+     * @return A new GUI button entry.
+     */
+    public abstract GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier);
+    
+    /**
+     * Gets the format string for use with the customization GUI.
+     * 
+     * @return The format string
+     */
+    public abstract String getFormatter();
     
     /**
      * Gets the property value.

@@ -33,6 +33,7 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -976,44 +977,9 @@ public class ModernBetaGeneratorSettings {
             this.tundraBiomeBeach = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_SNOWY_BEACH).toString();
             
             this.customProperties = new LinkedHashMap<>();
-            ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
-                Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
-                
-                if (property instanceof BooleanProperty) {
-                    BooleanProperty booleanProperty = (BooleanProperty)property;
-                    this.customProperties.put(key, new BooleanProperty(booleanProperty.getValue()));
-                    
-                } else if (property instanceof FloatProperty) {
-                    FloatProperty floatProperty = (FloatProperty)property;
-                    float value = floatProperty.getValue();
-                    float minValue = floatProperty.getMinValue();
-                    float maxValue = floatProperty.getMaxValue();
-                    PropertyGuiType type = floatProperty.getGuiType();
-                    
-                    this.customProperties.put(key, new FloatProperty(value, minValue, maxValue, type));
-                    
-                } else if (property instanceof IntProperty) {
-                    IntProperty intProperty = (IntProperty)property;
-                    int value = intProperty.getValue();
-                    int minValue = intProperty.getMinValue();
-                    int maxValue = intProperty.getMaxValue();
-                    PropertyGuiType type = intProperty.getGuiType();
-                    
-                    this.customProperties.put(key, new IntProperty(value, minValue, maxValue, type));
-                    
-                } else if (property instanceof ListProperty) {
-                    ListProperty listProperty = (ListProperty)property;
-                    this.customProperties.put(key, new ListProperty(listProperty.getValue(), listProperty.getValues()));
-                    
-                } else if (property instanceof BiomeProperty) {
-                    BiomeProperty biomeProperty = (BiomeProperty)property;
-                    this.customProperties.put(key, new BiomeProperty(biomeProperty.getValue()));
-                    
-                } else if (property instanceof StringProperty) {
-                    StringProperty stringProperty = (StringProperty)property;
-                    this.customProperties.put(key, new StringProperty(stringProperty.getValue()));
-                    
-                }
+            ModernBetaRegistries.PROPERTY.getKeys().forEach(registryKey -> {
+                Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey);
+                property.visitFactory(new NewFactoryPropertyVisitor(), this, registryKey, null);
             });
         }
 
@@ -1697,42 +1663,7 @@ public class ModernBetaGeneratorSettings {
                 
                 ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
                     Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
-                    
-                    if (property instanceof BooleanProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        boolean value = JsonUtils.getBoolean(jsonObject, key.toString(), ((BooleanProperty)property).getValue());
-                        factory.customProperties.put(key, new BooleanProperty(value));
-                        
-                    } else if (property instanceof FloatProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        FloatProperty floatProperty = (FloatProperty)property;
-                        float value = JsonUtils.getFloat(jsonObject, key.toString(), floatProperty.getValue());
-                        float minValue = floatProperty.getMinValue();
-                        float maxValue = floatProperty.getMaxValue();
-                        PropertyGuiType guiType = floatProperty.getGuiType();
-                        
-                        factory.customProperties.put(key, new FloatProperty(value, minValue, maxValue, guiType));
-                        
-                    } else if (property instanceof IntProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        IntProperty intProperty = (IntProperty)property;
-                        int value = JsonUtils.getInt(jsonObject, key.toString(), intProperty.getValue());
-                        int minValue = intProperty.getMinValue();
-                        int maxValue = intProperty.getMaxValue();
-                        PropertyGuiType guiType = intProperty.getGuiType();
-                        
-                        factory.customProperties.put(key, new IntProperty(value, minValue, maxValue, guiType));
-                        
-                    } else if (property instanceof ListProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        String value = JsonUtils.getString(jsonObject, key.toString(), ((ListProperty)property).getValue());
-                        factory.customProperties.put(key, new ListProperty(value, ((ListProperty)property).getValues()));
-                        
-                    } else if (property instanceof BiomeProperty && JsonUtils.hasField(jsonObject, key.toString())) { 
-                        String value = JsonUtils.getString(jsonObject, key.toString(), ((BiomeProperty)property).getValue());
-                        factory.customProperties.put(key, new BiomeProperty(value));
-                        
-                    } else if (property instanceof StringProperty && JsonUtils.hasField(jsonObject, key.toString())) {
-                        String value = JsonUtils.getString(jsonObject, key.toString(), ((StringProperty)property).getValue());
-                        factory.customProperties.put(key, new StringProperty(value));
-                        
-                    } 
+                    property.visitFactory(new ReadFactoryPropertyVisitor(), factory, key, jsonObject);
                 });
                 
             } catch (Exception e) {
@@ -1961,21 +1892,7 @@ public class ModernBetaGeneratorSettings {
             
             factory.customProperties.keySet().forEach(key -> {
                 Property<?> property = factory.customProperties.get(key);
-                
-                if (property instanceof BooleanProperty) {
-                    jsonObject.addProperty(key.toString(), ((BooleanProperty)property).getValue());
-                    
-                } else if (property instanceof FloatProperty) {
-                    jsonObject.addProperty(key.toString(), ((FloatProperty)property).getValue());
-                    
-                } else if (property instanceof IntProperty) {
-                    jsonObject.addProperty(key.toString(), ((IntProperty)property).getValue());
-                    
-                } else if (property instanceof StringProperty) {
-                    jsonObject.addProperty(key.toString(), ((StringProperty)property).getValue());
-                    
-                }
-                
+                property.visitFactory(new WriteFactoryPropertyVisitor(), factory, key, jsonObject);
             });
             
             return jsonObject;
@@ -1988,5 +1905,139 @@ public class ModernBetaGeneratorSettings {
     
     public static ModernBetaGeneratorSettings build(String generatorSettings) {
         return ModernBetaGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
+    }
+    
+    private static class NewFactoryPropertyVisitor implements FactoryPropertyVisitor {
+        @Override
+        public void visit(BooleanProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            factory.customProperties.put(registryKey, new BooleanProperty(property.getValue()));
+        }
+
+        @Override
+        public void visit(FloatProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            float value = property.getValue();
+            float minValue = property.getMinValue();
+            float maxValue = property.getMaxValue();
+            PropertyGuiType type = property.getGuiType();
+            
+            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, type));
+        }
+
+        @Override
+        public void visit(IntProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            int value = property.getValue();
+            int minValue = property.getMinValue();
+            int maxValue = property.getMaxValue();
+            PropertyGuiType type = property.getGuiType();
+            
+            factory.customProperties.put(registryKey, new IntProperty(value, minValue, maxValue, type));
+        }
+
+        @Override
+        public void visit(StringProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            
+            factory.customProperties.put(registryKey, new StringProperty(value));
+        }
+
+        @Override
+        public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            String[] values = property.getValues();
+            
+            factory.customProperties.put(registryKey, new ListProperty(value, values));
+        }
+
+        @Override
+        public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            
+            factory.customProperties.put(registryKey, new BiomeProperty(value));
+        }
+
+    }
+    
+    private static class ReadFactoryPropertyVisitor implements FactoryPropertyVisitor {
+        @Override
+        public void visit(BooleanProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            boolean value = JsonUtils.getBoolean(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new BooleanProperty(value));
+        }
+
+        @Override
+        public void visit(FloatProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            float value = JsonUtils.getFloat(jsonObject, registryKey.toString(), property.getValue());
+            float minValue = property.getMinValue();
+            float maxValue = property.getMaxValue();
+            PropertyGuiType guiType = property.getGuiType();
+            
+            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, guiType));
+        }
+
+        @Override
+        public void visit(IntProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            int value = JsonUtils.getInt(jsonObject, registryKey.toString(), property.getValue());
+            int minValue = property.getMinValue();
+            int maxValue = property.getMaxValue();
+            PropertyGuiType guiType = property.getGuiType();
+
+            factory.customProperties.put(registryKey, new IntProperty(value, minValue, maxValue, guiType));
+        }
+
+        @Override
+        public void visit(StringProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new StringProperty(value));
+        }
+
+        @Override
+        public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new ListProperty(value, property.getValues()));
+        }
+
+        @Override
+        public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new BiomeProperty(value));
+        }
+
+    }
+    
+    private static class WriteFactoryPropertyVisitor implements FactoryPropertyVisitor {
+        @Override
+        public void visit(BooleanProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(FloatProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(IntProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(StringProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
     }
 }

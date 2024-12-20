@@ -166,7 +166,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     @SideOnly(Side.CLIENT)
-    public class ListPreset extends GuiSlot {
+    private class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 80;
         
         public int selected;
@@ -323,7 +323,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     @SideOnly(Side.CLIENT)
-    static class Info {
+    private static class Info {
         public String name;
         public String desc;
         public ResourceLocation texture;

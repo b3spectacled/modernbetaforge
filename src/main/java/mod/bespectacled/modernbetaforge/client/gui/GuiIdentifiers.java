@@ -11,6 +11,8 @@ import java.util.function.BiPredicate;
 import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
@@ -32,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIdentifiers {
-    public static final Map<String, List<Integer>> CHUNK_SETTINGS = new LinkedHashMap<>();
+    public static final Map<ResourceLocation, List<Integer>> NOISE_SETTINGS = new LinkedHashMap<>();
     public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
     public static final Map<Integer, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
     
@@ -465,8 +467,8 @@ public class GuiIdentifiers {
     }
     
     static {
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.BETA.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -483,8 +485,8 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -501,8 +503,8 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -519,8 +521,8 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -535,8 +537,8 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -549,15 +551,15 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_HEIGH_LIM
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -572,8 +574,8 @@ public class GuiIdentifiers {
             )
         );
 
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -590,8 +592,8 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(),
             ImmutableList.of(
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
@@ -617,13 +619,13 @@ public class GuiIdentifiers {
             )
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey(),
             ImmutableList.of()
         );
         
-        CHUNK_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString(),
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(),
             ImmutableList.of()
         );
         
@@ -675,8 +677,8 @@ public class GuiIdentifiers {
 
         TEST_CHUNK_SETTINGS = (factory, id) -> {
             boolean enabled = false;
-            List<Integer> defaultSettings = CHUNK_SETTINGS.get(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString());
-            List<Integer> settings = CHUNK_SETTINGS.getOrDefault(factory.chunkSource, defaultSettings);
+            List<Integer> defaultSettings = NOISE_SETTINGS.get(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey());
+            List<Integer> settings = NOISE_SETTINGS.getOrDefault(factory.chunkSource, defaultSettings);
             
             if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
                 enabled = settings.contains(id);
@@ -692,15 +694,21 @@ public class GuiIdentifiers {
             boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
             boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
             
-            return !(isIndev || isClassic) && !isSkylands;
+            return !isIndev && !isClassic && !isSkylands;
         };
         BiPredicate<Factory, Integer> testCarver = (factory, id) -> factory.useCaves;
         BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-        BiPredicate<Factory, Integer> testBiomeReplacement = (factory, id) -> {
-            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean isSkylands = factory.biomeSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString());
+        BiPredicate<Factory, Integer> testOceanReplacement = (factory, id) -> {
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
             
-            return !isFixedBiomeSource && !isSkylands;
+            return biomeSource instanceof BiomeResolverOcean;
+        };
+        BiPredicate<Factory, Integer> testBeachReplacement = (factory, id) -> {
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
+            
+            return biomeSource instanceof BiomeResolverBeach;
         };
         BiPredicate<Factory, Integer> testClassicNetherBoP = (factory, id) -> !ModCompat.isBoPLoaded();
         BiPredicate<Factory, Integer> testClassicNether = (factory, id) -> factory.useOldNether && !ModCompat.isBoPLoaded();
@@ -847,8 +855,8 @@ public class GuiIdentifiers {
         
         add(PG0_B_FIXED, testFixed);
         
-        add(PG0_B_USE_OCEAN, testBiomeReplacement);
-        add(PG0_B_USE_BEACH, testBiomeReplacement);
+        add(PG0_B_USE_OCEAN, testOceanReplacement);
+        add(PG0_B_USE_BEACH, testBeachReplacement);
         
         add(PG0_S_SEA_LEVEL, testSurface);
         add(PG0_B_USE_CAVES);
