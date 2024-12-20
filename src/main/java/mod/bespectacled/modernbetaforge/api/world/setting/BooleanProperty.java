@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.setting;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
@@ -31,6 +32,11 @@ public final class BooleanProperty extends Property<Boolean> {
     @Override
     public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
         return visitor.visit(this, guiIdentifier);
+    }
+
+    @Override
+    public void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey) {
+        visitor.visit(this, guiIdentifier, (Boolean)value, registryKey);
     }
 
     @Override

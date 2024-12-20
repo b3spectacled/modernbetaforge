@@ -5,6 +5,7 @@ import com.google.common.primitives.Floats;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
@@ -55,6 +56,11 @@ public final class FloatProperty extends RangedProperty<Float> {
     }
 
     @Override
+    public void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey) {
+        visitor.visit(this, guiIdentifier, value, registryKey);
+    }
+
+    @Override
     public String getFormatter() {
         return "%2.3f";
     }
@@ -64,7 +70,7 @@ public final class FloatProperty extends RangedProperty<Float> {
         return string -> {
             Float value = Floats.tryParse(string);
             
-            return string.isEmpty() || (value != null && value >= this.getMinValue() && value <= this.getMaxValue());
+            return string.isEmpty() || string.equals("-") || (value != null && Floats.isFinite(value));
         };
     }
 }

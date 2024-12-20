@@ -5,6 +5,7 @@ import com.google.common.primitives.Ints;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
@@ -53,6 +54,11 @@ public final class IntProperty extends RangedProperty<Integer> {
     public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
         return visitor.visit(this, guiIdentifier);
     }
+    
+    @Override
+    public void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey) {
+        visitor.visit(this, guiIdentifier, value, registryKey);
+    }
 
     @Override
     public String getFormatter() {
@@ -64,7 +70,7 @@ public final class IntProperty extends RangedProperty<Integer> {
         return string -> {
             Integer value = Ints.tryParse(string);
             
-            return string.isEmpty() || (value != null && value >= this.getMinValue() && value <= this.getMaxValue());
+            return string.isEmpty() || string.equals("-") || value != null;
         };
     }
 }

@@ -37,6 +37,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.setting.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -90,8 +91,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private final Predicate<String> floatFilter;
     private final Predicate<String> intFilter;
-    private final Predicate<String> intBiomeSizeFilter;
-    private final Predicate<String> intRiverSizeFilter;
     
     private final ModernBetaGeneratorSettings.Factory defaultSettings;
     private ModernBetaGeneratorSettings.Factory settings;
@@ -144,7 +143,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             public boolean apply(@Nullable String entryString) {
                 Float entryValue = Floats.tryParse(entryString);
                 
-                return entryString.isEmpty() || (entryValue != null && Floats.isFinite(entryValue) && entryValue >= 0.0f);
+                return entryString.isEmpty() || (entryValue != null && Floats.isFinite(entryValue));
             }
         };
         
@@ -153,25 +152,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             public boolean apply(@Nullable String entryString) {
                 Integer entryValue = Ints.tryParse(entryString);
                 
-                return entryString.isEmpty() || (entryValue != null && entryValue >= 0 && entryValue <= (int)MAX_HEIGHT);
-            }
-        };
-        
-        this.intBiomeSizeFilter = new Predicate<String>() {
-            @Override
-            public boolean apply(@Nullable String entryString) {
-                Integer entryValue = Ints.tryParse(entryString);
-                
-                return entryString.isEmpty() || (entryValue != null && entryValue >= (int)MIN_BIOME_SIZE && entryValue <= (int)MAX_BIOME_SIZE);
-            }
-        };
-        
-        this.intRiverSizeFilter = new Predicate<String>() {
-            @Override
-            public boolean apply(@Nullable String entryString) {
-                Integer entryValue = Ints.tryParse(entryString);
-                
-                return entryString.isEmpty() || (entryValue != null && entryValue >= (int)MIN_RIVER_SIZE && entryValue <= (int)MAX_RIVER_SIZE);
+                return entryString.isEmpty() || entryValue != null;
             }
         };
         
@@ -486,9 +467,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_B_SCL_OF, I18n.format(PREFIX + "biomeScaleOffset") + ":"),
             createGuiField(GuiIdentifiers.PG4_F_B_SCL_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_BIOME_SZ, I18n.format(PREFIX + NbtTags.BIOME_SIZE) + ":"),
-            createGuiField(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intBiomeSizeFilter),
+            createGuiField(GuiIdentifiers.PG4_F_BIOME_SZ, String.format("%d", this.settings.biomeSize), this.intFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG4_L_RIVER_SZ, I18n.format(PREFIX + "riverRarity") + ":"),
-            createGuiField(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intRiverSizeFilter)
+            createGuiField(GuiIdentifiers.PG4_F_RIVER_SZ, String.format("%d", this.settings.riverSize), this.intFilter)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList5 = {
@@ -755,132 +736,118 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, String entryString) {
-        float entryValue = 0.0f;
-        
-        try {
-            entryValue = Float.parseFloat(entryString);
-            
-        } catch (NumberFormatException ex) {}
-        
-        float newEntryValue = 0.0f;
-        switch (entry) {
-            case GuiIdentifiers.PG4_F_MAIN_NS_X:
-                this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                newEntryValue = this.settings.mainNoiseScaleX;
-                break;
-            case GuiIdentifiers.PG4_F_MAIN_NS_Y:
-                this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                newEntryValue = this.settings.mainNoiseScaleY;
-                break;
-            case GuiIdentifiers.PG4_F_MAIN_NS_Z:
-                this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                newEntryValue = this.settings.mainNoiseScaleZ;
-                break;
-            case GuiIdentifiers.PG4_F_DPTH_NS_X:
-                this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
-                newEntryValue = this.settings.depthNoiseScaleX;
-                break;
-            case GuiIdentifiers.PG4_F_DPTH_NS_Z:
-                this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
-                newEntryValue = this.settings.depthNoiseScaleZ;
-                break;
-            case GuiIdentifiers.PG4_F_BASE_SIZE:
-                this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
-                newEntryValue = this.settings.baseSize;
-                break;
-            case GuiIdentifiers.PG4_F_COORD_SCL:
-                this.settings.coordinateScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
-                newEntryValue = this.settings.coordinateScale;
-                break;
-            case GuiIdentifiers.PG4_F_HEIGH_SCL:
-                this.settings.heightScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
-                newEntryValue = this.settings.heightScale;
-                break;
-            case GuiIdentifiers.PG4_F_STRETCH_Y:
-                this.settings.stretchY = MathHelper.clamp(entryValue, 0.01f, 50.0f);
-                newEntryValue = this.settings.stretchY;
-                break;
-            case GuiIdentifiers.PG4_F_UPPER_LIM:
-                this.settings.upperLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                newEntryValue = this.settings.upperLimitScale;
-                break;
-            case GuiIdentifiers.PG4_F_LOWER_LIM:
-                this.settings.lowerLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
-                newEntryValue = this.settings.lowerLimitScale;
-                break;
-            case GuiIdentifiers.PG4_F_HEIGH_LIM:
-                this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
-                newEntryValue = this.settings.height;
-                break;
-            case GuiIdentifiers.PG4_F_TEMP_SCL:
-                this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                newEntryValue = this.settings.tempNoiseScale;
-                break;
-            case GuiIdentifiers.PG4_F_RAIN_SCL:
-                this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                newEntryValue = this.settings.rainNoiseScale;
-                break;
-            case GuiIdentifiers.PG4_F_DETL_SCL:
-                this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
-                newEntryValue = this.settings.detailNoiseScale;
-                break;
-            case GuiIdentifiers.PG4_F_B_DPTH_WT:
-                this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
-                newEntryValue = this.settings.biomeDepthWeight;
-                break;
-            case GuiIdentifiers.PG4_F_B_DPTH_OF:
-                this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
-                newEntryValue = this.settings.biomeDepthOffset;
-                break;
-            case GuiIdentifiers.PG4_F_B_SCL_WT:
-                this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
-                newEntryValue = this.settings.biomeScaleWeight;
-                break;
-            case GuiIdentifiers.PG4_F_B_SCL_OF:
-                this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
-                newEntryValue = this.settings.biomeScaleOffset;
-                break;
-            case GuiIdentifiers.PG4_F_BIOME_SZ:
-                this.settings.biomeSize = (int)MathHelper.clamp(entryValue, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
-                newEntryValue = this.settings.biomeSize;
-                break;
-            case GuiIdentifiers.PG4_F_RIVER_SZ:
-                this.settings.riverSize = (int)MathHelper.clamp(entryValue, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
-                newEntryValue = this.settings.riverSize;
-                break;
-        }
-        
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
+            ResourceLocation registryKey = new ResourceLocation(key);
             
-            if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.FIELD) {
-                FloatProperty floatProperty = (FloatProperty)property;
+            Property<?> property = this.settings.customProperties.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
+            
+        } else {
+            float entryValue = 0.0f;
+            
+            try {
+                entryValue = Float.parseFloat(entryString);
                 
-                floatProperty.setValue(MathHelper.clamp(entryValue, floatProperty.getMinValue(), floatProperty.getMaxValue()));
-                newEntryValue = floatProperty.getValue();
-                
-            } else if (property instanceof IntProperty && ((IntProperty)property).getGuiType() == PropertyGuiType.FIELD) {
-                IntProperty intProperty = (IntProperty)property;
-                
-                intProperty.setValue((int)MathHelper.clamp(entryValue, intProperty.getMinValue(), intProperty.getMaxValue()));
-                newEntryValue = intProperty.getValue();
-                
-            } else if (property instanceof StringProperty) {
-                StringProperty stringProperty = (StringProperty)property;
-                
-                stringProperty.setValue(entryString);
+            } catch (NumberFormatException ex) {}
+            
+            float newEntryValue = 0.0f;
+            switch (entry) {
+                case GuiIdentifiers.PG4_F_MAIN_NS_X:
+                    this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                    newEntryValue = this.settings.mainNoiseScaleX;
+                    break;
+                case GuiIdentifiers.PG4_F_MAIN_NS_Y:
+                    this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                    newEntryValue = this.settings.mainNoiseScaleY;
+                    break;
+                case GuiIdentifiers.PG4_F_MAIN_NS_Z:
+                    this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                    newEntryValue = this.settings.mainNoiseScaleZ;
+                    break;
+                case GuiIdentifiers.PG4_F_DPTH_NS_X:
+                    this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
+                    newEntryValue = this.settings.depthNoiseScaleX;
+                    break;
+                case GuiIdentifiers.PG4_F_DPTH_NS_Z:
+                    this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, 1.0f, 2000.0f);
+                    newEntryValue = this.settings.depthNoiseScaleZ;
+                    break;
+                case GuiIdentifiers.PG4_F_BASE_SIZE:
+                    this.settings.baseSize = MathHelper.clamp(entryValue, 1.0f, 25.0f);
+                    newEntryValue = this.settings.baseSize;
+                    break;
+                case GuiIdentifiers.PG4_F_COORD_SCL:
+                    this.settings.coordinateScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
+                    newEntryValue = this.settings.coordinateScale;
+                    break;
+                case GuiIdentifiers.PG4_F_HEIGH_SCL:
+                    this.settings.heightScale = MathHelper.clamp(entryValue, 1.0f, 6000.0f);
+                    newEntryValue = this.settings.heightScale;
+                    break;
+                case GuiIdentifiers.PG4_F_STRETCH_Y:
+                    this.settings.stretchY = MathHelper.clamp(entryValue, 0.01f, 50.0f);
+                    newEntryValue = this.settings.stretchY;
+                    break;
+                case GuiIdentifiers.PG4_F_UPPER_LIM:
+                    this.settings.upperLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                    newEntryValue = this.settings.upperLimitScale;
+                    break;
+                case GuiIdentifiers.PG4_F_LOWER_LIM:
+                    this.settings.lowerLimitScale = MathHelper.clamp(entryValue, 1.0f, 5000.0f);
+                    newEntryValue = this.settings.lowerLimitScale;
+                    break;
+                case GuiIdentifiers.PG4_F_HEIGH_LIM:
+                    this.settings.height = (int)MathHelper.clamp(entryValue, 1.0f, MAX_HEIGHT);
+                    newEntryValue = this.settings.height;
+                    break;
+                case GuiIdentifiers.PG4_F_TEMP_SCL:
+                    this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.tempNoiseScale;
+                    break;
+                case GuiIdentifiers.PG4_F_RAIN_SCL:
+                    this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.rainNoiseScale;
+                    break;
+                case GuiIdentifiers.PG4_F_DETL_SCL:
+                    this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    newEntryValue = this.settings.detailNoiseScale;
+                    break;
+                case GuiIdentifiers.PG4_F_B_DPTH_WT:
+                    this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                    newEntryValue = this.settings.biomeDepthWeight;
+                    break;
+                case GuiIdentifiers.PG4_F_B_DPTH_OF:
+                    this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                    newEntryValue = this.settings.biomeDepthOffset;
+                    break;
+                case GuiIdentifiers.PG4_F_B_SCL_WT:
+                    this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                    newEntryValue = this.settings.biomeScaleWeight;
+                    break;
+                case GuiIdentifiers.PG4_F_B_SCL_OF:
+                    this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                    newEntryValue = this.settings.biomeScaleOffset;
+                    break;
+                case GuiIdentifiers.PG4_F_BIOME_SZ:
+                    this.settings.biomeSize = (int)MathHelper.clamp(entryValue, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                    newEntryValue = this.settings.biomeSize;
+                    break;
+                case GuiIdentifiers.PG4_F_RIVER_SZ:
+                    this.settings.riverSize = (int)MathHelper.clamp(entryValue, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
+                    newEntryValue = this.settings.riverSize;
+                    break;
             }
-        }
-        
-        if (newEntryValue != entryValue && entryValue != 0.0f) {
-            ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
-        }
-        
-        if (entry >= GuiIdentifiers.PG4_F_MAIN_NS_X && entry <= GuiIdentifiers.PG4_F_DETL_SCL) {
-            Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry));
-            if (gui != null) {
-                ((GuiSlider)gui).setSliderValue(newEntryValue, false);
+
+            if (newEntryValue != entryValue) {
+                ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
+            }
+            
+            if (entry >= GuiIdentifiers.PG4_F_MAIN_NS_X && entry <= GuiIdentifiers.PG4_F_DETL_SCL) {
+                Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry));
+                if (gui != null) {
+                    ((GuiSlider)gui).setSliderValue(newEntryValue, false);
+                }
             }
         }
         
@@ -889,276 +856,262 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, boolean entryValue) {
-        switch (entry) {
-            case GuiIdentifiers.PG0_B_FIXED:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
-                break;
-                
-            case GuiIdentifiers.PG5_DSRT_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_DSRT_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_DSRT_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_FRST_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_FRST_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_FRST_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_ICED_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_ICED_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_ICED_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_PLNS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_PLNS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_PLNS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_RAIN_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_RAIN_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_RAIN_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_SAVA_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_SAVA_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_SAVA_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_SHRB_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_SHRB_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_SHRB_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_SEAS_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_SEAS_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_SEAS_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_SWMP_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_SWMP_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_SWMP_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_TAIG_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_TAIG_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_TAIG_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach));
-                break;
-                
-            case GuiIdentifiers.PG5_TUND_LAND:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase));
-                break;
-            case GuiIdentifiers.PG5_TUND_OCEAN:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean));
-                break;
-            case GuiIdentifiers.PG5_TUND_BEACH:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach));
-                break;
-        
-            case GuiIdentifiers.PG0_B_USE_OCEAN:
-                this.settings.replaceOceanBiomes = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_BEACH:
-                this.settings.replaceBeachBiomes = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_GRASS:
-                this.settings.useTallGrass = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_FLOWERS:
-                this.settings.useNewFlowers = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_PADS:
-                this.settings.useLilyPads = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_MELONS:
-                this.settings.useMelons = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_WELLS:
-                this.settings.useDesertWells = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_FOSSILS:
-                this.settings.useFossils = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_BIRCH:
-                this.settings.useBirchTrees = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_PINE:
-                this.settings.usePineTrees = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_SWAMP:
-                this.settings.useSwampTrees = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_JUNGLE:
-                this.settings.useJungleTrees = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_USE_ACACIA:
-                this.settings.useAcaciaTrees = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG1_B_USE_MODDED_BIOMES:
-                this.settings.useModdedBiomes = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG1_B_SPAWN_CREATURE:
-                this.settings.spawnNewCreatureMobs = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_SPAWN_MONSTER:
-                this.settings.spawnNewMonsterMobs = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_SPAWN_WOLVES:
-                this.settings.spawnWolves = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_SPAWN_WATER:
-                this.settings.spawnWaterMobs = entryValue;
-                break;
-            case GuiIdentifiers.PG1_B_SPAWN_AMBIENT:
-                this.settings.spawnAmbientMobs = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG0_B_USE_CAVES:
-                this.settings.useCaves = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_HOLDS:
-                this.settings.useStrongholds = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_VILLAGES:
-                this.settings.useVillages = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS:
-                this.settings.useVillageVariants = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_SHAFTS:
-                this.settings.useMineShafts = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_TEMPLES:
-                this.settings.useTemples = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_MONUMENTS:
-                this.settings.useMonuments = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_MANSIONS:
-                this.settings.useMansions = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_RAVINES:
-                this.settings.useRavines = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_DUNGEONS:
-                this.settings.useDungeons = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_WATER_LAKES:
-                this.settings.useWaterLakes = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_LAVA_LAKES:
-                this.settings.useLavaLakes = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_LAVA_OCEANS:
-                this.settings.useLavaOceans = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_SANDSTONE:
-                this.settings.useSandstone = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG0_B_USE_OLD_NETHER:
-                this.settings.useOldNether = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_NETHER_CAVES:
-                this.settings.useNetherCaves = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_FORTRESSES:
-                this.settings.useFortresses = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_LAVA_POCKETS:
-                this.settings.useLavaPockets = entryValue;
-                break;
-
-            case GuiIdentifiers.PG0_B_USE_INDEV_CAVES:
-                this.settings.useIndevCaves = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG0_B_USE_INFDEV_WALLS:
-                this.settings.useInfdevWalls = entryValue;
-                break;
-            case GuiIdentifiers.PG0_B_USE_INFDEV_PYRAMIDS:
-                this.settings.useInfdevPyramids = entryValue;
-                break;
-                
-            case GuiIdentifiers.PG3_B_USE_BDS:
-                this.settings.useBiomeDepthScale = entryValue;
-                break;
-        }
-        
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
             ResourceLocation registryKey = new ResourceLocation(key);
             
             Property<?> property = this.settings.customProperties.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
-            if (property instanceof BooleanProperty) {
-                BooleanProperty booleanProperty = (BooleanProperty)property;
-                
-                booleanProperty.setValue(entryValue);
-                this.setTextButton(this.pageList, entry, I18n.format(booleanProperty.getValue() ? "gui.yes" : "gui.no"));
-                
-            } else if (property instanceof BiomeProperty) {
-                BiomeProperty biomeProperty = (BiomeProperty)property;
-                
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(
-                    this,
-                    (str, factory) -> ((BiomeProperty)factory.customProperties.get(registryKey)).setValue(str),
-                    biomeProperty.getValue()
-                ));
+        } else {
+            switch (entry) {
+                case GuiIdentifiers.PG0_B_FIXED:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
+                    break;
+                    
+                case GuiIdentifiers.PG5_DSRT_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_DSRT_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_DSRT_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_FRST_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_FRST_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_FRST_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_ICED_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_ICED_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_ICED_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_PLNS_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_PLNS_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_PLNS_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_RAIN_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_RAIN_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_RAIN_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_SAVA_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_SAVA_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_SAVA_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_SHRB_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_SHRB_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_SHRB_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_SEAS_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_SEAS_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_SEAS_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_SWMP_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_SWMP_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_SWMP_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_TAIG_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_TAIG_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_TAIG_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach));
+                    break;
+                    
+                case GuiIdentifiers.PG5_TUND_LAND:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase));
+                    break;
+                case GuiIdentifiers.PG5_TUND_OCEAN:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean));
+                    break;
+                case GuiIdentifiers.PG5_TUND_BEACH:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach));
+                    break;
+            
+                case GuiIdentifiers.PG0_B_USE_OCEAN:
+                    this.settings.replaceOceanBiomes = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_BEACH:
+                    this.settings.replaceBeachBiomes = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_GRASS:
+                    this.settings.useTallGrass = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_FLOWERS:
+                    this.settings.useNewFlowers = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_PADS:
+                    this.settings.useLilyPads = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_MELONS:
+                    this.settings.useMelons = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_WELLS:
+                    this.settings.useDesertWells = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_FOSSILS:
+                    this.settings.useFossils = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_BIRCH:
+                    this.settings.useBirchTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_PINE:
+                    this.settings.usePineTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_SWAMP:
+                    this.settings.useSwampTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_JUNGLE:
+                    this.settings.useJungleTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_USE_ACACIA:
+                    this.settings.useAcaciaTrees = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG1_B_USE_MODDED_BIOMES:
+                    this.settings.useModdedBiomes = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG1_B_SPAWN_CREATURE:
+                    this.settings.spawnNewCreatureMobs = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_SPAWN_MONSTER:
+                    this.settings.spawnNewMonsterMobs = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_SPAWN_WOLVES:
+                    this.settings.spawnWolves = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_SPAWN_WATER:
+                    this.settings.spawnWaterMobs = entryValue;
+                    break;
+                case GuiIdentifiers.PG1_B_SPAWN_AMBIENT:
+                    this.settings.spawnAmbientMobs = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG0_B_USE_CAVES:
+                    this.settings.useCaves = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_HOLDS:
+                    this.settings.useStrongholds = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_VILLAGES:
+                    this.settings.useVillages = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS:
+                    this.settings.useVillageVariants = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_SHAFTS:
+                    this.settings.useMineShafts = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_TEMPLES:
+                    this.settings.useTemples = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_MONUMENTS:
+                    this.settings.useMonuments = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_MANSIONS:
+                    this.settings.useMansions = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_RAVINES:
+                    this.settings.useRavines = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_DUNGEONS:
+                    this.settings.useDungeons = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_WATER_LAKES:
+                    this.settings.useWaterLakes = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_LAVA_LAKES:
+                    this.settings.useLavaLakes = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_LAVA_OCEANS:
+                    this.settings.useLavaOceans = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_SANDSTONE:
+                    this.settings.useSandstone = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG0_B_USE_OLD_NETHER:
+                    this.settings.useOldNether = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_NETHER_CAVES:
+                    this.settings.useNetherCaves = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_FORTRESSES:
+                    this.settings.useFortresses = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_LAVA_POCKETS:
+                    this.settings.useLavaPockets = entryValue;
+                    break;
+    
+                case GuiIdentifiers.PG0_B_USE_INDEV_CAVES:
+                    this.settings.useIndevCaves = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG0_B_USE_INFDEV_WALLS:
+                    this.settings.useInfdevWalls = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_INFDEV_PYRAMIDS:
+                    this.settings.useInfdevPyramids = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG3_B_USE_BDS:
+                    this.settings.useBiomeDepthScale = entryValue;
+                    break;
             }
         }
-        
+            
         this.updateGuiButtons();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
         this.playSound();
@@ -1166,329 +1119,319 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void setEntryValue(int entry, float entryValue) {
-        switch (entry) {
-            case GuiIdentifiers.PG3_S_MAIN_NS_X:
-                this.settings.mainNoiseScaleX = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_MAIN_NS_Y:
-                this.settings.mainNoiseScaleY = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_MAIN_NS_Z:
-                this.settings.mainNoiseScaleZ = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_DPTH_NS_X:
-                this.settings.depthNoiseScaleX = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_DPTH_NS_Z:
-                this.settings.depthNoiseScaleZ = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_BASE_SIZE:
-                this.settings.baseSize = entryValue;
-                break;    
-            case GuiIdentifiers.PG3_S_COORD_SCL:
-                this.settings.coordinateScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_HEIGH_SCL:
-                this.settings.heightScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_STRETCH_Y:
-                this.settings.stretchY = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_UPPER_LIM:
-                this.settings.upperLimitScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_LOWER_LIM:
-                this.settings.lowerLimitScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_HEIGH_LIM:
-                this.settings.height = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_TEMP_SCL:
-                this.settings.tempNoiseScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_RAIN_SCL:
-                this.settings.rainNoiseScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_DETL_SCL:
-                this.settings.detailNoiseScale = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_B_DPTH_WT:
-                this.settings.biomeDepthWeight = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_B_DPTH_OF:
-                this.settings.biomeDepthOffset = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_B_SCL_WT:
-                this.settings.biomeScaleWeight = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_B_SCL_OF:
-                this.settings.biomeScaleOffset = entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_BIOME_SZ:
-                this.settings.biomeSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG3_S_RIVER_SZ:
-                this.settings.riverSize = (int)entryValue;
-                break;
-                
-            case GuiIdentifiers.PG0_S_CHUNK:
-                this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue).toString();
-                break;
-            case GuiIdentifiers.PG0_S_BIOME:
-                this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue).toString();
-                break;
-            case GuiIdentifiers.PG0_S_SURFACE:
-                this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue).toString();
-                break;
-            case GuiIdentifiers.PG0_S_CARVER:
-                this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue).toString();
-                break;
-            
-            case GuiIdentifiers.PG0_S_SEA_LEVEL:
-                this.settings.seaLevel = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_CAVE_HEIGHT:
-                this.settings.caveHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_CAVE_COUNT:
-                this.settings.caveCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_CAVE_CHANCE:
-                this.settings.caveChance = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_DUNGEON_CHANCE:
-                this.settings.dungeonChance = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE:
-                this.settings.waterLakeChance = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE:
-                this.settings.lavaLakeChance = (int)entryValue;
-                break;
-                
-            case GuiIdentifiers.PG0_S_LEVEL_THEME:
-                this.settings.levelTheme = IndevTheme.values()[(int)entryValue].id;
-                break;
-            case GuiIdentifiers.PG0_S_LEVEL_TYPE:
-                this.settings.levelType = IndevType.values()[(int)entryValue].id;
-                break;
-            case GuiIdentifiers.PG0_S_LEVEL_WIDTH:
-                this.settings.levelWidth = LEVEL_WIDTHS[(int)entryValue];
-                break;
-            case GuiIdentifiers.PG0_S_LEVEL_LENGTH:
-                this.settings.levelLength = LEVEL_WIDTHS[(int)entryValue];
-                break;
-            case GuiIdentifiers.PG0_S_LEVEL_HEIGHT:
-                this.settings.levelHeight = LEVEL_HEIGHTS[(int)entryValue];
-                break;
-            case GuiIdentifiers.PG0_S_LEVEL_HOUSE:
-                this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
-                break;
-
-            case GuiIdentifiers.PG2_S_CLAY_SIZE:
-                this.settings.claySize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_CLAY_CNT:
-                this.settings.clayCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_CLAY_MIN:
-                this.settings.clayMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_CLAY_MAX:
-                this.settings.clayMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIRT_SIZE:
-                this.settings.dirtSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIRT_CNT:
-                this.settings.dirtCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIRT_MIN:
-                this.settings.dirtMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIRT_MAX:
-                this.settings.dirtMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAV_SIZE:
-                this.settings.gravelSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAV_CNT:
-                this.settings.gravelCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAV_MIN:
-                this.settings.gravelMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAV_MAX:
-                this.settings.gravelMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAN_SIZE:
-                this.settings.graniteSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAN_CNT:
-                this.settings.graniteCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAN_MIN:
-                this.settings.graniteMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GRAN_MAX:
-                this.settings.graniteMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIOR_SIZE:
-                this.settings.dioriteSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIOR_CNT:
-                this.settings.dioriteCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIOR_MIN:
-                this.settings.dioriteMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIOR_MAX:
-                this.settings.dioriteMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_ANDE_SIZE:
-                this.settings.andesiteSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_ANDE_CNT:
-                this.settings.andesiteCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_ANDE_MIN:
-                this.settings.andesiteMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_ANDE_MAX:
-                this.settings.andesiteMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_COAL_SIZE:
-                this.settings.coalSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_COAL_CNT:
-                this.settings.coalCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_COAL_MIN:
-                this.settings.coalMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_COAL_MAX:
-                this.settings.coalMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_IRON_SIZE:
-                this.settings.ironSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_IRON_CNT:
-                this.settings.ironCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_IRON_MIN:
-                this.settings.ironMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_IRON_MAX:
-                this.settings.ironMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GOLD_SIZE:
-                this.settings.goldSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GOLD_CNT:
-                this.settings.goldCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GOLD_MIN:
-                this.settings.goldMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_GOLD_MAX:
-                this.settings.goldMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_REDS_SIZE:
-                this.settings.redstoneSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_REDS_CNT:
-                this.settings.redstoneCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_REDS_MIN:
-                this.settings.redstoneMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_REDS_MAX:
-                this.settings.redstoneMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIAM_SIZE:
-                this.settings.diamondSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIAM_CNT:
-                this.settings.diamondCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIAM_MIN:
-                this.settings.diamondMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_DIAM_MAX:
-                this.settings.diamondMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_LAPS_SIZE:
-                this.settings.lapisSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_LAPS_CNT:
-                this.settings.lapisCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_LAPS_CTR:
-                this.settings.lapisCenterHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_LAPS_SPR:
-                this.settings.lapisSpread = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_EMER_SIZE:
-                this.settings.emeraldSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_EMER_CNT:
-                this.settings.emeraldCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_EMER_MIN:
-                this.settings.emeraldMinHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_EMER_MAX:
-                this.settings.emeraldMaxHeight = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_QRTZ_SIZE:
-                this.settings.quartzSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_QRTZ_CNT:
-                this.settings.quartzCount = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_MGMA_SIZE:
-                this.settings.magmaSize = (int)entryValue;
-                break;
-            case GuiIdentifiers.PG2_S_MGMA_CNT:
-                this.settings.magmaCount = (int)entryValue;
-                break;
-        }
-        
         if (this.customIds.containsKey(entry)) {
             String key = this.customIds.get(entry);
-            Property<?> property = this.settings.customProperties.get(new ResourceLocation(key));
+            ResourceLocation registryKey = new ResourceLocation(key);
             
-            if (property instanceof FloatProperty && ((FloatProperty)property).getGuiType() == PropertyGuiType.SLIDER) {
-                FloatProperty floatProperty = (FloatProperty)property;
+            Property<?> property = this.settings.customProperties.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
-                floatProperty.setValue(entryValue);
-            } else if (property instanceof IntProperty && ((IntProperty)property).getGuiType() == PropertyGuiType.SLIDER) {
-                IntProperty intProperty = (IntProperty)property;
-            
-                intProperty.setValue((int)entryValue);
-            } else if (property instanceof ListProperty) {
-                ListProperty listProperty = (ListProperty)property;
+        } else {
+            switch (entry) {
+                case GuiIdentifiers.PG3_S_MAIN_NS_X:
+                    this.settings.mainNoiseScaleX = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_MAIN_NS_Y:
+                    this.settings.mainNoiseScaleY = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_MAIN_NS_Z:
+                    this.settings.mainNoiseScaleZ = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_DPTH_NS_X:
+                    this.settings.depthNoiseScaleX = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_DPTH_NS_Z:
+                    this.settings.depthNoiseScaleZ = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_BASE_SIZE:
+                    this.settings.baseSize = entryValue;
+                    break;    
+                case GuiIdentifiers.PG3_S_COORD_SCL:
+                    this.settings.coordinateScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_HEIGH_SCL:
+                    this.settings.heightScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_STRETCH_Y:
+                    this.settings.stretchY = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_UPPER_LIM:
+                    this.settings.upperLimitScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_LOWER_LIM:
+                    this.settings.lowerLimitScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_HEIGH_LIM:
+                    this.settings.height = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_TEMP_SCL:
+                    this.settings.tempNoiseScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_RAIN_SCL:
+                    this.settings.rainNoiseScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_DETL_SCL:
+                    this.settings.detailNoiseScale = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_B_DPTH_WT:
+                    this.settings.biomeDepthWeight = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_B_DPTH_OF:
+                    this.settings.biomeDepthOffset = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_B_SCL_WT:
+                    this.settings.biomeScaleWeight = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_B_SCL_OF:
+                    this.settings.biomeScaleOffset = entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_BIOME_SZ:
+                    this.settings.biomeSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG3_S_RIVER_SZ:
+                    this.settings.riverSize = (int)entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG0_S_CHUNK:
+                    this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue).toString();
+                    break;
+                case GuiIdentifiers.PG0_S_BIOME:
+                    this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue).toString();
+                    break;
+                case GuiIdentifiers.PG0_S_SURFACE:
+                    this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue).toString();
+                    break;
+                case GuiIdentifiers.PG0_S_CARVER:
+                    this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue).toString();
+                    break;
                 
-                listProperty.setValue(listProperty.getValues()[(int)entryValue]);
+                case GuiIdentifiers.PG0_S_SEA_LEVEL:
+                    this.settings.seaLevel = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_CAVE_HEIGHT:
+                    this.settings.caveHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_CAVE_COUNT:
+                    this.settings.caveCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_CAVE_CHANCE:
+                    this.settings.caveChance = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_DUNGEON_CHANCE:
+                    this.settings.dungeonChance = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE:
+                    this.settings.waterLakeChance = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE:
+                    this.settings.lavaLakeChance = (int)entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG0_S_LEVEL_THEME:
+                    this.settings.levelTheme = IndevTheme.values()[(int)entryValue].id;
+                    break;
+                case GuiIdentifiers.PG0_S_LEVEL_TYPE:
+                    this.settings.levelType = IndevType.values()[(int)entryValue].id;
+                    break;
+                case GuiIdentifiers.PG0_S_LEVEL_WIDTH:
+                    this.settings.levelWidth = LEVEL_WIDTHS[(int)entryValue];
+                    break;
+                case GuiIdentifiers.PG0_S_LEVEL_LENGTH:
+                    this.settings.levelLength = LEVEL_WIDTHS[(int)entryValue];
+                    break;
+                case GuiIdentifiers.PG0_S_LEVEL_HEIGHT:
+                    this.settings.levelHeight = LEVEL_HEIGHTS[(int)entryValue];
+                    break;
+                case GuiIdentifiers.PG0_S_LEVEL_HOUSE:
+                    this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
+                    break;
+    
+                case GuiIdentifiers.PG2_S_CLAY_SIZE:
+                    this.settings.claySize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_CLAY_CNT:
+                    this.settings.clayCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_CLAY_MIN:
+                    this.settings.clayMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_CLAY_MAX:
+                    this.settings.clayMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIRT_SIZE:
+                    this.settings.dirtSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIRT_CNT:
+                    this.settings.dirtCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIRT_MIN:
+                    this.settings.dirtMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIRT_MAX:
+                    this.settings.dirtMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAV_SIZE:
+                    this.settings.gravelSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAV_CNT:
+                    this.settings.gravelCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAV_MIN:
+                    this.settings.gravelMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAV_MAX:
+                    this.settings.gravelMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAN_SIZE:
+                    this.settings.graniteSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAN_CNT:
+                    this.settings.graniteCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAN_MIN:
+                    this.settings.graniteMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GRAN_MAX:
+                    this.settings.graniteMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIOR_SIZE:
+                    this.settings.dioriteSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIOR_CNT:
+                    this.settings.dioriteCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIOR_MIN:
+                    this.settings.dioriteMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIOR_MAX:
+                    this.settings.dioriteMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_ANDE_SIZE:
+                    this.settings.andesiteSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_ANDE_CNT:
+                    this.settings.andesiteCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_ANDE_MIN:
+                    this.settings.andesiteMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_ANDE_MAX:
+                    this.settings.andesiteMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_COAL_SIZE:
+                    this.settings.coalSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_COAL_CNT:
+                    this.settings.coalCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_COAL_MIN:
+                    this.settings.coalMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_COAL_MAX:
+                    this.settings.coalMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_IRON_SIZE:
+                    this.settings.ironSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_IRON_CNT:
+                    this.settings.ironCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_IRON_MIN:
+                    this.settings.ironMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_IRON_MAX:
+                    this.settings.ironMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GOLD_SIZE:
+                    this.settings.goldSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GOLD_CNT:
+                    this.settings.goldCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GOLD_MIN:
+                    this.settings.goldMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_GOLD_MAX:
+                    this.settings.goldMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_REDS_SIZE:
+                    this.settings.redstoneSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_REDS_CNT:
+                    this.settings.redstoneCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_REDS_MIN:
+                    this.settings.redstoneMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_REDS_MAX:
+                    this.settings.redstoneMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIAM_SIZE:
+                    this.settings.diamondSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIAM_CNT:
+                    this.settings.diamondCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIAM_MIN:
+                    this.settings.diamondMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_DIAM_MAX:
+                    this.settings.diamondMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_LAPS_SIZE:
+                    this.settings.lapisSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_LAPS_CNT:
+                    this.settings.lapisCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_LAPS_CTR:
+                    this.settings.lapisCenterHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_LAPS_SPR:
+                    this.settings.lapisSpread = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_EMER_SIZE:
+                    this.settings.emeraldSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_EMER_CNT:
+                    this.settings.emeraldCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_EMER_MIN:
+                    this.settings.emeraldMinHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_EMER_MAX:
+                    this.settings.emeraldMaxHeight = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_QRTZ_SIZE:
+                    this.settings.quartzSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_QRTZ_CNT:
+                    this.settings.quartzCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_MGMA_SIZE:
+                    this.settings.magmaSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_MGMA_CNT:
+                    this.settings.magmaCount = (int)entryValue;
+                    break;
             }
-        }
-        
-        if (entry >= GuiIdentifiers.PG3_S_MAIN_NS_X && entry <= GuiIdentifiers.PG3_S_DETL_SCL) {
-            Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetForward(entry));
-            if (gui != null) {
-                ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
+            
+            if (entry >= GuiIdentifiers.PG3_S_MAIN_NS_X && entry <= GuiIdentifiers.PG3_S_DETL_SCL) {
+                Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetForward(entry));
+                if (gui != null) {
+                    ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
+                }
             }
-        }
-        
-        if (entry == GuiIdentifiers.PG0_S_LEVEL_HEIGHT || entry == GuiIdentifiers.PG0_S_LEVEL_TYPE || entry == GuiIdentifiers.PG0_S_CHUNK) {
-            Gui gui = this.pageList.getComponent(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL);
-            if (gui != null) {
-                AccessorGuiLabel accessor = (AccessorGuiLabel)gui;
-                int levelSeaLevel = this.getLevelSeaLevel();
-                String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
-                
-                accessor.getLabels().set(0, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr));
+            
+            if (entry == GuiIdentifiers.PG0_S_LEVEL_HEIGHT || entry == GuiIdentifiers.PG0_S_LEVEL_TYPE || entry == GuiIdentifiers.PG0_S_CHUNK) {
+                Gui gui = this.pageList.getComponent(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL);
+                if (gui != null) {
+                    AccessorGuiLabel accessor = (AccessorGuiLabel)gui;
+                    int levelSeaLevel = this.getLevelSeaLevel();
+                    String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
+                    
+                    accessor.getLabels().set(0, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr));
+                }
             }
         }
         
@@ -1708,7 +1651,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 Property<?> property = this.settings.customProperties.get(key);
                 
                 pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + getFormattedRegistryString(key)) + ":");
-                pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVistor(), this.customId);
+                pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), this.customId);
                 
                 this.customIds.put(this.customId++, key.toString());
             }
@@ -2087,7 +2030,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return 0;
     }
 
-    private class CreateGuiPropertyVistor implements GuiPropertyVisitor {
+    private class CreateGuiPropertyVisitor implements GuiPropertyVisitor {
         @Override
         public GuiPageButtonList.GuiListEntry visit(BooleanProperty property, int guiIdentifier) {
             return createGuiButton(guiIdentifier, "enabled", property.getValue());
@@ -2160,6 +2103,90 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public GuiPageButtonList.GuiListEntry visit(BiomeProperty property, int guiIdentifier) {
             return createGuiButton(guiIdentifier, "enabled", true);
         }
+        
+    }
+    
+    private class SetEntryValuePropertyVisitor implements EntryValuePropertyVisitor {
+        @Override
+        public void visit(BooleanProperty property, int guiIdentifier, boolean value, ResourceLocation registryKey) {
+            property.setValue(value);
+            GuiScreenCustomizeWorld.this.setTextButton(
+                GuiScreenCustomizeWorld.this.pageList,
+                guiIdentifier,
+                I18n.format(property.getValue() ? "gui.yes" : "gui.no")
+            );
+        }
+
+        @Override
+        public void visit(FloatProperty property, int guiIdentifier, Object value, ResourceLocation registryKey) {
+            if (property.getGuiType() == PropertyGuiType.FIELD) {
+                String entryString = (String)value;
+                
+                float entryValue = 0.0f;
+                float newEntryValue = 0.0f;
+                
+                try {
+                    entryValue = Float.parseFloat(entryString);
+                    
+                } catch (NumberFormatException e) { }
+
+                property.setValue(MathHelper.clamp(entryValue, property.getMinValue(), property.getMaxValue()));
+                newEntryValue = property.getValue();
+                
+                if (newEntryValue != entryValue) {
+                    ((GuiTextField)GuiScreenCustomizeWorld.this.pageList.getComponent(guiIdentifier))
+                        .setText(GuiScreenCustomizeWorld.this.getFormattedValue(guiIdentifier, newEntryValue));
+                }
+                
+            } else if (property.getGuiType() == PropertyGuiType.SLIDER) {
+                property.setValue((Float)value);
+            }
+        }
+
+        @Override
+        public void visit(IntProperty property, int guiIdentifier, Object value, ResourceLocation registryKey) {
+            if (property.getGuiType() == PropertyGuiType.FIELD) {
+                String entryString = (String)value;
+                
+                float entryValue = 0.0f;
+                float newEntryValue = 0.0f;
+                
+                try {
+                    entryValue = Float.parseFloat(entryString);
+                    
+                } catch (NumberFormatException e) { }
+                
+                property.setValue((int)MathHelper.clamp(entryValue, property.getMinValue(), property.getMaxValue()));
+                newEntryValue = property.getValue();
+                
+                if (newEntryValue != entryValue) {
+                    ((GuiTextField)GuiScreenCustomizeWorld.this.pageList.getComponent(guiIdentifier))
+                        .setText(GuiScreenCustomizeWorld.this.getFormattedValue(guiIdentifier, newEntryValue));
+                }
+                
+            } else if (property.getGuiType() == PropertyGuiType.SLIDER) {
+                property.setValue(((Float)value).intValue());
+            }
+        }
+
+        @Override
+        public void visit(StringProperty property, int guiIdentifier, String value, ResourceLocation registryKey) {
+            property.setValue(value);
+        }
+
+        @Override
+        public void visit(ListProperty property, int guiIdentifier, float value, ResourceLocation registryKey) {
+            property.setValue(property.getValues()[(int)value]);
+        }
+
+        @Override
+        public void visit(BiomeProperty property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreenCustomizeWorld.this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(
+                GuiScreenCustomizeWorld.this,
+                (str, factory) -> ((BiomeProperty)factory.customProperties.get(registryKey)).setValue(str),
+                property.getValue()
+            ));
+        };
         
     }
 }
