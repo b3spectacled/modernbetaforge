@@ -1,45 +1,18 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
 
-import com.google.common.collect.ImmutableList;
-
-import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
-import mod.bespectacled.modernbetaforge.compat.ModCompat;
-import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
-import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIdentifiers {
-    public static final Map<ResourceLocation, List<Integer>> NOISE_SETTINGS = new LinkedHashMap<>();
-    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> GUI_BIOMES = new HashMap<>();
-    public static final Map<Integer, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer>> GUI_IDS = new HashMap<>();
-    
-    private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
-    private static final BiPredicate<Factory, Integer> TEST_CHUNK_SETTINGS;
+    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BIOME_SETTINGS = new HashMap<>();
     
     /* Function Buttons */
     
@@ -425,23 +398,11 @@ public class GuiIdentifiers {
     }
     
     public static Set<Integer> getBiomeGuiIds() {
-        return GUI_BIOMES.keySet();
+        return BIOME_SETTINGS.keySet();
     }
     
     public static void updateBiomeSetting(int id, String registryKey, Factory factory) {
-        GUI_BIOMES.get(id).accept(registryKey, factory);
-    }
-    
-    public static Set<Integer> getGuiIds() {
-        return GUI_IDS.keySet();
-    }
-    
-    public static boolean testGuiEnabled(Factory factory, int id) {
-        if (GUI_IDS.containsKey(id)) {
-            return GUI_IDS.get(id).test(factory, id);
-        }
-        
-        return false;
+        BIOME_SETTINGS.get(id).accept(registryKey, factory);
     }
     
     private static void assertOffset(int sliderId, int fieldId) {
@@ -452,635 +413,51 @@ public class GuiIdentifiers {
         }
     }
     
-    private static void add(int id) {
-        add(id, (factory, guiId) -> true);
-    }
-    
-    private static void add(int id, BiPredicate<ModernBetaGeneratorSettings.Factory, Integer> predicate) {
-        if (GUI_IDS.containsKey(id)) {
-            String errorStr = String.format("[Modern Beta] GUI id %d has already been registered!", id);
-            
-            throw new IllegalArgumentException(errorStr);
-        }
-        
-        GUI_IDS.put(id, predicate);
-    }
-    
     static {
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.BETA.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
-
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG3_S_MAIN_NS_X,
-                GuiIdentifiers.PG3_S_MAIN_NS_Y,
-                GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
-                GuiIdentifiers.PG3_S_BASE_SIZE,
-                GuiIdentifiers.PG3_S_COORD_SCL,
-                GuiIdentifiers.PG3_S_HEIGH_SCL,
-                GuiIdentifiers.PG3_S_STRETCH_Y,
-                GuiIdentifiers.PG3_S_UPPER_LIM,
-                GuiIdentifiers.PG3_S_LOWER_LIM,
-                GuiIdentifiers.PG3_S_HEIGH_LIM,
-                
-                GuiIdentifiers.PG3_S_B_DPTH_WT,
-                GuiIdentifiers.PG3_S_B_DPTH_OF,
-                GuiIdentifiers.PG3_S_B_SCL_WT,
-                GuiIdentifiers.PG3_S_B_SCL_OF,
-                GuiIdentifiers.PG3_S_BIOME_SZ,
-                GuiIdentifiers.PG3_S_RIVER_SZ,
-                
-                GuiIdentifiers.PG3_B_USE_BDS
-            )
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey(),
-            ImmutableList.of()
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(),
-            ImmutableList.of()
-        );
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIdentifiers.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
         
-        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
-        
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
-        GUI_BIOMES.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
-
-        TEST_CHUNK_SETTINGS = (factory, id) -> {
-            boolean enabled = false;
-            List<Integer> defaultSettings = NOISE_SETTINGS.get(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey());
-            List<Integer> settings = NOISE_SETTINGS.getOrDefault(factory.chunkSource, defaultSettings);
-            
-            if (id >= GuiIdentifiers.PG3_S_MAIN_NS_X && id <= GuiIdentifiers.PG3_B_USE_BDS) {
-                enabled = settings.contains(id);
-            } else if (id >= offsetForward(GuiIdentifiers.PG3_S_MAIN_NS_X) && id <= offsetForward(GuiIdentifiers.PG3_B_USE_BDS)) {
-                enabled = settings.contains(offsetBackward(id));
-            }
-            
-            return enabled;
-        };
-        
-        BiPredicate<Factory, Integer> testSurface = (factory, id) -> {
-            boolean isSkylands = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString());
-            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
-            
-            return !isIndev && !isClassic && !isSkylands;
-        };
-        BiPredicate<Factory, Integer> testCarver = (factory, id) -> factory.useCaves;
-        BiPredicate<Factory, Integer> testFixed = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-        BiPredicate<Factory, Integer> testOceanReplacement = (factory, id) -> {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
-            
-            return biomeSource instanceof BiomeResolverOcean;
-        };
-        BiPredicate<Factory, Integer> testBeachReplacement = (factory, id) -> {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
-            
-            return biomeSource instanceof BiomeResolverBeach;
-        };
-        BiPredicate<Factory, Integer> testClassicNetherBoP = (factory, id) -> !ModCompat.isBoPLoaded();
-        BiPredicate<Factory, Integer> testClassicNether = (factory, id) -> factory.useOldNether && !ModCompat.isBoPLoaded();
-        BiPredicate<Factory, Integer> testDungeons = (factory, id) -> factory.useDungeons;
-        BiPredicate<Factory, Integer> testWaterLakes = (factory, id) -> factory.useWaterLakes;
-        BiPredicate<Factory, Integer> testLavaLakes = (factory, id) -> factory.useLavaLakes;
-        BiPredicate<Factory, Integer> testVillageVariants = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean hasVillages = isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
-            
-            return hasVillages && factory.useVillages;
-        };
-        BiPredicate<Factory, Integer> testSandstone = (factory, id) -> {
-            boolean isReleaseSurface = factory.surfaceBuilder.equals(ModernBetaBuiltInTypes.Surface.RELEASE.getRegistryString());
-            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
-            
-            return !isReleaseSurface && !(isIndev || isClassic);
-        };
-        BiPredicate<Factory, Integer> testIndev = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
-        BiPredicate<Factory, Integer> testFinite = (factory, id) -> {
-            boolean isIndev = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString());
-            boolean isClassic = factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString());
-            
-            return isIndev || isClassic;
-        };
-        BiPredicate<Factory, Integer> testInfdev227 = (factory, id) -> factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString());
-        BiPredicate<Factory, Integer> testReleaseBiomeSource = (factory, id) -> factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
-        BiPredicate<Factory, Integer> testBetaBiomeFeature = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            
-            boolean isBetaOrPEBiomeSource = 
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean isBetaBiome = biome instanceof BiomeBeta;
-            
-            return isBetaOrPEBiomeSource || (isFixedBiomeSource && isBetaBiome);
-        };
-        BiPredicate<Factory, Integer> testModernBetaBiomeFeature = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            
-            boolean isBetaOrPEBiomeSource = 
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
-            
-            return isBetaOrPEBiomeSource || (isFixedBiomeSource && isModernBetaBiome);
-        };
-        BiPredicate<Factory, Integer> testModernBetaOre = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-
-            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
-            boolean isFixedBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean isModernBetaBiome = biome instanceof ModernBetaBiome;
-            
-            return (isFixedBiomeSource && isModernBetaBiome) ||  (!isReleaseBiomeSource && !isFixedBiomeSource);
-        };
-        BiPredicate<Factory, Integer> testStrongholds = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return isFixed ? STRONGHOLD.allowedBiomes.contains(biome) : true;
-        };
-        BiPredicate<Factory, Integer> testVillages = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return isFixed ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
-        };
-        BiPredicate<Factory, Integer> testTemples = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return isFixed ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
-        };
-        BiPredicate<Factory, Integer> testMonuments = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return isFixed ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
-        };
-        BiPredicate<Factory, Integer> testMansions = (factory, id) -> {
-            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(factory.singleBiome));
-            boolean isFixed = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return isFixed ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
-        };
-        BiPredicate<Factory, Integer> testCustomBetaBiomeBase = (factory, id) -> {
-            boolean isBetaOrPEBiomeSource = 
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-            
-            return isBetaOrPEBiomeSource;
-        };
-        BiPredicate<Factory, Integer> testCustomBetaBiomeOcean = (factory, id) -> {
-            boolean isBetaOrPEBiomeSource = 
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-            
-            return isBetaOrPEBiomeSource && factory.replaceOceanBiomes;
-        };
-        BiPredicate<Factory, Integer> testCustomBetaBiomeBeach = (factory, id) -> {
-            boolean isBetaOrPEBiomeSource = 
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-            
-            return isBetaOrPEBiomeSource && factory.replaceBeachBiomes;
-        };
-        BiPredicate<Factory, Integer> testBiomeSize = (factory, id) -> {
-            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            boolean isReleaseBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryString());
-            
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource || isReleaseBiomeSource;
-        };
-        BiPredicate<Factory, Integer> testRiverSize = (factory, id) -> {
-            boolean isSingleBiomeSource = factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString());
-            
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !isSingleBiomeSource;
-        };
-        BiPredicate<Factory, Integer> testClimateScales = (factory, id) -> {
-            return 
-                factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) ||
-                factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString()) ||
-                factory.biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString());
-        };
-        BiPredicate<Factory, Integer> testCarverSettings = (factory, id) -> {
-            return !factory.caveCarver.equals(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryString()) && factory.useCaves;
-        };
-        BiPredicate<Factory, Integer> testBiomeDepthOverride = (factory, id) -> {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(factory.toString());
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME.get(new ResourceLocation(factory.biomeSource)).apply(0L, settings);
-            
-            return TEST_CHUNK_SETTINGS.test(factory, id) && !(biomeSource instanceof NoiseBiomeSource);
-        };
-        
-        add(PG0_S_CHUNK);
-        add(PG0_S_BIOME);
-        add(PG0_S_SURFACE, testSurface);
-        add(PG0_S_CARVER, testCarver);
-        
-        add(PG0_B_FIXED, testFixed);
-        
-        add(PG0_B_USE_OCEAN, testOceanReplacement);
-        add(PG0_B_USE_BEACH, testBeachReplacement);
-        
-        add(PG0_S_SEA_LEVEL, testSurface);
-        add(PG0_B_USE_CAVES);
-        add(PG0_S_CAVE_HEIGHT, testCarverSettings);
-        add(PG0_S_CAVE_COUNT, testCarverSettings);
-        add(PG0_S_CAVE_CHANCE, testCarverSettings);
-        add(PG0_B_USE_HOLDS, testStrongholds);
-        add(PG0_B_USE_VILLAGES, testVillages);
-        add(PG0_B_USE_VILLAGE_VARIANTS, testVillageVariants);
-        add(PG0_B_USE_SHAFTS);
-        add(PG0_B_USE_TEMPLES, testTemples);
-        add(PG0_B_USE_MONUMENTS, testMonuments);
-        add(PG0_B_USE_MANSIONS, testMansions);
-        add(PG0_B_USE_RAVINES);
-        add(PG0_B_USE_DUNGEONS);
-        add(PG0_S_DUNGEON_CHANCE, testDungeons);
-        add(PG0_B_USE_WATER_LAKES);
-        add(PG0_S_WATER_LAKE_CHANCE, testWaterLakes);
-        add(PG0_B_USE_LAVA_LAKES);
-        add(PG0_S_LAVA_LAKE_CHANCE, testLavaLakes);
-        add(PG0_B_USE_LAVA_OCEANS);
-        add(PG0_B_USE_SANDSTONE, testSandstone);
-        
-        add(PG0_B_USE_OLD_NETHER, testClassicNetherBoP);
-        add(PG0_B_USE_NETHER_CAVES, testClassicNether);
-        add(PG0_B_USE_FORTRESSES, testClassicNether);
-        add(PG0_B_USE_LAVA_POCKETS, testClassicNether);
-        
-        add(PG0_S_LEVEL_THEME, testIndev);
-        add(PG0_S_LEVEL_TYPE, testIndev);
-        add(PG0_S_LEVEL_WIDTH, testFinite);
-        add(PG0_S_LEVEL_LENGTH, testFinite);
-        add(PG0_S_LEVEL_HEIGHT, testFinite);
-        add(PG0_S_LEVEL_HOUSE, testFinite);
-        add(PG0_B_USE_INDEV_CAVES, testFinite);
-        
-        add(PG0_B_USE_INFDEV_WALLS, testInfdev227);
-        add(PG0_B_USE_INFDEV_PYRAMIDS, testInfdev227);
-        
-        add(PG1_B_USE_GRASS, testModernBetaBiomeFeature);
-        add(PG1_B_USE_FLOWERS, testBetaBiomeFeature);
-        add(PG1_B_USE_PADS, testBetaBiomeFeature);
-        add(PG1_B_USE_MELONS, testBetaBiomeFeature);
-        
-        add(PG1_B_USE_WELLS, testBetaBiomeFeature);
-        add(PG1_B_USE_FOSSILS, testBetaBiomeFeature);
-        
-        add(PG1_B_USE_BIRCH, testBetaBiomeFeature);
-        add(PG1_B_USE_PINE, testBetaBiomeFeature);
-        add(PG1_B_USE_SWAMP, testBetaBiomeFeature);
-        add(PG1_B_USE_JUNGLE, testBetaBiomeFeature);
-        add(PG1_B_USE_ACACIA, testBetaBiomeFeature);
-        
-        add(PG1_B_SPAWN_CREATURE, testModernBetaBiomeFeature);
-        add(PG1_B_SPAWN_MONSTER, testModernBetaBiomeFeature);
-        add(PG1_B_SPAWN_WATER, testModernBetaBiomeFeature);
-        add(PG1_B_SPAWN_AMBIENT, testModernBetaBiomeFeature);
-        add(PG1_B_SPAWN_WOLVES, testModernBetaBiomeFeature);
-        
-        add(PG1_B_USE_MODDED_BIOMES, testReleaseBiomeSource);
-        
-        add(PG2_S_CLAY_SIZE, testModernBetaOre);
-        add(PG2_S_CLAY_CNT, testModernBetaOre);
-        add(PG2_S_CLAY_MIN, testModernBetaOre);
-        add(PG2_S_CLAY_MAX, testModernBetaOre);
-
-        add(PG2_S_DIRT_SIZE);
-        add(PG2_S_DIRT_CNT);
-        add(PG2_S_DIRT_MIN);
-        add(PG2_S_DIRT_MAX);
-
-        add(PG2_S_GRAV_SIZE);
-        add(PG2_S_GRAV_CNT);
-        add(PG2_S_GRAV_MIN);
-        add(PG2_S_GRAV_MAX);
-
-        add(PG2_S_GRAN_SIZE);
-        add(PG2_S_GRAN_CNT);
-        add(PG2_S_GRAN_MIN);
-        add(PG2_S_GRAN_MAX);
-
-        add(PG2_S_DIOR_SIZE);
-        add(PG2_S_DIOR_CNT);
-        add(PG2_S_DIOR_MIN);
-        add(PG2_S_DIOR_MAX);
-
-        add(PG2_S_ANDE_SIZE);
-        add(PG2_S_ANDE_CNT);
-        add(PG2_S_ANDE_MIN);
-        add(PG2_S_ANDE_MAX);
-
-        add(PG2_S_COAL_SIZE);
-        add(PG2_S_COAL_CNT);
-        add(PG2_S_COAL_MIN);
-        add(PG2_S_COAL_MAX);
-        
-        add(PG2_S_IRON_SIZE);
-        add(PG2_S_IRON_CNT);
-        add(PG2_S_IRON_MIN);
-        add(PG2_S_IRON_MAX);
-
-        add(PG2_S_GOLD_SIZE);
-        add(PG2_S_GOLD_CNT);
-        add(PG2_S_GOLD_MIN);
-        add(PG2_S_GOLD_MAX);
-
-        add(PG2_S_REDS_SIZE);
-        add(PG2_S_REDS_CNT);
-        add(PG2_S_REDS_MIN);
-        add(PG2_S_REDS_MAX);
-
-        add(PG2_S_DIAM_SIZE);
-        add(PG2_S_DIAM_CNT);
-        add(PG2_S_DIAM_MIN);
-        add(PG2_S_DIAM_MAX);
-
-        add(PG2_S_LAPS_SIZE);
-        add(PG2_S_LAPS_CNT);
-        add(PG2_S_LAPS_CTR);
-        add(PG2_S_LAPS_SPR);
-        
-        add(PG2_S_EMER_SIZE, testModernBetaOre);
-        add(PG2_S_EMER_CNT, testModernBetaOre);
-        add(PG2_S_EMER_MIN, testModernBetaOre);
-        add(PG2_S_EMER_MAX, testModernBetaOre);
-        
-        add(PG2_S_QRTZ_SIZE, testClassicNether);
-        add(PG2_S_QRTZ_CNT, testClassicNether);
-        
-        add(PG2_S_MGMA_SIZE, testClassicNether);
-        add(PG2_S_MGMA_CNT, testClassicNether);
-        
-        add(PG3_S_MAIN_NS_X, TEST_CHUNK_SETTINGS);
-        add(PG3_S_MAIN_NS_Y, TEST_CHUNK_SETTINGS);
-        add(PG3_S_MAIN_NS_Z, TEST_CHUNK_SETTINGS);
-        add(PG3_S_DPTH_NS_X, TEST_CHUNK_SETTINGS);
-        add(PG3_S_DPTH_NS_Z, TEST_CHUNK_SETTINGS);
-        add(PG3_S_BASE_SIZE, TEST_CHUNK_SETTINGS);
-        add(PG3_S_COORD_SCL, TEST_CHUNK_SETTINGS);
-        add(PG3_S_HEIGH_SCL, TEST_CHUNK_SETTINGS);
-        add(PG3_S_STRETCH_Y, TEST_CHUNK_SETTINGS);
-        add(PG3_S_UPPER_LIM, TEST_CHUNK_SETTINGS);
-        add(PG3_S_LOWER_LIM, TEST_CHUNK_SETTINGS);
-        add(PG3_S_HEIGH_LIM, TEST_CHUNK_SETTINGS);
-        
-        add(PG3_S_TEMP_SCL, testClimateScales);
-        add(PG3_S_RAIN_SCL, testClimateScales);
-        add(PG3_S_DETL_SCL, testClimateScales);
-        
-        add(PG3_S_B_DPTH_WT, TEST_CHUNK_SETTINGS);
-        add(PG3_S_B_DPTH_OF, TEST_CHUNK_SETTINGS);
-        add(PG3_S_B_SCL_WT, TEST_CHUNK_SETTINGS);
-        add(PG3_S_B_SCL_OF, TEST_CHUNK_SETTINGS);
-        add(PG3_S_BIOME_SZ, testBiomeSize);
-        add(PG3_S_RIVER_SZ, testRiverSize);
-        
-        add(PG3_B_USE_BDS, testBiomeDepthOverride);
-        
-        add(PG4_F_MAIN_NS_X, TEST_CHUNK_SETTINGS);
-        add(PG4_F_MAIN_NS_Y, TEST_CHUNK_SETTINGS);
-        add(PG4_F_MAIN_NS_Z, TEST_CHUNK_SETTINGS);
-        add(PG4_F_DPTH_NS_X, TEST_CHUNK_SETTINGS);
-        add(PG4_F_DPTH_NS_Z, TEST_CHUNK_SETTINGS);
-        add(PG4_F_BASE_SIZE, TEST_CHUNK_SETTINGS);
-        add(PG4_F_COORD_SCL, TEST_CHUNK_SETTINGS);
-        add(PG4_F_HEIGH_SCL, TEST_CHUNK_SETTINGS);
-        add(PG4_F_STRETCH_Y, TEST_CHUNK_SETTINGS);
-        add(PG4_F_UPPER_LIM, TEST_CHUNK_SETTINGS);
-        add(PG4_F_LOWER_LIM, TEST_CHUNK_SETTINGS);
-        add(PG4_F_HEIGH_LIM, TEST_CHUNK_SETTINGS);
-        
-        add(PG4_F_TEMP_SCL, testClimateScales);
-        add(PG4_F_RAIN_SCL, testClimateScales);
-        add(PG4_F_DETL_SCL, testClimateScales);
-        
-        add(PG4_F_B_DPTH_WT, TEST_CHUNK_SETTINGS);
-        add(PG4_F_B_DPTH_OF, TEST_CHUNK_SETTINGS);
-        add(PG4_F_B_SCL_WT, TEST_CHUNK_SETTINGS);
-        add(PG4_F_B_SCL_OF, TEST_CHUNK_SETTINGS);
-        add(PG4_F_BIOME_SZ, testBiomeSize);
-        add(PG4_F_RIVER_SZ, TEST_CHUNK_SETTINGS);
-        
-        add(PG5_DSRT_LAND, testCustomBetaBiomeBase);
-        add(PG5_DSRT_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_DSRT_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_FRST_LAND, testCustomBetaBiomeBase);
-        add(PG5_FRST_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_FRST_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_ICED_LAND, testCustomBetaBiomeBase);
-        add(PG5_ICED_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_ICED_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_PLNS_LAND, testCustomBetaBiomeBase);
-        add(PG5_PLNS_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_PLNS_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_RAIN_LAND, testCustomBetaBiomeBase);
-        add(PG5_RAIN_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_RAIN_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_SAVA_LAND, testCustomBetaBiomeBase);
-        add(PG5_SAVA_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_SAVA_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_SHRB_LAND, testCustomBetaBiomeBase);
-        add(PG5_SHRB_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_SHRB_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_SEAS_LAND, testCustomBetaBiomeBase);
-        add(PG5_SEAS_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_SEAS_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_SWMP_LAND, testCustomBetaBiomeBase);
-        add(PG5_SWMP_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_SWMP_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_TAIG_LAND, testCustomBetaBiomeBase);
-        add(PG5_TAIG_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_TAIG_BEACH, testCustomBetaBiomeBeach);
-        
-        add(PG5_TUND_LAND, testCustomBetaBiomeBase);
-        add(PG5_TUND_OCEAN, testCustomBetaBiomeOcean);
-        add(PG5_TUND_BEACH, testCustomBetaBiomeBeach);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
+        BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
     }
 }

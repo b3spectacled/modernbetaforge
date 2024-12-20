@@ -713,9 +713,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.pageList.scrollBy(curScroll);
             this.updatePageControls();
         }
-        
-        // Set default enabled for certain options
-        this.updateGuiButtons();
     }
     
     @Override
@@ -1111,8 +1108,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
             }
         }
-            
-        this.updateGuiButtons();
+
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
         this.playSound();
     }
@@ -1435,7 +1431,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
         
-        this.updateGuiButtons();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
         this.playSound();
     }
@@ -1529,7 +1524,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseButtonComponents);
 
                     this.randomClicked = false;
-                    this.updateGuiButtons();
                     this.setSettingsModified(!this.settings.equals(this.defaultSettings));
                 }
                              
@@ -1858,7 +1852,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.nextPage.enabled = page != this.pageList.getPageCount() - 1;
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
         this.pageTitle = this.pageNames[page];
-        this.randomize.enabled = page < 4;
+        this.randomize.enabled = page < 4 || page == 5;
         this.firstPage.enabled = this.previousPage.enabled;
         this.lastPage.enabled = this.nextPage.enabled;
     }
@@ -1916,32 +1910,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private void setTextButton(GuiPageButtonList pageList, int id, String value) {
         ((GuiButton)pageList.getComponent(id)).displayString = value;
-    }
-    
-    private void updateGuiButtons() {
-        // Set default enabled for certain options
-        if (this.pageList != null) {
-            for (Integer key : GuiIdentifiers.getGuiIds()) {
-                boolean enabled = GuiIdentifiers.testGuiEnabled(settings, key);
-                
-                this.setButtonEnabled(key, enabled);
-                this.setFieldEnabled(key, enabled);
-            }
-        }
-    }
-    
-    private void setButtonEnabled(int entry, boolean enabled) {
-        Gui gui = this.pageList.getComponent(entry);
-        if (gui != null && gui instanceof GuiButton) {
-            ((GuiButton)gui).enabled = enabled;
-        }
-    }
-    
-    private void setFieldEnabled(int entry, boolean enabled) {
-        Gui gui = this.pageList.getComponent(entry);
-        if (gui != null && gui instanceof GuiTextField) {
-            ((GuiTextField)gui).setEnabled(enabled);
-        }
     }
     
     private int getLevelSeaLevel() {
