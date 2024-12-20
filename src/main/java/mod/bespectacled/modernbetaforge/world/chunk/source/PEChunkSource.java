@@ -35,7 +35,7 @@ public class PEChunkSource extends NoiseChunkSource {
         super(world, chunkGenerator, settings);
         
         // Use Mersenne Twister random instead of Java random
-        this.random = new MTRandom(seed);
+        this.random = new MTRandom(world.getSeed());
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

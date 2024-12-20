@@ -1,16 +1,24 @@
-package mod.bespectacled.modernbetaforge.world.biome;
+package mod.bespectacled.modernbetaforge.world.structure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.common.BiomeManager;
 
-public class ModernBetaBiomeStructures {
-    public static void registerStructures() {}
+public class ModernBetaStructures {
+    public static final ResourceLocation VILLAGE = new ResourceLocation("village");
+    public static final ResourceLocation STRONGHOLD = new ResourceLocation("stronghold");
+    public static final ResourceLocation MINESHAFT = new ResourceLocation("mineshaft");
+    public static final ResourceLocation MONUMENT = new ResourceLocation("monument");
+    public static final ResourceLocation MANSION = new ResourceLocation("mansion");
+    public static final ResourceLocation TEMPLE = new ResourceLocation("temple");
     
     public static void registerStructureBiomes() {
         /* Beta */

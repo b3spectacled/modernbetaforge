@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeStructures;
+import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -60,9 +60,7 @@ public class ModernBeta {
     public void init(FMLInitializationEvent event) throws Exception {
         ModernBetaWorldType.register();
         
-        ModernBetaBiomeStructures.registerStructures();
-        ModernBetaBiomeStructures.registerStructureBiomes();
-        
+        ModernBetaStructures.registerStructureBiomes();
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
         ModernBetaBuiltInRegistries.registerNoiseSources();

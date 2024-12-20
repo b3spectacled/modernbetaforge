@@ -1,7 +1,10 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -32,6 +35,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -53,11 +57,13 @@ import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
+import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
@@ -71,8 +77,6 @@ public abstract class ChunkSource {
     protected final ModernBetaBiomeProvider biomeProvider;
     
     protected final World world;
-    protected final long seed;
-    protected final boolean mapFeaturesEnabled;
     protected final Random random;
     
     protected final IBlockState defaultBlock;
@@ -83,18 +87,10 @@ public abstract class ChunkSource {
     
     protected final List<BlockSource> blockSources;
     
-    protected final MapGenVillage villageGenerator;
     protected final ChunkCache<ComponentChunk> componentCache;
     
-    private final MapGenBase caveCarver;
-    private final MapGenBase ravineCarver; 
-    
-    private final MapGenStronghold strongholdGenerator;
-    private final MapGenMineshaft mineshaftGenerator;
-    
-    private final MapGenScatteredFeature scatteredFeatureGenerator;
-    private final StructureOceanMonument oceanMonumentGenerator;
-    private final WoodlandMansion woodlandMansionGenerator;
+    private final Map<ResourceLocation, MapGenStructure> structureMap;
+    private final Map<ResourceLocation, MapGenBase> carverMap;
 
     private final BiomeInjector biomeInjector;
     private final ChunkCache<ChunkPrimerContainer> initialChunkCache;
@@ -119,9 +115,7 @@ public abstract class ChunkSource {
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         
         this.world = world;
-        this.seed = world.getSeed();
-        this.mapFeaturesEnabled = world.getWorldInfo().isMapFeaturesEnabled();
-        this.random = new Random(seed);
+        this.random = new Random(world.getSeed());
         
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
@@ -135,18 +129,14 @@ public abstract class ChunkSource {
             .map(e -> e.apply(this.world, this, this.settings))
             .collect(Collectors.toList());
         
-        this.villageGenerator = (MapGenVillage)TerrainGen.getModdedMapGen(new MapGenVillage(), InitMapGenEvent.EventType.VILLAGE);
-        this.componentCache = new ChunkCache<>("structure_components", MAX_RENDER_DISTANCE_AREA + MAX_RENDER_DISTANCE_AREA / 2, ComponentChunk::new);
-
-        this.caveCarver = TerrainGen.getModdedMapGen(ModernBetaRegistries.CARVER.get(new ResourceLocation(settings.caveCarver)).apply(this.world, this, settings), InitMapGenEvent.EventType.CAVE);
-        this.ravineCarver = TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE);
+        this.componentCache = new ChunkCache<>(
+            "structure_components",
+            MAX_RENDER_DISTANCE_AREA + MAX_RENDER_DISTANCE_AREA / 2,
+            ComponentChunk::new
+        );
         
-        this.strongholdGenerator = (MapGenStronghold)TerrainGen.getModdedMapGen(new MapGenStronghold(), InitMapGenEvent.EventType.STRONGHOLD);
-        this.mineshaftGenerator = (MapGenMineshaft)TerrainGen.getModdedMapGen(new MapGenMineshaft(), InitMapGenEvent.EventType.MINESHAFT);
-        
-        this.oceanMonumentGenerator = (StructureOceanMonument)TerrainGen.getModdedMapGen(new StructureOceanMonument(), InitMapGenEvent.EventType.OCEAN_MONUMENT);
-        this.woodlandMansionGenerator = (WoodlandMansion)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), InitMapGenEvent.EventType.WOODLAND_MANSION);
-        this.scatteredFeatureGenerator = (MapGenScatteredFeature)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), InitMapGenEvent.EventType.SCATTERED_FEATURE);
+        this.structureMap = this.initStructures(chunkGenerator, settings, world.getWorldInfo().isMapFeaturesEnabled());
+        this.carverMap = this.initCarvers(settings);
 
         this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
         this.biomeProvider.setChunkSource(this);
@@ -224,10 +214,8 @@ public abstract class ChunkSource {
         
         if (!this.skipChunk(chunkX, chunkZ)) {
             // Generate village feature placements here, for structure weight sampling
-            if (this.mapFeaturesEnabled) {
-                if (this.settings.useVillages) {
-                    this.villageGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
+            if (this.structureMap.containsKey(ModernBetaStructures.VILLAGE)) {
+                this.structureMap.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, chunkPrimer);
             }
             
             boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
@@ -244,34 +232,16 @@ public abstract class ChunkSource {
             }
             
             // Carve terrain
-            if (this.settings.useCaves && !villageGenerated) {
-                this.caveCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
+            for (MapGenBase carver : this.carverMap.values()) {
+                if (!villageGenerated) {
+                    carver.generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
             }
-            
-            if (this.settings.useRavines && !villageGenerated) {
-                this.ravineCarver.generate(this.world, chunkX, chunkZ, chunkPrimer);
-            }
-            
+
             // Generate map feature placements
-            if (this.mapFeaturesEnabled) {
-                if (this.settings.useMineShafts) {
-                    this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-                
-                if (this.settings.useStrongholds) {
-                    this.strongholdGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-                
-                if (this.settings.useTemples) {
-                    this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-                
-                if (this.settings.useMonuments) {
-                    this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-                
-                if (this.settings.useMansions) {
-                    this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, chunkPrimer);
+            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
+                if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
+                    structureEntry.getValue().generate(world, chunkX, chunkZ, chunkPrimer);
                 }
             }
         }
@@ -306,14 +276,13 @@ public abstract class ChunkSource {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
-        boolean hasVillageGenerated = false;
-        
         ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
+        boolean hasVillageGenerated = false;
+        
         if (!this.skipChunk(chunkX, chunkZ)) {
             Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
-            
             this.random.setSeed(this.world.getSeed());
             long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
             long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
@@ -322,29 +291,11 @@ public abstract class ChunkSource {
             ForgeEventFactory.onChunkPopulate(true, chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
             
             // Actually generate map features here
-            if (this.mapFeaturesEnabled) {
-                if (this.settings.useMineShafts) {
-                    this.mineshaftGenerator.generateStructure(this.world, this.random, chunkPos);
-                }
-                
-                if (this.settings.useVillages) {
-                    hasVillageGenerated = this.villageGenerator.generateStructure(this.world, this.random, chunkPos);
-                }
-                
-                if (this.settings.useStrongholds) {
-                    this.strongholdGenerator.generateStructure(this.world, this.random, chunkPos);
-                }
-                
-                if (this.settings.useTemples) {
-                    this.scatteredFeatureGenerator.generateStructure(this.world, this.random, chunkPos);
-                }
-                
-                if (this.settings.useMonuments) {
-                    this.oceanMonumentGenerator.generateStructure(this.world, this.random, chunkPos);
-                }
-                
-                if (this.settings.useMansions) {
-                    this.woodlandMansionGenerator.generateStructure(this.world, this.random, chunkPos);
+            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
+                if (structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
+                    hasVillageGenerated = structureEntry.getValue().generateStructure(this.world, this.random, chunkPos);
+                } else {
+                    structureEntry.getValue().generateStructure(this.world, this.random, chunkPos);
                 }
             }
             
@@ -471,8 +422,10 @@ public abstract class ChunkSource {
         
         boolean generated = false;
         
-        if (this.settings.useMonuments && this.mapFeaturesEnabled && chunk.getInhabitedTime() < 3600L) {
-            generated |= this.oceanMonumentGenerator.generateStructure(this.world, this.random, new ChunkPos(chunkX, chunkZ));
+        if (this.structureMap.containsKey(ModernBetaStructures.MONUMENT) && chunk.getInhabitedTime() < 3600L) {
+            generated |= this.structureMap
+                .get(ModernBetaStructures.MONUMENT)
+                .generateStructure(this.world, this.random, new ChunkPos(chunkX, chunkZ));
         }
         
         return generated;
@@ -493,19 +446,19 @@ public abstract class ChunkSource {
         
         Biome biome = this.world.getBiome(blockPos);
         
-        if (this.mapFeaturesEnabled) {
-            if (enumCreatureType == EnumCreatureType.MONSTER &&
-                this.settings.useTemples &&
-                this.scatteredFeatureGenerator.isSwampHut(blockPos)
-            ) {
-                return this.scatteredFeatureGenerator.getMonsters();
-            }
+        if (enumCreatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.TEMPLE)) {
+            MapGenScatteredFeature feature = (MapGenScatteredFeature)this.structureMap.get(ModernBetaStructures.TEMPLE);
             
-            if (enumCreatureType == EnumCreatureType.MONSTER &&
-                this.settings.useMonuments &&
-                this.oceanMonumentGenerator.isPositionInStructure(this.world, blockPos)
-            ) {
-                return this.oceanMonumentGenerator.getMonsters();
+            if (feature.isSwampHut(blockPos)) {
+                return feature.getMonsters();
+            }
+        }
+        
+        if (enumCreatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.MONUMENT)) {
+            StructureOceanMonument feature = (StructureOceanMonument)this.structureMap.get(ModernBetaStructures.MONUMENT);
+            
+            if (feature.isPositionInStructure(this.world, blockPos)) {
+                return feature.getMonsters();
             }
         }
         
@@ -528,33 +481,14 @@ public abstract class ChunkSource {
         if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
             return false;
         }
-        
-        if (!this.mapFeaturesEnabled) {
+
+        if (this.structureMap.isEmpty()) {
             return false;
         }
         
-        if (this.settings.useStrongholds && "Stronghold".equals(structureName) && this.strongholdGenerator != null) {
-            return this.strongholdGenerator.isInsideStructure(blockPos);
-        }
-        
-        if (this.settings.useMansions && "Mansion".equals(structureName) && this.woodlandMansionGenerator != null) {
-            return this.woodlandMansionGenerator.isInsideStructure(blockPos);
-        }
-        
-        if (this.settings.useMonuments && "Monument".equals(structureName) && this.oceanMonumentGenerator != null) {
-            return this.oceanMonumentGenerator.isInsideStructure(blockPos);
-        }
-        
-        if (this.settings.useVillages && "Village".equals(structureName) && this.villageGenerator != null) {
-            return this.villageGenerator.isInsideStructure(blockPos);
-        }
-        
-        if (this.settings.useMineShafts && "Mineshaft".equals(structureName) && this.mineshaftGenerator != null) {
-            return this.mineshaftGenerator.isInsideStructure(blockPos);
-        }
-        
-        if (this.settings.useTemples && "Temple".equals(structureName) && this.scatteredFeatureGenerator != null) {
-            return this.scatteredFeatureGenerator.isInsideStructure(blockPos);
+        ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
+        if (this.structureMap.containsKey(structureKey)) {
+            return this.structureMap.get(structureKey).isInsideStructure(blockPos);
         }
 
         return false;
@@ -574,33 +508,14 @@ public abstract class ChunkSource {
         if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
             return null;
         }
-        
-        if (!this.mapFeaturesEnabled) {
+
+        if (this.structureMap.isEmpty()) {
             return null;
         }
         
-        if (this.settings.useStrongholds && "Stronghold".equals(structureName) && this.strongholdGenerator != null) {
-            return this.strongholdGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        if (this.settings.useMansions && "Mansion".equals(structureName) && this.woodlandMansionGenerator != null) {
-            return this.woodlandMansionGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        if (this.settings.useMonuments && "Monument".equals(structureName) && this.oceanMonumentGenerator != null) {
-            return this.oceanMonumentGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        if (this.settings.useVillages && "Village".equals(structureName) && this.villageGenerator != null) {
-            return this.villageGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        if (this.settings.useMineShafts && "Mineshaft".equals(structureName) && this.mineshaftGenerator != null) {
-            return this.mineshaftGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        if (this.settings.useTemples && "Temple".equals(structureName) && this.scatteredFeatureGenerator != null) {
-            return this.scatteredFeatureGenerator.getNearestStructurePos(world, blockPos, findUnexplored);
+        ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
+        if (this.structureMap.containsKey(structureKey)) {
+            return this.structureMap.get(structureKey).getNearestStructurePos(world, blockPos, findUnexplored);
         }
         
         return null;
@@ -617,33 +532,13 @@ public abstract class ChunkSource {
         if (this.skipChunk(chunkX, chunkZ)) {
             return;
         }
-        
-        if (!this.mapFeaturesEnabled) {
+
+        if (this.structureMap.isEmpty()) {
             return;
         }
-        
-        if (this.settings.useMineShafts) {
-            this.mineshaftGenerator.generate(this.world, chunkX, chunkZ, null);
-        }
-        
-        if (this.settings.useVillages) {
-            this.villageGenerator.generate(this.world, chunkX, chunkZ, null);
-        }
-        
-        if (this.settings.useStrongholds) {
-            this.strongholdGenerator.generate(this.world, chunkX, chunkZ, null);
-        }
-        
-        if (this.settings.useTemples) {
-            this.scatteredFeatureGenerator.generate(this.world, chunkX, chunkZ, null);
-        }
-        
-        if (this.settings.useMonuments) {
-            this.oceanMonumentGenerator.generate(this.world, chunkX, chunkZ, null);
-        }
-        
-        if (this.settings.useMansions) {
-            this.woodlandMansionGenerator.generate(this.world, chunkX, chunkZ, null);
+
+        for (MapGenStructure structure : this.structureMap.values()) {
+            structure.generate(this.world, chunkX, chunkZ, null);
         }
     }
 
@@ -882,6 +777,99 @@ public abstract class ChunkSource {
      */
     protected boolean isFluidBlock(IBlockState blockState) {
         return blockState.getBlock() == this.defaultFluid.getBlock();
+    }
+    
+    /**
+     * Initializes structures and if enabled, adds them to a map of available structures to generate.
+     * 
+     * @param chunkGenerator The chunk generator.
+     * @param settings The generator settings.
+     * @param mapFeaturesEnabled Whether structure are enabled.
+     * @return A map containing enabled structures.
+     */
+    private Map<ResourceLocation, MapGenStructure> initStructures(
+        ModernBetaChunkGenerator chunkGenerator,
+        ModernBetaGeneratorSettings settings,
+        boolean mapFeaturesEnabled
+    ) {
+        Map<ResourceLocation, MapGenStructure> structureMap = new LinkedHashMap<>();
+        
+        if (mapFeaturesEnabled) {
+            if (settings.useVillages) {
+                structureMap.put(
+                    ModernBetaStructures.VILLAGE,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenVillage(), EventType.VILLAGE)
+                );
+            }
+            
+            if (settings.useStrongholds) {
+                structureMap.put(
+                    ModernBetaStructures.STRONGHOLD,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenStronghold(), EventType.STRONGHOLD)
+                );
+            }
+            
+            if (settings.useMineShafts) {
+                structureMap.put(
+                    ModernBetaStructures.MINESHAFT,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT)
+                );
+            }
+            
+            if (settings.useMonuments) {
+                structureMap.put(
+                    ModernBetaStructures.MONUMENT,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new StructureOceanMonument(), EventType.OCEAN_MONUMENT)
+                );
+            }
+            
+            if (settings.useMansions) {
+                structureMap.put(
+                    ModernBetaStructures.MANSION,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), EventType.WOODLAND_MANSION)
+                );
+            }
+            
+            if (settings.useTemples) {
+                structureMap.put(
+                    ModernBetaStructures.TEMPLE,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE)
+                );
+            }
+        }
+        
+        return structureMap;
+    }
+    
+    /**
+     * Initializes carvers and if enabled, adds them to a map of available carvers to generate.
+     * 
+     * @param settings The generator settings.
+     * @return A map containing enabled carvers.
+     */
+    private Map<ResourceLocation, MapGenBase> initCarvers(ModernBetaGeneratorSettings settings) {
+        Map<ResourceLocation, MapGenBase> carverMap = new LinkedHashMap<>();
+        
+        if (settings.useCaves) {
+            carverMap.put(
+                new ResourceLocation("cave"),
+                TerrainGen.getModdedMapGen(
+                    ModernBetaRegistries.CARVER
+                        .get(new ResourceLocation(settings.caveCarver))
+                        .apply(this.world, this, settings),
+                    InitMapGenEvent.EventType.CAVE
+                )
+            );
+        }
+        
+        if (settings.useRavines) {
+            carverMap.put(
+                new ResourceLocation("ravine"),
+                TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE)
+            );
+        }
+        
+        return carverMap;
     }
     
     /**
