@@ -4,6 +4,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
@@ -15,24 +16,26 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.MapGenBase;
 
 public class ModernBetaRegistries {
-    public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK;
-    public static final ModernBetaRegistry<BiomeSourceCreator> BIOME;
-    public static final ModernBetaRegistry<NoiseSamplerCreator> NOISE;
+    public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK_SOURCE;
+    public static final ModernBetaRegistry<BiomeSourceCreator> BIOME_SOURCE;
+    public static final ModernBetaRegistry<NoiseSamplerCreator> NOISE_SAMPLER;
+    public static final ModernBetaRegistry<NoiseColumnSamplerCreator> NOISE_COLUMN_SAMPLER;
     public static final ModernBetaRegistry<NoiseSettings> NOISE_SETTING;
-    public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE;
-    public static final ModernBetaRegistry<CaveCarverCreator> CARVER;
-    public static final ModernBetaRegistry<BlockSourceCreator> BLOCK;
+    public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE_BUILDER;
+    public static final ModernBetaRegistry<CaveCarverCreator> CAVE_CARVER;
+    public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     public static final ModernBetaRegistry<Property<?>> PROPERTY;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     
     static {
-        CHUNK = new ModernBetaRegistry<>("CHUNK");
-        BIOME = new ModernBetaRegistry<>("BIOME");
-        NOISE = new ModernBetaRegistry<>("NOISE");
+        CHUNK_SOURCE = new ModernBetaRegistry<>("CHUNK_SOURCE");
+        BIOME_SOURCE = new ModernBetaRegistry<>("BIOME_SOURCE");
+        NOISE_SAMPLER = new ModernBetaRegistry<>("NOISE_SAMPLER");
+        NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>("NOISE_COLUMN_SAMPLER");
         NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
-        SURFACE = new ModernBetaRegistry<>("SURFACE");
-        CARVER = new ModernBetaRegistry<>("CARVER");
-        BLOCK = new ModernBetaRegistry<>("BLOCK");
+        SURFACE_BUILDER = new ModernBetaRegistry<>("SURFACE_BUILDER");
+        CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
+        BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         PROPERTY = new ModernBetaRegistry<>("PROPERTY");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
     }
@@ -54,6 +57,11 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface NoiseSamplerCreator {
         NoiseSampler apply(World world, NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface NoiseColumnSamplerCreator {
+        NoiseColumnSampler apply(World world, NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface

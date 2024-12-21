@@ -168,10 +168,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
         this.customIds = new LinkedHashMap<>();
         
-        int chunkSourceId = ModernBetaRegistries.CHUNK.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
-        int biomeSourceId = ModernBetaRegistries.BIOME.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
-        int surfaceBuilderId = ModernBetaRegistries.SURFACE.getKeys().indexOf(new ResourceLocation(this.settings.surfaceBuilder));
-        int caveCarverId = ModernBetaRegistries.CARVER.getKeys().indexOf(new ResourceLocation(this.settings.caveCarver));
+        int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
+        int biomeSourceId = ModernBetaRegistries.BIOME_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
+        int surfaceBuilderId = ModernBetaRegistries.SURFACE_BUILDER.getKeys().indexOf(new ResourceLocation(this.settings.surfaceBuilder));
+        int caveCarverId = ModernBetaRegistries.CAVE_CARVER.getKeys().indexOf(new ResourceLocation(this.settings.caveCarver));
         
         int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
         int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
@@ -192,11 +192,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK.getKeys().size() - 1, chunkSourceId, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME.getKeys().size() - 1, biomeSourceId, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE.getKeys().size() - 1, surfaceBuilderId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK_SOURCE.getKeys().size() - 1, chunkSourceId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME_SOURCE.getKeys().size() - 1, biomeSourceId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE_BUILDER.getKeys().size() - 1, surfaceBuilderId, this),
             createGuiButton(GuiIdentifiers.PG0_B_FIXED, "fixedBiome", true),
-            createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CARVER.getKeys().size() - 1, caveCarverId, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CAVE_CARVER.getKeys().size() - 1, caveCarverId, this),
             null,
 
             createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "biomeReplacementLabel"),
@@ -1189,16 +1189,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                     
                 case GuiIdentifiers.PG0_S_CHUNK:
-                    this.settings.chunkSource = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue).toString();
+                    this.settings.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_BIOME:
-                    this.settings.biomeSource = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue).toString();
+                    this.settings.biomeSource = ModernBetaRegistries.BIOME_SOURCE.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_SURFACE:
-                    this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue).toString();
+                    this.settings.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_CARVER:
-                    this.settings.caveCarver = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue).toString();
+                    this.settings.caveCarver = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue).toString();
                     break;
                 
                 case GuiIdentifiers.PG0_S_SEA_LEVEL:
@@ -1763,22 +1763,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG0_S_LEVEL_HEIGHT: return String.format("%d", LEVEL_HEIGHTS[(int)entryValue]);
             
             case GuiIdentifiers.PG0_S_CHUNK: {
-                ResourceLocation registryKey = ModernBetaRegistries.CHUNK.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue);
                 
                 return I18n.format(PREFIX + "chunkSource." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_BIOME: {
-                ResourceLocation registryKey = ModernBetaRegistries.BIOME.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.BIOME_SOURCE.getKeys().get((int)entryValue);
                 
                 return I18n.format(PREFIX + "biomeSource." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_SURFACE: {
-                ResourceLocation registryKey = ModernBetaRegistries.SURFACE.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.SURFACE_BUILDER.getKeys().get((int)entryValue);
                 
                 return I18n.format(PREFIX + "surfaceBuilder." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_CARVER: {
-                ResourceLocation registryKey = ModernBetaRegistries.CARVER.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue);
                 
                 return I18n.format(PREFIX + "caveCarver." + getFormattedRegistryString(registryKey));
             }

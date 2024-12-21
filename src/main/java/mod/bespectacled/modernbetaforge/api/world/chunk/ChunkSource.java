@@ -123,8 +123,8 @@ public abstract class ChunkSource {
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
         
-        this.blockSources = ModernBetaRegistries.BLOCK
-            .getEntries()
+        this.blockSources = ModernBetaRegistries.BLOCK_SOURCE
+            .getValues()
             .stream()
             .map(e -> e.apply(this.world, this, this.settings))
             .collect(Collectors.toList());
@@ -854,7 +854,7 @@ public abstract class ChunkSource {
             carverMap.put(
                 new ResourceLocation("cave"),
                 TerrainGen.getModdedMapGen(
-                    ModernBetaRegistries.CARVER
+                    ModernBetaRegistries.CAVE_CARVER
                         .get(new ResourceLocation(settings.caveCarver))
                         .apply(this.world, this, settings),
                     InitMapGenEvent.EventType.CAVE

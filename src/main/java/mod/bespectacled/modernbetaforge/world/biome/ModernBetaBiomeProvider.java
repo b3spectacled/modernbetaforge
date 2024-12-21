@@ -33,7 +33,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
             ModernBetaGeneratorSettings.build();
 
-        this.biomeSource = ModernBetaRegistries.BIOME
+        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
             .get(new ResourceLocation(this.settings.biomeSource))
             .apply(worldInfo.getSeed(), this.settings);
         this.biomeCache = new ChunkCache<BiomeChunk>(

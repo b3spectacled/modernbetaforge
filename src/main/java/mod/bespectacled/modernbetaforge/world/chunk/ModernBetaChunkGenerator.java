@@ -26,7 +26,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ModernBetaGeneratorSettings.build(generatorOptions) :
             ModernBetaGeneratorSettings.build();
         
-        this.chunkSource = ModernBetaRegistries.CHUNK
+        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE
             .get(new ResourceLocation(settings.chunkSource))
             .apply(world, this, settings);
 

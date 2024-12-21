@@ -3,7 +3,9 @@ package mod.bespectacled.modernbetaforge.api.registry;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
@@ -66,7 +68,7 @@ public final class ModernBetaRegistry<T> {
         return this.registryEntries.containsValue(value);
     }
     
-    public List<T> getEntries() {
+    public List<T> getValues() {
         return this.registryEntries.entrySet()
             .stream()
             .map(e -> e.getValue())
@@ -77,5 +79,9 @@ public final class ModernBetaRegistry<T> {
         return this.registryEntries.keySet()
             .stream()
             .collect(Collectors.toList());
+    }
+    
+    public Set<Entry<ResourceLocation, T>> getEntrySet() {
+        return this.registryEntries.entrySet();
     }
 }

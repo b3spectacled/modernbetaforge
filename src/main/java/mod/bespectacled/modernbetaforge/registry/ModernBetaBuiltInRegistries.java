@@ -46,24 +46,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModernBetaBuiltInRegistries {
     
     public static void registerChunkSources() {
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryKey(), BetaChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryKey(), AlphaChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey(), SkylandsChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryKey(), Infdev611ChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryKey(), Infdev420ChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryKey(), Infdev415ChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryKey(), Infdev227ChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey(), IndevChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(), Classic23aChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(), PEChunkSource::new);
-        ModernBetaRegistries.CHUNK.register(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(), ReleaseChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryKey(), BetaChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryKey(), AlphaChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey(), SkylandsChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryKey(), Infdev611ChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryKey(), Infdev420ChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryKey(), Infdev415ChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryKey(), Infdev227ChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey(), IndevChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(), Classic23aChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(), PEChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(), ReleaseChunkSource::new);
     }
     
     public static void registerBiomeSources() {
-        ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey(), BetaBiomeSource::new);
-        ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey(), SingleBiomeSource::new);
-        ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey(), PEBiomeSource::new);
-        ModernBetaRegistries.BIOME.register(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey(), ReleaseBiomeSource::new);
+        ModernBetaRegistries.BIOME_SOURCE.register(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey(), BetaBiomeSource::new);
+        ModernBetaRegistries.BIOME_SOURCE.register(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey(), SingleBiomeSource::new);
+        ModernBetaRegistries.BIOME_SOURCE.register(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey(), PEBiomeSource::new);
+        ModernBetaRegistries.BIOME_SOURCE.register(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey(), ReleaseBiomeSource::new);
     }
     
     public static void registerNoiseSources() { }
@@ -80,18 +80,18 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerSurfaceBuilders() {
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey(), BetaSurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA.getRegistryKey(), AlphaSurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.getRegistryKey(), Alpha12SurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV_227.getRegistryKey(), Infdev227SurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey(), InfdevSurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.PE.getRegistryKey(), PESurfaceBuilder::new);
-        ModernBetaRegistries.SURFACE.register(ModernBetaBuiltInTypes.Surface.RELEASE.getRegistryKey(), ReleaseSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey(), BetaSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.ALPHA.getRegistryKey(), AlphaSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.getRegistryKey(), Alpha12SurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.INFDEV_227.getRegistryKey(), Infdev227SurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey(), InfdevSurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.PE.getRegistryKey(), PESurfaceBuilder::new);
+        ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.RELEASE.getRegistryKey(), ReleaseSurfaceBuilder::new);
     }
     
     public static void registerCaveCarvers() {
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), (world, chunkSource, settings) -> new MapGenBetaCave(settings));
-        ModernBetaRegistries.CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (world, chunkSource, settings) -> new MapGenCaves());
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), (world, chunkSource, settings) -> new MapGenBetaCave(settings));
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (world, chunkSource, settings) -> new MapGenCaves());
     }
     
     public static void registerBlockSources() { }

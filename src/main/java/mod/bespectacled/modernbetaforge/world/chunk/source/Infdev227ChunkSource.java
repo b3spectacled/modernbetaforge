@@ -49,7 +49,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         this.detailOctaveNoise = new PerlinOctaveNoise(this.random, 5, true);
         
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmapChunk);
-        this.surfaceBuilder = ModernBetaRegistries.SURFACE
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
             .get(new ResourceLocation(this.settings.surfaceBuilder))
             .apply(world, this, chunkGeneratorSettings);
         

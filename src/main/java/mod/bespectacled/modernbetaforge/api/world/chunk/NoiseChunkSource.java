@@ -1,8 +1,11 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -73,7 +76,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
         
         this.noiseSettings = noiseSettings;
-        this.surfaceBuilder = ModernBetaRegistries.SURFACE
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
             .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
             .apply(world, this, settings);
     }
@@ -135,6 +138,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int chunkZ = z >> 4;
         
         return this.heightmapCache.get(chunkX, chunkZ).getHeight(x, z, type);
+    }
+    
+    /**
+     * Gets sampled terrain density from a particular layer identified by ResouceLocation key.
+     * 
+     * @param key The terrain density layer
+     * @param x x-coordinate in block coordinates.
+     * @param y y-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @return A terrain density.
+     */
+    public double getDensity(ResourceLocation key, int x, int y, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        
+        return this.densityCache.get(chunkX, chunkZ).sample(key, x, y, z);
     }
     
     /**
@@ -338,54 +357,79 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
         
-        double[] densities = new double[sizeX * sizeZ * sizeY];
-        
         // Create noise samplers
-        List<NoiseSampler> noiseSamplers = ModernBetaRegistries.NOISE.getEntries()
+        List<NoiseSampler> noiseSamplers = ModernBetaRegistries.NOISE_SAMPLER.getValues()
             .stream()
             .map(entry -> entry.apply(this.world, this, this.settings))
             .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
-         
+
+        // Create noise sources and sample.
+        Map<ResourceLocation, NoiseSource> noiseSourceMap = new LinkedHashMap<>();
+        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSourceMap.put(
+            entry.getKey(),
+            new NoiseSource(
+                entry.getValue().apply(this.world, this, this.settings),
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
+        noiseSourceMap.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
+            chunkX * this.noiseSizeX,
+            chunkZ * this.noiseSizeZ,
+            this.noiseSettings,
+            noiseSamplers
+        ));
+        
         // Create initial noise source and sample.
-        NoiseSource noiseSource = this.createInitialNoiseSource(chunkX, chunkZ);
-        noiseSource.sampleInitialNoise(
+        NoiseSource initialNoiseSource = this.createInitialNoiseSource(chunkX, chunkZ);
+        initialNoiseSource.sampleInitialNoise(
             chunkX * this.noiseSizeX,
             chunkZ * this.noiseSizeZ,
             this.noiseSettings,
             noiseSamplers
         );
-
-        for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
-            for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
-                for (int subChunkY = 0; subChunkY < this.noiseSizeY; ++subChunkY) {
-                    noiseSource.sampleNoiseCorners(subChunkX, subChunkY, subChunkZ);
-                    
-                    for (int subY = 0; subY < this.verticalNoiseResolution; ++subY) {
-                        int y = subY + subChunkY * this.verticalNoiseResolution;
-
-                        double deltaY = subY / (double)this.verticalNoiseResolution;
-                        noiseSource.sampleNoiseY(deltaY);
+        noiseSourceMap.put(DensityChunk.INITIAL, initialNoiseSource);
+        
+        Map<ResourceLocation, double[]> densityMap = new LinkedHashMap<>();
+        for (Entry<ResourceLocation, NoiseSource> entry : noiseSourceMap.entrySet()) {
+            NoiseSource noiseSource = entry.getValue();
+            double[] densities = new double[sizeX * sizeZ * sizeY];
+            
+            for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
+                for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
+                    for (int subChunkY = 0; subChunkY < this.noiseSizeY; ++subChunkY) {
+                        noiseSource.sampleNoiseCorners(subChunkX, subChunkY, subChunkZ);
                         
-                        for (int subX = 0; subX < this.horizontalNoiseResolution; ++subX) {
-                            int x = subX + subChunkX * this.horizontalNoiseResolution;
+                        for (int subY = 0; subY < this.verticalNoiseResolution; ++subY) {
+                            int y = subY + subChunkY * this.verticalNoiseResolution;
+
+                            double deltaY = subY / (double)this.verticalNoiseResolution;
+                            noiseSource.sampleNoiseY(deltaY);
                             
-                            double deltaX = subX / (double)this.horizontalNoiseResolution;
-                            noiseSource.sampleNoiseX(deltaX);
-                            
-                            for (int subZ = 0; subZ < this.horizontalNoiseResolution; ++subZ) {
-                                int z = subZ + subChunkZ * this.horizontalNoiseResolution;
+                            for (int subX = 0; subX < this.horizontalNoiseResolution; ++subX) {
+                                int x = subX + subChunkX * this.horizontalNoiseResolution;
                                 
-                                double deltaZ = subZ / (double)this.horizontalNoiseResolution;
-                                noiseSource.sampleNoiseZ(deltaZ);
+                                double deltaX = subX / (double)this.horizontalNoiseResolution;
+                                noiseSource.sampleNoiseX(deltaX);
                                 
-                                densities[(y * 16 + z) * 16 + x] = noiseSource.sample();
+                                for (int subZ = 0; subZ < this.horizontalNoiseResolution; ++subZ) {
+                                    int z = subZ + subChunkZ * this.horizontalNoiseResolution;
+                                    
+                                    double deltaZ = subZ / (double)this.horizontalNoiseResolution;
+                                    noiseSource.sampleNoiseZ(deltaZ);
+                                    
+                                    densities[(y * 16 + z) * 16 + x] = noiseSource.sample();
+                                }
                             }
                         }
                     }
                 }
             }
+            
+            densityMap.put(entry.getKey(), densities);
         }
         
-        return new DensityChunk(densities);
+        return new DensityChunk(densityMap);
     }
 }
