@@ -128,10 +128,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
                 density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
             }
             
-            density -= densityOffset;
-            density = this.applySlides(density, noiseY);
-            
-            buffer[noiseY] = density;
+            buffer[noiseY] = density - densityOffset;
         }
     }
     

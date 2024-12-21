@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.noise;
 
+import java.util.List;
+
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 
 public class NoiseSource {
@@ -59,9 +61,11 @@ public class NoiseSource {
      * 
      * @param startNoiseX x-coordinate in noise coordinates.
      * @param startNoiseZ z-coordinate in noise coordinates.
+     * @param noiseSettings Noise settings, including slides.
+     * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
      */
-    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ) {
-        this.noise = this.sampleNoise(startNoiseX, startNoiseZ);
+    public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
+        this.noise = this.sampleNoise(startNoiseX, startNoiseZ, noiseSettings, noiseSamplers);
         
         if (this.noise.length != this.noiseSize)
             throw new IllegalStateException("[Modern Beta] Noise array length is invalid!");
@@ -131,15 +135,20 @@ public class NoiseSource {
      * 
      * @param startNoiseX x-coordinate in noise coordinates.
      * @param startNoiseZ z-coordinate in noise coordinates.
+     * @param noiseSettings Noise settings, including slides.
+     * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
      * @return Array containing the initial densities for the chunk.
      */
-    private double[] sampleNoise(int startNoiseX, int startNoiseZ) {
+    private double[] sampleNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
         double[] buffer = new double[this.noiseResY];
         double[] noise = new double[this.noiseSize];
         
         int ndx = 0;
         for (int localNoiseX = 0; localNoiseX < this.noiseResX; ++localNoiseX) {
+            int noiseX = startNoiseX + localNoiseX;
+            
             for (int localNoiseZ = 0; localNoiseZ < this.noiseResZ; ++localNoiseZ) {
+                int noiseZ = startNoiseZ + localNoiseZ;
                 this.noiseColumnSampler.sampleNoiseColumn(
                     buffer,
                     startNoiseX,
@@ -147,12 +156,29 @@ public class NoiseSource {
                     localNoiseX,
                     localNoiseZ,
                     this.noiseResX - 1,
-                    this.noiseResZ - 1,
-                    this.noiseResY - 1
+                    this.noiseResY - 1,
+                    this.noiseResZ - 1
                 );
                 
-                for (int nY = 0; nY < this.noiseResY; ++nY) {
-                    noise[ndx++] = buffer[nY];
+                for (int noiseY = 0; noiseY < this.noiseResY; ++noiseY) {
+                    double density = buffer[noiseY];
+                    
+                    for (NoiseSampler sampler : noiseSamplers) {
+                        density = sampler.sample(
+                            density,
+                            noiseX,
+                            noiseY,
+                            noiseZ,
+                            this.noiseResX - 1,
+                            this.noiseResY - 1,
+                            this.noiseResZ - 1
+                        );
+                    }
+                    
+                    density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseResY - 1);
+                    density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
+                    
+                    noise[ndx++] = buffer[noiseY];
                 }
             }
         }
@@ -163,7 +189,6 @@ public class NoiseSource {
     @FunctionalInterface
     public static interface NoiseColumnSampler {
         /**
-         * 
          * @param buffer The array to store initial densities in for the column.
          * @param startNoiseX x-coordinate in noise coordinates, at the beginning of the chunk.
          * @param startNoiseZ z-coordinate in noise coordinates, at the beginning of the chunk.
@@ -180,8 +205,8 @@ public class NoiseSource {
             int localNoiseX,
             int localNoiseZ,
             int noiseSizeX,
-            int noiseSizeZ,
-            int noiseSizeY
+            int noiseSizeY,
+            int noiseSizeZ
         );
     }
 }

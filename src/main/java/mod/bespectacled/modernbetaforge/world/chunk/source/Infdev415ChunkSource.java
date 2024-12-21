@@ -119,8 +119,6 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 density = minLimitVal + (maxLimitVal - minLimitVal) * delta;
             };
             
-            density = this.applySlides(density, noiseY);
-            
             buffer[noiseY] = density;
         }
     }

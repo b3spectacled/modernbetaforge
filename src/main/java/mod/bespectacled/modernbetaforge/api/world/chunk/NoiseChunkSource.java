@@ -3,11 +3,12 @@ package mod.bespectacled.modernbetaforge.api.world.chunk;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
-import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings.SlideSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
@@ -38,12 +39,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final int noiseSizeY; // Number of vertical subchunks
     protected final int noiseTopY;  // Number of positive (y >= 0) vertical subchunks
     
-    private final SlideSettings topSlide;
-    private final SlideSettings bottomSlide;
-    
     private final ChunkCache<HeightmapChunk> heightmapCache;
     private final ChunkCache<DensityChunk> densityCache;
     
+    private final NoiseSettings noiseSettings;
     private final SurfaceBuilder surfaceBuilder;
 
     /**
@@ -70,12 +69,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.noiseSizeY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         this.noiseTopY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         
-        this.topSlide = noiseSettings.topSlideSettings;
-        this.bottomSlide = noiseSettings.bottomSlideSettings;
-        
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
-
+        
+        this.noiseSettings = noiseSettings;
         this.surfaceBuilder = ModernBetaRegistries.SURFACE
             .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
             .apply(world, this, settings);
@@ -141,26 +138,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Get top slide, used to interpolate density to set terrain curve at top of the world.
-     * 
-     * @return Slide settings used to interpolate terrain at top of the world.
-     * 
-     */
-    public SlideSettings getTopSlide() {
-        return this.topSlide;
-    }
-    
-    /**
-     * Get bottom slide, used to interpolate density to set terrain curve at bottom of the world.
-     * 
-     * @return Slide settings used to interpolate terrain at bottom of the world.
-     * 
-     */
-    public SlideSettings getBottomSlide() {
-        return this.bottomSlide;
-    }
-    
-    /**
      * Generates noise for a column at startNoiseX + localNoiseX / startNoiseZ + localNoiseZ.
      * 
      * @param buffer Buffer of size noiseSizeY + 1 to store noise column
@@ -176,21 +153,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int localNoiseX,
         int localNoiseZ
     );
-    
-    /**
-     * Interpolates density to set terrain curve at top and bottom of the world.
-     * 
-     * @param density Base density.
-     * @param noiseY y-coordinate in noise coordinates.
-     * @return Modified noise density.
-     */
-    protected double applySlides(double density, int noiseY) {
-        density = this.topSlide.applyTopSlide(density, noiseY, this.noiseSizeY);
-        density = this.bottomSlide.applyBottomSlide(density, noiseY);
-        
-        return density;
-    }
-    
+
     /**
      * Generates the base terrain for a given chunk.
      * 
@@ -319,7 +282,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     private NoiseSource createInitialNoiseSource(int chunkX, int chunkZ) {
         NoiseSource noiseSource = new NoiseSource(
-            (buffer, startX, startZ, localX, localZ, sizeX, sizeZ, sizeY) -> this.sampleNoiseColumn(
+            (buffer, startX, startZ, localX, localZ, sizeX, sizeY, sizeZ) -> this.sampleNoiseColumn(
                 buffer,
                 startX,
                 startZ,
@@ -377,62 +340,45 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         double[] densities = new double[sizeX * sizeZ * sizeY];
         
-        // Create and populate noise sources
-        List<NoiseSource> noiseSources = new LinkedList<>();
-        noiseSources.add(this.createInitialNoiseSource(chunkX, chunkZ));
-        ModernBetaRegistries.NOISE.getEntries().forEach(sampler -> noiseSources.add(
-            new NoiseSource(
-                sampler.apply(this.world, this, this.settings),
-                this.noiseSizeX,
-                this.noiseSizeY,
-                this.noiseSizeZ
-            )
-        ));
-
-        // Sample initial noise.
-        // Base noise should be added after this,
-        // since base noise is sampled when fetched from cache.
-        noiseSources.forEach(noiseSource -> noiseSource.sampleInitialNoise(
+        // Create noise samplers
+        List<NoiseSampler> noiseSamplers = ModernBetaRegistries.NOISE.getEntries()
+            .stream()
+            .map(entry -> entry.apply(this.world, this, this.settings))
+            .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
+         
+        // Create initial noise source and sample.
+        NoiseSource noiseSource = this.createInitialNoiseSource(chunkX, chunkZ);
+        noiseSource.sampleInitialNoise(
             chunkX * this.noiseSizeX,
-            chunkZ * this.noiseSizeZ
-        ));
+            chunkZ * this.noiseSizeZ,
+            this.noiseSettings,
+            noiseSamplers
+        );
 
         for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
-            int noiseX = subChunkX;
-            
             for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
-                int noiseZ = subChunkZ;
-                
                 for (int subChunkY = 0; subChunkY < this.noiseSizeY; ++subChunkY) {
-                    int noiseY = subChunkY;
-                    
-                    noiseSources.forEach(noiseSource -> noiseSource.sampleNoiseCorners(noiseX, noiseY, noiseZ));
+                    noiseSource.sampleNoiseCorners(subChunkX, subChunkY, subChunkZ);
                     
                     for (int subY = 0; subY < this.verticalNoiseResolution; ++subY) {
                         int y = subY + subChunkY * this.verticalNoiseResolution;
 
                         double deltaY = subY / (double)this.verticalNoiseResolution;
-                        noiseSources.forEach(noiseSource -> noiseSource.sampleNoiseY(deltaY));
+                        noiseSource.sampleNoiseY(deltaY);
                         
                         for (int subX = 0; subX < this.horizontalNoiseResolution; ++subX) {
                             int x = subX + subChunkX * this.horizontalNoiseResolution;
                             
                             double deltaX = subX / (double)this.horizontalNoiseResolution;
-                            noiseSources.forEach(noiseSource -> noiseSource.sampleNoiseX(deltaX));
+                            noiseSource.sampleNoiseX(deltaX);
                             
                             for (int subZ = 0; subZ < this.horizontalNoiseResolution; ++subZ) {
                                 int z = subZ + subChunkZ * this.horizontalNoiseResolution;
                                 
                                 double deltaZ = subZ / (double)this.horizontalNoiseResolution;
-                                noiseSources.forEach(noiseSource -> noiseSource.sampleNoiseZ(deltaZ));
+                                noiseSource.sampleNoiseZ(deltaZ);
                                 
-                                double density = 0.0;
-                                
-                                for (NoiseSource noiseSource : noiseSources) {
-                                    density += noiseSource.sample();
-                                }
-                                
-                                densities[(y * 16 + z) * 16 + x] = density;
+                                densities[(y * 16 + z) * 16 + x] = noiseSource.sample();
                             }
                         }
                     }
