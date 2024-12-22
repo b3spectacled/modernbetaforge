@@ -3,6 +3,9 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.noise;
 @FunctionalInterface
 public interface NoiseColumnSampler {
     /**
+     * Samples noise in a column at a particular x/z-coordinate.
+     * Has no effect on terrain generation if registered.
+     * 
      * @param buffer The array to store initial densities in for the column.
      * @param startNoiseX x-coordinate in noise coordinates, at the beginning of the chunk.
      * @param startNoiseZ z-coordinate in noise coordinates, at the beginning of the chunk.
