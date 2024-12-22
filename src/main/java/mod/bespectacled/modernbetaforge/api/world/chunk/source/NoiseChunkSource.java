@@ -407,7 +407,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                     double deltaZ = subZ / (double)this.horizontalNoiseResolution;
                                     noiseSource.sampleNoiseZ(deltaZ);
                                     
-                                    densities[(y * 16 + z) * 16 + x] = noiseSource.sample();
+                                    densities[(y * 16 + x) * 16 + z] = noiseSource.sample();
                                 }
                             }
                         }

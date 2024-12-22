@@ -31,6 +31,6 @@ public class DensityChunk {
             throw new IllegalArgumentException(error);
         }
         
-        return this.densityMap.get(key)[(y * 16 + (z & 0xF)) * 16 + (x & 0xF)];
+        return this.densityMap.get(key)[(y * 16 + (x & 0xF)) * 16 + (z & 0xF)];
     }
 }
