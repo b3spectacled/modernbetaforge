@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.chunk;
+package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -83,6 +83,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     /**
      * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
+     * This does not generate terrain, only samples the initial densities.
      *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -91,12 +92,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     @Override
     public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.generateTerrain(chunkPrimer, chunkX, chunkZ, false);
+        this.densityCache.get(chunkX, chunkZ);
     }
     
     /**
      * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int) provideProcessedChunk}.
-     * Used to actually generate terrain, after collection of village component placements.
+     * This actually generates the terrain, after collection of village component placements.
      *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -105,7 +106,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     @Override
     public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.generateTerrain(chunkPrimer, chunkX, chunkZ, true);
+        this.generateTerrain(chunkPrimer, chunkX, chunkZ);
     }
     
     /**
@@ -180,13 +181,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, boolean withVillages) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
-        List<StructureComponent> structureComponents = withVillages ?
-            this.componentCache.get(chunkX, chunkZ).getComponents() :
-            null;
+        List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
         StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
 
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
@@ -212,12 +211,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 }
             }
         }
-        
-        if (withVillages) {
-            // Remove chunk after processing to make room for other chunks;
-            // will lead to some chunks not getting processed if not cleared.
-            this.componentCache.remove(chunkX, chunkZ);
-        }
+
+        // Remove chunk after processing to make room for other chunks;
+        // will lead to some chunks not getting processed if not cleared.
+        this.componentCache.remove(chunkX, chunkZ);
     }
     
     /**
@@ -374,22 +371,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 this.noiseSizeZ
             )
         ));
+        noiseSourceMap.put(DensityChunk.INITIAL, this.createInitialNoiseSource(chunkX, chunkZ));
         noiseSourceMap.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
             chunkX * this.noiseSizeX,
             chunkZ * this.noiseSizeZ,
             this.noiseSettings,
             noiseSamplers
         ));
-        
-        // Create initial noise source and sample.
-        NoiseSource initialNoiseSource = this.createInitialNoiseSource(chunkX, chunkZ);
-        initialNoiseSource.sampleInitialNoise(
-            chunkX * this.noiseSizeX,
-            chunkZ * this.noiseSizeZ,
-            this.noiseSettings,
-            noiseSamplers
-        );
-        noiseSourceMap.put(DensityChunk.INITIAL, initialNoiseSource);
         
         Map<ResourceLocation, double[]> densityMap = new LinkedHashMap<>();
         for (Entry<ResourceLocation, NoiseSource> entry : noiseSourceMap.entrySet()) {

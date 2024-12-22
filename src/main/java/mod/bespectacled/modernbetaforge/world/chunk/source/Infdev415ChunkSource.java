@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;

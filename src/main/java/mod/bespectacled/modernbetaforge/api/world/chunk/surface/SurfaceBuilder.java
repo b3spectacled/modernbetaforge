@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;

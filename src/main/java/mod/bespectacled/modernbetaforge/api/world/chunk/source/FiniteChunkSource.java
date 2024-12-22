@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.chunk;
+package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;

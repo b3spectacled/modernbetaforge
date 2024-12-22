@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import net.minecraft.block.Block;

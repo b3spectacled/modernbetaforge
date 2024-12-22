@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.spawn;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.math.BlockPos;

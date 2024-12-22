@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorStructureStart;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;

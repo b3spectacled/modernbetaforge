@@ -3,8 +3,8 @@ package mod.bespectacled.modernbetaforge.world.spawn;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;

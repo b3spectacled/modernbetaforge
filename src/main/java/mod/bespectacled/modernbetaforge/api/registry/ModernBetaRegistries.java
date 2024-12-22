@@ -1,12 +1,12 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.setting.Property;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;

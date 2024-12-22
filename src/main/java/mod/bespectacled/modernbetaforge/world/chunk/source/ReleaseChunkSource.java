@@ -7,7 +7,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;

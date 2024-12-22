@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;

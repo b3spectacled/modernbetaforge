@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMapGenBase;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.util.math.ChunkPos;

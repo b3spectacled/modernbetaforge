@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.structure;
 
 import java.util.List;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;

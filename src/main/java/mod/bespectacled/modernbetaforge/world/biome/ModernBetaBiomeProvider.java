@@ -1,13 +1,15 @@
 package mod.bespectacled.modernbetaforge.world.biome;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -103,7 +105,9 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         int sizeZ = maxZ - minZ + 1;
         
         BlockPos blockPos = null;
-        int j = 0;
+        int chance = 0;
+        
+        Set<Biome> allowedBiomes = new HashSet<>(allowed);
         
         for (int i = 0; i < sizeX * sizeZ; ++i) {
             int startX = minX + i % sizeX << 2;
@@ -112,9 +116,9 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             // Do not use injector here to speed initial world load
             Biome biome = this.biomeSource.getBiome(startX, startZ);
             
-            if (allowed.contains(biome) && (blockPos == null || random.nextInt(j + 1) == 0)) {
+            if (allowedBiomes.contains(biome) && (blockPos == null || random.nextInt(chance + 1) == 0)) {
                 blockPos = new BlockPos(startX, 0, startZ);
-                ++j;
+                ++chance;
             }
         }
         
@@ -126,8 +130,10 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
      */
     @Override
     public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed) {
+        Set<Biome> allowedBiomes = new HashSet<>(allowed);
+        
         if (radius == 0) {
-            return allowed.contains(this.getBiome(x, z));
+            return allowedBiomes.contains(this.getBiome(x, z));
         } else {
             double r2 = radius * radius;
             
@@ -138,7 +144,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                     if (distance < r2) {
                         Biome biome = this.getBiome(dX, dZ);
                         
-                        if (!allowed.contains(biome))
+                        if (!allowedBiomes.contains(biome))
                             return false;
                     }
                 }

@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DebugUtil {
-    public static final String SECTION_GEN_CHUNK = "modernbeta.generateChunk";   // ~0.0042s per chunk (as of 1.3.3.0)
+    // Significant amount of world gen time (~0.002s is dedicated just to Stronghold placement)
+    public static final String SECTION_GEN_CHUNK = "modernbeta.generateChunk";        // ~0.005s per chunk (as of 1.3.3.0)
     public static final String SECTION_GEN_CHUNK_VANILLA = "minecraft.generateChunk"; // ~0.0026s per chunk
     
     public static final Map<String, Long> TOTAL_TIME = new HashMap<>();

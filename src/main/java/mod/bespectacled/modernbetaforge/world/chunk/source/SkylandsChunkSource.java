@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;

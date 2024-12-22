@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;

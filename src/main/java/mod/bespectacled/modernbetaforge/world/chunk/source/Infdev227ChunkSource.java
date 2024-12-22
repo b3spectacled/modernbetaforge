@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;

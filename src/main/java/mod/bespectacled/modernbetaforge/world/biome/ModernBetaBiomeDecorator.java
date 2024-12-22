@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.biome;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;

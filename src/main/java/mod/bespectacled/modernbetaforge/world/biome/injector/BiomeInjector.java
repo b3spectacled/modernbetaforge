@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import net.minecraft.block.state.IBlockState;

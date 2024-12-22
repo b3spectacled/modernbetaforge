@@ -15,8 +15,8 @@ import org.apache.logging.log4j.Level;
 import com.google.common.collect.BiMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource.LevelDataContainer;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource.LevelDataContainer;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;

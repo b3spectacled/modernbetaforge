@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.event;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldServer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;

@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.chunk;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.chunk.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
