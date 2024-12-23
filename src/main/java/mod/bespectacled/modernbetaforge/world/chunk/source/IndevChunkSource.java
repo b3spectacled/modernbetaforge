@@ -8,7 +8,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -40,12 +40,8 @@ public class IndevChunkSource extends FiniteChunkSource {
     private int waterLevel;
     private int groundLevel;
     
-    public IndevChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings chunkGeneratorSettings
-    ) {
-        super(world, chunkGenerator, chunkGeneratorSettings);
+    public IndevChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.levelTheme = IndevTheme.fromId(settings.levelTheme);
         this.levelType = IndevType.fromId(settings.levelType);
@@ -57,17 +53,6 @@ public class IndevChunkSource extends FiniteChunkSource {
                 this.levelHeight + 64 :
                 this.levelHeight + 2;
         this.setCloudHeight(cloudHeight);
-        
-        // Set world sea level for the Indev type
-        int worldSeaLevel = this.levelHeight - 32;
-        
-        if (this.levelType == IndevType.FLOATING) {
-            worldSeaLevel = 0;
-        } else if (this.levelType == IndevType.INLAND) {
-            worldSeaLevel = this.levelHeight - 48;
-        }
-        
-        this.world.setSeaLevel(worldSeaLevel);
     }
     
     @Override
@@ -76,7 +61,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     @Override
-    protected void pregenerateTerrain() {
+    protected void pregenerateTerrain(World world) {
         int layers = this.levelType == IndevType.FLOATING ? (this.levelHeight - 64) / 48 + 1 : 1;
         
         for (int layer = 0; layer < layers; ++layer) { 
@@ -96,32 +81,49 @@ public class IndevChunkSource extends FiniteChunkSource {
             
             this.sandOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
             this.gravelOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
-            
+
+            this.setPhase(world, "Raising");
             this.raiseLevel();
+
+            this.setPhase(world, "Eroding");
             this.erodeLevel();
+
+            this.setPhase(world, "Soiling");
             this.soilLevel();
+
+            this.setPhase(world, "Growing");
             this.growLevel();
         }
         
-        if (this.settings.useIndevCaves)
+        if (this.settings.useIndevCaves) {
+            this.setPhase(world, "Carving");
             this.carveLevel();
+        }
         
         this.oreLevel();
+        
+        this.setPhase(world, "Melting");
         this.meltLevel();
         this.updateLevel();
+        
+        this.setPhase(world, "Watering");
         this.waterLevel();
+
+        this.setPhase(world, "Planting");
         this.plantLevel();
+
+        this.setPhase(world, "Assembling");
         this.assembleLevel();
     }
 
     @Override
-    protected void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    protected void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
          switch(this.levelType) {
             case ISLAND: 
-                this.generateWaterBorder(chunkPrimer, chunkX, chunkZ);
+                this.generateWaterBorder(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
                 break;
             case INLAND:
-                this.generateWorldBorder(chunkPrimer, chunkX, chunkZ);
+                this.generateWorldBorder(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
                 break;
             case FLOATING:
                 break;
@@ -145,8 +147,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void raiseLevel() {
-        this.setPhase("Raising");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             double normalizedX = Math.abs((x / (this.levelWidth - 1.0) - 0.5) * 2.0);
@@ -193,8 +193,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void erodeLevel() {
-        this.setPhase("Eroding");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
@@ -213,7 +211,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void soilLevel() {
-        this.setPhase("Soiling");
         int seaLevel = this.waterLevel;
         MutableBlockPos blockPos = new MutableBlockPos();
         
@@ -276,7 +273,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void growLevel() {
-        this.setPhase("Growing");
         int surfaceLevel = this.waterLevel - 1;
         
         if (this.levelTheme == IndevTheme.PARADISE)
@@ -324,8 +320,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
     
     private void carveLevel() {
-        this.setPhase("Carving");
-        
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
         
         for (int i = 0; i < caveCount; ++i) {
@@ -385,7 +379,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void meltLevel() {
-        this.setPhase("Melting");
         long totalFlooded = 0;
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 2000;
@@ -433,7 +426,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void waterLevel() {
-        this.setPhase("Watering");
         long totalFlooded = 0;
         
         Block fluidBlock = this.defaultFluid.getBlock();
@@ -482,7 +474,6 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     private void plantLevel() {
-        this.setPhase("Planting");
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
@@ -505,8 +496,6 @@ public class IndevChunkSource extends FiniteChunkSource {
      * 
      */
     private void assembleLevel() {
-        this.setPhase("Assembling");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
@@ -564,14 +553,14 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
 
-    private void generateWorldBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    private void generateWorldBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
         int groundLevel = this.getSeaLevel();
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
+                Biome biome = biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
                 
                 for (int y = 0; y < this.levelHeight; ++y) {
                     if (y < groundLevel) {
@@ -584,14 +573,14 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
     
-    private void generateWaterBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    private void generateWaterBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
         int seaLevel = this.getSeaLevel();
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
+                Biome biome = biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
                 
                 for (int y = 0; y < this.levelHeight; ++y) {
                     if (y < seaLevel - 10) {

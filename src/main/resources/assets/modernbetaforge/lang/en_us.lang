@@ -28,7 +28,7 @@ createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
 createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
 createWorld.customize.custom.releaseFeaturesLabel=Release Biome Feature Settings
-createWorld.customize.custom.mobSpawnLabel=Modern Beta Mob Settings
+createWorld.customize.custom.mobSpawnLabel=Modern Beta Biome Mob Settings
 createWorld.customize.custom.modsLabel=Loaded Mods
 
 # Page 1 - Main Settings

@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVis
 import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public final class ListProperty extends StringProperty {
     private final String[] values;
@@ -17,11 +18,11 @@ public final class ListProperty extends StringProperty {
     /**
      * Constructs a new ListProperty with an initial string and an array of valid values.
      * 
-     * @param value The initial String value.
+     * @param index Index of the initial value from values.
      * @param values Array of valid String values.
      */
-    public ListProperty(String value, String[] values) {
-        super(value);
+    public ListProperty(int index, String[] values) {
+        super(values[MathHelper.clamp(index, 0, values.length - 1)]);
         
         this.values = values;
     }

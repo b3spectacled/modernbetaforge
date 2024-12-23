@@ -9,11 +9,11 @@ import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +26,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     private final BiomeSource biomeSource;
     private final ChunkCache<BiomeChunk> biomeCache;
     
-    private ChunkSource chunkSource;
+    private ModernBetaChunkGenerator chunkGenerator;
     
     public ModernBetaBiomeProvider(WorldInfo worldInfo) {
         super(worldInfo);
@@ -44,13 +44,13 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                 // No need to pregenerate chunk if we know all the biomes will be the same (single biome)
                 Biome[] biomes = this.biomeSource instanceof SingleBiomeSource ?
                     this.getBaseBiomes(null, chunkX << 4, chunkZ << 4, 16, 16) :
-                    this.chunkSource.getBiomes(chunkX, chunkZ);
+                    this.chunkGenerator.getBiomes(chunkX, chunkZ);
                 
                 return new BiomeChunk(biomes);
             }
         );
         
-        this.chunkSource = null;
+        this.chunkGenerator = null;
     }
 
     @Override
@@ -176,8 +176,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return this.biomeSource;
     }
     
-    public void setChunkSource(ChunkSource chunkSource) {
-        this.chunkSource = chunkSource;
+    public void setChunkGenerator(ModernBetaChunkGenerator chunkGenerator) {
+        this.chunkGenerator = chunkGenerator;
     }
     
     public boolean useVillageVariants() {

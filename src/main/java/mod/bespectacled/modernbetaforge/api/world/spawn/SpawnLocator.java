@@ -5,18 +5,20 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public interface SpawnLocator {
     /**
      * Locates initial player spawn point.
      * 
+     * @param world The world object.
      * @param spawnPos Starting player spawn block position.
      * @param chunkSource Modern Beta chunk source.
      * @param biomeSource Modern Beta biome source.
      * 
      * @return Block position for initial player spawn point.
      */
-    BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource);
+    BlockPos locateSpawn(World world, BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource);
     
     /**
      * The default spawn locator.
@@ -24,7 +26,7 @@ public interface SpawnLocator {
      */
     public static final SpawnLocator DEFAULT = new SpawnLocator() {
         @Override
-        public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
+        public BlockPos locateSpawn(World world, BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
             int centerX = spawnPos.getX();
             int centerZ = spawnPos.getZ();
             int radius = 64;
@@ -38,14 +40,14 @@ public interface SpawnLocator {
                         double distance = MathUtil.distance(centerX, centerZ, dX, dZ);
                         
                         if (distance < r2) {
-                            int y = chunkSource.getHeight(dX, dZ, HeightmapChunk.Type.SURFACE);
+                            int y = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.SURFACE);
                             
                             if (y > chunkSource.getSeaLevel()) {
                                 // Check if there are surrounding blocks, relevant for skylands worlds
                                 int numAdjacent = 0;
                                 for (int aX = dX - 1; aX <= dX + 1; ++aX) {
                                     for (int aZ = dZ - 1; aZ <= dZ + 1; ++aZ) {
-                                        int aY = chunkSource.getHeight(aX, aZ, HeightmapChunk.Type.SURFACE);
+                                        int aY = chunkSource.getHeight(world, aX, aZ, HeightmapChunk.Type.SURFACE);
                                         
                                         if (aY >= y - 2 && aY <= y + 2) {
                                             numAdjacent++;

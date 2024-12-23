@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -11,7 +12,6 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.structure.StructureComponent;
 
 public class Infdev227ChunkSource extends ChunkSource {
     private PerlinOctaveNoise heightNoise0;
@@ -34,12 +35,8 @@ public class Infdev227ChunkSource extends ChunkSource {
     private final ChunkCache<int[]> heightmapCache;
     private final SurfaceBuilder surfaceBuilder;
 
-    public Infdev227ChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings chunkGeneratorSettings
-    ) {
-        super(world, chunkGenerator, chunkGeneratorSettings);
+    public Infdev227ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.heightNoise0 = new PerlinOctaveNoise(this.random, 16, true);
         this.heightNoise1 = new PerlinOctaveNoise(this.random, 16, true);
@@ -51,7 +48,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmapChunk);
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
             .get(new ResourceLocation(this.settings.surfaceBuilder))
-            .apply(world, this, chunkGeneratorSettings);
+            .apply(this, settings);
         
         // Cloud height was y128 in this version
         this.setCloudHeight(128);
@@ -63,20 +60,20 @@ public class Infdev227ChunkSource extends ChunkSource {
     }
 
     @Override
-    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.generateTerrain(chunkPrimer, chunkX, chunkZ);
     }
 
     @Override
-    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
+    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.surfaceBuilder.provideSurface(world, biomes, chunkPrimer, chunkX, chunkZ);
     }
 
     @Override
-    public int getHeight(int x, int z, Type type) {
+    public int getHeight(World world, int x, int z, Type type) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         

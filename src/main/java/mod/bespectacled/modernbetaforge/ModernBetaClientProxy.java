@@ -16,6 +16,7 @@ public class ModernBetaClientProxy implements ModernBetaProxy {
     @Override
     public void init() {
         ModernBetaBuiltInRegistries.registerPresets();
+        ModernBetaBuiltInRegistries.registerPredicates();
         
         MinecraftForge.EVENT_BUS.register(new DebugInfoEventHandler());
         MinecraftForge.EVENT_BUS.register(new WorldEventHandlerClient());

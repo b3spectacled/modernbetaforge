@@ -3,11 +3,9 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 
 public class Infdev415ChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
@@ -17,12 +15,8 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    public Infdev415ChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
-        super(world, chunkGenerator, settings);
+    public Infdev415ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

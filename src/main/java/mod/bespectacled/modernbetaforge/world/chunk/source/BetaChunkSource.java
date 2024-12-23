@@ -1,15 +1,16 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 
 public class BetaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
@@ -23,12 +24,8 @@ public class BetaChunkSource extends NoiseChunkSource {
     
     private final ClimateSampler climateSampler;
 
-    public BetaChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
-        super(world, chunkGenerator, settings);
+    public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
@@ -38,10 +35,13 @@ public class BetaChunkSource extends NoiseChunkSource {
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-        
-        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
-            (ClimateSampler)this.biomeProvider.getBiomeSource() :
-            new BetaBiomeSource(world.getSeed(), settings);
+       
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
+            .get(new ResourceLocation(settings.biomeSource))
+            .apply(seed, settings);
+        this.climateSampler = biomeSource instanceof ClimateSampler ?
+            (ClimateSampler)biomeSource :
+            new BetaBiomeSource(seed, settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

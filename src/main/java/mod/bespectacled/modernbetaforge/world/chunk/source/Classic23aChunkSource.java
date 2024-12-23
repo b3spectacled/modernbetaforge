@@ -9,7 +9,6 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -30,12 +29,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     
     private final int seaLevel;
 
-    public Classic23aChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings chunkGeneratorSettings
-    ) {
-        super(world, chunkGenerator, chunkGeneratorSettings);
+    public Classic23aChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.lowOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
         this.highOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
@@ -57,23 +52,38 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
 
     @Override
-    protected void pregenerateTerrain() {
+    protected void pregenerateTerrain(World world) {
+        this.setPhase(world, "Raising");
         this.raiseLevel();
+
+        this.setPhase(world, "Eroding");
         this.erodeLevel();
+
+        this.setPhase(world, "Soiling");
         this.soilLevel();
         
-        if (this.settings.useIndevCaves)
+        if (this.settings.useIndevCaves) {
+            this.setPhase(world, "Carving");
             this.carveLevel();
+        }
         
         this.oreLevel();
+        
+        this.setPhase(world, "Watering");
         this.waterLevel();
+
+        this.setPhase(world, "Melting");
         this.meltLevel();
+
+        this.setPhase(world, "Growing");
         this.growLevel();
+
+        this.setPhase(world, "Assembling");
         this.assembleLevel();
     }
 
     @Override
-    protected void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    protected void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int seaLevel = this.getSeaLevel();
         
         for (int x = 0; x < 16; ++x) {
@@ -95,8 +105,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void raiseLevel() {
-        this.setPhase("Raising");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
@@ -121,8 +129,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void erodeLevel() {
-        this.setPhase("Eroding");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
@@ -141,7 +147,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void soilLevel() {
-        this.setPhase("Soiling");
         int seaLevel = this.getSeaLevel();
         MutableBlockPos blockPos = new MutableBlockPos();
         
@@ -183,8 +188,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void carveLevel() {
-        this.setPhase("Carving");
-        
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64;
         
         for (int i = 0; i < caveCount; ++i) {
@@ -238,8 +241,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
 
     private void waterLevel() {
-        this.setPhase("Watering");
-
         Block fluidBlock = this.defaultFluid.getBlock();
         int seaLevel = this.getSeaLevel();
         int flooded = 0;
@@ -273,8 +274,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void meltLevel() {
-        this.setPhase("Melting");
-        
         int attempts = 0;
         
         int lavaSourceCount = this.levelWidth * this.levelLength * this.levelHeight / 10000;
@@ -298,8 +297,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
     
     private void growLevel() {
-        this.setPhase("Growing");
-
         this.sandOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         this.gravelOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
         int seaLevel = this.getSeaLevel();
@@ -337,8 +334,6 @@ public class Classic23aChunkSource extends FiniteChunkSource {
      * 
      */
     private void assembleLevel() {
-        this.setPhase("Assembling");
-        
         for (int x = 0; x < this.levelWidth; ++x) {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             

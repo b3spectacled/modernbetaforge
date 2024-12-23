@@ -747,23 +747,6 @@ public class ModernBetaGeneratorSettings {
         
         public Map<ResourceLocation, Property<?>> customProperties;
         
-        public static Factory jsonToFactory(String string) {
-            if (string.isEmpty()) {
-                return new Factory();
-            }
-            
-            try {
-                return JsonUtils.<Factory>gsonDeserialize(Factory.JSON_ADAPTER, string, Factory.class);
-            } catch (Exception e) {
-                return new Factory();
-            }
-        }
-        
-        @Override
-        public String toString() {
-            return Factory.JSON_ADAPTER.toJson(this);
-        }
-        
         public Factory() {
             this.chunkSource = ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString();
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.getRegistryString();
@@ -981,6 +964,11 @@ public class ModernBetaGeneratorSettings {
                 Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey);
                 property.visitFactory(new NewFactoryPropertyVisitor(), this, registryKey, null);
             });
+        }
+
+        @Override
+        public String toString() {
+            return Factory.JSON_ADAPTER.toJson(this);
         }
 
         @Override
@@ -1433,10 +1421,22 @@ public class ModernBetaGeneratorSettings {
             return hashCode;
         }
         
-        private ModernBetaGeneratorSettings build() {
+        public ModernBetaGeneratorSettings build() {
             return new ModernBetaGeneratorSettings(this);
         }
-        
+
+        public static Factory jsonToFactory(String string) {
+            if (string.isEmpty()) {
+                return new Factory();
+            }
+            
+            try {
+                return JsonUtils.<Factory>gsonDeserialize(Factory.JSON_ADAPTER, string, Factory.class);
+            } catch (Exception e) {
+                return new Factory();
+            }
+        }
+
         static {
             JSON_ADAPTER = new GsonBuilder().registerTypeAdapter(Factory.class, new Serializer()).create();
         }
@@ -1470,7 +1470,7 @@ public class ModernBetaGeneratorSettings {
                 factory.mainNoiseScaleZ = JsonUtils.getFloat(jsonObject, "mainNoiseScaleZ", factory.mainNoiseScaleZ);
                 factory.baseSize = JsonUtils.getFloat(jsonObject, "baseSize", factory.baseSize);
                 factory.stretchY = JsonUtils.getFloat(jsonObject, "stretchY", factory.stretchY);
-                factory.seaLevel = JsonUtils.getInt(jsonObject, "seaLevel", factory.seaLevel);
+                factory.seaLevel = JsonUtils.getInt(jsonObject, NbtTags.SEA_LEVEL, factory.seaLevel);
                 factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
 
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
@@ -1489,22 +1489,22 @@ public class ModernBetaGeneratorSettings {
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
                 factory.caveCount = JsonUtils.getInt(jsonObject, NbtTags.CAVE_COUNT, factory.caveCount);
                 factory.caveChance = JsonUtils.getInt(jsonObject, NbtTags.CAVE_CHANCE, factory.caveChance);
-                factory.useDungeons = JsonUtils.getBoolean(jsonObject, "useDungeons", factory.useDungeons);
-                factory.dungeonChance = JsonUtils.getInt(jsonObject, "dungeonChance", factory.dungeonChance);
+                factory.useDungeons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DUNGEONS, factory.useDungeons);
+                factory.dungeonChance = JsonUtils.getInt(jsonObject, NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
                 
-                factory.useStrongholds = JsonUtils.getBoolean(jsonObject, "useStrongholds", factory.useStrongholds);
-                factory.useVillages = JsonUtils.getBoolean(jsonObject, "useVillages", factory.useVillages);
+                factory.useStrongholds = JsonUtils.getBoolean(jsonObject, NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
+                factory.useVillages = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGES, factory.useVillages);
                 factory.useVillageVariants = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
                 factory.useMineShafts = JsonUtils.getBoolean(jsonObject, "useMineShafts", factory.useMineShafts);
-                factory.useTemples = JsonUtils.getBoolean(jsonObject, "useTemples", factory.useTemples);
-                factory.useMonuments = JsonUtils.getBoolean(jsonObject, "useMonuments", factory.useMonuments);
-                factory.useMansions = JsonUtils.getBoolean(jsonObject, "useMansions", factory.useMansions);
+                factory.useTemples = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TEMPLES, factory.useTemples);
+                factory.useMonuments = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MONUMENTS, factory.useMonuments);
+                factory.useMansions = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MANSIONS, factory.useMansions);
                 factory.useRavines = JsonUtils.getBoolean(jsonObject, "useRavines", factory.useRavines);
                 
-                factory.useWaterLakes = JsonUtils.getBoolean(jsonObject, "useWaterLakes", factory.useWaterLakes);
-                factory.waterLakeChance = JsonUtils.getInt(jsonObject, "waterLakeChance", factory.waterLakeChance);
-                factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, "useLavaLakes", factory.useLavaLakes);
-                factory.lavaLakeChance = JsonUtils.getInt(jsonObject, "lavaLakeChance", factory.lavaLakeChance);
+                factory.useWaterLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
+                factory.waterLakeChance = JsonUtils.getInt(jsonObject, NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
+                factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
+                factory.lavaLakeChance = JsonUtils.getInt(jsonObject, NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
                 factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, "useLavaOceans", factory.useLavaOceans);
                 
                 factory.useSandstone = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SANDSTONE, factory.useSandstone);
@@ -1699,7 +1699,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty("mainNoiseScaleZ", factory.mainNoiseScaleZ);
             jsonObject.addProperty("baseSize", factory.baseSize);
             jsonObject.addProperty("stretchY", factory.stretchY);
-            jsonObject.addProperty("seaLevel", factory.seaLevel);
+            jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
             jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
             
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
@@ -1718,22 +1718,22 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
             jsonObject.addProperty(NbtTags.CAVE_COUNT, factory.caveCount);
             jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
-            jsonObject.addProperty("useDungeons", factory.useDungeons);
-            jsonObject.addProperty("dungeonChance", factory.dungeonChance);
+            jsonObject.addProperty(NbtTags.USE_DUNGEONS, factory.useDungeons);
+            jsonObject.addProperty(NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
             
-            jsonObject.addProperty("useStrongholds", factory.useStrongholds);
-            jsonObject.addProperty("useVillages", factory.useVillages);
+            jsonObject.addProperty(NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
+            jsonObject.addProperty(NbtTags.USE_VILLAGES, factory.useVillages);
             jsonObject.addProperty(NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
             jsonObject.addProperty("useMineShafts", factory.useMineShafts);
-            jsonObject.addProperty("useTemples", factory.useTemples);
-            jsonObject.addProperty("useMonuments", factory.useMonuments);
-            jsonObject.addProperty("useMansions", factory.useMansions);
+            jsonObject.addProperty(NbtTags.USE_TEMPLES, factory.useTemples);
+            jsonObject.addProperty(NbtTags.USE_MONUMENTS, factory.useMonuments);
+            jsonObject.addProperty(NbtTags.USE_MANSIONS, factory.useMansions);
             jsonObject.addProperty("useRavines", factory.useRavines);
             
-            jsonObject.addProperty("useWaterLakes", factory.useWaterLakes);
-            jsonObject.addProperty("waterLakeChance", factory.waterLakeChance);
-            jsonObject.addProperty("useLavaLakes", factory.useLavaLakes);
-            jsonObject.addProperty("lavaLakeChance", factory.lavaLakeChance);
+            jsonObject.addProperty(NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
+            jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
+            jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
+            jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
             jsonObject.addProperty("useLavaOceans", factory.useLavaOceans);
             
             jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
@@ -1945,7 +1945,7 @@ public class ModernBetaGeneratorSettings {
             String value = property.getValue();
             String[] values = property.getValues();
             
-            factory.customProperties.put(registryKey, new ListProperty(value, values));
+            factory.customProperties.put(registryKey, new ListProperty(property.indexOf(value), values));
         }
 
         @Override
@@ -1996,7 +1996,7 @@ public class ModernBetaGeneratorSettings {
         public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             
-            factory.customProperties.put(registryKey, new ListProperty(value, property.getValues()));
+            factory.customProperties.put(registryKey, new ListProperty(property.indexOf(value), property.getValues()));
         }
 
         @Override

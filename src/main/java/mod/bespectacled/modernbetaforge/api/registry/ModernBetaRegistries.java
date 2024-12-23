@@ -10,9 +10,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.setting.Property;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.MapGenBase;
 
 public class ModernBetaRegistries {
@@ -42,11 +40,7 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface ChunkSourceCreator {
-        ChunkSource apply(
-            World world,
-            ModernBetaChunkGenerator chunkGenerator,
-            ModernBetaGeneratorSettings settings
-        );
+        ChunkSource apply(long seed, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
@@ -56,26 +50,26 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface NoiseSamplerCreator {
-        NoiseSampler apply(World world, NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        NoiseSampler apply(NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface NoiseColumnSamplerCreator {
-        NoiseColumnSampler apply(World world, NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        NoiseColumnSampler apply(NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface SurfaceBuilderCreator {
-        SurfaceBuilder apply(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        SurfaceBuilder apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface CaveCarverCreator {
-        MapGenBase apply(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        MapGenBase apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
     public static interface BlockSourceCreator {
-        BlockSource apply(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+        BlockSource apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
 }

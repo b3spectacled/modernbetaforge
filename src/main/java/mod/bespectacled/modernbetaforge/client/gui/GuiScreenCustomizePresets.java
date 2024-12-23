@@ -141,8 +141,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         ResourceLocation texture;
         ModernBetaGeneratorSettings.Factory factory;
         
-        for (ResourceLocation key : ModernBetaClientRegistries.PRESET.getKeys()) {
-            GuiCustomizePreset preset = ModernBetaClientRegistries.PRESET.get(key);
+        for (ResourceLocation key : ModernBetaClientRegistries.GUI_PRESET.getKeys()) {
+            GuiCustomizePreset preset = ModernBetaClientRegistries.GUI_PRESET.get(key);
             
             name = GuiCustomizePreset.formatName(key);
             desc = GuiCustomizePreset.formatInfo(key);

@@ -10,12 +10,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class ReleaseSurfaceBuilder extends SurfaceBuilder {
-    public ReleaseSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(world, chunkSource, settings);
+    public ReleaseSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        super(chunkSource, settings);
     }
 
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX * 16;
         int startZ = chunkZ * 16;
         
@@ -27,7 +27,7 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
                 int z = startZ + localZ;
                 
                 Biome biome = biomes[localX + localZ * 16];
-                this.useCustomSurfaceBuilder(biome, chunkPrimer, random, x, z, true);
+                this.useCustomSurfaceBuilder(world, biome, chunkPrimer, random, x, z, true);
             }
         }
     }

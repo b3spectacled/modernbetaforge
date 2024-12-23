@@ -28,7 +28,6 @@ public abstract class SurfaceBuilder {
     protected final IBlockState defaultBlock;
     protected final IBlockState defaultFluid;
     
-    private final World world;
     private final ChunkSource chunkSource;
     private final ModernBetaGeneratorSettings settings;
     private final SimplexOctaveNoise vanillaSurfaceOctaveNoise;
@@ -43,20 +42,17 @@ public abstract class SurfaceBuilder {
     
     /**
      * Constructs a new abstract SurfaceBuilder with basic surface information.
-     * 
-     * @param world The world object.
      * @param chunkSource Associated chunkSource object.
      * @param settings The generator settings.
      */
-    public SurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+    public SurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
         
-        this.world = world;
         this.chunkSource = chunkSource;
         this.settings = settings;
         
-        Random random = new Random(world.getWorldInfo().getSeed());
+        Random random = new Random(chunkSource.getSeed());
         this.vanillaSurfaceOctaveNoise = new SimplexOctaveNoise(random, 4);
         this.defaultBeachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
         this.defaultSurfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
@@ -81,13 +77,13 @@ public abstract class SurfaceBuilder {
     
     /**
      * Replace default blocks with biome-specific topsoil blocks and set in the chunk.
-     * 
+     * @param world The world object.
      * @param biomes Array of biomes in the chunk.
      * @param chunkPrimer Blockstate data for the chunk.
      * @param chunkX x-coordinate in chunk coordinates.
      * @param chunkZ z-coordinate in chunk coordinates.
      */
-    public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Gets the PerlinOctaveNoise sampler used for beach generation.
@@ -137,8 +133,8 @@ public abstract class SurfaceBuilder {
     }
     
     /**
-     * Indiates whether bedrock should be generated at the bottom of the world.
-     * Probably won't add a 'useBedrock' setting to maintain congruous bedrock generation when using custom surfaces
+     * Indicates whether bedrock should be generated at the bottom of the world.
+     * Probably won't add a 'useBedrock' setting to maintain congruous bedrock generation when using custom surfaces.
      * 
      * @return Whether bedrock should be generated.
      */
@@ -162,23 +158,24 @@ public abstract class SurfaceBuilder {
     /**
      * Use a biome-specific surface builder, at a given x/z-coordinate and topmost y-coordinate.
      * Valid biomes are checked on per-biome basis using identifier from {@link #biomesWithCustomSurfaces} set.
-     * 
+     * @param world The world object.
      * @param biome Biome with surface builder to use.
      * @param chunkPrimer Chunk primer.
      * @param random Random
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param override Force usage of vanilla surface builder.
+     * 
      * @return True if biome is included in valid biomes set and has run surface builder. False if not included and not run.
      * 
      */
-    protected boolean useCustomSurfaceBuilder(Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
+    protected boolean useCustomSurfaceBuilder(World world, Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
         if (this.biomesWithCustomSurfaces.contains(biome) || override) {
             double surfaceNoise = this.vanillaSurfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
             
             // Reverse x/z because ??? why is it done this way in the surface gen code ????
             // Special surfaces won't properly generate if x/z are provided in the correct order, because WTF?!
-            biome.genTerrainBlocks(this.world, random, chunkPrimer, z, x, surfaceNoise);
+            biome.genTerrainBlocks(world, random, chunkPrimer, z, x, surfaceNoise);
             
             return true;
         }

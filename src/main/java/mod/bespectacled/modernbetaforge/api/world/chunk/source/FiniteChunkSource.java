@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -20,10 +21,10 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMinecraftServer;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -46,6 +47,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -66,7 +68,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int[] levelHeightmap;
     
     private final IndevHouse levelHouse;
-    private final LevelDataContainer levelDataContainer;
+    
+    private LevelDataContainer levelDataContainer;
     
     private String phase;
     @SuppressWarnings("unused")
@@ -75,16 +78,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Constructs an abstract FiniteChunkSource with necessary level information.
      * 
-     * @param world The world.
      * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
      * @param chunkGeneratorSettings The generator settings.
      */
-    public FiniteChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings chunkGeneratorSettings
-    ) {
-        super(world, chunkGenerator, chunkGeneratorSettings);
+    public FiniteChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         this.levelWidth = MathHelper.clamp(settings.levelWidth >> 4 << 4, MIN_WIDTH, MAX_WIDTH);
         this.levelLength = MathHelper.clamp(settings.levelLength >> 4 << 4, MIN_WIDTH, MAX_WIDTH);
@@ -92,9 +90,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
-        this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
-            this.tryLoadLevel() :
-            new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
     }
     
     /**
@@ -107,42 +102,40 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
-     *
+     * Inherited from {@link ChunkSource#provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk}.
+     * 
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
     @Override
-    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         if (this.inWorldBounds(startX, startZ)) {
-            this.pregenerateLevelOrWait();
-            this.generateTerrain(chunkPrimer, chunkX, chunkZ);
+            this.pregenerateLevelOrWait(world);
+            this.generateTerrain(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
         } else {
-            this.generateBorder(chunkPrimer, chunkX, chunkZ);
+            this.generateBorder(world, chunkPrimer, chunkX, chunkZ);
         }
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int) provideProcessedChunk}.
+     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int, ChunkCache<ComponentChunk>) provideProcessedChunk}.
      * This is unused.
-     *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
     @Override
-    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
+    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
     /**
-     * Inherited from {@link ChunkSource#provideSurface(Biome[], ChunkPrimer, int, int) provideSurface}.
+     * Inherited from {@link ChunkSource#provideSurface(World, Biome[], ChunkPrimer, int, int) provideSurface}.
      * This is unused.
-     *
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -150,27 +143,27 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      */
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
     
     /**
-     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Samples height from the generated level data.
-     *
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type HeightmapChunk heightmap type.
+     *
      * @return The y-coordinate of top block at x/z.
      * 
      */
     @Override
-    public int getHeight(int x, int z, HeightmapChunk.Type type) {
+    public int getHeight(World world, int x, int z, HeightmapChunk.Type type) {
         x += this.levelWidth / 2;
         z += this.levelLength / 2;
         
         if (!this.inLevelBounds(x, 0, z)) 
             return this.getBorderHeight(x, z, type);
         
-        this.pregenerateLevelOrWait();
+        this.pregenerateLevelOrWait(world);
         return this.getLevelHeight(x, z, type);
     }
     
@@ -271,7 +264,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (this.levelHouse == IndevHouse.NONE)
             return;
         
-        this.setPhase("Building");
+        this.setPhase(world, "Building");
         
         int spawnX = spawnPos.getX();
         int spawnY = spawnPos.getY() + 1;
@@ -353,7 +346,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @return Whether the chunk should be skipped.
      */
     @Override
-    protected boolean skipChunk(int chunkX, int chunkZ) {
+    public boolean skipChunk(int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -363,12 +356,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Prunes the chuck at the given coordinates.
      * The chunk is pruned if the chunk coordinates being tested are outside of level bounds.
-     * 
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
     @Override
-    protected void pruneChunk(int chunkX, int chunkZ) {
+    public void pruneChunk(World world, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         MutableBlockPos blockPos = new MutableBlockPos();
@@ -378,29 +370,67 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         for (int x = startX; x < startX + 16; ++x) {
             for (int z = startZ; z < startZ + 16; ++z) {
-                int height = this.getHeight(x, z, HeightmapChunk.Type.OCEAN);
+                int height = this.getHeight(world, x, z, HeightmapChunk.Type.OCEAN);
                 
-                for (int y = this.world.getActualHeight() - 1; y > height; --y) {
-                    if (this.world.getBlockState(blockPos.setPos(x, y, z)).getBlock() != Blocks.AIR)
-                        this.world.setBlockState(blockPos, BlockStates.AIR);
+                for (int y = world.getActualHeight() - 1; y > height; --y) {
+                    if (world.getBlockState(blockPos.setPos(x, y, z)).getBlock() != Blocks.AIR)
+                        world.setBlockState(blockPos, BlockStates.AIR);
                 }
             }
         }
     }
 
     /**
-     * Generates the level data.
+     * Builds the ruleset used for biome injection.
+     * 
+     * @return The built biome injection rules.
      */
-    protected abstract void pregenerateTerrain();
+    public BiomeInjectionRules buildBiomeInjectorRules(ModernBetaBiomeProvider biomeProvider) {
+        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
+        
+        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
+        
+        Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
+            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
+        
+        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
+            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
+            
+        Predicate<BiomeInjectionContext> beachPredicate = context ->
+            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
+            
+        if (replaceBeaches && biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeProvider.getBiomeSource();
+            
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
+        }
+        
+        if (replaceOceans && biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeProvider.getBiomeSource();
+    
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+        }
+        
+        return builder.build();
+    }
+
+    /**
+     * Generates the level data.
+     * 
+     * @param world The world object.
+     */
+    protected abstract void pregenerateTerrain(World world);
     
     /**
      * Generates the world chunks outside of the level bounds.
-     * 
+     * @param world The world object.
      * @param chunkPrimer The chunk primer.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    protected abstract void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    protected abstract void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Sample height at given x/z coordinate for coordinates outside of the level bounds.
@@ -439,17 +469,26 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Checks if the level data has generated yet, if not, then generates the level data.
      * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
+     * 
+     * @param world The world object, passed into {@link FiniteDataHandler}.
      */
-    protected void pregenerateLevelOrWait() {
+    protected void pregenerateLevelOrWait(World world) {
+        // Lazy load level data container
+        if (this.levelDataContainer == null) {
+            this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
+                this.tryLoadLevel(world) :
+                new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
+        }
+        
         if (!this.levelDataContainer.generated) {
-            this.pregenerateTerrain();
+            this.pregenerateTerrain(world);
             this.levelDataContainer.generated = true;
             
             if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
-                this.trySaveLevel();
+                this.trySaveLevel(world);
                 
                 if (DEBUG_LEVEL_DATA_HANDLER) {
-                    this.debugLevelDataHandler();
+                    this.debugLevelDataHandler(world);
                 }
             }
         }
@@ -579,13 +618,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Sets the current generation phase for the level. This is printed to the console and the level loading screen.
      * 
+     * @param world The world object, used to access the loading screen display message.
      * @param phase Generation phase.
      */
-    protected void setPhase(String phase) {
+    protected void setPhase(World world, String phase) {
         this.phase = phase;
         
-        if (this.world.getMinecraftServer() != null) {
-            AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
+        if (world.getMinecraftServer() != null) {
+            AccessorMinecraftServer accessor = (AccessorMinecraftServer)world.getMinecraftServer();
             accessor.invokeSetUserMessage(this.phase + "..");
         }
         
@@ -611,50 +651,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Builds the ruleset used for biome injection.
-     * 
-     * @return The built biome injection rules.
-     */
-    protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
-        
-        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
-        
-        Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
-        
-        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
-            
-        Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
-            
-        if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
-            
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
-        }
-        
-        if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
-
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
-        }
-        
-        return builder.build();
-    }
-
-    
-    /**
      * Takes the level data and sets it into the chunk primer for the actual terrain generation.
      * 
      * @param chunkPrimer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
+     * @param biomeProvider The biome provider.
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -673,7 +677,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             
             for (int localZ = 0; localZ < 16; ++localZ) {
                 int z = localZ + startZ;
-                Biome biome = this.biomeProvider.getBiomeSource().getBiome(x, z);
+                Biome biome = biomeProvider.getBiomeSource().getBiome(x, z);
                 
                 for (int y = this.levelHeight - 1; y >= 0; --y) {
                     Block block = this.getLevelBlock(x + offsetX, y, z + offsetZ);
@@ -725,10 +729,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Attempts to load a saved finite level from disk. If successful, then level data will be populated and returned for world generation.
      * 
+     * @param world The world object.
      * @return LevelDataContainer containing level data and level block map.
      */
-    private LevelDataContainer tryLoadLevel() {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
+    private LevelDataContainer tryLoadLevel(World world) {
+        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
         LevelDataContainer levelDataContainer;
         
         ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
@@ -753,10 +758,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Attempts to save finite level data to disk. If successful, then the level data can be loaded later to avoid regenerating the entire level.
      * 
+     * @param world The world object, passed into {@link FiniteDataHandler}.
      * @return Whether the file was successfully saved.
      */
-    private boolean trySaveLevel() {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
+    private boolean trySaveLevel(World world) {
+        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
         boolean saved = false;
         
         try {
@@ -776,9 +782,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Debugs the level data handler. If {@link #DEBUG_LEVEL_DATA_HANDLER} is set to true then this will be run after the level is saved.
      * The level file is read from disk and compared to the currently loaded level data to ensure data integrity.
+     * 
+     * @param world The world object, passed into {@link FiniteDataHandler}.
      */ 
-    private void debugLevelDataHandler() {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(this.world, this);
+    private void debugLevelDataHandler(World world) {
+        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
 
         ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
         try {

@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
@@ -9,10 +11,9 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.mersenne.MTRandom;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.spawn.PESpawnLocator;
-import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 
 public class PEChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
@@ -27,15 +28,11 @@ public class PEChunkSource extends NoiseChunkSource {
     private final ClimateSampler climateSampler;
     private final Random random;
 
-    public PEChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
-        super(world, chunkGenerator, settings);
+    public PEChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         // Use Mersenne Twister random instead of Java random
-        this.random = new MTRandom(world.getSeed());
+        this.random = new MTRandom(seed);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
@@ -46,9 +43,12 @@ public class PEChunkSource extends NoiseChunkSource {
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         
-        this.climateSampler = this.biomeProvider.getBiomeSource() instanceof ClimateSampler ?
-            (ClimateSampler)this.biomeProvider.getBiomeSource() :
-            new PEBiomeSource(world.getSeed(), settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
+                .get(new ResourceLocation(settings.biomeSource))
+                .apply(seed, settings);
+        this.climateSampler = biomeSource instanceof ClimateSampler ?
+            (ClimateSampler)biomeSource :
+            new PEBiomeSource(seed, settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

@@ -34,10 +34,11 @@ public class MixinMapGenVillageStart {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
-            ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
-
+            ModernBetaChunkGenerator modernBetaChunkGenerator = ((ModernBetaChunkGenerator)chunkGenerator);
+            ChunkCache<ComponentChunk> componentCache = modernBetaChunkGenerator.getComponentCache();
+            
+            ChunkSource chunkSource = modernBetaChunkGenerator.getChunkSource();
             if (chunkSource instanceof NoiseChunkSource) {
-                ChunkCache<ComponentChunk> componentCache = chunkSource.getComponentCache();
                 AccessorStructureStart accessor = (AccessorStructureStart)this;
                 
                 int numComponents = 0;

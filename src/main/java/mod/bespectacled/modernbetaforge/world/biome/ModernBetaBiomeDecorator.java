@@ -3,9 +3,12 @@ package mod.bespectacled.modernbetaforge.world.biome;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
@@ -20,6 +23,8 @@ import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenDungeons;
+import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
@@ -291,5 +296,91 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
 
     private int getOreHeightSpread(Random random, int centerHeight, int spread) {
         return random.nextInt(spread) + random.nextInt(spread) + centerHeight - spread;
+    }
+    
+    public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        
+        if (random.nextInt(settings.waterLakeChance) == 0) { // Default: 4
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(settings.height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            (new WorldGenLakes(Blocks.WATER)).generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    public static void populateLavaLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        
+        if (random.nextInt(settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(random.nextInt(settings.height - 8) + 8);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            if (y < 64 || random.nextInt(10) == 0) {
+                (new WorldGenLakes(Blocks.LAVA)).generate(world, random, mutablePos.setPos(x, y, z));
+            }
+        }
+    }
+    
+    public static void populateDungeons(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        
+        for (int i = 0; i < settings.dungeonChance; i++) {
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(settings.height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            new WorldGenDungeons().generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    public static void populateSnowIce(World world, Random random, ModernBetaBiomeProvider biomeProvider, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        
+        BiomeSource biomeSource = biomeProvider.getBiomeSource();
+        
+        for(int localX = 0; localX < 16; localX++) {
+            for(int localZ = 0; localZ < 16; localZ++) {
+                // Adding 8 is important to prevent runaway chunk loading
+                int x = localX + startX + 8; 
+                int z = localZ + startZ + 8;
+                int y = world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
+
+                Biome biome = biomeProvider.getBiome(mutablePos);
+                BlockPos blockPosDown = mutablePos.setPos(x, y, z).down();
+                
+                boolean canSetIce = false;
+                boolean canSetSnow = false;
+                
+                if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
+                    double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
+                    temp = temp - ((double)(y - 64) / 64.0) * 0.3;
+                    
+                    canSetIce = BiomeBeta.canSetIceBeta(world, blockPosDown, false, temp);
+                    canSetSnow = BiomeBeta.canSetSnowBeta(world, mutablePos, temp);
+                    
+                } else if (biome instanceof ModernBetaBiome) {
+                    ModernBetaBiome modernBetaBiome = (ModernBetaBiome)biome;
+                    double temp = (double)biome.getDefaultTemperature();
+                    
+                    canSetIce = modernBetaBiome.canSetIce(world, blockPosDown, false, temp);
+                    canSetSnow = modernBetaBiome.canSetSnow(world, mutablePos, temp);
+                    
+                } else {
+                    canSetIce = world.canBlockFreezeWater(blockPosDown);
+                    canSetSnow = world.canSnowAt(mutablePos, true);
+                    
+                }
+                
+                if (canSetIce) world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
+                if (canSetSnow) world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
+            }
+        }
     }
 }

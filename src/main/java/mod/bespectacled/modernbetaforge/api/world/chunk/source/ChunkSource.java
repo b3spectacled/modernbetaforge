@@ -1,82 +1,40 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
-
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
-import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
-import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
-import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.MapGenRavine;
-import net.minecraft.world.gen.feature.WorldGenDungeons;
-import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraft.world.gen.structure.MapGenMineshaft;
-import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
-import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
-import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class ChunkSource {
-    private static final int MAX_RENDER_DISTANCE_AREA = 1024;
-    
     protected static final int OCEAN_MIN_DEPTH = 4;
     protected static final int DEEP_OCEAN_MIN_DEPTH = 16;
     
+    protected final long seed;
     protected final ModernBetaGeneratorSettings settings;
-    protected final ModernBetaBiomeProvider biomeProvider;
-    
-    protected final World world;
     protected final Random random;
     
     protected final IBlockState defaultBlock;
@@ -87,14 +45,6 @@ public abstract class ChunkSource {
     
     protected final List<BlockSource> blockSources;
     
-    protected final ChunkCache<ComponentChunk> componentCache;
-    
-    private final Map<ResourceLocation, MapGenStructure> structureMap;
-    private final Map<ResourceLocation, MapGenBase> carverMap;
-
-    private final BiomeInjector biomeInjector;
-    private final ChunkCache<ChunkPrimerContainer> initialChunkCache;
-    
     private Optional<PerlinOctaveNoise> beachOctaveNoise;
     private Optional<PerlinOctaveNoise> surfaceOctaveNoise;
     private Optional<PerlinOctaveNoise> forestOctaveNoise;
@@ -102,20 +52,13 @@ public abstract class ChunkSource {
     /**
      * Constructs an abstract ChunkSource to hold basic underlying terrain generation information.
      * 
-     * @param world The world.
-     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
+     * @param seed The world seed.
      * @param settings The generator settings.
      */
-    public ChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
+    public ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        this.seed = seed;
         this.settings = settings;
-        this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
-        
-        this.world = world;
-        this.random = new Random(world.getSeed());
+        this.random = new Random(seed);
         
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
@@ -126,22 +69,8 @@ public abstract class ChunkSource {
         this.blockSources = ModernBetaRegistries.BLOCK_SOURCE
             .getValues()
             .stream()
-            .map(e -> e.apply(this.world, this, this.settings))
+            .map(e -> e.apply(this, this.settings))
             .collect(Collectors.toList());
-        
-        this.componentCache = new ChunkCache<>(
-            "structure_components",
-            MAX_RENDER_DISTANCE_AREA + MAX_RENDER_DISTANCE_AREA / 2,
-            ComponentChunk::new
-        );
-        
-        this.structureMap = this.initStructures(chunkGenerator, settings, world.getWorldInfo().isMapFeaturesEnabled());
-        this.carverMap = this.initCarvers(settings);
-
-        this.biomeInjector = new BiomeInjector(this, this.biomeProvider.getBiomeSource(), this.buildBiomeInjectorRules());
-        this.biomeProvider.setChunkSource(this);
-        
-        this.initialChunkCache = new ChunkCache<>("initial_chunk_primer", this::provideInitialChunkPrimerContainer);
         
         this.beachOctaveNoise = Optional.empty();
         this.surfaceOctaveNoise = Optional.empty();
@@ -155,404 +84,54 @@ public abstract class ChunkSource {
      * Create initial chunk given chunk coordinates.
      * Used to sample for biome injection and creation of initial biome map.
      * Called in {@link #provideInitialChunkPrimerContainer(int, int) provideInitialChunkPrimerContainer} and subsequently {@link #provideChunk(int, int) provideChunk}.
-     *
+     * 
+     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
-    public abstract void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Create processed chunk given chunk coordinates.
-     * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
+     * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
      * This does not need to be implemented and can be left empty, if you don't wish to do additional processing.
      * Called in {@link #provideChunk(int, int) provideChunk}.
-     *
+     * 
+     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
+     * @param structureComponents The list of structure components that at least partially occupy this chunk.
      * 
      */
-    public abstract void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents);
 
     /**
      * Build surface for given chunk primer and chunk coordinates.
      * Called in {@link #provideChunk(int, int) provideChunk}.
-     *
+     * 
+     * @param world The world object
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
-    public abstract void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Sample height at given x/z coordinate.
-     *
+     * 
+     * @param world The world object
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type {@link HeightmapChunk.Type}.
+     *
      * @return The y-coordinate of top block at x/z.
      */
-    public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
-    
-    /**
-     * Creates an entire chunk, with terrain, surfaces, caves, biomes, and structure placements generated.
-     * Called in {@link ModernBetaChunkGenerator#generateChunk(int, int) generateChunk}.
-     *
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * @return The completed chunk.
-     */
-    public Chunk provideChunk(int chunkX, int chunkZ) {
-        // Retrieve chunk primer from cache
-        ChunkPrimerContainer chunkContainer = this.initialChunkCache.get(chunkX, chunkZ);
-        ChunkPrimer chunkPrimer = chunkContainer.chunkPrimer;
-        Biome[] biomes = chunkContainer.biomes;
-        
-        if (!this.skipChunk(chunkX, chunkZ)) {
-            // Generate village feature placements here, for structure weight sampling
-            if (this.structureMap.containsKey(ModernBetaStructures.VILLAGE)) {
-                this.structureMap.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, chunkPrimer);
-            }
-            
-            boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
-            
-            // Generate processed chunk
-            this.provideProcessedChunk(chunkPrimer, chunkX, chunkZ);
-            
-            // Populate biome-specific surface
-            this.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
-            
-            // Post-process biome map, after surface generation
-            if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
-            }
-            
-            // Carve terrain
-            for (MapGenBase carver : this.carverMap.values()) {
-                if (!villageGenerated) {
-                    carver.generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-            }
-
-            // Generate map feature placements
-            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
-                if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
-                    structureEntry.getValue().generate(world, chunkX, chunkZ, chunkPrimer);
-                }
-            }
-        }
-        
-        // Generate final chunk
-        Chunk chunk = new Chunk(this.world, chunkPrimer, chunkX, chunkZ);
-        
-        // Set biome map in chunk
-        byte[] biomeArray = chunk.getBiomeArray();
-        for (int i = 0; i < biomeArray.length; ++i) {
-            biomeArray[i] = (byte)Biome.getIdForBiome(biomes[i]);
-        }
-        
-        chunk.generateSkylightMap();
-        return chunk;
-    }
-    
-    /**
-     * Populates the chunk with generated structures and biome feature decorations (i.e. trees, plants, lakes, etc.).
-     * Called in {@link ModernBetaChunkGenerator#populate(int, int) populate}.
-     * 
-     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for feature population.
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     */
-    public void populateChunk(IChunkGenerator chunkGenerator, int chunkX, int chunkZ) {
-        // Prune outer chunks for finite worlds
-        this.pruneChunk(chunkX, chunkZ);
-        
-        BlockFalling.fallInstantly = true;
-        
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
-        
-        ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
-        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        
-        boolean hasVillageGenerated = false;
-        
-        if (!this.skipChunk(chunkX, chunkZ)) {
-            Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
-            this.random.setSeed(this.world.getSeed());
-            long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
-            long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
-            this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
-
-            ForgeEventFactory.onChunkPopulate(true, chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
-            
-            // Actually generate map features here
-            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
-                if (structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
-                    hasVillageGenerated = structureEntry.getValue().generateStructure(this.world, this.random, chunkPos);
-                } else {
-                    structureEntry.getValue().generateStructure(this.world, this.random, chunkPos);
-                }
-            }
-            
-            // Reset seed for generation accuracy
-            this.random.setSeed(this.world.getSeed());
-            randomLong0 = (this.random.nextLong() / 2L) * 2L + 1L;
-            randomLong1 = (this.random.nextLong() / 2L) * 2L + 1L;
-            this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
-            
-            // Generate lakes, dungeons
-            
-            if (!hasVillageGenerated &&
-                this.settings.useWaterLakes && 
-                TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE)
-            ) {
-                if (random.nextInt(this.settings.waterLakeChance) == 0) { // Default: 4
-                    int x = startX + this.random.nextInt(16) + 8;
-                    int y = this.random.nextInt(this.settings.height);
-                    int z = startZ + this.random.nextInt(16) + 8;
-                    
-                    (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
-                }
-            }
-            
-            if (!hasVillageGenerated &&
-                this.settings.useLavaLakes &&
-                TerrainGen.populate(chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA)
-            ) {
-                if (random.nextInt(this.settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
-                    int x = startX + this.random.nextInt(16) + 8;
-                    int y = this.random.nextInt(this.random.nextInt(this.settings.height - 8) + 8);
-                    int z = startZ + this.random.nextInt(16) + 8;
-                    
-                    if (y < 64 || this.random.nextInt(10) == 0) {
-                        (new WorldGenLakes(Blocks.LAVA)).generate(this.world, this.random, mutablePos.setPos(x, y, z));
-                    }
-                }
-            }
-            
-            if (this.settings.useDungeons && 
-                TerrainGen.populate(chunkGenerator, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON)
-            ) {
-                for (int i = 0; i < this.settings.dungeonChance; i++) {
-                    int x = startX + this.random.nextInt(16) + 8;
-                    int y = this.random.nextInt(this.settings.height);
-                    int z = startZ + this.random.nextInt(16) + 8;
-                    
-                    new WorldGenDungeons().generate(this.world, this.random, mutablePos.setPos(x, y, z));
-                }
-            }
-            
-            // Generate biome decorations
-            biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
-            
-            // Generate animals
-            if (TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
-                WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
-            }
-        }
-        
-        // Get biome provider to check for climate sampler
-        ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)this.world.getBiomeProvider();
-        BiomeSource biomeSource = biomeProvider.getBiomeSource();
-
-        // Generate snow / ice
-        if (TerrainGen.populate(chunkGenerator, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
-            for(int localX = 0; localX < 16; localX++) {
-                for(int localZ = 0; localZ < 16; localZ++) {
-                    // Adding 8 is important to prevent runaway chunk loading
-                    int x = localX + startX + 8; 
-                    int z = localZ + startZ + 8;
-                    int y = this.world.getPrecipitationHeight(mutablePos.setPos(x, 0, z)).getY();
-
-                    Biome biome = this.biomeProvider.getBiome(mutablePos);
-                    BlockPos blockPosDown = mutablePos.setPos(x, y, z).down();
-                    
-                    boolean canSetIce = false;
-                    boolean canSetSnow = false;
-                    
-                    if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
-                        double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
-                        temp = temp - ((double)(y - 64) / 64.0) * 0.3;
-                        
-                        canSetIce = BiomeBeta.canSetIceBeta(this.world, blockPosDown, false, temp);
-                        canSetSnow = BiomeBeta.canSetSnowBeta(this.world, mutablePos, temp);
-                        
-                    } else if (biome instanceof ModernBetaBiome) {
-                        ModernBetaBiome modernBetaBiome = (ModernBetaBiome)biome;
-                        double temp = (double)biome.getDefaultTemperature();
-                        
-                        canSetIce = modernBetaBiome.canSetIce(this.world, blockPosDown, false, temp);
-                        canSetSnow = modernBetaBiome.canSetSnow(this.world, mutablePos, temp);
-                        
-                    } else {
-                        canSetIce = this.world.canBlockFreezeWater(blockPosDown);
-                        canSetSnow = this.world.canSnowAt(mutablePos, true);
-                        
-                    }
-                    
-                    if (canSetIce) this.world.setBlockState(blockPosDown, Blocks.ICE.getDefaultState(), 2);
-                    if (canSetSnow) this.world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
-                }
-            }
-        }
-        
-        ForgeEventFactory.onChunkPopulate(false, chunkGenerator, this.world, this.random, chunkX, chunkZ, false);
-        
-        BlockFalling.fallInstantly = false;
-    }
-    
-    /**
-     * Generates the Ocean Monument structure, in a given chunk.
-     * Called in {@link ModernBetaChunkGenerator#generateStructures(Chunk, int, int) generateStructures}.
-     * 
-     * @param chunk The world chunk.
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * @return Whether the ocean monument generated.
-     */
-    public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
-        if (this.skipChunk(chunkX, chunkZ)) {
-            return false;
-        }
-        
-        boolean generated = false;
-        
-        if (this.structureMap.containsKey(ModernBetaStructures.MONUMENT) && chunk.getInhabitedTime() < 3600L) {
-            generated |= this.structureMap
-                .get(ModernBetaStructures.MONUMENT)
-                .generateStructure(this.world, this.random, new ChunkPos(chunkX, chunkZ));
-        }
-        
-        return generated;
-    }
-    
-    /**
-     * Gets a list of possible mob spawns from the biome retrieved at a given position and creature type.
-     * Called in {@link ModernBetaChunkGenerator#getPossibleCreatures(EnumCreatureType, BlockPos) getPossibleCreatures}.
-     * 
-     * @param enumCreatureType The creature type, listed in {@link EnumCreatureType}
-     * @param blockPos The block position, used to retrieve the biome.
-     * @return List of possible mob spawns from the biome at the given position.
-     */
-    public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType enumCreatureType, BlockPos blockPos) {
-        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
-            return ImmutableList.of();
-        }
-        
-        Biome biome = this.world.getBiome(blockPos);
-        
-        if (enumCreatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.TEMPLE)) {
-            MapGenScatteredFeature feature = (MapGenScatteredFeature)this.structureMap.get(ModernBetaStructures.TEMPLE);
-            
-            if (feature.isSwampHut(blockPos)) {
-                return feature.getMonsters();
-            }
-        }
-        
-        if (enumCreatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.MONUMENT)) {
-            StructureOceanMonument feature = (StructureOceanMonument)this.structureMap.get(ModernBetaStructures.MONUMENT);
-            
-            if (feature.isPositionInStructure(this.world, blockPos)) {
-                return feature.getMonsters();
-            }
-        }
-        
-        List<Biome.SpawnListEntry> spawnEntries = new ArrayList<>(biome.getSpawnableList(enumCreatureType));
-        ModernBetaBiomeMobs.modifySpawnList(spawnEntries, enumCreatureType, biome, this.settings);
-        
-        return spawnEntries;
-    }
-    
-    /**
-     * Used to test if a given block position is in a structure.
-     * Called in {@link ModernBetaChunkGenerator#isInsideStructure(World, String, BlockPos) isInsideStructure}.
-     * 
-     * @param world The world object.
-     * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
-     * @param blockPos The block position used to test.
-     * @return Whether the block position overlaps a structure.
-     */
-    public boolean isInsideStructure(World world, String structureName, BlockPos blockPos) {
-        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
-            return false;
-        }
-
-        if (this.structureMap.isEmpty()) {
-            return false;
-        }
-        
-        ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
-        if (this.structureMap.containsKey(structureKey)) {
-            return this.structureMap.get(structureKey).isInsideStructure(blockPos);
-        }
-
-        return false;
-    }
-    
-    /**
-     * Finds the location of the nearest specified structure.
-     * Called in {@link ModernBetaChunkGenerator#getNearestStructurePos(World, String, BlockPos, boolean) getNearestStructurePos}.
-     * 
-     * @param world THe world object.
-     * @param structureName The structure name (i.e. "Village", "Stronghold", etc.).
-     * @param blockPos The initial block position.
-     * @param findUnexplored findUnexplored.
-     * @return The block position of the nearest specified structure.
-     */
-    public BlockPos getNearestStructurePos(World world, String structureName, BlockPos blockPos, boolean findUnexplored) {
-        if (this.skipChunk(blockPos.getX() >> 4, blockPos.getZ() >> 4)) {
-            return null;
-        }
-
-        if (this.structureMap.isEmpty()) {
-            return null;
-        }
-        
-        ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
-        if (this.structureMap.containsKey(structureKey)) {
-            return this.structureMap.get(structureKey).getNearestStructurePos(world, blockPos, findUnexplored);
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Called in {@link ModernBetaChunkGenerator#recreateStructures(Chunk, int, int) recreateStructures}.
-     * 
-     * @param chunk The chunk.
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     */
-    public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {
-        if (this.skipChunk(chunkX, chunkZ)) {
-            return;
-        }
-
-        if (this.structureMap.isEmpty()) {
-            return;
-        }
-
-        for (MapGenStructure structure : this.structureMap.values()) {
-            structure.generate(this.world, chunkX, chunkZ, null);
-        }
-    }
-
-    
-    /**
-     * Gets post-biome injection biome array for a given chunk.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * @return The biome array for the given chunk.
-     */
-    public Biome[] getBiomes(int chunkX, int chunkZ) {
-        return this.initialChunkCache.get(chunkX, chunkZ).biomes;
-    }
+    public abstract int getHeight(World world, int x, int z, HeightmapChunk.Type type);
 
     /**
      * Gets the chunk source sea level set in the chunk generator settings.
@@ -619,21 +198,71 @@ public abstract class ChunkSource {
     }
     
     /**
-     * Gets the associated world object.
+     * Gets the world seed.
      * 
-     * @return The world object.
+     * @return The world seed.
      */
-    public World getWorld() {
-        return this.world;
+    public long getSeed() {
+        return this.seed;
+    }
+
+    /**
+     * Indicate whether the chunk at the given coordinates should be skipped.
+     * This is called in several generation methods and used by {@link FiniteChunkSource}.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return Whether the chunk should be skipped.
+     */
+    public boolean skipChunk(int chunkX, int chunkZ) {
+        return false;
     }
     
     /**
-     * Gets the cache containing all nearby chunks with references to village components.
+     * Prunes the chuck at the given coordinates.
+     * This is used by {@link FiniteChunkSource}.
      * 
-     * @return The chunk cache for chunks containing village components.
+     * @param world The world object
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
      */
-    public ChunkCache<ComponentChunk> getComponentCache() {
-        return this.componentCache;
+    public void pruneChunk(World world, int chunkX, int chunkZ) { }
+    
+    /**
+     * Builds the ruleset used for biome injection.
+     * 
+     * @param biomeProvider The biome provider.
+     * @return The built biome injection rules.
+     */
+    public BiomeInjectionRules buildBiomeInjectorRules(ModernBetaBiomeProvider biomeProvider) {
+        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
+        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
+        
+        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
+        
+        Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
+            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH);
+        
+        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
+            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH);
+            
+        Predicate<BiomeInjectionContext> beachPredicate = context ->
+            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
+            
+        if (replaceBeaches && biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeProvider.getBiomeSource();
+            
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
+        }
+        
+        if (replaceOceans && biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeProvider.getBiomeSource();
+    
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+        }
+        
+        return builder.build();
     }
 
     /**
@@ -644,28 +273,7 @@ public abstract class ChunkSource {
     protected void setCloudHeight(int cloudHeight) {
         ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
     }
-    
-    /**
-     * Indicate whether the chunk at the given coordinates should be skipped.
-     * This is called in several generation methods and used by {@link FiniteChunkSource}.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * @return Whether the chunk should be skipped.
-     */
-    protected boolean skipChunk(int chunkX, int chunkZ) {
-        return false;
-    }
-    
-    /**
-     * Prunes the chuck at the given coordinates.
-     * This is used by {@link FiniteChunkSource}.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     */
-    protected void pruneChunk(int chunkX, int chunkZ) { }
-    
+
     /**
      * Sets the default PerlinOctaveNoise sampler used for beach generation for the default surface generator in {@link ModernBetaBiome}.
      * 
@@ -694,42 +302,6 @@ public abstract class ChunkSource {
      */
     protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
         this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
-    }
-
-    /**
-     * Builds the ruleset used for biome injection.
-     * 
-     * @return The built biome injection rules.
-     */
-    protected BiomeInjectionRules buildBiomeInjectorRules() {
-        boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
-        boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
-        
-        BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
-        
-        Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH);
-        
-        Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH);
-            
-        Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
-            
-        if (replaceBeaches && this.biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)this.biomeProvider.getBiomeSource();
-            
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
-        }
-        
-        if (replaceOceans && this.biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)this.biomeProvider.getBiomeSource();
-
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
-        }
-        
-        return builder.build();
     }
 
     /**
@@ -777,142 +349,5 @@ public abstract class ChunkSource {
      */
     protected boolean isFluidBlock(IBlockState blockState) {
         return blockState.getBlock() == this.defaultFluid.getBlock();
-    }
-    
-    /**
-     * Initializes structures and if enabled, adds them to a map of available structures to generate.
-     * 
-     * @param chunkGenerator The chunk generator.
-     * @param settings The generator settings.
-     * @param mapFeaturesEnabled Whether structure are enabled.
-     * @return A map containing enabled structures.
-     */
-    private Map<ResourceLocation, MapGenStructure> initStructures(
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings,
-        boolean mapFeaturesEnabled
-    ) {
-        Map<ResourceLocation, MapGenStructure> structureMap = new LinkedHashMap<>();
-        
-        if (mapFeaturesEnabled) {
-            if (settings.useVillages) {
-                structureMap.put(
-                    ModernBetaStructures.VILLAGE,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenVillage(), EventType.VILLAGE)
-                );
-            }
-            
-            if (settings.useStrongholds) {
-                structureMap.put(
-                    ModernBetaStructures.STRONGHOLD,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenStronghold(), EventType.STRONGHOLD)
-                );
-            }
-            
-            if (settings.useMineShafts) {
-                structureMap.put(
-                    ModernBetaStructures.MINESHAFT,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT)
-                );
-            }
-            
-            if (settings.useMonuments) {
-                structureMap.put(
-                    ModernBetaStructures.MONUMENT,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new StructureOceanMonument(), EventType.OCEAN_MONUMENT)
-                );
-            }
-            
-            if (settings.useMansions) {
-                structureMap.put(
-                    ModernBetaStructures.MANSION,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), EventType.WOODLAND_MANSION)
-                );
-            }
-            
-            if (settings.useTemples) {
-                structureMap.put(
-                    ModernBetaStructures.TEMPLE,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE)
-                );
-            }
-        }
-        
-        return structureMap;
-    }
-    
-    /**
-     * Initializes carvers and if enabled, adds them to a map of available carvers to generate.
-     * 
-     * @param settings The generator settings.
-     * @return A map containing enabled carvers.
-     */
-    private Map<ResourceLocation, MapGenBase> initCarvers(ModernBetaGeneratorSettings settings) {
-        Map<ResourceLocation, MapGenBase> carverMap = new LinkedHashMap<>();
-        
-        if (settings.useCaves) {
-            carverMap.put(
-                new ResourceLocation("cave"),
-                TerrainGen.getModdedMapGen(
-                    ModernBetaRegistries.CAVE_CARVER
-                        .get(new ResourceLocation(settings.caveCarver))
-                        .apply(this.world, this, settings),
-                    InitMapGenEvent.EventType.CAVE
-                )
-            );
-        }
-        
-        if (settings.useRavines) {
-            carverMap.put(
-                new ResourceLocation("ravine"),
-                TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE)
-            );
-        }
-        
-        return carverMap;
-    }
-    
-    /**
-     * Generates the initial chunk and modified biome array after biome injection.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * @return A container with the base chunk primer and modified biome array.
-     */
-    private ChunkPrimerContainer provideInitialChunkPrimerContainer(int chunkX, int chunkZ) {
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
-        
-        ChunkPrimer chunkPrimer = new ChunkPrimer();
-        Biome[] biomes = new Biome[256];
-        
-        // Generate base terrain
-        this.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
-        
-        // Generate base biome map
-        this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
-        
-        // Post-process biome map, before surface generation
-        if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
-        }
-        
-        return new ChunkPrimerContainer(chunkPrimer, biomes);
-    }
-    
-    private static class ChunkPrimerContainer {
-        public final ChunkPrimer chunkPrimer;
-        public final Biome[] biomes;
-        
-        /**
-         * Constructs a container that holds a chunk primer and biome array.
-         * 
-         * @param chunkPrimer
-         * @param biomes
-         */
-        public ChunkPrimerContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
-            this.chunkPrimer = chunkPrimer;
-            this.biomes = biomes;
-        }
     }
 }

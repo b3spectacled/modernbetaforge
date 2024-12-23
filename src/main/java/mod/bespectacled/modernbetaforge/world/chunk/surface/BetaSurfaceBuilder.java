@@ -13,12 +13,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BetaSurfaceBuilder extends SurfaceBuilder {
-    public BetaSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(world, chunkSource, settings);
+    public BetaSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        super(chunkSource, settings);
     }
 
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
         
         int startX = chunkX * 16;
@@ -61,7 +61,7 @@ public class BetaSurfaceBuilder extends SurfaceBuilder {
                 IBlockState fillerBlock = biome.fillerBlock;
                 
                 // Skip if used custom surface generation
-                if (this.useCustomSurfaceBuilder(biome, chunkPrimer, random, x, z, false)) {
+                if (this.useCustomSurfaceBuilder(world, biome, chunkPrimer, random, x, z, false)) {
                     continue;
                 }
 

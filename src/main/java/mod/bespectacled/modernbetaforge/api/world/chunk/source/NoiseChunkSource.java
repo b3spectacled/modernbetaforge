@@ -19,7 +19,6 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.DensityChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -55,12 +54,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
      * @param settings The generator settings.
      */
-    public NoiseChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
-        super(world, chunkGenerator, settings);
+    public NoiseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
         
         NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(new ResourceLocation(settings.chunkSource));
         
@@ -78,40 +73,37 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.noiseSettings = noiseSettings;
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
             .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
-            .apply(world, this, settings);
+            .apply(this, settings);
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
+     * Inherited from {@link ChunkSource#provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk}.
      * This does not generate terrain, only samples the initial densities.
-     *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
     @Override
-    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.densityCache.get(chunkX, chunkZ);
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int) provideProcessedChunk}.
+     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int, ChunkCache<ComponentChunk>) provideProcessedChunk}.
      * This actually generates the terrain, after collection of village component placements.
-     *
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * 
      */
     @Override
-    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.generateTerrain(chunkPrimer, chunkX, chunkZ);
+    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
+        this.generateTerrain(world, chunkPrimer, chunkX, chunkZ, structureComponents);
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideSurface(Biome[], ChunkPrimer, int, int) provideSurface}.
-     *
+     * Inherited from {@link ChunkSource#provideSurface(World, Biome[], ChunkPrimer, int, int) provideSurface}.
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
@@ -119,22 +111,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      */
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.surfaceBuilder.provideSurface(world, biomes, chunkPrimer, chunkX, chunkZ);
     }
     
     /**
-     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Initially generates heightmap for entire chunk, if chunk containing x/z coordinates has never been sampled.
-     *
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type {@link HeightmapChunk.Type}.
+     *
      * @return The y-coordinate of top block at x/z.
      * 
      */
     @Override
-    public int getHeight(int x, int z, HeightmapChunk.Type type) {
+    public int getHeight(World world, int x, int z, HeightmapChunk.Type type) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
@@ -176,27 +168,25 @@ public abstract class NoiseChunkSource extends ChunkSource {
 
     /**
      * Generates the base terrain for a given chunk.
-     * 
+     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    private void generateTerrain(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
-        List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
-        StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
-
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
         
+        StructureWeightSampler weightSampler = new StructureWeightSampler(structureComponents);
         DensityChunk densityChunk = this.densityCache.get(chunkX, chunkZ);
         
         // Build block source rules
         BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
-            .add(this.getInitialBlockSource(densityChunk, weightSampler))
+            .add(this.getInitialBlockSource(world, densityChunk, weightSampler))
             .add(this.blockSources)
             .build();
         
@@ -211,15 +201,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 }
             }
         }
-
-        // Remove chunk after processing to make room for other chunks;
-        // will lead to some chunks not getting processed if not cleared.
-        this.componentCache.remove(chunkX, chunkZ);
     }
     
     /**
      * Generates a heightmap for the chunk containing the given x/z coordinates
-     * and returns to {@link #getHeight(int, int, net.minecraft.world.Heightmap.Type) getHeight} 
+     * and returns to {@link #getHeight(World, int, int, net.minecraft.world.Heightmap.Type) getHeight} 
      * to cache and return the height.
      * 
      * @param chunkX x-coordinate in chunk coordinates to sample all y-values for.
@@ -316,11 +302,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Creates block source to sample BlockState at block coordinates given base noise provider.
      * 
+     * @param world The world object
      * @param noiseSource Primary noise provider to sample density noise.
      * @param blockSource Default block source
+     * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
-    private BlockSource getInitialBlockSource(DensityChunk densityChunk, StructureWeightSampler weightSampler) {
+    private BlockSource getInitialBlockSource(World world, DensityChunk densityChunk, StructureWeightSampler weightSampler) {
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         return (x, y, z) -> {
@@ -330,7 +318,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             density = MathHelper.clamp(density / 200.0, -1.0, 1.0);
             density = density / 2.0 - density * density * density / 24.0;
             
-            density += weightSampler.sample(mutablePos.setPos(x, y, z), this);
+            density += weightSampler.sample(world, this, mutablePos.setPos(x, y, z));
             
             if (density > 0.0) {
                 blockState = null;
@@ -357,7 +345,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         // Create noise samplers
         List<NoiseSampler> noiseSamplers = ModernBetaRegistries.NOISE_SAMPLER.getValues()
             .stream()
-            .map(entry -> entry.apply(this.world, this, this.settings))
+            .map(entry -> entry.apply(this, this.settings))
             .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
 
         // Create noise sources and sample.
@@ -365,7 +353,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSourceMap.put(
             entry.getKey(),
             new NoiseSource(
-                entry.getValue().apply(this.world, this, this.settings),
+                entry.getValue().apply(this, this.settings),
                 this.noiseSizeX,
                 this.noiseSizeY,
                 this.noiseSizeZ

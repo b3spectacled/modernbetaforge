@@ -3,8 +3,8 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.World;
@@ -21,12 +21,8 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     
     private final SurfaceBuilder surfaceBuilder;
     
-    public SkylandsChunkSource(
-        World world,
-        ModernBetaChunkGenerator chunkGenerator,
-        ModernBetaGeneratorSettings settings
-    ) {
-        super(world, chunkGenerator, settings);
+    public SkylandsChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+        super(seed, settings);
 
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
@@ -41,7 +37,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
         
-        this.surfaceBuilder = new SkylandsSurfaceBuilder(this.world, this, settings);
+        this.surfaceBuilder = new SkylandsSurfaceBuilder(this, settings);
         
         this.setCloudHeight(8);
     }
@@ -52,12 +48,12 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        this.surfaceBuilder.provideSurface(biomes, chunkPrimer, chunkX, chunkZ);
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+        this.surfaceBuilder.provideSurface(world, biomes, chunkPrimer, chunkX, chunkZ);
     }
     
     @Override
-    protected BiomeInjectionRules buildBiomeInjectorRules() {
+    public BiomeInjectionRules buildBiomeInjectorRules(ModernBetaBiomeProvider biomeProvider) {
         return new BiomeInjectionRules.Builder().build();
     }
 

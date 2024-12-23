@@ -13,12 +13,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SkylandsSurfaceBuilder extends SurfaceBuilder {
-    public SkylandsSurfaceBuilder(World world, ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(world, chunkSource, settings);
+    public SkylandsSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        super(chunkSource, settings);
     }
 
     @Override
-    public void provideSurface(Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         double scale = 0.03125;
 
         Random random = this.createSurfaceRandom(chunkX, chunkZ);

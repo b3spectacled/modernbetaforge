@@ -14,8 +14,19 @@ public class NbtTags {
     public static final String CAVE_COUNT = "caveCount";
     public static final String CAVE_CHANCE = "caveChance";
     
-    public static final String USE_VILLAGE_VARIANTS = "useVillageVariants";
     public static final String USE_SANDSTONE = "useSandstone";
+    public static final String USE_STRONGHOLDS = "useStrongholds";
+    public static final String USE_VILLAGES = "useVillages";
+    public static final String USE_VILLAGE_VARIANTS = "useVillageVariants";
+    public static final String USE_TEMPLES = "useTemples";
+    public static final String USE_MONUMENTS = "useMonuments";
+    public static final String USE_MANSIONS = "useMansions";
+    public static final String USE_DUNGEONS = "useDungeons";
+    public static final String DUNGEON_CHANCE = "dungeonChance";
+    public static final String USE_WATER_LAKES = "useWaterLakes";
+    public static final String WATER_LAKE_CHANCE = "waterLakeChance";
+    public static final String USE_LAVA_LAKES = "useLavaLakes";
+    public static final String LAVA_LAKE_CHANCE = "lavaLakeChance";
     
     public static final String USE_OLD_NETHER = "useOldNether";
     public static final String USE_NETHER_CAVES = "useNetherCaves";
@@ -73,6 +84,7 @@ public class NbtTags {
     public static final String SPAWN_AMBIENT_MOBS = "spawnAmbientMobs";
     public static final String SPAWN_WOLVES = "spawnWolves";
     
+    public static final String SEA_LEVEL = "seaLevel";
     public static final String HEIGHT = "height";
     
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";

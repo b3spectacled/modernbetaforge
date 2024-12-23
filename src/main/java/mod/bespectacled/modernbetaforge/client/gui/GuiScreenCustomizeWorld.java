@@ -18,6 +18,8 @@ import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
+import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
@@ -713,6 +715,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.pageList.scrollBy(curScroll);
             this.updatePageControls();
         }
+        
+        // Set default enabled for certain options
+        this.setGuiEnabled();
     }
     
     @Override
@@ -1109,6 +1114,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
 
+        this.setGuiEnabled();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
         this.playSound();
     }
@@ -1430,7 +1436,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 }
             }
         }
-        
+
+        this.setGuiEnabled();
         this.setSettingsModified(!this.settings.equals(this.defaultSettings));
         this.playSound();
     }
@@ -1524,6 +1531,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseButtonComponents);
 
                     this.randomClicked = false;
+                    this.setGuiEnabled();
                     this.setSettingsModified(!this.settings.equals(this.defaultSettings));
                 }
                              
@@ -1951,6 +1959,33 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private Set<Gui> getBiomeButtonComponents() {
         return GuiIdentifiers.getBiomeGuiIds().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
+    }
+    
+    private void setGuiEnabled() {
+        // Set default enabled for certain options
+        if (this.pageList != null) {
+            for (GuiPredicate predicate : ModernBetaClientRegistries.GUI_PREDICATE.getValues()) {
+                int guiId = predicate.getId();
+                boolean enabled = predicate.test(this.settings);
+                
+                this.setButtonEnabled(guiId, enabled);
+                this.setFieldEnabled(guiId, enabled);
+            }
+        }
+    }
+    
+    private void setButtonEnabled(int entry, boolean enabled) {
+        Gui gui = this.pageList.getComponent(entry);
+        if (gui != null && gui instanceof GuiButton) {
+            ((GuiButton)gui).enabled = enabled;
+        }
+    }
+
+    private void setFieldEnabled(int entry, boolean enabled) {
+        Gui gui = this.pageList.getComponent(entry);
+        if (gui != null && gui instanceof GuiTextField) {
+            ((GuiTextField)gui).setEnabled(enabled);
+        }
     }
     
     private static String getFormattedRegistryString(ResourceLocation registryKey) {

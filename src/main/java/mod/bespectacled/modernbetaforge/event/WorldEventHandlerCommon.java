@@ -40,7 +40,7 @@ public class WorldEventHandlerCommon {
                 ModernBetaGeneratorSettings generatorSettings = chunkSource.getGeneratorSettings();
                 
                 BlockPos newSpawnPos = useOldSpawns ?
-                    chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
+                    chunkSource.getSpawnLocator().locateSpawn(world, currentSpawnPos, chunkSource, biomeSource) :
                     null;
                 
                 if (newSpawnPos != null) {
