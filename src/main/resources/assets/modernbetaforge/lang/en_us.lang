@@ -162,7 +162,14 @@ createWorld.customize.custom.biomes.title=Customize Biome
 createWorld.customize.biomes.select=Use Biome
 createWorld.customize.biomes.reset=Reset
 createWorld.customize.biomes.search=Search
-createWorld.customize.biomes.search.info=Search biomes by name or registry name..
+createWorld.customize.biomes.search.info=Search by name or registry name..
+
+# Registry Customization
+createWorld.customize.custom.registry.title=Customize
+createWorld.customize.registry.select=Use
+createWorld.customize.registry.reset=Reset
+createWorld.customize.registry.search=Search
+createWorld.customize.registry.search.info=Search by name or registry name..
 
 ## World Customization Presets
 createWorld.customize.custom.preset.modernbetaforge.classic_beta=Classic Beta

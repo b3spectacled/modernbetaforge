@@ -78,8 +78,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public void initGui() {
         this.buttonList.clear();
         
-        this.title = I18n.format("createWorld.customize.custom.biomes.title");
-        this.searchText = I18n.format("createWorld.customize.biomes.search.info");
+        String formattedLangName = I18n.format(PREFIX + "." + this.langName);
+        
+        this.title = String.format(
+            "%s %s",
+            I18n.format("createWorld.customize.custom.registry.title"),
+            formattedLangName
+        );
+        this.searchText = I18n.format("createWorld.customize.registry.search.info");
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialEntry);
@@ -88,10 +94,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
         this.searchBar.setText(this.searchEntry);
         
-        this.select = this.addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.biomes.select")));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.biomes.search")));
-        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.biomes.reset")));
+        this.select = this.addButton(new GuiButton(0, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + formattedLangName));
+        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
+        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
         
         this.updateButtonValidity();
     }
