@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -51,6 +52,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         );
         
         this.chunkGenerator = null;
+        
+        DebugUtil.resetDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
     }
 
     @Override
@@ -154,7 +157,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return true;
     }
     
-    public Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {
+    public Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {        
+        DebugUtil.startDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
         if (biomes == null || biomes.length != sizeX * sizeZ) {
             biomes = new Biome[sizeX * sizeZ];
         }
@@ -168,7 +172,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                 biomes[localX + localZ * 16] = this.biomeSource.getBiome(x, z);
             }
         }
-        
+
+        DebugUtil.endDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
         return biomes;
     }
     

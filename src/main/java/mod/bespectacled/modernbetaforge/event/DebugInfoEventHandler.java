@@ -143,6 +143,9 @@ public class DebugInfoEventHandler {
 
                 String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
                 event.getLeft().add(baseBiomeText);
+                event.getLeft().add("");
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GET_BASE_BIOMES));
+                event.getLeft().add("[Modern Beta] " + DebugUtil.getIterations(DebugUtil.SECTION_GET_BASE_BIOMES));
             }
             
             if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {

@@ -189,7 +189,6 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_INFDEV_WALLS, GuiPredicates.USE_INFDEV_WALLS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_INFDEV_PYRAMIDS, GuiPredicates.USE_INFDEV_PYRAMIDS_TEST);
         
-        /*
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_TALL_GRASS, GuiPredicates.USE_TALL_GRASS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_NEW_FLOWERS, GuiPredicates.USE_NEW_FLOWERS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_LILY_PADS, GuiPredicates.USE_LILY_PADS_TEST);
@@ -201,9 +200,50 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_SWAMP_TREES, GuiPredicates.USE_SWAMP_TREES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_JUNGLE_TREES, GuiPredicates.USE_JUNGLE_TREES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_ACACIA_TREES, GuiPredicates.USE_ACACIA_TREES_TEST);
-        */
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.SPAWN_NEW_MONSTER_MOBS, GuiPredicates.SPAWN_NEW_MONSTER_MOBS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.SPAWN_NEW_CREATURE_MOBS, GuiPredicates.SPAWN_NEW_CREATURE_MOBS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.SPAWN_WATER_MOBS, GuiPredicates.SPAWN_WATER_MOBS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.SPAWN_AMBIENT_MOBS, GuiPredicates.SPAWN_AMBIENT_MOBS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.SPAWN_WOLVES, GuiPredicates.SPAWN_WOLVES_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_MODDED_BIOMES, GuiPredicates.USE_MODDED_BIOMES_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.CLAY_SIZE, GuiPredicates.CLAY_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.CLAY_COUNT, GuiPredicates.CLAY_COUNT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.CLAY_MIN_HEIGHT, GuiPredicates.CLAY_MIN_HEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.CLAY_MAX_HEIGHT, GuiPredicates.CLAY_MAX_HEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.EMERALD_SIZE, GuiPredicates.EMERALD_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.EMERALD_COUNT, GuiPredicates.EMERALD_COUNT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.EMERALD_MIN_HEIGHT, GuiPredicates.EMERALD_MIN_HEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.EMERALD_MAX_HEIGHT, GuiPredicates.EMERALD_MAX_HEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.QUARTZ_SIZE, GuiPredicates.QUARTZ_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.QUARTZ_COUNT, GuiPredicates.QUARTZ_COUNT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.MAGMA_SIZE, GuiPredicates.MAGMA_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.MAGMA_COUNT, GuiPredicates.MAGMA_COUNT_TEST);
+
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.COORDINATE_SCALE, GuiPredicates.COORDINATE_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.HEIGHT_SCALE, GuiPredicates.HEIGHT_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.LOWER_LIMIT_SCALE, GuiPredicates.LOWER_LIMIT_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.UPPER_LIMIT_SCALE, GuiPredicates.UPPER_LIMIT_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.DEPTH_NOISE_SCALE_X, GuiPredicates.DEPTH_NOISE_SCALE_X_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.DEPTH_NOISE_SCALE_Z, GuiPredicates.DEPTH_NOISE_SCALE_Z_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.MAIN_NOISE_SCALE_X, GuiPredicates.MAIN_NOISE_SCALE_X_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.MAIN_NOISE_SCALE_Y, GuiPredicates.MAIN_NOISE_SCALE_Y_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.MAIN_NOISE_SCALE_Z, GuiPredicates.MAIN_NOISE_SCALE_Z_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BASE_SIZE, GuiPredicates.BASE_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.STRETCH_Y, GuiPredicates.STRETCH_Y_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.HEIGHT, GuiPredicates.HEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.TEMP_NOISE_SCALE, GuiPredicates.TEMP_NOISE_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.RAIN_NOISE_SCALE, GuiPredicates.RAIN_NOISE_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.DETAIL_NOISE_SCALE, GuiPredicates.DETAIL_NOISE_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BIOME_DEPTH_WEIGHT, GuiPredicates.BIOME_DEPTH_WEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BIOME_DEPTH_OFFSET, GuiPredicates.BIOME_DEPTH_OFFSET_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BIOME_SCALE_WEIGHT, GuiPredicates.BIOME_SCALE_WEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BIOME_SCALE_OFFSET, GuiPredicates.BIOME_SCALE_OFFSET_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BIOME_SIZE, GuiPredicates.BIOME_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.RIVER_SIZE, GuiPredicates.RIVER_SIZE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.USE_BIOME_DEPTH_SCALE, GuiPredicates.USE_BIOME_DEPTH_SCALE_TEST);
         
-        
-        
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BASE_BIOME, GuiPredicates.BASE_BIOME_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.OCEAN_BIOME, GuiPredicates.OCEAN_BIOME_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicates.BEACH_BIOME, GuiPredicates.BEACH_BIOME_TEST);
     }
 }

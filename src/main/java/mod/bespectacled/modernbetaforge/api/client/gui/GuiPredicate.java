@@ -6,18 +6,18 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class GuiPredicate {
-    private final int guiId;
     private Predicate<ModernBetaGeneratorSettings.Factory> predicate;
+    private final int[] guiIds;
     
     /**
      * Constructs a new GuiPredicate with an associated GUI integer id and its predicate consuming a settings Factory.
      * 
-     * @param guiIdentifier The integer id that is associate the GUI button, can be found in {@link GuiIdentifiers}.
      * @param predicate The predicate used to test if the GUI button associated with the id should be enabled.
+     * @param guiIds A list of integer ids that is associate the GUI buttons, can be found in {@link GuiIdentifiers}.
      */
-    public GuiPredicate(int guiIdentifier, Predicate<ModernBetaGeneratorSettings.Factory> predicate) {
-        this.guiId = guiIdentifier;
+    public GuiPredicate(Predicate<ModernBetaGeneratorSettings.Factory> predicate, int... guiIds) {
         this.predicate = predicate;
+        this.guiIds = guiIds;
     }
     
     /**
@@ -59,7 +59,7 @@ public class GuiPredicate {
      * 
      * @return An integer denoting the GUI button's id.
      */
-    public int getId() {
-        return this.guiId;
+    public int[] getIds() {
+        return this.guiIds;
     }
 }

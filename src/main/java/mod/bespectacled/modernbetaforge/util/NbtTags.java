@@ -10,11 +10,14 @@ public class NbtTags {
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";
     
+    public static final String USE_CAVES = "useCaves";
     public static final String CAVE_HEIGHT = "caveHeight";
     public static final String CAVE_COUNT = "caveCount";
     public static final String CAVE_CHANCE = "caveChance";
+    public static final String USE_RAVINES = "useRavines";
     
     public static final String USE_SANDSTONE = "useSandstone";
+    public static final String USE_MINESHAFTS = "useMineShafts";
     public static final String USE_STRONGHOLDS = "useStrongholds";
     public static final String USE_VILLAGES = "useVillages";
     public static final String USE_VILLAGE_VARIANTS = "useVillageVariants";
@@ -27,6 +30,7 @@ public class NbtTags {
     public static final String WATER_LAKE_CHANCE = "waterLakeChance";
     public static final String USE_LAVA_LAKES = "useLavaLakes";
     public static final String LAVA_LAKE_CHANCE = "lavaLakeChance";
+    public static final String USE_LAVA_OCEANS = "useLavaOceans";
     
     public static final String USE_OLD_NETHER = "useOldNether";
     public static final String USE_NETHER_CAVES = "useNetherCaves";
@@ -84,12 +88,28 @@ public class NbtTags {
     public static final String SPAWN_AMBIENT_MOBS = "spawnAmbientMobs";
     public static final String SPAWN_WOLVES = "spawnWolves";
     
+    public static final String COORDINATE_SCALE = "coordinateScale";
+    public static final String HEIGHT_SCALE = "heightScale";
+    public static final String LOWER_LIMIT_SCALE = "lowerLimitScale";
+    public static final String UPPER_LIMIT_SCALE = "upperLimitScale";
+    public static final String DEPTH_NOISE_SCALE_X = "depthNoiseScaleX";
+    public static final String DEPTH_NOISE_SCALE_Z = "depthNoiseScaleZ";
+    public static final String MAIN_NOISE_SCALE_X = "mainNoiseScaleX";
+    public static final String MAIN_NOISE_SCALE_Y = "mainNoiseScaleY";
+    public static final String MAIN_NOISE_SCALE_Z = "mainNoiseScaleZ";
+    public static final String BASE_SIZE = "baseSize";
+    public static final String STRETCH_Y = "stretchY";
     public static final String SEA_LEVEL = "seaLevel";
     public static final String HEIGHT = "height";
     
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
+    
+    public static final String BIOME_DEPTH_WEIGHT = "biomeDepthWeight";
+    public static final String BIOME_DEPTH_OFFSET = "biomeDepthOffset";
+    public static final String BIOME_SCALE_WEIGHT = "biomeScaleWeight";
+    public static final String BIOME_SCALE_OFFSET = "biomeScaleOffset";
     
     public static final String DESERT_BIOME_BASE = "desertBiomeBase";
     public static final String DESERT_BIOME_OCEAN = "desertBiomeOcean";

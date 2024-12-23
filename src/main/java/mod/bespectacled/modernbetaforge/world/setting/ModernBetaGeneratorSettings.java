@@ -1459,17 +1459,17 @@ public class ModernBetaGeneratorSettings {
                 factory.replaceOceanBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
                 factory.replaceBeachBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
                 
-                factory.coordinateScale = JsonUtils.getFloat(jsonObject, "coordinateScale", factory.coordinateScale);
-                factory.heightScale = JsonUtils.getFloat(jsonObject, "heightScale", factory.heightScale);
-                factory.lowerLimitScale = JsonUtils.getFloat(jsonObject, "lowerLimitScale", factory.lowerLimitScale);
-                factory.upperLimitScale = JsonUtils.getFloat(jsonObject, "upperLimitScale", factory.upperLimitScale);
-                factory.depthNoiseScaleX = JsonUtils.getFloat(jsonObject, "depthNoiseScaleX", factory.depthNoiseScaleX);
-                factory.depthNoiseScaleZ = JsonUtils.getFloat(jsonObject, "depthNoiseScaleZ", factory.depthNoiseScaleZ);
-                factory.mainNoiseScaleX = JsonUtils.getFloat(jsonObject, "mainNoiseScaleX", factory.mainNoiseScaleX);
-                factory.mainNoiseScaleY = JsonUtils.getFloat(jsonObject, "mainNoiseScaleY", factory.mainNoiseScaleY);
-                factory.mainNoiseScaleZ = JsonUtils.getFloat(jsonObject, "mainNoiseScaleZ", factory.mainNoiseScaleZ);
-                factory.baseSize = JsonUtils.getFloat(jsonObject, "baseSize", factory.baseSize);
-                factory.stretchY = JsonUtils.getFloat(jsonObject, "stretchY", factory.stretchY);
+                factory.coordinateScale = JsonUtils.getFloat(jsonObject, NbtTags.COORDINATE_SCALE, factory.coordinateScale);
+                factory.heightScale = JsonUtils.getFloat(jsonObject, NbtTags.HEIGHT_SCALE, factory.heightScale);
+                factory.lowerLimitScale = JsonUtils.getFloat(jsonObject, NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
+                factory.upperLimitScale = JsonUtils.getFloat(jsonObject, NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
+                factory.depthNoiseScaleX = JsonUtils.getFloat(jsonObject, NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
+                factory.depthNoiseScaleZ = JsonUtils.getFloat(jsonObject, NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
+                factory.mainNoiseScaleX = JsonUtils.getFloat(jsonObject, NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);
+                factory.mainNoiseScaleY = JsonUtils.getFloat(jsonObject, NbtTags.MAIN_NOISE_SCALE_Y, factory.mainNoiseScaleY);
+                factory.mainNoiseScaleZ = JsonUtils.getFloat(jsonObject, NbtTags.MAIN_NOISE_SCALE_Z, factory.mainNoiseScaleZ);
+                factory.baseSize = JsonUtils.getFloat(jsonObject, NbtTags.BASE_SIZE, factory.baseSize);
+                factory.stretchY = JsonUtils.getFloat(jsonObject, NbtTags.STRETCH_Y, factory.stretchY);
                 factory.seaLevel = JsonUtils.getInt(jsonObject, NbtTags.SEA_LEVEL, factory.seaLevel);
                 factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
 
@@ -1477,15 +1477,15 @@ public class ModernBetaGeneratorSettings {
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 
-                factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, "biomeDepthWeight", factory.biomeDepthWeight);
-                factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, "biomeDepthOffset", factory.biomeDepthOffset);
-                factory.biomeScaleWeight = JsonUtils.getFloat(jsonObject, "biomeScaleWeight", factory.biomeScaleWeight);
-                factory.biomeScaleOffset = JsonUtils.getFloat(jsonObject, "biomeScaleOffset", factory.biomeScaleOffset);
+                factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
+                factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
+                factory.biomeScaleWeight = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
+                factory.biomeScaleOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
                 factory.useBiomeDepthScale = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
                 factory.biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.biomeSize);
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 
-                factory.useCaves = JsonUtils.getBoolean(jsonObject, "useCaves", factory.useCaves);
+                factory.useCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CAVES, factory.useCaves);
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
                 factory.caveCount = JsonUtils.getInt(jsonObject, NbtTags.CAVE_COUNT, factory.caveCount);
                 factory.caveChance = JsonUtils.getInt(jsonObject, NbtTags.CAVE_CHANCE, factory.caveChance);
@@ -1495,17 +1495,17 @@ public class ModernBetaGeneratorSettings {
                 factory.useStrongholds = JsonUtils.getBoolean(jsonObject, NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
                 factory.useVillages = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGES, factory.useVillages);
                 factory.useVillageVariants = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
-                factory.useMineShafts = JsonUtils.getBoolean(jsonObject, "useMineShafts", factory.useMineShafts);
+                factory.useMineShafts = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MINESHAFTS, factory.useMineShafts);
                 factory.useTemples = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TEMPLES, factory.useTemples);
                 factory.useMonuments = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MONUMENTS, factory.useMonuments);
                 factory.useMansions = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MANSIONS, factory.useMansions);
-                factory.useRavines = JsonUtils.getBoolean(jsonObject, "useRavines", factory.useRavines);
+                factory.useRavines = JsonUtils.getBoolean(jsonObject, NbtTags.USE_RAVINES, factory.useRavines);
                 
                 factory.useWaterLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
                 factory.waterLakeChance = JsonUtils.getInt(jsonObject, NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
                 factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
                 factory.lavaLakeChance = JsonUtils.getInt(jsonObject, NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-                factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, "useLavaOceans", factory.useLavaOceans);
+                factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_OCEANS, factory.useLavaOceans);
                 
                 factory.useSandstone = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SANDSTONE, factory.useSandstone);
                 
@@ -1688,17 +1688,17 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
             
-            jsonObject.addProperty("coordinateScale", factory.coordinateScale);
-            jsonObject.addProperty("heightScale", factory.heightScale);
-            jsonObject.addProperty("lowerLimitScale", factory.lowerLimitScale);
-            jsonObject.addProperty("upperLimitScale", factory.upperLimitScale);
-            jsonObject.addProperty("depthNoiseScaleX", factory.depthNoiseScaleX);
-            jsonObject.addProperty("depthNoiseScaleZ", factory.depthNoiseScaleZ);
-            jsonObject.addProperty("mainNoiseScaleX", factory.mainNoiseScaleX);
-            jsonObject.addProperty("mainNoiseScaleY", factory.mainNoiseScaleY);
-            jsonObject.addProperty("mainNoiseScaleZ", factory.mainNoiseScaleZ);
-            jsonObject.addProperty("baseSize", factory.baseSize);
-            jsonObject.addProperty("stretchY", factory.stretchY);
+            jsonObject.addProperty(NbtTags.COORDINATE_SCALE, factory.coordinateScale);
+            jsonObject.addProperty(NbtTags.HEIGHT_SCALE, factory.heightScale);
+            jsonObject.addProperty(NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
+            jsonObject.addProperty(NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
+            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
+            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Y, factory.mainNoiseScaleY);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Z, factory.mainNoiseScaleZ);
+            jsonObject.addProperty(NbtTags.BASE_SIZE, factory.baseSize);
+            jsonObject.addProperty(NbtTags.STRETCH_Y, factory.stretchY);
             jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
             jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
             
@@ -1706,15 +1706,15 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
 
-            jsonObject.addProperty("biomeDepthWeight", factory.biomeDepthWeight);
-            jsonObject.addProperty("biomeDepthOffset", factory.biomeDepthOffset);
-            jsonObject.addProperty("biomeScaleWeight", factory.biomeScaleWeight);
-            jsonObject.addProperty("biomeScaleOffset", factory.biomeScaleOffset);
+            jsonObject.addProperty(NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
+            jsonObject.addProperty(NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
+            jsonObject.addProperty(NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
+            jsonObject.addProperty(NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
             jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
             jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             
-            jsonObject.addProperty("useCaves", factory.useCaves);
+            jsonObject.addProperty(NbtTags.USE_CAVES, factory.useCaves);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
             jsonObject.addProperty(NbtTags.CAVE_COUNT, factory.caveCount);
             jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
@@ -1724,17 +1724,17 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
             jsonObject.addProperty(NbtTags.USE_VILLAGES, factory.useVillages);
             jsonObject.addProperty(NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
-            jsonObject.addProperty("useMineShafts", factory.useMineShafts);
+            jsonObject.addProperty(NbtTags.USE_MINESHAFTS, factory.useMineShafts);
             jsonObject.addProperty(NbtTags.USE_TEMPLES, factory.useTemples);
             jsonObject.addProperty(NbtTags.USE_MONUMENTS, factory.useMonuments);
             jsonObject.addProperty(NbtTags.USE_MANSIONS, factory.useMansions);
-            jsonObject.addProperty("useRavines", factory.useRavines);
+            jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
             
             jsonObject.addProperty(NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
             jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
             jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-            jsonObject.addProperty("useLavaOceans", factory.useLavaOceans);
+            jsonObject.addProperty(NbtTags.USE_LAVA_OCEANS, factory.useLavaOceans);
             
             jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             

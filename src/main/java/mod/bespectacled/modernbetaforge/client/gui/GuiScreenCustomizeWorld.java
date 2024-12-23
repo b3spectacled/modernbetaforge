@@ -1965,11 +1965,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         // Set default enabled for certain options
         if (this.pageList != null) {
             for (GuiPredicate predicate : ModernBetaClientRegistries.GUI_PREDICATE.getValues()) {
-                int guiId = predicate.getId();
+                int[] guiIds = predicate.getIds();
                 boolean enabled = predicate.test(this.settings);
                 
-                this.setButtonEnabled(guiId, enabled);
-                this.setFieldEnabled(guiId, enabled);
+                for (int i = 0; i < guiIds.length; ++i) {
+                    this.setButtonEnabled(guiIds[i], enabled);
+                    this.setFieldEnabled(guiIds[i], enabled);
+                }
             }
         }
     }
