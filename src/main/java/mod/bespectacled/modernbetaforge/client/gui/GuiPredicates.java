@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
@@ -17,7 +16,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
-import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
@@ -354,9 +352,9 @@ public class GuiPredicates {
 
                 return !isSkylands && !isFiniteChunk(factory);
             },
-            GuiIdentifiers.PG0_S_SURFACE
+            GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE
         );
-        CAVE_CARVER_TEST = new GuiPredicate(factory -> factory.useCaves, GuiIdentifiers.PG0_S_CARVER);
+        CAVE_CARVER_TEST = new GuiPredicate(factory -> factory.useCaves, GuiIdentifiers.PG0_S_CARVER, GuiIdentifiers.PG0_B_CARVER);
         SINGLE_BIOME_TEST = new GuiPredicate(factory -> isSingleBiome(factory), GuiIdentifiers.PG0_B_FIXED);
         REPLACE_OCEAN_TEST = new GuiPredicate(
             factory -> {

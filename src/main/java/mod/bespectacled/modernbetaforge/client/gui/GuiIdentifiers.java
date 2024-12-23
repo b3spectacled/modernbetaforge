@@ -2,17 +2,16 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIdentifiers {
     public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BIOME_SETTINGS = new HashMap<>();
+    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BASE_SETTINGS = new HashMap<>();
     
     /* Function Buttons */
     
@@ -30,6 +29,11 @@ public class GuiIdentifiers {
     /* Page 1 */
     
     // Entries
+    public static final int PG0_B_CHUNK = 190;
+    public static final int PG0_B_BIOME = 191;
+    public static final int PG0_B_SURFACE = 192;
+    public static final int PG0_B_CARVER = 193;
+    
     public static final int PG0_S_CHUNK = 100;
     public static final int PG0_S_BIOME = 101;
     public static final int PG0_S_SURFACE = 102;
@@ -396,15 +400,7 @@ public class GuiIdentifiers {
         assertOffset(PG3_S_B_SCL_WT, PG4_F_B_SCL_WT);
         assertOffset(PG3_S_B_SCL_OF, PG4_F_B_SCL_OF);
     }
-    
-    public static Set<Integer> getBiomeGuiIds() {
-        return BIOME_SETTINGS.keySet();
-    }
-    
-    public static void updateBiomeSetting(int id, String registryKey, Factory factory) {
-        BIOME_SETTINGS.get(id).accept(registryKey, factory);
-    }
-    
+
     private static void assertOffset(int sliderId, int fieldId) {
         if (sliderId != offsetBackward(fieldId)) {
             String errorStr = String.format("[Modern Beta] GUI slider id %d not correctly offset with field id %d!", sliderId, fieldId);
@@ -459,5 +455,10 @@ public class GuiIdentifiers {
         BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
         BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
         BIOME_SETTINGS.put(GuiIdentifiers.PG5_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
+        
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CHUNK, (str, factory) -> factory.chunkSource = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BIOME, (str, factory) -> factory.biomeSource = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str);
     }
 }

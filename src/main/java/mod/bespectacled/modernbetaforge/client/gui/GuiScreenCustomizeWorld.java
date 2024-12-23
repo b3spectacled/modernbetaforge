@@ -193,12 +193,26 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             loadedModsList.append(loadedMods.get(0));
         }
         
+        boolean useMenu = ModernBetaConfig.guiOptions.useMenusForBasicSettings;
+        GuiPageButtonList.GuiListEntry chunkEntry = useMenu ? 
+            createGuiButton(GuiIdentifiers.PG0_B_CHUNK, NbtTags.CHUNK_SOURCE, true) :
+            createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK_SOURCE.getKeys().size() - 1, chunkSourceId, this);
+        GuiPageButtonList.GuiListEntry biomeEntry = useMenu ? 
+            createGuiButton(GuiIdentifiers.PG0_B_BIOME, NbtTags.BIOME_SOURCE, true) :
+            createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME_SOURCE.getKeys().size() - 1, biomeSourceId, this);
+        GuiPageButtonList.GuiListEntry surfaceEntry = useMenu ? 
+            createGuiButton(GuiIdentifiers.PG0_B_SURFACE, NbtTags.SURFACE_BUILDER, true) :
+            createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE_BUILDER.getKeys().size() - 1, surfaceBuilderId, this);
+        GuiPageButtonList.GuiListEntry carverEntry = useMenu ? 
+            createGuiButton(GuiIdentifiers.PG0_B_CARVER, NbtTags.CAVE_CARVER, true) :
+            createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CAVE_CARVER.getKeys().size() - 1, caveCarverId, this);
+        
         GuiPageButtonList.GuiListEntry[] pageList0 = {
-            createGuiSlider(GuiIdentifiers.PG0_S_CHUNK, NbtTags.CHUNK_SOURCE, 0f, ModernBetaRegistries.CHUNK_SOURCE.getKeys().size() - 1, chunkSourceId, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_BIOME, NbtTags.BIOME_SOURCE, 0f, ModernBetaRegistries.BIOME_SOURCE.getKeys().size() - 1, biomeSourceId, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_SURFACE, NbtTags.SURFACE_BUILDER, 0f, ModernBetaRegistries.SURFACE_BUILDER.getKeys().size() - 1, surfaceBuilderId, this),
-            createGuiButton(GuiIdentifiers.PG0_B_FIXED, "fixedBiome", true),
-            createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CAVE_CARVER.getKeys().size() - 1, caveCarverId, this),
+            chunkEntry,
+            biomeEntry,
+            surfaceEntry,
+            createGuiButton(GuiIdentifiers.PG0_B_FIXED, NbtTags.SINGLE_BIOME, true),
+            carverEntry,
             null,
 
             createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "biomeReplacementLabel"),
@@ -602,53 +616,59 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.pageList.width += PAGELIST_ADDITIONAL_WIDTH;
         
+        // Set text for primary options
+        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, -1));
+        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, -1));
+        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, -1));
+        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, -1));
+        
         // Set biome text for Single Biome button
-        this.setTextButton(this.pageList, GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, true, BIOME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, true, BIOME_TRUNCATE_LEN));
         
         // Set biome text for Beta Biome buttons
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
         
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
-        this.setTextButton(this.pageList, GuiIdentifiers.PG5_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
+        this.setTextButton(GuiIdentifiers.PG5_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
         
         for (Entry<Integer, String> entry : this.customIds.entrySet()) {
             Property<?> property = this.settings.customProperties.get(new ResourceLocation(entry.getValue()));
@@ -656,12 +676,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             if (property instanceof BooleanProperty) {
                 BooleanProperty booleanProperty = (BooleanProperty)property;
                 
-                this.setTextButton(this.pageList, entry.getKey(), I18n.format(booleanProperty.getValue() ? "gui.yes" : "gui.no"));
+                this.setTextButton(entry.getKey(), I18n.format(booleanProperty.getValue() ? "gui.yes" : "gui.no"));
                 
             } if (property instanceof BiomeProperty) {
                 BiomeProperty biomeProperty = (BiomeProperty)property;
                 
-                this.setTextButton(this.pageList, entry.getKey(), getFormattedBiomeName(biomeProperty.getValue(), false, -1));
+                this.setTextButton(entry.getKey(), getFormattedBiomeName(biomeProperty.getValue(), false, -1));
             }
         }
 
@@ -867,6 +887,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
         } else {
             switch (entry) {
+                case GuiIdentifiers.PG0_B_CHUNK:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, (str, factory) -> factory.chunkSource = str, settings.chunkSource, NbtTags.CHUNK_SOURCE, ModernBetaRegistries.CHUNK_SOURCE.getKeys()));
+                    break;
+                case GuiIdentifiers.PG0_B_BIOME:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, (str, factory) -> factory.biomeSource = str, settings.biomeSource, NbtTags.BIOME_SOURCE, ModernBetaRegistries.BIOME_SOURCE.getKeys()));
+                    break;
+                case GuiIdentifiers.PG0_B_SURFACE:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, (str, factory) -> factory.surfaceBuilder = str, settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, ModernBetaRegistries.SURFACE_BUILDER.getKeys()));
+                    break;
+                case GuiIdentifiers.PG0_B_CARVER:
+                    this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, (str, factory) -> factory.caveCarver = str, settings.caveCarver, NbtTags.CAVE_CARVER, ModernBetaRegistries.CAVE_CARVER.getKeys()));
+                    break;
                 case GuiIdentifiers.PG0_B_FIXED:
                     this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this, (str, factory) -> factory.singleBiome = str, settings.singleBiome));
                     break;
@@ -1520,15 +1552,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case GuiIdentifiers.FUNC_RAND: // Randomize
-                Set<Gui> baseButtonComponents = this.getBaseButtonComponents();
                 Set<Gui> biomeButtonComponents = this.getBiomeButtonComponents();
+                Set<Gui> baseSliderComponents = this.getBaseSliderComponents();
+                Set<Gui> baseButtonComponents = this.getBaseButtonComponents();
                 
                 for (int page = 0; page < this.pageList.getSize(); ++page) {
                     this.randomClicked = true;
 
                     GuiPageButtonList.GuiEntry guiEntry = this.pageList.getListEntry(page);
-                    this.randomizeGuiComponent(guiEntry.getComponent1(), biomeButtonComponents, baseButtonComponents);
-                    this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseButtonComponents);
+                    this.randomizeGuiComponent(guiEntry.getComponent1(), biomeButtonComponents, baseSliderComponents, baseButtonComponents);
+                    this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseSliderComponents, baseButtonComponents);
 
                     this.randomClicked = false;
                     this.setGuiEnabled();
@@ -1662,11 +1695,50 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return pageList;
     }
     
-    private void randomizeGuiComponent(Gui guiComponent, Set<Gui> biomeButtonComponents, Set<Gui> baseButtonComponents) {
+    private void randomizeGuiComponent(Gui guiComponent, Set<Gui> biomeButtonComponents, Set<Gui> baseSliderComponents, Set<Gui> baseButtonComponents) {
         if (guiComponent instanceof GuiButton) {
             GuiButton guiButtonComponent = (GuiButton)guiComponent;
             
             if (baseButtonComponents.contains(guiButtonComponent)) {
+                int buttonId = GuiIdentifiers.BASE_SETTINGS
+                    .keySet()
+                    .stream()
+                    .filter(id -> this.pageList.getComponent(id) == guiButtonComponent)
+                    .findFirst()
+                    .orElse(-1);
+                
+                if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled && buttonId != -1) {
+                    ResourceLocation randomKey = null;
+                    String langName = null;
+                    
+                    switch(buttonId) {
+                        case GuiIdentifiers.PG0_B_CHUNK:
+                            randomKey = ModernBetaRegistries.CHUNK_SOURCE.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.CHUNK_SOURCE;
+                            break;
+                        case GuiIdentifiers.PG0_B_BIOME:
+                            randomKey = ModernBetaRegistries.BIOME_SOURCE.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.BIOME_SOURCE;
+                            break;
+                        case GuiIdentifiers.PG0_B_SURFACE:
+                            randomKey = ModernBetaRegistries.SURFACE_BUILDER.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.SURFACE_BUILDER;
+                            break;
+                        case GuiIdentifiers.PG0_B_CARVER:
+                            randomKey = ModernBetaRegistries.CAVE_CARVER.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.CAVE_CARVER;
+                            break;
+                    }
+                    
+                    if (randomKey != null && langName != null) {
+                        String registryName = randomKey.toString();
+                        
+                        GuiIdentifiers.BASE_SETTINGS.get(buttonId).accept(registryName, this.settings);
+                        this.setTextButton(buttonId, getFormattedRegistryName(registryName, langName, -1));
+                    }
+                }
+                
+            } else if (baseSliderComponents.contains(guiButtonComponent)) {
                 if (guiButtonComponent instanceof GuiSlider && ((GuiSlider)guiButtonComponent).enabled) {
                     GuiSlider guiSlider = (GuiSlider)guiButtonComponent;
                     
@@ -1676,19 +1748,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 }
             
             } else if (biomeButtonComponents.contains(guiButtonComponent)) {
-                int buttonId = GuiIdentifiers.getBiomeGuiIds()
+                int buttonId = GuiIdentifiers.BIOME_SETTINGS
+                    .keySet()
                     .stream()
                     .filter(id -> this.pageList.getComponent(id) == guiButtonComponent)
                     .findFirst()
                     .orElse(-1);
                 
                 if (guiButtonComponent instanceof GuiListButton && ((GuiListButton)guiButtonComponent).enabled && buttonId != -1) {
-                    String registryKey = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
+                    String registryName = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
                     boolean prefix = buttonId == GuiIdentifiers.PG0_B_FIXED;
                     int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
                     
-                    GuiIdentifiers.updateBiomeSetting(buttonId, registryKey, this.settings);
-                    this.setTextButton(this.pageList, buttonId, getFormattedBiomeName(registryKey, prefix, truncateLen));
+                    GuiIdentifiers.BIOME_SETTINGS.get(buttonId).accept(registryName,  this.settings);
+                    this.setTextButton(buttonId, getFormattedBiomeName(registryName, prefix, truncateLen));
                 }
                 
             } else {
@@ -1916,8 +1989,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setEntryValue(guiTextId, guiTextString);
     }
     
-    private void setTextButton(GuiPageButtonList pageList, int id, String value) {
-        ((GuiButton)pageList.getComponent(id)).displayString = value;
+    private void setTextButton(int id, String value) {
+        Gui guiComponent = this.pageList.getComponent(id);
+        if (guiComponent != null) {
+            ((GuiButton)guiComponent).displayString = value;
+        }
     }
     
     private int getLevelSeaLevel() {
@@ -1943,7 +2019,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
-    private Set<Gui> getBaseButtonComponents() {
+    private Set<Gui> getBaseSliderComponents() {
         Set<Gui> set = new HashSet<>();
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_CHUNK));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_BIOME));
@@ -1958,7 +2034,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private Set<Gui> getBiomeButtonComponents() {
-        return GuiIdentifiers.getBiomeGuiIds().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
+        return GuiIdentifiers.BIOME_SETTINGS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
+    }
+    
+    private Set<Gui> getBaseButtonComponents() {
+        return GuiIdentifiers.BASE_SETTINGS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
     }
     
     private void setGuiEnabled() {
@@ -2014,8 +2094,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return new GuiPageButtonList.EditBoxEntry(id, formattedValue, true, predicate);
     }
     
-    private static String getFormattedBiomeName(String registryKey, boolean prefix, int truncateLen) {
-        Biome biome = BiomeUtil.getBiome(new ResourceLocation(registryKey), "generator");
+    private static String getFormattedRegistryName(String registryName, String langName, int truncateLen) {
+        ResourceLocation registryKey = new ResourceLocation(registryName);
+        String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
+        
+        // Truncate if registry name is too long to fit in button
+        if (truncateLen > 0 && formattedName.length() > truncateLen) {
+            formattedName = formattedName.substring(0, truncateLen) + "...";
+        }
+        
+        return String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
+    }
+    
+    private static String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
+        Biome biome = BiomeUtil.getBiome(new ResourceLocation(registryName), "generator");
         String biomeName = biome.getBiomeName();
         
         // Truncate if biome name is too long to fit in button
@@ -2116,7 +2208,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public void visit(BooleanProperty property, int guiIdentifier, boolean value, ResourceLocation registryKey) {
             property.setValue(value);
             GuiScreenCustomizeWorld.this.setTextButton(
-                GuiScreenCustomizeWorld.this.pageList,
                 guiIdentifier,
                 I18n.format(property.getValue() ? "gui.yes" : "gui.no")
             );

@@ -1,10 +1,12 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,5 +85,11 @@ public final class ModernBetaRegistry<T> {
     
     public Set<Entry<ResourceLocation, T>> getEntrySet() {
         return this.registryEntries.entrySet();
+    }
+    
+    public Entry<ResourceLocation, T> getRandomEntry(Random random) {
+        List<Entry<ResourceLocation, T>> entries = new ArrayList<>(this.registryEntries.entrySet());
+        
+        return entries.get(random.nextInt(entries.size() - 1));
     }
 }

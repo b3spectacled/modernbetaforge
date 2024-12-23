@@ -36,6 +36,12 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean useModernBetaAsDefault = false;
+        
+        @Comment({
+            "Use customization menus for selecting basic generator settings. Applies to chunk source, biome source, surface builder, and cave carver options."
+        })
+        @RequiresWorldRestart
+        public boolean useMenusForBasicSettings = false;
     }
     
     public static class CategoryGenerator {
