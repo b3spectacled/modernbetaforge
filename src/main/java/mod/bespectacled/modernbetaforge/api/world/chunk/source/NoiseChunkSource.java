@@ -50,8 +50,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Constructs an abstract NoiseChunkSource with necessary noise setting information.
      * 
-     * @param world The world.
-     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
+     * @param seed The world seed.
      * @param settings The generator settings.
      */
     public NoiseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
@@ -79,10 +78,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Inherited from {@link ChunkSource#provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk}.
      * This does not generate terrain, only samples the initial densities.
+     * 
+     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
      */
     @Override
     public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
@@ -90,12 +90,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int, ChunkCache<ComponentChunk>) provideProcessedChunk}.
+     * Inherited from {@link ChunkSource#provideProcessedChunk(World, ChunkPrimer, int, int, List) provideProcessedChunk}.
      * This actually generates the terrain, after collection of village component placements.
+     * 
+     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
+     * @param structureComponents The list of structure components that at least partially occupy this chunk.
      */
     @Override
     public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
@@ -104,11 +106,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     /**
      * Inherited from {@link ChunkSource#provideSurface(World, Biome[], ChunkPrimer, int, int) provideSurface}.
+     * 
+     * @param world The world object
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
      */
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {

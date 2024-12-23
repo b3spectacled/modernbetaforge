@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
-import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;

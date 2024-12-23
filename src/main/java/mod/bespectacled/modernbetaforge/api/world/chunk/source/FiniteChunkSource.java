@@ -78,8 +78,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Constructs an abstract FiniteChunkSource with necessary level information.
      * 
-     * @param chunkGenerator The ModernBetaChunkGenerator which hooks into this for terrain generation.
-     * @param chunkGeneratorSettings The generator settings.
+     * @param seed The world seed.
+     * @param settings The generator settings.
      */
     public FiniteChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
@@ -123,7 +123,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int, ChunkCache<ComponentChunk>) provideProcessedChunk}.
+     * Inherited from {@link ChunkSource#provideProcessedChunk(World, ChunkPrimer, int, int, List) provideProcessedChunk}.
      * This is unused.
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates

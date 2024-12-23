@@ -120,13 +120,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.chunkSource.provideProcessedChunk(this.world, chunkContainer.chunkPrimer, chunkX, chunkZ, structureComponents);
         
         // Copy chunk data into chunkPrimer parameter
-        for (int x = 0; x < 16; ++x) {
-            for (int z = 0; z < 16; ++z) {
-                for (int y = 0; y < 256; ++y) {
-                    chunkPrimer.setBlockState(x, y, z, chunkContainer.chunkPrimer.getBlockState(x, y, z));
-                }
-            }
-        }
+        chunkPrimer.data = chunkContainer.chunkPrimer.data;
     }
 
     @Override

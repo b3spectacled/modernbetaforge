@@ -83,13 +83,11 @@ public abstract class ChunkSource {
     /**
      * Create initial chunk given chunk coordinates.
      * Used to sample for biome injection and creation of initial biome map.
-     * Called in {@link #provideInitialChunkPrimerContainer(int, int) provideInitialChunkPrimerContainer} and subsequently {@link #provideChunk(int, int) provideChunk}.
      * 
      * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
      */
     public abstract void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
@@ -97,27 +95,23 @@ public abstract class ChunkSource {
      * Create processed chunk given chunk coordinates.
      * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
      * This does not need to be implemented and can be left empty, if you don't wish to do additional processing.
-     * Called in {@link #provideChunk(int, int) provideChunk}.
      * 
      * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * @param structureComponents The list of structure components that at least partially occupy this chunk.
-     * 
      */
     public abstract void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents);
 
     /**
      * Build surface for given chunk primer and chunk coordinates.
-     * Called in {@link #provideChunk(int, int) provideChunk}.
      * 
      * @param world The world object
      * @param biomes Biome array for chunk
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * 
      */
     public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
