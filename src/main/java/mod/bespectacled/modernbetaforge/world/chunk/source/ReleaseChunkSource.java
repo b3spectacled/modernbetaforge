@@ -312,7 +312,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             factory.riverSize = settings.riverSize;
             
             WorldSettings worldSettings = new WorldSettings(this.seed, GameType.NOT_SET, false, false, WorldType.CUSTOMIZED);
-            WorldInfo worldInfo = new WorldInfo(worldSettings.setGeneratorOptions(settings.toString()), "");
+            WorldInfo worldInfo = new WorldInfo(worldSettings.setGeneratorOptions(factory.toString()), "");
             
             this.biomeProvider = new BiomeProvider(worldInfo);
         }

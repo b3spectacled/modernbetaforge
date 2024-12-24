@@ -101,14 +101,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return new IndevSpawnLocator();
     }
     
-    /**
-     * Inherited from {@link ChunkSource#provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk}.
-     * 
-     * @param chunkPrimer Chunk primer
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * 
-     */
     @Override
     public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
@@ -122,36 +114,20 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
     }
     
-    /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(World, ChunkPrimer, int, int, List) provideProcessedChunk}.
-     * This is unused.
-     * @param chunkPrimer Chunk primer
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * 
-     */
     @Override
     public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
-    /**
-     * Inherited from {@link ChunkSource#provideSurface(World, Biome[], ChunkPrimer, int, int) provideSurface}.
-     * This is unused.
-     * @param biomes Biome array for chunk
-     * @param chunkPrimer Chunk primer
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
-     * 
-     */
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
     
     /**
      * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Samples height from the generated level data.
+     * 
+     * @param world The world object.
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type HeightmapChunk heightmap type.
-     *
      * @return The y-coordinate of top block at x/z.
      * 
      */
