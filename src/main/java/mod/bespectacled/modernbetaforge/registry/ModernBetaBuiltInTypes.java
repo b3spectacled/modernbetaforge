@@ -92,6 +92,7 @@ public class ModernBetaBuiltInTypes {
     
     public enum Carver {
         BETA("beta"),
+        BETA_1_8("beta_1_8"),
         RELEASE("release");
         
         private final String id;

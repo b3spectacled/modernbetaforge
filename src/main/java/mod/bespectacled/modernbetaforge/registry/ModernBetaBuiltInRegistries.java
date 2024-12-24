@@ -21,6 +21,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBeta18Cave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
@@ -92,7 +93,8 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerCaveCarvers() {
-        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), (chunkSource, settings) -> new MapGenBetaCave(settings));
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), MapGenBetaCave::new);
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA_1_8.getRegistryKey(), MapGenBeta18Cave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (chunkSource, settings) -> new MapGenCaves());
     }
     

@@ -2,13 +2,14 @@ package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class MapGenBetaCaveHell extends MapGenBetaCave {
     public MapGenBetaCaveHell() {
-        super(Blocks.LAVA, Blocks.FLOWING_LAVA, 128, 10, 5);
+        super(BlockStates.NETHERRACK, BlockStates.LAVA, 128, 10, 5);
     }
     
     @Override
@@ -28,7 +29,7 @@ public class MapGenBetaCaveHell extends MapGenBetaCave {
     
     @Override
     protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (block == Blocks.NETHERRACK || block == Blocks.DIRT || block == Blocks.GRASS) {
+        if (this.carvables.contains(block)) {
             chunkPrimer.setBlockState(localX, localY, localZ, Blocks.AIR.getDefaultState());
         }
     }

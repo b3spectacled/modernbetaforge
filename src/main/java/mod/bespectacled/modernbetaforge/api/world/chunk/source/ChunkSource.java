@@ -137,6 +137,15 @@ public abstract class ChunkSource {
     }
     
     /**
+     * Gets the default block for the chunk source, usually stone.
+     * 
+     * @return The default block blockstate.
+     */
+    public IBlockState getDefaultBlock() {
+        return this.defaultBlock;
+    }
+    
+    /**
      * Gets the default fluid for the chunk source, either water or lava.
      * 
      * @return The default fluid blockstate.

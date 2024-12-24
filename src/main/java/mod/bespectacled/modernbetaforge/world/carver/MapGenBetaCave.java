@@ -5,8 +5,14 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDynamicLiquid;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -14,32 +20,38 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 
 public class MapGenBetaCave extends MapGenBase {
-    private static final Set<Block> CARVABLE;
+    protected final Block defaultBlock;
+    protected final BlockStaticLiquid defaultFluid;
+    protected final BlockDynamicLiquid defaultFlowing;
     
-    private final Block fluidBlock;
-    private final Block flowingBlock;
+    protected final Set<Block> carvables;
+    
     private final int caveHeight;
     private final int caveCount;
     private final int caveChance;
     
-    public MapGenBetaCave(Block fluidBlock, Block flowingBlock, int caveHeight, int caveCount, int caveChance) {
+    public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), settings.caveHeight, settings.caveCount, settings.caveChance);
+    }
+    
+    public MapGenBetaCave() {
+        this(BlockStates.STONE, BlockStates.WATER, 128, 40, 15);
+    }
+    
+    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, int caveHeight, int caveCount, int caveChance) {
         super();
         
-        this.fluidBlock = fluidBlock;
-        this.flowingBlock = flowingBlock;
+        this.defaultBlock = defaultBlock.getBlock();
+        this.defaultFluid = (BlockStaticLiquid)defaultFluid.getBlock();
+        this.defaultFlowing = BlockLiquid.getFlowingBlock(defaultFluid.getMaterial());
+        
+        this.carvables = this.initializeCarvables(defaultBlock.getBlock());
+        
         this.caveHeight = MathHelper.clamp(caveHeight, 9, 255);
         this.caveCount = caveCount;
         this.caveChance = caveChance;
     }
-    
-    public MapGenBetaCave(ModernBetaGeneratorSettings settings) {
-        this(Blocks.WATER, Blocks.FLOWING_WATER, settings.caveHeight, settings.caveCount, settings.caveChance);
-    }
-    
-    public MapGenBetaCave() {
-        this(Blocks.WATER, Blocks.FLOWING_WATER, 128, 40, 15);
-    }
-    
+
     @Override
     public void generate(World world, int originChunkX, int originChunkZ, ChunkPrimer chunkPrimer) {
         this.world = world;
@@ -109,8 +121,93 @@ public class MapGenBetaCave extends MapGenBase {
         return 1.0;
     }
     
+    protected boolean canCarveBranch(int mainChunkX, int mainChunkZ, double x, double z, int branch, int branchCount, float baseWidth) {
+        double ctrX = mainChunkX * 16 + 8;
+        double ctrZ = mainChunkZ * 16 + 8;
+    
+        double d1 = x - ctrX;
+        double d2 = z - ctrZ;
+        double d3 = branchCount - branch;
+        double d4 = baseWidth + 2.0F + 16F;
+    
+        if ((d1 * d1 + d2 * d2) - d3 * d3 > d4 * d4) {
+            return false;
+        }
+    
+        return true;
+    }
+
+    protected boolean carveRegion(ChunkPrimer chunkPrimer, long seed, int seaLevel, int chunkX, int chunkZ, double x, double y, double z, double yaw, double pitch) {
+        double ctrX = chunkX * 16 + 8;
+        double ctrZ = chunkZ * 16 + 8;
+    
+        if ( // Check for valid tunnel starts, I guess? Or to prevent overlap?
+        x < ctrX - 16.0 - yaw * 2.0 || z < ctrZ - 16.0 - yaw * 2.0 || x > ctrX + 16.0 + yaw * 2.0 || z > ctrZ + 16.0 + yaw * 2.0) {
+            return false;
+        }
+    
+        int minX = MathHelper.floor(x - yaw) - chunkX * 16 - 1; // Get min and max extents of tunnel, relative to chunk coords
+        int maxX = (MathHelper.floor(x + yaw) - chunkX * 16) + 1;
+    
+        int minY = MathHelper.floor(y - pitch) - 1;
+        int maxY = MathHelper.floor(y + pitch) + 1;
+    
+        int minZ = MathHelper.floor(z - yaw) - chunkZ * 16 - 1;
+        int maxZ = (MathHelper.floor(z + yaw) - chunkZ * 16) + 1;
+    
+        if (minX < 0) {
+            minX = 0;
+        }
+        if (maxX > 16) {
+            maxX = 16;
+        }
+    
+        if (minY < 1) {
+            minY = 1;
+        }
+        if (maxY > this.getBaseCaveHeight() - 8) {
+            maxY = this.getBaseCaveHeight() - 8;
+        }
+    
+        if (minZ < 0) {
+            minZ = 0;
+        }
+        if (maxZ > 16) {
+            maxZ = 16;
+        }
+    
+        if (this.isRegionUncarvable(chunkPrimer, chunkX, chunkZ, minX, maxX, minY, maxY, minZ, maxZ)) { 
+            return false;
+        }
+    
+        for (int localX = minX; localX < maxX; localX++) {
+            double scaledLocalX = (((double) (localX + chunkX * 16) + 0.5) - x) / yaw;
+    
+            for (int localZ = minZ; localZ < maxZ; localZ++) {
+                double scaledLocalZ = (((double) (localZ + chunkZ * 16) + 0.5) - z) / yaw;
+                boolean isGrassBlock = false;
+                
+                for (int localY = maxY; localY >= minY; localY--) {
+                    double scaledLocalY = (((double) localY - 1 + 0.5) - y) / pitch;
+    
+                    if (this.isPositionExcluded(scaledLocalX, scaledLocalY, scaledLocalZ)) {
+                        Block block = chunkPrimer.getBlockState(localX, localY, localZ).getBlock();
+    
+                        if (block == Blocks.GRASS) {
+                            isGrassBlock = true;
+                        }
+    
+                        this.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
+                    }
+                }
+            }
+        }
+    
+        return true;
+    }
+
     protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (CARVABLE.contains(block)) {
+        if (this.carvables.contains(block)) {
             if (localY - 1 < 10) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
@@ -192,91 +289,6 @@ public class MapGenBetaCave extends MapGenBase {
         }
     }
 
-    private boolean carveRegion(ChunkPrimer chunkPrimer, long seed, int seaLevel, int chunkX, int chunkZ, double x, double y, double z, double yaw, double pitch) {
-        double ctrX = chunkX * 16 + 8;
-        double ctrZ = chunkZ * 16 + 8;
-
-        if ( // Check for valid tunnel starts, I guess? Or to prevent overlap?
-        x < ctrX - 16.0 - yaw * 2.0 || z < ctrZ - 16.0 - yaw * 2.0 || x > ctrX + 16.0 + yaw * 2.0 || z > ctrZ + 16.0 + yaw * 2.0) {
-            return false;
-        }
-
-        int minX = MathHelper.floor(x - yaw) - chunkX * 16 - 1; // Get min and max extents of tunnel, relative to chunk coords
-        int maxX = (MathHelper.floor(x + yaw) - chunkX * 16) + 1;
-
-        int minY = MathHelper.floor(y - pitch) - 1;
-        int maxY = MathHelper.floor(y + pitch) + 1;
-
-        int minZ = MathHelper.floor(z - yaw) - chunkZ * 16 - 1;
-        int maxZ = (MathHelper.floor(z + yaw) - chunkZ * 16) + 1;
-
-        if (minX < 0) {
-            minX = 0;
-        }
-        if (maxX > 16) {
-            maxX = 16;
-        }
-
-        if (minY < 1) {
-            minY = 1;
-        }
-        if (maxY > this.getBaseCaveHeight() - 8) {
-            maxY = this.getBaseCaveHeight() - 8;
-        }
-
-        if (minZ < 0) {
-            minZ = 0;
-        }
-        if (maxZ > 16) {
-            maxZ = 16;
-        }
-
-        if (this.isRegionUncarvable(chunkPrimer, chunkX, chunkZ, minX, maxX, minY, maxY, minZ, maxZ)) { 
-            return false;
-        }
-
-        for (int localX = minX; localX < maxX; localX++) {
-            double scaledLocalX = (((double) (localX + chunkX * 16) + 0.5) - x) / yaw;
-
-            for (int localZ = minZ; localZ < maxZ; localZ++) {
-                double scaledLocalZ = (((double) (localZ + chunkZ * 16) + 0.5) - z) / yaw;
-                boolean isGrassBlock = false;
-                
-                for (int localY = maxY; localY >= minY; localY--) {
-                    double scaledLocalY = (((double) localY - 1 + 0.5) - y) / pitch;
-
-                    if (this.isPositionExcluded(scaledLocalX, scaledLocalY, scaledLocalZ)) {
-                        Block block = chunkPrimer.getBlockState(localX, localY, localZ).getBlock();
-
-                        if (block == Blocks.GRASS) {
-                            isGrassBlock = true;
-                        }
-
-                        this.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private boolean canCarveBranch(int mainChunkX, int mainChunkZ, double x, double z, int branch, int branchCount, float baseWidth) {
-        double ctrX = mainChunkX * 16 + 8;
-        double ctrZ = mainChunkZ * 16 + 8;
-
-        double d1 = x - ctrX;
-        double d2 = z - ctrZ;
-        double d3 = branchCount - branch;
-        double d4 = baseWidth + 2.0F + 16F;
-
-        if ((d1 * d1 + d2 * d2) - d3 * d3 > d4 * d4) {
-            return false;
-        }
-
-        return true;
-    }
-
     private boolean isRegionUncarvable(ChunkPrimer chunkPrimer, int mainChunkX, int mainChunkZ, int relMinX, int relMaxX, int minY, int maxY, int relMinZ, int relMaxZ) {
         for (int relX = relMinX; relX < relMaxX; relX++) {
             for (int relZ = relMinZ; relZ < relMaxZ; relZ++) {
@@ -288,7 +300,7 @@ public class MapGenBetaCave extends MapGenBase {
 
                     Block block = chunkPrimer.getBlockState(relX, relY, relZ).getBlock();
 
-                    if (block == this.fluidBlock || block == this.flowingBlock) {
+                    if (block == this.defaultFluid || block == this.defaultFlowing) {
                         return true;
                     }
 
@@ -311,13 +323,15 @@ public class MapGenBetaCave extends MapGenBase {
         return relX != minX && relX != maxX - 1 && relZ != minZ && relZ != maxZ - 1;
     }
     
-    static {
-        CARVABLE = new ImmutableSet.Builder<Block>()
-            .add(Blocks.STONE)
+    private Set<Block> initializeCarvables(Block defaultBlock) {
+        Set<Block> carvables = new ImmutableSet.Builder<Block>()
+            .add(defaultBlock)
             .add(Blocks.GRASS)
             .add(Blocks.DIRT)
             .add(Blocks.COAL_ORE)
             .add(Blocks.IRON_ORE)
             .build();
+        
+        return carvables;
     }
 }
