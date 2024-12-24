@@ -177,7 +177,7 @@ public class GuiPredicates {
         ResourceLocation chunkSource = new ResourceLocation(factory.chunkSource);
         
         if (!NOISE_SETTINGS.containsKey(chunkSource)) {
-            return true;
+            return false;
         }
         
         return NOISE_SETTINGS.get(chunkSource).contains(guiId);
@@ -336,16 +336,6 @@ public class GuiPredicates {
             )
         );
         
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey(),
-            ImmutableList.of()
-        );
-        
-        NOISE_SETTINGS.put(
-            ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(),
-            ImmutableList.of()
-        );
-        
         SURFACE_BUILDER_TEST = new GuiPredicate(
             factory -> {
                 boolean isSkylands = isChunkEqualTo(factory, ModernBetaBuiltInTypes.Chunk.SKYLANDS);
@@ -451,19 +441,19 @@ public class GuiPredicates {
         USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG0_B_USE_INFDEV_PYRAMIDS);
         USE_TALL_GRASS_TEST = new GuiPredicate(
             factory -> {
-                boolean isReleaseBiomeSource = isBiomeEqualTo(factory, ModernBetaBuiltInTypes.Biome.RELEASE);
+                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(factory);
                 boolean isFixedBiomeSource = isSingleBiome(factory);
     
-                return !isReleaseBiomeSource && (isFixedBiomeSource ? isModernBetaBiome(factory) : true);
+                return isBetaPEBiomeSource || isFixedBiomeSource && isModernBetaBiome(factory);
             },
             GuiIdentifiers.PG1_B_USE_GRASS
         );
         USE_NEW_FLOWERS_TEST = new GuiPredicate(
             factory -> {
-                boolean isReleaseBiomeSource = isBiomeEqualTo(factory, ModernBetaBuiltInTypes.Biome.RELEASE);
+                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(factory);
                 boolean isFixedBiomeSource = isSingleBiome(factory);
     
-                return !isReleaseBiomeSource && (isFixedBiomeSource ? isBetaBiome(factory) : true);
+                return isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(factory);
             },
             GuiIdentifiers.PG1_B_USE_FLOWERS
         );

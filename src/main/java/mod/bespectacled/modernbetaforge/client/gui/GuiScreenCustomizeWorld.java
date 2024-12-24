@@ -303,7 +303,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageList2 = {
-            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_CLAY_NAME, I18n.format("tile.clay.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_CLAY_NAME, String.format("%s (%s)", I18n.format("tile.clay.name"), I18n.format(PREFIX + "modernBeta"))),
             null,
             createGuiSlider(GuiIdentifiers.PG2_S_CLAY_SIZE, "size", 1.0f, 50.0f, (float)this.settings.claySize, this),
             createGuiSlider(GuiIdentifiers.PG2_S_CLAY_CNT, "count", 0.0f, 40.0f, (float)this.settings.clayCount, this),
@@ -387,7 +387,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG2_S_LAPS_CTR, "center", 0.0f, MAX_HEIGHT, (float)this.settings.lapisCenterHeight, this),
             createGuiSlider(GuiIdentifiers.PG2_S_LAPS_SPR, "spread", 1.0f, MAX_HEIGHT, (float)this.settings.lapisSpread, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_EMER_NAME, I18n.format("tile.oreEmerald.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG2_L_EMER_NAME, String.format("%s (%s)", I18n.format("tile.oreEmerald.name"), I18n.format(PREFIX + "modernBeta"))),
             null,
             createGuiSlider(GuiIdentifiers.PG2_S_EMER_SIZE, "size", 1.0f, 50.0f, (float)this.settings.emeraldSize, this),
             createGuiSlider(GuiIdentifiers.PG2_S_EMER_CNT, "count", 0.0f, 40.0f, (float)this.settings.emeraldCount, this),

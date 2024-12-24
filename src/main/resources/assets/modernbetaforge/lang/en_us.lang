@@ -3,6 +3,7 @@
 generator.modernbeta=Modern Beta
 
 ## World Customization
+createWorld.customize.custom.modernBeta=Modern Beta
 
 # Page Buttons
 createWorld.customize.custom.nextPage=>

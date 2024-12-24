@@ -38,7 +38,7 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
         for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
             Compat compat = entry.getValue();
             if (compat instanceof BiomeCompat) {
-                ModernBeta.log(Level.INFO, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
+                ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
                 BiomeCompat biomeCompat = (BiomeCompat)compat;
                 
                 for (BiomeType type : BiomeType.values()) {
