@@ -90,6 +90,6 @@ public final class ModernBetaRegistry<T> {
     public Entry<ResourceLocation, T> getRandomEntry(Random random) {
         List<Entry<ResourceLocation, T>> entries = new ArrayList<>(this.registryEntries.entrySet());
         
-        return entries.get(random.nextInt(entries.size() - 1));
+        return entries.get(random.nextInt(entries.size()));
     }
 }
