@@ -15,10 +15,10 @@ public final class BiomeProperty extends StringProperty {
     /**
      * Constructs a new BiomeProperty with an initial biome, storing the biome's registry name.
      * 
-     * @param value The initial Biome value.
+     * @param value The initial Biome registry name value.
      */
-    public BiomeProperty(Biome value) {
-        super(value.getRegistryName().toString());
+    public BiomeProperty(ResourceLocation registryKey) {
+        super(registryKey.toString());
     }
 
     @Override

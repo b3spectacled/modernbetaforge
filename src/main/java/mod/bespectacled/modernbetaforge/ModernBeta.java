@@ -68,8 +68,8 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
-        // ModernBetaBuiltInRegistries.registerProperties();
         ModernBetaBuiltInRegistries.registerDataFixes();
+        //ModernBetaBuiltInRegistries.registerProperties();
         
         ModDataFixer.INSTANCE.registerModDataFixes();
         ModCompat.loadModCompat();

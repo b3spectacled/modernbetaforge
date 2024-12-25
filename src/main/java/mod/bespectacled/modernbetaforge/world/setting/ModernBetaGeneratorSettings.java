@@ -38,7 +38,6 @@ import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModernBetaGeneratorSettings {
     public final String chunkSource;
@@ -1953,7 +1952,7 @@ public class ModernBetaGeneratorSettings {
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
             
-            factory.customProperties.put(registryKey, new BiomeProperty(ForgeRegistries.BIOMES.getValue(new ResourceLocation(value))));
+            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
         }
 
     }
@@ -2004,7 +2003,7 @@ public class ModernBetaGeneratorSettings {
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             
-            factory.customProperties.put(registryKey, new BiomeProperty(ForgeRegistries.BIOMES.getValue(new ResourceLocation(value))));
+            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
         }
 
     }
