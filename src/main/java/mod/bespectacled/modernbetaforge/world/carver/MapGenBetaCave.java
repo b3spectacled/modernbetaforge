@@ -1,11 +1,18 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.collect.ImmutableSet;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
+import mod.bespectacled.modernbetaforge.compat.Compat;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -324,14 +331,25 @@ public class MapGenBetaCave extends MapGenBase {
     }
     
     private Set<Block> initializeCarvables(Block defaultBlock) {
-        Set<Block> carvables = new ImmutableSet.Builder<Block>()
-            .add(defaultBlock)
+        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
+        
+        // Add default blocks
+        carvables.add(defaultBlock)
             .add(Blocks.GRASS)
             .add(Blocks.DIRT)
             .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE)
-            .build();
+            .add(Blocks.IRON_ORE);
         
-        return carvables;
+        // Add modded blocks
+        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+            Compat compat = entry.getValue();
+            if (compat instanceof BiomeCompat) {
+                ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));
+                
+                carvables.addAll(((BiomeCompat)compat).getCustomCarvables());
+            }
+        }
+        
+        return carvables.build();
     }
 }

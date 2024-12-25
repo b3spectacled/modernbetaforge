@@ -7,6 +7,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
+import biomesoplenty.api.block.BOPBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
@@ -131,6 +133,16 @@ public class CompatBOP implements Compat, BiomeCompat {
         return builder.build();
     }
     
+    @Override
+    public List<Block> getCustomCarvables() {
+        ImmutableList.Builder<Block> builder = new ImmutableList.Builder<>();
+        
+        this.addCarverBlock(builder, BOPBlocks.grass);
+        this.addCarverBlock(builder, BOPBlocks.dirt);
+        
+        return builder.build();
+    }
+    
     private void addBiomeEntry(int ndx, Optional<Biome> biome, int weight) {
         if (biome != null && biome.isPresent()) {
             this.biomeEntries[ndx].add(new BiomeEntry(biome.get(), weight));
@@ -140,6 +152,12 @@ public class CompatBOP implements Compat, BiomeCompat {
     private void addBiomeSurface(ImmutableList.Builder<Biome> builder, Optional<Biome> biome) {
         if (biome != null && biome.isPresent()) {
             builder.add(biome.get());
+        }
+    }
+    
+    private void addCarverBlock(ImmutableList.Builder<Block> builder, Block block) {
+        if (block != null) {
+            builder.add(block);
         }
     }
 }
