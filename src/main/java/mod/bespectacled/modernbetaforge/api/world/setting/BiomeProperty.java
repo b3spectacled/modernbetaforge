@@ -17,8 +17,8 @@ public final class BiomeProperty extends StringProperty {
      * 
      * @param value The initial Biome registry name value.
      */
-    public BiomeProperty(ResourceLocation registryKey) {
-        super(registryKey.toString());
+    public BiomeProperty(ResourceLocation value) {
+        super(value.toString());
     }
 
     @Override

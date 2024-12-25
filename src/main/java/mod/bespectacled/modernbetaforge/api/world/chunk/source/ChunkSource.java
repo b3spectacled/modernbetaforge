@@ -26,6 +26,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureComponent;
 
@@ -83,6 +84,9 @@ public abstract class ChunkSource {
     /**
      * Create initial chunk given chunk coordinates.
      * Used to sample for biome injection and creation of initial biome map.
+     * If using biomes for chunk generation, DO NOT use {@link BiomeProvider#getBiome(net.minecraft.util.math.BlockPos) BiomeProvider.getBiome()} from {@link World}.
+     * At this stage, the biomes have not actually been set for {@link ModernBetaBiome} to sample from.
+     * Instead, get the biome provider, cast to {@link ModernBetaBiomeProvider} and use {@link ModernBetaBiomeProvider#getBiomeSource()} to sample biomes, or do final generation in {@link #provideProcessedChunk(World, ChunkPrimer, int, int, List) processedChunk} to get processed biome map.
      * 
      * @param world The world object
      * @param chunkPrimer Chunk primer

@@ -144,7 +144,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             
             // Post-process biome map, after surface generation
             if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
+                this.biomeInjector.injectBiomes(this.world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
             }
             
             // Carve terrain
@@ -157,7 +157,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             // Generate map feature placements
             for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
                 if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
-                    structureEntry.getValue().generate(world, chunkX, chunkZ, chunkPrimer);
+                    structureEntry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
                 }
             }
         }
@@ -459,14 +459,14 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         Biome[] biomes = new Biome[256];
         
         // Generate base terrain
-        this.chunkSource.provideInitialChunk(world, chunkPrimer, chunkX, chunkZ);
+        this.chunkSource.provideInitialChunk(this.world, chunkPrimer, chunkX, chunkZ);
         
         // Generate base biome map
         this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
         
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
+            this.biomeInjector.injectBiomes(this.world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);
