@@ -17,6 +17,7 @@ import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
@@ -42,6 +43,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.Infdev227SurfaceBuil
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
+import net.minecraft.init.Biomes;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -108,7 +110,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp2"), new FloatProperty(13.0f, 0.0f, 500.0f, PropertyGuiType.FIELD));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("stringProp"), new StringProperty("test"));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("listProp"), new ListProperty(1, new String[] { "test0", "test1", "test2" }));
-        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty("minecraft:plains"));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty(Biomes.PLAINS));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp2"), new BiomeProperty(ModernBetaBiomeHolders.ALPHA));
     }
     
     public static void registerDataFixes() {

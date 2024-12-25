@@ -13,12 +13,12 @@ import net.minecraft.world.biome.Biome;
 
 public final class BiomeProperty extends StringProperty {
     /**
-     * Constructs a new BiomeProperty with an initial string.
+     * Constructs a new BiomeProperty with an initial biome, storing the biome's registry name.
      * 
-     * @param value The initial String value.
+     * @param value The initial Biome value.
      */
-    public BiomeProperty(String value) {
-        super(value);
+    public BiomeProperty(Biome value) {
+        super(value.getRegistryName().toString());
     }
 
     @Override
