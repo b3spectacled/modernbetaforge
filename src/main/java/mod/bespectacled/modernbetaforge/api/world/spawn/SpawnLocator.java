@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.spawn;
 
+import java.util.Random;
+
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -27,10 +29,12 @@ public interface SpawnLocator {
     public static final SpawnLocator DEFAULT = new SpawnLocator() {
         @Override
         public BlockPos locateSpawn(World world, BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
-            int centerX = spawnPos.getX();
-            int centerZ = spawnPos.getZ();
             int radius = 64;
             int minAdjacent = 9;
+            
+            Random random = new Random(world.getSeed());
+            int centerX = random.nextInt(512) - 256;
+            int centerZ = random.nextInt(512) - 256;
             
             while(true) {
                 int r2 = radius * radius;
@@ -40,16 +44,17 @@ public interface SpawnLocator {
                         double distance = MathUtil.distance(centerX, centerZ, dX, dZ);
                         
                         if (distance < r2) {
-                            int y = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.SURFACE);
+                            int oceanY = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.OCEAN);
+                            int surfaceY = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.SURFACE);
                             
-                            if (y >= chunkSource.getSeaLevel()) {
+                            if (oceanY >= surfaceY && oceanY > 0) {
                                 // Check if there are surrounding blocks, relevant for Skylands worlds
                                 int numAdjacent = 0;
                                 for (int aX = dX - 1; aX <= dX + 1; ++aX) {
                                     for (int aZ = dZ - 1; aZ <= dZ + 1; ++aZ) {
-                                        int aY = chunkSource.getHeight(world, aX, aZ, HeightmapChunk.Type.SURFACE);
+                                        int aY = chunkSource.getHeight(world, aX, aZ, HeightmapChunk.Type.OCEAN);
                                         
-                                        if (aY >= y - 2 && aY <= y + 2) {
+                                        if (aY >= oceanY - 2 && aY <= oceanY + 2) {
                                             numAdjacent++;
                                         }
                                     }
@@ -57,7 +62,7 @@ public interface SpawnLocator {
                                 
                                 // Only spawn if the spawn position is surrounded by blocks
                                 if (numAdjacent >= minAdjacent) {
-                                    return new BlockPos(dX, y + 1, dZ);
+                                    return new BlockPos(dX, oceanY + 1, dZ);
                                 }
                             }
                         }
