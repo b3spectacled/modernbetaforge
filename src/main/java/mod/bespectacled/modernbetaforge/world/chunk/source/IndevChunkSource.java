@@ -61,7 +61,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     @Override
-    protected void pregenerateTerrain(World world) {
+    protected void pregenerateTerrain() {
         int layers = this.levelType == IndevType.FLOATING ? (this.levelHeight - 64) / 48 + 1 : 1;
         
         for (int layer = 0; layer < layers; ++layer) { 
@@ -82,37 +82,37 @@ public class IndevChunkSource extends FiniteChunkSource {
             this.sandOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
             this.gravelOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
 
-            this.setPhase(world, "Raising");
+            this.setPhase("Raising");
             this.raiseLevel();
 
-            this.setPhase(world, "Eroding");
+            this.setPhase("Eroding");
             this.erodeLevel();
 
-            this.setPhase(world, "Soiling");
+            this.setPhase("Soiling");
             this.soilLevel();
 
-            this.setPhase(world, "Growing");
+            this.setPhase("Growing");
             this.growLevel();
         }
         
         if (this.settings.useIndevCaves) {
-            this.setPhase(world, "Carving");
+            this.setPhase("Carving");
             this.carveLevel();
         }
         
         this.oreLevel();
         
-        this.setPhase(world, "Melting");
+        this.setPhase("Melting");
         this.meltLevel();
         this.updateLevel();
         
-        this.setPhase(world, "Watering");
+        this.setPhase("Watering");
         this.waterLevel();
 
-        this.setPhase(world, "Planting");
+        this.setPhase("Planting");
         this.plantLevel();
 
-        this.setPhase(world, "Assembling");
+        this.setPhase("Assembling");
         this.assembleLevel();
     }
 

@@ -59,13 +59,11 @@ public class DebugInfoEventHandler {
                 String biomeKey = settings.biomeSource;
                 String surfaceKey = settings.surfaceBuilder;
                 String carverKey = settings.caveCarver;
-                String fixedBiome = settings.singleBiome;
                 
                 String chunkText = String.format("[Modern Beta] Chunk Source: %s", chunkKey);
                 String biomeText = String.format("[Modern Beta] Biome Source: %s", biomeKey);
                 String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceKey);
                 String carverText = String.format("[Modern Beta] Cave Carver: %s", carverKey);
-                String fixedBiomeText = String.format("[Modern Beta] Fixed Biome: %s", fixedBiome);
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 event.getLeft().add(chunkText);
@@ -73,13 +71,6 @@ public class DebugInfoEventHandler {
                 event.getLeft().add(surfaceText);
                 if (settings.useCaves) event.getLeft().add(carverText);
                 event.getLeft().add("");
-                
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK));
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK));
-                event.getLeft().add("");
-
-                if (biomeKey.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString()))
-                    event.getLeft().add(fixedBiomeText);
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||
                     chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).hasPregenerated()
@@ -144,13 +135,23 @@ public class DebugInfoEventHandler {
                 String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
                 event.getLeft().add(baseBiomeText);
                 event.getLeft().add("");
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getAverageTime(DebugUtil.SECTION_GET_BASE_BIOMES));
-                event.getLeft().add("[Modern Beta] " + DebugUtil.getIterations(DebugUtil.SECTION_GET_BASE_BIOMES));
             }
             
+            String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK);
+            String iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK);
+            
+            if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
+            if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
+
+            averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GET_BASE_BIOMES);
+            iterations = DebugUtil.getIterations(DebugUtil.SECTION_GET_BASE_BIOMES);
+
+            if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
+            if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
+            
             if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {
-                String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
-                String iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
+                averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
+                iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
                 
                 if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
                 if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);

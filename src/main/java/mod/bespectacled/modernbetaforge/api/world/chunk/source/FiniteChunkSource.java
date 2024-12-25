@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
@@ -68,7 +69,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int[] levelHeightmap;
     
     private final IndevHouse levelHouse;
-    
+
+    private Consumer<String> levelNotifier;
     private LevelDataContainer levelDataContainer;
     
     private String phase;
@@ -240,7 +242,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (this.levelHouse == IndevHouse.NONE)
             return;
         
-        this.setPhase(world, "Building");
+        this.setPhase("Building");
         
         int spawnX = spawnPos.getX();
         int spawnY = spawnPos.getY() + 1;
@@ -394,10 +396,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
 
     /**
      * Generates the level data.
-     * 
-     * @param world The world object.
      */
-    protected abstract void pregenerateTerrain(World world);
+    protected abstract void pregenerateTerrain();
     
     /**
      * Generates the world chunks outside of the level bounds.
@@ -449,6 +449,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @param world The world object, passed into {@link FiniteDataHandler}.
      */
     protected void pregenerateLevelOrWait(World world) {
+        if (this.levelNotifier == null) {
+            this.levelNotifier = message -> {
+                if (world.getMinecraftServer() != null) {
+                    AccessorMinecraftServer accessor = (AccessorMinecraftServer)world.getMinecraftServer();
+                    accessor.invokeSetUserMessage(message + "..");
+                }
+            };
+        }
+        
         // Lazy load level data container
         if (this.levelDataContainer == null) {
             this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
@@ -457,7 +466,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
         
         if (!this.levelDataContainer.generated) {
-            this.pregenerateTerrain(world);
+            this.pregenerateTerrain();
             this.levelDataContainer.generated = true;
             
             if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
@@ -594,15 +603,13 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Sets the current generation phase for the level. This is printed to the console and the level loading screen.
      * 
-     * @param world The world object, used to access the loading screen display message.
      * @param phase Generation phase.
      */
-    protected void setPhase(World world, String phase) {
+    protected void setPhase(String phase) {
         this.phase = phase;
         
-        if (world.getMinecraftServer() != null) {
-            AccessorMinecraftServer accessor = (AccessorMinecraftServer)world.getMinecraftServer();
-            accessor.invokeSetUserMessage(this.phase + "..");
+        if (this.levelNotifier != null) {
+            this.levelNotifier.accept(phase);
         }
         
         ModernBeta.log(Level.INFO, this.phase + "..");
