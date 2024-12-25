@@ -2,10 +2,12 @@ package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
@@ -35,6 +37,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.MapGenRavine;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
@@ -66,6 +69,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final Map<ResourceLocation, MapGenStructure> structureMap;
     private final Map<ResourceLocation, MapGenBase> carverMap;
     
+    private final List<WorldGenerator> customFeatures;
+    
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         
@@ -94,6 +99,12 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         this.structureMap = this.initStructures(this, settings, world.getWorldInfo().isMapFeaturesEnabled());
         this.carverMap = this.initCarvers(settings);
+        
+        this.customFeatures = ModernBetaRegistries.FEATURE
+            .getValues()
+            .stream()
+            .map(feature -> feature.apply(this.chunkSource, this.settings))
+            .collect(Collectors.toCollection(LinkedList<WorldGenerator>::new));
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());
@@ -233,8 +244,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                 ModernBetaBiomeDecorator.populateDungeons(this.world, this.random, this.settings, mutablePos, chunkX, chunkZ);
             }
             
-            // Generate biome decorations
-            biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
+            // Generate biome features
+            biome.decorate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
+            
+            // Generate custom features
+            for (WorldGenerator feature : this.customFeatures) {
+                feature.generate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
+            }
             
             // Generate animals
             if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
