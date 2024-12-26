@@ -312,7 +312,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @return Whether the level is generated and data can be fetched from the level data.
      */
     public boolean hasPregenerated() {
-        return this.levelDataContainer.generated;
+        if (this.levelDataContainer != null) {
+            return this.levelDataContainer.generated;
+        }
+        
+        return false;
     }
 
     /**
@@ -470,10 +474,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.levelDataContainer.generated = true;
             
             if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
-                this.trySaveLevel(world);
+                this.trySaveLevel(world, this.levelDataContainer);
                 
                 if (DEBUG_LEVEL_DATA_HANDLER) {
-                    this.debugLevelDataHandler(world);
+                    this.debugLevelDataHandler(world, this.levelDataContainer);
                 }
             }
         }
@@ -624,11 +628,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.phaseProgress = phaseProgress;
 
         /*
-        if (this.world.getMinecraftServer() != null) {
-            AccessorMinecraftServer accessor = (AccessorMinecraftServer)this.world.getMinecraftServer();
-            String progressStr = String.format("%s.. %d", this.phase, (int)(this.phaseProgress * 100.0f));
-            
-            accessor.invokeSetUserMessage(progressStr);
+        if (this.levelNotifier != null) {
+            this.levelNotifier.accept(String.format("%s.. %d", this.phase, (int)(this.phaseProgress * 100.0f)));
         }
         */
     }
@@ -742,14 +743,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * Attempts to save finite level data to disk. If successful, then the level data can be loaded later to avoid regenerating the entire level.
      * 
      * @param world The world object, passed into {@link FiniteDataHandler}.
+     * @param levelDataContainer The active level data container to be saved.
      * @return Whether the file was successfully saved.
      */
-    private boolean trySaveLevel(World world) {
+    private boolean trySaveLevel(World world, LevelDataContainer levelDataContainer) {
         FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
         boolean saved = false;
         
         try {
-            dataHandler.setLevelData(this.levelDataContainer.levelData, this.levelDataContainer.levelMap);
+            dataHandler.setLevelData(levelDataContainer.levelData, levelDataContainer.levelMap);
             dataHandler.writeToDisk();
             
             ModernBeta.log(Level.INFO, String.format("Level file '%s' was saved..", FiniteDataHandler.FILE_NAME));
@@ -767,8 +769,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * The level file is read from disk and compared to the currently loaded level data to ensure data integrity.
      * 
      * @param world The world object, passed into {@link FiniteDataHandler}.
+     * @param levelDataContainer The active level data container to be debugged against.
      */ 
-    private void debugLevelDataHandler(World world) {
+    private void debugLevelDataHandler(World world, LevelDataContainer levelDataContainer) {
         FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
 
         ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
@@ -779,7 +782,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             for (int x = 0; x < this.levelWidth; ++x) {
                 for (int y = 0; y < this.levelHeight; ++y) {
                     for (int z = 0; z < this.levelLength; ++z) {
-                        Block expected = this.levelDataContainer.getLevelBlock(x, y, z, this.levelWidth, this.levelLength);
+                        Block expected = levelDataContainer.getLevelBlock(x, y, z, this.levelWidth, this.levelLength);
                         Block found = readLevelData.getLevelBlock(x, y, z, this.levelWidth, this.levelLength);
                         
                         if (expected != found) {
