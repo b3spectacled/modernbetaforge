@@ -90,6 +90,8 @@ createWorld.customize.custom.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.spawnWolves=Wolves
 
 # Page 4/5
+createWorld.customize.custom.scaleNoiseScaleX=Scale Noise Scale X
+createWorld.customize.custom.scaleNoiseScaleZ=Scale Noise Scale Z
 createWorld.customize.custom.height=Height
 createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale

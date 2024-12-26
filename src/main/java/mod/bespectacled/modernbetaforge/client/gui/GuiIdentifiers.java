@@ -234,14 +234,17 @@ public class GuiIdentifiers {
     
     public static final int PG3_S_B_DPTH_WT = 413;
     public static final int PG3_S_B_DPTH_OF = 414;
-    public static final int PG3_S_B_SCL_WT = 415;
-    public static final int PG3_S_B_SCL_OF = 416;
+    public static final int PG3_S_B_SCLE_WT = 415;
+    public static final int PG3_S_B_SCLE_OF = 416;
     public static final int PG3_S_RIVER_SZ = 417;
     public static final int PG3_S_BIOME_SZ = 418;
 
     public static final int PG3_S_TEMP_SCL = 419;
     public static final int PG3_S_RAIN_SCL = 420;
     public static final int PG3_S_DETL_SCL = 421;
+    
+    public static final int PG3_S_SCLE_NS_X = 422;
+    public static final int PG3_S_SCLE_NS_Z = 423;
 
     public static final int PG3_B_USE_BDS = 450;
     
@@ -267,14 +270,17 @@ public class GuiIdentifiers {
     
     public static final int PG4_F_B_DPTH_WT = 513;
     public static final int PG4_F_B_DPTH_OF = 514;
-    public static final int PG4_F_B_SCL_WT = 515;
-    public static final int PG4_F_B_SCL_OF = 516;
+    public static final int PG4_F_B_SCLE_WT = 515;
+    public static final int PG4_F_B_SCLE_OF = 516;
     public static final int PG4_F_RIVER_SZ = 517;
     public static final int PG4_F_BIOME_SZ = 518;
 
     public static final int PG4_F_TEMP_SCL = 519;
     public static final int PG4_F_RAIN_SCL = 520;
     public static final int PG4_F_DETL_SCL = 521;
+    
+    public static final int PG4_F_SCLE_NS_X = 522;
+    public static final int PG4_F_SCLE_NS_Z = 523;
     
     // Labels
     public static final int PG4_L_MAIN_NS_X = 1500;
@@ -296,10 +302,13 @@ public class GuiIdentifiers {
     
     public static final int PG4_L_B_DPTH_WT = 1516;
     public static final int PG4_L_B_DPTH_OF = 1517;
-    public static final int PG4_L_B_SCL_WT = 1518;
-    public static final int PG4_L_B_SCL_OF = 1519;
+    public static final int PG4_L_B_SCLE_WT = 1518;
+    public static final int PG4_L_B_SCLE_OF = 1519;
     public static final int PG4_L_BIOME_SZ = 1520;
     public static final int PG4_L_RIVER_SZ = 1521;
+    
+    public static final int PG4_L_SCLE_NS_X = 1522;
+    public static final int PG4_L_SCLE_NS_Z = 1523;
     
     /* Page 6 */
     
@@ -397,8 +406,8 @@ public class GuiIdentifiers {
         
         assertOffset(PG3_S_B_DPTH_WT, PG4_F_B_DPTH_WT);
         assertOffset(PG3_S_B_DPTH_OF, PG4_F_B_DPTH_OF);
-        assertOffset(PG3_S_B_SCL_WT, PG4_F_B_SCL_WT);
-        assertOffset(PG3_S_B_SCL_OF, PG4_F_B_SCL_OF);
+        assertOffset(PG3_S_B_SCLE_WT, PG4_F_B_SCLE_WT);
+        assertOffset(PG3_S_B_SCLE_OF, PG4_F_B_SCLE_OF);
     }
 
     private static void assertOffset(int sliderId, int fieldId) {

@@ -138,6 +138,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_RESOURCE_LOCATION_BIOME, new DataFix(NbtTags.BIOME_SOURCE, DataFixers::fixResourceLocationBiome));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_RESOURCE_LOCATION_SURFACE, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixResourceLocationSurface));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_RESOURCE_LOCATION_CARVER, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixResourceLocationCarver));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SCALE_NOISE_SCALE_X, new DataFix(NbtTags.SCALE_NOISE_SCALE_X, DataFixers::fixScaleNoiseScaleX));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SCALE_NOISE_SCALE_Z, new DataFix(NbtTags.SCALE_NOISE_SCALE_Z, DataFixers::fixScaleNoiseScaleZ));
     }
 
     @SideOnly(Side.CLIENT)
@@ -229,6 +231,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.HEIGHT_SCALE, GuiPredicates.HEIGHT_SCALE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LOWER_LIMIT_SCALE, GuiPredicates.LOWER_LIMIT_SCALE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.UPPER_LIMIT_SCALE, GuiPredicates.UPPER_LIMIT_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SCALE_NOISE_SCALE_X, GuiPredicates.SCALE_NOISE_SCALE_X_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SCALE_NOISE_SCALE_Z, GuiPredicates.SCALE_NOISE_SCALE_Z_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.DEPTH_NOISE_SCALE_X, GuiPredicates.DEPTH_NOISE_SCALE_X_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.DEPTH_NOISE_SCALE_Z, GuiPredicates.DEPTH_NOISE_SCALE_Z_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.MAIN_NOISE_SCALE_X, GuiPredicates.MAIN_NOISE_SCALE_X_TEST);

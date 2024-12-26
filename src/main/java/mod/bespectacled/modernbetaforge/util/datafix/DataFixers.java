@@ -200,6 +200,26 @@ public class DataFixers {
         }
     }
     
+    public static void fixScaleNoiseScaleX(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE);
+        boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
+        boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
+        
+        if (isAlpha || isInfdev611) {
+            factory.scaleNoiseScaleX = 1.0f;
+        }
+    }
+    
+    public static void fixScaleNoiseScaleZ(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE);
+        boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
+        boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
+        
+        if (isAlpha || isInfdev611) {
+            factory.scaleNoiseScaleZ = 1.0f;
+        }
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }

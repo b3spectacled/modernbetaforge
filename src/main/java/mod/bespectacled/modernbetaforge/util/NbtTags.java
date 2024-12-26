@@ -92,6 +92,8 @@ public class NbtTags {
     public static final String HEIGHT_SCALE = "heightScale";
     public static final String LOWER_LIMIT_SCALE = "lowerLimitScale";
     public static final String UPPER_LIMIT_SCALE = "upperLimitScale";
+    public static final String SCALE_NOISE_SCALE_X = "scaleNoiseScaleX";
+    public static final String SCALE_NOISE_SCALE_Z = "scaleNoiseScaleZ";
     public static final String DEPTH_NOISE_SCALE_X = "depthNoiseScaleX";
     public static final String DEPTH_NOISE_SCALE_Z = "depthNoiseScaleZ";
     public static final String MAIN_NOISE_SCALE_X = "mainNoiseScaleX";

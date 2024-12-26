@@ -81,8 +81,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
             double densityOffset = this.getOffset();
-            
-            // Equivalent to current MC noise.sample() function, see NoiseColumnSampler.            
+                      
             double mainNoise = (this.mainOctaveNoise.sample(
                 noiseX, noiseY, noiseZ,
                 coordinateScale / mainNoiseScaleX, 

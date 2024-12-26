@@ -100,6 +100,8 @@ public class GuiPredicates {
     public static final GuiPredicate HEIGHT_SCALE_TEST;
     public static final GuiPredicate LOWER_LIMIT_SCALE_TEST;
     public static final GuiPredicate UPPER_LIMIT_SCALE_TEST;
+    public static final GuiPredicate SCALE_NOISE_SCALE_X_TEST;
+    public static final GuiPredicate SCALE_NOISE_SCALE_Z_TEST;
     public static final GuiPredicate DEPTH_NOISE_SCALE_X_TEST;
     public static final GuiPredicate DEPTH_NOISE_SCALE_Z_TEST;
     public static final GuiPredicate MAIN_NOISE_SCALE_X_TEST;
@@ -190,6 +192,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
                 GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_SCLE_NS_X,
+                GuiIdentifiers.PG3_S_SCLE_NS_Z,
                 GuiIdentifiers.PG3_S_DPTH_NS_X,
                 GuiIdentifiers.PG3_S_DPTH_NS_Z,
                 GuiIdentifiers.PG3_S_BASE_SIZE,
@@ -208,6 +212,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
                 GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_SCLE_NS_X,
+                GuiIdentifiers.PG3_S_SCLE_NS_Z,
                 GuiIdentifiers.PG3_S_DPTH_NS_X,
                 GuiIdentifiers.PG3_S_DPTH_NS_Z,
                 GuiIdentifiers.PG3_S_BASE_SIZE,
@@ -226,6 +232,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
                 GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_SCLE_NS_X,
+                GuiIdentifiers.PG3_S_SCLE_NS_Z,
                 GuiIdentifiers.PG3_S_DPTH_NS_X,
                 GuiIdentifiers.PG3_S_DPTH_NS_Z,
                 GuiIdentifiers.PG3_S_BASE_SIZE,
@@ -281,8 +289,6 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
                 GuiIdentifiers.PG3_S_MAIN_NS_Z,
-                GuiIdentifiers.PG3_S_DPTH_NS_X,
-                GuiIdentifiers.PG3_S_DPTH_NS_Z,
                 GuiIdentifiers.PG3_S_COORD_SCL,
                 GuiIdentifiers.PG3_S_HEIGH_SCL,
                 GuiIdentifiers.PG3_S_UPPER_LIM,
@@ -297,6 +303,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_MAIN_NS_X,
                 GuiIdentifiers.PG3_S_MAIN_NS_Y,
                 GuiIdentifiers.PG3_S_MAIN_NS_Z,
+                GuiIdentifiers.PG3_S_SCLE_NS_X,
+                GuiIdentifiers.PG3_S_SCLE_NS_Z,
                 GuiIdentifiers.PG3_S_DPTH_NS_X,
                 GuiIdentifiers.PG3_S_DPTH_NS_Z,
                 GuiIdentifiers.PG3_S_BASE_SIZE,
@@ -327,8 +335,8 @@ public class GuiPredicates {
                 
                 GuiIdentifiers.PG3_S_B_DPTH_WT,
                 GuiIdentifiers.PG3_S_B_DPTH_OF,
-                GuiIdentifiers.PG3_S_B_SCL_WT,
-                GuiIdentifiers.PG3_S_B_SCL_OF,
+                GuiIdentifiers.PG3_S_B_SCLE_WT,
+                GuiIdentifiers.PG3_S_B_SCLE_OF,
                 GuiIdentifiers.PG3_S_BIOME_SZ,
                 GuiIdentifiers.PG3_S_RIVER_SZ,
                 
@@ -489,6 +497,8 @@ public class GuiPredicates {
         HEIGHT_SCALE_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_HEIGH_SCL), GuiIdentifiers.PG3_S_HEIGH_SCL, GuiIdentifiers.PG4_F_HEIGH_SCL);
         LOWER_LIMIT_SCALE_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_LOWER_LIM), GuiIdentifiers.PG3_S_LOWER_LIM, GuiIdentifiers.PG4_F_LOWER_LIM);
         UPPER_LIMIT_SCALE_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_UPPER_LIM), GuiIdentifiers.PG3_S_UPPER_LIM, GuiIdentifiers.PG4_F_UPPER_LIM);
+        SCALE_NOISE_SCALE_X_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_SCLE_NS_X), GuiIdentifiers.PG3_S_SCLE_NS_X, GuiIdentifiers.PG4_F_SCLE_NS_X);
+        SCALE_NOISE_SCALE_Z_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_SCLE_NS_Z), GuiIdentifiers.PG3_S_SCLE_NS_Z, GuiIdentifiers.PG4_F_SCLE_NS_Z);
         DEPTH_NOISE_SCALE_X_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_DPTH_NS_X), GuiIdentifiers.PG3_S_DPTH_NS_X, GuiIdentifiers.PG4_F_DPTH_NS_X);
         DEPTH_NOISE_SCALE_Z_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_DPTH_NS_Z), GuiIdentifiers.PG3_S_DPTH_NS_Z, GuiIdentifiers.PG4_F_DPTH_NS_Z);
         MAIN_NOISE_SCALE_X_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_MAIN_NS_X), GuiIdentifiers.PG3_S_MAIN_NS_X, GuiIdentifiers.PG4_F_MAIN_NS_X);
@@ -502,8 +512,8 @@ public class GuiPredicates {
         DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG3_S_DETL_SCL, GuiIdentifiers.PG4_F_DETL_SCL);
         BIOME_DEPTH_WEIGHT_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_DPTH_WT), GuiIdentifiers.PG3_S_B_DPTH_WT, GuiIdentifiers.PG4_F_B_DPTH_WT);
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_DPTH_OF), GuiIdentifiers.PG3_S_B_DPTH_OF, GuiIdentifiers.PG4_F_B_DPTH_OF);
-        BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_SCL_WT), GuiIdentifiers.PG3_S_B_SCL_WT, GuiIdentifiers.PG4_F_B_SCL_WT);
-        BIOME_SCALE_OFFSET_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_SCL_OF), GuiIdentifiers.PG3_S_B_SCL_OF, GuiIdentifiers.PG4_F_B_SCL_OF);
+        BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_SCLE_WT), GuiIdentifiers.PG3_S_B_SCLE_WT, GuiIdentifiers.PG4_F_B_SCLE_WT);
+        BIOME_SCALE_OFFSET_TEST = new GuiPredicate(factory -> containsNoiseSetting(factory, GuiIdentifiers.PG3_S_B_SCLE_OF), GuiIdentifiers.PG3_S_B_SCLE_OF, GuiIdentifiers.PG4_F_B_SCLE_OF);
         BIOME_SIZE_TEST = new GuiPredicate(
             factory -> {
                 boolean isSingleBiomeSource = isBiomeEqualTo(factory, ModernBetaBuiltInTypes.Biome.SINGLE);

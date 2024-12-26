@@ -24,6 +24,7 @@ public class ModDataFixer {
         this.registerModDataFix(ModDataFixers.SINGLE_BIOME_FIX);
         this.registerModDataFix(ModDataFixers.INDEV_HOUSE_FIX);
         this.registerModDataFix(ModDataFixers.RESOURCE_LOCATION_FIX);
+        this.registerModDataFix(ModDataFixers.SCALE_NOISE_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {

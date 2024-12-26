@@ -77,6 +77,8 @@ public class GuiPredicate {
     public static final ResourceLocation HEIGHT_SCALE = createRegistryKey(NbtTags.HEIGHT_SCALE);
     public static final ResourceLocation LOWER_LIMIT_SCALE = createRegistryKey(NbtTags.LOWER_LIMIT_SCALE);
     public static final ResourceLocation UPPER_LIMIT_SCALE = createRegistryKey(NbtTags.UPPER_LIMIT_SCALE);
+    public static final ResourceLocation SCALE_NOISE_SCALE_X = createRegistryKey(NbtTags.SCALE_NOISE_SCALE_X);
+    public static final ResourceLocation SCALE_NOISE_SCALE_Z = createRegistryKey(NbtTags.SCALE_NOISE_SCALE_Z);
     public static final ResourceLocation DEPTH_NOISE_SCALE_X = createRegistryKey(NbtTags.DEPTH_NOISE_SCALE_X);
     public static final ResourceLocation DEPTH_NOISE_SCALE_Z = createRegistryKey(NbtTags.DEPTH_NOISE_SCALE_Z);
     public static final ResourceLocation MAIN_NOISE_SCALE_X = createRegistryKey(NbtTags.MAIN_NOISE_SCALE_X);

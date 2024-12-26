@@ -54,6 +54,8 @@ public class ModernBetaGeneratorSettings {
     public final float heightScale;
     public final float upperLimitScale;
     public final float lowerLimitScale;
+    public final float scaleNoiseScaleX;
+    public final float scaleNoiseScaleZ;
     public final float depthNoiseScaleX;
     public final float depthNoiseScaleZ;
     public final float mainNoiseScaleX;
@@ -269,6 +271,8 @@ public class ModernBetaGeneratorSettings {
         this.heightScale = factory.heightScale;
         this.upperLimitScale = factory.upperLimitScale;
         this.lowerLimitScale = factory.lowerLimitScale;
+        this.scaleNoiseScaleX = factory.scaleNoiseScaleX;
+        this.scaleNoiseScaleZ = factory.scaleNoiseScaleZ;
         this.depthNoiseScaleX = factory.depthNoiseScaleX;
         this.depthNoiseScaleZ = factory.depthNoiseScaleZ;
         this.mainNoiseScaleX = factory.mainNoiseScaleX;
@@ -547,6 +551,8 @@ public class ModernBetaGeneratorSettings {
         public float heightScale;
         public float upperLimitScale;
         public float lowerLimitScale;
+        public float scaleNoiseScaleX;
+        public float scaleNoiseScaleZ;
         public float depthNoiseScaleX;
         public float depthNoiseScaleZ;
         public float mainNoiseScaleX;
@@ -762,6 +768,8 @@ public class ModernBetaGeneratorSettings {
             this.heightScale = 684.412f;
             this.upperLimitScale = 512.0f;
             this.lowerLimitScale = 512.0f;
+            this.scaleNoiseScaleX = 1.121f;
+            this.scaleNoiseScaleZ = 1.121f;
             this.depthNoiseScaleX = 200.0f;
             this.depthNoiseScaleZ = 200.0f;
             this.mainNoiseScaleX = 80.0f;
@@ -998,6 +1006,8 @@ public class ModernBetaGeneratorSettings {
                 Float.compare(factory.heightScale, this.heightScale) == 0 &&
                 Float.compare(factory.upperLimitScale, this.upperLimitScale) == 0 &&
                 Float.compare(factory.lowerLimitScale, this.lowerLimitScale) == 0 &&
+                Float.compare(factory.scaleNoiseScaleX, this.scaleNoiseScaleX) == 0 &&
+                Float.compare(factory.scaleNoiseScaleZ, this.scaleNoiseScaleZ) == 0 &&
                 Float.compare(factory.depthNoiseScaleX, this.depthNoiseScaleX) == 0 &&
                 Float.compare(factory.depthNoiseScaleZ, this.depthNoiseScaleZ) == 0 &&
                 Float.compare(factory.mainNoiseScaleX, this.mainNoiseScaleX) == 0 &&
@@ -1218,6 +1228,8 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + ((this.heightScale == 0.0f) ? 0 : Float.floatToIntBits(this.heightScale));
             hashCode = 31 * hashCode + ((this.upperLimitScale == 0.0f) ? 0 : Float.floatToIntBits(this.upperLimitScale));
             hashCode = 31 * hashCode + ((this.lowerLimitScale == 0.0f) ? 0 : Float.floatToIntBits(this.lowerLimitScale));
+            hashCode = 31 * hashCode + ((this.scaleNoiseScaleX == 0.0f) ? 0 : Float.floatToIntBits(this.scaleNoiseScaleX));
+            hashCode = 31 * hashCode + ((this.scaleNoiseScaleZ == 0.0f) ? 0 : Float.floatToIntBits(this.scaleNoiseScaleZ));
             hashCode = 31 * hashCode + ((this.depthNoiseScaleX == 0.0f) ? 0 : Float.floatToIntBits(this.depthNoiseScaleX));
             hashCode = 31 * hashCode + ((this.depthNoiseScaleZ == 0.0f) ? 0 : Float.floatToIntBits(this.depthNoiseScaleZ));
             hashCode = 31 * hashCode + ((this.mainNoiseScaleX == 0.0f) ? 0 : Float.floatToIntBits(this.mainNoiseScaleX));
@@ -1463,6 +1475,8 @@ public class ModernBetaGeneratorSettings {
                 factory.heightScale = JsonUtils.getFloat(jsonObject, NbtTags.HEIGHT_SCALE, factory.heightScale);
                 factory.lowerLimitScale = JsonUtils.getFloat(jsonObject, NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
                 factory.upperLimitScale = JsonUtils.getFloat(jsonObject, NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
+                factory.scaleNoiseScaleX = JsonUtils.getFloat(jsonObject, NbtTags.SCALE_NOISE_SCALE_X, factory.scaleNoiseScaleX);
+                factory.scaleNoiseScaleZ = JsonUtils.getFloat(jsonObject, NbtTags.SCALE_NOISE_SCALE_Z, factory.scaleNoiseScaleZ);
                 factory.depthNoiseScaleX = JsonUtils.getFloat(jsonObject, NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
                 factory.depthNoiseScaleZ = JsonUtils.getFloat(jsonObject, NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
                 factory.mainNoiseScaleX = JsonUtils.getFloat(jsonObject, NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);
@@ -1692,6 +1706,8 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.HEIGHT_SCALE, factory.heightScale);
             jsonObject.addProperty(NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
             jsonObject.addProperty(NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_X, factory.scaleNoiseScaleX);
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_Z, factory.scaleNoiseScaleZ);
             jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
             jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
             jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);

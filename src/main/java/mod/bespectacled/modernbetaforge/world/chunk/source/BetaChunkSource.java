@@ -68,6 +68,9 @@ public class BetaChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
+        double scaleNoiseScaleX = this.settings.scaleNoiseScaleX; // Default: 1.121
+        double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;
+        
         double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 200
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         
@@ -84,7 +87,7 @@ public class BetaChunkSource extends NoiseChunkSource {
         double baseSize = this.settings.baseSize;
         double heightStretch = this.settings.stretchY;
 
-        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, 1.121, 1.121);
+        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
         double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
         Clime clime = this.climateSampler.sample(x, z);

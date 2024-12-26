@@ -169,6 +169,26 @@ public class ModDataFixers {
         }
     );
     
+    public static final ModDataFix SCALE_NOISE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_4_0_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_SCALE_NOISE_SCALE_X,
+                    DataFixTags.FIX_SCALE_NOISE_SCALE_Z
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys);
+            }
+        }
+    );
+    
     private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys) {
         String worldName = getWorldName(compound);
         
