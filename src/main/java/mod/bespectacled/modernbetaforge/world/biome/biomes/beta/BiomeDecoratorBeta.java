@@ -66,7 +66,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int plantCount = this.getYellowFlowerCount(biome);
             
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenDandelion, mutablePos, plantCount, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenDandelion, mutablePos, plantCount, settings.height);
         }
 
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
@@ -77,37 +77,37 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
             if (biome instanceof BiomeBetaDesert) {
-                this.populateWorldGenCount(world, random, biome, startPos, this.worldGenDeadBush, mutablePos, 2, settings.height);
+                this.populateWorldGenCount(world, random, startPos, this.worldGenDeadBush, mutablePos, 2, settings.height);
             }
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenPoppy, mutablePos, 2, settings.height);
+            this.populateWorldGenChance(world, random, startPos, this.worldGenPoppy, mutablePos, 2, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
-            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenBrownMushroom, mutablePos, 4, settings.height);
-            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenRedMushroom, mutablePos, 8, settings.height);
+            this.populateWorldGenChance(world, random, startPos, this.worldGenBrownMushroom, mutablePos, 4, settings.height);
+            this.populateWorldGenChance(world, random, startPos, this.worldGenRedMushroom, mutablePos, 8, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.REED)) {
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenReed, mutablePos, 10, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenReed, mutablePos, 10, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.PUMPKIN)) {
-            this.populateWorldGenChance(world, random, biome, startPos, this.worldGenPumpkin, mutablePos, 32, settings.height);
+            this.populateWorldGenChance(world, random, startPos, this.worldGenPumpkin, mutablePos, 32, settings.height);
         }
         
         if (biome instanceof BiomeBetaDesert && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CACTUS)) {
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenCactus, mutablePos, 10, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenCactus, mutablePos, 10, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
-            this.populateWaterfalls(world, random, biome, startPos, mutablePos, settings.height);
+            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
-            this.populateLavafalls(world, random, biome, startPos, mutablePos, settings.height);
+            this.populateLavafalls(world, random, startPos, mutablePos, settings.height);
         }
         
         /*

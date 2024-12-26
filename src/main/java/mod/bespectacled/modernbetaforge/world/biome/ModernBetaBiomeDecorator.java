@@ -126,7 +126,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateWorldGenCount(World world, Random random, Biome biome, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
+    protected void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -139,7 +139,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateWorldGenChance(World world, Random random, Biome biome, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
+    protected void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -208,7 +208,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateWaterfalls(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int height) {
+    protected void populateWaterfalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
 
@@ -222,7 +222,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateLavafalls(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int height) {
+    protected void populateLavafalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
 

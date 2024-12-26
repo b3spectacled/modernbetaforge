@@ -54,15 +54,15 @@ public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int count = this.getFlowerCount(biome);
             
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenDandelion, mutablePos, count, settings.height);
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenPoppy, mutablePos, count, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenDandelion, mutablePos, count, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenPoppy, mutablePos, count, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
             int count = this.getMushroomCount();
             
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenBrownMushroom, mutablePos, count, settings.height);
-            this.populateWorldGenCount(world, random, biome, startPos, this.worldGenRedMushroom, mutablePos, count, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenBrownMushroom, mutablePos, count, settings.height);
+            this.populateWorldGenCount(world, random, startPos, this.worldGenRedMushroom, mutablePos, count, settings.height);
         }
 
         // New feature generators
