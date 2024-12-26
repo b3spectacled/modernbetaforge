@@ -44,17 +44,17 @@ public interface SpawnLocator {
                         double distance = MathUtil.distance(centerX, centerZ, dX, dZ);
                         
                         if (distance < r2) {
-                            int oceanY = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.OCEAN);
                             int surfaceY = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.SURFACE);
+                            int oceanY = chunkSource.getHeight(world, dX, dZ, HeightmapChunk.Type.OCEAN);
                             
-                            if (oceanY >= surfaceY && oceanY > 0) {
+                            if (surfaceY >= oceanY && surfaceY > 0) {
                                 // Check if there are surrounding blocks, relevant for Skylands worlds
                                 int numAdjacent = 0;
                                 for (int aX = dX - 1; aX <= dX + 1; ++aX) {
                                     for (int aZ = dZ - 1; aZ <= dZ + 1; ++aZ) {
-                                        int aY = chunkSource.getHeight(world, aX, aZ, HeightmapChunk.Type.OCEAN);
+                                        int aY = chunkSource.getHeight(world, aX, aZ, HeightmapChunk.Type.SURFACE);
                                         
-                                        if (aY >= oceanY - 2 && aY <= oceanY + 2) {
+                                        if (aY >= surfaceY - 2 && aY <= surfaceY + 2) {
                                             numAdjacent++;
                                         }
                                     }
@@ -62,7 +62,7 @@ public interface SpawnLocator {
                                 
                                 // Only spawn if the spawn position is surrounded by blocks
                                 if (numAdjacent >= minAdjacent) {
-                                    return new BlockPos(dX, oceanY + 1, dZ);
+                                    return new BlockPos(dX, surfaceY + 1, dZ);
                                 }
                             }
                         }
