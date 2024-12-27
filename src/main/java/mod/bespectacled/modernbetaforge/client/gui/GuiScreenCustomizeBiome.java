@@ -81,6 +81,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialBiome);
+        this.list.scrollBy(SLOT_HEIGHT * this.list.selected);
         
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);

@@ -95,6 +95,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialEntry);
+        this.list.scrollBy(SLOT_HEIGHT * this.list.selected);
         
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
@@ -105,6 +106,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
         this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
         this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
+        
         
         this.updateButtonValidity();
     }
