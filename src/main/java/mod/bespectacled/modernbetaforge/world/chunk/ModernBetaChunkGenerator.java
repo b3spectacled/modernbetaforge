@@ -91,7 +91,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.biomeInjector = new BiomeInjector(
             this.chunkSource,
             this.biomeProvider.getBiomeSource(),
-            this.chunkSource.buildBiomeInjectorRules(biomeProvider)
+            this.chunkSource.buildBiomeInjectorRules(this.biomeProvider)
         );
 
         this.initialChunkCache = new ChunkCache<>("initial_chunk", this::provideInitialChunkPrimerContainer);
@@ -248,8 +248,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             biome.decorate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
             
             // Generate custom features
-            for (WorldGenerator feature : this.customFeatures) {
-                feature.generate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
+            if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.CUSTOM)) {
+                for (WorldGenerator feature : this.customFeatures) {
+                    feature.generate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
+                }
             }
             
             // Generate animals

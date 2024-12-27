@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 
 import org.lwjgl.input.Keyboard;
 
+import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -34,9 +35,11 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
     private final String initialEntry;
     private final String searchEntry;
-    private final List<Info> entries;
+    private final boolean startSearchFocused;
+    
     private final String langName;
     private final List<ResourceLocation> registryKeys;
+    private final List<Info> entries;
 
     private ModernBetaGeneratorSettings.Factory settings;
     private ListPreset list;
@@ -53,7 +56,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(guiCustomizeWorldScreen, consumer, initialEntry, "", langName, registryKeys);
+        this(guiCustomizeWorldScreen, consumer, initialEntry, "", false, langName, registryKeys);
     }
     
     public GuiScreenCustomizeRegistry(
@@ -61,6 +64,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialEntry,
         String searchEntry,
+        boolean startSearchFocused,
         String langName,
         List<ResourceLocation> registryKeys
     ) {
@@ -69,6 +73,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.consumer = consumer;
         this.initialEntry = initialEntry;
         this.searchEntry = searchEntry;
+        this.startSearchFocused = startSearchFocused;
+        
         this.langName = langName;
         this.registryKeys = registryKeys;
         this.entries = this.loadEntries();
@@ -93,6 +99,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
         this.searchBar.setText(this.searchEntry);
+        this.searchBar.setFocused(this.startSearchFocused);
         
         this.select = this.addButton(new GuiButton(0, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + formattedLangName));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
@@ -127,11 +134,13 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         }
         
         if (keyCode == 28 || keyCode == 156) {
+            SoundUtil.playClickSound(this.mc.getSoundHandler());
             this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                 this.parent,
                 this.consumer,
                 this.initialEntry,
                 this.searchBar.getText(),
+                true,
                 this.langName,
                 this.registryKeys
             ));
@@ -155,6 +164,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.consumer,
                     this.initialEntry,
                     this.searchBar.getText(),
+                    true,
                     this.langName,
                     this.registryKeys
                 ));
@@ -165,6 +175,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.consumer,
                     this.initialEntry,
                     "",
+                    false,
                     this.langName,
                     this.registryKeys
                 ));

@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 
 import org.lwjgl.input.Keyboard;
 
+import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -34,6 +35,8 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
     private final String initialBiome;
     private final String searchBiome;
+    private final boolean startSearchFocused;
+    
     private final List<Info> biomes;
 
     private ModernBetaGeneratorSettings.Factory settings;
@@ -49,20 +52,23 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome
     ) {
-        this(guiCustomizeWorldScreen, consumer, initialBiome, "");
+        this(guiCustomizeWorldScreen, consumer, initialBiome, "", false);
     }
     
     public GuiScreenCustomizeBiome(
         GuiScreenCustomizeWorld guiCustomizeWorldScreen,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome,
-        String searchBiome
+        String searchBiome,
+        boolean startSearchFocused
     ) {
         this.title = "Customize Single Biome";
         this.parent = guiCustomizeWorldScreen;
         this.consumer = consumer;
         this.initialBiome = initialBiome;
         this.searchBiome = searchBiome;
+        this.startSearchFocused = startSearchFocused;
+        
         this.biomes = this.loadBiomes();
     }
     
@@ -79,6 +85,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
         this.searchBar.setText(this.searchBiome);
+        this.searchBar.setFocused(this.startSearchFocused);
         
         this.select = this.addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.biomes.select")));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
@@ -113,7 +120,8 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
         }
         
         if (keyCode == 28 || keyCode == 156) {
-            this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText()));
+            SoundUtil.playClickSound(this.mc.getSoundHandler());
+            this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText(), true));
         }
     }
     
@@ -129,10 +137,10 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case 2:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText()));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText(), true));
                 break;
             case 3:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, ""));
+                this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, "", false));
                 break;
         }
     }
