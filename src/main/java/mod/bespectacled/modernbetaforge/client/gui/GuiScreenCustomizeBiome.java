@@ -119,7 +119,7 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
             super.keyTyped(character, keyCode);
         }
         
-        if (keyCode == 28 || keyCode == 156) {
+        if (this.searchBar.isFocused() && keyCode == 28 || keyCode == 156) {
             SoundUtil.playClickSound(this.mc.getSoundHandler());
             this.mc.displayGuiScreen(new GuiScreenCustomizeBiome(this.parent, this.consumer, this.initialBiome, this.searchBar.getText(), true));
         }
