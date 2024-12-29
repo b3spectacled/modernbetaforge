@@ -13,11 +13,19 @@ public class ModCompat {
     public static final Map<String, Compat> LOADED_MODS = new LinkedHashMap<>();
     
     public static void loadModCompat() {
+        if (!isMixinLoaderLoaded()) {
+            ModernBeta.log(Level.WARN, "Couldn't find a mixin loader, this mod won't work correctly!");
+        }
+        
         loadModCompat(MOD_BOP, new CompatBOP());
     }
     
     public static boolean isBoPLoaded() {
         return LOADED_MODS.containsKey(MOD_BOP);
+    }
+    
+    public static boolean isMixinLoaderLoaded() {
+        return Loader.isModLoaded("mixinbooter") || Loader.isModLoaded("mixincompat");
     }
     
     public static boolean isModLoaded(String mod) {

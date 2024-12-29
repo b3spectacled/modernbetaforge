@@ -27,23 +27,25 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
         ModernBetaGeneratorSettings settings
     ) {
         super(seed, parent, worldType, vanillaSettings);
-        
-        if (settings.useModdedBiomes) {
-            AccessorGenLayerBiome accessor = (AccessorGenLayerBiome)this;
-            this.populateAdditionalBiomes(accessor.getBiomes());
-        }
+
+        this.populateAdditionalBiomes(settings.useModdedBiomes && ModCompat.isMixinLoaderLoaded());
     }
     
-    private void populateAdditionalBiomes(List<BiomeEntry>[] biomes) {
-        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
-            Compat compat = entry.getValue();
-            if (compat instanceof BiomeCompat) {
-                ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
-                BiomeCompat biomeCompat = (BiomeCompat)compat;
-                
-                for (BiomeType type : BiomeType.values()) {
-                    int ndx = type.ordinal();
-                    biomes[ndx].addAll(biomeCompat.getBiomeEntries()[ndx]);
+    private void populateAdditionalBiomes(boolean useModdedBiomes) {
+        if (useModdedBiomes) {
+            AccessorGenLayerBiome accessor = (AccessorGenLayerBiome)this;
+            List<BiomeEntry>[] biomes = accessor.getBiomes();
+        
+            for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+                Compat compat = entry.getValue();
+                if (compat instanceof BiomeCompat) {
+                    ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
+                    BiomeCompat biomeCompat = (BiomeCompat)compat;
+                    
+                    for (BiomeType type : BiomeType.values()) {
+                        int ndx = type.ordinal();
+                        biomes[ndx].addAll(biomeCompat.getBiomeEntries()[ndx]);
+                    }
                 }
             }
         }
