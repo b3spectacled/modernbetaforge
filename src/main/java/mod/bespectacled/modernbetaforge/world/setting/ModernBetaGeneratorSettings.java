@@ -28,6 +28,7 @@ import mod.bespectacled.modernbetaforge.api.world.setting.Property;
 import mod.bespectacled.modernbetaforge.api.world.setting.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
+import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -474,7 +475,7 @@ public class ModernBetaGeneratorSettings {
         this.customProperties = ImmutableMap.copyOf(factory.customProperties);
     }
     
-    public boolean getCustomBoolean(ResourceLocation registryKey) {
+    public boolean getBooleanProperty(ResourceLocation registryKey) {
         Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof BooleanProperty) {
@@ -484,7 +485,7 @@ public class ModernBetaGeneratorSettings {
         throw new IllegalArgumentException(String.format("[Modern Beta] Boolean Property '%s' was not found!", registryKey));
     }
     
-    public float getCustomFloat(ResourceLocation registryKey) {
+    public float getFloatProperty(ResourceLocation registryKey) {
         Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof FloatProperty) {
@@ -494,7 +495,7 @@ public class ModernBetaGeneratorSettings {
         throw new IllegalArgumentException(String.format("[Modern Beta] Float Property '%s' was not found!", registryKey));
     }
     
-    public int getCustomInt(ResourceLocation registryKey) {
+    public int getIntProperty(ResourceLocation registryKey) {
         Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof IntProperty) {
@@ -504,7 +505,7 @@ public class ModernBetaGeneratorSettings {
         throw new IllegalArgumentException(String.format("[Modern Beta] Int Property '%s' was not found!", registryKey));
     }
     
-    public String getCustomString(ResourceLocation registryKey) {
+    public String getStringProperty(ResourceLocation registryKey) {
         Property<?> property = this.customProperties.get(registryKey);
         
         if (property != null && property instanceof StringProperty) {
@@ -514,24 +515,12 @@ public class ModernBetaGeneratorSettings {
         throw new IllegalArgumentException(String.format("[Modern Beta] String Property '%s' was not found!", registryKey));
     }
     
-    public String getCustomListString(ResourceLocation registryKey) {
-        Property<?> property = this.customProperties.get(registryKey);
-        
-        if (property != null && property instanceof ListProperty) {
-            return ((ListProperty)property).getValue();
-        }
-        
-        throw new IllegalArgumentException(String.format("[Modern Beta] List Property '%s' was not found!", registryKey));
+    public String getListProperty(ResourceLocation registryKey) {
+        return this.getStringProperty(registryKey);
     }
     
-    public Biome getCustomBiome(ResourceLocation registryKey) {
-        Property<?> property = this.customProperties.get(registryKey);
-        
-        if (property != null && property instanceof BiomeProperty) {
-            return ((BiomeProperty)property).getBiome();
-        }
-        
-        throw new IllegalArgumentException(String.format("[Modern Beta] Biome Property '%s' was not found!", registryKey));
+    public Biome getBiomeProperty(ResourceLocation registryKey) {
+        return BiomeUtil.getBiome(new ResourceLocation(this.getStringProperty(registryKey)), "biome_property");
     }
     
     public static class Factory {
