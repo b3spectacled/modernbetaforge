@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableList;
+
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
@@ -44,6 +46,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
     private final ChunkCache<HeightmapChunk> heightmapCache;
     private final ChunkCache<DensityChunk> densityCache;
     
+    private final List<NoiseSampler> noiseSamplers;
+    private final Map<ResourceLocation, NoiseSource> noiseSources;
+    
     private final NoiseSettings noiseSettings;
     private final SurfaceBuilder surfaceBuilder;
 
@@ -68,6 +73,21 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
+        
+        this.noiseSamplers = ModernBetaRegistries.NOISE_SAMPLER.getValues()
+            .stream()
+            .map(entry -> entry.apply(this, this.settings))
+            .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
+        this.noiseSources = new LinkedHashMap<>();
+        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSources.put(
+            entry.getKey(),
+            new NoiseSource(
+                entry.getValue().apply(this, this.settings),
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
         
         this.noiseSettings = noiseSettings;
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
@@ -344,34 +364,19 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
-        
-        // Create noise samplers
-        List<NoiseSampler> noiseSamplers = ModernBetaRegistries.NOISE_SAMPLER.getValues()
-            .stream()
-            .map(entry -> entry.apply(this, this.settings))
-            .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
 
         // Create noise sources and sample.
-        Map<ResourceLocation, NoiseSource> noiseSourceMap = new LinkedHashMap<>();
-        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSourceMap.put(
-            entry.getKey(),
-            new NoiseSource(
-                entry.getValue().apply(this, this.settings),
-                this.noiseSizeX,
-                this.noiseSizeY,
-                this.noiseSizeZ
-            )
-        ));
-        noiseSourceMap.put(DensityChunk.INITIAL, this.createInitialNoiseSource(chunkX, chunkZ));
-        noiseSourceMap.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
+        Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>(this.noiseSources);
+        noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource(chunkX, chunkZ));
+        noiseSources.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
             chunkX * this.noiseSizeX,
             chunkZ * this.noiseSizeZ,
             this.noiseSettings,
-            noiseSamplers
+            entry.getKey().equals(DensityChunk.INITIAL) ? this.noiseSamplers : ImmutableList.of()
         ));
         
         Map<ResourceLocation, double[]> densityMap = new LinkedHashMap<>();
-        for (Entry<ResourceLocation, NoiseSource> entry : noiseSourceMap.entrySet()) {
+        for (Entry<ResourceLocation, NoiseSource> entry : noiseSources.entrySet()) {
             NoiseSource noiseSource = entry.getValue();
             double[] densities = new double[sizeX * sizeZ * sizeY];
             
