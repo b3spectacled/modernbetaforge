@@ -14,7 +14,7 @@ public class ModCompat {
     
     public static void loadModCompat() {
         if (!isMixinLoaderLoaded()) {
-            ModernBeta.log(Level.WARN, "Couldn't find a mixin loader, this mod won't work correctly!");
+            ModernBeta.log(Level.WARN, "MixinBooter was not found or an alternate mixin loader was installed..");
         }
         
         loadModCompat(MOD_BOP, new CompatBOP());
@@ -25,7 +25,7 @@ public class ModCompat {
     }
     
     public static boolean isMixinLoaderLoaded() {
-        return Loader.isModLoaded("mixinbooter") || Loader.isModLoaded("mixincompat");
+        return Loader.isModLoaded("mixinbooter");
     }
     
     public static boolean isModLoaded(String mod) {
