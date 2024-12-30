@@ -16,7 +16,7 @@ public final class ListProperty extends StringProperty {
     private final String[] values;
     
     /**
-     * Constructs a new ListProperty with an initial string and an array of valid values.
+     * Constructs a new ListProperty with the index of the initial value from an array of valid values.
      * 
      * @param index Index of the initial value from values.
      * @param values Array of valid String values.
@@ -25,6 +25,17 @@ public final class ListProperty extends StringProperty {
         super(values[MathHelper.clamp(index, 0, values.length - 1)]);
         
         this.values = values;
+    }
+    
+    /**
+     * Constructs a new ListProperty with the String value of the initial value from an array of valid values.
+     * If the initial value isn't actually valid, then the value at index 0 of values is used.
+     * 
+     * @param value The initial value from values.
+     * @param values Array of valid String values.
+     */
+    public ListProperty(String value, String[] values) {
+        this(indexOfOrDefault(value, values), values);
     }
 
     @Override
@@ -70,5 +81,17 @@ public final class ListProperty extends StringProperty {
         }
         
         return -1;
+    }
+
+    private static int indexOfOrDefault(String value, String[] values) {
+        int index = 0;
+        
+        for (int i = 0; i < values.length; ++i) {
+            if (value.equals(values[i])) {
+                index = i;
+            }
+        }
+        
+        return index;
     }
 }
