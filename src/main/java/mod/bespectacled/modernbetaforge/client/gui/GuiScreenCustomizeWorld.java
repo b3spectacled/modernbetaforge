@@ -31,7 +31,6 @@ import mod.bespectacled.modernbetaforge.api.world.setting.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiLabel;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -45,6 +44,7 @@ import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
@@ -1478,12 +1478,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             if (entry == GuiIdentifiers.PG0_S_LEVEL_HEIGHT || entry == GuiIdentifiers.PG0_S_LEVEL_TYPE || entry == GuiIdentifiers.PG0_S_CHUNK) {
                 Gui gui = this.pageList.getComponent(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL);
-                if (gui != null) {
-                    AccessorGuiLabel accessor = (AccessorGuiLabel)gui;
+                if (gui != null && gui instanceof GuiLabel) {
                     int levelSeaLevel = this.getLevelSeaLevel();
                     String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
                     
-                    accessor.getLabels().set(0, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr));
+                    ((GuiLabel)gui).labels.set(0, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr));
                 }
             }
         }

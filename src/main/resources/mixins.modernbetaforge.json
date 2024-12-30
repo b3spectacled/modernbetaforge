@@ -15,22 +15,17 @@
       "MixinMapGenStronghold",
       "MixinMapGenVillageStart",
       "MixinStructureVillagePiecesVillage",
-      "accessor.AccessorChunkGeneratorHell",
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",
-      "accessor.AccessorWorldServer",
       "accessor.AccessorWorldProvider",
       "accessor.AccessorGenLayerBiome",
-      "accessor.AccessorMapGenBase",
-      "accessor.AccessorMinecraftServer",
-      "accessor.AccessorMapGenStructure"
+      "accessor.AccessorMapGenBase"
     ],
     "client": [
       "client.MixinEntityRenderer",
       "client.MixinGuiCreateWorld",
       "client.MixinWorld",
-      "accessor.AccessorEntityRenderer",
-      "accessor.AccessorGuiLabel"
+      "accessor.AccessorEntityRenderer"
     ],
     "server": []
 }

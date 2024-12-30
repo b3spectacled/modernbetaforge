@@ -19,7 +19,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorMinecraftServer;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -456,8 +455,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (this.levelNotifier == null) {
             this.levelNotifier = message -> {
                 if (world.getMinecraftServer() != null) {
-                    AccessorMinecraftServer accessor = (AccessorMinecraftServer)world.getMinecraftServer();
-                    accessor.invokeSetUserMessage(message + "..");
+                    world.getMinecraftServer().setUserMessage(message + "..");
                 }
             };
         }

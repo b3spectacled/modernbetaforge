@@ -4,7 +4,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorWorldServer;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -51,11 +50,9 @@ public class WorldEventHandlerCommon {
                     }
 
                     if (settings.isBonusChestEnabled()) {
-                        AccessorWorldServer accessor = (AccessorWorldServer)world;
-                        
                         // Handle bonus chest placement in Indev house generation method
                         if (!(chunkSource instanceof FiniteChunkSource && IndevHouse.fromId(generatorSettings.levelHouse) != IndevHouse.NONE)) {
-                            accessor.invokeCreateBonusChest();
+                            world.createBonusChest();
                         }
                     }
                     

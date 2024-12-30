@@ -7,7 +7,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorChunkGeneratorHell;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
@@ -89,8 +88,7 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         ChunkPrimer chunkprimer = new ChunkPrimer();
         
         // Grab random from ChunkGeneratorHell superclass and set for surface generation
-        Random random = ((AccessorChunkGeneratorHell)this).getRand();
-        random.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
+        this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
 
         // Generate base terrain and biome-specific surface
         this.prepareHeights(chunkX, chunkZ, chunkprimer);
@@ -136,7 +134,7 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         MutableBlockPos mutablePos = new MutableBlockPos(startPos);
         
         Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
-        Random random = ((AccessorChunkGeneratorHell)this).getRand();
+        Random random = this.rand;
         
         ForgeEventFactory.onChunkPopulate(true, this, this.world, random, chunkX, chunkZ, false);
      
