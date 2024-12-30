@@ -28,18 +28,18 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
     ) {
         super(seed, parent, worldType, vanillaSettings);
 
-        this.populateAdditionalBiomes(settings.useModdedBiomes && ModCompat.isMixinLoaderLoaded());
+        this.populateAdditionalBiomes(settings.useModdedBiomes);
     }
     
     private void populateAdditionalBiomes(boolean useModdedBiomes) {
         if (useModdedBiomes) {
-            AccessorGenLayerBiome accessor = (AccessorGenLayerBiome)this;
-            List<BiomeEntry>[] biomes = accessor.getBiomes();
-        
             for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
                 Compat compat = entry.getValue();
                 if (compat instanceof BiomeCompat) {
                     ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
+
+                    AccessorGenLayerBiome accessor = (AccessorGenLayerBiome)this;
+                    List<BiomeEntry>[] biomes = accessor.getBiomes();
                     BiomeCompat biomeCompat = (BiomeCompat)compat;
                     
                     for (BiomeType type : BiomeType.values()) {

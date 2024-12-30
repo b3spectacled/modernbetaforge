@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.Loader;
 
 public class ModCompat {
     public static final String MOD_BOP = "biomesoplenty";
+    public static final String MOD_GC = "galacticraftcore";
+    
     public static final Map<String, Compat> LOADED_MODS = new LinkedHashMap<>();
     
     public static void loadModCompat() {
@@ -18,6 +20,7 @@ public class ModCompat {
         }
         
         loadModCompat(MOD_BOP, new CompatBOP());
+        loadModCompat(MOD_GC, new CompatGC());
     }
     
     public static boolean isBoPLoaded() {

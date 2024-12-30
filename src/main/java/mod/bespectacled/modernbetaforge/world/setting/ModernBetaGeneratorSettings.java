@@ -910,7 +910,7 @@ public class ModernBetaGeneratorSettings {
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
             
-            this.useModdedBiomes = false;
+            this.useModdedBiomes = true;
             
             this.desertBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();

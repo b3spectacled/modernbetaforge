@@ -5,7 +5,7 @@
     "minVersion": "0.8",
     "required": true,
     "injectors": {
-        "defaultRequire": 1
+        "defaultRequire": 0
     },
     "mixins": [
       "MixinMapGenScatteredFeatureStart",
