@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -67,8 +68,13 @@ public class DebugInfoEventHandler {
                 
                 event.getLeft().add(chunkText);
                 event.getLeft().add(biomeText);
-                event.getLeft().add(surfaceText);
-                if (settings.useCaves) event.getLeft().add(carverText);
+                
+                if (!(chunkSource instanceof SkylandsChunkSource || chunkSource instanceof FiniteChunkSource))
+                    event.getLeft().add(surfaceText);
+                
+                if (settings.useCaves)
+                    event.getLeft().add(carverText);
+                
                 event.getLeft().add("");
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||
