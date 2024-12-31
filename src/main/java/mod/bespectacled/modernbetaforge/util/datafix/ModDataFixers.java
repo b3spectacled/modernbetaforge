@@ -62,7 +62,7 @@ public class ModDataFixers {
                     DataFixTags.FIX_SINGLE_BIOME
                 );
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -86,7 +86,7 @@ public class ModDataFixers {
                     DataFixTags.FIX_SINGLE_BIOME
                 );
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -108,7 +108,7 @@ public class ModDataFixers {
                     DataFixTags.FIX_SINGLE_BIOME
                 );
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -125,7 +125,7 @@ public class ModDataFixers {
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -142,7 +142,7 @@ public class ModDataFixers {
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_USE_INDEV_HOUSE);
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -164,7 +164,7 @@ public class ModDataFixers {
                     DataFixTags.FIX_RESOURCE_LOCATION_CARVER
                 );
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
@@ -184,12 +184,12 @@ public class ModDataFixers {
                     DataFixTags.FIX_SCALE_NOISE_SCALE_Z
                 );
                 
-                return fixGeneratorSettings(compound, registryKeys);
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
         }
     );
     
-    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys) {
+    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys, int fixVersion) {
         String worldName = getWorldName(compound);
         
         if (isModernBetaWorld(compound) && compound.hasKey("generatorOptions")) {
@@ -204,7 +204,7 @@ public class ModDataFixers {
             }
             
             for (ResourceLocation registryKey : registryKeys) {
-                DataFixer.runDataFixer(registryKey, factory, jsonObject, worldName);
+                DataFixer.runDataFixer(registryKey, factory, jsonObject, worldName, fixVersion);
             }
             
             compound.setString("generatorOptions", factory.toString().replace("\n", ""));

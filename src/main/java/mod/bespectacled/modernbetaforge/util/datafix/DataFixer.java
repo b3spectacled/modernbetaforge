@@ -11,16 +11,14 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.util.ResourceLocation;
 
 public class DataFixer {
-    public static void runDataFixer(ResourceLocation registryKey, ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject, String worldName) {
+    public static void runDataFixer(ResourceLocation registryKey, ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject, String worldName, int fixVersion) {
         DataFix dataFix = ModernBetaRegistries.DATA_FIX.get(registryKey);
         
-        if (jsonObject.has(dataFix.getTag())) {
-            logDataFix(dataFix.getTag(), worldName);
-            dataFix.getDataFixConsumer().accept(factory, jsonObject);
-        }
+        logDataFix(dataFix.getTag(), worldName, fixVersion);
+        dataFix.getDataFixConsumer().accept(factory, jsonObject);
     }
     
-    private static void logDataFix(String key, String worldName) {
-        ModernBeta.log(Level.INFO, String.format("[DataFix] Found old property '%s' in world '%s' to be fixed..", key, worldName));
+    private static void logDataFix(String key, String worldName, int fixVersion) {
+        ModernBeta.log(Level.INFO, String.format("[DataFix] Found old property '%s' in world '%s' to be fixed for version '%d'..", key, worldName, fixVersion));
     }
 }

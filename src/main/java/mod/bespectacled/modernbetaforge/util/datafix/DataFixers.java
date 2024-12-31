@@ -155,7 +155,7 @@ public class DataFixers {
     
     public static void fixSkylandsSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId()))
-            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.getId();
+            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.SKYLANDS.getId();
     }
     
     public static void fixSingleBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
