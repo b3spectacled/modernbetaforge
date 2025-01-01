@@ -245,7 +245,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             }
             
             // Generate biome features
-            biome.decorate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
+            biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
             
             // Generate custom features
             if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.CUSTOM)) {
