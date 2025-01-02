@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
@@ -123,7 +125,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private boolean randomClicked;
     
     private int customId;
-    private Map<Integer, String> customIds;
+    private BiMap<Integer, ResourceLocation> customIds;
     
     public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
         this.title = "Customize World Settings";
@@ -167,7 +169,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private void createPagedList() {
         this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
-        this.customIds = new LinkedHashMap<>();
+        this.customIds = HashBiMap.create();
         
         int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
         int biomeSourceId = ModernBetaRegistries.BIOME_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
@@ -675,8 +677,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setTextButton(GuiIdentifiers.PG5_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
         this.setTextButton(GuiIdentifiers.PG5_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
         
-        for (Entry<Integer, String> entry : this.customIds.entrySet()) {
-            Property<?> property = this.settings.customProperties.get(new ResourceLocation(entry.getValue()));
+        for (Entry<Integer, ResourceLocation> entry : this.customIds.entrySet()) {
+            Property<?> property = this.settings.customProperties.get(entry.getValue());
             
             if (property instanceof BooleanProperty) {
                 BooleanProperty booleanProperty = (BooleanProperty)property;
@@ -764,8 +766,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public void setEntryValue(int entry, String entryString) {
         if (this.customIds.containsKey(entry)) {
-            String key = this.customIds.get(entry);
-            ResourceLocation registryKey = new ResourceLocation(key);
+            ResourceLocation registryKey = this.customIds.get(entry);
             
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
@@ -892,8 +893,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public void setEntryValue(int entry, boolean entryValue) {
         if (this.customIds.containsKey(entry)) {
-            String key = this.customIds.get(entry);
-            ResourceLocation registryKey = new ResourceLocation(key);
+            ResourceLocation registryKey = this.customIds.get(entry);
             
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
@@ -1167,8 +1167,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public void setEntryValue(int entry, float entryValue) {
         if (this.customIds.containsKey(entry)) {
-            String key = this.customIds.get(entry);
-            ResourceLocation registryKey = new ResourceLocation(key);
+            ResourceLocation registryKey = this.customIds.get(entry);
             
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
@@ -1679,34 +1678,34 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size() * 2;
         
         // Build map based on mod ID
-        Map<String, List<ResourceLocation>> modKeys = new LinkedHashMap<>();
-        for (ResourceLocation key : ModernBetaRegistries.PROPERTY.getKeys()) {
-            String namespace = key.getNamespace();
+        Map<String, List<ResourceLocation>> modRegistryKeys = new LinkedHashMap<>();
+        for (ResourceLocation registryKey : ModernBetaRegistries.PROPERTY.getKeys()) {
+            String namespace = registryKey.getNamespace();
             
-            if (!modKeys.containsKey(namespace)) {
-                modKeys.put(namespace, new LinkedList<>());
+            if (!modRegistryKeys.containsKey(namespace)) {
+                modRegistryKeys.put(namespace, new LinkedList<>());
                 numEntries += 2;
             }
             
-            modKeys.get(namespace).add(key);
+            modRegistryKeys.get(namespace).add(registryKey);
         }
         
         GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
         
         int ndx = 0;
-        for (String namespace : modKeys.keySet()) {
-            List<ResourceLocation> keys = modKeys.get(namespace);
+        for (String namespace : modRegistryKeys.keySet()) {
+            List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace);
             
             pageList[ndx++] = createGuiLabel(this.customId++, namespace);
             pageList[ndx++] = null;
             
-            for (ResourceLocation key : keys) {
-                Property<?> property = this.settings.customProperties.get(key);
+            for (ResourceLocation registryKey : registryKeys) {
+                Property<?> property = this.settings.customProperties.get(registryKey);
                 
-                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + getFormattedRegistryString(key)) + ":");
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + getFormattedRegistryString(registryKey)) + ":");
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), this.customId);
                 
-                this.customIds.put(this.customId++, key.toString());
+                this.customIds.put(this.customId++, registryKey);
             }
         }
         
@@ -1799,7 +1798,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private String getFormattedValue(int entry, float entryValue) {
         if (this.customIds.containsKey(entry)) {
-            Property<?> property = this.settings.customProperties.get(new ResourceLocation(this.customIds.get(entry)));
+            Property<?> property = this.settings.customProperties.get(this.customIds.get(entry));
             
             if (property instanceof FloatProperty) {
                 return String.format("%2.3f", entryValue);
@@ -2066,13 +2065,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void setGuiEnabled() {
         // Set default enabled for certain options
         if (this.pageList != null) {
-            for (GuiPredicate predicate : ModernBetaClientRegistries.GUI_PREDICATE.getValues()) {
-                int[] guiIds = predicate.getIds();
-                boolean enabled = predicate.test(this.settings);
+            for (Entry<ResourceLocation, GuiPredicate> entry : ModernBetaClientRegistries.GUI_PREDICATE.getEntrySet()) {
+                int[] guiIds = entry.getValue().getIds();
+                boolean enabled = entry.getValue().test(this.settings);
                 
                 for (int i = 0; i < guiIds.length; ++i) {
                     this.setButtonEnabled(guiIds[i], enabled);
                     this.setFieldEnabled(guiIds[i], enabled);
+                }
+                
+                if (guiIds.length <= 0) {
+                    if (this.customIds.containsValue(entry.getKey())) {
+                        int customId = this.customIds.inverse().get(entry.getKey());
+                        
+                        this.setButtonEnabled(customId, enabled);
+                        this.setFieldEnabled(customId, enabled);
+                    }
                 }
             }
         }
