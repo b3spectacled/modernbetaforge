@@ -102,6 +102,7 @@ public class GuiPredicate {
     public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);
     public static final ResourceLocation BEACH_BIOME = createRegistryKey(NbtTags.BEACH_BIOME);
     
+    // TODO: Convert this to a built settings Predicate for 1.5.0.0
     private Predicate<ModernBetaGeneratorSettings.Factory> predicate;
     private final int[] guiIds;
     

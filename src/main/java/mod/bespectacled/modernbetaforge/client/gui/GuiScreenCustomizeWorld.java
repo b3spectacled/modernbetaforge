@@ -2063,11 +2063,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void setGuiEnabled() {
+        // TODO: Convert this to a built settings object for 1.5.0.0; for now, make a copy.
+        ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.settings.toString());
+        
         // Set default enabled for certain options
         if (this.pageList != null) {
             for (Entry<ResourceLocation, GuiPredicate> entry : ModernBetaClientRegistries.GUI_PREDICATE.getEntrySet()) {
                 int[] guiIds = entry.getValue().getIds();
-                boolean enabled = entry.getValue().test(this.settings);
+                boolean enabled = entry.getValue().test(factory);
                 
                 for (int i = 0; i < guiIds.length; ++i) {
                     this.setButtonEnabled(guiIds[i], enabled);
