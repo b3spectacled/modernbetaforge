@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
@@ -124,6 +125,8 @@ public class GuiPredicates {
     public static final GuiPredicate BASE_BIOME_TEST;
     public static final GuiPredicate OCEAN_BIOME_TEST;
     public static final GuiPredicate BEACH_BIOME_TEST;
+    
+    public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
     private static boolean isChunkEqualTo(Factory factory, ModernBetaBuiltInTypes.Chunk type) {
         return factory.chunkSource.equals(type.getRegistryString());
@@ -574,5 +577,14 @@ public class GuiPredicates {
             GuiIdentifiers.PG5_TAIG_BEACH,
             GuiIdentifiers.PG5_TUND_BEACH
         );
+        DEV_BIOME_PROP_TEST = new GuiPredicate(factory -> {
+            ResourceLocation booleanProp = ModernBeta.createRegistryKey("booleanProp");
+            
+            if (factory.customProperties.containsKey(booleanProp)) {
+                return (Boolean)factory.customProperties.get(booleanProp).getValue();
+            }
+            
+            return true;
+        });
     }
 }

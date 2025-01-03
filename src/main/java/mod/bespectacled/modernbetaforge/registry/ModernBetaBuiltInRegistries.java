@@ -255,5 +255,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BASE_BIOME, GuiPredicates.BASE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.OCEAN_BIOME, GuiPredicates.OCEAN_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BEACH_BIOME, GuiPredicates.BEACH_BIOME_TEST);
+        
+        // ModernBetaClientRegistries.GUI_PREDICATE.register(ModernBeta.createRegistryKey("biomeProp"), GuiPredicates.DEV_BIOME_PROP_TEST);
     }
 }
