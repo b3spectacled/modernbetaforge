@@ -13,6 +13,13 @@ createWorld.customize.custom.firstPage=<<
 createWorld.customize.custom.enabled=Enabled
 createWorld.customize.custom.entry=Entry
 
+# Presets
+createWorld.customize.presets.filter=Filter
+createWorld.customize.presets.filter.all=All
+createWorld.customize.presets.filter.builtin=Built-in
+createWorld.customize.presets.filter.modded=Modded
+createWorld.customize.presets.filter.custom=Custom
+
 # Page Titles
 createWorld.customize.custom.page4=Beta/PE Climates (Expert Users Only!)
 createWorld.customize.custom.page5=Biome Feature Settings

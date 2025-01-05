@@ -3,9 +3,11 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.lwjgl.input.Keyboard;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -27,10 +29,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
+    private enum FilterType {
+        ALL, BUILTIN, MODDED, CUSTOM
+    }
+    
+    private static final String PREFIX_FILTER = "createWorld.customize.presets.filter";
+    private static final String PREFIX_SELECT = "createWorld.customize.presets.select";
+    
     private static final int SLOT_HEIGHT = 32;
     private static final int MAX_PRESET_LENGTH = 50000;
     
+    private static final int GUI_ID_FILTER = 0;
+    private static final int GUI_ID_SELECT = 1;
+    private static final int GUI_ID_CANCEL = 2;
+    
     private final GuiScreenCustomizeWorld parent;
+    private final FilterType filterType;
     private final List<Info> presets;
     
     private ListPreset list;
@@ -41,10 +55,15 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     protected String title;
     
-    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld guiCustomizeWorldScreen) {
+    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
+        this(parent, FilterType.ALL);
+    }
+    
+    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType) {
         this.title = "Customize World Presets";
-        this.parent = guiCustomizeWorldScreen;
-        this.presets = this.loadPresets();
+        this.parent = parent;
+        this.filterType = filterType;
+        this.presets = this.loadPresets(filterType);
     }
     
     @Override
@@ -62,8 +81,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
         this.export.setText(this.parent.getSettingsString());
         
-        this.select = this.<GuiButton>addButton(new GuiButton(0, this.width / 2 - 102, this.height - 27, 100, 20, I18n.format("createWorld.customize.presets.select")));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        this.buttonList.add(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
+        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX_SELECT)));
+        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
         
         this.updateButtonValidity();
     }
@@ -96,11 +116,21 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
-            case 0:
+            case GUI_ID_FILTER:
+                FilterType[] values = FilterType.values();
+                
+                int increment = GuiScreen.isShiftKeyDown() ? -1 : 1;
+                int index = this.filterType.ordinal() + increment;
+                if (index < 0) index = values.length - 1;
+                
+                FilterType filterType = values[index % values.length];
+                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
+                break;
+            case GUI_ID_SELECT:
                 this.parent.loadValues(this.export.getText());
                 this.mc.displayGuiScreen(this.parent);
                 break;
-            case 1:
+            case GUI_ID_CANCEL:
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }
@@ -133,7 +163,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.export.getText().length() > 1;
     }
     
-    private List<Info> loadPresets() {
+    private List<Info> loadPresets(FilterType filterType) {
         List<Info> presets = new ArrayList<>();
         
         String name;
@@ -141,7 +171,25 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         ResourceLocation texture;
         ModernBetaGeneratorSettings.Factory factory;
         
-        for (ResourceLocation key : ModernBetaClientRegistries.GUI_PRESET.getKeys()) {
+        List<ResourceLocation> filteredKeys = ModernBetaClientRegistries.GUI_PRESET.getKeys()
+            .stream()
+            .filter(key -> {
+                switch (filterType) {
+                    case ALL:
+                        return true;
+                    case BUILTIN:
+                        return key.getNamespace().equals(ModernBeta.MODID);
+                    case MODDED:
+                        return !key.getNamespace().equals(ModernBeta.MODID);
+                    case CUSTOM:
+                        return false;
+                }
+                
+                return true;
+            })
+            .collect(Collectors.toList());
+        
+        for (ResourceLocation key : filteredKeys) {
             GuiCustomizePreset preset = ModernBetaClientRegistries.GUI_PRESET.get(key);
             
             name = GuiCustomizePreset.formatName(key);
@@ -152,17 +200,23 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             presets.add(new Info(name, desc, texture, factory));
         }
 
-        String[] customPresets = ModernBetaConfig.guiOptions.customPresets;
-        for (int i = 0; i < customPresets.length; ++i) {
-            String customPreset = customPresets[i];
-            name = I18n.format("createWorld.customize.custom.preset.custom").concat(String.format(" %d", i + 1));
-            texture = new ResourceLocation("textures/misc/unknown_pack.png");
-            factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(customPreset);
-            
-            presets.add(new Info(name, texture, factory));
+        if (filterType == FilterType.ALL || filterType == FilterType.CUSTOM) {
+            String[] customPresets = ModernBetaConfig.guiOptions.customPresets;
+            for (int i = 0; i < customPresets.length; ++i) {
+                String customPreset = customPresets[i];
+                name = I18n.format("createWorld.customize.custom.preset.custom").concat(String.format(" %d", i + 1));
+                texture = new ResourceLocation("textures/misc/unknown_pack.png");
+                factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(customPreset);
+                
+                presets.add(new Info(name, texture, factory));
+            }
         }
         
         return presets;
+    }
+    
+    private String getFilterString() {
+        return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
     
     @SideOnly(Side.CLIENT)

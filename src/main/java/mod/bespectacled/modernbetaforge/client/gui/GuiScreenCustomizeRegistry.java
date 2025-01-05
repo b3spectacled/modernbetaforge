@@ -50,17 +50,17 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     protected String title;
     
     public GuiScreenCustomizeRegistry(
-        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialEntry,
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(guiCustomizeWorldScreen, consumer, initialEntry, "", false, langName, registryKeys);
+        this(parent, consumer, initialEntry, "", false, langName, registryKeys);
     }
     
     public GuiScreenCustomizeRegistry(
-        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialEntry,
         String searchEntry,
@@ -69,7 +69,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         List<ResourceLocation> registryKeys
     ) {
         this.title = "Customize Registry Entry";
-        this.parent = guiCustomizeWorldScreen;
+        this.parent = parent;
         this.consumer = consumer;
         this.initialEntry = initialEntry;
         this.searchEntry = searchEntry;

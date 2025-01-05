@@ -48,22 +48,22 @@ public class GuiScreenCustomizeBiome extends GuiScreen {
     protected String title;
     
     public GuiScreenCustomizeBiome(
-        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome
     ) {
-        this(guiCustomizeWorldScreen, consumer, initialBiome, "", false);
+        this(parent, consumer, initialBiome, "", false);
     }
     
     public GuiScreenCustomizeBiome(
-        GuiScreenCustomizeWorld guiCustomizeWorldScreen,
+        GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
         String initialBiome,
         String searchBiome,
         boolean startSearchFocused
     ) {
         this.title = "Customize Single Biome";
-        this.parent = guiCustomizeWorldScreen;
+        this.parent = parent;
         this.consumer = consumer;
         this.initialBiome = initialBiome;
         this.searchBiome = searchBiome;

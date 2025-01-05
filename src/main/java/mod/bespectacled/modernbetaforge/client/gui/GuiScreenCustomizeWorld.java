@@ -127,7 +127,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private int customId;
     private BiMap<Integer, ResourceLocation> customIds;
     
-    public GuiScreenCustomizeWorld(GuiScreen guiScreen, String string) {
+    public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
         this.title = "Customize World Settings";
         this.subtitle = "Page 1 of 6";
         this.pageTitle = "Basic Settings";
@@ -162,7 +162,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
-        this.parent = (GuiCreateWorld)guiScreen;
+        this.parent = (GuiCreateWorld)parent;
         
         this.loadValues(string);
     }
