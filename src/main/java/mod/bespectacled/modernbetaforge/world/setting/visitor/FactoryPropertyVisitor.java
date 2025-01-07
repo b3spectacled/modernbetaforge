@@ -2,12 +2,12 @@ package mod.bespectacled.modernbetaforge.world.setting.visitor;
 
 import com.google.gson.JsonObject;
 
-import mod.bespectacled.modernbetaforge.api.world.setting.BiomeProperty;
-import mod.bespectacled.modernbetaforge.api.world.setting.BooleanProperty;
-import mod.bespectacled.modernbetaforge.api.world.setting.FloatProperty;
-import mod.bespectacled.modernbetaforge.api.world.setting.IntProperty;
-import mod.bespectacled.modernbetaforge.api.world.setting.ListProperty;
-import mod.bespectacled.modernbetaforge.api.world.setting.StringProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.IntProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.world.property.StringProperty;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 

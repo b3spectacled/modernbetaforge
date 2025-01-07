@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.setting;
+package mod.bespectacled.modernbetaforge.api.world.property;
 
 import java.util.Arrays;
 

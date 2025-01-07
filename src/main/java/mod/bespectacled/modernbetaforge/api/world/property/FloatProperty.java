@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.setting;
+package mod.bespectacled.modernbetaforge.api.world.property;
 
 import com.google.common.base.Predicate;
 import com.google.common.primitives.Floats;
