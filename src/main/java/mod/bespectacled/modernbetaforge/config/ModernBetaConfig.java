@@ -17,6 +17,7 @@ public class ModernBetaConfig {
     public static CategoryVisual visualOptions = new CategoryVisual();
     public static CategorySpawn spawnOptions = new CategorySpawn();
     public static CategoryServer serverOptions = new CategoryServer();
+    public static CategoryDebug debugOptions = new CategoryDebug();
     
     public static class CategoryGui {
         @Comment({
@@ -120,6 +121,13 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean sendCloudHeight = true;
+    }
+    
+    public static class CategoryDebug {
+        @Comment({
+            "Display Modern Beta debug info in debug screen."
+        })
+        public boolean displayDebugInfo = false;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)

@@ -224,6 +224,7 @@ modernbetaforge.general.generatoroptions=Generator Options
 modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
 modernbetaforge.general.serveroptions=Server Options
+modernbetaforge.general.debugoptions=Debug Options
 
 modernbetaforge.general.guioptions.custompresets=Custom World Presets
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
@@ -245,6 +246,8 @@ modernbetaforge.general.visualoptions.usecustomcloudheight=Custom Cloud Height
 modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Temperature Gradient
 
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
+
+modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 
 ## Test Properties (Not used!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge

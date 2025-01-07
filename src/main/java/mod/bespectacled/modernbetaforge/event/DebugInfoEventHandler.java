@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -49,7 +50,7 @@ public class DebugInfoEventHandler {
             int y = playerPos.getY();
             int z = playerPos.getZ();
             
-            event.getLeft().add("");
+            addDebugText(event, "");
             
             if (chunkGenerator instanceof ModernBetaChunkGenerator) {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
@@ -66,16 +67,16 @@ public class DebugInfoEventHandler {
                 String carverText = String.format("[Modern Beta] Cave Carver: %s", carverKey);
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
-                event.getLeft().add(chunkText);
-                event.getLeft().add(biomeText);
+                addDebugText(event, chunkText);
+                addDebugText(event, biomeText);
                 
                 if (!(chunkSource instanceof SkylandsChunkSource || chunkSource instanceof FiniteChunkSource))
-                    event.getLeft().add(surfaceText);
+                    addDebugText(event, surfaceText);
                 
                 if (settings.useCaves)
-                    event.getLeft().add(carverText);
+                    addDebugText(event, carverText);
                 
-                event.getLeft().add("");
+                addDebugText(event, "");
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||
                     chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).hasPregenerated()
@@ -87,16 +88,16 @@ public class DebugInfoEventHandler {
                         chunkSource.getHeight(worldServer, x, z, HeightmapChunk.Type.FLOOR)
                     );
                     
-                    event.getLeft().add(heightmapText);
+                    addDebugText(event, heightmapText);
                 }
-                event.getLeft().add(seaLevelText);
+                addDebugText(event, seaLevelText);
                 
                 if (chunkSource instanceof ReleaseChunkSource) {
                     ReleaseChunkSource releaseChunkSource = (ReleaseChunkSource)chunkSource;
                     String noisebiome = releaseChunkSource.getNoiseBiome(x, z).getBiomeName();
                     
                     String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
-                    event.getLeft().add(noiseBiomeText);
+                    addDebugText(event, noiseBiomeText);
                 }
                 
                 if (chunkSource instanceof FiniteChunkSource) {
@@ -109,8 +110,8 @@ public class DebugInfoEventHandler {
                     String finiteInLevelText = String.format("[Modern Beta] In Finite Level: %b", inLevel);
                     String finiteCoordsText = String.format("[Modern Beta] Finite XYZ: %d / %d / %d", x + offsetX, y, z + offsetZ);
 
-                    event.getLeft().add(finiteInLevelText);
-                    event.getLeft().add(finiteCoordsText);
+                    addDebugText(event, finiteInLevelText);
+                    addDebugText(event, finiteCoordsText);
                     
                     if (finiteChunkSource.hasPregenerated()) {
                         String finiteHeightmapText = String.format("[Modern Beta] Finite Surface Height: %d Ocean Height: %d Floor Height: %d",
@@ -118,7 +119,7 @@ public class DebugInfoEventHandler {
                             finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.OCEAN),
                             finiteChunkSource.getLevelHeight(x + offsetX, z + offsetZ, HeightmapChunk.Type.FLOOR)
                         );
-                        event.getLeft().add(finiteHeightmapText);
+                        addDebugText(event, finiteHeightmapText);
                     }
                 }
             }
@@ -134,33 +135,39 @@ public class DebugInfoEventHandler {
                     double rain = clime.rain();
                     
                     String climateText = String.format("[Modern Beta] Climate Temp: %.3f Rainfall: %.3f", temp, rain);
-                    event.getLeft().add(climateText);
+                    addDebugText(event, climateText);
                 }
 
                 String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
-                event.getLeft().add(baseBiomeText);
-                event.getLeft().add("");
+                addDebugText(event, baseBiomeText);
+                addDebugText(event, "");
             }
             
             String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK);
             String iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK);
             
-            if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
-            if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
+            if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
+            if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
 
             averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GET_BASE_BIOMES);
             iterations = DebugUtil.getIterations(DebugUtil.SECTION_GET_BASE_BIOMES);
 
-            if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
-            if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
+            if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
+            if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
             
             if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {
                 averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
                 iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
                 
-                if (!averageTime.isEmpty()) event.getLeft().add("[Modern Beta] " + averageTime);
-                if (!iterations.isEmpty()) event.getLeft().add("[Modern Beta] " + iterations);
+                if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
+                if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
             }
+        }
+    }
+    
+    private static void addDebugText(RenderGameOverlayEvent.Text event, String text) {
+        if (ModernBetaConfig.debugOptions.displayDebugInfo) {
+            event.getLeft().add(text);
         }
     }
 }
