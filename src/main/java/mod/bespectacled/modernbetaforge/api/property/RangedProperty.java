@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.property;
+package mod.bespectacled.modernbetaforge.api.property;
 
 import java.util.function.Predicate;
 

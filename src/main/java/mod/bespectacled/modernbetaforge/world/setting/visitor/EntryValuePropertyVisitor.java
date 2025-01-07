@@ -1,11 +1,11 @@
 package mod.bespectacled.modernbetaforge.world.setting.visitor;
 
-import mod.bespectacled.modernbetaforge.api.world.property.BiomeProperty;
-import mod.bespectacled.modernbetaforge.api.world.property.BooleanProperty;
-import mod.bespectacled.modernbetaforge.api.world.property.FloatProperty;
-import mod.bespectacled.modernbetaforge.api.world.property.IntProperty;
-import mod.bespectacled.modernbetaforge.api.world.property.ListProperty;
-import mod.bespectacled.modernbetaforge.api.world.property.StringProperty;
+import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.property.IntProperty;
+import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.util.ResourceLocation;
 
 public interface EntryValuePropertyVisitor {

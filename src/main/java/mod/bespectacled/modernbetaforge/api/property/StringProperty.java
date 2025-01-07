@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.property;
+package mod.bespectacled.modernbetaforge.api.property;
 
 import com.google.gson.JsonObject;
 
@@ -9,21 +9,21 @@ import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public final class BooleanProperty extends Property<Boolean> {
+public class StringProperty extends Property<String> {
     /**
-     * Constructs a new BooleanProperty.
+     * Constructs a new StringProperty with an initial string.
      * 
-     * @param value The initial boolean value.
+     * @param value The initial String value.
      */
-    public BooleanProperty(boolean value) {
+    public StringProperty(String value) {
         super(value);
     }
-    
+
     @Override
     public String getType() {
-        return "boolean";
+        return "string";
     }
-
+    
     @Override
     public void visitFactory(FactoryPropertyVisitor visitor, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
         visitor.visit(this, factory, registryKey, jsonObject);
@@ -33,14 +33,14 @@ public final class BooleanProperty extends Property<Boolean> {
     public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
         return visitor.visit(this, guiIdentifier);
     }
-
+    
     @Override
     public void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey) {
-        visitor.visit(this, guiIdentifier, (Boolean)value, registryKey);
+        visitor.visit(this, guiIdentifier, (String)value, registryKey);
     }
 
     @Override
     public String getFormatter() {
-        return "%b";
+        return "%s";
     }
 }
