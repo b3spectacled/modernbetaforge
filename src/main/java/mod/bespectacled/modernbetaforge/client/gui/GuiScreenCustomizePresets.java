@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
     private enum FilterType {
-        ALL, BUILTIN, MODDED, CUSTOM
+        ALL, BUILTIN, ADDON, CUSTOM
     }
     
     private static final String PREFIX_FILTER = "createWorld.customize.presets.filter";
@@ -179,7 +179,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                         return true;
                     case BUILTIN:
                         return key.getNamespace().equals(ModernBeta.MODID);
-                    case MODDED:
+                    case ADDON:
                         return !key.getNamespace().equals(ModernBeta.MODID);
                     case CUSTOM:
                         return false;

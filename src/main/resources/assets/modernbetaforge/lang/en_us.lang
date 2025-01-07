@@ -17,7 +17,7 @@ createWorld.customize.custom.entry=Entry
 createWorld.customize.presets.filter=Filter
 createWorld.customize.presets.filter.all=All
 createWorld.customize.presets.filter.builtin=Built-in
-createWorld.customize.presets.filter.modded=Modded
+createWorld.customize.presets.filter.addon=Add-on
 createWorld.customize.presets.filter.custom=Custom
 
 # Page Titles
@@ -247,7 +247,7 @@ modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Tempera
 
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
 
-modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
+modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Infow
 
 ## Test Properties (Not used!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge
