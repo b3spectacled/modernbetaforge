@@ -5,7 +5,7 @@ import java.util.Random;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;

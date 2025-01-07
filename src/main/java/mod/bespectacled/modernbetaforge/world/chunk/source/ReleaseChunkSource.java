@@ -6,8 +6,8 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -329,16 +329,6 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         @Override
         public Biome getBiome(int x, int z) {
             return this.biomeProvider.getBiome(new BlockPos(x, 0 , z));
-        }
-
-        @Override
-        public float getBaseHeight(int x, int z) {
-            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z)).getBaseHeight();
-        }
-
-        @Override
-        public float getHeightVariation(int x, int z) {
-            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z)).getHeightVariation();
         }
     }
 }

@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome.source;
 
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
-import mod.bespectacled.modernbetaforge.api.world.biome.NoiseBiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
@@ -19,15 +19,5 @@ public class SingleBiomeSource extends BiomeSource implements NoiseBiomeSource {
     @Override
     public Biome getBiome(int x, int z) {
         return this.biome;
-    }
-
-    @Override
-    public float getBaseHeight(int x, int z) {
-        return this.biome.getBaseHeight();
-    }
-
-    @Override
-    public float getHeightVariation(int x, int z) {
-        return this.biome.getHeightVariation();
     }
 }

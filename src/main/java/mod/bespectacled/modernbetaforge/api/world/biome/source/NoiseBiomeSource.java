@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.biome;
+package mod.bespectacled.modernbetaforge.api.world.biome.source;
 
 import net.minecraft.world.biome.Biome;
 
@@ -19,7 +19,9 @@ public interface NoiseBiomeSource {
      * @param z z-coordinate.
      * @return The base height at given coordinates.
      */
-    float getBaseHeight(int x, int z);
+    default float getBaseHeight(int x, int z) {
+        return this.getBiome(x, z).getBaseHeight();
+    }
     
     /**
      * Gets the height variation from the biome at given coordinates.
@@ -28,5 +30,7 @@ public interface NoiseBiomeSource {
      * @param z z-coordinate.
      * @return The height variation at given coordinates.
      */
-    float getHeightVariation(int x, int z);
+    default float getHeightVariation(int x, int z) {
+        return this.getBiome(x, z).getHeightVariation();
+    }
 }

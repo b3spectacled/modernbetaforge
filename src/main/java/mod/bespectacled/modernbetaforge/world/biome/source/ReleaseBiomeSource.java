@@ -3,7 +3,7 @@ package mod.bespectacled.modernbetaforge.world.biome.source;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;

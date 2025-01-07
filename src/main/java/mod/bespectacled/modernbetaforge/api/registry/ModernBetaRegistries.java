@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseColumnSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;

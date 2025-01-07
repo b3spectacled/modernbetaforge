@@ -1,9 +1,9 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;

@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.api.world.biome;
+package mod.bespectacled.modernbetaforge.api.world.biome.source;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;

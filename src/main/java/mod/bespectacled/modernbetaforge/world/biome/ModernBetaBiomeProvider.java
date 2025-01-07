@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;

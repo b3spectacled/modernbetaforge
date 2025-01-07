@@ -2,10 +2,10 @@ package mod.bespectacled.modernbetaforge.world.biome.source;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
