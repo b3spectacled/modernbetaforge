@@ -475,6 +475,10 @@ public class ModernBetaGeneratorSettings {
         this.customProperties = ImmutableMap.copyOf(factory.customProperties);
     }
     
+    public boolean containsProperty(ResourceLocation registryKey) {
+        return this.customProperties.containsKey(registryKey);
+    }
+    
     public boolean getBooleanProperty(ResourceLocation registryKey) {
         Property<?> property = this.customProperties.get(registryKey);
         

@@ -20,4 +20,14 @@ public class SingleBiomeSource extends BiomeSource implements NoiseBiomeSource {
     public Biome getBiome(int x, int z) {
         return this.biome;
     }
+
+    @Override
+    public float getBaseHeight(int x, int z) {
+        return this.biome.getBaseHeight();
+    }
+
+    @Override
+    public float getHeightVariation(int x, int z) {
+        return this.biome.getHeightVariation();
+    }
 }

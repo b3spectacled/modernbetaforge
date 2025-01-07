@@ -163,21 +163,22 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         double biomeDepth = 0.0;
         double totalBiomeWeight = 0.0;
 
-        Biome biome = this.sampleBiome(x, z);
+        float baseHeight = this.getBaseHeight(x, z);
         
         for (int localBiomeX = -2; localBiomeX <= 2; ++localBiomeX) {
             for (int localBiomeZ = -2; localBiomeZ <= 2; ++localBiomeZ) {
                 int bX = (noiseX + localBiomeX) << 2;
                 int bZ = (noiseZ + localBiomeZ) << 2;
                 
-                Biome curBiome = this.sampleBiome(bX, bZ);
+                float curBaseHeight = this.getBaseHeight(bX, bZ);
+                float curHeightVariation = this.getHeightVariation(bX, bZ);
                 
-                float curBiomeDepth = biomeDepthOffset + curBiome.getBaseHeight() * biomeDepthWeight;
-                float curBiomeScale = biomeScaleOffset + curBiome.getHeightVariation() * biomeScaleWeight;
+                float curBiomeDepth = biomeDepthOffset + curBaseHeight * biomeDepthWeight;
+                float curBiomeScale = biomeScaleOffset + curHeightVariation * biomeScaleWeight;
 
                 float biomeWeight = BIOME_WEIGHTS[localBiomeX + 2 + (localBiomeZ + 2) * 5] / (curBiomeDepth + 2.0f);
 
-                if (curBiome.getBaseHeight() > biome.getBaseHeight()) {
+                if (curBaseHeight > baseHeight) {
                     biomeWeight /= 2.0f;
                 }
 
@@ -292,6 +293,14 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         return biome;
     }
     
+    private float getBaseHeight(int x, int z) {
+        return this.sampleBiome(x, z).getBaseHeight();
+    }
+    
+    private float getHeightVariation(int x, int z) {
+        return this.sampleBiome(x, z).getHeightVariation();
+    }
+    
     static {
         for (int i = -2; i <= 2; ++i) {
             for (int j = -2; j <= 2; ++j) {
@@ -320,6 +329,16 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         @Override
         public Biome getBiome(int x, int z) {
             return this.biomeProvider.getBiome(new BlockPos(x, 0 , z));
+        }
+
+        @Override
+        public float getBaseHeight(int x, int z) {
+            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z)).getBaseHeight();
+        }
+
+        @Override
+        public float getHeightVariation(int x, int z) {
+            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z)).getHeightVariation();
         }
     }
 }

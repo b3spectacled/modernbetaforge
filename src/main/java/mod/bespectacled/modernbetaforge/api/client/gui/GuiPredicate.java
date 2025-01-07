@@ -102,17 +102,16 @@ public class GuiPredicate {
     public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);
     public static final ResourceLocation BEACH_BIOME = createRegistryKey(NbtTags.BEACH_BIOME);
     
-    // TODO: Convert this to a built settings Predicate for 1.5.0.0
-    private Predicate<ModernBetaGeneratorSettings.Factory> predicate;
+    private Predicate<ModernBetaGeneratorSettings> predicate;
     private final int[] guiIds;
     
     /**
-     * Constructs a new GuiPredicate with an associated GUI integer id and its predicate consuming a settings Factory.
+     * Constructs a new GuiPredicate with an associated GUI integer id and its predicate consuming generator settings.
      * 
      * @param predicate The predicate used to test if the GUI button associated with the id should be enabled.
      * @param guiIds A list of integer ids that is associate the GUI buttons, can be found in {@link GuiIdentifiers}.
      */
-    public GuiPredicate(Predicate<ModernBetaGeneratorSettings.Factory> predicate, int... guiIds) {
+    public GuiPredicate(Predicate<ModernBetaGeneratorSettings> predicate, int... guiIds) {
         this.predicate = predicate;
         this.guiIds = guiIds;
     }
@@ -123,7 +122,7 @@ public class GuiPredicate {
      * @param predicate The new predicate to test in addition to the existing predicate.
      * @return This GuiPredicate object, so the statements can be chained.
      */
-    public GuiPredicate or(Predicate<ModernBetaGeneratorSettings.Factory> predicate) {
+    public GuiPredicate or(Predicate<ModernBetaGeneratorSettings> predicate) {
         this.predicate = this.predicate.or(predicate);
         
         return this;
@@ -135,7 +134,7 @@ public class GuiPredicate {
      * @param predicate The new predicate to test in addition to the existing predicate.
      * @return This GuiPredicate object, so the statements can be chained.
      */
-    public GuiPredicate and(Predicate<ModernBetaGeneratorSettings.Factory> predicate) {
+    public GuiPredicate and(Predicate<ModernBetaGeneratorSettings> predicate) {
         this.predicate = this.predicate.and(predicate);
         
         return this;
@@ -144,11 +143,11 @@ public class GuiPredicate {
     /**
      * Tests the predicate.
      * 
-     * @param factory The settings Factory to use to test.
+     * @param settings The settings to use to test.
      * @return Whether the test is passed. This is then used to set the GUI button's enabled state.
      */
-    public boolean test(ModernBetaGeneratorSettings.Factory factory) {
-        return this.predicate.test(factory);
+    public boolean test(ModernBetaGeneratorSettings settings) {
+        return this.predicate.test(settings);
     }
     
     /**

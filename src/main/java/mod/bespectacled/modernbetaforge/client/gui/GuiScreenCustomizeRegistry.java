@@ -246,7 +246,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         public int selected;
         
-        public ListPreset(String initialBiome) {
+        public ListPreset(String initialEntry) {
             super(
                 GuiScreenCustomizeRegistry.this.mc,
                 GuiScreenCustomizeRegistry.this.width,
@@ -260,7 +260,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             for (int i = 0; i < GuiScreenCustomizeRegistry.this.entries.size(); ++i) {
                 Info info = GuiScreenCustomizeRegistry.this.entries.get(i);
                 
-                if (info.registryName.equals(initialBiome.toString())) {
+                if (info.registryName.equals(initialEntry.toString())) {
                     this.selected = i;
                 }
             }
