@@ -247,7 +247,7 @@ modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Tempera
 
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
 
-modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Infow
+modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 
 ## Test Properties (Not used!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge
