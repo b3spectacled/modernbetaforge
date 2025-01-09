@@ -4,20 +4,18 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
+import mod.bespectacled.modernbetaforge.util.LayerUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.WorldTypeEvent;
 
 public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcean, BiomeResolverBeach, BiomeResolverRiver {
     private final ChunkCache<BiomeChunk> biomeCache;
@@ -29,7 +27,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         
         GenLayer[] genLayers = ModernBetaGenLayer.initLayers(seed, ModernBetaWorldType.INSTANCE, settings);
-        genLayers = getModdedBiomeGenerators(ModernBetaWorldType.INSTANCE, seed, genLayers);
+        genLayers = LayerUtil.getModdedBiomeGenerators(ModernBetaWorldType.INSTANCE, seed, genLayers);
         
         this.biomeLayer = genLayers[1];
     }
@@ -64,28 +62,17 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
 
     private Biome[] getBiomes(int x, int z) {
         IntCache.resetIntCache();
-        Biome[] biomes = new Biome[256];
-        
         int[] ints = this.biomeLayer.getInts(x, z, 16, 16);
-
-        int i = 0;
-        for (int localZ = 0; localZ < 16; ++localZ) {
-            for (int localX = 0; localX < 16; ++localX) {
-                biomes[(localX & 0xF) + (localZ & 0xF) * 16] = Biome.getBiome(ints[i++], Biomes.DEFAULT);
-            }
+        
+        Biome[] biomes = new Biome[256];
+        for (int i = 0; i < 256; ++i) {
+            biomes[i] = Biome.getBiome(ints[i], Biomes.DEFAULT);
         }
-
+        
         return biomes;
     }
     
     private static boolean isSnowy(Biome biome) {
         return BiomeDictionary.hasType(biome, Type.SNOWY);
-    }
-    
-    private static GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original) {
-        WorldTypeEvent.InitBiomeGens event = new WorldTypeEvent.InitBiomeGens(worldType, seed, original);
-        MinecraftForge.TERRAIN_GEN_BUS.post(event);
-        
-        return event.getNewBiomeGens();
     }
 }

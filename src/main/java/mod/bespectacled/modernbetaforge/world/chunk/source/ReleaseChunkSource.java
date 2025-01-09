@@ -9,6 +9,9 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.util.LayerUtil;
+import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -17,15 +20,12 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.GameType;
-import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.storage.WorldInfo;
+import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -311,7 +311,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     }
 
     private static class ReleaseNoiseBiomeSource extends BiomeSource implements NoiseBiomeSource {
-        private final BiomeProvider biomeProvider;
+        private final GenLayer genLayer;
+        private final ChunkCache<BiomeChunk> biomeCache;
     
         public ReleaseNoiseBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
             super(seed, settings);
@@ -319,16 +320,36 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
             factory.biomeSize = settings.biomeSize;
             factory.riverSize = settings.riverSize;
+
+            GenLayer[] genLayers = GenLayer.initializeAllBiomeGenerators(seed, WorldType.CUSTOMIZED, factory.build());
+            genLayers = LayerUtil.getModdedBiomeGenerators(WorldType.CUSTOMIZED, seed, genLayers);
             
-            WorldSettings worldSettings = new WorldSettings(this.seed, GameType.NOT_SET, false, false, WorldType.CUSTOMIZED);
-            WorldInfo worldInfo = new WorldInfo(worldSettings.setGeneratorOptions(factory.toString()), "");
-            
-            this.biomeProvider = new BiomeProvider(worldInfo);
+            this.genLayer = genLayers[1];
+            this.biomeCache = new ChunkCache<>(
+                "noise_biome",
+                256,
+                (chunkX, chunkZ) -> new BiomeChunk(this.getBiomes(chunkX << 4, chunkZ << 4))
+            );
         }
     
         @Override
         public Biome getBiome(int x, int z) {
-            return this.biomeProvider.getBiome(new BlockPos(x, 0 , z));
+            int chunkX = x >> 4;
+            int chunkZ = z >> 4;
+            
+            return this.biomeCache.get(chunkX, chunkZ).sample(x, z);
+        }
+        
+        private Biome[] getBiomes(int x, int z) {
+            IntCache.resetIntCache();
+            int[] ints = this.genLayer.getInts(x, z, 16, 16);
+            
+            Biome[] biomes = new Biome[256];
+            for (int i = 0; i < 256; ++i) {
+                biomes[i] = Biome.getBiome(ints[i], Biomes.DEFAULT);
+            }
+            
+            return biomes;
         }
     }
 }
