@@ -247,6 +247,7 @@ public class GuiIdentifiers {
     public static final int PG3_S_SCLE_NS_Z = 423;
 
     public static final int PG3_B_USE_BDS = 450;
+    public static final int PG3_S_LAYER_TYPE = 451;
     
     // Labels
     public static final int PG3_L_BETA_LABL = 1400;

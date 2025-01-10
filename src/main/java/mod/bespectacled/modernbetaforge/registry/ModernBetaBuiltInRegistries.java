@@ -251,6 +251,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BIOME_SIZE, GuiPredicates.BIOME_SIZE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.RIVER_SIZE, GuiPredicates.RIVER_SIZE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_BIOME_DEPTH_SCALE, GuiPredicates.USE_BIOME_DEPTH_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LAYER_TYPE, GuiPredicates.LAYER_TYPE_TEST);
         
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BASE_BIOME, GuiPredicates.BASE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.OCEAN_BIOME, GuiPredicates.OCEAN_BIOME_TEST);

@@ -52,6 +52,7 @@ public class NbtTags {
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     public static final String BIOME_SIZE = "biomeSize";
     public static final String RIVER_SIZE = "riverSize";
+    public static final String LAYER_TYPE = "layerType";
     
     public static final String CLAY_SIZE = "claySize";
     public static final String CLAY_COUNT = "clayCount";
@@ -172,8 +173,6 @@ public class NbtTags {
     public static final String SWAMPLAND_BIOMES = "swamplandBiomes";
     public static final String TAIGA_BIOMES = "taigaBiomes";
     public static final String TUNDRA_BIOMES = "tundraBiomes";
-    
-    public static final String ADDITIONAL_SETTINGS = "additionalSettings";
 
     /* OLD */
     public static final String DEPR_FIXED_BIOME = "fixedBiome";

@@ -4,7 +4,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
-import mod.bespectacled.modernbetaforge.util.LayerUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -26,9 +25,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         
         this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         
-        GenLayer[] genLayers = ModernBetaGenLayer.initLayers(seed, ModernBetaWorldType.INSTANCE, settings);
-        genLayers = LayerUtil.getModdedBiomeGenerators(ModernBetaWorldType.INSTANCE, seed, genLayers);
-        
+        GenLayer[] genLayers = ModernBetaGenLayer.initBiomeLayers(seed, ModernBetaWorldType.INSTANCE, settings);
         this.biomeLayer = genLayers[1];
     }
 

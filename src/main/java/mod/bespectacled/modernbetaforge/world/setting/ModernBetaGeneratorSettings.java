@@ -31,6 +31,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
+import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
@@ -78,6 +79,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useBiomeDepthScale;
     public final int biomeSize;
     public final int riverSize;
+    public final String layerType;
     
     public final boolean useCaves;
     public final int caveHeight;
@@ -295,6 +297,7 @@ public class ModernBetaGeneratorSettings {
         this.useBiomeDepthScale = factory.useBiomeDepthScale;
         this.biomeSize = factory.biomeSize;
         this.riverSize = factory.riverSize;
+        this.layerType = factory.layerType;
         
         this.useCaves = factory.useCaves;
         this.caveHeight = factory.caveHeight;
@@ -567,6 +570,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useBiomeDepthScale;
         public int biomeSize;
         public int riverSize;
+        public String layerType;
         
         public boolean useCaves;
         public int caveHeight;
@@ -784,6 +788,7 @@ public class ModernBetaGeneratorSettings {
             this.useBiomeDepthScale = false;
             this.biomeSize = 4;
             this.riverSize = 4;
+            this.layerType = GenLayerType.VANILLA.id;
             
             this.useCaves = true;
             this.caveHeight = 128;
@@ -1023,6 +1028,7 @@ public class ModernBetaGeneratorSettings {
                 this.useBiomeDepthScale == factory.useBiomeDepthScale &&
                 this.biomeSize == factory.biomeSize &&
                 this.riverSize == factory.riverSize &&
+                this.layerType.equals(factory.layerType) &&
                 
                 this.useCaves == factory.useCaves &&
                 this.caveHeight == factory.caveHeight &&
@@ -1244,6 +1250,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useBiomeDepthScale ? 1 : 0);
             hashCode = 31 * hashCode + this.biomeSize;
             hashCode = 31 * hashCode + this.riverSize;
+            hashCode = 31 * hashCode + this.layerType.hashCode();
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
             hashCode = 31 * hashCode + this.caveHeight;
@@ -1491,6 +1498,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useBiomeDepthScale = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
                 factory.biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.biomeSize);
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
+                factory.layerType = JsonUtils.getString(jsonObject, NbtTags.LAYER_TYPE, factory.layerType);
                 
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CAVES, factory.useCaves);
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
@@ -1722,6 +1730,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
             jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
+            jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
             
             jsonObject.addProperty(NbtTags.USE_CAVES, factory.useCaves);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);

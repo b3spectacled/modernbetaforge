@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.biome.layer;
+package mod.bespectacled.modernbetaforge.world.biome.layer.custom;
 
 import java.util.ArrayList;
 import java.util.List;

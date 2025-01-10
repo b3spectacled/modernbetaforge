@@ -1,14 +1,14 @@
-package mod.bespectacled.modernbetaforge.world.biome.layer;
+package mod.bespectacled.modernbetaforge.world.biome.layer.custom;
 
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerContinent extends GenLayer {
+public class GenLayerOceanless extends GenLayer {
     private static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
     
-    public GenLayerContinent(long seed) {
+    public GenLayerOceanless(long seed) {
         super(seed);
     }
 

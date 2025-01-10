@@ -37,6 +37,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
+import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
@@ -184,6 +185,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int levelHouseId = IndevHouse.fromId(this.settings.levelHouse).ordinal();
         int levelSeaLevel = this.getLevelSeaLevel();
         String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
+        
+        int layerTypeId = GenLayerType.fromId(this.settings.layerType).ordinal();
         
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
@@ -437,7 +440,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG3_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
             createGuiSlider(GuiIdentifiers.PG3_S_BIOME_SZ, NbtTags.BIOME_SIZE, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.biomeSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_RIVER_SZ, NbtTags.RIVER_SIZE, MIN_RIVER_SIZE, MAX_RIVER_SIZE, this.settings.riverSize, this),
-            createGuiButton(GuiIdentifiers.PG3_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale)
+            createGuiButton(GuiIdentifiers.PG3_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
+            createGuiSlider(GuiIdentifiers.PG3_S_LAYER_TYPE, NbtTags.LAYER_TYPE, 0f, GenLayerType.values().length - 1, layerTypeId, this)
         };
         
         GuiPageButtonList.GuiListEntry[] pageList4 = {
@@ -1243,6 +1247,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG3_S_RIVER_SZ:
                     this.settings.riverSize = (int)entryValue;
                     break;
+                case GuiIdentifiers.PG3_S_LAYER_TYPE:
+                    this.settings.layerType = GenLayerType.values()[(int)entryValue].id;
+                    break;
                     
                 case GuiIdentifiers.PG0_S_CHUNK:
                     this.settings.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue).toString();
@@ -1899,6 +1906,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 
                 return I18n.format(PREFIX + "levelHouse." + key);
             }
+            case GuiIdentifiers.PG3_S_LAYER_TYPE: {
+                String key = GenLayerType.values()[(int)entryValue].id;
+                
+                return I18n.format(PREFIX + "layerType." + key);
+            }
             
             default: return String.format("%d", (int)entryValue);
         }
@@ -2050,6 +2062,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_LEVEL_THEME));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_LEVEL_TYPE));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_LEVEL_HOUSE));
+        
+        set.add(this.pageList.getComponent(GuiIdentifiers.PG3_S_LAYER_TYPE));
         
         return set;
     }

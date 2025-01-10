@@ -97,6 +97,7 @@ public class GuiPredicate {
     public static final ResourceLocation BIOME_SIZE = createRegistryKey(NbtTags.BIOME_SIZE);
     public static final ResourceLocation RIVER_SIZE = createRegistryKey(NbtTags.RIVER_SIZE);
     public static final ResourceLocation USE_BIOME_DEPTH_SCALE = createRegistryKey(NbtTags.USE_BIOME_DEPTH_SCALE);
+    public static final ResourceLocation LAYER_TYPE = createRegistryKey(NbtTags.LAYER_TYPE);
     
     public static final ResourceLocation BASE_BIOME = createRegistryKey(NbtTags.BASE_BIOME);
     public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);

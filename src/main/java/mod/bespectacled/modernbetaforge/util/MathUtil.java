@@ -30,4 +30,8 @@ public class MathUtil {
         
         return new Vec3d((float)(r / 255.0), (float)(g / 255.0), (float)(b / 255.0));
     }
+    
+    public static int convertColorComponentsToInt(int r, int g, int b) {
+        return (r << 16) | (g << 8) | b;
+    }
 }

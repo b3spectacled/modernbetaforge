@@ -97,7 +97,10 @@ public class DebugInfoEventHandler {
                     String noisebiome = releaseChunkSource.getNoiseBiome(x, z).getBiomeName();
                     
                     String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
+                    String layerTypeText = String.format("[Modern Beta] Release Layer Type: %s", settings.layerType);
+                    
                     addDebugText(event, noiseBiomeText);
+                    addDebugText(event, layerTypeText);
                 }
                 
                 if (chunkSource instanceof FiniteChunkSource) {

@@ -121,6 +121,7 @@ public class GuiPredicates {
     public static final GuiPredicate BIOME_SIZE_TEST;
     public static final GuiPredicate RIVER_SIZE_TEST;
     public static final GuiPredicate USE_BIOME_DEPTH_SCALE_TEST;
+    public static final GuiPredicate LAYER_TYPE_TEST;
     
     public static final GuiPredicate BASE_BIOME_TEST;
     public static final GuiPredicate OCEAN_BIOME_TEST;
@@ -343,7 +344,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG3_S_BIOME_SZ,
                 GuiIdentifiers.PG3_S_RIVER_SZ,
                 
-                GuiIdentifiers.PG3_B_USE_BDS
+                GuiIdentifiers.PG3_B_USE_BDS,
+                GuiIdentifiers.PG3_S_LAYER_TYPE
             )
         );
         
@@ -534,6 +536,13 @@ public class GuiPredicates {
                 return containsNoiseSetting(settings, GuiIdentifiers.PG3_B_USE_BDS)  && !(biomeSource instanceof NoiseBiomeSource);
             },
             GuiIdentifiers.PG3_B_USE_BDS
+        );
+        LAYER_TYPE_TEST = new GuiPredicate(settings -> {
+            BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
+            
+            return containsNoiseSetting(settings, GuiIdentifiers.PG3_S_LAYER_TYPE)  && !(biomeSource instanceof NoiseBiomeSource);
+            },
+            GuiIdentifiers.PG3_S_LAYER_TYPE
         );
         BASE_BIOME_TEST = new GuiPredicate(
             settings -> isBetaOrPEBiomeSource(settings),
