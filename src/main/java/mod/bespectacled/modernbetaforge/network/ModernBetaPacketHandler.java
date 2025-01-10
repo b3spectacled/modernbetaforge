@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ModernBetaPacketHandler {
     public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(ModernBeta.MODID);
     
-    public static void init() {
+    public static void register() {
         INSTANCE.registerMessage(CloudHeightMessageHandler.class, CloudHeightMessage.class, 0, Side.CLIENT);
     }
 }

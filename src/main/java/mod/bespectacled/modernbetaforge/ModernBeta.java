@@ -59,8 +59,13 @@ public class ModernBeta {
 
     @EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
+        MinecraftForge.EVENT_BUS.register(new WorldEventHandlerCommon());
+        ModDataFixer.INSTANCE.register();
+        
         ModernBetaWorldType.register();
-        ModernBetaStructures.registerStructureBiomes();
+        ModernBetaStructures.register();
+        ModernBetaPacketHandler.register();
+        
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
         ModernBetaBuiltInRegistries.registerNoiseSources();
@@ -71,11 +76,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerDataFixes();
         //ModernBetaBuiltInRegistries.registerProperties();
         
-        ModDataFixer.INSTANCE.registerModDataFixes();
         ModCompat.loadModCompat();
-
-        ModernBetaPacketHandler.init();
-        MinecraftForge.EVENT_BUS.register(new WorldEventHandlerCommon());
         
         proxy.init();
     }

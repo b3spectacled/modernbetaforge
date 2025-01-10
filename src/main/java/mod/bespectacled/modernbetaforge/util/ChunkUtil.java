@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -16,9 +17,11 @@ public class ChunkUtil {
     private enum TerrainType {
         LAND(COLOR_LAND),
         SAND(COLOR_SAND),
+        SNOW(COLOR_SNOW),
         WATER(COLOR_WATER),
+        ICE(COLOR_ICE),
         VOID(COLOR_VOID),
-        CENTER(COLOR_CENTER);
+        MARKER(COLOR_CENTER);
         
         private int color;
         
@@ -29,7 +32,9 @@ public class ChunkUtil {
     
     private static final int COLOR_LAND = MathUtil.convertColorComponentsToInt(127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertColorComponentsToInt(247, 233, 163);
+    private static final int COLOR_SNOW = MathUtil.convertColorComponentsToInt(255, 255, 255);
     private static final int COLOR_WATER = MathUtil.convertColorComponentsToInt(64, 64, 255);
+    private static final int COLOR_ICE = MathUtil.convertColorComponentsToInt(160, 160, 255);
     private static final int COLOR_VOID = MathUtil.convertColorComponentsToInt(0, 0, 0);
     private static final int COLOR_CENTER = MathUtil.convertColorComponentsToInt(255, 0, 0);
     
@@ -71,12 +76,29 @@ public class ChunkUtil {
                 }
                 
                 Biome biome = world.getBiomeProvider().getBiome(mutablePos.setPos(x, 0, z));
-                if (terrainType == TerrainType.LAND && (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH))) {
-                    terrainType = TerrainType.SAND;
+                
+                if (terrainType == TerrainType.LAND) {
+                    if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
+                        terrainType = TerrainType.SAND;
+                    } else if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
+                        terrainType = TerrainType.SNOW;
+                    }
                 }
                 
-                if (x > -5 && x < 5 && z > -5 && z < 5) {
-                    terrainType = TerrainType.CENTER;
+                if (terrainType == TerrainType.WATER && BiomeDictionary.hasType(biome, Type.SNOWY)) {
+                    terrainType = TerrainType.ICE;
+                }
+                
+                if (inCenter(x, z)) {
+                    terrainType = TerrainType.MARKER;
+                }
+                
+                if (onAxisX(x, z) && z % 10 == 0) {
+                    terrainType = TerrainType.MARKER;
+                }
+                
+                if (onAxisZ(x, z) && x % 10 == 0) {
+                    terrainType = TerrainType.MARKER;
                 }
                 
                 image.setRGB(localX, localZ, terrainType.color);
@@ -84,5 +106,31 @@ public class ChunkUtil {
         }
         
         return image;
+    }
+    
+    private static boolean inCenter(int x, int z) {
+        if (x > 7 || x < -7 || z > 7 || z < -7) {
+            return false;
+        }
+        
+        int distance = (int)MathHelper.sqrt(x * x + z * z);
+        
+        if (distance > 0 && distance < 3) {
+            return true;
+        } else if (distance > 3 && distance < 4) {
+            return false;
+        } else if (distance > 4 && distance < 7) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private static boolean onAxisX(int x, int z) {
+        return x == 0 && z != 0;
+    }
+    
+    private static boolean onAxisZ(int x, int z) {
+        return x !=0 && z ==0;
     }
 }

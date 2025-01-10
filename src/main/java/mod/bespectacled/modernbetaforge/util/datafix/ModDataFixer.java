@@ -17,7 +17,7 @@ public class ModDataFixer {
         this.modFixer = this.forgeDataFixer.init(ModernBeta.MODID, ModernBeta.DATA_VERSION);
     }
     
-    public void registerModDataFixes() {
+    public void register() {
         this.registerModDataFix(ModDataFixers.BIOME_MAP_FIX);
         this.registerModDataFix(ModDataFixers.SANDSTONE_WOLVES_SURFACE_FIX);
         this.registerModDataFix(ModDataFixers.SKYLANDS_SURFACE_FIX);

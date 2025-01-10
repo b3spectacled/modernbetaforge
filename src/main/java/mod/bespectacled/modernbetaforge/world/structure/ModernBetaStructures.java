@@ -20,7 +20,7 @@ public class ModernBetaStructures {
     public static final ResourceLocation MANSION = new ResourceLocation("mansion");
     public static final ResourceLocation TEMPLE = new ResourceLocation("temple");
     
-    public static void registerStructureBiomes() {
+    public static void register() {
         /* Beta */
 
         // Add stronghold biomes
