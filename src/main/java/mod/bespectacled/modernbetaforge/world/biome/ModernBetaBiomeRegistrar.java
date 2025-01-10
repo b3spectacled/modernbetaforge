@@ -56,8 +56,8 @@ public class ModernBetaBiomeRegistrar {
         biomeRegistry.register(new BiomeBetaOcean(), ModernBetaBiomeTags.BETA_OCEAN, Type.OCEAN, Type.WET);
         biomeRegistry.register(new BiomeBetaFrozenOcean(), ModernBetaBiomeTags.BETA_FROZEN_OCEAN, Type.OCEAN, Type.SNOWY, Type.COLD, Type.WET);
         
-        biomeRegistry.register(new BiomeBetaBeach(), ModernBetaBiomeTags.BETA_BEACH, Type.BEACH, Type.WET);
-        biomeRegistry.register(new BiomeBetaSnowyBeach(), ModernBetaBiomeTags.BETA_SNOWY_BEACH, Type.BEACH, Type.SNOWY, Type.COLD, Type.WET);
+        biomeRegistry.register(new BiomeBetaBeach(), ModernBetaBiomeTags.BETA_BEACH, Type.BEACH);
+        biomeRegistry.register(new BiomeBetaSnowyBeach(), ModernBetaBiomeTags.BETA_SNOWY_BEACH, Type.BEACH, Type.SNOWY, Type.COLD);
         
         biomeRegistry.register(new BiomeAlphaNormal(), ModernBetaBiomeTags.ALPHA, Type.FOREST);
         biomeRegistry.register(new BiomeAlphaWinter(), ModernBetaBiomeTags.ALPHA_WINTER, Type.FOREST, Type.SNOWY, Type.COLD);

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.bespectacled.modernbetaforge.command.DrawTerrainMapCommand;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandlerCommon;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
@@ -59,7 +60,6 @@ public class ModernBeta {
     @EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
         ModernBetaWorldType.register();
-        
         ModernBetaStructures.registerStructureBiomes();
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
@@ -76,6 +76,7 @@ public class ModernBeta {
 
         ModernBetaPacketHandler.init();
         MinecraftForge.EVENT_BUS.register(new WorldEventHandlerCommon());
+        
         proxy.init();
     }
     
@@ -86,5 +87,7 @@ public class ModernBeta {
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) { }
     
     @EventHandler
-    private void onFMLServerStartingEvent(FMLServerStartingEvent event) { }
+    private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
+        event.registerServerCommand(new DrawTerrainMapCommand());
+    }
 }

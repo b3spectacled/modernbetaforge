@@ -224,6 +224,13 @@ createWorld.customize.custom.preset.info.modernbetaforge.beta_plus=Beta generati
 createWorld.customize.custom.preset.info.modernbetaforge.beta_pe=Based on Minecraft PE v0.6.0 with Beta biomes
 createWorld.customize.custom.preset.info.modernbetaforge.beta_release=Release 1.12.2 generation with Beta biomes
 
+## Commands
+commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <width> <length>
+commands.modernbetaforge.drawterrainmap.start=Attempting to draw terrain map of size %s/%s
+commands.modernbetaforge.drawterrainmap.progress=Terrain map drawing %s%% completed
+commands.modernbetaforge.drawterrainmap.success=Saved terrain map as %s
+commands.modernbetaforge.drawterrainmap.failure=Couldn't draw terrain map due to invalid world type or other error
+
 ## Config
 modernbetaforge.general.guioptions=GUI Options
 modernbetaforge.general.generatoroptions=Generator Options

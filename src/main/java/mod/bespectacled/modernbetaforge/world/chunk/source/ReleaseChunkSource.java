@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.GenLayerUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -322,7 +321,6 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
     private static class ReleaseNoiseBiomeSource extends BiomeSource implements NoiseBiomeSource {
         private static final boolean DEBUG_VANILLA = false;
-        private static final boolean DEBUG_DRAW_MAP = false;
         
         private final GenLayer genLayer;
         private final ChunkCache<BiomeChunk> biomeCache;
@@ -344,8 +342,9 @@ public class ReleaseChunkSource extends NoiseChunkSource {
                 (chunkX, chunkZ) -> new BiomeChunk(this.getBiomes(chunkX << 4, chunkZ << 4))
             );
             
-            if (DEBUG_VANILLA) this.debugVanillaGenLayer();
-            if (DEBUG_DRAW_MAP) BiomeUtil.drawDebugMap(this, 2500, 2500);
+            if (DEBUG_VANILLA) {
+                this.debugVanillaGenLayer();
+            }
         }
     
         @Override
