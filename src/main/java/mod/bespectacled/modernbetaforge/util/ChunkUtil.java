@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.util;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
@@ -105,10 +106,22 @@ public class ChunkUtil {
             }
         }
         
-        return image;
+        BufferedImage rotatedImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+        Graphics2D graphic = rotatedImage.createGraphics();
+        graphic.rotate(Math.toRadians(-90), width / 2, length / 2);
+        graphic.drawImage(image, null, 0, 0);
+        
+        return rotatedImage;
     }
     
     private static boolean inCenter(int x, int z) {
+        return inCenter(x, z, 0, 0);
+    }
+    
+    private static boolean inCenter(int x, int z, int offsetX, int offsetZ) {
+        x += offsetX;
+        z += offsetZ;
+        
         if (x > 7 || x < -7 || z > 7 || z < -7) {
             return false;
         }

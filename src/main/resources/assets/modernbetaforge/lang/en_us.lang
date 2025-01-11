@@ -225,7 +225,7 @@ createWorld.customize.custom.preset.info.modernbetaforge.beta_pe=Based on Minecr
 createWorld.customize.custom.preset.info.modernbetaforge.beta_release=Release 1.12.2 generation with Beta biomes
 
 ## Commands
-commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <width> <length>
+commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <width>
 commands.modernbetaforge.drawterrainmap.start=Attempting to draw terrain map of size %s/%s
 commands.modernbetaforge.drawterrainmap.progress=Terrain map drawing %s%% completed
 commands.modernbetaforge.drawterrainmap.success=Saved terrain map as %s

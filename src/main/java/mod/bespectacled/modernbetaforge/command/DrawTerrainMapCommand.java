@@ -36,14 +36,14 @@ public class DrawTerrainMapCommand extends CommandBase {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         boolean success = false;
         
-        if (args.length != 2) {
+        if (args.length != 1) {
             throw new WrongUsageException(this.getUsage(sender), new Object[0]);
         }
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
             int width = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5000);
-            int length = MathHelper.clamp(CommandBase.parseInt(args[1]), 0, 5000);
+            int length = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5000);
 
             try { 
                 File file = new File(worldServer.getSaveHandler().getWorldDirectory(), "terrain_map.png");
