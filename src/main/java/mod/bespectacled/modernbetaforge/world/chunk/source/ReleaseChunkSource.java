@@ -329,7 +329,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             super(seed, settings);
 
             ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
-            factory.biomeSize = settings.biomeSize;
+            factory.biomeSize = settings.layerSize;
             factory.riverSize = settings.riverSize;
 
             GenLayer[] genLayers = ModernBetaGenLayer.initNoiseLayers(seed, WorldType.CUSTOMIZED, factory.build(), settings);
@@ -369,7 +369,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
         private void debugVanillaGenLayer() {
             ChunkGeneratorSettings.Factory factory = new ChunkGeneratorSettings.Factory();
-            factory.biomeSize = this.settings.biomeSize;
+            factory.biomeSize = this.settings.layerSize;
             factory.riverSize = this.settings.riverSize;
             
             WorldSettings worldSettings = new WorldSettings(this.seed, GameType.NOT_SET, false, false, WorldType.CUSTOMIZED);

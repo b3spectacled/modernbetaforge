@@ -32,6 +32,7 @@ public class GuiPredicate {
     public static final ResourceLocation USE_NETHER_CAVES = createRegistryKey(NbtTags.USE_NETHER_CAVES);
     public static final ResourceLocation USE_FORTRESSES = createRegistryKey(NbtTags.USE_FORTRESSES);
     public static final ResourceLocation USE_LAVA_POCKETS = createRegistryKey(NbtTags.USE_LAVA_POCKETS);
+    
     public static final ResourceLocation LEVEL_THEME = createRegistryKey(NbtTags.LEVEL_THEME);
     public static final ResourceLocation LEVEL_TYPE = createRegistryKey(NbtTags.LEVEL_TYPE);
     public static final ResourceLocation LEVEL_WIDTH = createRegistryKey(NbtTags.LEVEL_WIDTH);
@@ -59,6 +60,7 @@ public class GuiPredicate {
     public static final ResourceLocation SPAWN_AMBIENT_MOBS = createRegistryKey(NbtTags.SPAWN_AMBIENT_MOBS);
     public static final ResourceLocation SPAWN_WOLVES = createRegistryKey(NbtTags.SPAWN_WOLVES);
     public static final ResourceLocation USE_MODDED_BIOMES = createRegistryKey(NbtTags.USE_MODDED_BIOMES);
+    public static final ResourceLocation BIOME_SIZE = createRegistryKey(NbtTags.BIOME_SIZE);
     
     public static final ResourceLocation CLAY_SIZE = createRegistryKey(NbtTags.CLAY_SIZE);
     public static final ResourceLocation CLAY_COUNT = createRegistryKey(NbtTags.CLAY_COUNT);
@@ -94,10 +96,10 @@ public class GuiPredicate {
     public static final ResourceLocation BIOME_DEPTH_OFFSET = createRegistryKey(NbtTags.BIOME_DEPTH_OFFSET);
     public static final ResourceLocation BIOME_SCALE_WEIGHT = createRegistryKey(NbtTags.BIOME_SCALE_WEIGHT);
     public static final ResourceLocation BIOME_SCALE_OFFSET = createRegistryKey(NbtTags.BIOME_SCALE_OFFSET);
-    public static final ResourceLocation BIOME_SIZE = createRegistryKey(NbtTags.BIOME_SIZE);
     public static final ResourceLocation RIVER_SIZE = createRegistryKey(NbtTags.RIVER_SIZE);
     public static final ResourceLocation USE_BIOME_DEPTH_SCALE = createRegistryKey(NbtTags.USE_BIOME_DEPTH_SCALE);
     public static final ResourceLocation LAYER_TYPE = createRegistryKey(NbtTags.LAYER_TYPE);
+    public static final ResourceLocation LAYER_SIZE = createRegistryKey(NbtTags.LAYER_SIZE);
     
     public static final ResourceLocation BASE_BIOME = createRegistryKey(NbtTags.BASE_BIOME);
     public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);

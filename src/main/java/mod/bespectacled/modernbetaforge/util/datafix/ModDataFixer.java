@@ -25,6 +25,7 @@ public class ModDataFixer {
         this.registerModDataFix(ModDataFixers.INDEV_HOUSE_FIX);
         this.registerModDataFix(ModDataFixers.RESOURCE_LOCATION_FIX);
         this.registerModDataFix(ModDataFixers.SCALE_NOISE_FIX);
+        this.registerModDataFix(ModDataFixers.LAYER_SIZE_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {

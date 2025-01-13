@@ -140,6 +140,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_RESOURCE_LOCATION_CARVER, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixResourceLocationCarver));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SCALE_NOISE_SCALE_X, new DataFix(NbtTags.SCALE_NOISE_SCALE_X, DataFixers::fixScaleNoiseScaleX));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SCALE_NOISE_SCALE_Z, new DataFix(NbtTags.SCALE_NOISE_SCALE_Z, DataFixers::fixScaleNoiseScaleZ));
+        
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_SIZE, new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize));
     }
 
     @SideOnly(Side.CLIENT)
@@ -252,6 +254,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.RIVER_SIZE, GuiPredicates.RIVER_SIZE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_BIOME_DEPTH_SCALE, GuiPredicates.USE_BIOME_DEPTH_SCALE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LAYER_TYPE, GuiPredicates.LAYER_TYPE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LAYER_SIZE, GuiPredicates.LAYER_SIZE_TEST);
         
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BASE_BIOME, GuiPredicates.BASE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.OCEAN_BIOME, GuiPredicates.OCEAN_BIOME_TEST);

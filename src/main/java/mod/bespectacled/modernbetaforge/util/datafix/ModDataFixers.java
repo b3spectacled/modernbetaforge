@@ -20,6 +20,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_3_0_0 = 1300;
     private static final int DATA_VERSION_V1_3_1_0 = 1310;
     private static final int DATA_VERSION_V1_4_0_0 = 1400;
+    private static final int DATA_VERSION_V1_5_0_0 = 1500;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -182,6 +183,25 @@ public class ModDataFixers {
                 List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.FIX_SCALE_NOISE_SCALE_X,
                     DataFixTags.FIX_SCALE_NOISE_SCALE_Z
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
+            }
+        }
+    );
+    
+    public static final ModDataFix LAYER_SIZE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_5_0_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_LAYER_SIZE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());

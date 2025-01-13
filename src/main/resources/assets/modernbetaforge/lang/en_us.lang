@@ -6,10 +6,6 @@ generator.modernbeta=Modern Beta
 createWorld.customize.custom.modernBeta=Modern Beta
 
 # Page Buttons
-createWorld.customize.custom.nextPage=>
-createWorld.customize.custom.prevPage=<
-createWorld.customize.custom.lastPage=>>
-createWorld.customize.custom.firstPage=<<
 createWorld.customize.custom.enabled=Enabled
 createWorld.customize.custom.entry=Entry
 
@@ -20,24 +16,30 @@ createWorld.customize.presets.filter.builtin=Built-in
 createWorld.customize.presets.filter.addon=Add-on
 createWorld.customize.presets.filter.custom=Custom
 
-# Page Titles
-createWorld.customize.custom.page4=Beta/PE Climates (Expert Users Only!)
-createWorld.customize.custom.page5=Biome Feature Settings
-createWorld.customize.custom.page6=Custom Settings
+# Page Tabs
+createWorld.customize.custom.tab.page0=Basic
+createWorld.customize.custom.tab.page1=Chunk
+createWorld.customize.custom.tab.page2=Biome
+createWorld.customize.custom.tab.page3=Ore
+createWorld.customize.custom.tab.page4=Noise 1
+createWorld.customize.custom.tab.page5=Noise 2
+createWorld.customize.custom.tab.page6=Climate
+createWorld.customize.custom.tab.page7=Custom
 
 # Page Labels
-createWorld.customize.custom.biomeReplacementLabel=Biome Replacement Settings
-createWorld.customize.custom.overworldFeaturesLabel=Overworld Settings
-createWorld.customize.custom.netherFeaturesLabel=Nether Settings
-createWorld.customize.custom.netherBoPLabel=BoP is detected, Classic Nether is incompatible.
-createWorld.customize.custom.infdev227FeaturesLabel=Infdev 20100227 Settings
-createWorld.customize.custom.indevFeaturesLabel=Indev/Classic Settings
-createWorld.customize.custom.betaNoiseLabel=Beta/Pocket Edition Noise Settings
-createWorld.customize.custom.releaseNoiseLabel=Release Noise Settings
-createWorld.customize.custom.betaFeaturesLabel=Beta Biome Feature Settings
-createWorld.customize.custom.releaseFeaturesLabel=Release Biome Feature Settings
-createWorld.customize.custom.mobSpawnLabel=Modern Beta Biome Mob Settings
-createWorld.customize.custom.modsLabel=Loaded Mods
+createWorld.customize.custom.label.biomeReplacement=Biome Replacement Settings
+createWorld.customize.custom.label.overworld=Overworld Settings
+createWorld.customize.custom.label.nether=Nether Settings
+createWorld.customize.custom.label.netherBoP=BoP is detected, Classic Nether is incompatible.
+createWorld.customize.custom.label.infdev227=Infdev 20100227 Settings
+createWorld.customize.custom.label.indev=Indev/Classic Settings
+createWorld.customize.custom.label.release=Release Settings
+createWorld.customize.custom.label.betaBiome=Beta Biome Feature Settings
+createWorld.customize.custom.label.releaseBiome=Release Biome Feature Settings
+createWorld.customize.custom.label.mobSpawn=Modern Beta Biome Mob Settings
+createWorld.customize.custom.label.mods=Loaded Mods
+createWorld.customize.custom.label.betaNoise=Beta/Pocket Edition Noise Settings
+createWorld.customize.custom.label.releaseNoise=Release Noise Settings
 
 # Page 1 - Main Settings
 createWorld.customize.custom.chunkSource=Chunk Source
@@ -62,11 +64,11 @@ createWorld.customize.custom.useNetherCaves=Nether Caves
 createWorld.customize.custom.useFortresses=Nether Fortresses
 createWorld.customize.custom.useLavaPockets=Lava Pockets
 
-# Page 1 - Infdev 227 Settings
+# Page 2 - Infdev 227 Settings
 createWorld.customize.custom.useInfdevWalls=Infdev Obsidian Walls
 createWorld.customize.custom.useInfdevPyramids=Infdev Brick Pyramids
 
-# Page 1 - Indev Settings
+# Page 2 - Indev Settings
 createWorld.customize.custom.levelTheme=Level Theme
 createWorld.customize.custom.levelType=Level Type
 createWorld.customize.custom.levelWidth=Level Width
@@ -75,7 +77,12 @@ createWorld.customize.custom.levelHeight=Level Height
 createWorld.customize.custom.levelHouse=Indev House
 createWorld.customize.custom.useIndevCaves=Indev Caves
 
-# Page 2 - Features
+# Page 2 - Release Settings
+createWorld.customize.custom.riverRarity=River Rarity
+createWorld.customize.custom.layerType=Layer Type
+createWorld.customize.custom.layerSize=Layer Size
+
+# Page 3 - Features
 createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=Modern Flowers
 createWorld.customize.custom.useLilyPads=Lily Pads
@@ -88,15 +95,16 @@ createWorld.customize.custom.useSwampTrees=Swamp Trees
 createWorld.customize.custom.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.useJungleTrees=Jungle Trees
 createWorld.customize.custom.useModdedBiomes=Mod Biome Compatibility
+createWorld.customize.custom.biomeSize=Biome Size
 
-# Page 3 - Mobs
+# Page 4 - Mobs
 createWorld.customize.custom.spawnNewCreatureMobs=Modern Passive Mobs
 createWorld.customize.custom.spawnNewMonsterMobs=Modern Hostile Mobs
 createWorld.customize.custom.spawnWaterMobs=Water Mobs
 createWorld.customize.custom.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.spawnWolves=Wolves
 
-# Page 4/5
+# Page 5/6
 createWorld.customize.custom.scaleNoiseScaleX=Scale Noise Scale X
 createWorld.customize.custom.scaleNoiseScaleZ=Scale Noise Scale Z
 createWorld.customize.custom.height=Height
@@ -104,10 +112,8 @@ createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
 createWorld.customize.custom.useBiomeDepthScale=Override Depth/Scale
-createWorld.customize.custom.riverRarity=River Rarity
-createWorld.customize.custom.layerType=Layer Type
 
-# Page 6 - World Customization Beta Biomes
+# Page 7 - World Customization Beta Biomes
 createWorld.customize.custom.desertBiomes=Desert
 createWorld.customize.custom.forestBiomes=Forest
 createWorld.customize.custom.iceDesertBiomes=Ice Desert
@@ -225,8 +231,8 @@ createWorld.customize.custom.preset.info.modernbetaforge.beta_pe=Based on Minecr
 createWorld.customize.custom.preset.info.modernbetaforge.beta_release=Release 1.12.2 generation with Beta biomes
 
 ## Commands
-commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <width>
-commands.modernbetaforge.drawterrainmap.start=Attempting to draw terrain map of size %s/%s
+commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <size>
+commands.modernbetaforge.drawterrainmap.start=Drawing terrain map of size %s/%s
 commands.modernbetaforge.drawterrainmap.progress=Terrain map drawing %s%% completed
 commands.modernbetaforge.drawterrainmap.success=Saved terrain map as %s
 commands.modernbetaforge.drawterrainmap.failure=Couldn't draw terrain map due to invalid world type or other error

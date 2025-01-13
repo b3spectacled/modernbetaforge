@@ -19,6 +19,6 @@ public class DataFixer {
     }
     
     private static void logDataFix(String key, String worldName, int fixVersion) {
-        ModernBeta.log(Level.INFO, String.format("[DataFix] Found old property '%s' in world '%s' to be fixed for version '%d'..", key, worldName, fixVersion));
+        ModernBeta.log(Level.INFO, String.format("[DataFix] Found property '%s' in world '%s' to be fixed for version '%d'..", key, worldName, fixVersion));
     }
 }

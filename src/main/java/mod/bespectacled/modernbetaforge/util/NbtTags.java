@@ -53,6 +53,7 @@ public class NbtTags {
     public static final String BIOME_SIZE = "biomeSize";
     public static final String RIVER_SIZE = "riverSize";
     public static final String LAYER_TYPE = "layerType";
+    public static final String LAYER_SIZE = "layerSize";
     
     public static final String CLAY_SIZE = "claySize";
     public static final String CLAY_COUNT = "clayCount";

@@ -68,7 +68,7 @@ public class ModernBetaGenLayer {
     }
     
     public static GenLayer[] initNoiseLayers(long seed, WorldType worldType, ChunkGeneratorSettings vanillaSettings, ModernBetaGeneratorSettings settings) {
-        int biomeSize = settings.biomeSize;
+        int biomeSize = settings.layerSize;
         int riverSize = settings.riverSize;
         
         GenLayer genLayer = createInitialLayer(settings);

@@ -222,6 +222,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @SideOnly(Side.CLIENT)
     private class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 80;
+        private static final int LIST_PADDING_BOTTOM = 32;
         
         public int selected;
         
@@ -231,7 +232,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 GuiScreenCustomizePresets.this.width,
                 GuiScreenCustomizePresets.this.height,
                 LIST_PADDING_TOP,
-                GuiScreenCustomizePresets.this.height - 32,
+                GuiScreenCustomizePresets.this.height - LIST_PADDING_BOTTOM,
                 SLOT_HEIGHT + 6
             );
             this.selected = -1;

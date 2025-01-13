@@ -80,6 +80,7 @@ public class ModernBetaGeneratorSettings {
     public final int biomeSize;
     public final int riverSize;
     public final String layerType;
+    public final int layerSize;
     
     public final boolean useCaves;
     public final int caveHeight;
@@ -298,6 +299,7 @@ public class ModernBetaGeneratorSettings {
         this.biomeSize = factory.biomeSize;
         this.riverSize = factory.riverSize;
         this.layerType = factory.layerType;
+        this.layerSize = factory.layerSize;
         
         this.useCaves = factory.useCaves;
         this.caveHeight = factory.caveHeight;
@@ -571,6 +573,7 @@ public class ModernBetaGeneratorSettings {
         public int biomeSize;
         public int riverSize;
         public String layerType;
+        public int layerSize;
         
         public boolean useCaves;
         public int caveHeight;
@@ -785,10 +788,11 @@ public class ModernBetaGeneratorSettings {
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
             this.biomeScaleOffset = 0.0f;
-            this.useBiomeDepthScale = false;
+            this.useBiomeDepthScale = true;
             this.biomeSize = 4;
             this.riverSize = 4;
             this.layerType = GenLayerType.VANILLA.id;
+            this.layerSize = 4;
             
             this.useCaves = true;
             this.caveHeight = 128;
@@ -1029,6 +1033,7 @@ public class ModernBetaGeneratorSettings {
                 this.biomeSize == factory.biomeSize &&
                 this.riverSize == factory.riverSize &&
                 this.layerType.equals(factory.layerType) &&
+                this.layerSize == factory.layerSize &&
                 
                 this.useCaves == factory.useCaves &&
                 this.caveHeight == factory.caveHeight &&
@@ -1251,6 +1256,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.biomeSize;
             hashCode = 31 * hashCode + this.riverSize;
             hashCode = 31 * hashCode + this.layerType.hashCode();
+            hashCode = 31 * hashCode + this.layerSize;
             
             hashCode = 31 * hashCode + (this.useCaves ? 1 : 0);
             hashCode = 31 * hashCode + this.caveHeight;
@@ -1499,6 +1505,7 @@ public class ModernBetaGeneratorSettings {
                 factory.biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.biomeSize);
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 factory.layerType = JsonUtils.getString(jsonObject, NbtTags.LAYER_TYPE, factory.layerType);
+                factory.layerSize = JsonUtils.getInt(jsonObject, NbtTags.LAYER_SIZE, factory.layerSize);
                 
                 factory.useCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CAVES, factory.useCaves);
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
@@ -1731,6 +1738,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
+            jsonObject.addProperty(NbtTags.LAYER_SIZE, factory.layerSize);
             
             jsonObject.addProperty(NbtTags.USE_CAVES, factory.useCaves);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);

@@ -220,6 +220,12 @@ public class DataFixers {
         }
     }
     
+    public static void fixLayerSize(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        int biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.layerSize);
+        
+        factory.layerSize = biomeSize;
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }
