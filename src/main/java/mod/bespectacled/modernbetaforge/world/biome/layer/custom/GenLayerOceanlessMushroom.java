@@ -37,6 +37,7 @@ public class GenLayerOceanlessMushroom extends GenLayer {
                 } else {
                     ints[x + y * areaWidth] = ctr;
                 }
+
             }
         }
 

@@ -235,7 +235,13 @@ commands.modernbetaforge.drawterrainmap.usage=/drawterrainmap <size>
 commands.modernbetaforge.drawterrainmap.start=Drawing terrain map of size %s/%s
 commands.modernbetaforge.drawterrainmap.progress=Terrain map drawing %s%% completed
 commands.modernbetaforge.drawterrainmap.success=Saved terrain map as %s
-commands.modernbetaforge.drawterrainmap.failure=Couldn't draw terrain map due to invalid world type or other error
+commands.modernbetaforge.drawterrainmap.failure=Couldn't draw terrain map due to non-Modern Beta world type or other error
+
+commands.modernbetaforge.drawbiomemap.usage=/drawbiomemap <size>
+commands.modernbetaforge.drawbiomemap.start=Drawing biome map of size %s/%s
+commands.modernbetaforge.drawbiomemap.progress=biome map drawing %s%% completed
+commands.modernbetaforge.drawbiomemap.success=Saved biome map as %s
+commands.modernbetaforge.drawbiomemap.failure=Couldn't draw biome map due to non-Modern Beta world type or other error
 
 ## Config
 modernbetaforge.general.guioptions=GUI Options

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.bespectacled.modernbetaforge.command.DrawBiomeMapCommand;
 import mod.bespectacled.modernbetaforge.command.DrawTerrainMapCommand;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandlerCommon;
@@ -42,6 +43,10 @@ public class ModernBeta {
         LOGGER.log(level, "{}", message);
     }
     
+    public static void log(String message) {
+        log(Level.INFO, message);
+    }
+    
     public static ResourceLocation createRegistryKey(String name) {
         return new ResourceLocation(MODID, name);
     }
@@ -77,7 +82,7 @@ public class ModernBeta {
         //ModernBetaBuiltInRegistries.registerProperties();
         
         ModCompat.loadModCompat();
-        
+         
         proxy.init();
     }
     
@@ -90,5 +95,6 @@ public class ModernBeta {
     @EventHandler
     private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
         event.registerServerCommand(new DrawTerrainMapCommand());
+        event.registerServerCommand(new DrawBiomeMapCommand());
     }
 }

@@ -1,8 +1,10 @@
 package mod.bespectacled.modernbetaforge.world.biome.layer;
 
-import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerAddMoreSnow;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerBiomeExtended;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanless;
+import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddForest;
+import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddMoreSnow;
+import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddSnow;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessMushroom;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerSmallIslands;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -35,13 +37,18 @@ public class ModernBetaGenLayer {
         
         GenLayer genLayer = new GenLayerOceanless(1L);
         genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
+        genLayer = new GenLayerOceanlessAddForest(1L, genLayer);
         genLayer = new GenLayerZoom(2001L, genLayer);
-        genLayer = new GenLayerAddMoreSnow(2L, genLayer);
-        genLayer = new GenLayerEdge(2L, genLayer, GenLayerEdge.Mode.COOL_WARM);
-        genLayer = new GenLayerEdge(2L, genLayer, GenLayerEdge.Mode.HEAT_ICE);
-        genLayer = new GenLayerEdge(3L, genLayer, GenLayerEdge.Mode.SPECIAL);
+        genLayer = new GenLayerOceanlessAddForest(2L, genLayer);
+        genLayer = new GenLayerOceanlessAddForest(50L, genLayer);
+        genLayer = new GenLayerOceanlessAddForest(70L, genLayer);
+        genLayer = new GenLayerOceanlessAddSnow(2L, genLayer);
+        genLayer = new GenLayerOceanlessAddMoreSnow(2L, genLayer);
+        genLayer = new GenLayerOceanlessAddForest(3L, genLayer);
+        genLayer = addClimateLayers(genLayer);
         genLayer = new GenLayerZoom(2002L, genLayer);
         genLayer = new GenLayerZoom(2003L, genLayer);
+        genLayer = new GenLayerOceanlessAddForest(4L, genLayer);
         genLayer = GenLayerZoom.magnify(1000L, genLayer, 0);
         GenLayer genLayerMutation = GenLayerZoom.magnify(1000L, genLayer, 0);
         genLayerMutation = new GenLayerRiverInit(100L, genLayerMutation);
@@ -53,7 +60,11 @@ public class ModernBetaGenLayer {
         
         for (int i = 0; i < biomeSize; ++i) {
             genLayer = new GenLayerZoom((long)(1000 + i), genLayer);
-
+            
+            if (i == 0) {
+                genLayer = new GenLayerOceanlessAddForest(3L, genLayer);
+            }
+            
             if (i == 1 || biomeSize == 1) {
                 genLayer = new GenLayerShore(1000L, genLayer);
             }
@@ -71,7 +82,7 @@ public class ModernBetaGenLayer {
         int biomeSize = settings.layerSize;
         int riverSize = settings.riverSize;
         
-        GenLayer genLayer = createInitialLayer(settings);
+        GenLayer genLayer = createInitialLayer(GenLayerType.fromId(settings.layerType));
         genLayer = new GenLayerAddMushroomIsland(5L, genLayer);
         genLayer = new GenLayerDeepOcean(4L, genLayer);
         genLayer = GenLayerZoom.magnify(1000L, genLayer, 0);
@@ -107,9 +118,7 @@ public class ModernBetaGenLayer {
         return new GenLayer[] { genLayerNoise, genLayerVoronoi, genLayerNoise };
     }
     
-    private static GenLayer createInitialLayer(ModernBetaGeneratorSettings settings) {
-        GenLayerType type = GenLayerType.fromId(settings.layerType);
-        
+    private static GenLayer createInitialLayer(GenLayerType type) {
         GenLayer genLayer = new GenLayerIsland(1L);
         switch (type) {
             case SMALL_ISLANDS:
