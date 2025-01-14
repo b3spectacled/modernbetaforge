@@ -27,19 +27,21 @@ createWorld.customize.custom.tab.page6=Climate
 createWorld.customize.custom.tab.page7=Custom
 
 # Page Labels
-createWorld.customize.custom.label.biomeReplacement=Biome Replacement Settings
-createWorld.customize.custom.label.overworld=Overworld Settings
-createWorld.customize.custom.label.nether=Nether Settings
-createWorld.customize.custom.label.netherBoP=BoP is detected, Classic Nether is incompatible.
-createWorld.customize.custom.label.infdev227=Infdev 20100227 Settings
-createWorld.customize.custom.label.indev=Indev/Classic Settings
-createWorld.customize.custom.label.release=Release Settings
-createWorld.customize.custom.label.betaBiome=Beta Biome Feature Settings
-createWorld.customize.custom.label.releaseBiome=Release Biome Feature Settings
-createWorld.customize.custom.label.mobSpawn=Modern Beta Biome Mob Settings
-createWorld.customize.custom.label.mods=Loaded Mods
-createWorld.customize.custom.label.betaNoise=Beta/Pocket Edition Noise Settings
-createWorld.customize.custom.label.releaseNoise=Release Noise Settings
+createWorld.customize.custom.label.page0.biomeReplacement=Biome Replacement Settings
+createWorld.customize.custom.label.page0.overworld=Overworld Settings
+createWorld.customize.custom.label.page0.nether=Nether Settings
+createWorld.customize.custom.label.page0.netherBoP=BoP is detected, Classic Nether is incompatible.
+createWorld.customize.custom.label.page1.infdev227=Infdev 20100227 Chunk Settings
+createWorld.customize.custom.label.page1.indev=Indev/Classic Chunk Settings
+createWorld.customize.custom.label.page1.release=Release Chunk Settings
+createWorld.customize.custom.label.page2.beta=Beta Biome Feature Settings
+createWorld.customize.custom.label.page2.release=Release Biome Feature Settings
+createWorld.customize.custom.label.page2.mobSpawn=Modern Beta Biome Mob Settings
+createWorld.customize.custom.label.page2.mods=Loaded Mods
+createWorld.customize.custom.label.page4.beta=Beta/Pocket Edition Noise Settings
+createWorld.customize.custom.label.page4.release=Release Noise Settings
+createWorld.customize.custom.label.page5.beta=Beta/Pocket Edition Noise Settings
+createWorld.customize.custom.label.page5.release=Release Noise Settings
 
 # Page 1 - Main Settings
 createWorld.customize.custom.chunkSource=Chunk Source
