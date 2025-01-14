@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -40,7 +39,7 @@ public class DrawUtil {
     private static final int COLOR_VOID = MathUtil.convertColorComponentsToInt(0, 0, 0);
     private static final int COLOR_CENTER = MathUtil.convertColorComponentsToInt(255, 0, 0);
     
-    public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, Consumer<Float> progressTracker) {
+    public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_RGB);
         
         int offsetX = width / 2;
@@ -59,7 +58,9 @@ public class DrawUtil {
                 }
                 
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
-                terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                if (drawMarkers) {
+                    terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                }
                 
                 image.setRGB(localX, localZ, terrainType.color);
             }
@@ -68,7 +69,7 @@ public class DrawUtil {
         return rotateImage(image);
     }
     
-    public static BufferedImage createTerrainMap(World world, ChunkSource chunkSource, int width, int length, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMap(World world, ChunkSource chunkSource, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_RGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -84,30 +85,21 @@ public class DrawUtil {
                 int z = localZ - offsetZ;
 
                 TerrainType terrainType = TerrainType.LAND;
+                int height = chunkSource.getHeight(world, x, z, HeightmapChunk.Type.SURFACE);
                 
-                if (chunkSource instanceof ReleaseChunkSource) {
-                    Biome biome = ((ReleaseChunkSource)chunkSource).getNoiseBiome(x, z);
-                    
-                    if (BiomeDictionary.hasType(biome, Type.OCEAN) || BiomeDictionary.hasType(biome, Type.RIVER)) {
-                        terrainType = TerrainType.WATER;
-                    }
-                    
-                } else {
-                    int height = chunkSource.getHeight(world, x, z, HeightmapChunk.Type.SURFACE);
-                    
-                    if (height < chunkSource.getSeaLevel() - 1) {
-                        terrainType = TerrainType.WATER;
-                    }
-                    
-                    if (height == 0) {
-                        terrainType = TerrainType.VOID;
-                    }
-                    
+                if (height < chunkSource.getSeaLevel() - 1) {
+                    terrainType = TerrainType.WATER;
+                }
+                
+                if (height == 0) {
+                    terrainType = TerrainType.VOID;
                 }
                 
                 Biome biome = world.getBiomeProvider().getBiome(mutablePos.setPos(x, 0, z));
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
-                terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                if (drawMarkers) {
+                    terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                }
                 
                 image.setRGB(localX, localZ, terrainType.color);
             }

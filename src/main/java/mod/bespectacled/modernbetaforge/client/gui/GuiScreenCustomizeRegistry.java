@@ -27,12 +27,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final String PREFIX = "createWorld.customize.custom";
-    private static final int SLOT_HEIGHT = 32;
+    private static final int DEFAULT_SLOT_HEIGHT = 32;
     private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;
     
     private final GuiScreenCustomizeWorld parent;
     private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
+    private final int slotHeight;
+    private final boolean displayIcons;
     private final String initialEntry;
     private final String searchEntry;
     private final boolean startSearchFocused;
@@ -52,16 +54,29 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        int slotHeight,
         String initialEntry,
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(parent, consumer, initialEntry, "", false, langName, registryKeys);
+        this(parent, consumer, slotHeight, false, initialEntry, "", false, langName, registryKeys);
     }
     
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        String initialEntry,
+        String langName,
+        List<ResourceLocation> registryKeys
+    ) {
+        this(parent, consumer, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys);
+    }
+    
+    public GuiScreenCustomizeRegistry(
+        GuiScreenCustomizeWorld parent,
+        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        int slotHeight,
+        boolean displayIcons,
         String initialEntry,
         String searchEntry,
         boolean startSearchFocused,
@@ -71,6 +86,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.title = "Customize Registry Entry";
         this.parent = parent;
         this.consumer = consumer;
+        this.slotHeight = slotHeight;
+        this.displayIcons = displayIcons;
         this.initialEntry = initialEntry;
         this.searchEntry = searchEntry;
         this.startSearchFocused = startSearchFocused;
@@ -96,9 +113,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = new ListPreset(this.initialEntry);
         
-        int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / SLOT_HEIGHT;
+        int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / this.slotHeight;
         if (this.list.selected > numDisplayed - 1)
-            this.list.scrollBy(SLOT_HEIGHT * (this.list.selected - numDisplayed + 1));
+            this.list.scrollBy(this.slotHeight * (this.list.selected - numDisplayed + 1));
         
         this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
@@ -143,6 +160,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                 this.parent,
                 this.consumer,
+                this.slotHeight,
+                this.displayIcons,
                 this.initialEntry,
                 this.searchBar.getText(),
                 true,
@@ -167,6 +186,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                     this.parent,
                     this.consumer,
+                    this.slotHeight,
+                    this.displayIcons,
                     this.initialEntry,
                     this.searchBar.getText(),
                     true,
@@ -178,6 +199,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                     this.parent,
                     this.consumer,
+                    this.slotHeight,
+                    this.displayIcons,
                     this.initialEntry,
                     "",
                     false,
@@ -253,7 +276,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 GuiScreenCustomizeRegistry.this.height,
                 LIST_PADDING_TOP,
                 GuiScreenCustomizeRegistry.this.height - LIST_PADDING_BOTTOM,
-                SLOT_HEIGHT
+                GuiScreenCustomizeRegistry.this.slotHeight
             );
             
             this.selected = -1;

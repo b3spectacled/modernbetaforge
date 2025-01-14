@@ -26,6 +26,7 @@ public class DrawBiomeMapCommand extends DrawMapCommand {
                 (x, z) -> biomeProvider.getBiome(mutablePos.setPos(x, 0, z)),
                 width,
                 length,
+                true,
                 progressTracker
             );
         }

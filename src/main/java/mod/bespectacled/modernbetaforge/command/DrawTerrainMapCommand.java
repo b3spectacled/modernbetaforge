@@ -29,6 +29,7 @@ public class DrawTerrainMapCommand extends DrawMapCommand {
                 chunkSource,
                 width,
                 length,
+                true,
                 progressTracker
             );
         }

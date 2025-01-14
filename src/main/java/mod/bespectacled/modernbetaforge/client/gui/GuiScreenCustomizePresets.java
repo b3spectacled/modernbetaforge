@@ -33,8 +33,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         ALL, BUILTIN, ADDON, CUSTOM
     }
     
+    private static final String PREFIX = "createWorld.customize.presets.";
     private static final String PREFIX_FILTER = "createWorld.customize.presets.filter";
-    private static final String PREFIX_SELECT = "createWorld.customize.presets.select";
     
     private static final int SLOT_HEIGHT = 32;
     private static final int MAX_PRESET_LENGTH = 50000;
@@ -71,9 +71,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         
-        this.title = I18n.format("createWorld.customize.custom.presets.title");
-        this.shareText = I18n.format("createWorld.customize.presets.share");
-        this.listText = I18n.format("createWorld.customize.presets.list");
+        this.title = I18n.format(PREFIX + "title");
+        this.shareText = I18n.format(PREFIX + "share");
+        this.listText = I18n.format(PREFIX + "list");
         
         this.list = new ListPreset();
         
@@ -82,7 +82,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.export.setText(this.parent.getSettingsString());
         
         this.buttonList.add(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
-        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX_SELECT)));
+        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
         this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
         
         this.updateButtonValidity();

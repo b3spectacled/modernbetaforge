@@ -28,7 +28,10 @@ import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiPredicates {
     private static final Map<ResourceLocation, List<Integer>> NOISE_SETTINGS = new LinkedHashMap<>();
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
@@ -453,16 +456,21 @@ public class GuiPredicates {
         USE_INFDEV_WALLS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_WALLS);
         USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
         RIVER_SIZE_TEST = new GuiPredicate(
-            settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE), 
+            settings -> {
+                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
+                return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !(biomeSource instanceof NoiseBiomeSource);
+            },
             GuiIdentifiers.PG1_S_RIVER_SZ
         );
         LAYER_SIZE_TEST = new GuiPredicate(
-            settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE), 
+            settings -> {
+                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
+                return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !(biomeSource instanceof NoiseBiomeSource);
+            },
             GuiIdentifiers.PG1_S_LAYER_SZ
         );
         LAYER_TYPE_TEST = new GuiPredicate(settings -> {
             BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-            
             return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE)  && !(biomeSource instanceof NoiseBiomeSource);
             },
             GuiIdentifiers.PG1_S_LAYER_TYPE
@@ -547,7 +555,7 @@ public class GuiPredicates {
             settings -> {
                 BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
                 
-                return containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS)  && !(biomeSource instanceof NoiseBiomeSource);
+                return containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !(biomeSource instanceof NoiseBiomeSource);
             },
             GuiIdentifiers.PG4_B_USE_BDS
         );
