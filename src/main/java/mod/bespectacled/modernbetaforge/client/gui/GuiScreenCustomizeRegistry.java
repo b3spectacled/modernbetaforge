@@ -10,7 +10,6 @@ import org.lwjgl.input.Keyboard;
 
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -20,7 +19,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,7 +86,11 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this.title = "Customize Registry Entry";
+        this.title = String.format(
+            "%s %s",
+            I18n.format("createWorld.customize.custom.registry.title"),
+            I18n.format(PREFIX + "." + langName)
+        );
         this.parent = parent;
         this.consumer = consumer;
         this.nameFormatter = nameFormatter;
@@ -105,15 +107,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     
     @Override
     public void initGui() {
+        Keyboard.enableRepeatEvents(true);
+        
         this.buttonList.clear();
+        this.select = this.addButton(new GuiButton(0, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
+        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
+        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
         
-        String formattedLangName = I18n.format(PREFIX + "." + this.langName);
-        
-        this.title = String.format(
-            "%s %s",
-            I18n.format("createWorld.customize.custom.registry.title"),
-            formattedLangName
-        );
         this.searchText = I18n.format("createWorld.customize.registry.search.info");
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
@@ -127,12 +128,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
         this.searchBar.setText(this.searchEntry);
         this.searchBar.setFocused(this.startSearchFocused);
-        
-        this.select = this.addButton(new GuiButton(0, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + formattedLangName));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
-        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
-        
         
         this.updateButtonValidity();
     }
@@ -264,10 +259,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         return entries;
     }
     
-    private void playSound() {
-        this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-    }
-    
     @SideOnly(Side.CLIENT)
     public class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 66;
@@ -311,7 +302,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             );
             
             if (doubleClicked) {
-                GuiScreenCustomizeRegistry.this.playSound();
+                SoundUtil.playClickSound(this.mc.getSoundHandler());
                 
                 GuiScreenCustomizeRegistry.this.parent.loadValues(GuiScreenCustomizeRegistry.this.settings.toString());
                 GuiScreenCustomizeRegistry.this.parent.setSettingsModified(!GuiScreenCustomizeRegistry.this.settings.equals(GuiScreenCustomizeRegistry.this.parent.getDefaultSettings()));

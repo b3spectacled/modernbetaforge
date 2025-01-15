@@ -1,10 +1,14 @@
 package mod.bespectacled.modernbetaforge.util;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
+import org.lwjgl.util.vector.Vector4f;
+
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -31,16 +35,20 @@ public class DrawUtil {
         }
     }
     
-    private static final int COLOR_LAND = MathUtil.convertColorComponentsToInt(127, 178, 56);
-    private static final int COLOR_SAND = MathUtil.convertColorComponentsToInt(247, 233, 163);
-    private static final int COLOR_SNOW = MathUtil.convertColorComponentsToInt(255, 255, 255);
-    private static final int COLOR_WATER = MathUtil.convertColorComponentsToInt(64, 64, 255);
-    private static final int COLOR_ICE = MathUtil.convertColorComponentsToInt(160, 160, 255);
-    private static final int COLOR_VOID = MathUtil.convertColorComponentsToInt(0, 0, 0);
-    private static final int COLOR_CENTER = MathUtil.convertColorComponentsToInt(255, 0, 0);
+    private static final int COLOR_LAND = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
+    private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
+    private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
+    private static final int COLOR_WATER = MathUtil.convertARGBComponentsToInt(255, 64, 64, 255);
+    private static final int COLOR_ICE = MathUtil.convertARGBComponentsToInt(255, 160, 160, 255);
+    private static final int COLOR_VOID = MathUtil.convertARGBComponentsToInt(0, 0, 0, 0);
+    private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
+    
+    public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int size, Consumer<Float> progressTracker) {
+        return createBiomeMap(biomeFunc, size, size, false, progressTracker);
+    }
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
-        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         
         int offsetX = width / 2;
         int offsetZ = length / 2;
@@ -66,11 +74,15 @@ public class DrawUtil {
             }
         }
         
-        return rotateImage(image);
+        return image;
+    }
+
+    public static BufferedImage createTerrainMap(@Nullable World world, ChunkSource chunkSource, int size, Consumer<Float> progressTracker) {
+        return createTerrainMap(world, chunkSource, size, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMap(World world, ChunkSource chunkSource, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
-        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_RGB);
+    public static BufferedImage createTerrainMap(@Nullable World world, ChunkSource chunkSource, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
+        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         int offsetX = width / 2;
@@ -97,15 +109,80 @@ public class DrawUtil {
                 
                 Biome biome = world.getBiomeProvider().getBiome(mutablePos.setPos(x, 0, z));
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
+                
                 if (drawMarkers) {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
                 }
                 
-                image.setRGB(localX, localZ, terrainType.color);
+                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
+                Vector4f mapColor = scale(colorVec, 0.86f);
+                mapColor.setX(1.0f);
+                
+                int elevationDiff = chunkSource.getHeight(null, x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                if (terrainType == TerrainType.ICE) {
+                    elevationDiff = 0;
+                }
+                
+                if (elevationDiff > 0) {
+                    mapColor = colorVec;
+                } else if (elevationDiff < 0) {
+                    mapColor = scale(colorVec, 0.71f);
+                }
+                
+                image.setRGB(localX, localZ, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
             }
         }
         
-        return rotateImage(image);
+        return image;
+    }
+    
+    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, int size, Consumer<Float> progressTracker) {
+        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        
+        int offsetX = size / 2;
+        int offsetZ = size / 2;
+        
+        for (int localX = 0; localX < size; ++localX) {
+            float progress = localX / (float)size;
+            progressTracker.accept(progress);
+            
+            for (int localZ = 0; localZ < size; ++localZ) {
+                int x = localX - offsetX;
+                int z = localZ - offsetZ;
+
+                TerrainType terrainType = TerrainType.LAND;
+                int height = chunkSource.getHeight(null, x, z, HeightmapChunk.Type.SURFACE);
+                
+                if (height < chunkSource.getSeaLevel() - 1) {
+                    terrainType = TerrainType.WATER;
+                }
+                
+                if (height == 0) {
+                    terrainType = TerrainType.VOID;
+                }
+                
+                Biome biome = biomeSource.getBiome(x, z);
+                terrainType = getTerrainTypeByBiome(biome, terrainType);
+                
+                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
+                Vector4f mapColor = scale(colorVec, 0.86f);
+                
+                int elevationDiff = chunkSource.getHeight(null, x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                if (terrainType == TerrainType.ICE) {
+                    elevationDiff = 0;
+                }
+                
+                if (elevationDiff > 0) {
+                    mapColor = colorVec;
+                } else if (elevationDiff < 0) {
+                    mapColor = scale(colorVec, 0.71f);
+                }
+                
+                image.setRGB(localX, localZ, MathUtil.convertARGBVector4fToInt(mapColor));
+            }
+        }
+        
+        return image;
     }
     
     private static boolean inCenter(int x, int z) {
@@ -141,6 +218,16 @@ public class DrawUtil {
         return x !=0 && z ==0;
     }
     
+    private static Vector4f scale(Vector4f vector, float factor) {
+        Vector4f newVector = new Vector4f(vector);
+        
+        newVector.y *= factor;
+        newVector.z *= factor;
+        newVector.w *= factor;
+        
+        return newVector;
+    }
+    
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
         if (terrainType == TerrainType.LAND) {
             if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
@@ -171,17 +258,5 @@ public class DrawUtil {
         }
         
         return terrainType;
-    }
-    
-    private static BufferedImage rotateImage(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        
-        BufferedImage rotatedImage = new BufferedImage(width, height, image.getType());
-        Graphics2D graphic = rotatedImage.createGraphics();
-        graphic.rotate(Math.toRadians(180), width / 2, height / 2);
-        graphic.drawImage(image, null, 0, 0);
-        
-        return rotatedImage;
     }
 }

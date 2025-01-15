@@ -84,7 +84,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_SCROLLBAR_PADDING = 24;
     private static final int BIOME_TRUNCATE_LEN = 18;
 
-    private static final int BUTTON_WIDTH = 90;
+    private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
     private static final int BUTTON_SLOT_HEIGHT = 25;
     
@@ -134,6 +134,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton confirm;
     private GuiButton cancel;
     private GuiButton presets;
+    private GuiButton preview;
     
     private boolean settingsModified;
     private int confirmMode;
@@ -147,7 +148,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private BiMap<Integer, ResourceLocation> customIds;
     
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
-        this.title = "Customize World Settings";
+        this.title = I18n.format("options.customizeTitle");
         this.subtitle = "Page 1 of 6";
         this.pageTitle = "Basic Settings";
         this.pageNames = new String[]{
@@ -758,13 +759,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             curScroll = this.pageList.getAmountScrolled();
         }
         
-        this.title = I18n.format("options.customizeTitle");
         this.buttonList.clear();
         
-        this.done = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, this.width / 2 + 98, this.height - 27, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
-        this.randomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, this.width / 2 - 92, this.height - 27, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.defaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, this.width / 2 - 187, this.height - 27, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.presets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, this.width / 2 + 3, this.height - 27, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        int buttonY = this.height - 27;
+        int defaultsX = this.width / 2 - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
+        int randomizeX = this.width / 2 - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
+        int previewX = this.width / 2 - BUTTON_WIDTH / 2;
+        int presetsX = this.width / 2 + BUTTON_WIDTH / 2 + 3;
+        int doneX = this.width / 2 + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
+
+        this.defaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.randomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.preview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.presets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.done = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
         
         this.defaults.enabled = this.settingsModified;
         
@@ -795,6 +803,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         // Set default enabled for certain options
         this.setGuiEnabled();
         this.updatePageControls();
+        this.isSettingsModified();
     }
     
     @Override
@@ -1600,6 +1609,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.settings = new ModernBetaGeneratorSettings.Factory();
         }
     }
+    
+    public void isSettingsModified() {
+        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+    }
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
@@ -1650,6 +1663,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.FUNC_CNCL:
                 this.confirmMode = 0;
                 this.exitConfirmation();
+                break;
+            case GuiIdentifiers.FUNC_PRVW:
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build()));
                 break;
         }
         

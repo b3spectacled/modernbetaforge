@@ -11,8 +11,8 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,7 +59,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType) {
-        this.title = "Customize World Presets";
+        this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.filterType = filterType;
         this.presets = this.loadPresets(filterType);
@@ -68,10 +67,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     @Override
     public void initGui() {
-        this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         
-        this.title = I18n.format(PREFIX + "title");
+        this.buttonList.clear();
+        this.buttonList.add(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
+        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
+        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        
         this.shareText = I18n.format(PREFIX + "share");
         this.listText = I18n.format(PREFIX + "list");
         
@@ -80,10 +82,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
         this.export.setText(this.parent.getSettingsString());
-        
-        this.buttonList.add(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
-        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
-        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
         
         this.updateButtonValidity();
     }
@@ -151,6 +149,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 break;
             case GUI_ID_SELECT:
                 this.parent.loadValues(this.export.getText());
+                this.parent.isSettingsModified();
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_CANCEL:
@@ -218,10 +217,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private String getFilterString() {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
-    
-    private void playSound() {
-        this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-    }
 
     @SideOnly(Side.CLIENT)
     private class ListPreset extends GuiSlot {
@@ -255,9 +250,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             GuiScreenCustomizePresets.this.export.setText(GuiScreenCustomizePresets.this.presets.get(GuiScreenCustomizePresets.this.list.selected).settings.toString());
             
             if (doubleClicked) {
-                GuiScreenCustomizePresets.this.playSound();
+                SoundUtil.playClickSound(this.mc.getSoundHandler());
                 
                 GuiScreenCustomizePresets.this.parent.loadValues(GuiScreenCustomizePresets.this.export.getText());
+                GuiScreenCustomizePresets.this.parent.isSettingsModified();
                 GuiScreenCustomizePresets.this.mc.displayGuiScreen(GuiScreenCustomizePresets.this.parent);
             } 
         }

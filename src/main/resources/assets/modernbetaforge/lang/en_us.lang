@@ -4,10 +4,7 @@ generator.modernbeta=Modern Beta
 
 ## World Customization
 createWorld.customize.custom.modernBeta=Modern Beta
-
-# Page Buttons
-createWorld.customize.custom.enabled=Enabled
-createWorld.customize.custom.entry=Entry
+createWorld.customize.custom.preview=Preview
 
 # Presets
 createWorld.customize.presets.filter=Filter
@@ -15,6 +12,15 @@ createWorld.customize.presets.filter.all=All
 createWorld.customize.presets.filter.builtin=Built-in
 createWorld.customize.presets.filter.addon=Add-on
 createWorld.customize.presets.filter.custom=Custom
+
+# Preview
+createWorld.customize.preview.preview=Preview
+createWorld.customize.preview.title=Preview World Generation
+createWorld.customize.preview.resolution=Resolution
+createWorld.customize.preview.generate=Generate
+createWorld.customize.preview.progress=Generating preview..
+createWorld.customize.preview.hint=Preview not generated
+createWorld.customize.preview.failure=Failed to generate!
 
 # Page Tabs
 createWorld.customize.custom.tab.page0=Basic

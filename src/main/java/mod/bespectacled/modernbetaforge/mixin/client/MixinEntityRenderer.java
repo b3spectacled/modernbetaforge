@@ -74,7 +74,7 @@ public abstract class MixinEntityRenderer {
                 celestialAngle = MathHelper.cos(celestialAngle * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
                 celestialAngle = MathHelper.clamp(celestialAngle, 0.0f, 1.0f);
                 
-                fogColor = MathUtil.convertColorIntToVec3d(biomeFogColor);
+                fogColor = MathUtil.convertRGBIntToVec3d(biomeFogColor);
                 float r = (float)fogColor.x;
                 float g = (float)fogColor.y;
                 float b = (float)fogColor.z;

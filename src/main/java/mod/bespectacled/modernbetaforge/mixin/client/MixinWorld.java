@@ -26,7 +26,7 @@ public abstract class MixinWorld {
             int cloudColor = modernBetaBiome.getCloudColor();
             
             if (cloudColor != -1) {
-                Vec3d cloudColorVec = MathUtil.convertColorIntToVec3d(cloudColor);
+                Vec3d cloudColorVec = MathUtil.convertRGBIntToVec3d(cloudColor);
                 float r = (float)cloudColorVec.x;
                 float g = (float)cloudColorVec.y;
                 float b = (float)cloudColorVec.z;

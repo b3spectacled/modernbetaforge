@@ -22,6 +22,7 @@ public class GuiIdentifiers {
     public static final int FUNC_PRST = 63;
     public static final int FUNC_CONF = 64;
     public static final int FUNC_CNCL = 65;
+    public static final int FUNC_PRVW = 66;
     
     /* Page 1 */
     
