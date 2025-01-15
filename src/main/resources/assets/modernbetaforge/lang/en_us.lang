@@ -48,6 +48,7 @@ createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.surfaceBuilder=Surface Builder
 createWorld.customize.custom.caveCarver=Cave Carver
+createWorld.customize.custom.biome=Biome
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes

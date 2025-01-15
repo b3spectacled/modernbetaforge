@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.lwjgl.input.Keyboard;
 
@@ -33,6 +34,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     
     private final GuiScreenCustomizeWorld parent;
     private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
+    private final Function<ResourceLocation, String> nameFormatter;
     private final int slotHeight;
     private final boolean displayIcons;
     private final String initialEntry;
@@ -54,27 +56,30 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        Function<ResourceLocation, String> nameFormatter,
         int slotHeight,
         String initialEntry,
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(parent, consumer, slotHeight, false, initialEntry, "", false, langName, registryKeys);
+        this(parent, consumer, nameFormatter, slotHeight, false, initialEntry, "", false, langName, registryKeys);
     }
     
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        Function<ResourceLocation, String> nameFormatter,
         String initialEntry,
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(parent, consumer, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys);
+        this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys);
     }
     
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
         BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        Function<ResourceLocation, String> nameFormatter,
         int slotHeight,
         boolean displayIcons,
         String initialEntry,
@@ -86,6 +91,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.title = "Customize Registry Entry";
         this.parent = parent;
         this.consumer = consumer;
+        this.nameFormatter = nameFormatter;
         this.slotHeight = slotHeight;
         this.displayIcons = displayIcons;
         this.initialEntry = initialEntry;
@@ -143,75 +149,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     }
     
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
-        this.searchBar.mouseClicked(mouseX, mouseY, clicked);
-        
-        super.mouseClicked(mouseX, mouseY, clicked);
-    }
-    
-    @Override
-    protected void keyTyped(char character, int keyCode) throws IOException {
-        if (!this.searchBar.textboxKeyTyped(character, keyCode)) {
-            super.keyTyped(character, keyCode);
-        }
-        
-        if (this.searchBar.isFocused() && keyCode == 28 || keyCode == 156) {
-            SoundUtil.playClickSound(this.mc.getSoundHandler());
-            this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
-                this.parent,
-                this.consumer,
-                this.slotHeight,
-                this.displayIcons,
-                this.initialEntry,
-                this.searchBar.getText(),
-                true,
-                this.langName,
-                this.registryKeys
-            ));
-        }
-    }
-    
-    @Override
-    protected void actionPerformed(GuiButton guiButton) throws IOException {
-        switch (guiButton.id) {
-            case 0:
-                this.parent.loadValues(this.settings.toString());
-                this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
-                this.mc.displayGuiScreen(this.parent);
-                break;
-            case 1:
-                this.mc.displayGuiScreen(this.parent);
-                break;
-            case 2:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
-                    this.parent,
-                    this.consumer,
-                    this.slotHeight,
-                    this.displayIcons,
-                    this.initialEntry,
-                    this.searchBar.getText(),
-                    true,
-                    this.langName,
-                    this.registryKeys
-                ));
-                break;
-            case 3:
-                this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
-                    this.parent,
-                    this.consumer,
-                    this.slotHeight,
-                    this.displayIcons,
-                    this.initialEntry,
-                    "",
-                    false,
-                    this.langName,
-                    this.registryKeys
-                ));
-                break;
-        }
-    }
-    
-    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         
@@ -233,6 +170,78 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.select.enabled = this.hasValidSelection();
     }
     
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
+        this.searchBar.mouseClicked(mouseX, mouseY, clicked);
+        
+        super.mouseClicked(mouseX, mouseY, clicked);
+    }
+
+    @Override
+    protected void keyTyped(char character, int keyCode) throws IOException {
+        if (!this.searchBar.textboxKeyTyped(character, keyCode)) {
+            super.keyTyped(character, keyCode);
+        }
+        
+        if (this.searchBar.isFocused() && keyCode == 28 || keyCode == 156) {
+            SoundUtil.playClickSound(this.mc.getSoundHandler());
+            this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
+                this.parent,
+                this.consumer,
+                this.nameFormatter,
+                this.slotHeight,
+                this.displayIcons,
+                this.initialEntry,
+                this.searchBar.getText(),
+                true,
+                this.langName,
+                this.registryKeys
+            ));
+        }
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton guiButton) throws IOException {
+        switch (guiButton.id) {
+            case 0:
+                this.parent.loadValues(this.settings.toString());
+                this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
+                this.mc.displayGuiScreen(this.parent);
+                break;
+            case 1:
+                this.mc.displayGuiScreen(this.parent);
+                break;
+            case 2:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
+                    this.parent,
+                    this.consumer,
+                    this.nameFormatter,
+                    this.slotHeight,
+                    this.displayIcons,
+                    this.initialEntry,
+                    this.searchBar.getText(),
+                    true,
+                    this.langName,
+                    this.registryKeys
+                ));
+                break;
+            case 3:
+                this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
+                    this.parent,
+                    this.consumer,
+                    this.nameFormatter,
+                    this.slotHeight,
+                    this.displayIcons,
+                    this.initialEntry,
+                    "",
+                    false,
+                    this.langName,
+                    this.registryKeys
+                ));
+                break;
+        }
+    }
+
     private boolean hasValidSelection() {
         return this.list.selected > -1 && this.list.selected < this.entries.size();
     }
@@ -241,17 +250,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         List<Info> entries = new ArrayList<>();
         
         for (ResourceLocation registryKey : this.registryKeys) {
-            String namespace = registryKey.getNamespace();
-            String path = registryKey.getPath();
-            
-            String localName = I18n.format(String.format("%s.%s.%s.%s", PREFIX, this.langName, namespace, path));
+            String formattedName = this.nameFormatter.apply(registryKey);
             
             if (this.searchEntry == null ||
                 this.searchEntry.isEmpty() ||
-                localName.toLowerCase().contains(this.searchEntry.toLowerCase()) ||
+                formattedName.toLowerCase().contains(this.searchEntry.toLowerCase()) ||
                 registryKey.toString().toLowerCase().contains(this.searchEntry.toLowerCase())
             ) {
-                entries.add(new Info(localName, registryKey.toString()));
+                entries.add(new Info(formattedName, registryKey.toString()));
             }
         }
         

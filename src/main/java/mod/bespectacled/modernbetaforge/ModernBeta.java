@@ -79,7 +79,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerDataFixes();
-        //ModernBetaBuiltInRegistries.registerProperties();
+        ModernBetaBuiltInRegistries.registerProperties();
         
         ModCompat.loadModCompat();
          

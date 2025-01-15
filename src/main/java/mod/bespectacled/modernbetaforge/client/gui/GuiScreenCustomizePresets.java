@@ -100,43 +100,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
-        this.export.mouseClicked(mouseX, mouseY, clicked);
-        
-        super.mouseClicked(mouseX, mouseY, clicked);
-    }
-    
-    @Override
-    protected void keyTyped(char character, int keyCode) throws IOException {
-        if (!this.export.textboxKeyTyped(character, keyCode)) {
-            super.keyTyped(character, keyCode);
-        }
-    }
-    
-    @Override
-    protected void actionPerformed(GuiButton guiButton) throws IOException {
-        switch (guiButton.id) {
-            case GUI_ID_FILTER:
-                FilterType[] values = FilterType.values();
-                
-                int increment = GuiScreen.isShiftKeyDown() ? -1 : 1;
-                int index = this.filterType.ordinal() + increment;
-                if (index < 0) index = values.length - 1;
-                
-                FilterType filterType = values[index % values.length];
-                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
-                break;
-            case GUI_ID_SELECT:
-                this.parent.loadValues(this.export.getText());
-                this.mc.displayGuiScreen(this.parent);
-                break;
-            case GUI_ID_CANCEL:
-                this.mc.displayGuiScreen(this.parent);
-                break;
-        }
-    }
-    
-    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         
@@ -159,6 +122,43 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.select.enabled = this.hasValidSelection();
     }
     
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
+        this.export.mouseClicked(mouseX, mouseY, clicked);
+        
+        super.mouseClicked(mouseX, mouseY, clicked);
+    }
+
+    @Override
+    protected void keyTyped(char character, int keyCode) throws IOException {
+        if (!this.export.textboxKeyTyped(character, keyCode)) {
+            super.keyTyped(character, keyCode);
+        }
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton guiButton) throws IOException {
+        switch (guiButton.id) {
+            case GUI_ID_FILTER:
+                FilterType[] values = FilterType.values();
+                
+                int increment = GuiScreen.isShiftKeyDown() ? -1 : 1;
+                int index = this.filterType.ordinal() + increment;
+                if (index < 0) index = values.length - 1;
+                
+                FilterType filterType = values[index % values.length];
+                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
+                break;
+            case GUI_ID_SELECT:
+                this.parent.loadValues(this.export.getText());
+                this.mc.displayGuiScreen(this.parent);
+                break;
+            case GUI_ID_CANCEL:
+                this.mc.displayGuiScreen(this.parent);
+                break;
+        }
+    }
+
     private boolean hasValidSelection() {
         return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.export.getText().length() > 1;
     }
@@ -219,6 +219,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
     
+    private void playSound() {
+        this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+
     @SideOnly(Side.CLIENT)
     private class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 80;
@@ -371,10 +375,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             
             tessellator.draw();
         }
-    }
-    
-    private void playSound() {
-        this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
     
     @SideOnly(Side.CLIENT)
