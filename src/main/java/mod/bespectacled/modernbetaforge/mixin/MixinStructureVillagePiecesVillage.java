@@ -30,7 +30,7 @@ public class MixinStructureVillagePiecesVillage {
                 StructureComponent component = (StructureComponent)(Object)this;
                 StructureBoundingBox box = component.getBoundingBox();
                 
-                int height = StructureWeightSampler.getStructureHeight(worldServer, chunkSource, box);
+                int height = StructureWeightSampler.getStructureHeight(chunkSource, box);
                 info.setReturnValue(height + 1);
             }
         }

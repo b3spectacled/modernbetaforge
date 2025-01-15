@@ -7,7 +7,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -18,7 +17,7 @@ public class BiomeInjector {
         this.rules = rules;
     }
     
-    public void injectBiomes(World world, Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ, BiomeInjectionStep step) {
+    public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ, BiomeInjectionStep step) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
 
@@ -28,8 +27,8 @@ public class BiomeInjector {
                 int z = localZ + startZ;
                 int ndx = localX + localZ * 16;
                 
-                int height = MathHelper.clamp(chunkSource.getHeight(world, x, z, Type.SURFACE), 0, 255);
-                int heightAbove = MathHelper.clamp(chunkSource.getHeight(world, x, z, Type.SURFACE) + 1, 0, 255);
+                int height = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE), 0, 255);
+                int heightAbove = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE) + 1, 0, 255);
                 
                 BlockPos blockPos = new BlockPos(x, height, z);
                 IBlockState blockState = chunkPrimer.getBlockState(localX, height, localZ);

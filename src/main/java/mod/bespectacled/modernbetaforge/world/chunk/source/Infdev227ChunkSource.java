@@ -73,7 +73,7 @@ public class Infdev227ChunkSource extends ChunkSource {
     }
 
     @Override
-    public int getHeight(World world, int x, int z, Type type) {
+    public int getHeight(int x, int z, Type type) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         

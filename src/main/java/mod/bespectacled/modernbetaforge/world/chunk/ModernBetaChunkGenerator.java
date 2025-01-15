@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -171,7 +170,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             
             // Post-process biome map, after surface generation
             if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(this.world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
+                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
             }
             
             // Carve terrain
@@ -500,7 +499,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(this.world, biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);

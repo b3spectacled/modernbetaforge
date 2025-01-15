@@ -9,16 +9,15 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class PESpawnLocator implements SpawnLocator {
     @Override
-    public BlockPos locateSpawn(World world, BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
+    public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
         if (!(chunkSource instanceof NoiseChunkSource))
-            return SpawnLocator.DEFAULT.locateSpawn(world, spawnPos, chunkSource, biomeSource);
+            return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         
         NoiseChunkSource noiseChunkSource = (NoiseChunkSource)chunkSource;
         PerlinOctaveNoise beachOctaveNoise = noiseChunkSource.getBeachOctaveNoise().get();
@@ -30,7 +29,7 @@ public class PESpawnLocator implements SpawnLocator {
         
         Random random = new Random();
         
-        while(!this.isSandAt(world, x, z, chunkSource, biomeSource, beachOctaveNoise)) {
+        while(!this.isSandAt(x, z, chunkSource, biomeSource, beachOctaveNoise)) {
             if (attempts > 10000) {
                 failed = true;
                 x = 128;
@@ -52,14 +51,14 @@ public class PESpawnLocator implements SpawnLocator {
             attempts++;
         }
         
-        int y = chunkSource.getHeight(world, x, z, failed ? HeightmapChunk.Type.OCEAN : HeightmapChunk.Type.FLOOR) + 1;
+        int y = chunkSource.getHeight(x, z, failed ? HeightmapChunk.Type.OCEAN : HeightmapChunk.Type.FLOOR) + 1;
         
         return new BlockPos(x, y, z);
     }
     
-    private boolean isSandAt(World world, int x, int z, ChunkSource chunkSource, BiomeSource biomeSource, PerlinOctaveNoise beachOctaveNoise) {
+    private boolean isSandAt(int x, int z, ChunkSource chunkSource, BiomeSource biomeSource, PerlinOctaveNoise beachOctaveNoise) {
         int seaLevel = chunkSource.getSeaLevel();
-        int y = chunkSource.getHeight(world, x, z, HeightmapChunk.Type.FLOOR);
+        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR);
         
         Biome biome = biomeSource.getBiome(x, z);
         boolean isSandy = BiomeDictionary.getBiomes(Type.SANDY).contains(biome);

@@ -6,7 +6,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
@@ -19,7 +18,7 @@ public class StructureWeightSampler {
         this.structureComponents = structureComponents;
     }
     
-    public double sample(World world, ChunkSource chunkSource, BlockPos blockPos) {
+    public double sample(ChunkSource chunkSource, BlockPos blockPos) {
         if (this.structureComponents == null) {
             return 0.0;
         }
@@ -33,7 +32,7 @@ public class StructureWeightSampler {
         for (StructureComponent component : this.structureComponents) {
             StructureBoundingBox box = component.getBoundingBox();
             
-            int height = getStructureHeight(world, chunkSource, box);
+            int height = getStructureHeight(chunkSource, box);
             int x = Math.max(0, Math.max(box.minX - posX, posX - box.maxX));
             int z = Math.max(0, Math.max(box.minZ - posZ, posZ - box.maxZ));
             int y = posY - height - 1;
@@ -44,11 +43,11 @@ public class StructureWeightSampler {
         return density;
     }
     
-    public static int getStructureHeight(World world, ChunkSource chunkSource, StructureBoundingBox boundingBox) {
+    public static int getStructureHeight(ChunkSource chunkSource, StructureBoundingBox boundingBox) {
         int centerX = boundingBox.minX + boundingBox.getXSize() / 2;
         int centerZ = boundingBox.minZ + boundingBox.getZSize() / 2;
         
-        return chunkSource.getHeight(world, centerX, centerZ, Type.STRUCTURE);
+        return chunkSource.getHeight(centerX, centerZ, Type.STRUCTURE);
     }
     
     private static double getStructureWeight(int x, int y, int z) {

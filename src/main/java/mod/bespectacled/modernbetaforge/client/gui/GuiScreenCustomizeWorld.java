@@ -1665,7 +1665,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.exitConfirmation();
                 break;
             case GuiIdentifiers.FUNC_PRVW:
-                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build()));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1], this.settings.build()));
                 break;
         }
         

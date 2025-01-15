@@ -108,10 +108,31 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int startZ = chunkZ << 4;
         
         if (this.inWorldBounds(startX, startZ)) {
-            this.pregenerateLevelOrWait(world);
+            synchronized(this) {
+                // Lazy load level data container
+                if (this.levelDataContainer == null) {
+                    this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
+                        this.tryLoadLevel(world) :
+                        new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
+                }
+                
+                this.pregenerateLevelOrWait(this.levelDataContainer);
+
+                if (!this.levelDataContainer.saveAttempted && ModernBetaConfig.generatorOptions.saveIndevLevels) {
+                    this.trySaveLevel(world, this.levelDataContainer);
+                    this.levelDataContainer.saveAttempted = true;
+                    
+                    if (DEBUG_LEVEL_DATA_HANDLER) {
+                        this.debugLevelDataHandler(world, this.levelDataContainer);
+                    }
+                }
+            }
+            
             this.generateTerrain(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
+            
         } else {
             this.generateBorder(world, chunkPrimer, chunkX, chunkZ);
+            
         }
     }
     
@@ -133,14 +154,22 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      */
     @Override
-    public int getHeight(World world, int x, int z, HeightmapChunk.Type type) {
+    public int getHeight(int x, int z, HeightmapChunk.Type type) {
         x += this.levelWidth / 2;
         z += this.levelLength / 2;
         
-        if (!this.inLevelBounds(x, 0, z)) 
+        if (!this.inLevelBounds(x, 0, z)) {
             return this.getBorderHeight(x, z, type);
+        }
+
+        synchronized(this) {
+            this.levelDataContainer = this.levelDataContainer == null ?
+                new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength) :
+                this.levelDataContainer;
+            
+            this.pregenerateLevelOrWait(this.levelDataContainer);
+        }
         
-        this.pregenerateLevelOrWait(world);
         return this.getLevelHeight(x, z, type);
     }
     
@@ -351,7 +380,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         for (int x = startX; x < startX + 16; ++x) {
             for (int z = startZ; z < startZ + 16; ++z) {
-                int height = this.getHeight(world, x, z, HeightmapChunk.Type.OCEAN);
+                int height = this.getHeight(x, z, HeightmapChunk.Type.OCEAN);
                 
                 for (int y = world.getActualHeight() - 1; y > height; --y) {
                     if (world.getBlockState(blockPos.setPos(x, y, z)).getBlock() != Blocks.AIR)
@@ -395,6 +424,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
         
         return builder.build();
+    }
+    
+    /**
+     * Sets the level notifier consumer.
+     * 
+     * @param levelNotifier The level notifier consuming a String.
+     */
+    public void setLevelNotifier(Consumer<String> levelNotifier) {
+        this.levelNotifier = levelNotifier;
     }
 
     /**
@@ -448,36 +486,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Checks if the level data has generated yet, if not, then generates the level data.
      * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
-     * 
-     * @param world The world object, passed into {@link FiniteDataHandler}.
      */
-    protected void pregenerateLevelOrWait(World world) {
-        if (this.levelNotifier == null) {
-            this.levelNotifier = message -> {
-                if (world.getMinecraftServer() != null) {
-                    world.getMinecraftServer().setUserMessage(message + "..");
-                }
-            };
-        }
-        
-        // Lazy load level data container
-        if (this.levelDataContainer == null) {
-            this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
-                this.tryLoadLevel(world) :
-                new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
-        }
-        
-        if (!this.levelDataContainer.generated) {
+    protected void pregenerateLevelOrWait(LevelDataContainer levelDataContainer) {
+        if (!levelDataContainer.generated) {
             this.pregenerateTerrain();
-            this.levelDataContainer.generated = true;
-            
-            if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
-                this.trySaveLevel(world, this.levelDataContainer);
-                
-                if (DEBUG_LEVEL_DATA_HANDLER) {
-                    this.debugLevelDataHandler(world, this.levelDataContainer);
-                }
-            }
+            levelDataContainer.generated = true;
         }
     }
     
@@ -624,12 +637,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
      */
     protected void setPhaseProgress(float phaseProgress) {
         this.phaseProgress = phaseProgress;
-
-        /*
-        if (this.levelNotifier != null) {
-            this.levelNotifier.accept(String.format("%s.. %d", this.phase, (int)(this.phaseProgress * 100.0f)));
-        }
-        */
     }
     
     /**
@@ -815,6 +822,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         private byte blockId;
         private boolean generated;
+        private boolean saveAttempted;
         
         /**
          * Constructs a LevelDataContainer for level data.
@@ -832,6 +840,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             
             this.blockId = 0;
             this.generated = false;
+            this.saveAttempted = false;
             
             this.levelMap.put(this.blockId++, Blocks.AIR.getRegistryName().toString());
             Arrays.fill(this.levelData, this.levelMap.inverse().get(Blocks.AIR.getRegistryName().toString()));
@@ -848,6 +857,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.levelMap = levelMap;
             this.levelBlockMap = HashBiMap.create();
             this.generated = true;
+            this.saveAttempted = true;
         }
         
         /**

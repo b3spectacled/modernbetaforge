@@ -83,9 +83,9 @@ public class DebugInfoEventHandler {
                 ) {
                     String heightmapText = String.format(
                         "[Modern Beta] Surface Height: %d Ocean Height: %d Floor Height: %d",
-                        chunkSource.getHeight(worldServer, x, z, HeightmapChunk.Type.SURFACE),
-                        chunkSource.getHeight(worldServer, x, z, HeightmapChunk.Type.OCEAN),
-                        chunkSource.getHeight(worldServer, x, z, HeightmapChunk.Type.FLOOR)
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE),
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN),
+                        chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR)
                     );
                     
                     addDebugText(event, heightmapText);

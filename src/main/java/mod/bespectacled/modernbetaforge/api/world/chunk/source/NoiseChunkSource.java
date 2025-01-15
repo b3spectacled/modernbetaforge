@@ -141,15 +141,15 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Initially generates heightmap for entire chunk, if chunk containing x/z coordinates has never been sampled.
+     * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type {@link HeightmapChunk.Type}.
-     *
      * @return The y-coordinate of top block at x/z.
      * 
      */
     @Override
-    public int getHeight(World world, int x, int z, HeightmapChunk.Type type) {
+    public int getHeight(int x, int z, HeightmapChunk.Type type) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
@@ -209,7 +209,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         // Build block source rules
         BlockSourceRules blockSources = new BlockSourceRules.Builder(this.defaultBlock)
-            .add(this.getInitialBlockSource(world, densityChunk, weightSampler))
+            .add(this.getInitialBlockSource(densityChunk, weightSampler))
             .add(this.blockSources)
             .build();
         
@@ -325,13 +325,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Creates block source to sample BlockState at block coordinates given base noise provider.
      * 
-     * @param world The world object
      * @param noiseSource Primary noise provider to sample density noise.
      * @param blockSource Default block source
      * 
      * @return BlockSource to sample blockstate at x/y/z block coordinates.
      */
-    private BlockSource getInitialBlockSource(World world, DensityChunk densityChunk, StructureWeightSampler weightSampler) {
+    private BlockSource getInitialBlockSource(DensityChunk densityChunk, StructureWeightSampler weightSampler) {
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         return (x, y, z) -> {
@@ -341,7 +340,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             density = MathHelper.clamp(density / 200.0, -1.0, 1.0);
             density = density / 2.0 - density * density * density / 24.0;
             
-            density += weightSampler.sample(world, this, mutablePos.setPos(x, y, z));
+            density += weightSampler.sample(this, mutablePos.setPos(x, y, z));
             
             if (density > 0.0) {
                 blockState = null;

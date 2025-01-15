@@ -44,16 +44,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_CANCEL = 2;
     
     private static final float MIN_RES = 128.0f;
-    private static final float MAX_RES = 1024.0f;
     
     private final GuiScreenCustomizeWorld parent;
     private final String worldSeed;
+    private final int maxResolution;
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorService executor;
     private final ResourceLocation mapLocation;
     
+    private final ChunkSource chunkSource;
+    private final BiomeSource biomeSource;
+    
     private GuiSlider resolutionSlider;
     private GuiButton generate;
+    private GuiButton cancel;
     private ListPreset list;
     private BufferedImage mapImage;
     private DynamicTexture mapTexture;
@@ -65,13 +69,22 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     protected String title;
 
-    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings) {
+    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, int maxResolution, ModernBetaGeneratorSettings settings) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.worldSeed = worldSeed;
+        this.maxResolution = maxResolution;
         this.settings = settings;
         this.executor = Executors.newFixedThreadPool(1);
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
+        
+        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
+        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
+        
+        long seed = this.worldSeed.isEmpty() ? new Random().nextLong() : this.worldSeed.hashCode();
+        
+        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
+        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
         
         this.resolution = 512;
         this.progress = 0.0f;
@@ -81,8 +94,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     public void initGui() {
         this.buttonList.clear();
         this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "generate")));
-        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
-        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 153, this.height - 27, PREFIX + "resolution", MIN_RES, MAX_RES, this.resolution, this));
+        this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 153, this.height - 27, PREFIX + "resolution", MIN_RES, this.maxResolution, this.resolution, this));
         
         this.resolutionSlider.width = 100;
         this.hintText = I18n.format(PREFIX + "hint");
@@ -188,8 +201,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            this.shutdownExecutor();
+        if (keyCode == Keyboard.KEY_ESCAPE && this.state == ProgressState.STARTED) {
+            return;
         }
         
         super.keyTyped(typedChar, keyCode);
@@ -216,17 +229,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.deleteMapTexture();
         
         Runnable runnable = () -> {
-            ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
-            ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
-            
-            long seed = this.worldSeed.isEmpty() ? new Random().nextLong() : this.worldSeed.hashCode();
-            
-            ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
-            
             try {
                 ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.resolution));
-                this.mapImage = DrawUtil.createTerrainMapForPreview(chunkSource, biomeSource, this.resolution, current -> this.progress = current);
+                this.mapImage = DrawUtil.createTerrainMapForPreview(this.chunkSource, this.biomeSource, this.resolution, current -> this.progress = current);
                 ModernBeta.log(Level.DEBUG, "Finished drawing terrain map!");
                 this.state = ProgressState.SUCCEEDED;
                 
@@ -268,6 +273,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         try {
             if (!this.executor.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
                 this.executor.shutdownNow();
+                
+                if (!this.executor.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
+                    ModernBeta.log(Level.DEBUG, "Executor service still did not shutdown!");
+                }
             } 
         } catch (InterruptedException e) {
             this.executor.shutdownNow();
@@ -275,8 +284,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void updateButtonsEnabled(boolean enabled) {
-        this.generate.enabled = enabled;
         this.resolutionSlider.enabled = enabled;
+        this.generate.enabled = enabled;
+        this.cancel.enabled = enabled;
     }
 
     @SideOnly(Side.CLIENT)

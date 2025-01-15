@@ -122,14 +122,13 @@ public abstract class ChunkSource {
     /**
      * Sample height at given x/z coordinate.
      * 
-     * @param world The world object
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type {@link HeightmapChunk.Type}.
      *
      * @return The y-coordinate of top block at x/z.
      */
-    public abstract int getHeight(World world, int x, int z, HeightmapChunk.Type type);
+    public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
 
     /**
      * Gets the chunk source sea level set in the chunk generator settings.

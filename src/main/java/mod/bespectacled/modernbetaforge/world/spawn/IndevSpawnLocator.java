@@ -13,13 +13,12 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class IndevSpawnLocator implements SpawnLocator {
     @Override
-    public BlockPos locateSpawn(World world, BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
+    public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
         if (!(chunkSource instanceof FiniteChunkSource))
-            return SpawnLocator.DEFAULT.locateSpawn(world, spawnPos, chunkSource, biomeSource);
+            return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         
         FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
         Random random = new Random();
@@ -38,7 +37,7 @@ public class IndevSpawnLocator implements SpawnLocator {
         while (true) {
             spawnX = random.nextInt(width / 2) + width / 4;
             spawnZ = random.nextInt(length / 2) + length / 4;
-            spawnY = finiteChunkSource.getHeight(world, spawnX - width / 2, spawnZ - length / 2, Type.SURFACE) + 2;
+            spawnY = finiteChunkSource.getHeight(spawnX - width / 2, spawnZ - length / 2, Type.SURFACE) + 2;
             
             if (attempts >= 1000000) {
                 ModernBeta.log(Level.INFO, "[Indev] Exceeded spawn attempts, spawning anyway..");

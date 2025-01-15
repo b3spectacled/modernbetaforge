@@ -38,8 +38,19 @@ public class WorldEventHandlerCommon {
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
                 ModernBetaGeneratorSettings generatorSettings = chunkSource.getGeneratorSettings();
                 
+                // Set level loading message notifier here,
+                // since level pregeneration is called for spawn placement
+                // before initial chunk generation
+                if (chunkSource instanceof FiniteChunkSource) {
+                    ((FiniteChunkSource)chunkSource).setLevelNotifier(message -> {
+                        if (world.getMinecraftServer() != null) {
+                            world.getMinecraftServer().setUserMessage(message + "..");
+                        }
+                    });
+                }
+                
                 BlockPos newSpawnPos = useOldSpawns ?
-                    chunkSource.getSpawnLocator().locateSpawn(world, currentSpawnPos, chunkSource, biomeSource) :
+                    chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
                     null;
                 
                 if (newSpawnPos != null) {

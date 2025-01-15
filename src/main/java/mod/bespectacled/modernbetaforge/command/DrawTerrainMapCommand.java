@@ -25,8 +25,8 @@ public class DrawTerrainMapCommand extends DrawMapCommand {
             ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
             
             return DrawUtil.createTerrainMap(
-                worldServer,
                 chunkSource,
+                worldServer.getBiomeProvider(),
                 width,
                 length,
                 true,

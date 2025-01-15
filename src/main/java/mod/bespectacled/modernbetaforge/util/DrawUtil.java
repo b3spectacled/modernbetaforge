@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import javax.annotation.Nullable;
-
 import org.lwjgl.util.vector.Vector4f;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -13,8 +11,8 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -77,11 +75,11 @@ public class DrawUtil {
         return image;
     }
 
-    public static BufferedImage createTerrainMap(@Nullable World world, ChunkSource chunkSource, int size, Consumer<Float> progressTracker) {
-        return createTerrainMap(world, chunkSource, size, size, false, progressTracker);
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, BiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
+        return createTerrainMap(chunkSource, biomeProvider, size, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMap(@Nullable World world, ChunkSource chunkSource, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, BiomeProvider biomeProvider, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -97,7 +95,7 @@ public class DrawUtil {
                 int z = localZ - offsetZ;
 
                 TerrainType terrainType = TerrainType.LAND;
-                int height = chunkSource.getHeight(world, x, z, HeightmapChunk.Type.SURFACE);
+                int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
                     terrainType = TerrainType.WATER;
@@ -107,7 +105,7 @@ public class DrawUtil {
                     terrainType = TerrainType.VOID;
                 }
                 
-                Biome biome = world.getBiomeProvider().getBiome(mutablePos.setPos(x, 0, z));
+                Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 
                 if (drawMarkers) {
@@ -118,7 +116,7 @@ public class DrawUtil {
                 Vector4f mapColor = scale(colorVec, 0.86f);
                 mapColor.setX(1.0f);
                 
-                int elevationDiff = chunkSource.getHeight(null, x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
                 if (terrainType == TerrainType.ICE) {
                     elevationDiff = 0;
                 }
@@ -151,7 +149,7 @@ public class DrawUtil {
                 int z = localZ - offsetZ;
 
                 TerrainType terrainType = TerrainType.LAND;
-                int height = chunkSource.getHeight(null, x, z, HeightmapChunk.Type.SURFACE);
+                int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
                     terrainType = TerrainType.WATER;
@@ -167,7 +165,7 @@ public class DrawUtil {
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
                 Vector4f mapColor = scale(colorVec, 0.86f);
                 
-                int elevationDiff = chunkSource.getHeight(null, x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
                 if (terrainType == TerrainType.ICE) {
                     elevationDiff = 0;
                 }
