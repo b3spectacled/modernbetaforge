@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
@@ -24,6 +26,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -120,18 +123,31 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer chunkPrimer) {
         // Retrieve chunk primer from cache
         ChunkPrimerContainer chunkContainer = this.initialChunkCache.get(chunkX, chunkZ);
+        ChunkPrimer containerPrimer = chunkContainer.chunkPrimer;
         
         // Generate village feature placements here, for structure weight sampling
         if (this.structureMap.containsKey(ModernBetaStructures.VILLAGE)) {
-            this.structureMap.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, chunkContainer.chunkPrimer);
+            this.structureMap.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, containerPrimer);
         }
         
         // Generate processed chunk
         List<StructureComponent> structureComponents = componentCache.get(chunkX, chunkZ).getComponents();
-        this.chunkSource.provideProcessedChunk(this.world, chunkContainer.chunkPrimer, chunkX, chunkZ, structureComponents);
+        this.chunkSource.provideProcessedChunk(this.world, containerPrimer, chunkX, chunkZ, structureComponents);
         
         // Copy chunk data into chunkPrimer parameter
-        chunkPrimer.data = chunkContainer.chunkPrimer.data;
+        for (int x = 0; x < 16; ++x) {
+            for (int z = 0; z < 16; ++z) {
+                for (int y = 0; y < 255; ++y) {
+                    IBlockState blockState = containerPrimer.getBlockState(x, y, z);
+                    
+                    if (blockState == BlockStates.AIR) {
+                        continue;
+                    }
+                    
+                    chunkPrimer.setBlockState(x, y, z, blockState);
+                }
+            }
+        }
     }
 
     @Override
