@@ -2001,6 +2001,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.done.enabled = !setConfirm;
         this.defaults.enabled = (this.settingsModified && !setConfirm);
         this.presets.enabled = !setConfirm;
+        this.preview.enabled = !setConfirm;
         this.pageList.setActive(!setConfirm);
         
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
