@@ -1,14 +1,21 @@
 package mod.bespectacled.modernbetaforge.util;
 
 import java.awt.image.BufferedImage;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.lwjgl.util.vector.Vector4f;
 
+import com.google.common.collect.ImmutableSet;
+
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
@@ -24,6 +31,7 @@ public class DrawUtil {
         WATER(COLOR_WATER),
         ICE(COLOR_ICE),
         VOID(COLOR_VOID),
+        STONE(COLOR_STONE),
         MARKER(COLOR_CENTER);
         
         private int color;
@@ -33,12 +41,27 @@ public class DrawUtil {
         }
     }
     
+    private static final Set<ResourceLocation> INVALID_CHUNK_SOURCES = ImmutableSet.<ResourceLocation>builder()
+        .add(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey())
+        .build();
+    
+    private static final Set<ResourceLocation> VALID_BEACH_SURFACES = ImmutableSet.<ResourceLocation>builder()
+        .add(ModernBetaBuiltInTypes.Surface.ALPHA.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Surface.PE.getRegistryKey())
+        .add(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey())
+        .build();
+    
     private static final int COLOR_LAND = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
     private static final int COLOR_WATER = MathUtil.convertARGBComponentsToInt(255, 64, 64, 255);
     private static final int COLOR_ICE = MathUtil.convertARGBComponentsToInt(255, 160, 160, 255);
     private static final int COLOR_VOID = MathUtil.convertARGBComponentsToInt(0, 0, 0, 0);
+    private static final int COLOR_STONE = MathUtil.convertARGBComponentsToInt(255, 112, 112, 112);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int size, Consumer<Float> progressTracker) {
@@ -135,7 +158,13 @@ public class DrawUtil {
     }
     
     public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, int size, Consumer<Float> progressTracker) {
+        return createTerrainMapForPreview(chunkSource, biomeSource, size, false, progressTracker);
+    }
+    
+    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, int size, boolean drawBeaches, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        ResourceLocation chunkSourceKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
+        ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
         
         int offsetX = size / 2;
         int offsetZ = size / 2;
@@ -159,8 +188,16 @@ public class DrawUtil {
                     terrainType = TerrainType.VOID;
                 }
                 
+                boolean isBeach = terrainType == TerrainType.LAND && height < chunkSource.getSeaLevel() + 2;
+                
                 Biome biome = biomeSource.getBiome(x, z);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
+                
+                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilderKey)) {
+                    if (isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
+                        terrainType = TerrainType.SAND;
+                    }
+                }
                 
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
                 Vector4f mapColor = scale(colorVec, 0.86f);
@@ -256,5 +293,17 @@ public class DrawUtil {
         }
         
         return terrainType;
+    }
+    
+    private static boolean isSandyBeach(int x, int z, Optional<PerlinOctaveNoise> noise) {
+        if (noise.isPresent()) {
+            return noise.get().sample(x * 0.03125, z * 0.03125, 0.0) > 0.0;
+        }
+        
+        return false;
+    }
+
+    private static boolean isBeachSurfaceBuilder(ResourceLocation chunkSource, ResourceLocation surfaceBuilder) {
+        return !INVALID_CHUNK_SOURCES.contains(chunkSource) && VALID_BEACH_SURFACES.contains(surfaceBuilder);
     }
 }

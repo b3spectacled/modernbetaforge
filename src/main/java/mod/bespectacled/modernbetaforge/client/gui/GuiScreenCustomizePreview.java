@@ -38,6 +38,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private static final String PREFIX = "createWorld.customize.preview.";
+    private static final int HINT_TEXT_OFFSET = 20;
+    private static final int PROGRESS_TEXT_OFFSET = 7;
     
     private static final int GUI_ID_RESOLUTION = 0;
     private static final int GUI_ID_GENERATE = 1;
@@ -163,20 +165,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.hintText = I18n.format(PREFIX + "progress");
                 this.progressText = String.format("%d%%", (int)(this.progress * 100.0));
                 
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
-                this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 + 3, 16777215);
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
+                this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
                 break;
                 
             case FAILED:
                 this.hintText = I18n.format(PREFIX + "failure");
                 
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
                 break;
                 
             default:
                 this.hintText = I18n.format(PREFIX + "hint");
                 
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
         }
         
         String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
