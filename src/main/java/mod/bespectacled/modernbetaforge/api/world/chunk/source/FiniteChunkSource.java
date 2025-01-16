@@ -23,7 +23,6 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
@@ -419,13 +418,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
             }
         }
     }
-
-    /**
-     * Builds the ruleset used for biome injection.
-     * 
-     * @return The built biome injection rules.
-     */
-    public BiomeInjectionRules buildBiomeInjectorRules(ModernBetaBiomeProvider biomeProvider) {
+    
+    @Override
+    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
         boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
@@ -440,14 +435,14 @@ public abstract class FiniteChunkSource extends ChunkSource {
         Predicate<BiomeInjectionContext> beachPredicate = context ->
             this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
             
-        if (replaceBeaches && biomeProvider.getBiomeSource() instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeProvider.getBiomeSource();
+        if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
             
             builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
         }
         
-        if (replaceOceans && biomeProvider.getBiomeSource() instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeProvider.getBiomeSource();
+        if (replaceOceans && biomeSource instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeSource;
     
             builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
             builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);

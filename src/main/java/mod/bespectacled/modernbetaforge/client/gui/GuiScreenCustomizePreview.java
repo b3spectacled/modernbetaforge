@@ -10,16 +10,25 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.ImmutableList;
+
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
@@ -29,6 +38,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,9 +54,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int HINT_TEXT_OFFSET = 20;
     private static final int PROGRESS_TEXT_OFFSET = 7;
     
-    private static final int GUI_ID_RESOLUTION = 0;
-    private static final int GUI_ID_GENERATE = 1;
-    private static final int GUI_ID_CANCEL = 2;
+    private static final int GUI_ID_BIOME_COLORS = 0;
+    private static final int GUI_ID_RESOLUTION = 1;
+    private static final int GUI_ID_GENERATE = 2;
+    private static final int GUI_ID_CANCEL = 3;
     
     private static final float MIN_RES = 128.0f;
     
@@ -56,10 +68,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ExecutorService executor;
     private final ResourceLocation mapLocation;
     private final BoundChecker boundsChecker;
+    private final MutableBlockPos mutablePos;
     
     private final ChunkSource chunkSource;
     private final BiomeSource biomeSource;
+    private final SurfaceBuilder surfaceBuilder;
+    private final BiomeInjectionRules injectionRules;
     
+    private GuiListButton biomeColors;
     private GuiSlider resolutionSlider;
     private GuiButton generate;
     private GuiButton cancel;
@@ -68,6 +84,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private DynamicTexture mapTexture;
     private ProgressState state;
     private int resolution;
+    private boolean useBiomeColors;
     private float progress;
     private String hintText;
     private String progressText;
@@ -83,28 +100,35 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor = Executors.newFixedThreadPool(1);
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
         this.boundsChecker = new BoundChecker();
+        this.mutablePos = new MutableBlockPos();
         
         ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
         ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
+        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
         
         long seed = this.worldSeed.isEmpty() ? new Random().nextLong() : this.worldSeed.hashCode();
         
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceKey).apply(this.chunkSource, this.settings);
+        this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
         
         this.state = ProgressState.IDLE;
         this.resolution = 512;
+        this.useBiomeColors = true;
         this.progress = 0.0f;
     }
     
     @Override
     public void initGui() {
         this.buttonList.clear();
-        this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "generate")));
-        this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
-        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 153, this.height - 27, PREFIX + "resolution", MIN_RES, this.maxResolution, this.resolution, this));
+        this.biomeColors = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeColors"), true));
+        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", MIN_RES, this.maxResolution, this.resolution, this));
+        this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
+        this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
         
-        this.resolutionSlider.width = 100;
+        this.biomeColors.width = 90;
+        this.resolutionSlider.width = 90;
         this.hintText = I18n.format(PREFIX + "hint");
         this.progressText = "";
         
@@ -204,8 +228,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             y -= (float)this.resolution / 2f;
             
             int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
+            Biome biome = this.biomeSource.getBiome((int)x, (int)y);
             
-            this.drawHoveringText(String.format("%d, %d, %d", (int)x, height, (int)y), mouseX, mouseY);
+            boolean inWater = height < chunkSource.getSeaLevel() - 1;
+            IBlockState state = inWater ? BlockStates.WATER : BlockStates.STONE;
+            IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
+            
+            BiomeInjectionContext context = new BiomeInjectionContext(this.mutablePos.setPos(x, height, y), state, stateAbove, biome);
+            Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.PRE_SURFACE);
+            biome = injectedBiome != null ? injectedBiome : biome;
+            
+            String coordinateText = String.format("%d, %d, %d", (int)x, height, (int)y);
+            String biomeText = biome.getBiomeName();
+            
+            this.drawHoveringText(ImmutableList.of(coordinateText, biomeText), mouseX, mouseY);
         }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -222,7 +258,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
 
     @Override
-    public void setEntryValue(int id, boolean value) { }
+    public void setEntryValue(int id, boolean value) { 
+        if (id == GUI_ID_BIOME_COLORS) {
+            this.useBiomeColors = value;        
+        }
+    }
 
     @Override
     public void setEntryValue(int id, float value) {
@@ -266,7 +306,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         Runnable runnable = () -> {
             try {
                 ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.resolution));
-                this.mapImage = DrawUtil.createTerrainMapForPreview(this.chunkSource, this.biomeSource, this.resolution, current -> this.progress = current);
+                this.mapImage = DrawUtil.createTerrainMapForPreview(
+                    this.chunkSource,
+                    this.biomeSource,
+                    this.surfaceBuilder,
+                    this.resolution,
+                    this.useBiomeColors,
+                    current -> this.progress = current
+                );
                 ModernBeta.log(Level.DEBUG, "Finished drawing terrain map!");
                 this.state = ProgressState.SUCCEEDED;
                 
@@ -321,6 +368,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void updateButtonsEnabled(ProgressState state) {
         boolean enabled = state != ProgressState.STARTED;
         
+        this.biomeColors.enabled = enabled;
         this.resolutionSlider.enabled = enabled;
         this.generate.enabled = enabled;
         this.cancel.enabled = enabled;

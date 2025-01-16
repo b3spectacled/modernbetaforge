@@ -77,6 +77,7 @@ public abstract class SurfaceBuilder {
     
     /**
      * Replace default blocks with biome-specific topsoil blocks and set in the chunk.
+     * 
      * @param world The world object.
      * @param biomes Array of biomes in the chunk.
      * @param chunkPrimer Blockstate data for the chunk.
@@ -84,6 +85,16 @@ public abstract class SurfaceBuilder {
      * @param chunkZ z-coordinate in chunk coordinates.
      */
     public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    
+    /**
+     * Checks whether a given biome is within the set of biomes using custom surfaces.
+     * 
+     * @param biome The biome to check.
+     * @return Whether the given biome uses a custom surface.
+     */
+    public boolean usesCustomSurface(Biome biome) {
+        return this.biomesWithCustomSurfaces.contains(biome);
+    }
     
     /**
      * Gets the PerlinOctaveNoise sampler used for beach generation.

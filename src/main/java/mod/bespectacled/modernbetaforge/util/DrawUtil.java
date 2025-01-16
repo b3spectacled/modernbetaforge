@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -25,7 +26,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DrawUtil {
     private enum TerrainType {
-        LAND(COLOR_LAND),
+        GRASS(COLOR_GRASS),
         SAND(COLOR_SAND),
         SNOW(COLOR_SNOW),
         WATER(COLOR_WATER),
@@ -33,6 +34,7 @@ public class DrawUtil {
         ICE(COLOR_ICE),
         VOID(COLOR_VOID),
         STONE(COLOR_STONE),
+        TERRACOTTA(COLOR_TERRACOTTA),
         MARKER(COLOR_CENTER);
         
         private int color;
@@ -56,7 +58,7 @@ public class DrawUtil {
         .add(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey())
         .build();
     
-    private static final int COLOR_LAND = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
+    private static final int COLOR_GRASS = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
     private static final int COLOR_WATER = MathUtil.convertARGBComponentsToInt(255, 64, 64, 255);
@@ -64,6 +66,7 @@ public class DrawUtil {
     private static final int COLOR_FIRE = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     private static final int COLOR_VOID = MathUtil.convertARGBComponentsToInt(0, 0, 0, 0);
     private static final int COLOR_STONE = MathUtil.convertARGBComponentsToInt(255, 112, 112, 112);
+    private static final int COLOR_TERRACOTTA = MathUtil.convertARGBComponentsToInt(255, 216, 127, 51);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int size, Consumer<Float> progressTracker) {
@@ -81,7 +84,7 @@ public class DrawUtil {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
 
-                TerrainType terrainType = TerrainType.LAND;
+                TerrainType terrainType = TerrainType.GRASS;
                 Biome biome = biomeFunc.apply(x, z);
                 
                 if (BiomeDictionary.hasType(biome, Type.OCEAN) || BiomeDictionary.hasType(biome, Type.RIVER)) {
@@ -119,7 +122,7 @@ public class DrawUtil {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
 
-                TerrainType terrainType = TerrainType.LAND;
+                TerrainType terrainType = TerrainType.GRASS;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
@@ -159,14 +162,15 @@ public class DrawUtil {
         return image;
     }
     
-    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, int size, Consumer<Float> progressTracker) {
-        return createTerrainMapForPreview(chunkSource, biomeSource, size, false, progressTracker);
+    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, Consumer<Float> progressTracker) {
+        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, int size, boolean drawBeaches, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeColors, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         ResourceLocation chunkSourceKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
         ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
+        MutableBlockPos mutablePos = new MutableBlockPos();
         
         int offsetX = size / 2;
         int offsetZ = size / 2;
@@ -179,7 +183,7 @@ public class DrawUtil {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
 
-                TerrainType terrainType = TerrainType.LAND;
+                TerrainType terrainType = TerrainType.GRASS;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
@@ -190,18 +194,25 @@ public class DrawUtil {
                     terrainType = TerrainType.VOID;
                 }
                 
-                boolean isBeach = terrainType == TerrainType.LAND && height < chunkSource.getSeaLevel() + 2;
+                boolean isBeach = terrainType == TerrainType.GRASS && height < chunkSource.getSeaLevel() + 2;
                 
                 Biome biome = biomeSource.getBiome(x, z);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 
-                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilderKey)) {
+                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilderKey) && !surfaceBuilder.usesCustomSurface(biome)) {
                     if (isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
                         terrainType = TerrainType.SAND;
                     }
                 }
                 
-                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
+                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, height, z)));
+                int color = useBiomeColors && terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
+                
+                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                if (useBiomeColors && terrainType == TerrainType.GRASS) {
+                    colorVec = scale(colorVec, 0.86f);
+                }
+                
                 Vector4f mapColor = scale(colorVec, 0.86f);
                 
                 int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
@@ -266,9 +277,13 @@ public class DrawUtil {
     }
     
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
-        if (terrainType == TerrainType.LAND) {
-            if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
+        if (terrainType == TerrainType.GRASS) {
+            if (BiomeDictionary.hasType(biome, Type.MESA)) {
+                terrainType = TerrainType.TERRACOTTA;
+            
+            } else if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
                 terrainType = TerrainType.SAND;
+                
             } else if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
                 terrainType = TerrainType.SNOW;
             }

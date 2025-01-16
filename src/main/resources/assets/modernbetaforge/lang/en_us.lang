@@ -17,6 +17,7 @@ createWorld.customize.presets.filter.custom=Custom
 createWorld.customize.preview.preview=Preview
 createWorld.customize.preview.title=Preview World Generation
 createWorld.customize.preview.resolution=Resolution
+createWorld.customize.preview.biomeColors=Biome Tint
 createWorld.customize.preview.generate=Generate
 createWorld.customize.preview.progress=Generating preview..
 createWorld.customize.preview.hint=Preview not generated

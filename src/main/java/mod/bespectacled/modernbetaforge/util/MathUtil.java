@@ -57,4 +57,10 @@ public class MathUtil {
     public static int convertARGBComponentsToInt(int a, int r, int g, int b) {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
+    
+    public static int convertRGBtoARGB(int color) {
+        Vec3d rgb = convertRGBIntToVec3d(color);
+        
+        return convertARGBComponentsToInt(255, (int)(rgb.x * 255.0), (int)(rgb.y * 255.0), (int)(rgb.z * 255.0));
+    }
 }

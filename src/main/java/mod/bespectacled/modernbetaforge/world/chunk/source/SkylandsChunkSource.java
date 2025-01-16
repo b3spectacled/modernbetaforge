@@ -1,9 +1,9 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.SkylandsSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -53,7 +53,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    public BiomeInjectionRules buildBiomeInjectorRules(ModernBetaBiomeProvider biomeProvider) {
+    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
         return new BiomeInjectionRules.Builder().build();
     }
 

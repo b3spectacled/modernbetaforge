@@ -94,7 +94,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.biomeInjector = new BiomeInjector(
             this.chunkSource,
             this.biomeProvider.getBiomeSource(),
-            this.chunkSource.buildBiomeInjectorRules(this.biomeProvider)
+            this.chunkSource.buildBiomeInjectorRules(this.biomeProvider.getBiomeSource())
         );
 
         this.initialChunkCache = new ChunkCache<>("initial_chunk", this::provideInitialChunkPrimerContainer);
