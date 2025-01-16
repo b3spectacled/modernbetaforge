@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +29,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.config.HoverChecker;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,6 +41,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private static final String PREFIX = "createWorld.customize.preview.";
+    private static final int TEXTURE_Y_OFFSET = 10;
     private static final int HINT_TEXT_OFFSET = 20;
     private static final int PROGRESS_TEXT_OFFSET = 7;
     
@@ -53,6 +57,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorService executor;
     private final ResourceLocation mapLocation;
+    private final BoundChecker boundsChecker;
     
     private final ChunkSource chunkSource;
     private final BiomeSource biomeSource;
@@ -79,6 +84,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.settings = settings;
         this.executor = Executors.newFixedThreadPool(1);
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
+        this.boundsChecker = new BoundChecker();
         
         ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
         ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
@@ -105,6 +111,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progressText = "";
         
         this.list = new ListPreset();
+
+        int size = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int textureX = this.width / 2 - size / 2;
+        int textureY = this.height / 2 - size / 2;
+        textureY -= TEXTURE_Y_OFFSET;
+        
+        this.boundsChecker.updateBounds(textureX, textureY, size, size);
+        
         this.updateButtonsEnabled(this.state);
     }
     
@@ -129,8 +143,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int size = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
         int textureX = this.width / 2 - size / 2;
         int textureY = this.height / 2 - size / 2;
-        int offsetY = 10;
-        textureY -= offsetY;
+        textureY -= TEXTURE_Y_OFFSET;
 
         drawRect(textureX, textureY, textureX + size, textureY + size, MathUtil.convertARGBComponentsToInt(50, 0, 0, 0));
         this.drawHorizontalLine(textureX - 1, textureX + size, textureY - 1, -2039584);
@@ -156,10 +169,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 );
                 GlStateManager.disableBlend();
                 
-                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - size / 2 + 2 - offsetY, 16776960);
-                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + size / 2 - 9 - offsetY, 16776960);
-                this.drawCenteredString(fontRenderer, "E", this.width / 2 + size / 2 - 4, this.height / 2 - 3 - offsetY, 16776960);
-                this.drawCenteredString(fontRenderer, "W", this.width / 2 - size / 2 + 5, this.height / 2 - 3 - offsetY, 16776960);
+                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - size / 2 + 2 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + size / 2 - 9 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "E", this.width / 2 + size / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "W", this.width / 2 - size / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
                 break;
                 
             case STARTED:
@@ -184,6 +197,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
         this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + size / 2, 16777215);
+        
+        if (this.state == ProgressState.SUCCEEDED && this.boundsChecker.inBounds(mouseX, mouseY)) {
+            float x = this.boundsChecker.getRelativeX(mouseX) / (float)size * this.resolution;
+            float y = this.boundsChecker.getRelativeY(mouseY) / (float)size * this.resolution;
+
+            x -= (float)this.resolution / 2f;
+            y -= (float)this.resolution / 2f;
+            
+            this.drawHoveringText(String.format("%d, %d", (int)x, (int)y), mouseX, mouseY);
+        }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -338,5 +361,44 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) { }
         
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static class BoundChecker {
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+        
+        public BoundChecker() {
+            this.x = 0;
+            this.y = 0;
+            this.width = 0;
+            this.height = 0;
+        }
+        
+        public void updateBounds(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+        
+        public boolean inBounds(int mouseX, int mouseY) {
+            int left = this.x;
+            int right = this.x + this.width;
+            int top = this.y;
+            int bottom = this.y + this.height;
+            
+            return mouseX >= left && mouseX < right && mouseY >= top && mouseY < bottom;
+        }
+        
+        public int getRelativeX(int mouseX) {
+            return mouseX - this.x;
+        }
+        
+        public int getRelativeY(int mouseY) {
+            return mouseY - this.y;
+        }
     }
 }
