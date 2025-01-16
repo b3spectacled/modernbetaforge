@@ -75,6 +75,7 @@ public class DrawUtil {
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
+        MutableBlockPos mutablePos = new MutableBlockPos();
         
         int offsetX = width / 2;
         int offsetZ = length / 2;
@@ -96,7 +97,16 @@ public class DrawUtil {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
                 }
                 
-                image.setRGB(localX, localZ, terrainType.color);
+                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z)));
+                int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
+                
+                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                if (terrainType == TerrainType.GRASS) {
+                    colorVec = scale(colorVec, 0.86f);
+                }
+                Vector4f mapColor = scale(colorVec, 0.86f);
+                
+                image.setRGB(localX, localZ, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
             }
         }
         
@@ -140,9 +150,14 @@ public class DrawUtil {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
                 }
                 
-                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(terrainType.color);
+                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, height, z)));
+                int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
+                
+                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                if (terrainType == TerrainType.GRASS) {
+                    colorVec = scale(colorVec, 0.86f);
+                }
                 Vector4f mapColor = scale(colorVec, 0.86f);
-                mapColor.setX(1.0f);
                 
                 int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
                 if (terrainType == TerrainType.ICE) {
