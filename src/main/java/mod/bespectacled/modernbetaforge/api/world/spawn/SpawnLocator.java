@@ -12,7 +12,6 @@ public interface SpawnLocator {
     /**
      * Locates initial player spawn point.
      * 
-     * @param world The world object.
      * @param spawnPos Starting player spawn block position.
      * @param chunkSource Modern Beta chunk source.
      * @param biomeSource Modern Beta biome source.

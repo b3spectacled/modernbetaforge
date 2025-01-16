@@ -130,10 +130,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
     
     /**
-     * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Samples height from the generated level data.
      * 
-     * @param world The world object.
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param type HeightmapChunk heightmap type.
@@ -484,6 +483,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * Checks if the level data has generated yet, if not, then generates the level data.
      * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
+     * 
+     * @param levelDataContainer The level data container.
      */
     protected synchronized void pregenerateLevelOrWait(LevelDataContainer levelDataContainer) {
         if (!levelDataContainer.generated) {

@@ -135,7 +135,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Inherited from {@link ChunkSource#getHeight(World, int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
+     * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.
      * Initially generates heightmap for entire chunk, if chunk containing x/z coordinates has never been sampled.
      * 
      * @param x x-coordinate in block coordinates.
