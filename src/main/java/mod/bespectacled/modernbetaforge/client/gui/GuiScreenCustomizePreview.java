@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
+import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -202,7 +203,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             x -= (float)this.resolution / 2f;
             y -= (float)this.resolution / 2f;
             
-            this.drawHoveringText(String.format("%d, %d", (int)x, (int)y), mouseX, mouseY);
+            int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
+            
+            this.drawHoveringText(String.format("%d, %d, %d", (int)x, height, (int)y), mouseX, mouseY);
         }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
