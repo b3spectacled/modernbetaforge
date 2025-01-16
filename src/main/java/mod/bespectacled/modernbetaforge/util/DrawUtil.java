@@ -29,6 +29,7 @@ public class DrawUtil {
         SAND(COLOR_SAND),
         SNOW(COLOR_SNOW),
         WATER(COLOR_WATER),
+        FIRE(COLOR_FIRE),
         ICE(COLOR_ICE),
         VOID(COLOR_VOID),
         STONE(COLOR_STONE),
@@ -60,6 +61,7 @@ public class DrawUtil {
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
     private static final int COLOR_WATER = MathUtil.convertARGBComponentsToInt(255, 64, 64, 255);
     private static final int COLOR_ICE = MathUtil.convertARGBComponentsToInt(255, 160, 160, 255);
+    private static final int COLOR_FIRE = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     private static final int COLOR_VOID = MathUtil.convertARGBComponentsToInt(0, 0, 0, 0);
     private static final int COLOR_STONE = MathUtil.convertARGBComponentsToInt(255, 112, 112, 112);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
@@ -121,7 +123,7 @@ public class DrawUtil {
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
-                    terrainType = TerrainType.WATER;
+                    terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
                 }
                 
                 if (height == 0) {
@@ -181,7 +183,7 @@ public class DrawUtil {
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 
                 if (height < chunkSource.getSeaLevel() - 1) {
-                    terrainType = TerrainType.WATER;
+                    terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
                 }
                 
                 if (height == 0) {
