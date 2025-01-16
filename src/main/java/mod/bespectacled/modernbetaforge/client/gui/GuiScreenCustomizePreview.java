@@ -105,6 +105,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progressText = "";
         
         this.list = new ListPreset();
+        this.updateButtonsEnabled(this.state);
     }
     
     @Override
@@ -236,7 +237,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.mapImage = null;
         this.progress = 0.0f;
         this.state = ProgressState.STARTED;
-        this.updateButtonsEnabled(false);
+        this.updateButtonsEnabled(this.state);
         this.deleteMapTexture();
         
         Runnable runnable = () -> {
@@ -252,7 +253,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.state = ProgressState.FAILED;
                 
             } finally {
-                this.updateButtonsEnabled(true);
+                this.updateButtonsEnabled(this.state);
                 
             }
         };
@@ -294,7 +295,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
-    private void updateButtonsEnabled(boolean enabled) {
+    private void updateButtonsEnabled(ProgressState state) {
+        boolean enabled = state != ProgressState.STARTED;
+        
         this.resolutionSlider.enabled = enabled;
         this.generate.enabled = enabled;
         this.cancel.enabled = enabled;
