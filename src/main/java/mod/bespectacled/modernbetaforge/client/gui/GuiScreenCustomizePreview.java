@@ -123,7 +123,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, 16777215);
 
-        int size = this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int size = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
         int textureX = this.width / 2 - size / 2;
         int textureY = this.height / 2 - size / 2;
         int offsetY = 10;
