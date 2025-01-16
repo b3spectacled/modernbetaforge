@@ -86,27 +86,24 @@ public abstract class ChunkSource {
      * Used to sample for biome injection and creation of initial biome map.
      * If using biomes for chunk generation, DO NOT use {@link BiomeProvider#getBiome(net.minecraft.util.math.BlockPos) BiomeProvider.getBiome()} from {@link World}.
      * At this stage, the biomes have not actually been set for {@link ModernBetaBiome} to sample from.
-     * Instead, get the biome provider, cast to {@link ModernBetaBiomeProvider} and use {@link ModernBetaBiomeProvider#getBiomeSource()} to sample biomes, or do final generation in {@link #provideProcessedChunk(World, ChunkPrimer, int, int, List) processedChunk} to get processed biome map.
-     * 
-     * @param world The world object
+     * Instead, get the biome provider, cast to {@link ModernBetaBiomeProvider} and use {@link ModernBetaBiomeProvider#getBiomeSource()} to sample biomes, or do final generation in {@link #provideProcessedChunk(ChunkPrimer, int, int, List) processedChunk} to get processed biome map.
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    public abstract void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    public abstract void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Create processed chunk given chunk coordinates.
-     * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
+     * This exists to allow terrain to be modified or regenerated for village placement, which needs to occur after {@link #provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk} so villages can be placed correctly.
      * This does not need to be implemented and can be left empty, if you don't wish to do additional processing.
      * 
-     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * @param structureComponents The list of structure components that at least partially occupy this chunk.
      */
-    public abstract void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents);
+    public abstract void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents);
 
     /**
      * Build surface for given chunk primer and chunk coordinates.

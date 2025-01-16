@@ -14,8 +14,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -66,6 +68,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelLength;
     protected final int levelHeight;
     protected final int[] levelHeightmap;
+    protected final BiomeSource biomeSource;
     
     private final IndevHouse levelHouse;
 
@@ -89,6 +92,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelLength = MathHelper.clamp(settings.levelLength >> 4 << 4, MIN_WIDTH, MAX_WIDTH);
         this.levelHeight = MathHelper.clamp(settings.levelHeight, MIN_HEIGHT, MAX_HEIGHT);
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
+        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
+            .get(new ResourceLocation(settings.biomeSource))
+            .apply(seed, settings);
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
     }
@@ -103,41 +109,22 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     @Override
-    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         if (this.inWorldBounds(startX, startZ)) {
-            synchronized(this) {
-                // Lazy load level data container
-                if (this.levelDataContainer == null) {
-                    this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
-                        this.tryLoadLevel(world) :
-                        new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
-                }
-                
-                this.pregenerateLevelOrWait(this.levelDataContainer);
-
-                if (!this.levelDataContainer.saveAttempted && ModernBetaConfig.generatorOptions.saveIndevLevels) {
-                    this.trySaveLevel(world, this.levelDataContainer);
-                    this.levelDataContainer.saveAttempted = true;
-                    
-                    if (DEBUG_LEVEL_DATA_HANDLER) {
-                        this.debugLevelDataHandler(world, this.levelDataContainer);
-                    }
-                }
-            }
-            
-            this.generateTerrain(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
+            this.pregenerateLevelOrWait(this.levelDataContainer);
+            this.generateTerrain(chunkPrimer, chunkX, chunkZ, this.biomeSource);
             
         } else {
-            this.generateBorder(world, chunkPrimer, chunkX, chunkZ);
+            this.generateBorder(chunkPrimer, chunkX, chunkZ);
             
         }
     }
     
     @Override
-    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
@@ -163,7 +150,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
 
         synchronized(this) {
-            this.levelDataContainer = this.levelDataContainer == null ?
+            this.levelDataContainer = this.levelDataContainer == null || !this.levelDataContainer.generated ?
                 new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength) :
                 this.levelDataContainer;
             
@@ -259,6 +246,50 @@ public abstract class FiniteChunkSource extends ChunkSource {
         return this.levelHeight;
     }
     
+    /**
+     * Sets the level notifier consumer.
+     * 
+     * @param levelNotifier The level notifier consuming a String.
+     */
+    public void setLevelNotifier(Consumer<String> levelNotifier) {
+        this.levelNotifier = levelNotifier;
+    }
+    
+    /**
+     * Loads from file or creates new level data container.
+     * 
+     * @param world The world object
+     */
+    public void loadOrCreateLevelDataContainer(World world) {
+        if (this.levelDataContainer == null) {
+            this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
+                this.tryLoadLevel(world) :
+                new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
+        }
+    }
+    
+    /**
+     * Saves the level data container to file.
+     * 
+     * @param world The world object
+     */
+    public void saveLevelDataContainer(World world) {
+        if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
+            this.trySaveLevel(world, this.levelDataContainer);
+            
+            if (DEBUG_LEVEL_DATA_HANDLER) {
+                this.debugLevelDataHandler(world, this.levelDataContainer);
+            }
+        }
+    }
+    
+    /**
+     * Pregenerates the level terrain.
+     */
+    public void pregenerateTerrainOrWait() {
+        this.pregenerateLevelOrWait(this.levelDataContainer);
+    }
+
     /**
      * Generates the Indev starting house at the given coordinates.
      * 
@@ -427,27 +458,18 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
-     * Sets the level notifier consumer.
-     * 
-     * @param levelNotifier The level notifier consuming a String.
-     */
-    public void setLevelNotifier(Consumer<String> levelNotifier) {
-        this.levelNotifier = levelNotifier;
-    }
-
-    /**
      * Generates the level data.
      */
     protected abstract void pregenerateTerrain();
     
     /**
      * Generates the world chunks outside of the level bounds.
-     * @param world The world object.
+     *
      * @param chunkPrimer The chunk primer.
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
-    protected abstract void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
+    protected abstract void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
      * Sample height at given x/z coordinate for coordinates outside of the level bounds.
@@ -459,6 +481,17 @@ public abstract class FiniteChunkSource extends ChunkSource {
      */
     protected abstract int getBorderHeight(int x, int z, HeightmapChunk.Type type);
     
+    /**
+     * Checks if the level data has generated yet, if not, then generates the level data.
+     * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
+     */
+    protected synchronized void pregenerateLevelOrWait(LevelDataContainer levelDataContainer) {
+        if (!levelDataContainer.generated) {
+            this.pregenerateTerrain();
+            levelDataContainer.generated = true;
+        }
+    }
+
     /**
      * Indicates whether the given level coordinates are within the level area.
      * 
@@ -481,17 +514,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
      */
     protected boolean atLevelBounds(int x, int y, int z) {
         return x == 0 || x == this.levelWidth - 1 || y == 0 || y == this.levelHeight - 1 || z == 0 || z == this.levelLength - 1;
-    }
-    
-    /**
-     * Checks if the level data has generated yet, if not, then generates the level data.
-     * If `saveIndevLevels` has been enabled, then the level will be saved to disk after generation.
-     */
-    protected void pregenerateLevelOrWait(LevelDataContainer levelDataContainer) {
-        if (!levelDataContainer.generated) {
-            this.pregenerateTerrain();
-            levelDataContainer.generated = true;
-        }
     }
     
     /**
@@ -645,9 +667,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @param chunkPrimer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
-     * @param biomeProvider The biome provider.
+     * @param biomeSource The biome source.
      */
-    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, BiomeSource biomeSource) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -666,7 +688,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             
             for (int localZ = 0; localZ < 16; ++localZ) {
                 int z = localZ + startZ;
-                Biome biome = biomeProvider.getBiomeSource().getBiome(x, z);
+                Biome biome = biomeSource.getBiome(x, z);
                 
                 for (int y = this.levelHeight - 1; y >= 0; --y) {
                     Block block = this.getLevelBlock(x + offsetX, y, z + offsetZ);
@@ -822,7 +844,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         
         private byte blockId;
         private boolean generated;
-        private boolean saveAttempted;
         
         /**
          * Constructs a LevelDataContainer for level data.
@@ -840,7 +861,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
             
             this.blockId = 0;
             this.generated = false;
-            this.saveAttempted = false;
             
             this.levelMap.put(this.blockId++, Blocks.AIR.getRegistryName().toString());
             Arrays.fill(this.levelData, this.levelMap.inverse().get(Blocks.AIR.getRegistryName().toString()));
@@ -857,7 +877,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
             this.levelMap = levelMap;
             this.levelBlockMap = HashBiMap.create();
             this.generated = true;
-            this.saveAttempted = true;
         }
         
         /**

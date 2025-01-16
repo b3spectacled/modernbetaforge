@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -111,6 +112,22 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());
         
+        // Handle FiniteChunkSource saves
+        if (this.chunkSource instanceof FiniteChunkSource) {
+            FiniteChunkSource finiteChunkSource = (FiniteChunkSource)this.chunkSource;
+            finiteChunkSource.setLevelNotifier(message -> {
+                if (world.getMinecraftServer() != null) {
+                    world.getMinecraftServer().setUserMessage(message + "..");
+                }
+            });
+            
+            finiteChunkSource.loadOrCreateLevelDataContainer(this.world);
+            if (!finiteChunkSource.hasPregenerated()) {
+                finiteChunkSource.pregenerateTerrainOrWait();
+                finiteChunkSource.saveLevelDataContainer(this.world);
+            }
+        }
+        
         DebugUtil.resetDebug(DebugUtil.SECTION_GEN_CHUNK);
     }
     
@@ -131,7 +148,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         // Generate processed chunk
         List<StructureComponent> structureComponents = componentCache.get(chunkX, chunkZ).getComponents();
-        this.chunkSource.provideProcessedChunk(this.world, containerPrimer, chunkX, chunkZ, structureComponents);
+        this.chunkSource.provideProcessedChunk(containerPrimer, chunkX, chunkZ, structureComponents);
         
         // Copy chunk data into chunkPrimer parameter
         for (int x = 0; x < 16; ++x) {
@@ -492,7 +509,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         Biome[] biomes = new Biome[256];
         
         // Generate base terrain
-        this.chunkSource.provideInitialChunk(this.world, chunkPrimer, chunkX, chunkZ);
+        this.chunkSource.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
         
         // Generate base biome map
         this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);

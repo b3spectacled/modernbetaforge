@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class Classic23aChunkSource extends FiniteChunkSource {
@@ -83,7 +82,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     }
 
     @Override
-    protected void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    protected void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int seaLevel = this.getSeaLevel();
         
         for (int x = 0; x < 16; ++x) {

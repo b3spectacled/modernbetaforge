@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -17,7 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
@@ -117,13 +115,13 @@ public class IndevChunkSource extends FiniteChunkSource {
     }
 
     @Override
-    protected void generateBorder(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    protected void generateBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
          switch(this.levelType) {
             case ISLAND: 
-                this.generateWaterBorder(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
+                this.generateWaterBorder(chunkPrimer, chunkX, chunkZ);
                 break;
             case INLAND:
-                this.generateWorldBorder(chunkPrimer, chunkX, chunkZ, (ModernBetaBiomeProvider)world.getBiomeProvider());
+                this.generateWorldBorder(chunkPrimer, chunkX, chunkZ);
                 break;
             case FLOATING:
                 break;
@@ -553,14 +551,14 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
 
-    private void generateWorldBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
+    private void generateWorldBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int groundLevel = this.getSeaLevel();
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
-                Biome biome = biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
+                Biome biome = this.biomeSource.getBiome(startX + x, startZ + z);
                 
                 for (int y = 0; y < this.levelHeight; ++y) {
                     if (y < groundLevel) {
@@ -573,14 +571,14 @@ public class IndevChunkSource extends FiniteChunkSource {
         }
     }
     
-    private void generateWaterBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, ModernBetaBiomeProvider biomeProvider) {
+    private void generateWaterBorder(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int seaLevel = this.getSeaLevel();
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
-                Biome biome = biomeProvider.getBiomeSource().getBiome(startX + x, startZ + z);
+                Biome biome = this.biomeSource.getBiome(startX + x, startZ + z);
                 
                 for (int y = 0; y < this.levelHeight; ++y) {
                     if (y < seaLevel - 10) {

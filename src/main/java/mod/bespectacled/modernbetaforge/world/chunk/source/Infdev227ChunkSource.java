@@ -60,12 +60,12 @@ public class Infdev227ChunkSource extends ChunkSource {
     }
 
     @Override
-    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.generateTerrain(chunkPrimer, chunkX, chunkZ);
     }
 
     @Override
-    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {

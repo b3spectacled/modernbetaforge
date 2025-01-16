@@ -96,32 +96,28 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideInitialChunk(World, ChunkPrimer, int, int) provideInitialChunk}.
+     * Inherited from {@link ChunkSource#provideInitialChunk(ChunkPrimer, int, int) provideInitialChunk}.
      * This does not generate terrain, only samples the initial densities.
-     * 
-     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      */
     @Override
-    public void provideInitialChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
+    public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         this.densityCache.get(chunkX, chunkZ);
     }
     
     /**
-     * Inherited from {@link ChunkSource#provideProcessedChunk(World, ChunkPrimer, int, int, List) provideProcessedChunk}.
+     * Inherited from {@link ChunkSource#provideProcessedChunk(ChunkPrimer, int, int, List) provideProcessedChunk}.
      * This actually generates the terrain, after collection of village component placements.
-     * 
-     * @param world The world object
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
      * @param structureComponents The list of structure components that at least partially occupy this chunk.
      */
     @Override
-    public void provideProcessedChunk(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
-        this.generateTerrain(world, chunkPrimer, chunkX, chunkZ, structureComponents);
+    public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
+        this.generateTerrain(chunkPrimer, chunkX, chunkZ, structureComponents);
     }
     
     /**
@@ -191,12 +187,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
 
     /**
      * Generates the base terrain for a given chunk.
-     * @param world The world object
+     * 
      * @param chunkPrimer Chunk primer
      * @param chunkX x-coordinate in chunk coordinates
      * @param chunkZ z-coordinate in chunk coordinates
+     * @param structureComponents The list of structure components in the given chunk
      */
-    private void generateTerrain(World world, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
+    private void generateTerrain(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
