@@ -21,6 +21,7 @@ createWorld.customize.preview.generate=Generate
 createWorld.customize.preview.progress=Generating preview..
 createWorld.customize.preview.hint=Preview not generated
 createWorld.customize.preview.failure=Failed to generate!
+createWorld.customize.preview.seed=World Seed
 
 # Page Tabs
 createWorld.customize.custom.tab.page0=Basic

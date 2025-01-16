@@ -61,8 +61,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ListPreset list;
     private BufferedImage mapImage;
     private DynamicTexture mapTexture;
-    private int resolution;
     private ProgressState state;
+    private int resolution;
     private float progress;
     private String hintText;
     private String progressText;
@@ -86,6 +86,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
         
+        this.state = ProgressState.IDLE;
         this.resolution = 512;
         this.progress = 0.0f;
     }
@@ -125,6 +126,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int size = this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
         int textureX = this.width / 2 - size / 2;
         int textureY = this.height / 2 - size / 2;
+        int offsetY = 10;
+        textureY -= offsetY;
 
         drawRect(textureX, textureY, textureX + size, textureY + size, MathUtil.convertARGBComponentsToInt(50, 0, 0, 0));
         this.drawHorizontalLine(textureX - 1, textureX + size, textureY - 1, -2039584);
@@ -133,45 +136,51 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.drawVerticalLine(textureX + size, textureY - 1, textureY + size, -6250336);
         
         this.loadMapTexture();
-        if (this.state == ProgressState.SUCCEEDED && this.mapTexture != null) {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.mc.getTextureManager().bindTexture(this.mapLocation);
-            GlStateManager.enableBlend();
-            Gui.drawModalRectWithCustomSizedTexture(
-                textureX,
-                textureY,
-                0.0f,
-                0.0f,
-                size,
-                size,
-                size,
-                size
-            );
-            GlStateManager.disableBlend();
-            
-            this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - size / 2 + 2, 16776960);
-            this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + size / 2 - 9, 16776960);
-            this.drawCenteredString(fontRenderer, "E", this.width / 2 + size / 2 - 4, this.height / 2 - 3, 16776960);
-            this.drawCenteredString(fontRenderer, "W", this.width / 2 - size / 2 + 5, this.height / 2 - 3, 16776960);
-            
-        } else if (this.state == ProgressState.STARTED) {
-            this.hintText = I18n.format(PREFIX + "progress");
-            this.progressText = String.format("%d%%", (int)(this.progress * 100.0));
-            
-            this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
-            this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 + 3, 16777215);
-            
-        } else if (this.state == ProgressState.FAILED) {
-            this.hintText = I18n.format(PREFIX + "failure");
-            
-            this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
-            
-        } else {
-            this.hintText = I18n.format(PREFIX + "hint");
-            
-            this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
-            
+        switch(this.state) {
+            case SUCCEEDED:
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                this.mc.getTextureManager().bindTexture(this.mapLocation);
+                GlStateManager.enableBlend();
+                Gui.drawModalRectWithCustomSizedTexture(
+                    textureX,
+                    textureY,
+                    0.0f,
+                    0.0f,
+                    size,
+                    size,
+                    size,
+                    size
+                );
+                GlStateManager.disableBlend();
+                
+                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - size / 2 + 2 - offsetY, 16776960);
+                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + size / 2 - 9 - offsetY, 16776960);
+                this.drawCenteredString(fontRenderer, "E", this.width / 2 + size / 2 - 4, this.height / 2 - 3 - offsetY, 16776960);
+                this.drawCenteredString(fontRenderer, "W", this.width / 2 - size / 2 + 5, this.height / 2 - 3 - offsetY, 16776960);
+                break;
+                
+            case STARTED:
+                this.hintText = I18n.format(PREFIX + "progress");
+                this.progressText = String.format("%d%%", (int)(this.progress * 100.0));
+                
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
+                this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 + 3, 16777215);
+                break;
+                
+            case FAILED:
+                this.hintText = I18n.format(PREFIX + "failure");
+                
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
+                break;
+                
+            default:
+                this.hintText = I18n.format(PREFIX + "hint");
+                
+                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - 10, 16777215);
         }
+        
+        String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
+        this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + size / 2, 16777215);
         
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
