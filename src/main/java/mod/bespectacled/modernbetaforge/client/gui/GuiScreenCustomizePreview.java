@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.Longs;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -106,7 +107,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
         ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
         
-        long seed = this.worldSeed.isEmpty() ? new Random().nextLong() : this.worldSeed.hashCode();
+        long seed = new Random().nextLong();
+        if (!this.worldSeed.isEmpty()) {
+            try {
+                seed = Longs.tryParse(this.worldSeed);
+                
+            } catch (Exception e) {
+                seed = this.worldSeed.hashCode();
+                
+            }
+        }
         
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
