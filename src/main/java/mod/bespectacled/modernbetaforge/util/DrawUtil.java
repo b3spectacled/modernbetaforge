@@ -102,7 +102,7 @@ public class DrawUtil {
                 
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 if (terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.86f);
+                    colorVec = scale(colorVec, 0.71f);
                 }
                 Vector4f mapColor = scale(colorVec, 0.86f);
                 
@@ -155,7 +155,7 @@ public class DrawUtil {
                 
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 if (terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.86f);
+                    colorVec = scale(colorVec, 0.71f);
                 }
                 Vector4f mapColor = scale(colorVec, 0.86f);
                 
@@ -225,7 +225,7 @@ public class DrawUtil {
                 
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 if (useBiomeColors && terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.86f);
+                    colorVec = scale(colorVec, 0.71f);
                 }
                 
                 Vector4f mapColor = scale(colorVec, 0.86f);

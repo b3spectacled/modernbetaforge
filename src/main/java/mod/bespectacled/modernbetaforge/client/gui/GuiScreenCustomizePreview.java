@@ -103,10 +103,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.boundsChecker = new BoundChecker();
         this.mutablePos = new MutableBlockPos();
         
-        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
-        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
-        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
-        
         long seed = new Random().nextLong();
         if (!this.worldSeed.isEmpty()) {
             try {
@@ -117,6 +113,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 
             }
         }
+        
+        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
+        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
+        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
         
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
@@ -139,18 +139,19 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.biomeColors.width = 90;
         this.resolutionSlider.width = 90;
+        this.biomeColors.setValue(this.useBiomeColors);
+        
         this.hintText = I18n.format(PREFIX + "hint");
         this.progressText = "";
         
         this.list = new ListPreset();
 
-        int size = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
-        int textureX = this.width / 2 - size / 2;
-        int textureY = this.height / 2 - size / 2;
+        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int textureX = this.width / 2 - viewportSize / 2;
+        int textureY = this.height / 2 - viewportSize / 2;
         textureY -= TEXTURE_Y_OFFSET;
         
-        this.boundsChecker.updateBounds(textureX, textureY, size, size);
-        
+        this.boundsChecker.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.updateButtonsEnabled(this.state);
     }
     
@@ -172,16 +173,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, 16777215);
 
-        int size = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
-        int textureX = this.width / 2 - size / 2;
-        int textureY = this.height / 2 - size / 2;
+        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int textureX = this.width / 2 - viewportSize / 2;
+        int textureY = this.height / 2 - viewportSize / 2;
         textureY -= TEXTURE_Y_OFFSET;
 
-        drawRect(textureX, textureY, textureX + size, textureY + size, MathUtil.convertARGBComponentsToInt(50, 0, 0, 0));
-        this.drawHorizontalLine(textureX - 1, textureX + size, textureY - 1, -2039584);
-        this.drawHorizontalLine(textureX - 1, textureX + size, textureY + size, -6250336);
-        this.drawVerticalLine(textureX - 1, textureY - 1, textureY + size, -2039584);
-        this.drawVerticalLine(textureX + size, textureY - 1, textureY + size, -6250336);
+        drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, MathUtil.convertARGBComponentsToInt(50, 0, 0, 0));
+        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, -2039584);
+        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, -6250336);
+        this.drawVerticalLine(textureX - 1, textureY - 1, textureY + viewportSize, -2039584);
+        this.drawVerticalLine(textureX + viewportSize, textureY - 1, textureY + viewportSize, -6250336);
         
         this.loadMapTexture();
         switch(this.state) {
@@ -194,17 +195,17 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     textureY,
                     0.0f,
                     0.0f,
-                    size,
-                    size,
-                    size,
-                    size
+                    viewportSize,
+                    viewportSize,
+                    viewportSize,
+                    viewportSize
                 );
                 GlStateManager.disableBlend();
                 
-                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - size / 2 + 2 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + size / 2 - 9 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "E", this.width / 2 + size / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "W", this.width / 2 - size / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "E", this.width / 2 + viewportSize / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "W", this.width / 2 - viewportSize / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
                 break;
                 
             case STARTED:
@@ -228,11 +229,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
         
         String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
-        this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + size / 2, 16777215);
+        this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + viewportSize / 2, 16777215);
         
         if (this.state == ProgressState.SUCCEEDED && this.boundsChecker.inBounds(mouseX, mouseY)) {
-            float x = this.boundsChecker.getRelativeX(mouseX) / (float)size * this.resolution;
-            float y = this.boundsChecker.getRelativeY(mouseY) / (float)size * this.resolution;
+            float x = this.boundsChecker.getRelativeX(mouseX) / (float)viewportSize * this.resolution;
+            float y = this.boundsChecker.getRelativeY(mouseY) / (float)viewportSize * this.resolution;
 
             x -= (float)this.resolution / 2f;
             y -= (float)this.resolution / 2f;
