@@ -3,9 +3,6 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -20,6 +17,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
+import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -66,7 +64,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final String worldSeed;
     private final int maxResolution;
     private final ModernBetaGeneratorSettings settings;
-    private final ExecutorService executor;
+    private final ExecutorWrapper executor;
     private final ResourceLocation mapLocation;
     private final BoundChecker boundsChecker;
     private final MutableBlockPos mutablePos;
@@ -98,7 +96,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.worldSeed = worldSeed;
         this.maxResolution = maxResolution;
         this.settings = settings;
-        this.executor = Executors.newFixedThreadPool(1);
+        this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
         this.boundsChecker = new BoundChecker();
         this.mutablePos = new MutableBlockPos();
@@ -301,7 +299,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.drawTerrainMap();
                 break;
             case GUI_ID_CANCEL:
-                this.shutdownExecutor();
+                this.executor.shutdown();
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }
@@ -339,7 +337,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             }
         };
         
-        this.executor.execute(runnable);
+        this.executor.queueTask(runnable);
     }
     
     private void loadMapTexture() {
@@ -357,23 +355,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void deleteMapTexture() {
         this.mc.getTextureManager().deleteTexture(this.mapLocation);
         this.mapTexture = null;
-    }
-    
-    private void shutdownExecutor() {
-        ModernBeta.log(Level.DEBUG, "Shutting down executor service..");
-        
-        this.executor.shutdown();
-        try {
-            if (!this.executor.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
-                this.executor.shutdownNow();
-                
-                if (!this.executor.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
-                    ModernBeta.log(Level.DEBUG, "Executor service still did not shutdown!");
-                }
-            } 
-        } catch (InterruptedException e) {
-            this.executor.shutdownNow();
-        }
     }
     
     private void updateButtonsEnabled(ProgressState state) {
