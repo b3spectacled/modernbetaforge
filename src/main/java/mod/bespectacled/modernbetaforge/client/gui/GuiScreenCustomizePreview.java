@@ -58,11 +58,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_GENERATE = 2;
     private static final int GUI_ID_CANCEL = 3;
     
-    private static final float MIN_RES = 128.0f;
-    
     private final GuiScreenCustomizeWorld parent;
     private final String worldSeed;
-    private final int maxResolution;
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorWrapper executor;
     private final ResourceLocation mapLocation;
@@ -90,11 +87,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     protected String title;
 
-    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, int maxResolution, ModernBetaGeneratorSettings settings) {
+    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.worldSeed = worldSeed;
-        this.maxResolution = maxResolution;
         this.settings = settings;
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
@@ -129,9 +125,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     public void initGui() {
+        int resolutionNdx = getNdx(GuiScreenCustomizeWorld.LEVEL_WIDTHS, this.resolution);
+        
         this.buttonList.clear();
         this.biomeColors = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeColors"), true));
-        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", MIN_RES, this.maxResolution, this.resolution, this));
+        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, GuiScreenCustomizeWorld.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
         this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
         this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
         
@@ -262,8 +260,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     @Override
-    public String getText(int entry, String entryString, float entryValue) {
-        return String.format("%s: %d", entryString, (int)entryValue);
+    public String getText(int id, String entryString, float entryValue) {
+        if (id == GUI_ID_RESOLUTION) {
+            return String.format("%s: %d", entryString, GuiScreenCustomizeWorld.LEVEL_WIDTHS[(int)entryValue]);
+        }
+        
+        return String.format("%d", (int)entryValue);
     }
 
     @Override
@@ -276,7 +278,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void setEntryValue(int id, float value) {
         if (id == GUI_ID_RESOLUTION) {
-            this.resolution = (int)value;
+            this.resolution = GuiScreenCustomizeWorld.LEVEL_WIDTHS[(int)value];
         }
     }
 
@@ -366,6 +368,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.resolutionSlider.enabled = enabled;
         this.generate.enabled = enabled;
         this.cancel.enabled = enabled;
+    }
+    
+    private static int getNdx(int[] arr, int val) {
+        for (int i = 0; i < arr.length; ++i) {
+            if (val == arr[i])
+                return i;
+        }
+        
+        return 0;
     }
 
     @SideOnly(Side.CLIENT)

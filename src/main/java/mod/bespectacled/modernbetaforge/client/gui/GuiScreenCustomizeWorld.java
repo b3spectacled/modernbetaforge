@@ -71,7 +71,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
-    private static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
+    public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     private static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     private static final String PREFIX = "createWorld.customize.custom.";
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.";
@@ -1665,7 +1665,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.exitConfirmation();
                 break;
             case GuiIdentifiers.FUNC_PRVW:
-                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1], this.settings.build()));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build()));
                 break;
         }
         
