@@ -141,6 +141,15 @@ public class ModernBetaGenLayer {
                 genLayer = new GenLayerZoom(2003L, genLayer);
                 genLayer = new GenLayerAddIsland(4L, genLayer);
                 break;
+            case PANGAEA:
+                genLayer = new GenLayerSmallIslands(1L);
+                genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
+                genLayer = new GenLayerZoom(2001L, genLayer);
+                genLayer = new GenLayerZoom(2002L, genLayer);
+                genLayer = new GenLayerZoom(2003L, genLayer);
+                genLayer = new GenLayerAddSnow(2L, genLayer);
+                genLayer = addClimateLayers(genLayer);
+                break;
             default:
                 genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
                 genLayer = new GenLayerAddIsland(1L, genLayer);

@@ -4,7 +4,8 @@ public enum GenLayerType {
     VANILLA("vanilla"),
     CONTINENTAL("continental"),
     ISLANDS("islands"),
-    SMALL_ISLANDS("small_islands");
+    SMALL_ISLANDS("small_islands"),
+    PANGAEA("pangaea");
     
     public final String id;
     

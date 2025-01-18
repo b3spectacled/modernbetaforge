@@ -803,7 +803,7 @@ public class ModernBetaGeneratorSettings {
             
             this.useStrongholds = true;
             this.useVillages = true;
-            this.useVillageVariants = false;
+            this.useVillageVariants = true;
             this.useMineShafts = true;
             this.useTemples = true;
             this.useMonuments = true;

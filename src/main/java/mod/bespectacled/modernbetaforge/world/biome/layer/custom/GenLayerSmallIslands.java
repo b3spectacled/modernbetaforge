@@ -15,7 +15,7 @@ public class GenLayerSmallIslands extends GenLayer {
 
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
         int[] ints = IntCache.getIntCache(areaWidth * areaHeight);
-        
+
         for (int y = 0; y < areaHeight; ++y) {
             for (int x = 0; x < areaWidth; ++x) {
                 ints[x + y * areaWidth] = OCEAN;

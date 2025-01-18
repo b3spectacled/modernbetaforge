@@ -190,6 +190,7 @@ createWorld.customize.custom.layerType.vanilla=Vanilla
 createWorld.customize.custom.layerType.continental=Continental
 createWorld.customize.custom.layerType.islands=Islands
 createWorld.customize.custom.layerType.small_islands=Small Islands
+createWorld.customize.custom.layerType.pangaea=Pangaea
 
 # Single Biome Customization
 createWorld.customize.custom.biomes.title=Customize Biome
