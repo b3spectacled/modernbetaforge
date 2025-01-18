@@ -28,11 +28,11 @@ public class ExecutorWrapper {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> this.shutdown()));
     }
     
-    public void queueTask(Runnable runnable) {
+    public void queueRunnable(Runnable runnable) {
         this.executor.execute(runnable);
     }
     
-    public Future<TaskResult> queueFuture(Callable<TaskResult> callable) {
+    public Future<TaskResult> queueCallable(Callable<TaskResult> callable) {
         return this.executor.submit(callable);
     }
     

@@ -10,6 +10,8 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.google.common.collect.ImmutableSet;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
@@ -19,6 +21,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraftforge.common.BiomeDictionary;
@@ -220,9 +223,20 @@ public class DrawUtil {
                     }
                 }
                 
-                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, height, z)));
-                int color = useBiomeColors && terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
-                
+                int color = terrainType.color;
+                if (useBiomeColors && terrainType == TerrainType.GRASS) {
+                    color =  biome.getGrassColorAtPos(mutablePos.setPos(x, height, z));
+                    
+                    if (biomeSource instanceof ClimateSampler) {
+                        ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                        
+                        Clime clime = climateSampler.sample(x, z);
+                        color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+                    }
+                    
+                    color = MathUtil.convertRGBtoARGB(color);
+                }
+
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 if (useBiomeColors && terrainType == TerrainType.GRASS) {
                     colorVec = scale(colorVec, 0.71f);

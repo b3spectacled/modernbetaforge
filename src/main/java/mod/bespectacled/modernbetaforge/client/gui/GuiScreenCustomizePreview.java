@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder, FormatHelper {
     private enum ProgressState {
-        IDLE, STARTED, FAILED, SUCCEEDED;
+        NOT_STARTED, STARTED, FAILED, SUCCEEDED, LOADED;
     }
     
     private static final String PREFIX = "createWorld.customize.preview.";
@@ -121,7 +121,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceKey).apply(this.chunkSource, this.settings);
         this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
         
-        this.state = ProgressState.IDLE;
+        this.state = ProgressState.NOT_STARTED;
         this.resolution = 512;
         this.useBiomeColors = true;
         this.progress = 0.0f;
@@ -184,7 +184,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.loadMapTexture();
         switch(this.state) {
-            case SUCCEEDED:
+            case LOADED:
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 this.mc.getTextureManager().bindTexture(this.mapLocation);
                 GlStateManager.enableBlend();
@@ -229,7 +229,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
         this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + viewportSize / 2, 16777215);
         
-        if (this.state == ProgressState.SUCCEEDED && this.boundsChecker.inBounds(mouseX, mouseY)) {
+        if (this.state == ProgressState.LOADED && this.boundsChecker.inBounds(mouseX, mouseY)) {
             float x = this.boundsChecker.getRelativeX(mouseX) / (float)viewportSize * this.resolution;
             float y = this.boundsChecker.getRelativeY(mouseY) / (float)viewportSize * this.resolution;
 
@@ -311,6 +311,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.state = ProgressState.STARTED;
         this.updateButtonsEnabled(this.state);
         this.deleteMapTexture();
+        long time = System.currentTimeMillis();
         
         Runnable runnable = () -> {
             try {
@@ -323,7 +324,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.useBiomeColors,
                     current -> this.progress = current
                 );
-                ModernBeta.log(Level.DEBUG, "Finished drawing terrain map!");
+                ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
                 this.state = ProgressState.SUCCEEDED;
                 
             } catch (Exception e) {
@@ -337,11 +338,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             }
         };
         
-        this.executor.queueTask(runnable);
+        this.executor.queueRunnable(runnable);
     }
     
     private void loadMapTexture() {
-        if (this.mapImage != null) {
+        if (this.state == ProgressState.SUCCEEDED) {
             this.mapTexture = new DynamicTexture(this.mapImage.getWidth(), this.mapImage.getHeight());
             this.mc.getTextureManager().loadTexture(this.mapLocation, this.mapTexture);
 
@@ -349,6 +350,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.mapTexture.updateDynamicTexture();
             this.mapImage = null;
             
+            this.state = ProgressState.LOADED;
         }
     }
     
