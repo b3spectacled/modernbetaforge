@@ -82,6 +82,7 @@ public class ModDataFixers {
                     DataFixTags.USE_SANDSTONE,
                     DataFixTags.SPAWN_WOLVES,
                     DataFixTags.SURFACE_BUILDER,
+                    DataFixTags.FIX_BIOME_DEPTH_SCALE,
 
                     // Added in 1.3.0.0 to replace fixedBiome
                     DataFixTags.FIX_SINGLE_BIOME

@@ -153,6 +153,10 @@ public class DataFixers {
         factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(factory.chunkSource, factory.surfaceBuilder);
     }
     
+    public static void fixBiomeDepthScale(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.useBiomeDepthScale = false;
+    }
+    
     public static void fixSkylandsSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId()))
             factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.SKYLANDS.getId();
