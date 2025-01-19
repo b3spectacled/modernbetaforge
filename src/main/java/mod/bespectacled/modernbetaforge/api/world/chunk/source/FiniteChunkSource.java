@@ -26,6 +26,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -427,13 +428,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
+            BiomeInjector.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
+            BiomeInjector.isFluidBlock(context.stateAbove, this.defaultFluid);
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH) && this.isFluidBlock(context.stateAbove);
+            BiomeInjector.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
+            BiomeInjector.isFluidBlock(context.stateAbove, this.defaultFluid);
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
+            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state);
             
         if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;

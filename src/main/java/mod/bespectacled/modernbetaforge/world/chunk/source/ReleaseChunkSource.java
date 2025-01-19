@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
@@ -105,7 +106,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         };
         
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
+            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state);
             
         if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;

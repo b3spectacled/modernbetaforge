@@ -4,7 +4,9 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
@@ -46,5 +48,25 @@ public class BiomeInjector {
     
     private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
         return this.rules.test(context, x, z, step);
+    }
+    
+    public static boolean atBeachDepth(int topHeight, int seaLevel) {
+        return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
+    }
+    
+    public static boolean isBeachBlock(IBlockState blockState) {
+        Block block = blockState.getBlock();
+        
+        // Only handle sand beaches,
+        // due to limitation of heightmap cache.
+        return block == Blocks.SAND;
+    }
+    
+    public static boolean atOceanDepth(int topHeight, int oceanDepth, int seaLevel) {
+        return topHeight < seaLevel - oceanDepth;
+    }
+    
+    public static boolean isFluidBlock(IBlockState blockState, IBlockState defaultFluid) {
+        return blockState.getBlock() == defaultFluid.getBlock();
     }
 }

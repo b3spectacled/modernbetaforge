@@ -21,10 +21,9 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -245,13 +244,13 @@ public abstract class ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH);
+            BiomeInjector.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel());
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            this.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH);
+            BiomeInjector.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH, this.getSeaLevel());
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            this.atBeachDepth(context.pos.getY()) && this.isBeachBlock(context.state);
+            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state);
             
         if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
@@ -306,52 +305,5 @@ public abstract class ChunkSource {
      */
     protected void setForestOctaveNoise(PerlinOctaveNoise forestOctaveNoise) {
         this.forestOctaveNoise = Optional.ofNullable(forestOctaveNoise);
-    }
-
-    /**
-     * Tests whether a given height is where a beach generates.
-     * 
-     * @param topHeight y-coordinate of the highest block for a particular position.
-     * @return Whether the given height for a position is at the depth where beaches generated.
-     */
-    protected boolean atBeachDepth(int topHeight) {
-        int seaLevel = this.getSeaLevel();
-        
-        return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
-    }
-
-    /**
-     * Tests whether a given block state is a beach (sand) block.
-     * 
-     * @param blockState Block state to be tested.
-     * @return Whether the given block state is a sand block.
-     */
-    protected boolean isBeachBlock(IBlockState blockState) {
-        Block block = blockState.getBlock();
-        
-        // Only handle sand beaches,
-        // due to limitation of heightmap cache.
-        return block == Blocks.SAND;
-    }
-    
-    /**
-     * Tests whether a given height is at ocean depth.
-     * 
-     * @param topHeight y-coordinate of the highest block for a particular position.
-     * @param oceanDepth The height depth to test the height against.
-     * @return Whether the given height is below the ocean depth value.
-     */
-    protected boolean atOceanDepth(int topHeight, int oceanDepth) {
-        return topHeight < this.getSeaLevel() - oceanDepth;
-    }
-
-    /**
-     * Tests whether a given block state is the default fluid block.
-     * 
-     * @param blockState Block state to be tested.
-     * @return Whether the given block state is the default fluid block.
-     */
-    protected boolean isFluidBlock(IBlockState blockState) {
-        return blockState.getBlock() == this.defaultFluid.getBlock();
     }
 }
