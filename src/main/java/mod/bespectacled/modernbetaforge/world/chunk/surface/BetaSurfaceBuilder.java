@@ -16,6 +16,11 @@ public class BetaSurfaceBuilder extends SurfaceBuilder {
     public BetaSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(chunkSource, settings);
     }
+    
+    @Override
+    public boolean generatesBeaches() {
+        return true;
+    }
 
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {

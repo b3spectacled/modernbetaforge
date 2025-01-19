@@ -127,5 +127,9 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
             }
         }
     }
-
+    
+    @Override
+    public boolean generatesBeaches() {
+        return true;
+    }
 }

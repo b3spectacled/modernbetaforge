@@ -92,8 +92,17 @@ public abstract class SurfaceBuilder {
      * @param biome The biome to check.
      * @return Whether the given biome uses a custom surface.
      */
-    public boolean usesCustomSurface(Biome biome) {
+    public boolean isCustomSurface(Biome biome) {
         return this.biomesWithCustomSurfaces.contains(biome);
+    }
+    
+    /**
+     * Gets whether the surface builder generates beaches.
+     * 
+     * @return Whether the surface builder generates beaches. False by default.
+     */
+    public boolean generatesBeaches() {
+        return false;
     }
     
     /**

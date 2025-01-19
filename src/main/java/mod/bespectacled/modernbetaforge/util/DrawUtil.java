@@ -52,15 +52,7 @@ public class DrawUtil {
         .add(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey())
         .add(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey())
         .build();
-    
-    private static final Set<ResourceLocation> VALID_BEACH_SURFACES = ImmutableSet.<ResourceLocation>builder()
-        .add(ModernBetaBuiltInTypes.Surface.ALPHA.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Surface.ALPHA_1_2.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Surface.PE.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey())
-        .build();
-    
+
     private static final int COLOR_GRASS = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
@@ -187,7 +179,6 @@ public class DrawUtil {
     public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeColors, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         ResourceLocation chunkSourceKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
-        ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         int offsetX = size / 2;
@@ -217,7 +208,7 @@ public class DrawUtil {
                 Biome biome = biomeSource.getBiome(x, z);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 
-                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilderKey) && !surfaceBuilder.usesCustomSurface(biome)) {
+                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilder) && !surfaceBuilder.isCustomSurface(biome)) {
                     if (isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
                         terrainType = TerrainType.SAND;
                     }
@@ -349,7 +340,7 @@ public class DrawUtil {
         return false;
     }
 
-    private static boolean isBeachSurfaceBuilder(ResourceLocation chunkSource, ResourceLocation surfaceBuilder) {
-        return !INVALID_CHUNK_SOURCES.contains(chunkSource) && VALID_BEACH_SURFACES.contains(surfaceBuilder);
+    private static boolean isBeachSurfaceBuilder(ResourceLocation chunkSource, SurfaceBuilder surfaceBuilder) {
+        return !INVALID_CHUNK_SOURCES.contains(chunkSource) && surfaceBuilder.generatesBeaches();
     }
 }
