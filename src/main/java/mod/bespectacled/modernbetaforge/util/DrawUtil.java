@@ -18,12 +18,13 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -38,6 +39,7 @@ public class DrawUtil {
         VOID(COLOR_VOID),
         STONE(COLOR_STONE),
         TERRACOTTA(COLOR_TERRACOTTA),
+        MYCELIUM(COLOR_MYCELIUM),
         MARKER(COLOR_CENTER);
         
         private int color;
@@ -62,6 +64,7 @@ public class DrawUtil {
     private static final int COLOR_VOID = MathUtil.convertARGBComponentsToInt(0, 0, 0, 0);
     private static final int COLOR_STONE = MathUtil.convertARGBComponentsToInt(255, 112, 112, 112);
     private static final int COLOR_TERRACOTTA = MathUtil.convertARGBComponentsToInt(255, 216, 127, 51);
+    private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int size, Consumer<Float> progressTracker) {
@@ -108,11 +111,11 @@ public class DrawUtil {
         return image;
     }
 
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, BiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
         return createTerrainMap(chunkSource, biomeProvider, size, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, BiomeProvider biomeProvider, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -144,11 +147,10 @@ public class DrawUtil {
                 if (drawMarkers) {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
                 }
-                
-                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, height, z)));
-                int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
-                
+
+                int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeProvider.getBiomeSource(), true, terrainType);
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                
                 if (terrainType == TerrainType.GRASS) {
                     colorVec = scale(colorVec, 0.71f);
                 }
@@ -213,22 +215,10 @@ public class DrawUtil {
                         terrainType = TerrainType.SAND;
                     }
                 }
-                
-                int color = terrainType.color;
-                if (useBiomeColors && terrainType == TerrainType.GRASS) {
-                    color =  biome.getGrassColorAtPos(mutablePos.setPos(x, height, z));
-                    
-                    if (biomeSource instanceof ClimateSampler) {
-                        ClimateSampler climateSampler = (ClimateSampler)biomeSource;
-                        
-                        Clime clime = climateSampler.sample(x, z);
-                        color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
-                    }
-                    
-                    color = MathUtil.convertRGBtoARGB(color);
-                }
 
+                int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeSource, useBiomeColors, terrainType);
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                
                 if (useBiomeColors && terrainType == TerrainType.GRASS) {
                     colorVec = scale(colorVec, 0.71f);
                 }
@@ -298,7 +288,10 @@ public class DrawUtil {
     
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
         if (terrainType == TerrainType.GRASS) {
-            if (BiomeDictionary.hasType(biome, Type.MESA)) {
+            if (BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
+                terrainType = TerrainType.MYCELIUM;
+                
+            } else if (BiomeDictionary.hasType(biome, Type.MESA)) {
                 terrainType = TerrainType.TERRACOTTA;
             
             } else if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
@@ -330,6 +323,27 @@ public class DrawUtil {
         }
         
         return terrainType;
+    }
+    
+    private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, BiomeSource biomeSource, boolean useBiomeColors, TerrainType terrainType) {
+        int color = terrainType.color;
+        
+        if (useBiomeColors && terrainType == TerrainType.GRASS) {
+            color =  biome.getGrassColorAtPos(blockPos);
+            
+            if (biomeSource instanceof ClimateSampler) {
+                ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                
+                if (climateSampler.sampleBiomeColor()) {
+                    Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
+                    color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+                }
+            }
+            
+            color = MathUtil.convertRGBtoARGB(color);
+        }
+        
+        return color;
     }
     
     private static boolean isSandyBeach(int x, int z, Optional<PerlinOctaveNoise> noise) {
