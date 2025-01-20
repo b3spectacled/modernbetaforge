@@ -314,7 +314,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         @Override
         protected void drawSlot(int preset, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
             Info info = GuiScreenCustomizePresets.this.presets.get(preset);
-            int maxChars = 34;
             int paddingY = 2;
             
             // Render preset icon

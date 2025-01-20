@@ -265,7 +265,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.biomeSource.getBiome((int)x, (int)y);
             
-            boolean inWater = height < chunkSource.getSeaLevel() - 1;
+            boolean inWater = height < this.chunkSource.getSeaLevel() - 1;
             IBlockState state = inWater ? BlockStates.WATER : BlockStates.STONE;
             IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
             
