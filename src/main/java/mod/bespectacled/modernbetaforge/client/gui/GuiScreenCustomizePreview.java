@@ -241,8 +241,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
         int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
         
-        this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen + 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
-        this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
+        if (!seedField.isEmpty()) {
+            this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen + 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
+            this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
+        }
         
         if (this.hoveredSeedField && !this.copiedSeedField) {
             this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
@@ -358,6 +360,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (this.worldSeed.isEmpty()) {
             this.seed = new Random().nextLong();
             this.initSources(this.seed, this.settings);
+            this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
         }
         
         Runnable runnable = () -> {
@@ -427,7 +430,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private String getFormattedSeed() {
-        return this.worldSeed.isEmpty() ? new Long(this.seed).toString() : this.worldSeed; 
+        return this.worldSeed.isEmpty() ? this.state == ProgressState.NOT_STARTED ? "" : new Long(this.seed).toString() : this.worldSeed; 
     }
     
     private int getSeedFieldX() {
