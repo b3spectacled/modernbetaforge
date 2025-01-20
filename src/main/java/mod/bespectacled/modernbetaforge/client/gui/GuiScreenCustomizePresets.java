@@ -323,28 +323,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             // Render preset name
             GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, 16777215);
             
-            // Render preset description, handles long strings by breaking into two lines
-            if (info.desc.length() > maxChars) {
-                String[] infoSplit = info.desc.split(" ");
-                
-                StringBuilder line0 = new StringBuilder();
-                StringBuilder line1 = new StringBuilder();
-                
-                int totalChars = 0;
-                for (int i = 0; i < infoSplit.length; ++i) {
-                    totalChars += infoSplit[i].length() + 1;
-                    
-                    if (totalChars > maxChars) {
-                        line1.append(infoSplit[i]).append(" ");
-                    } else {
-                        line0.append(infoSplit[i]).append(" ");
-                    }
+            // Render preset description, splitting if too long
+            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, 190);
+            if (splitString.size() > 1) {
+                for (int i = 0; i < splitString.size(); ++i) {
+                    String line = splitString.get(i);
+                    GuiScreenCustomizePresets.this.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, 10526880);
                 }
                 
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(line0.toString(), x + SLOT_HEIGHT + 10, y + 13 + paddingY, 10526880);
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(line1.toString(), x + SLOT_HEIGHT + 10, y + 23 + paddingY, 10526880);
             } else {
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 14 + paddingY, 10526880);
+                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, 10526880);
             }
         }
 

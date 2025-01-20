@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Longs;
@@ -58,18 +59,22 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_GENERATE = 2;
     private static final int GUI_ID_CANCEL = 3;
     
+    private static final long COPIED_SEED_WAIT_TIME = 1000L;
+    
     private final GuiScreenCustomizeWorld parent;
     private final String worldSeed;
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorWrapper executor;
     private final ResourceLocation mapLocation;
-    private final BoundChecker boundsChecker;
+    private final BoundsChecker mapBounds;
+    private final BoundsChecker seedFieldBounds;
     private final MutableBlockPos mutablePos;
     
-    private final ChunkSource chunkSource;
-    private final BiomeSource biomeSource;
-    private final SurfaceBuilder surfaceBuilder;
-    private final BiomeInjectionRules injectionRules;
+    private long seed;
+    private ChunkSource chunkSource;
+    private BiomeSource biomeSource;
+    private SurfaceBuilder surfaceBuilder;
+    private BiomeInjectionRules injectionRules;
     
     private GuiListButton biomeColors;
     private GuiSlider resolutionSlider;
@@ -84,6 +89,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private float progress;
     private String hintText;
     private String progressText;
+    private boolean hoveredSeedField;
+    private boolean copiedSeedField;
+    private long copiedSeedFieldTime;
     
     protected String title;
 
@@ -94,28 +102,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.settings = settings;
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
-        this.boundsChecker = new BoundChecker();
+        this.mapBounds = new BoundsChecker();
+        this.seedFieldBounds = new BoundsChecker();
         this.mutablePos = new MutableBlockPos();
-        
-        long seed = new Random().nextLong();
-        if (!this.worldSeed.isEmpty()) {
-            try {
-                seed = Longs.tryParse(this.worldSeed);
-                
-            } catch (Exception e) {
-                seed = this.worldSeed.hashCode();
-                
-            }
-        }
-        
-        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
-        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
-        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
-        
-        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, this.settings);
-        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, this.settings);
-        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceKey).apply(this.chunkSource, this.settings);
-        this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
+
+        this.seed = parseSeed(worldSeed);
+        this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
         this.resolution = 512;
@@ -147,7 +139,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textureY = this.height / 2 - viewportSize / 2;
         textureY -= TEXTURE_Y_OFFSET;
         
-        this.boundsChecker.updateBounds(textureX, textureY, viewportSize, viewportSize);
+        this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
+        this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
         this.updateButtonsEnabled(this.state);
     }
     
@@ -155,6 +148,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         this.list.handleMouseInput();
+        
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        
+        this.hoveredSeedField = this.seedFieldBounds.inBounds(mouseX, mouseY);
     }
     
     @Override
@@ -165,6 +163,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
+        
+        if (System.currentTimeMillis() - this.copiedSeedFieldTime > COPIED_SEED_WAIT_TIME) {
+            this.copiedSeedField = false;
+        }
         
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, 16777215);
@@ -220,16 +222,39 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 
             default:
                 this.hintText = I18n.format(PREFIX + "hint");
-                
+
                 this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
         }
+
+        String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
+        String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
+        String seedField = this.getFormattedSeed();
+        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
+        int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
+        int seedColor = this.hoveredSeedField ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? 10526880 : 16777120 : 16777215;
+        int seedFieldX = this.width / 2 + seedTextLen / 2 - seedFieldLen;
+        int seedFieldHeight = this.height / 2 + viewportSize / 2;
         
-        String seedTest = String.format("%s: %s", I18n.format(PREFIX + "seed"), this.worldSeed);
-        this.drawCenteredString(this.fontRenderer, seedTest, this.width / 2, this.height / 2 + viewportSize / 2, 16777215);
+        this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, 16777215);
+        this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
         
-        if (this.state == ProgressState.LOADED && this.boundsChecker.inBounds(mouseX, mouseY)) {
-            float x = this.boundsChecker.getRelativeX(mouseX) / (float)viewportSize * this.resolution;
-            float y = this.boundsChecker.getRelativeY(mouseY) / (float)viewportSize * this.resolution;
+        int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
+        int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
+        
+        this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen + 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
+        this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
+        
+        if (this.hoveredSeedField && !this.copiedSeedField) {
+            this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
+            
+        } else if (this.copiedSeedField) {
+            this.drawHoveringText(I18n.format(PREFIX + "copied"), mouseX, mouseY);
+            
+        }
+        
+        if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
+            float x = this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.resolution;
+            float y = this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.resolution;
 
             x -= (float)this.resolution / 2f;
             y -= (float)this.resolution / 2f;
@@ -248,7 +273,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             String coordinateText = String.format("%d, %d, %d", (int)x, height, (int)y);
             String biomeText = biome.getBiomeName();
             
-            this.drawHoveringText(ImmutableList.of(coordinateText, biomeText), mouseX, mouseY);
+            if (!this.copiedSeedField) {
+                this.drawHoveringText(ImmutableList.of(coordinateText, biomeText), mouseX, mouseY);
+            }
         }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -293,6 +320,19 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         super.keyTyped(typedChar, keyCode);
     }
+    
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton == 0 && this.hoveredSeedField) {
+            GuiScreen.setClipboardString(this.getFormattedSeed());
+            ModernBeta.log(I18n.format(PREFIX + "copied"));
+            
+            this.copiedSeedField = true;
+            this.copiedSeedFieldTime = System.currentTimeMillis();
+        }
+        
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
@@ -314,6 +354,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.updateButtonsEnabled(this.state);
         this.deleteMapTexture();
         long time = System.currentTimeMillis();
+
+        if (this.worldSeed.isEmpty()) {
+            this.seed = new Random().nextLong();
+            this.initSources(this.seed, this.settings);
+        }
         
         Runnable runnable = () -> {
             try {
@@ -370,6 +415,56 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.cancel.enabled = enabled;
     }
     
+    private void initSources(long seed, ModernBetaGeneratorSettings settings) {
+        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
+        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
+        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
+        
+        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, settings);
+        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, settings);
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceKey).apply(this.chunkSource, settings);
+        this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
+    }
+    
+    private String getFormattedSeed() {
+        return this.worldSeed.isEmpty() ? new Long(this.seed).toString() : this.worldSeed; 
+    }
+    
+    private int getSeedFieldX() {
+        String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
+        String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
+        String seedField = this.getFormattedSeed();
+        
+        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
+        int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
+        
+        return this.width / 2 + seedTextLen / 2 - seedFieldLen;
+    }
+    
+    private int getSeedFieldY() {
+        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        
+        return this.height / 2 + viewportSize / 2;
+    }
+    
+    private int getSeedFieldWidth() {
+        return this.fontRenderer.getStringWidth(this.getFormattedSeed());
+    }
+    
+    private static long parseSeed(String seedString) {
+        long seed = new Random().nextLong();
+        
+        if (!seedString.isEmpty()) {
+            try {
+                seed = Longs.tryParse(seedString);
+            } catch (Exception e) {
+                seed = seedString.hashCode();
+            }
+        }
+        
+        return seed;
+    }
+    
     private static int getNdx(int[] arr, int val) {
         for (int i = 0; i < arr.length; ++i) {
             if (val == arr[i])
@@ -417,13 +512,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     @SideOnly(Side.CLIENT)
-    private static class BoundChecker {
+    private static class BoundsChecker {
         private int x;
         private int y;
         private int width;
         private int height;
         
-        public BoundChecker() {
+        public BoundsChecker() {
             this.x = 0;
             this.y = 0;
             this.width = 0;

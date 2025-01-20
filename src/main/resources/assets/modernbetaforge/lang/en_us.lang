@@ -23,6 +23,8 @@ createWorld.customize.preview.progress=Generating preview..
 createWorld.customize.preview.hint=Preview not generated
 createWorld.customize.preview.failure=Failed to generate!
 createWorld.customize.preview.seed=World Seed
+createWorld.customize.preview.copy=Copy to clipboard
+createWorld.customize.preview.copied=Copied to clipboard!
 
 # Page Tabs
 createWorld.customize.custom.tab.page0=Basic
