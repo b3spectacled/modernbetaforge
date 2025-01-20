@@ -163,13 +163,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
+        this.list.drawScreen(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, 16777215);
         
         if (System.currentTimeMillis() - this.copiedSeedFieldTime > COPIED_SEED_WAIT_TIME) {
             this.copiedSeedField = false;
         }
-        
-        this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, 16777215);
 
         int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
         int textureX = this.width / 2 - viewportSize / 2;
@@ -279,8 +280,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.drawHoveringText(ImmutableList.of(coordinateText, biomeText), mouseX, mouseY);
             }
         }
-        
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
     @Override
