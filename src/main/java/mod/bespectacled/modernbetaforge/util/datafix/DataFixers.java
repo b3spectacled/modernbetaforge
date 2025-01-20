@@ -173,7 +173,7 @@ public class DataFixers {
     }
     
     public static void fixResourceLocationChunk(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
             factory.chunkSource = ModernBeta.createRegistryKey(registryString).toString();
@@ -181,7 +181,7 @@ public class DataFixers {
     }
     
     public static void fixResourceLocationBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, ModernBetaBuiltInTypes.Biome.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
             factory.biomeSource = ModernBeta.createRegistryKey(registryString).toString();
@@ -189,7 +189,7 @@ public class DataFixers {
     }
     
     public static void fixResourceLocationSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.SURFACE_BUILDER);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.SURFACE_BUILDER, ModernBetaBuiltInTypes.Surface.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
             factory.surfaceBuilder = ModernBeta.createRegistryKey(registryString).toString();
@@ -197,7 +197,7 @@ public class DataFixers {
     }
     
     public static void fixResourceLocationCarver(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CAVE_CARVER);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CAVE_CARVER, ModernBetaBuiltInTypes.Carver.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
             factory.caveCarver = ModernBeta.createRegistryKey(registryString).toString();
@@ -205,7 +205,7 @@ public class DataFixers {
     }
     
     public static void fixScaleNoiseScaleX(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
         boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
         boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
         
@@ -215,7 +215,7 @@ public class DataFixers {
     }
     
     public static void fixScaleNoiseScaleZ(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
         boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
         boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
         
