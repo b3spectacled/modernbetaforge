@@ -33,22 +33,28 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DrawUtil {
     private enum TerrainType {
-        GRASS(COLOR_GRASS),
-        SAND(COLOR_SAND),
-        SNOW(COLOR_SNOW),
+        GRASS(COLOR_GRASS, true),
+        SAND(COLOR_SAND, true),
+        SNOW(COLOR_SNOW, true),
+        STONE(COLOR_STONE, true),
+        TERRACOTTA(COLOR_TERRACOTTA, true),
+        MYCELIUM(COLOR_MYCELIUM, true),
         WATER(COLOR_WATER),
         FIRE(COLOR_FIRE),
         ICE(COLOR_ICE),
         VOID(COLOR_VOID),
-        STONE(COLOR_STONE),
-        TERRACOTTA(COLOR_TERRACOTTA),
-        MYCELIUM(COLOR_MYCELIUM),
         MARKER(COLOR_CENTER);
         
-        private int color;
+        private final int color;
+        private final boolean snowy; 
         
         private TerrainType(int color) {
+            this(color, false);
+        }
+        
+        private TerrainType(int color, boolean snowy) {
             this.color = color;
+            this.snowy = snowy;
         }
     }
     
@@ -74,6 +80,10 @@ public class DrawUtil {
         return createBiomeMap(biomeFunc, size, size, false, progressTracker);
     }
     
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
+        return createTerrainMap(chunkSource, biomeProvider, size, size, false, progressTracker);
+    }
+    
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
@@ -85,7 +95,7 @@ public class DrawUtil {
             for (int localZ = 0; localZ < length; ++localZ) {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
-
+    
                 TerrainType terrainType = TerrainType.GRASS;
                 Biome biome = biomeFunc.apply(x, z);
                 
@@ -94,6 +104,8 @@ public class DrawUtil {
                 }
                 
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
+                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
+                
                 if (drawMarkers) {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
                 }
@@ -114,10 +126,6 @@ public class DrawUtil {
         return image;
     }
 
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
-        return createTerrainMap(chunkSource, biomeProvider, size, size, false, progressTracker);
-    }
-    
     public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
@@ -133,11 +141,11 @@ public class DrawUtil {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-
-                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height);
-                
                 Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
+
+                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height, biome);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
+                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
                 
                 if (drawMarkers) {
                     terrainType = getTerrainTypeByMarker(x, z, terrainType);
@@ -189,11 +197,11 @@ public class DrawUtil {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-
-                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height);
-                
                 Biome biome = biomeSource.getBiome(x, z);
+
+                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height, biome);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
+                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
                 
                 if (isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilder) && !surfaceBuilder.isCustomSurface(biome)) {
                     boolean isBeach = terrainType == TerrainType.GRASS && height < chunkSource.getSeaLevel() + 2;
@@ -203,7 +211,8 @@ public class DrawUtil {
                     }
                 }
 
-                int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeSource, useBiomeColors, terrainType);
+                mutablePos.setPos(x, height, z);
+                int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeColors, terrainType);
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 
                 if (useBiomeColors && terrainType == TerrainType.GRASS) {
@@ -273,7 +282,7 @@ public class DrawUtil {
         return newVector;
     }
     
-    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, int x, int z, int height) {
+    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, int x, int z, int height, Biome biome) {
         TerrainType terrainType = TerrainType.GRASS;
         
         if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
@@ -309,10 +318,6 @@ public class DrawUtil {
     }
     
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
-        if (terrainType == TerrainType.VOID) {
-            return terrainType;
-        }
-        
         if (terrainType == TerrainType.GRASS) {
             if (BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
                 terrainType = TerrainType.MYCELIUM;
@@ -325,14 +330,20 @@ public class DrawUtil {
                 
             }
         }
-        
-        if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
-            if (terrainType != TerrainType.WATER) {
+
+        return terrainType;
+    }
+    
+    private static TerrainType getTerrainTypeBySnowiness(Biome biome, TerrainType terrainType) {
+        if (terrainType.snowy) {
+            if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
                 terrainType = TerrainType.SNOW;
-                
-            } else if (terrainType == TerrainType.WATER) {
+            }
+        }
+        
+        if (terrainType == TerrainType.WATER) {
+            if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
                 terrainType = TerrainType.ICE;
-                
             }
         }
         
