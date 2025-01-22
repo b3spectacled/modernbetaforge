@@ -246,6 +246,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
+     * Get the finite level generation phase.
+     * 
+     * @return The current generation phase.
+     */
+    public String getPhase() {
+        return this.phase;
+    }
+    
+    /**
      * Sets the level notifier consumer.
      * 
      * @param levelNotifier The level notifier consuming a String.
