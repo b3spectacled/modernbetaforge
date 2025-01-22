@@ -40,7 +40,7 @@ public class ModernBetaBiomeRegistrar {
     public static void register(Register<Biome> event) {
         BiomeRegistry biomeRegistry = new BiomeRegistry(event.getRegistry());
         
-        biomeRegistry.register(new BiomeBetaIceDesert(), ModernBetaBiomeTags.BETA_ICE_DESERT, Type.SANDY, Type.COLD, Type.SPARSE);
+        biomeRegistry.register(new BiomeBetaIceDesert(), ModernBetaBiomeTags.BETA_ICE_DESERT, Type.SANDY, Type.SNOWY, Type.COLD, Type.SPARSE);
         biomeRegistry.register(new BiomeBetaTundra(), ModernBetaBiomeTags.BETA_TUNDRA, Type.SNOWY, Type.COLD, Type.SPARSE);
         biomeRegistry.register(new BiomeBetaSavanna(), ModernBetaBiomeTags.BETA_SAVANNA, Type.PLAINS, Type.SAVANNA, Type.SPARSE, Type.DRY);
         biomeRegistry.register(new BiomeBetaDesert(), ModernBetaBiomeTags.BETA_DESERT, Type.SANDY, Type.HOT, Type.SPARSE, Type.DRY);

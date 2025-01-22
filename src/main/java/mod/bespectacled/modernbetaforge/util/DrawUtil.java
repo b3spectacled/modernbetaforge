@@ -14,11 +14,14 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -129,17 +132,9 @@ public class DrawUtil {
             for (int localZ = 0; localZ < length; ++localZ) {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
-
-                TerrainType terrainType = TerrainType.GRASS;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                
-                if (height < chunkSource.getSeaLevel() - 1) {
-                    terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
-                }
-                
-                if (height == 0) {
-                    terrainType = TerrainType.VOID;
-                }
+
+                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height);
                 
                 Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
@@ -193,25 +188,17 @@ public class DrawUtil {
             for (int localZ = 0; localZ < size; ++localZ) {
                 int x = localX - offsetX;
                 int z = localZ - offsetZ;
-
-                TerrainType terrainType = TerrainType.GRASS;
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                
-                if (height < chunkSource.getSeaLevel() - 1) {
-                    terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
-                }
-                
-                if (height == 0) {
-                    terrainType = TerrainType.VOID;
-                }
-                
-                boolean isBeach = terrainType == TerrainType.GRASS && height < chunkSource.getSeaLevel() + 2;
+
+                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height);
                 
                 Biome biome = biomeSource.getBiome(x, z);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 
-                if (isBeach && isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilder) && !surfaceBuilder.isCustomSurface(biome)) {
-                    if (isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
+                if (isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilder) && !surfaceBuilder.isCustomSurface(biome)) {
+                    boolean isBeach = terrainType == TerrainType.GRASS && height < chunkSource.getSeaLevel() + 2;
+                    
+                    if (isBeach && isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
                         terrainType = TerrainType.SAND;
                     }
                 }
@@ -273,7 +260,7 @@ public class DrawUtil {
     }
     
     private static boolean onAxisZ(int x, int z) {
-        return x !=0 && z ==0;
+        return x != 0 && z == 0;
     }
     
     private static Vector4f scale(Vector4f vector, float factor) {
@@ -286,7 +273,46 @@ public class DrawUtil {
         return newVector;
     }
     
+    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, int x, int z, int height) {
+        TerrainType terrainType = TerrainType.GRASS;
+        
+        if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
+            FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
+            int offsetX = finiteChunkSource.getLevelWidth() / 2;
+            int offsetZ = finiteChunkSource.getLevelLength() / 2;
+            
+            x += offsetX;
+            z += offsetZ;
+            
+            Block block = finiteChunkSource.getLevelBlock(x, height, z);
+            Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
+            
+            if (block == Blocks.SAND) {
+                terrainType = TerrainType.SAND;
+            } else if (block == Blocks.GRAVEL || block == Blocks.STONE) {
+                terrainType = TerrainType.STONE;
+            }
+            
+            if (blockAbove == Blocks.WATER) {
+                terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+            }
+            
+        } else if (height < chunkSource.getSeaLevel() - 1) {
+            terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+        }
+        
+        if (height == 0) {
+            terrainType = TerrainType.VOID;
+        }
+        
+        return terrainType;
+    }
+    
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
+        if (terrainType == TerrainType.VOID) {
+            return terrainType;
+        }
+        
         if (terrainType == TerrainType.GRASS) {
             if (BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
                 terrainType = TerrainType.MYCELIUM;
@@ -297,13 +323,17 @@ public class DrawUtil {
             } else if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
                 terrainType = TerrainType.SAND;
                 
-            } else if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
-                terrainType = TerrainType.SNOW;
             }
         }
         
-        if (terrainType == TerrainType.WATER && BiomeDictionary.hasType(biome, Type.SNOWY)) {
-            terrainType = TerrainType.ICE;
+        if (BiomeDictionary.hasType(biome, Type.SNOWY)) {
+            if (terrainType != TerrainType.WATER) {
+                terrainType = TerrainType.SNOW;
+                
+            } else if (terrainType == TerrainType.WATER) {
+                terrainType = TerrainType.ICE;
+                
+            }
         }
         
         return terrainType;
