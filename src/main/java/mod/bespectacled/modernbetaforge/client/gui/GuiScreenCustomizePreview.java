@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
@@ -25,6 +26,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -37,6 +39,7 @@ import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.biome.Biome;
@@ -265,11 +268,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.biomeSource.getBiome((int)x, (int)y);
             
-            boolean inWater = height < this.chunkSource.getSeaLevel() - 1;
-            IBlockState state = inWater ? BlockStates.WATER : BlockStates.STONE;
-            IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
-            
-            BiomeInjectionContext context = new BiomeInjectionContext(this.mutablePos.setPos(x, height, y), state, stateAbove, biome);
+            BiomeInjectionContext context = this.createInjectionContext((int)x, (int)y, height, biome);
             Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.PRE_SURFACE);
             biome = injectedBiome != null ? injectedBiome : biome;
             
@@ -451,6 +450,27 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private int getSeedFieldWidth() {
         return this.fontRenderer.getStringWidth(this.getFormattedSeed());
+    }
+    
+    private BiomeInjectionContext createInjectionContext(int x, int z, int height, Biome biome) {
+        boolean inWater = height < this.chunkSource.getSeaLevel() - 1;
+        
+        if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
+            FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
+            int offsetX = finiteChunkSource.getLevelWidth() / 2;
+            int offsetZ = finiteChunkSource.getLevelLength() / 2;
+                
+            x += offsetX;
+            z += offsetZ;
+            
+            Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
+            
+            inWater = blockAbove == Blocks.WATER;
+        }
+        
+        IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
+        
+        return new BiomeInjectionContext(this.mutablePos.setPos(x, height, z), BlockStates.STONE, stateAbove, biome);
     }
     
     private static long parseSeed(String seedString) {
