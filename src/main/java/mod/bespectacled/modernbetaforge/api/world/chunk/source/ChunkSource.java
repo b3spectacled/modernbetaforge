@@ -73,9 +73,10 @@ public abstract class ChunkSource {
             .map(e -> e.apply(this, this.settings))
             .collect(Collectors.toList());
         
-        this.beachOctaveNoise = Optional.empty();
-        this.surfaceOctaveNoise = Optional.empty();
-        this.forestOctaveNoise = Optional.empty();
+        Random random = new Random(seed);
+        this.beachOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 4, true));
+        this.surfaceOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 4, true));
+        this.forestOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 8, true));
         
         // Set default cloud height
         this.setCloudHeight(this.worldHeight - 20);

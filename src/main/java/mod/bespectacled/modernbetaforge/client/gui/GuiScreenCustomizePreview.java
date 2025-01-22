@@ -150,7 +150,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        this.list.handleMouseInput();
         
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;

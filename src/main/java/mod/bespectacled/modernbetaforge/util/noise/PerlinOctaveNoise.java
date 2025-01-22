@@ -18,7 +18,7 @@ public class PerlinOctaveNoise {
     /*
      * Beta 3D array noise sampler.
      */
-    public double[] sampleBeta(
+    public final double[] sampleBeta(
         double x,
         double y,
         double z, 
@@ -56,7 +56,7 @@ public class PerlinOctaveNoise {
     /*
      * Alpha 3D array noise sampler.
      */
-    public double[] sampleAlpha(
+    public final double[] sampleAlpha(
         double x,
         double y,
         double z, 
