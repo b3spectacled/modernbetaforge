@@ -37,7 +37,7 @@ public abstract class SurfaceBuilder {
 
     // Set for specifying which biomes should use their vanilla surface builders.
     // Done on per-biome basis for best mod compatibility.
-    private final Set<Biome> biomesWithCustomSurfaces = new HashSet<Biome>(
+    private final Set<Biome> biomesWithCustomSurfaces = new HashSet<>(
         ModernBetaBiomeLists.BUILTIN_BIOMES_WITH_CUSTOM_SURFACES
     );
     
@@ -114,18 +114,19 @@ public abstract class SurfaceBuilder {
 
     /**
      * Checks whether a given biome is within the set of biomes using custom surfaces.
-     * @deprecated This is no longer used.
+     * [Deprecated] This is no longer used.
      * 
      * @param biome The biome to check.
      * @return Whether the given biome uses a custom surface.
      */
+    @Deprecated
     public boolean isCustomSurface(Biome biome) {
         return this.biomesWithCustomSurfaces.contains(biome);
     }
 
     /**
      * Samples the surface depth at the given coordinates.
-     * @deprecated This method has been moved to {@link NoiseSurfaceBuilder}.
+     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
@@ -139,7 +140,7 @@ public abstract class SurfaceBuilder {
 
     /**
      * Determines whether stone basins should generate given the surface depth.
-     * @deprecated This method has been moved to {@link NoiseSurfaceBuilder}.
+     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
      * 
      * @param surfaceDepth The surface depth noise value.
      * @return Whether a stone basin should generate at the given coordinates.
@@ -151,7 +152,7 @@ public abstract class SurfaceBuilder {
 
     /**
      * Gets whether the surface builder generates beaches.
-     * @deprecated This was previously used just for the map previewer. Don't use this.
+     * [Deprecated] This was previously used just for the map previewer. Don't use this.
      * 
      * @return Whether the surface builder generates beaches. False by default.
      */
@@ -229,7 +230,7 @@ public abstract class SurfaceBuilder {
     /**
      * Gets the PerlinOctaveNoise sampler used for beach generation.
      * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
-     * @deprecate This method has been moved to {@link NoiseSurfaceBuilder}.
+     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
      * 
      * @return The noise sampler.
      */
@@ -241,7 +242,7 @@ public abstract class SurfaceBuilder {
     /**
      * Gets the PerlinOctaveNoise sampler used for surface generation.
      * Will try to use the sampler from {@link ChunkSource#getSurfaceOctaveNoise() getSurfaceOctaveNoise} if possible, otherwise a default sampler.
-     * @deprecate This method has been moved to {@link NoiseSurfaceBuilder}.
+     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
      *
      * @return The noise sampler.
      */
