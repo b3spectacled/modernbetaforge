@@ -227,8 +227,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
                 
                 if (this.chunkSource instanceof FiniteChunkSource && !((FiniteChunkSource)this.chunkSource).hasPregenerated()) {
-                    String levelProgressText = ((FiniteChunkSource)this.chunkSource).getPhase() + "..";
-                    this.drawCenteredString(this.fontRenderer, levelProgressText, this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
+                    String levelProgressText = ((FiniteChunkSource)this.chunkSource).getPhase();
+                    
+                    if (levelProgressText != null) {
+                        this.drawCenteredString(this.fontRenderer, levelProgressText + "..", this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
+                    }
                 } else {
                     this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
                 }
