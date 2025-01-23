@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.setting.visitor;
+package mod.bespectacled.modernbetaforge.property.visitor;
 
 import com.google.gson.JsonObject;
 

@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.world.setting.visitor;
+package mod.bespectacled.modernbetaforge.property.visitor;
 
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;

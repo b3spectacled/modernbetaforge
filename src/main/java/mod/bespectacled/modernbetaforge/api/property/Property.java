@@ -3,10 +3,10 @@ package mod.bespectacled.modernbetaforge.api.property;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.setting.visitor.EntryValuePropertyVisitor;
-import mod.bespectacled.modernbetaforge.world.setting.visitor.FactoryPropertyVisitor;
-import mod.bespectacled.modernbetaforge.world.setting.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
