@@ -297,7 +297,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
             int tpX = (int)x;
             int tpZ = (int)y;
-            int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height;
+            int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height + 1;
             this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
             
             if (!this.copiedSeedField && !this.copiedTpCommand) {

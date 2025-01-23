@@ -311,7 +311,7 @@ public class DrawUtil {
             }
         }
         
-        if (height == 0) {
+        if (height <= 0) {
             terrainType = TerrainType.VOID;
         }
         
