@@ -2,13 +2,15 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Longs;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
@@ -93,8 +95,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private String hintText;
     private String progressText;
     private boolean hoveredSeedField;
+    private boolean hoveredMap;
     private boolean copiedSeedField;
+    private boolean copiedTpCommand;
     private long copiedSeedFieldTime;
+    private long copiedTpCommandTime;
+    private Supplier<String> tpCallback;
     
     protected String title;
 
@@ -155,6 +161,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         this.hoveredSeedField = this.seedFieldBounds.inBounds(mouseX, mouseY);
+        this.hoveredMap = this.mapBounds.inBounds(mouseX, mouseY);
     }
     
     @Override
@@ -172,6 +179,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         if (System.currentTimeMillis() - this.copiedSeedFieldTime > COPIED_SEED_WAIT_TIME) {
             this.copiedSeedField = false;
+        }
+        
+        if (System.currentTimeMillis() - this.copiedTpCommandTime > COPIED_SEED_WAIT_TIME) {
+            this.copiedTpCommand = false;
         }
 
         int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
@@ -256,11 +267,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
         }
         
-        if (this.hoveredSeedField && !this.copiedSeedField) {
+        if (this.hoveredSeedField && !this.copiedSeedField && !this.copiedTpCommand) {
             this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
             
         } else if (this.copiedSeedField) {
             this.drawHoveringText(I18n.format(PREFIX + "copied"), mouseX, mouseY);
+            
+        } else if (this.copiedTpCommand) {
+            this.drawHoveringText(I18n.format(PREFIX + "copiedTp"), mouseX, mouseY);
             
         }
         
@@ -281,8 +295,17 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             String coordinateText = String.format("%d, %d, %d", (int)x, height, (int)y);
             String biomeText = biome.getBiomeName();
             
-            if (!this.copiedSeedField) {
-                this.drawHoveringText(ImmutableList.of(coordinateText, biomeText), mouseX, mouseY);
+            int tpX = (int)x;
+            int tpZ = (int)y;
+            int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height;
+            this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
+            
+            if (!this.copiedSeedField && !this.copiedTpCommand) {
+                List<String> tooltips = new ArrayList<>();
+                tooltips.add(coordinateText);
+                tooltips.add(biomeText);
+
+                this.drawHoveringText(tooltips, mouseX, mouseY);
             }
         }
     }
@@ -335,6 +358,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
             this.copiedSeedField = true;
             this.copiedSeedFieldTime = System.currentTimeMillis();
+            
+            this.copiedTpCommand = false;
+        }
+        
+        if (mouseButton == 0 && this.hoveredMap && this.state == ProgressState.LOADED) {
+            if (this.tpCallback != null) {
+                GuiScreen.setClipboardString(this.tpCallback.get());
+            }
+            ModernBeta.log(I18n.format(PREFIX + "copiedTp"));
+            
+            this.copiedTpCommand = true;
+            this.copiedTpCommandTime = System.currentTimeMillis();
+            
+            this.copiedSeedField = false;
         }
         
         super.mouseClicked(mouseX, mouseY, mouseButton);
