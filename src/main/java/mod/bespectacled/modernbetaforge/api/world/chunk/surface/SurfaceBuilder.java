@@ -28,11 +28,12 @@ public abstract class SurfaceBuilder {
     protected final IBlockState defaultBlock;
     protected final IBlockState defaultFluid;
     
-    private final ChunkSource chunkSource;
-    private final ModernBetaGeneratorSettings settings;
+    protected final ChunkSource chunkSource;
+    protected final ModernBetaGeneratorSettings settings;
+    
     private final SimplexOctaveNoise vanillaSurfaceOctaveNoise;
-    private final PerlinOctaveNoise defaultBeachOctaveNoise;
-    private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
+    @Deprecated private final PerlinOctaveNoise defaultBeachOctaveNoise;
+    @Deprecated private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
 
     // Set for specifying which biomes should use their vanilla surface builders.
     // Done on per-biome basis for best mod compatibility.
@@ -42,6 +43,7 @@ public abstract class SurfaceBuilder {
     
     /**
      * Constructs a new abstract SurfaceBuilder with basic surface information.
+     * 
      * @param chunkSource Associated chunkSource object.
      * @param settings The generator settings.
      */
@@ -87,69 +89,14 @@ public abstract class SurfaceBuilder {
     public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
-     * Determines whether beaches should generate at the given coordinates.
+     * Determines whether bedrock should generate at the given y-level.
      * 
-     * @param x x-coordinate in block coordinates.
-     * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
-     * @return Whether beaches should generate at the given coordinates.
+     * @param y y-coordinate in block coordinates
+     * @param random The random used to vary bedrock.
+     * @return Whether bedrock should generate at the given coordinates.
      */
-    public boolean generatesBeaches(int x, int z, Random random) {
-        return false;
-    }
-
-    /**
-     * Determines whether gravel beaches should generate at the given coordinates.
-     * 
-     * @param x x-coordinate in block coordinates.
-     * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
-     * @return Whether gravel beaches should generate at the given coordinates.
-     */
-    public boolean generatesGravelBeaches(int x, int z, Random random) {
-        return false;
-    }
-
-    /**
-     * Samples the surface depth at the given coordinates.
-     * 
-     * @param x x-coordinate in block coordinates.
-     * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
-     * @return The surface depth used to determine the depth of topsoil.
-     */
-    public int sampleSurfaceDepth(int x, int z, Random random) {
-        return Integer.MIN_VALUE;
-    }
-    
-    /**
-     * Determines whether stone basins should generate given the surface depth.
-     * 
-     * @param surfaceDepth The surface depth noise value.
-     * @return Whether a stone basin should generate at the given coordinates.
-     */
-    public boolean generatesBasin(int surfaceDepth) {
-        return false;
-    }
-    
-    /**
-     * Determines whether the y-value is the correct height for generating beaches.
-     * 
-     * @param y x-coordinate in block coordinates.
-     * @return Whether beaches should generate at the given y-value.
-     */
-    public boolean atBeachDepth(int y) {
-        return false;
-    }
-    
-    /**
-     * Checks whether a given biome is within the set of biomes using custom surfaces.
-     * 
-     * @param biome The biome to check.
-     * @return Whether the given biome uses a custom surface.
-     */
-    public boolean isCustomSurface(Biome biome) {
-        return this.biomesWithCustomSurfaces.contains(biome);
+    public boolean generatesBedrock(int y, Random random) {
+        return this.useBedrock() && y <= random.nextInt(5);
     }
     
     /**
@@ -166,6 +113,43 @@ public abstract class SurfaceBuilder {
     }
 
     /**
+     * Checks whether a given biome is within the set of biomes using custom surfaces.
+     * @deprecated This is no longer used.
+     * 
+     * @param biome The biome to check.
+     * @return Whether the given biome uses a custom surface.
+     */
+    public boolean isCustomSurface(Biome biome) {
+        return this.biomesWithCustomSurfaces.contains(biome);
+    }
+
+    /**
+     * Samples the surface depth at the given coordinates.
+     * @deprecated This method has been moved to {@link NoiseSurfaceBuilder}.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param random The random used to vary surface transition.
+     * @return The surface depth used to determine the depth of topsoil.
+     */
+    @Deprecated
+    public int sampleSurfaceDepth(int x, int z, Random random) {
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * Determines whether stone basins should generate given the surface depth.
+     * @deprecated This method has been moved to {@link NoiseSurfaceBuilder}.
+     * 
+     * @param surfaceDepth The surface depth noise value.
+     * @return Whether a stone basin should generate at the given coordinates.
+     */
+    @Deprecated
+    public boolean generatesBasin(int surfaceDepth) {
+        return false;
+    }
+
+    /**
      * Gets whether the surface builder generates beaches.
      * @deprecated This was previously used just for the map previewer. Don't use this.
      * 
@@ -174,26 +158,6 @@ public abstract class SurfaceBuilder {
     @Deprecated
     public boolean generatesBeaches() {
         return false;
-    }
-    
-    /**
-     * Gets the PerlinOctaveNoise sampler used for beach generation.
-     * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
-     * 
-     * @return The noise sampler.
-     */
-    protected PerlinOctaveNoise getBeachOctaveNoise() {
-        return this.chunkSource.getBeachOctaveNoise().orElse(this.defaultBeachOctaveNoise);
-    }
-    
-    /**
-     * Gets the PerlinOctaveNoise sampler used for surface generation.
-     * Will try to use the sampler from {@link ChunkSource#getSurfaceOctaveNoise() getSurfaceOctaveNoise} if possible, otherwise a default sampler.
-     * 
-     * @return The noise sampler.
-     */
-    protected PerlinOctaveNoise getSurfaceOctaveNoise() {
-        return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
     }
     
     /**
@@ -232,10 +196,11 @@ public abstract class SurfaceBuilder {
     protected boolean useBedrock() {
         return true;
     }
-    
+
     /**
      * Use a biome-specific surface builder, at a given x/z-coordinate and topmost y-coordinate.
      * Valid biomes are checked on per-biome basis using identifier from {@link #biomesWithCustomSurfaces} set.
+     * 
      * @param world The world object.
      * @param biome Biome with surface builder to use.
      * @param chunkPrimer Chunk primer.
@@ -259,5 +224,29 @@ public abstract class SurfaceBuilder {
         }
         
         return false;
+    }
+
+    /**
+     * Gets the PerlinOctaveNoise sampler used for beach generation.
+     * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
+     * @deprecate This method has been moved to {@link NoiseSurfaceBuilder}.
+     * 
+     * @return The noise sampler.
+     */
+    @Deprecated
+    protected PerlinOctaveNoise getBeachOctaveNoise() {
+        return this.chunkSource.getBeachOctaveNoise().orElse(this.defaultBeachOctaveNoise);
+    }
+
+    /**
+     * Gets the PerlinOctaveNoise sampler used for surface generation.
+     * Will try to use the sampler from {@link ChunkSource#getSurfaceOctaveNoise() getSurfaceOctaveNoise} if possible, otherwise a default sampler.
+     * @deprecate This method has been moved to {@link NoiseSurfaceBuilder}.
+     *
+     * @return The noise sampler.
+     */
+    @Deprecated
+    protected PerlinOctaveNoise getSurfaceOctaveNoise() {
+        return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
     }
 }

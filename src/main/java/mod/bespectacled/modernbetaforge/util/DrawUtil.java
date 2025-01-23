@@ -12,6 +12,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
@@ -287,15 +288,17 @@ public class DrawUtil {
                 terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
             }
             
-        } else {
-            boolean generatesBeaches = surfaceBuilder.generatesBeaches(x, z, random);
-            boolean generatesGravelBeaches = surfaceBuilder.generatesGravelBeaches(x, z, random);
-            int surfaceDepth = surfaceBuilder.sampleSurfaceDepth(x, z, random);
+        } else if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
+            NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
-            if (surfaceBuilder.generatesBasin(surfaceDepth)) {
+            boolean generatesBeaches = noiseSurfaceBuilder.generatesBeaches(x, z, random);
+            boolean generatesGravelBeaches = noiseSurfaceBuilder.generatesGravelBeaches(x, z, random);
+            int surfaceDepth = noiseSurfaceBuilder.sampleSurfaceDepth(x, z, random);
+            
+            if (noiseSurfaceBuilder.generatesBasin(surfaceDepth)) {
                 terrainType = TerrainType.STONE;
                 
-            } else if (surfaceBuilder.atBeachDepth(height)) {
+            } else if (noiseSurfaceBuilder.atBeachDepth(height)) {
                 if (generatesGravelBeaches) {
                     terrainType = TerrainType.STONE;
                     height--;
@@ -309,6 +312,12 @@ public class DrawUtil {
             if (height < chunkSource.getSeaLevel() - 1) {
                 terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
             }
+            
+        } else {
+            if (height < chunkSource.getSeaLevel() - 1) {
+                terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+            }
+            
         }
         
         if (height <= 0) {
