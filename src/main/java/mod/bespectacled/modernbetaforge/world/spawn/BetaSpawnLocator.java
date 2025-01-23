@@ -2,14 +2,16 @@ package mod.bespectacled.modernbetaforge.world.spawn;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
+import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -19,8 +21,8 @@ public class BetaSpawnLocator implements SpawnLocator {
         if (!(chunkSource instanceof NoiseChunkSource))
             return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         
-        NoiseChunkSource noiseChunkSource = (NoiseChunkSource)chunkSource;
-        PerlinOctaveNoise beachOctaveNoise = noiseChunkSource.getBeachOctaveNoise().get();
+        ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
+        SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceBuilderKey).apply(chunkSource, chunkSource.getGeneratorSettings());
 
         boolean failed = false;
         int x = 0;
@@ -29,7 +31,7 @@ public class BetaSpawnLocator implements SpawnLocator {
         
         Random random = new Random();
         
-        while(!this.isSandAt(x, z, chunkSource, biomeSource, beachOctaveNoise)) {
+        while(!this.isSandAt(x, z, chunkSource, biomeSource, surfaceBuilder, random)) {
             if (attempts > 10000) {
                 failed = true;
                 x = 0;
@@ -49,13 +51,19 @@ public class BetaSpawnLocator implements SpawnLocator {
         return new BlockPos(x, y, z);
     }
     
-    private boolean isSandAt(int x, int z, ChunkSource chunkSource, BiomeSource biomeSource, PerlinOctaveNoise beachOctaveNoise) {
-        int seaLevel = chunkSource.getSeaLevel();
+    private boolean isSandAt(int x, int z, ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, Random random) {
         int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR);
+        int seaLevel = chunkSource.getSeaLevel();
         
-        Biome biome = biomeSource.getBiome(x, z);
-        boolean isSandy = BiomeDictionary.getBiomes(Type.SANDY).contains(biome);
+        boolean isSandyBiome = BiomeDictionary.getBiomes(Type.SANDY).contains(biomeSource.getBiome(x, z)) && y >= seaLevel - 1;
         
-        return (isSandy && y >= seaLevel - 1) || (beachOctaveNoise.sample(x * 0.03125, z * 0.03125, 0.0) > 0.0 && y >= seaLevel - 1 && y < seaLevel + 2);
+        if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
+            NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
+            boolean atBeachDepth = y >= seaLevel - 1 && y <= seaLevel + 1;
+            
+            return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.generatesBeaches(x, z, random) && !noiseSurfaceBuilder.generatesGravelBeaches(x, z, random);
+        }
+        
+        return isSandyBiome;
     }
 }
