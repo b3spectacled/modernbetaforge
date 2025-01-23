@@ -19,10 +19,8 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
 
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        double scale = 0.03125;
-        
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
         Random bedrockRandom = this.createSurfaceRandom(chunkX, chunkZ);
@@ -33,24 +31,10 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                 int x = startX + localX;
                 int z = startZ + localZ;
                 
-                boolean genSandBeach = this.getBeachOctaveNoise().sample(
-                    x * scale,
-                    z * scale,
-                    0.0
-                ) + random.nextDouble() * 0.2 > 0.0;
+                boolean generatesBeaches = this.generatesBeaches(x, z, random);
+                boolean generatesGravelBeaches = this.generatesGravelBeaches(x, z, random);
                 
-                boolean genGravelBeach = this.getBeachOctaveNoise().sample(
-                    z * scale, 
-                    109.0134,
-                    x * scale
-                ) + random.nextDouble() * 0.2 > 3.0;
-                
-                double surfaceNoise = this.getSurfaceOctaveNoise().sampleXY(
-                    x * scale * 2.0,
-                    z * scale * 2.0
-                );
-                
-                int surfaceDepth = (int)(surfaceNoise / 3.0 + 3.0 + random.nextDouble() * 0.25);
+                int surfaceDepth = this.sampleSurfaceDepth(x, z, random);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
@@ -78,20 +62,20 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
                         
                     } else if (BlockStates.isEqual(blockState, this.defaultBlock)) {
                         if (runDepth == -1) {
-                            if (surfaceDepth <= 0) {
+                            if (this.generatesBasin(surfaceDepth)) {
                                 topBlock = BlockStates.AIR;
                                 fillerBlock = this.defaultBlock;
                                 
-                            } else if (y >= this.getSeaLevel() - 4 && y <= this.getSeaLevel() + 1) {
+                            } else if (this.atBeachDepth(y)) {
                                 topBlock = biome.topBlock;
                                 fillerBlock = biome.fillerBlock;
                                 
-                                if (genGravelBeach) {
+                                if (generatesGravelBeaches) {
                                     topBlock = BlockStates.AIR;
                                     fillerBlock = BlockStates.GRAVEL;
                                 }
                                 
-                                if (genSandBeach) {
+                                if (generatesBeaches) {
                                     topBlock = BlockStates.SAND;
                                     fillerBlock = BlockStates.SAND;
                                 }
@@ -129,7 +113,33 @@ public class InfdevSurfaceBuilder extends SurfaceBuilder {
     }
     
     @Override
-    public boolean generatesBeaches() {
-        return true;
+    public boolean generatesBeaches(int x, int z, Random random) {
+        double noise = this.getBeachOctaveNoise().sample(x * 0.03125, z * 0.03125, 0.0);
+        
+        return noise + random.nextDouble() * 0.2 > 0.0;
+    }
+    
+    @Override
+    public boolean generatesGravelBeaches(int x, int z, Random random) {
+        double noise = this.getBeachOctaveNoise().sample(z * 0.03125, 109.0134, x * 0.03125);
+        
+        return noise + random.nextDouble() * 0.2 > 3.0;
+    }
+    
+    @Override
+    public int sampleSurfaceDepth(int x, int z, Random random) {
+        double noise = this.getSurfaceOctaveNoise().sampleXY(x * 0.03125 * 2.0, z * 0.03125 * 2.0);
+        
+        return (int)(noise / 3.0 + 3.0 + random.nextDouble() * 0.25);
+    }
+    
+    @Override
+    public boolean generatesBasin(int surfaceDepth) {
+        return surfaceDepth <= 0;
+    }
+    
+    @Override
+    public boolean atBeachDepth(int y) {
+        return y >= this.getSeaLevel() - 4 && y <= this.getSeaLevel() + 1;
     }
 }

@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeChunk {
-    private Biome[] biomes = new Biome[256];
+    private final Biome[] biomes;
 
     public BiomeChunk(int chunkX, int chunkZ, BiFunction<Integer, Integer, Biome[]> chunkFunc) {
         int startX = chunkX << 4;

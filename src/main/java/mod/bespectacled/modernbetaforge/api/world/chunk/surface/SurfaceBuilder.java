@@ -87,6 +87,62 @@ public abstract class SurfaceBuilder {
     public abstract void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ);
     
     /**
+     * Determines whether beaches should generate at the given coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param random The random used to vary surface transition.
+     * @return Whether beaches should generate at the given coordinates.
+     */
+    public boolean generatesBeaches(int x, int z, Random random) {
+        return false;
+    }
+
+    /**
+     * Determines whether gravel beaches should generate at the given coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param random The random used to vary surface transition.
+     * @return Whether gravel beaches should generate at the given coordinates.
+     */
+    public boolean generatesGravelBeaches(int x, int z, Random random) {
+        return false;
+    }
+
+    /**
+     * Samples the surface depth at the given coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @param random The random used to vary surface transition.
+     * @return The surface depth used to determine the depth of topsoil.
+     */
+    public int sampleSurfaceDepth(int x, int z, Random random) {
+        return Integer.MIN_VALUE;
+    }
+    
+    /**
+     * Determines whether stone basins should generate given the surface depth.
+     * 
+     * @param surfaceDepth The surface depth noise value.
+     * @return Whether a stone basin should generate at the given coordinates.
+     */
+    public boolean generatesBasin(int surfaceDepth) {
+        return false;
+    }
+    
+    /**
+     * Determines whether the y-value is the correct height for generating beaches.
+     * 
+     * @param y x-coordinate in block coordinates.
+     * @return Whether beaches should generate at the given y-value.
+     */
+    public boolean atBeachDepth(int y) {
+        return false;
+    }
+    
+    /**
      * Checks whether a given biome is within the set of biomes using custom surfaces.
      * 
      * @param biome The biome to check.
@@ -97,10 +153,25 @@ public abstract class SurfaceBuilder {
     }
     
     /**
+     * Get a new Random object initialized with chunk coordinates for seed, for surface generation.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates.
+     * @param chunkZ z-coordinate in chunk coordinates.
+     * @return New Random object initialized with chunk coordinates for seed.
+     */
+    public Random createSurfaceRandom(int chunkX, int chunkZ) {
+        long seed = (long)chunkX * 0x4f9939f508L + (long)chunkZ * 0x1ef1565bd5L;
+        
+        return new Random(seed);
+    }
+
+    /**
      * Gets whether the surface builder generates beaches.
+     * @deprecated This was previously used just for the map previewer. Don't use this.
      * 
      * @return Whether the surface builder generates beaches. False by default.
      */
+    @Deprecated
     public boolean generatesBeaches() {
         return false;
     }
@@ -161,19 +232,6 @@ public abstract class SurfaceBuilder {
     protected boolean useBedrock() {
         return true;
     }
-    
-    /**
-     * Get a new Random object initialized with chunk coordinates for seed, for surface generation.
-     * 
-     * @param chunkX x-coordinate in chunk coordinates.
-     * @param chunkZ z-coordinate in chunk coordinates.
-     * @return New Random object initialized with chunk coordinates for seed.
-     */
-    protected Random createSurfaceRandom(int chunkX, int chunkZ) {
-        long seed = (long)chunkX * 0x4f9939f508L + (long)chunkZ * 0x1ef1565bd5L;
-        
-        return new Random(seed);
-    } 
     
     /**
      * Use a biome-specific surface builder, at a given x/z-coordinate and topmost y-coordinate.

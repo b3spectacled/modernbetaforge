@@ -1,14 +1,11 @@
 package mod.bespectacled.modernbetaforge.util;
 
 import java.awt.image.BufferedImage;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.lwjgl.util.vector.Vector4f;
-
-import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
@@ -16,13 +13,10 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -57,12 +51,6 @@ public class DrawUtil {
             this.snowy = snowy;
         }
     }
-    
-    private static final Set<ResourceLocation> INVALID_CHUNK_SOURCES = ImmutableSet.<ResourceLocation>builder()
-        .add(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey())
-        .add(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryKey())
-        .build();
 
     private static final int COLOR_GRASS = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
@@ -80,8 +68,8 @@ public class DrawUtil {
         return createBiomeMap(biomeFunc, size, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int size, Consumer<Float> progressTracker) {
-        return createTerrainMap(chunkSource, biomeProvider, size, size, false, progressTracker);
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, SurfaceBuilder surfaceBuilder, int size, Consumer<Float> progressTracker) {
+        return createTerrainMap(chunkSource, biomeProvider, surfaceBuilder, size, size, false, progressTracker);
     }
     
     public static BufferedImage createBiomeMap(BiFunction<Integer, Integer, Biome> biomeFunc, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
@@ -98,11 +86,7 @@ public class DrawUtil {
     
                 TerrainType terrainType = TerrainType.GRASS;
                 Biome biome = biomeFunc.apply(x, z);
-                
-                if (BiomeDictionary.hasType(biome, Type.OCEAN) || BiomeDictionary.hasType(biome, Type.RIVER)) {
-                    terrainType = TerrainType.WATER;
-                }
-                
+
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 terrainType = getTerrainTypeBySnowiness(biome, terrainType);
                 
@@ -126,9 +110,12 @@ public class DrawUtil {
         return image;
     }
 
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, SurfaceBuilder surfaceBuilder, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
+        
+        // Used for surface sampling, yes it won't be accurate.
+        Random random = new Random(chunkSource.getSeed());
         
         int offsetX = width / 2;
         int offsetZ = length / 2;
@@ -143,7 +130,7 @@ public class DrawUtil {
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
 
-                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height, biome);
+                TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 terrainType = getTerrainTypeBySnowiness(biome, terrainType);
                 
@@ -183,8 +170,10 @@ public class DrawUtil {
     
     public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeColors, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-        ResourceLocation chunkSourceKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
         MutableBlockPos mutablePos = new MutableBlockPos();
+        
+        // Used for surface sampling, yes it won't be accurate.
+        Random random = new Random(chunkSource.getSeed());
         
         int offsetX = size / 2;
         int offsetZ = size / 2;
@@ -199,17 +188,9 @@ public class DrawUtil {
                 int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                 Biome biome = biomeSource.getBiome(x, z);
 
-                TerrainType terrainType = getBaseTerrainType(chunkSource, x, z, height, biome);
+                TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                 terrainType = getTerrainTypeByBiome(biome, terrainType);
                 terrainType = getTerrainTypeBySnowiness(biome, terrainType);
-                
-                if (isBeachSurfaceBuilder(chunkSourceKey, surfaceBuilder) && !surfaceBuilder.isCustomSurface(biome)) {
-                    boolean isBeach = terrainType == TerrainType.GRASS && height < chunkSource.getSeaLevel() + 2;
-                    
-                    if (isBeach && isSandyBeach(x, z, chunkSource.getBeachOctaveNoise()) && terrainType != TerrainType.SNOW) {
-                        terrainType = TerrainType.SAND;
-                    }
-                }
 
                 mutablePos.setPos(x, height, z);
                 int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeColors, terrainType);
@@ -282,7 +263,7 @@ public class DrawUtil {
         return newVector;
     }
     
-    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, int x, int z, int height, Biome biome) {
+    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, SurfaceBuilder surfaceBuilder, int x, int z, int height, Biome biome, Random random) {
         TerrainType terrainType = TerrainType.GRASS;
         
         if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
@@ -306,8 +287,28 @@ public class DrawUtil {
                 terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
             }
             
-        } else if (height < chunkSource.getSeaLevel() - 1) {
-            terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+        } else {
+            boolean generatesBeaches = surfaceBuilder.generatesBeaches(x, z, random);
+            boolean generatesGravelBeaches = surfaceBuilder.generatesGravelBeaches(x, z, random);
+            int surfaceDepth = surfaceBuilder.sampleSurfaceDepth(x, z, random);
+            
+            if (surfaceBuilder.generatesBasin(surfaceDepth)) {
+                terrainType = TerrainType.STONE;
+                
+            } else if (surfaceBuilder.atBeachDepth(height)) {
+                if (generatesGravelBeaches) {
+                    terrainType = TerrainType.STONE;
+                    height--;
+                }
+                
+                if (generatesBeaches) {
+                    terrainType = TerrainType.SAND;
+                }
+            }
+            
+            if (height < chunkSource.getSeaLevel() - 1) {
+                terrainType = chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+            }
         }
         
         if (height == 0) {
@@ -385,17 +386,5 @@ public class DrawUtil {
         }
         
         return color;
-    }
-    
-    private static boolean isSandyBeach(int x, int z, Optional<PerlinOctaveNoise> noise) {
-        if (noise.isPresent()) {
-            return noise.get().sample(x * 0.03125, z * 0.03125, 0.0) > 0.0;
-        }
-        
-        return false;
-    }
-
-    private static boolean isBeachSurfaceBuilder(ResourceLocation chunkSource, SurfaceBuilder surfaceBuilder) {
-        return !INVALID_CHUNK_SOURCES.contains(chunkSource) && surfaceBuilder.generatesBeaches();
     }
 }

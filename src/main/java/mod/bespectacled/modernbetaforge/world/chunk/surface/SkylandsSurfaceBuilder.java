@@ -5,6 +5,8 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.util.chunk.SurfaceNoiseChunk;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
@@ -13,26 +15,27 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SkylandsSurfaceBuilder extends SurfaceBuilder {
+    private final ChunkCache<SurfaceNoiseChunk> surfaceCache;
+    
     public SkylandsSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(chunkSource, settings);
+        
+        this.surfaceCache = new ChunkCache<>("surface", 16, this::sampleSurfaceNoise);
     }
 
     @Override
     public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
-        double scale = 0.03125;
-
-        Random random = this.createSurfaceRandom(chunkX, chunkZ);
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
         
-        double[] surfaceNoise = this.getSurfaceOctaveNoise().sampleBeta(
-            chunkX * 16, chunkZ * 16, 0.0, 
-            16, 16, 1,
-            scale * 2.0, scale * 2.0, scale * 2.0
-        );
+        Random random = this.createSurfaceRandom(chunkX, chunkZ);
         
         for (int localZ = 0; localZ < 16; localZ++) {
             for (int localX = 0; localX < 16; localX++) {
-                int surfaceDepth = (int) (surfaceNoise[localZ + localX * 16] / 3.0 + 3.0 + random.nextDouble() * 0.25);
+                int x = startX + localX;
+                int z = startZ + localZ;
                 
+                int surfaceDepth = this.sampleSurfaceDepth(x, z, random);
                 int runDepth = -1;
                 
                 Biome biome = biomes[localX + localZ * 16];
@@ -55,17 +58,14 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
                     }
 
                     if (runDepth == -1) {
-                        if (surfaceDepth <= 0) { // Generate stone basin if noise permits
+                        if (this.generatesBasin(surfaceDepth)) { // Generate stone basin if noise permits
                             topBlock = BlockStates.AIR;
                             fillerBlock = this.defaultBlock;
                         }
 
                         runDepth = surfaceDepth;
                         
-                        blockState = (y >= 0) ? 
-                            topBlock : 
-                            fillerBlock;
-                        
+                        blockState = y >= 0 ? topBlock : fillerBlock;
                         chunkPrimer.setBlockState(localX, y, localZ, blockState);
 
                         continue;
@@ -88,5 +88,29 @@ public class SkylandsSurfaceBuilder extends SurfaceBuilder {
                 }
             }
         }
+    }
+    
+    @Override
+    public int sampleSurfaceDepth(int x, int z, Random random) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        double noise = this.surfaceCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
+        
+        return (int)(noise / 3.0 + 3.0 + random.nextDouble() * 0.25);
+    }
+    
+    @Override
+    public boolean generatesBasin(int surfaceDepth) {
+        return surfaceDepth <= 0;
+    }
+    
+    private SurfaceNoiseChunk sampleSurfaceNoise(int chunkX, int chunkZ) {
+        return new SurfaceNoiseChunk(
+            this.getSurfaceOctaveNoise().sampleBeta(
+                chunkX << 4, chunkZ << 4, 0.0, 
+                16, 16, 1,
+                0.03125 * 2.0, 0.03125 * 2.0, 0.03125 * 2.0
+            )
+        );
     }
 }
