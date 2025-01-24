@@ -307,6 +307,11 @@ public class DrawUtil {
                 
                 if (isBeach) {
                     terrainType = TerrainType.SAND;
+                    
+                    // Undo above height change if no gravel beaches
+                    if (generatesGravelBeaches) {
+                        height++;
+                    }
                 }
             }
             
