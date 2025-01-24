@@ -22,12 +22,12 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesBedrock(int y, Random random) {
+    public boolean isBedrock(int y, Random random) {
         return this.useBedrock() && y <= random.nextInt(6) - 1;
     }
     
     @Override
-    public boolean generatesBeaches(int x, int z, Random random) {
+    public boolean isBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
@@ -36,7 +36,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesGravelBeaches(int x, int z, Random random) {
+    public boolean isGravelBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
@@ -54,7 +54,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesBasin(int surfaceDepth) {
+    public boolean isBasin(int surfaceDepth) {
         return surfaceDepth <= 0;
     }
     

@@ -68,7 +68,7 @@ public class PESpawnLocator implements SpawnLocator {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             boolean atBeachDepth = y >= seaLevel - 1 && y <= seaLevel + 1;
             
-            return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.generatesBeaches(x, z, random) && !noiseSurfaceBuilder.generatesGravelBeaches(x, z, random);
+            return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.isBeach(x, z, random) && !noiseSurfaceBuilder.isGravelBeach(x, z, random);
         }
         
         return isSandyBiome;

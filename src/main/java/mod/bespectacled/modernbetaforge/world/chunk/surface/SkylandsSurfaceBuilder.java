@@ -21,7 +21,7 @@ public class SkylandsSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesBedrock(int y, Random random) {
+    public boolean isBedrock(int y, Random random) {
         return false;
     }
 
@@ -35,17 +35,17 @@ public class SkylandsSurfaceBuilder extends NoiseSurfaceBuilder {
     }
 
     @Override
-    public boolean generatesBasin(int surfaceDepth) {
+    public boolean isBasin(int surfaceDepth) {
         return surfaceDepth <= 0;
     }
 
     @Override
-    public boolean generatesBeaches(int x, int z, Random random) {
+    public boolean isBeach(int x, int z, Random random) {
         return false;
     }
 
     @Override
-    public boolean generatesGravelBeaches(int x, int z, Random random) {
+    public boolean isGravelBeach(int x, int z, Random random) {
         return false;
     }
     

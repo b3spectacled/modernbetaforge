@@ -31,7 +31,7 @@ public abstract class SurfaceBuilder {
     protected final ChunkSource chunkSource;
     protected final ModernBetaGeneratorSettings settings;
     
-    private final SimplexOctaveNoise vanillaSurfaceOctaveNoise;
+    private final SimplexOctaveNoise surfaceOctaveNoise;
     @Deprecated private final PerlinOctaveNoise defaultBeachOctaveNoise;
     @Deprecated private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
 
@@ -55,7 +55,7 @@ public abstract class SurfaceBuilder {
         this.settings = settings;
         
         Random random = new Random(chunkSource.getSeed());
-        this.vanillaSurfaceOctaveNoise = new SimplexOctaveNoise(random, 4);
+        this.surfaceOctaveNoise = new SimplexOctaveNoise(random, 4);
         this.defaultBeachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
         this.defaultSurfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
         
@@ -95,7 +95,7 @@ public abstract class SurfaceBuilder {
      * @param random The random used to vary bedrock.
      * @return Whether bedrock should generate at the given coordinates.
      */
-    public boolean generatesBedrock(int y, Random random) {
+    public boolean isBedrock(int y, Random random) {
         return this.useBedrock() && y <= random.nextInt(5);
     }
     
@@ -122,32 +122,6 @@ public abstract class SurfaceBuilder {
     @Deprecated
     public boolean isCustomSurface(Biome biome) {
         return this.biomesWithCustomSurfaces.contains(biome);
-    }
-
-    /**
-     * Samples the surface depth at the given coordinates.
-     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
-     * 
-     * @param x x-coordinate in block coordinates.
-     * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
-     * @return The surface depth used to determine the depth of topsoil.
-     */
-    @Deprecated
-    public int sampleSurfaceDepth(int x, int z, Random random) {
-        return Integer.MIN_VALUE;
-    }
-
-    /**
-     * Determines whether stone basins should generate given the surface depth.
-     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
-     * 
-     * @param surfaceDepth The surface depth noise value.
-     * @return Whether a stone basin should generate at the given coordinates.
-     */
-    @Deprecated
-    public boolean generatesBasin(int surfaceDepth) {
-        return false;
     }
 
     /**
@@ -215,7 +189,7 @@ public abstract class SurfaceBuilder {
      */
     protected boolean useCustomSurfaceBuilder(World world, Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
         if (this.biomesWithCustomSurfaces.contains(biome) || override) {
-            double surfaceNoise = this.vanillaSurfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
+            double surfaceNoise = this.surfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
             
             // Reverse x/z because ??? why is it done this way in the surface gen code ????
             // Special surfaces won't properly generate if x/z are provided in the correct order, because WTF?!

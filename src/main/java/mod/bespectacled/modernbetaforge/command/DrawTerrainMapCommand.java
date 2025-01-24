@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -23,7 +24,7 @@ public class DrawTerrainMapCommand extends DrawMapCommand {
     }
 
     @Override
-    public BufferedImage drawMap(WorldServer worldServer, int length, int width, Consumer<Float> progressTracker) throws IllegalStateException {
+    public BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         BiomeProvider biomeProvider = worldServer.getBiomeProvider();
         
@@ -38,9 +39,10 @@ public class DrawTerrainMapCommand extends DrawMapCommand {
                 ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource(),
                 (ModernBetaBiomeProvider)biomeProvider,
                 surfaceBuilder,
+                center,
                 width,
                 length,
-                true,
+                false,
                 progressTracker
             );
         }

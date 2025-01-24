@@ -15,6 +15,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -33,26 +34,27 @@ public abstract class DrawMapCommand extends CommandBase {
         this.path = path;
     }
     
-    public abstract BufferedImage drawMap(WorldServer worldServer, int length, int width, Consumer<Float> progressTracker) throws IllegalStateException;
+    public abstract BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException;
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         WorldServer worldServer = server.getWorld(DimensionType.OVERWORLD.getId());
         boolean success = false;
         
-        if (args.length != 1) {
+        if (args.length != 3) {
             throw new WrongUsageException(this.getUsage(sender), new Object[0]);
         }
         
-        int width = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5000);
-        int length = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5000);
+        int width = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5120);
+        int length = MathHelper.clamp(CommandBase.parseInt(args[1]), 0, 5120);
+        BlockPos center = CommandBase.parseBoolean(args[2]) ? new BlockPos(0, 0, 0) : sender.getPosition();
 
         try { 
             File file = new File(worldServer.getSaveHandler().getWorldDirectory(), this.path);
             file = file.getCanonicalFile(); // Fixes '/./' being inserted in path
 
-            notifyCommandListener(sender, this, this.getLangString("start"), new Object[] { width, length });
-            BufferedImage image = this.drawMap(worldServer, length, width, current -> setProgress(current, sender));
+            notifyCommandListener(sender, this, this.getLangString("start"), new Object[] { width, length, center.getX(), center.getZ() });
+            BufferedImage image = this.drawMap(worldServer, center, length, width, current -> setProgress(current, sender));
             ImageIO.write(image, "png", file);
             
             ITextComponent textComponent = new TextComponentString(file.getName());

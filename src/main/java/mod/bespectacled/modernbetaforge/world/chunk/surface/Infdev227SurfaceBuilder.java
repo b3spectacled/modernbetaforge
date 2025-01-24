@@ -12,12 +12,12 @@ public class Infdev227SurfaceBuilder extends NoiseSurfaceBuilder {
     }
 
     @Override
-    public boolean generatesBeaches(int x, int z, Random random) {
+    public boolean isBeach(int x, int z, Random random) {
         return false;
     }
 
     @Override
-    public boolean generatesGravelBeaches(int x, int z, Random random) {
+    public boolean isGravelBeach(int x, int z, Random random) {
         return false;
     }
     
@@ -27,7 +27,7 @@ public class Infdev227SurfaceBuilder extends NoiseSurfaceBuilder {
     }
 
     @Override
-    public boolean generatesBasin(int surfaceDepth) {
+    public boolean isBasin(int surfaceDepth) {
         return false;
     }
     

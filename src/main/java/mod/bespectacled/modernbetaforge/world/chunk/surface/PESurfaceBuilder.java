@@ -33,7 +33,7 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
     }
 
     @Override
-    public boolean generatesBeaches(int x, int z, Random random) {
+    public boolean isBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
@@ -43,7 +43,7 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesGravelBeaches(int x, int z, Random random) {
+    public boolean isGravelBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
@@ -63,7 +63,7 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean generatesBasin(int surfaceDepth) {
+    public boolean isBasin(int surfaceDepth) {
         return surfaceDepth <= 0;
     }
     

@@ -55,8 +55,8 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
             int x = startX + localX;
             int z = startZ + localZ;
             
-            boolean generatesBeaches = this.generatesBeaches(x, z, random);
-            boolean generatesGravelBeaches = this.generatesGravelBeaches(x, z, random);
+            boolean isBeach = this.isBeach(x, z, random);
+            boolean isGravelBeach = this.isGravelBeach(x, z, random);
             
             int surfaceDepth = this.sampleSurfaceDepth(x, z, random);
             int runDepth = -1;
@@ -73,7 +73,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
 
             for (int y = this.getWorldHeight() - 1; y >= 0; y--) {
 
-                if (this.generatesBedrock(y, this.useBedrockRandom ? bedrockRandom : random)) {
+                if (this.isBedrock(y, this.useBedrockRandom ? bedrockRandom : random)) {
                     chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                     continue;
                 }
@@ -90,7 +90,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                 }
 
                 if (runDepth == -1) {
-                    if (this.generatesBasin(surfaceDepth)) {
+                    if (this.isBasin(surfaceDepth)) {
                         topBlock = BlockStates.AIR;
                         fillerBlock = this.defaultBlock;
                         
@@ -98,12 +98,12 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                         topBlock = biome.topBlock;
                         fillerBlock = biome.fillerBlock;
 
-                        if (generatesGravelBeaches) {
+                        if (isGravelBeach) {
                             topBlock = BlockStates.AIR;
                             fillerBlock = BlockStates.GRAVEL;
                         }
 
-                        if (generatesBeaches) {
+                        if (isBeach) {
                             topBlock = BlockStates.SAND;
                             fillerBlock = BlockStates.SAND;
                         }
@@ -166,7 +166,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @param random The random used to vary surface transition.
      * @return Whether beaches should generate at the given coordinates.
      */
-    public abstract boolean generatesBeaches(int x, int z, Random random);
+    public abstract boolean isBeach(int x, int z, Random random);
 
     /**
      * Determines whether gravel beaches should generate at the given coordinates.
@@ -176,7 +176,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @param random The random used to vary surface transition.
      * @return Whether gravel beaches should generate at the given coordinates.
      */
-    public abstract boolean generatesGravelBeaches(int x, int z, Random random);
+    public abstract boolean isGravelBeach(int x, int z, Random random);
     
     /**
      * Samples the surface depth at the given coordinates.
@@ -194,7 +194,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @param surfaceDepth The surface depth noise value.
      * @return Whether a stone basin should generate at the given coordinates.
      */
-    public abstract boolean generatesBasin(int surfaceDepth);
+    public abstract boolean isBasin(int surfaceDepth);
     
     /**
      * Determines whether the y-value is the correct height for generating beaches.
