@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -169,7 +170,7 @@ public class DrawUtil {
         return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeColors, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeBlend, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -194,10 +195,10 @@ public class DrawUtil {
                 terrainType = getTerrainTypeBySnowiness(biome, terrainType);
 
                 mutablePos.setPos(x, height, z);
-                int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeColors, terrainType);
+                int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeBlend, terrainType);
                 Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                 
-                if (useBiomeColors && terrainType == TerrainType.GRASS) {
+                if (terrainType == TerrainType.GRASS) {
                     colorVec = scale(colorVec, 0.71f);
                 }
                 
@@ -387,18 +388,23 @@ public class DrawUtil {
         return chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
     }
     
-    private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, BiomeSource biomeSource, boolean useBiomeColors, TerrainType terrainType) {
+    private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, BiomeSource biomeSource, boolean useBiomeBlend, TerrainType terrainType) {
         int color = terrainType.color;
         
-        if (useBiomeColors && terrainType == TerrainType.GRASS) {
+        if (terrainType == TerrainType.GRASS) {
             color =  biome.getGrassColorAtPos(blockPos);
             
-            if (biomeSource instanceof ClimateSampler) {
-                ClimateSampler climateSampler = (ClimateSampler)biomeSource;
-                
-                if (climateSampler.sampleBiomeColor()) {
-                    Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
-                    color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+            if (useBiomeBlend) {
+                if (biomeSource instanceof ClimateSampler) {
+                    ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                    
+                    if (climateSampler.sampleBiomeColor()) {
+                        Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
+                        color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+                    }
+                } else {
+                    color = blendBiomeColor(blockPos, biomeSource);
+                    
                 }
             }
             
@@ -406,5 +412,24 @@ public class DrawUtil {
         }
         
         return color;
+    }
+    
+    private static int blendBiomeColor(BlockPos blockPos, BiomeSource biomeSource) {
+        Vec3d color = Vec3d.ZERO;
+        int centerX = blockPos.getX();
+        int centerZ = blockPos.getZ();
+        int blendDist = 3;
+        MutableBlockPos mutablePos = new MutableBlockPos();
+        
+        int blocks = 0;
+        for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
+            for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
+                Biome biome = biomeSource.getBiome(x, z);
+                color = color.add(MathUtil.convertRGBIntToVec3d(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z))));
+                blocks++;
+            }
+        }
+        
+        return MathUtil.convertRGBVec3dToInt(color.scale(1.0 / blocks));
     }
 }

@@ -81,7 +81,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private SurfaceBuilder surfaceBuilder;
     private BiomeInjectionRules injectionRules;
     
-    private GuiListButton biomeColors;
+    private GuiListButton biomeBlend;
     private GuiSlider resolutionSlider;
     private GuiButton generate;
     private GuiButton cancel;
@@ -90,7 +90,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private DynamicTexture mapTexture;
     private ProgressState state;
     private int resolution;
-    private boolean useBiomeColors;
+    private boolean useBiomeBlend;
     private float progress;
     private String hintText;
     private String progressText;
@@ -120,7 +120,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.state = ProgressState.NOT_STARTED;
         this.resolution = 512;
-        this.useBiomeColors = true;
+        this.useBiomeBlend = true;
         this.progress = 0.0f;
     }
     
@@ -129,14 +129,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int resolutionNdx = getNdx(GuiScreenCustomizeWorld.LEVEL_WIDTHS, this.resolution);
         
         this.buttonList.clear();
-        this.biomeColors = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeColors"), true));
+        this.biomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeBlend"), true));
         this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, GuiScreenCustomizeWorld.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
         this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
         this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
         
-        this.biomeColors.width = 90;
+        this.biomeBlend.width = 90;
         this.resolutionSlider.width = 90;
-        this.biomeColors.setValue(this.useBiomeColors);
+        this.biomeBlend.setValue(this.useBiomeBlend);
         
         this.hintText = I18n.format(PREFIX + "hint");
         this.progressText = "";
@@ -330,7 +330,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void setEntryValue(int id, boolean value) { 
         if (id == GUI_ID_BIOME_COLORS) {
-            this.useBiomeColors = value;        
+            this.useBiomeBlend = value;        
         }
     }
 
@@ -415,7 +415,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.resolution,
-                    this.useBiomeColors,
+                    this.useBiomeBlend,
                     current -> this.progress = current
                 );
                 ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
@@ -456,7 +456,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void updateButtonsEnabled(ProgressState state) {
         boolean enabled = state != ProgressState.STARTED;
         
-        this.biomeColors.enabled = enabled;
+        this.biomeBlend.enabled = enabled;
         this.resolutionSlider.enabled = enabled;
         this.generate.enabled = enabled;
         this.cancel.enabled = enabled;
