@@ -395,13 +395,11 @@ public class DrawUtil {
             color =  biome.getGrassColorAtPos(blockPos);
             
             if (useBiomeBlend) {
-                if (biomeSource instanceof ClimateSampler) {
+                if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleBiomeColor()) {
                     ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                    Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
+                    color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
                     
-                    if (climateSampler.sampleBiomeColor()) {
-                        Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
-                        color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
-                    }
                 } else {
                     color = blendBiomeColor(blockPos, biomeSource);
                     
