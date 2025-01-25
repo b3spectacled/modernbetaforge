@@ -78,34 +78,49 @@ public class DrawUtil {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
+        int chunkWidth = width >> 4;
+        int chunkLength = length >> 4;
+        
         int offsetX = width / 2 - center.getX();
         int offsetZ = length / 2 - center.getZ();
         
-        for (int localX = 0; localX < width; ++localX) {
-            for (int localZ = 0; localZ < length; ++localZ) {
-                int x = localX - offsetX;
-                int z = localZ - offsetZ;
-    
-                TerrainType terrainType = TerrainType.GRASS;
-                Biome biome = biomeFunc.apply(x, z);
+        for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
+            int startX = chunkX << 4;
+            progressTracker.accept(chunkX / (float)chunkWidth);
+            
+            for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
+                int startZ = chunkZ << 4;
+                
+                for (int localX = 0; localX < 16; ++localX) {
+                    int x = startX + localX - offsetX;
+                    int imageX = startX + localX;
+                   
+                    for (int localZ = 0; localZ < 16; ++localZ) {
+                        int z = startZ + localZ - offsetZ;
+                        int imageY = startZ + localZ;
+                        
+                        TerrainType terrainType = TerrainType.GRASS;
+                        Biome biome = biomeFunc.apply(x, z);
 
-                terrainType = getBaseTerrainTypeByBiome(biome, terrainType);
-                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
-                
-                if (drawMarkers) {
-                    terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                        terrainType = getBaseTerrainTypeByBiome(biome, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(biome, terrainType);
+                        
+                        if (drawMarkers) {
+                            terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                        }
+                        
+                        int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z)));
+                        int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
+                        
+                        Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                        if (terrainType == TerrainType.GRASS) {
+                            colorVec = scale(colorVec, 0.71f);
+                        }
+                        Vector4f mapColor = scale(colorVec, 0.86f);
+                        
+                        image.setRGB(imageX, imageY, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
+                    }
                 }
-                
-                int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z)));
-                int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
-                
-                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
-                if (terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.71f);
-                }
-                Vector4f mapColor = scale(colorVec, 0.86f);
-                
-                image.setRGB(localX, localZ, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
             }
         }
         
@@ -116,53 +131,67 @@ public class DrawUtil {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
-        // Used for surface sampling, yes it won't be accurate.
         Random random = new Random(chunkSource.getSeed());
+        
+        int chunkWidth = width >> 4;
+        int chunkLength = length >> 4;
         
         int offsetX = width / 2 - center.getX();
         int offsetZ = length / 2 - center.getZ();
         
-        for (int localX = 0; localX < width; ++localX) {
-            float progress = localX / (float)width;
-            progressTracker.accept(progress);
+        for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
+            int startX = chunkX << 4;
+            progressTracker.accept(chunkX / (float)chunkWidth);
             
-            for (int localZ = 0; localZ < length; ++localZ) {
-                int x = localX - offsetX;
-                int z = localZ - offsetZ;
-                int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
+            for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
+                int startZ = chunkZ << 4;
+                
+                random = surfaceBuilder.createSurfaceRandom(chunkX, chunkZ);
+                
+                for (int localX = 0; localX < 16; ++localX) {
+                    int x = startX + localX - offsetX;
+                    int imageX = startX + localX;
+                   
+                    for (int localZ = 0; localZ < 16; ++localZ) {
+                        int z = startZ + localZ - offsetZ;
+                        int imageY = startZ + localZ;
+                        
+                        int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
+                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
 
-                TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
-                terrainType = getTerrainTypeByBiome(biome, terrainType);
-                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
-                
-                if (drawMarkers) {
-                    terrainType = getTerrainTypeByMarker(x, z, terrainType);
-                }
+                        TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
+                        terrainType = getTerrainTypeByBiome(biome, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(biome, terrainType);
+                        
+                        if (drawMarkers) {
+                            terrainType = getTerrainTypeByMarker(x, z, terrainType);
+                        }
 
-                int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeProvider.getBiomeSource(), true, terrainType);
-                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
-                
-                if (terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.71f);
+                        int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeProvider.getBiomeSource(), true, terrainType);
+                        Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                        
+                        if (terrainType == TerrainType.GRASS) {
+                            colorVec = scale(colorVec, 0.71f);
+                        }
+                        Vector4f mapColor = scale(colorVec, 0.86f);
+                        
+                        int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                        if (terrainType == TerrainType.ICE) {
+                            elevationDiff = 0;
+                        }
+                        
+                        if (elevationDiff > 0) {
+                            mapColor = colorVec;
+                        } else if (elevationDiff < 0) {
+                            mapColor = scale(colorVec, 0.71f);
+                        }
+                        
+                        image.setRGB(imageX, imageY, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
+                    }
                 }
-                Vector4f mapColor = scale(colorVec, 0.86f);
-                
-                int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
-                if (terrainType == TerrainType.ICE) {
-                    elevationDiff = 0;
-                }
-                
-                if (elevationDiff > 0) {
-                    mapColor = colorVec;
-                } else if (elevationDiff < 0) {
-                    mapColor = scale(colorVec, 0.71f);
-                }
-                
-                image.setRGB(localX, localZ, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
             }
         }
-        
+
         return image;
     }
     
@@ -174,48 +203,62 @@ public class DrawUtil {
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
-        // Used for surface sampling, yes it won't be accurate.
         Random random = new Random(chunkSource.getSeed());
+        
+        int chunkWidth = size >> 4;
+        int chunkLength = size >> 4;
         
         int offsetX = size / 2;
         int offsetZ = size / 2;
         
-        for (int localX = 0; localX < size; ++localX) {
-            float progress = localX / (float)size;
-            progressTracker.accept(progress);
+        for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
+            int startX = chunkX << 4;
+            progressTracker.accept(chunkX / (float)chunkWidth);
             
-            for (int localZ = 0; localZ < size; ++localZ) {
-                int x = localX - offsetX;
-                int z = localZ - offsetZ;
-                int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                Biome biome = biomeSource.getBiome(x, z);
+            for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
+                int startZ = chunkZ << 4;
+                
+                random = surfaceBuilder.createSurfaceRandom(chunkX, chunkZ);
+                
+                for (int localX = 0; localX < 16; ++localX) {
+                    int x = startX + localX - offsetX;
+                    int imageX = startX + localX;
+                   
+                    for (int localZ = 0; localZ < 16; ++localZ) {
+                        int z = startZ + localZ - offsetZ;
+                        int imageY = startZ + localZ;
+                        
+                        int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
+                        Biome biome = biomeSource.getBiome(x, z);
 
-                TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
-                terrainType = getTerrainTypeByBiome(biome, terrainType);
-                terrainType = getTerrainTypeBySnowiness(biome, terrainType);
+                        TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
+                        terrainType = getTerrainTypeByBiome(biome, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(biome, terrainType);
 
-                mutablePos.setPos(x, height, z);
-                int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeBlend, terrainType);
-                Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
-                
-                if (terrainType == TerrainType.GRASS) {
-                    colorVec = scale(colorVec, 0.71f);
+                        mutablePos.setPos(x, height, z);
+                        int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeBlend, terrainType);
+                        Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                        
+                        if (terrainType == TerrainType.GRASS) {
+                            colorVec = scale(colorVec, 0.71f);
+                        }
+                        
+                        Vector4f mapColor = scale(colorVec, 0.86f);
+                        
+                        int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
+                        if (terrainType == TerrainType.ICE) {
+                            elevationDiff = 0;
+                        }
+                        
+                        if (elevationDiff > 0) {
+                            mapColor = colorVec;
+                        } else if (elevationDiff < 0) {
+                            mapColor = scale(colorVec, 0.71f);
+                        }
+                        
+                        image.setRGB(imageX, imageY, MathUtil.convertARGBVector4fToInt(mapColor));
+                    }
                 }
-                
-                Vector4f mapColor = scale(colorVec, 0.86f);
-                
-                int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
-                if (terrainType == TerrainType.ICE) {
-                    elevationDiff = 0;
-                }
-                
-                if (elevationDiff > 0) {
-                    mapColor = colorVec;
-                } else if (elevationDiff < 0) {
-                    mapColor = scale(colorVec, 0.71f);
-                }
-                
-                image.setRGB(localX, localZ, MathUtil.convertARGBVector4fToInt(mapColor));
             }
         }
         

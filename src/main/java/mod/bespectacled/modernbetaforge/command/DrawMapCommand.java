@@ -45,9 +45,10 @@ public abstract class DrawMapCommand extends CommandBase {
             throw new WrongUsageException(this.getUsage(sender), new Object[0]);
         }
         
-        int width = MathHelper.clamp(CommandBase.parseInt(args[0]), 0, 5120);
-        int length = MathHelper.clamp(CommandBase.parseInt(args[1]), 0, 5120);
+        int width = MathHelper.clamp(CommandBase.parseInt(args[0]) >> 4 << 4, 0, 5120);
+        int length = MathHelper.clamp(CommandBase.parseInt(args[1]) >> 4 << 4, 0, 5120);
         BlockPos center = CommandBase.parseBoolean(args[2]) ? new BlockPos(0, 0, 0) : sender.getPosition();
+        center = new BlockPos(center.getX() >> 4 << 4, center.getY(), center.getZ() >> 4 << 4);
 
         try { 
             File file = new File(worldServer.getSaveHandler().getWorldDirectory(), this.path);
