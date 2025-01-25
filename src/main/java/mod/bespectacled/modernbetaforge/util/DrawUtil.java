@@ -67,7 +67,7 @@ public class DrawUtil {
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
-    public static BufferedImage createBiomeMap(ModernBetaBiomeProvider biomeProvider, BlockPos center, int seaLevel, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
+    public static BufferedImage createBiomeMap(ModernBetaBiomeProvider biomeProvider, BlockPos center, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -96,7 +96,7 @@ public class DrawUtil {
                         Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
 
                         terrainType = getBaseTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), seaLevel, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), terrainType);
                         
                         if (drawMarkers) {
                             terrainType = getTerrainTypeByMarker(x, z, terrainType);
@@ -154,7 +154,7 @@ public class DrawUtil {
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), chunkSource.getSeaLevel(), terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), terrainType);
                         
                         if (drawMarkers) {
                             terrainType = getTerrainTypeByMarker(x, z, terrainType);
@@ -230,7 +230,7 @@ public class DrawUtil {
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, chunkSource.getSeaLevel(), terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, terrainType);
 
                         int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
@@ -396,15 +396,15 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, int seaLevel, TerrainType terrainType) {
+    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, TerrainType terrainType) {
         if (terrainType.snowy) {
-            if (canFreeze(blockPos, biome, biomeSource, seaLevel)) {
+            if (canFreeze(blockPos, biome, biomeSource, 64)) {
                 terrainType = TerrainType.SNOW;
             }
         }
         
         if (terrainType == TerrainType.WATER) {
-            if (canFreeze(blockPos, biome, biomeSource, seaLevel)) {
+            if (canFreeze(blockPos, biome, biomeSource, 64)) {
                 terrainType = TerrainType.ICE;
             }
         }
@@ -436,27 +436,27 @@ public class DrawUtil {
         int x = blockPos.getX();
         int y = blockPos.getY() + 1;
         int z = blockPos.getZ();
-        boolean shouldFreeze = false;
+        boolean canFreeze = false;
         
         if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
             double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
             temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
             
-            shouldFreeze = temp < 0.5;
+            canFreeze = temp < 0.5;
             
         } else if (biome instanceof BiomeBeta) {
             double temp = biome.getDefaultTemperature();
-            temp = temp - ((double)(y - 64) / 64.0) * 0.3;
+            temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
             
-            shouldFreeze = temp < 0.5;
+            canFreeze = temp < 0.5;
             
         } else {
             double temp = biome.getTemperature(blockPos);
             
-            shouldFreeze = temp < 0.15;
+            canFreeze = temp < 0.15;
         }
         
-        return shouldFreeze;
+        return canFreeze;
     }
     
     private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, BiomeSource biomeSource, boolean useBiomeBlend, TerrainType terrainType) {

@@ -30,7 +30,6 @@ public class BetaColorSampler {
     public void resetClimateSamplers() {
         this.climateSampler = Optional.empty();
         this.skyClimateSampler = Optional.empty();
-        this.seaLevel = 64;
     }
     
     public void setClimateSampler(ClimateSampler climateSampler) {
@@ -39,10 +38,6 @@ public class BetaColorSampler {
     
     public void setSkyClimateSampler(SkyClimateSampler skyClimateSampler) {
         this.skyClimateSampler = Optional.ofNullable(skyClimateSampler);
-    }
-    
-    public void setSeaLevel(int seaLevel) {
-        this.seaLevel = MathHelper.clamp(seaLevel, 0, 255);
     }
     
     public int getSkyColor(BlockPos blockPos) {

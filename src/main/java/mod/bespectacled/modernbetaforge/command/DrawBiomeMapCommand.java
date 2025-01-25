@@ -24,7 +24,6 @@ public class DrawBiomeMapCommand extends DrawMapCommand {
             return DrawUtil.createBiomeMap(
                 biomeProvider,
                 center,
-                worldServer.getSeaLevel(),
                 width,
                 length,
                 false,

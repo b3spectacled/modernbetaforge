@@ -46,7 +46,6 @@ public class WorldEventHandlerClient {
                 
                 if (biomeProvider.getBiomeSource() instanceof ClimateSampler) {
                     BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeProvider.getBiomeSource());
-                    BetaColorSampler.INSTANCE.setSeaLevel(world.getSeaLevel());
                 }
                 
                 if (biomeProvider.getBiomeSource() instanceof SkyClimateSampler) {
