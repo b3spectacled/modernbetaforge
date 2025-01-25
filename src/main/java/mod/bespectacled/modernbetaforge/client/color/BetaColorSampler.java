@@ -19,15 +19,18 @@ public class BetaColorSampler {
     
     private Optional<ClimateSampler> climateSampler;
     private Optional<SkyClimateSampler> skyClimateSampler;
+    private int seaLevel;
     
     private BetaColorSampler() {
         this.climateSampler = Optional.empty();
         this.skyClimateSampler = Optional.empty();
+        this.seaLevel = 64;
     }
     
     public void resetClimateSamplers() {
         this.climateSampler = Optional.empty();
         this.skyClimateSampler = Optional.empty();
+        this.seaLevel = 64;
     }
     
     public void setClimateSampler(ClimateSampler climateSampler) {
@@ -36,6 +39,10 @@ public class BetaColorSampler {
     
     public void setSkyClimateSampler(SkyClimateSampler skyClimateSampler) {
         this.skyClimateSampler = Optional.ofNullable(skyClimateSampler);
+    }
+    
+    public void setSeaLevel(int seaLevel) {
+        this.seaLevel = MathHelper.clamp(seaLevel, 0, 255);
     }
     
     public int getSkyColor(BlockPos blockPos) {
@@ -48,14 +55,14 @@ public class BetaColorSampler {
     
     public int getGrassColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
         
         return ColorizerGrass.getGrassColor(temp, clime.rain());
     }
     
     public int getFoliageColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
         
         return ColorizerFoliage.getFoliageColor(temp, clime.rain());
     }
@@ -72,7 +79,7 @@ public class BetaColorSampler {
         z = (int) ((long) z + (shift >> 24 & 31L));
         
         Clime clime = this.climateSampler.get().sample(x, z);
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY()), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
 
         return ColorizerGrass.getGrassColor(temp, clime.rain());
     }
@@ -85,8 +92,8 @@ public class BetaColorSampler {
         return this.climateSampler.isPresent() && this.climateSampler.get().sampleBiomeColor();
     }
     
-    private static double getTempOffset(int y) {
-        boolean useHeightTempGradient = ModernBetaConfig.visualOptions.useHeightTempGradient;        
-        return useHeightTempGradient ? MathHelper.clamp(1.0 - (256.0 - y) / 128.0, 0.0, 0.5) : 0.0;
+    private static double getTempOffset(int y, int seaLevel) {
+        boolean useHeightTempGradient = ModernBetaConfig.visualOptions.useHeightTempGradient; 
+        return useHeightTempGradient ? MathHelper.clamp(1.0 - (seaLevel + 64) / (double)y, 0.0, 0.5) : 0.0;
     }
 }

@@ -44,11 +44,14 @@ public class WorldEventHandlerClient {
                 ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
                 
-                if (biomeProvider.getBiomeSource() instanceof ClimateSampler)
-                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeProvider.getBiomeSource());  
+                if (biomeProvider.getBiomeSource() instanceof ClimateSampler) {
+                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeProvider.getBiomeSource());
+                    BetaColorSampler.INSTANCE.setSeaLevel(world.getSeaLevel());
+                }
                 
-                if (biomeProvider.getBiomeSource() instanceof SkyClimateSampler)
+                if (biomeProvider.getBiomeSource() instanceof SkyClimateSampler) {
                     BetaColorSampler.INSTANCE.setSkyClimateSampler((SkyClimateSampler)biomeProvider.getBiomeSource());
+                }
             }
             
             // Return early so we do not reset climate samplers
