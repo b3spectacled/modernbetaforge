@@ -14,6 +14,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.block.Block;
@@ -157,7 +158,7 @@ public class DrawUtil {
                         int imageY = startZ + localZ;
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
+                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, height, z));
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
@@ -167,7 +168,7 @@ public class DrawUtil {
                             terrainType = getTerrainTypeByMarker(x, z, terrainType);
                         }
 
-                        int color = getTerrainTypeColor(mutablePos.setPos(x, height, z), biome, biomeProvider.getBiomeSource(), true, terrainType);
+                        int color = getTerrainTypeColor(mutablePos, biome, biomeProvider.getBiomeSource(), true, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                         
                         if (terrainType == TerrainType.GRASS) {
@@ -200,6 +201,9 @@ public class DrawUtil {
     }
     
     public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeBlend, Consumer<Float> progressTracker) {
+        // Make sure to reset climate samplers if world was previously loaded.
+        BetaColorSampler.INSTANCE.resetClimateSamplers();
+        
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -440,7 +444,7 @@ public class DrawUtil {
         int color = terrainType.color;
         
         if (terrainType == TerrainType.GRASS) {
-            color =  biome.getGrassColorAtPos(blockPos);
+            color = biome.getGrassColorAtPos(blockPos);
             
             if (useBiomeBlend) {
                 if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleBiomeColor()) {

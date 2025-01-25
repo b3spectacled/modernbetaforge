@@ -63,5 +63,4 @@ public class WorldEventHandlerClient {
         
         BetaColorSampler.INSTANCE.resetClimateSamplers();
     }
-
 }
