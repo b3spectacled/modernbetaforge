@@ -69,6 +69,7 @@ public class DrawUtil {
     
     public static BufferedImage createBiomeMap(ModernBetaBiomeProvider biomeProvider, BlockPos center, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
         BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
+        BiomeSource biomeSource = biomeProvider.getBiomeSource();
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         int chunkWidth = width >> 4;
@@ -96,16 +97,15 @@ public class DrawUtil {
                         Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
 
                         terrainType = getBaseTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, terrainType);
                         
                         if (drawMarkers) {
                             terrainType = getTerrainTypeByMarker(x, z, terrainType);
                         }
-                        
-                        int biomeColor = MathUtil.convertRGBtoARGB(biome.getGrassColorAtPos(mutablePos));
-                        int color = terrainType == TerrainType.GRASS ? biomeColor : terrainType.color;
-                        
+
+                        int color = getTerrainTypeColor(mutablePos, biome, biomeSource, true, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
+                        
                         if (terrainType == TerrainType.GRASS) {
                             colorVec = scale(colorVec, 0.71f);
                         }
@@ -383,7 +383,7 @@ public class DrawUtil {
             } else if (BiomeDictionary.hasType(biome, Type.MESA)) {
                 terrainType = TerrainType.TERRACOTTA;
             
-            } else if (BiomeDictionary.hasType(biome, Type.SANDY)) {
+            } else if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
                 terrainType = TerrainType.SAND;
                 
             }
