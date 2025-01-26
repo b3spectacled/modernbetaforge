@@ -307,27 +307,29 @@ public class DrawUtil {
     private static TerrainType getBaseTerrainType(ChunkSource chunkSource, SurfaceBuilder surfaceBuilder, int x, int z, int height, Biome biome, Random random) {
         TerrainType terrainType = TerrainType.GRASS;
         
-        if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
+        if (chunkSource instanceof FiniteChunkSource) {
             FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
-            int offsetX = finiteChunkSource.getLevelWidth() / 2;
-            int offsetZ = finiteChunkSource.getLevelLength() / 2;
             
-            x += offsetX;
-            z += offsetZ;
-            
-            Block block = finiteChunkSource.getLevelBlock(x, height, z);
-            Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
-            
-            if (block == Blocks.SAND) {
-                terrainType = TerrainType.SAND;
-            } else if (block == Blocks.GRAVEL || block == Blocks.STONE) {
-                terrainType = TerrainType.STONE;
+            if (finiteChunkSource.inWorldBounds(x, z)) {
+                int offsetX = finiteChunkSource.getLevelWidth() / 2;
+                int offsetZ = finiteChunkSource.getLevelLength() / 2;
+                
+                x += offsetX;
+                z += offsetZ;
+                
+                Block block = finiteChunkSource.getLevelBlock(x, height, z);
+                Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
+                
+                if (block == Blocks.SAND) {
+                    terrainType = TerrainType.SAND;
+                } else if (block == Blocks.GRAVEL || block == Blocks.STONE) {
+                    terrainType = TerrainType.STONE;
+                }
+                
+                if (blockAbove == Blocks.WATER) {
+                    terrainType = getTerrainTypeByFluid(chunkSource);
+                }
             }
-            
-            if (blockAbove == Blocks.WATER) {
-                terrainType = getTerrainTypeByFluid(chunkSource);
-            }
-            
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
