@@ -114,12 +114,10 @@ public abstract class SurfaceBuilder {
 
     /**
      * Checks whether a given biome is within the set of biomes using custom surfaces.
-     * [Deprecated] This is no longer used.
      * 
      * @param biome The biome to check.
      * @return Whether the given biome uses a custom surface.
      */
-    @Deprecated
     public boolean isCustomSurface(Biome biome) {
         return this.biomesWithCustomSurfaces.contains(biome);
     }

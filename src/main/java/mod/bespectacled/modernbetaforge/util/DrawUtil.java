@@ -328,7 +328,7 @@ public class DrawUtil {
                 terrainType = getTerrainTypeByFluid(chunkSource);
             }
             
-        } else if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
+        } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
             boolean isBeach = noiseSurfaceBuilder.isBeach(x, z, random);
