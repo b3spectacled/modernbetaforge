@@ -329,7 +329,11 @@ public class DrawUtil {
                 if (blockAbove == Blocks.WATER) {
                     terrainType = getTerrainTypeByFluid(chunkSource);
                 }
+                
+            } else if (height < chunkSource.getSeaLevel() - 1) {
+                terrainType = getTerrainTypeByFluid(chunkSource);
             }
+            
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
