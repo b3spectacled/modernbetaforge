@@ -59,7 +59,7 @@ public class BetaSpawnLocator implements SpawnLocator {
         
         if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
-            boolean atBeachDepth = y >= seaLevel - 1 && y <= seaLevel + 1;
+            boolean atBeachDepth = noiseSurfaceBuilder.atBeachDepth(y) && y >= seaLevel - 1;
             
             return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.isBeach(x, z, random) && !noiseSurfaceBuilder.isGravelBeach(x, z, random);
         }
