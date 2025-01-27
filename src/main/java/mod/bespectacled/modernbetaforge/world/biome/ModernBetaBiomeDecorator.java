@@ -342,7 +342,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     public static void populateSnowIce(World world, Random random, ModernBetaBiomeProvider biomeProvider, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
-        int seaLevel = world.getSeaLevel();
+        int seaLevel = 64;
         
         BiomeSource biomeSource = biomeProvider.getBiomeSource();
         

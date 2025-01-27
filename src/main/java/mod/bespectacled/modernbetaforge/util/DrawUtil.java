@@ -338,14 +338,14 @@ public class DrawUtil {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
             boolean isBeach = noiseSurfaceBuilder.isBeach(x, z, random);
-            boolean generatesGravelBeaches = noiseSurfaceBuilder.isGravelBeach(x, z, random);
+            boolean isGravelBeach = noiseSurfaceBuilder.isGravelBeach(x, z, random);
             int surfaceDepth = noiseSurfaceBuilder.sampleSurfaceDepth(x, z, random);
             
             if (noiseSurfaceBuilder.isBasin(surfaceDepth)) {
                 terrainType = TerrainType.STONE;
                 
             } else if (noiseSurfaceBuilder.atBeachDepth(height)) {
-                if (generatesGravelBeaches) {
+                if (isGravelBeach) {
                     terrainType = TerrainType.STONE;
                     height--;
                 }
@@ -354,7 +354,7 @@ public class DrawUtil {
                     terrainType = TerrainType.SAND;
                     
                     // Undo above height change if no gravel beaches
-                    if (generatesGravelBeaches) {
+                    if (isGravelBeach) {
                         height++;
                     }
                 }

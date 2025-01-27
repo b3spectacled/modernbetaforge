@@ -147,7 +147,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         }
         
         // Generate processed chunk
-        List<StructureComponent> structureComponents = componentCache.get(chunkX, chunkZ).getComponents();
+        List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
         this.chunkSource.provideProcessedChunk(containerPrimer, chunkX, chunkZ, structureComponents);
         
         // Copy chunk data into chunkPrimer parameter
