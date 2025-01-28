@@ -38,6 +38,8 @@ public class MapGenBetaCave extends MapGenBase {
     protected final int caveCount;
     protected final int caveChance;
     
+    protected final Random tunnelRandom;
+    
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance);
     }
@@ -59,6 +61,8 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveHeight = MathHelper.clamp(caveHeight, 9, 255);
         this.caveCount = caveCount;
         this.caveChance = caveChance;
+        
+        this.tunnelRandom = new Random();
     }
 
     @Override
@@ -71,8 +75,10 @@ public class MapGenBetaCave extends MapGenBase {
         
         for (int chunkX = originChunkX - this.range; chunkX <= originChunkX + this.range; ++chunkX) {
             for (int chunkZ = originChunkZ - this.range; chunkZ <= originChunkZ + this.range; ++chunkZ) {
+                long chunkSeed = (long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ world.getSeed();
+                this.rand.setSeed(chunkSeed);
+                this.tunnelRandom.setSeed(chunkSeed);
                 
-                this.rand.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ world.getSeed());
                 this.recursiveGenerate(world, chunkX, chunkZ, originChunkX, originChunkZ, chunkPrimer);
             }
         }
@@ -99,7 +105,7 @@ public class MapGenBetaCave extends MapGenBase {
             for (int j = 0; j < tunnelCount; ++j) {
                 float tunnelC = this.rand.nextFloat() * 3.141593F * 2.0F;
                 float f1 = ((this.rand.nextFloat() - 0.5F) * 2.0F) / 8F;
-                float tunnelSysWidth = this.getTunnelSystemWidth(this.rand);
+                float tunnelSysWidth = this.getTunnelSystemWidth(this.rand, this.tunnelRandom);
 
                 this.carveTunnels(chunkPrimer, originChunkX, originChunkZ, x, y, z, tunnelSysWidth, tunnelC, f1, 0, 0, this.getTunnelWHRatio());
             }
@@ -210,14 +216,18 @@ public class MapGenBetaCave extends MapGenBase {
         return random.nextInt(random.nextInt(this.caveHeight - 8) + 8);
     }
 
-    protected float getTunnelSystemWidth(Random random) {
-        return this.getBaseTunnelSystemWidth(random) * this.caveWidth;
+    protected float getTunnelSystemWidth(Random random, Random tunnelRandom) {
+        return this.getBaseTunnelSystemWidth(random) * this.getTunnelWidthFactor(tunnelRandom);
     }
     
     protected double getTunnelWHRatio() {
         return 1.0;
     }
     
+    protected final float getTunnelWidthFactor(Random random) {
+        return 1.0f + random.nextFloat() * (this.caveWidth - 1.0f);
+    }
+
     protected final float getBaseTunnelSystemWidth(Random random) {
         return random.nextFloat() * 2.0f + random.nextFloat();
     }

@@ -28,10 +28,12 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
         
         for (int chunkX = originChunkX - this.range; chunkX <= originChunkX + this.range; ++chunkX) {
             for (int chunkZ = originChunkZ - this.range; chunkZ <= originChunkZ + this.range; ++chunkZ) {
-                
                 long randomLong2 = (long)chunkX * randomLong0;
                 long randomLong3 = (long)chunkZ * randomLong1;
-                this.rand.setSeed(randomLong2 ^ randomLong3 ^ world.getSeed());
+                long chunkSeed = randomLong2 ^ randomLong3 ^ world.getSeed();
+                
+                this.rand.setSeed(chunkSeed);
+                this.tunnelRandom.setSeed(chunkSeed);
                 
                 this.recursiveGenerate(world, chunkX, chunkZ, originChunkX, originChunkZ, chunkPrimer);
             }
@@ -59,7 +61,7 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
             for (int j = 0; j < tunnelCount; ++j) {
                 float tunnelC = this.rand.nextFloat() * 3.141593F * 2.0F;
                 float f1 = ((this.rand.nextFloat() - 0.5F) * 2.0F) / 8F;
-                float tunnelSysWidth = this.getTunnelSystemWidth(this.rand);
+                float tunnelSysWidth = this.getTunnelSystemWidth(this.rand, this.tunnelRandom);
 
                 this.carveTunnels(this.rand.nextLong(), chunkPrimer, originChunkX, originChunkZ, x, y, z, tunnelSysWidth, tunnelC, f1, 0, 0, this.getTunnelWHRatio());
             }
@@ -67,14 +69,14 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
     }
     
     @Override
-    protected float getTunnelSystemWidth(Random random) {
+    protected float getTunnelSystemWidth(Random random, Random tunnelRandom) {
         float tunnelSysWidth = this.getBaseTunnelSystemWidth(random);
         
         if (random.nextInt(10) == 0) {
             tunnelSysWidth *= random.nextFloat() * random.nextFloat() * 3F + 1.0F;
         }
         
-        return tunnelSysWidth * this.caveWidth;
+        return tunnelSysWidth * this.getTunnelWidthFactor(tunnelRandom);
     }
 
     private void carveCave(long seed, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {

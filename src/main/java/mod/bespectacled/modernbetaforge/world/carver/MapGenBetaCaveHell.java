@@ -18,7 +18,7 @@ public class MapGenBetaCaveHell extends MapGenBetaCave {
     }
     
     @Override
-    protected float getTunnelSystemWidth(Random random) {
+    protected float getTunnelSystemWidth(Random random, Random tunnelRandom) {
         return this.getBaseTunnelSystemWidth(random) * 2.0f;
     }
 

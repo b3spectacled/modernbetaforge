@@ -450,7 +450,6 @@ public class GuiPredicates {
         USE_FORTRESSES_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_FORTRESSES);
         USE_LAVA_POCKETS_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
         LEVEL_THEME_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_THEME);
-        
         LEVEL_TYPE_TEST = new GuiPredicate(LEVEL_THEME_TEST::test, GuiIdentifiers.PG1_S_LEVEL_TYPE);
         LEVEL_WIDTH_TEST = new GuiPredicate(settings -> isFiniteChunk(settings), GuiIdentifiers.PG1_S_LEVEL_WIDTH);
         LEVEL_LENGTH_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_LENGTH);
