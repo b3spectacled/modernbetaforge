@@ -42,6 +42,66 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 public class ModernBetaGeneratorSettings {
+    public static final float MIN_HEIGHT = 1.0f;
+    public static final float MAX_HEIGHT = 255.0f;
+    
+    public static final float MIN_SEA_LEVEL = 0.0f;
+    public static final float MAX_SEA_LEVEL = MAX_HEIGHT;
+    public static final float MIN_DUNGEON_CHANCE = 1.0f;
+    public static final float MAX_DUNGEON_CHANCE = 100.0f;
+    public static final float MIN_WATER_LAKE_CHANCE = 1.0f;
+    public static final float MAX_WATER_LAKE_CHANCE = 100.0f;
+    public static final float MIN_LAVA_LAKE_CHANCE = 10.0f;
+    public static final float MAX_LAVA_LAKE_CHANCE = 100.0f;
+    
+    public static final float MIN_ORE_SIZE = 1.0f;
+    public static final float MAX_ORE_SIZE = 50.0f;
+    public static final float MIN_ORE_COUNT = 0.0f;
+    public static final float MAX_ORE_COUNT = 40.0f;
+    public static final float MIN_ORE_HEIGHT = 0.0f;
+    public static final float MAX_ORE_HEIGHT = MAX_HEIGHT;
+    public static final float MIN_ORE_CENTER = 0.0f;
+    public static final float MAX_ORE_CENTER = MAX_HEIGHT;
+    public static final float MIN_ORE_SPREAD = 1.0f;
+    public static final float MAX_ORE_SPREAD = MAX_HEIGHT;
+    
+    public static final float MIN_CAVE_WIDTH = 1.0f;
+    public static final float MAX_CAVE_WIDTH = 5.0f;
+    public static final int MIN_CAVE_HEIGHT = 9;
+    public static final int MAX_CAVE_HEIGHT = (int)MAX_HEIGHT;
+    public static final int MIN_CAVE_COUNT = 1;
+    public static final int MAX_CAVE_COUNT = 100;
+    public static final int MIN_CAVE_CHANCE = 1;
+    public static final int MAX_CAVE_CHANCE = 100;
+    
+    public static final int MIN_BIOME_SIZE = 1;
+    public static final int MAX_BIOME_SIZE = 8;
+    public static final int MIN_RIVER_SIZE = 1;
+    public static final int MAX_RIVER_SIZE = 5;
+    
+    public static final float MIN_MAIN_NOISE = 1.0f;
+    public static final float MAX_MAIN_NOISE = 5000.0f;
+    public static final float MIN_SCALE_NOISE = 1.0f;
+    public static final float MAX_SCALE_NOISE = 20.0f;
+    public static final float MIN_DEPTH_NOISE = 1.0f;
+    public static final float MAX_DEPTH_NOISE = 2000.0f;
+    public static final float MIN_BASE_SIZE = 1.0f;
+    public static final float MAX_BASE_SIZE = 25.0f;
+    public static final float MIN_COORD_SCALE = 1.0f;
+    public static final float MAX_COORD_SCALE = 6000.0f;
+    public static final float MIN_HEIGHT_SCALE = 1.0f;
+    public static final float MAX_HEIGHT_SCALE = 6000.0f;
+    public static final float MIN_STRETCH_Y = 0.01f;
+    public static final float MAX_STRETCH_Y = 50.0f;
+    public static final float MIN_LIMIT = 1.0f;
+    public static final float MAX_LIMIT = 5000.0f;
+    public static final float MIN_BIOME_SCALE = 0.1f;
+    public static final float MAX_BIOME_SCALE = 8.0f;
+    public static final float MIN_BIOME_WEIGHT = 1.0f;
+    public static final float MAX_BIOME_WEIGHT = 20.0f;
+    public static final float MIN_BIOME_OFFSET = 0.0f;
+    public static final float MAX_BIOME_OFFSET = 20.0f;
+    
     public final String chunkSource;
     public final String biomeSource;
     public final String surfaceBuilder;

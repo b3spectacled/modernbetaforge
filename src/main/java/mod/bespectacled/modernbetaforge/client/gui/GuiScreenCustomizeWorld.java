@@ -97,65 +97,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TAB_BUTTON_WIDTH = 44;
     private static final int TAB_BUTTON_HEIGHT = 20;
     
-    private static final float MIN_HEIGHT = 1.0f;
-    private static final float MAX_HEIGHT = 255.0f;
     
-    private static final float MIN_SEA_LEVEL = 0.0f;
-    private static final float MAX_SEA_LEVEL = MAX_HEIGHT;
-    private static final float MIN_DUNGEON_CHANCE = 1.0f;
-    private static final float MAX_DUNGEON_CHANCE = 100.0f;
-    private static final float MIN_WATER_LAKE_CHANCE = 1.0f;
-    private static final float MAX_WATER_LAKE_CHANCE = 100.0f;
-    private static final float MIN_LAVA_LAKE_CHANCE = 10.0f;
-    private static final float MAX_LAVA_LAKE_CHANCE = 100.0f;
-    
-    private static final float MIN_ORE_SIZE = 1.0f;
-    private static final float MAX_ORE_SIZE = 50.0f;
-    private static final float MIN_ORE_COUNT = 0.0f;
-    private static final float MAX_ORE_COUNT = 40.0f;
-    private static final float MIN_ORE_HEIGHT = 0.0f;
-    private static final float MAX_ORE_HEIGHT = MAX_HEIGHT;
-    private static final float MIN_ORE_CENTER = 0.0f;
-    private static final float MAX_ORE_CENTER = MAX_HEIGHT;
-    private static final float MIN_ORE_SPREAD = 1.0f;
-    private static final float MAX_ORE_SPREAD = MAX_HEIGHT;
-    
-    private static final float MIN_CAVE_WIDTH = 1.0f;
-    private static final float MAX_CAVE_WIDTH = 5.0f;
-    private static final int MIN_CAVE_HEIGHT = 9;
-    private static final int MAX_CAVE_HEIGHT = (int)MAX_HEIGHT;
-    private static final int MIN_CAVE_COUNT = 1;
-    private static final int MAX_CAVE_COUNT = 100;
-    private static final int MIN_CAVE_CHANCE = 1;
-    private static final int MAX_CAVE_CHANCE = 100;
-    
-    private static final int MIN_BIOME_SIZE = 1;
-    private static final int MAX_BIOME_SIZE = 8;
-    private static final int MIN_RIVER_SIZE = 1;
-    private static final int MAX_RIVER_SIZE = 5;
-    
-    private static final float MIN_MAIN_NOISE = 1.0f;
-    private static final float MAX_MAIN_NOISE = 5000.0f;
-    private static final float MIN_SCALE_NOISE = 1.0f;
-    private static final float MAX_SCALE_NOISE = 20.0f;
-    private static final float MIN_DEPTH_NOISE = 1.0f;
-    private static final float MAX_DEPTH_NOISE = 2000.0f;
-    private static final float MIN_BASE_SIZE = 1.0f;
-    private static final float MAX_BASE_SIZE = 25.0f;
-    private static final float MIN_COORD_SCALE = 1.0f;
-    private static final float MAX_COORD_SCALE = 6000.0f;
-    private static final float MIN_HEIGHT_SCALE = 1.0f;
-    private static final float MAX_HEIGHT_SCALE = 6000.0f;
-    private static final float MIN_STRETCH_Y = 0.01f;
-    private static final float MAX_STRETCH_Y = 50.0f;
-    private static final float MIN_LIMIT = 1.0f;
-    private static final float MAX_LIMIT = 5000.0f;
-    private static final float MIN_BIOME_SCALE = 0.1f;
-    private static final float MAX_BIOME_SCALE = 8.0f;
-    private static final float MIN_BIOME_WEIGHT = 1.0f;
-    private static final float MAX_BIOME_WEIGHT = 20.0f;
-    private static final float MIN_BIOME_OFFSET = 0.0f;
-    private static final float MAX_BIOME_OFFSET = 20.0f;
     
     private final GuiCreateWorld parent;
     
@@ -292,12 +234,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, "page0", "overworld"),
             null,
-            createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, NbtTags.SEA_LEVEL, MIN_SEA_LEVEL, MAX_SEA_LEVEL, (float)this.settings.seaLevel, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, NbtTags.SEA_LEVEL, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, (float)this.settings.seaLevel, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_SANDSTONE, NbtTags.USE_SANDSTONE, this.settings.useSandstone),
-            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_WIDTH, NbtTags.CAVE_WIDTH, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH, this.settings.caveWidth, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT, (float)this.settings.caveHeight, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, MIN_CAVE_COUNT, MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
-            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_WIDTH, NbtTags.CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_CAVE_WIDTH, this.settings.caveWidth, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, ModernBetaGeneratorSettings.MIN_CAVE_HEIGHT, ModernBetaGeneratorSettings.MAX_CAVE_HEIGHT, (float)this.settings.caveHeight, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, ModernBetaGeneratorSettings.MIN_CAVE_COUNT, ModernBetaGeneratorSettings.MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, ModernBetaGeneratorSettings.MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_RAVINES, NbtTags.USE_RAVINES, this.settings.useRavines),
             createGuiButton(GuiIdentifiers.PG0_B_USE_SHAFTS, NbtTags.USE_MINESHAFTS, this.settings.useMineShafts),
             createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGES, NbtTags.USE_VILLAGES, this.settings.useVillages),
@@ -307,11 +249,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG0_B_USE_MONUMENTS, NbtTags.USE_MONUMENTS, this.settings.useMonuments),
             createGuiButton(GuiIdentifiers.PG0_B_USE_MANSIONS, NbtTags.USE_MANSIONS, this.settings.useMansions),
             createGuiButton(GuiIdentifiers.PG0_B_USE_DUNGEONS, NbtTags.USE_DUNGEONS, this.settings.useDungeons),
-            createGuiSlider(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, NbtTags.DUNGEON_CHANCE, MIN_DUNGEON_CHANCE, MAX_DUNGEON_CHANCE, (float)this.settings.dungeonChance, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, NbtTags.DUNGEON_CHANCE, ModernBetaGeneratorSettings.MIN_DUNGEON_CHANCE, ModernBetaGeneratorSettings.MAX_DUNGEON_CHANCE, (float)this.settings.dungeonChance, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_WATER_LAKES, NbtTags.USE_WATER_LAKES, this.settings.useWaterLakes),
-            createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, NbtTags.WATER_LAKE_CHANCE, MIN_WATER_LAKE_CHANCE, MAX_WATER_LAKE_CHANCE, (float)this.settings.waterLakeChance, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, NbtTags.WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_WATER_LAKE_CHANCE, (float)this.settings.waterLakeChance, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, NbtTags.USE_LAVA_LAKES, this.settings.useLavaLakes),
-            createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, NbtTags.LAVA_LAKE_CHANCE, MIN_LAVA_LAKE_CHANCE, MAX_LAVA_LAKE_CHANCE, (float)this.settings.lavaLakeChance, this),
+            createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, NbtTags.LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE, (float)this.settings.lavaLakeChance, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_OCEANS, NbtTags.USE_LAVA_OCEANS, this.settings.useLavaOceans),
             null,
             createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "page0", "nether"),
@@ -341,8 +283,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, "page1", "release"),
             null,
-            createGuiSlider(GuiIdentifiers.PG1_S_LAYER_SZ, NbtTags.LAYER_SIZE, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.layerSize, this),
-            createGuiSlider(GuiIdentifiers.PG1_S_RIVER_SZ, "riverRarity", MIN_RIVER_SIZE, MAX_RIVER_SIZE, this.settings.riverSize, this),
+            createGuiSlider(GuiIdentifiers.PG1_S_LAYER_SZ, NbtTags.LAYER_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.layerSize, this),
+            createGuiSlider(GuiIdentifiers.PG1_S_RIVER_SZ, "riverRarity", ModernBetaGeneratorSettings.MIN_RIVER_SIZE, ModernBetaGeneratorSettings.MAX_RIVER_SIZE, this.settings.riverSize, this),
             createGuiSlider(GuiIdentifiers.PG1_S_LAYER_TYPE, NbtTags.LAYER_TYPE, 0f, GenLayerType.values().length - 1, layerTypeId, this)
         };
         
@@ -367,7 +309,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
             createGuiButton(GuiIdentifiers.PG2_B_USE_MODDED_BIOMES, NbtTags.USE_MODDED_BIOMES, this.settings.useModdedBiomes),
-            createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, MIN_BIOME_SIZE, MAX_BIOME_SIZE, this.settings.biomeSize, this),
+            createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.biomeSize, this),
         
             createGuiLabel(GuiIdentifiers.PG2_L_MOBS, "page2", "mobSpawn"),
             null,
@@ -382,135 +324,135 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         GuiPageButtonList.GuiListEntry[] pageOre = {
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, String.format("%s (%s)", I18n.format("tile.clay.name"), I18n.format(PREFIX + "modernBeta"))),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.claySize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.clayCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.clayMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.clayMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, I18n.format("tile.dirt.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.dirtCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.dirtMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.dirtMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dirtCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dirtMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dirtMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAV_NAME, I18n.format("tile.gravel.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.gravelSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.gravelCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.gravelMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.gravelMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.gravelSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.gravelCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.gravelMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.gravelMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAN_NAME, I18n.format("tile.stone.granite.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.graniteSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.graniteCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.graniteMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.graniteMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.graniteSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.graniteCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.graniteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.graniteMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIOR_NAME, I18n.format("tile.stone.diorite.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.dioriteSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.dioriteCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.dioriteMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.dioriteMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dioriteSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dioriteCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dioriteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dioriteMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_ANDE_NAME, I18n.format("tile.stone.andesite.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.andesiteSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.andesiteCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.andesiteMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.andesiteMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.andesiteSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.andesiteCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.andesiteMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.andesiteMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_COAL_NAME, I18n.format("tile.oreCoal.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_COAL_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.coalSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_COAL_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.coalCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_COAL_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.coalMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_COAL_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.coalMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_COAL_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.coalSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_COAL_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.coalCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_COAL_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.coalMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_COAL_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.coalMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_IRON_NAME, I18n.format("tile.oreIron.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_IRON_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.ironSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_IRON_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.ironCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_IRON_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.ironMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_IRON_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.ironMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_IRON_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.ironSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_IRON_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.ironCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_IRON_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.ironMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_IRON_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.ironMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GOLD_NAME, I18n.format("tile.oreGold.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.goldSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.goldCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.goldMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.goldMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.goldSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.goldCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.goldMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.goldMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_REDS_NAME, I18n.format("tile.oreRedstone.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_REDS_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.redstoneSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_REDS_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.redstoneCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_REDS_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.redstoneMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_REDS_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.redstoneMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_REDS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.redstoneSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_REDS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.redstoneCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_REDS_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.redstoneMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_REDS_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.redstoneMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIAM_NAME, I18n.format("tile.oreDiamond.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.diamondSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.diamondCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.diamondMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.diamondMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.diamondSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.diamondCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.diamondMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.diamondMaxHeight, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_LAPS_NAME, I18n.format("tile.oreLapis.name")),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.lapisSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.lapisCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CTR, "center", MIN_ORE_CENTER, MAX_ORE_CENTER, (float)this.settings.lapisCenterHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SPR, "spread", MIN_ORE_SPREAD, MAX_ORE_SPREAD, (float)this.settings.lapisSpread, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.lapisSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.lapisCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CTR, "center", ModernBetaGeneratorSettings.MIN_ORE_CENTER, ModernBetaGeneratorSettings.MAX_ORE_CENTER, (float)this.settings.lapisCenterHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SPR, "spread", ModernBetaGeneratorSettings.MIN_ORE_SPREAD, ModernBetaGeneratorSettings.MAX_ORE_SPREAD, (float)this.settings.lapisSpread, this),
             
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, String.format("%s (%s)", I18n.format("tile.oreEmerald.name"), I18n.format(PREFIX + "modernBeta"))),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_EMER_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.emeraldSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.emeraldMinHeight, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", MIN_ORE_HEIGHT, MAX_ORE_HEIGHT, (float)this.settings.emeraldMaxHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_EMER_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.emeraldSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMinHeight, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMaxHeight, this),
 
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.quartzSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.quartzCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.quartzSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.quartzCount, this),
 
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
-            createGuiSlider(GuiIdentifiers.PG3_S_MGMA_SIZE, "size", MIN_ORE_SIZE, MAX_ORE_SIZE, (float)this.settings.magmaSize, this),
-            createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", MIN_ORE_COUNT, MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_MGMA_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.magmaSize, this),
+            createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
         };
         
         GuiPageButtonList.GuiListEntry[] pageNoise0 = {
-            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_X, NbtTags.MAIN_NOISE_SCALE_X, MIN_MAIN_NOISE, MAX_MAIN_NOISE, this.settings.mainNoiseScaleX, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Y, NbtTags.MAIN_NOISE_SCALE_Y, MIN_MAIN_NOISE, MAX_MAIN_NOISE, this.settings.mainNoiseScaleY, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Z, NbtTags.MAIN_NOISE_SCALE_Z, MIN_MAIN_NOISE, MAX_MAIN_NOISE, this.settings.mainNoiseScaleZ, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_SCLE_NS_X, NbtTags.SCALE_NOISE_SCALE_X, MIN_SCALE_NOISE, MAX_SCALE_NOISE, this.settings.scaleNoiseScaleX, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_SCLE_NS_Z, NbtTags.SCALE_NOISE_SCALE_Z, MIN_SCALE_NOISE, MAX_SCALE_NOISE, this.settings.scaleNoiseScaleZ, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_DPTH_NS_X, NbtTags.DEPTH_NOISE_SCALE_X, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE, this.settings.depthNoiseScaleX, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_DPTH_NS_Z, NbtTags.DEPTH_NOISE_SCALE_Z, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE, this.settings.depthNoiseScaleZ, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_BASE_SIZE, NbtTags.BASE_SIZE, MIN_BASE_SIZE, MAX_BASE_SIZE, this.settings.baseSize, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_COORD_SCL, NbtTags.COORDINATE_SCALE, MIN_COORD_SCALE, MAX_COORD_SCALE, this.settings.coordinateScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_SCL, NbtTags.HEIGHT_SCALE, MIN_HEIGHT_SCALE, MAX_HEIGHT_SCALE, this.settings.heightScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_STRETCH_Y, NbtTags.STRETCH_Y, MIN_STRETCH_Y, MAX_STRETCH_Y, this.settings.stretchY, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_UPPER_LIM, NbtTags.UPPER_LIMIT_SCALE, MIN_LIMIT, MAX_LIMIT, this.settings.upperLimitScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_LOWER_LIM, NbtTags.LOWER_LIMIT_SCALE, MIN_LIMIT, MAX_LIMIT, this.settings.lowerLimitScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_LIM, NbtTags.HEIGHT, MIN_HEIGHT, MAX_HEIGHT, this.settings.height, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_X, NbtTags.MAIN_NOISE_SCALE_X, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleX, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Y, NbtTags.MAIN_NOISE_SCALE_Y, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleY, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Z, NbtTags.MAIN_NOISE_SCALE_Z, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleZ, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_SCLE_NS_X, NbtTags.SCALE_NOISE_SCALE_X, ModernBetaGeneratorSettings.MIN_SCALE_NOISE, ModernBetaGeneratorSettings.MAX_SCALE_NOISE, this.settings.scaleNoiseScaleX, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_SCLE_NS_Z, NbtTags.SCALE_NOISE_SCALE_Z, ModernBetaGeneratorSettings.MIN_SCALE_NOISE, ModernBetaGeneratorSettings.MAX_SCALE_NOISE, this.settings.scaleNoiseScaleZ, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_DPTH_NS_X, NbtTags.DEPTH_NOISE_SCALE_X, ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, ModernBetaGeneratorSettings.MAX_DEPTH_NOISE, this.settings.depthNoiseScaleX, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_DPTH_NS_Z, NbtTags.DEPTH_NOISE_SCALE_Z, ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, ModernBetaGeneratorSettings.MAX_DEPTH_NOISE, this.settings.depthNoiseScaleZ, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_BASE_SIZE, NbtTags.BASE_SIZE, ModernBetaGeneratorSettings.MIN_BASE_SIZE, ModernBetaGeneratorSettings.MAX_BASE_SIZE, this.settings.baseSize, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_COORD_SCL, NbtTags.COORDINATE_SCALE, ModernBetaGeneratorSettings.MIN_COORD_SCALE, ModernBetaGeneratorSettings.MAX_COORD_SCALE, this.settings.coordinateScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_SCL, NbtTags.HEIGHT_SCALE, ModernBetaGeneratorSettings.MIN_HEIGHT_SCALE, ModernBetaGeneratorSettings.MAX_HEIGHT_SCALE, this.settings.heightScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_STRETCH_Y, NbtTags.STRETCH_Y, ModernBetaGeneratorSettings.MIN_STRETCH_Y, ModernBetaGeneratorSettings.MAX_STRETCH_Y, this.settings.stretchY, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_UPPER_LIM, NbtTags.UPPER_LIMIT_SCALE, ModernBetaGeneratorSettings.MIN_LIMIT, ModernBetaGeneratorSettings.MAX_LIMIT, this.settings.upperLimitScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_LOWER_LIM, NbtTags.LOWER_LIMIT_SCALE, ModernBetaGeneratorSettings.MIN_LIMIT, ModernBetaGeneratorSettings.MAX_LIMIT, this.settings.lowerLimitScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_LIM, NbtTags.HEIGHT, ModernBetaGeneratorSettings.MIN_HEIGHT, ModernBetaGeneratorSettings.MAX_HEIGHT, this.settings.height, this),
             
             createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page4", "beta"),
             null,
-            createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, MIN_BIOME_SCALE, MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
             null,
             
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page4", "release"),
             null,
-            createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_WT, NbtTags.BIOME_DEPTH_WEIGHT, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_WT, NbtTags.BIOME_DEPTH_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
             createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale)
         };
         
@@ -890,87 +832,87 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             float newEntryValue = 0.0f;
             switch (entry) {
                 case GuiIdentifiers.PG5_F_MAIN_NS_X:
-                    this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                    this.settings.mainNoiseScaleX = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE);
                     newEntryValue = this.settings.mainNoiseScaleX;
                     break;
                 case GuiIdentifiers.PG5_F_MAIN_NS_Y:
-                    this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                    this.settings.mainNoiseScaleY = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE);
                     newEntryValue = this.settings.mainNoiseScaleY;
                     break;
                 case GuiIdentifiers.PG5_F_MAIN_NS_Z:
-                    this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                    this.settings.mainNoiseScaleZ = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE);
                     newEntryValue = this.settings.mainNoiseScaleZ;
                     break;
                 case GuiIdentifiers.PG5_F_SCLE_NS_X:
-                    this.settings.scaleNoiseScaleX = MathHelper.clamp(entryValue, MIN_SCALE_NOISE, MAX_SCALE_NOISE);
+                    this.settings.scaleNoiseScaleX = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_SCALE_NOISE, ModernBetaGeneratorSettings.MAX_SCALE_NOISE);
                     newEntryValue = this.settings.scaleNoiseScaleX;
                     break;
                 case GuiIdentifiers.PG5_F_SCLE_NS_Z:
-                    this.settings.scaleNoiseScaleZ = MathHelper.clamp(entryValue, MIN_SCALE_NOISE, MAX_SCALE_NOISE);
+                    this.settings.scaleNoiseScaleZ = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_SCALE_NOISE, ModernBetaGeneratorSettings.MAX_SCALE_NOISE);
                     newEntryValue = this.settings.scaleNoiseScaleZ;
                     break;
                 case GuiIdentifiers.PG5_F_DPTH_NS_X:
-                    this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE);
+                    this.settings.depthNoiseScaleX = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, ModernBetaGeneratorSettings.MAX_DEPTH_NOISE);
                     newEntryValue = this.settings.depthNoiseScaleX;
                     break;
                 case GuiIdentifiers.PG5_F_DPTH_NS_Z:
-                    this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE);
+                    this.settings.depthNoiseScaleZ = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, ModernBetaGeneratorSettings.MAX_DEPTH_NOISE);
                     newEntryValue = this.settings.depthNoiseScaleZ;
                     break;
                 case GuiIdentifiers.PG5_F_BASE_SIZE:
-                    this.settings.baseSize = MathHelper.clamp(entryValue, MIN_BASE_SIZE, MAX_BASE_SIZE);
+                    this.settings.baseSize = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BASE_SIZE, ModernBetaGeneratorSettings.MAX_BASE_SIZE);
                     newEntryValue = this.settings.baseSize;
                     break;
                 case GuiIdentifiers.PG5_F_COORD_SCL:
-                    this.settings.coordinateScale = MathHelper.clamp(entryValue, MIN_COORD_SCALE, MAX_COORD_SCALE);
+                    this.settings.coordinateScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_COORD_SCALE, ModernBetaGeneratorSettings.MAX_COORD_SCALE);
                     newEntryValue = this.settings.coordinateScale;
                     break;
                 case GuiIdentifiers.PG5_F_HEIGH_SCL:
-                    this.settings.heightScale = MathHelper.clamp(entryValue, MIN_HEIGHT_SCALE, MAX_HEIGHT_SCALE);
+                    this.settings.heightScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_HEIGHT_SCALE, ModernBetaGeneratorSettings.MAX_HEIGHT_SCALE);
                     newEntryValue = this.settings.heightScale;
                     break;
                 case GuiIdentifiers.PG5_F_STRETCH_Y:
-                    this.settings.stretchY = MathHelper.clamp(entryValue, MIN_STRETCH_Y, MAX_STRETCH_Y);
+                    this.settings.stretchY = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_STRETCH_Y, ModernBetaGeneratorSettings.MAX_STRETCH_Y);
                     newEntryValue = this.settings.stretchY;
                     break;
                 case GuiIdentifiers.PG5_F_UPPER_LIM:
-                    this.settings.upperLimitScale = MathHelper.clamp(entryValue, MIN_LIMIT, MAX_LIMIT);
+                    this.settings.upperLimitScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_LIMIT, ModernBetaGeneratorSettings.MAX_LIMIT);
                     newEntryValue = this.settings.upperLimitScale;
                     break;
                 case GuiIdentifiers.PG5_F_LOWER_LIM:
-                    this.settings.lowerLimitScale = MathHelper.clamp(entryValue, MIN_LIMIT, MAX_LIMIT);
+                    this.settings.lowerLimitScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_LIMIT, ModernBetaGeneratorSettings.MAX_LIMIT);
                     newEntryValue = this.settings.lowerLimitScale;
                     break;
                 case GuiIdentifiers.PG5_F_HEIGH_LIM:
-                    this.settings.height = (int)MathHelper.clamp(entryValue, MIN_HEIGHT, MAX_HEIGHT);
+                    this.settings.height = (int)MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_HEIGHT, ModernBetaGeneratorSettings.MAX_HEIGHT);
                     newEntryValue = this.settings.height;
                     break;
                 case GuiIdentifiers.PG5_F_TEMP_SCL:
-                    this.settings.tempNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    this.settings.tempNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
                     newEntryValue = this.settings.tempNoiseScale;
                     break;
                 case GuiIdentifiers.PG5_F_RAIN_SCL:
-                    this.settings.rainNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    this.settings.rainNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
                     newEntryValue = this.settings.rainNoiseScale;
                     break;
                 case GuiIdentifiers.PG5_F_DETL_SCL:
-                    this.settings.detailNoiseScale = MathHelper.clamp(entryValue, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                    this.settings.detailNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
                     newEntryValue = this.settings.detailNoiseScale;
                     break;
                 case GuiIdentifiers.PG5_F_B_DPTH_WT:
-                    this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                    this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT);
                     newEntryValue = this.settings.biomeDepthWeight;
                     break;
                 case GuiIdentifiers.PG5_F_B_DPTH_OF:
-                    this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                    this.settings.biomeDepthOffset = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeDepthOffset;
                     break;
                 case GuiIdentifiers.PG5_F_B_SCLE_WT:
-                    this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                    this.settings.biomeScaleWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT);
                     newEntryValue = this.settings.biomeScaleWeight;
                     break;
                 case GuiIdentifiers.PG5_F_B_SCLE_OF:
-                    this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                    this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeScaleOffset;
                     break;
             }
