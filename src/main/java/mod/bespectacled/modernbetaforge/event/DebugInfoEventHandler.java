@@ -73,9 +73,7 @@ public class DebugInfoEventHandler {
                 if (!(chunkSource instanceof SkylandsChunkSource || chunkSource instanceof FiniteChunkSource))
                     addDebugText(event, surfaceText);
                 
-                if (settings.useCaves)
-                    addDebugText(event, carverText);
-                
+                addDebugText(event, carverText);
                 addDebugText(event, "");
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||

@@ -17,8 +17,9 @@ import net.minecraft.util.math.BlockPos;
 public class IndevSpawnLocator implements SpawnLocator {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
-        if (!(chunkSource instanceof FiniteChunkSource))
+        if (!(chunkSource instanceof FiniteChunkSource)) {
             return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
+        }
         
         FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
         Random random = new Random();

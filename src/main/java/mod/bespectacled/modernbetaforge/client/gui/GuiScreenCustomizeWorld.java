@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -76,6 +78,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final String PREFIX = "createWorld.customize.custom.";
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.";
     private static final String PREFIX_LABEL = "createWorld.customize.custom.label.";
+    private static final DecimalFormat DF_THREE = new DecimalFormat("#.###");
+    private static final DecimalFormat DF_ONE = new DecimalFormat("#.#");
     
     private static final int PAGE_TITLE_HEIGHT = 6;
     
@@ -93,6 +97,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TAB_BUTTON_WIDTH = 44;
     private static final int TAB_BUTTON_HEIGHT = 20;
     
+    private static final float MIN_CAVE_WIDTH = 0.5f;
+    private static final float MAX_CAVE_WIDTH = 5.0f;
     private static final int MIN_CAVE_HEIGHT = 9;
     private static final int MAX_CAVE_HEIGHT = 255;
     private static final int MIN_CAVE_COUNT = 1;
@@ -133,7 +139,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton defaults;
     private GuiButton confirm;
     private GuiButton cancel;
-    private GuiButton presets;
+   private GuiButton presets;
     private GuiButton preview;
     
     private boolean settingsModified;
@@ -248,7 +254,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null,
             createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, NbtTags.SEA_LEVEL, 0.0f, MAX_HEIGHT, (float)this.settings.seaLevel, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_SANDSTONE, NbtTags.USE_SANDSTONE, this.settings.useSandstone),
-            createGuiButton(GuiIdentifiers.PG0_B_USE_CAVES, NbtTags.USE_CAVES, this.settings.useCaves),
+            createGuiSlider(GuiIdentifiers.PG0_S_CAVE_WIDTH, NbtTags.CAVE_WIDTH, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH, this.settings.caveWidth, this),
             createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT, (float)this.settings.caveHeight, this),
             createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, MIN_CAVE_COUNT, MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
             createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
@@ -1140,9 +1146,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.spawnAmbientMobs = entryValue;
                     break;
                     
-                case GuiIdentifiers.PG0_B_USE_CAVES:
-                    this.settings.useCaves = entryValue;
-                    break;
                 case GuiIdentifiers.PG0_B_USE_HOLDS:
                     this.settings.useStrongholds = entryValue;
                     break;
@@ -1229,67 +1232,67 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG4_S_MAIN_NS_X:
-                    this.settings.mainNoiseScaleX = entryValue;
+                    this.settings.mainNoiseScaleX = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_MAIN_NS_Y:
-                    this.settings.mainNoiseScaleY = entryValue;
+                    this.settings.mainNoiseScaleY = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_MAIN_NS_Z:
-                    this.settings.mainNoiseScaleZ = entryValue;
+                    this.settings.mainNoiseScaleZ = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_SCLE_NS_X:
-                    this.settings.scaleNoiseScaleX = entryValue;
+                    this.settings.scaleNoiseScaleX = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_SCLE_NS_Z:
-                    this.settings.scaleNoiseScaleZ = entryValue;
+                    this.settings.scaleNoiseScaleZ = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_DPTH_NS_X:
-                    this.settings.depthNoiseScaleX = entryValue;
+                    this.settings.depthNoiseScaleX = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_DPTH_NS_Z:
-                    this.settings.depthNoiseScaleZ = entryValue;
+                    this.settings.depthNoiseScaleZ = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_BASE_SIZE:
-                    this.settings.baseSize = entryValue;
+                    this.settings.baseSize = roundToThreeDec(entryValue);
                     break;    
                 case GuiIdentifiers.PG4_S_COORD_SCL:
-                    this.settings.coordinateScale = entryValue;
+                    this.settings.coordinateScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_HEIGH_SCL:
-                    this.settings.heightScale = entryValue;
+                    this.settings.heightScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_STRETCH_Y:
-                    this.settings.stretchY = entryValue;
+                    this.settings.stretchY = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_UPPER_LIM:
-                    this.settings.upperLimitScale = entryValue;
+                    this.settings.upperLimitScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_LOWER_LIM:
-                    this.settings.lowerLimitScale = entryValue;
+                    this.settings.lowerLimitScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_HEIGH_LIM:
                     this.settings.height = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG4_S_TEMP_SCL:
-                    this.settings.tempNoiseScale = entryValue;
+                    this.settings.tempNoiseScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_RAIN_SCL:
-                    this.settings.rainNoiseScale = entryValue;
+                    this.settings.rainNoiseScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_DETL_SCL:
-                    this.settings.detailNoiseScale = entryValue;
+                    this.settings.detailNoiseScale = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_B_DPTH_WT:
-                    this.settings.biomeDepthWeight = entryValue;
+                    this.settings.biomeDepthWeight = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_B_DPTH_OF:
-                    this.settings.biomeDepthOffset = entryValue;
+                    this.settings.biomeDepthOffset = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_B_SCLE_WT:
-                    this.settings.biomeScaleWeight = entryValue;
+                    this.settings.biomeScaleWeight = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_B_SCLE_OF:
-                    this.settings.biomeScaleOffset = entryValue;
+                    this.settings.biomeScaleOffset = roundToThreeDec(entryValue);
                     break;
                     
                 case GuiIdentifiers.PG0_S_CHUNK:
@@ -1307,6 +1310,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 
                 case GuiIdentifiers.PG0_S_SEA_LEVEL:
                     this.settings.seaLevel = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_CAVE_WIDTH:
+                    this.settings.caveWidth = roundToTwoDec(entryValue);
                     break;
                 case GuiIdentifiers.PG0_S_CAVE_HEIGHT:
                     this.settings.caveHeight = (int)entryValue;
@@ -1894,7 +1900,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG5_F_UPPER_LIM:
             case GuiIdentifiers.PG5_F_LOWER_LIM:
                 return String.format("%5.3f", entryValue);
-            
+                
             case GuiIdentifiers.PG4_S_BASE_SIZE:
             case GuiIdentifiers.PG4_S_STRETCH_Y:
             case GuiIdentifiers.PG4_S_TEMP_SCL:
@@ -1915,6 +1921,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG5_F_B_SCLE_WT:
             case GuiIdentifiers.PG5_F_B_SCLE_OF:
                 return String.format("%2.3f", entryValue);
+                
+            case GuiIdentifiers.PG0_S_CAVE_WIDTH:
+                return String.format("%2.1f", entryValue);
             
             case GuiIdentifiers.PG0_S_CHUNK: {
                 ResourceLocation registryKey = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue);
@@ -2241,6 +2250,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return 0;
+    }
+    
+    private static float roundToThreeDec(float entryValue) {
+        DF_THREE.setRoundingMode(RoundingMode.FLOOR);
+        
+        return Floats.tryParse(DF_THREE.format(entryValue));
+    }
+    
+    private static float roundToTwoDec(float entryValue) {
+        DF_THREE.setRoundingMode(RoundingMode.FLOOR);
+        
+        return Floats.tryParse(DF_ONE.format(entryValue));
     }
 
     private class CreateGuiPropertyVisitor implements GuiPropertyVisitor {

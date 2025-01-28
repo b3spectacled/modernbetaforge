@@ -9,17 +9,17 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public class MapGenBetaCaveHell extends MapGenBetaCave {
     public MapGenBetaCaveHell() {
-        super(BlockStates.NETHERRACK, BlockStates.LAVA, 128, 10, 5);
+        super(BlockStates.NETHERRACK, BlockStates.LAVA, 1.0f, 128, 10, 5);
     }
     
     @Override
     protected int getCaveY(Random random) {
-        return random.nextInt(this.getBaseCaveHeight());
+        return random.nextInt(this.caveHeight);
     }
     
     @Override
     protected float getTunnelSystemWidth(Random random) {
-        return super.getTunnelSystemWidth(random) * 2.0f;
+        return this.getBaseTunnelSystemWidth(random) * 2.0f;
     }
 
     @Override

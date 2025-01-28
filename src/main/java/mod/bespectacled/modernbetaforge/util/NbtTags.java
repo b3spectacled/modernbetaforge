@@ -10,7 +10,7 @@ public class NbtTags {
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";
     
-    public static final String USE_CAVES = "useCaves";
+    public static final String CAVE_WIDTH = "caveWidth";
     public static final String CAVE_HEIGHT = "caveHeight";
     public static final String CAVE_COUNT = "caveCount";
     public static final String CAVE_CHANCE = "caveChance";
@@ -175,8 +175,10 @@ public class NbtTags {
     public static final String TAIGA_BIOMES = "taigaBiomes";
     public static final String TUNDRA_BIOMES = "tundraBiomes";
 
-    /* OLD */
+    /* Deprecated */
+    
     public static final String DEPR_FIXED_BIOME = "fixedBiome";
+    public static final String DEPR_USE_CAVES = "useCaves";
     
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";

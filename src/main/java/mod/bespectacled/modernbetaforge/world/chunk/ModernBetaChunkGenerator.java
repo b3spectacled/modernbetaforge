@@ -479,17 +479,15 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private Map<ResourceLocation, MapGenBase> initCarvers(ModernBetaGeneratorSettings settings) {
         Map<ResourceLocation, MapGenBase> carverMap = new LinkedHashMap<>();
         
-        if (settings.useCaves) {
-            carverMap.put(
-                new ResourceLocation("cave"),
-                TerrainGen.getModdedMapGen(
-                    ModernBetaRegistries.CAVE_CARVER
-                        .get(new ResourceLocation(settings.caveCarver))
-                        .apply(this.getChunkSource(), settings),
-                    InitMapGenEvent.EventType.CAVE
-                )
-            );
-        }
+        carverMap.put(
+            new ResourceLocation("cave"),
+            TerrainGen.getModdedMapGen(
+                ModernBetaRegistries.CAVE_CARVER
+                    .get(new ResourceLocation(settings.caveCarver))
+                    .apply(this.getChunkSource(), settings),
+                InitMapGenEvent.EventType.CAVE
+            )
+        );
         
         if (settings.useRavines) {
             carverMap.put(

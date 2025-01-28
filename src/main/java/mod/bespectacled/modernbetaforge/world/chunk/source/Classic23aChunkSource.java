@@ -4,12 +4,14 @@ import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -43,6 +45,11 @@ public class Classic23aChunkSource extends FiniteChunkSource {
         this.seaLevel = this.levelHeight / 2;
         
         this.setCloudHeight(this.seaLevel + 34);
+    }
+    
+    @Override
+    public SpawnLocator getSpawnLocator() {
+        return new IndevSpawnLocator();
     }
     
     @Override

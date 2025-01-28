@@ -21,6 +21,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_3_1_0 = 1310;
     private static final int DATA_VERSION_V1_4_0_0 = 1400;
     private static final int DATA_VERSION_V1_5_0_0 = 1500;
+    private static final int DATA_VERSION_V1_5_2_0 = 1520;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -203,6 +204,25 @@ public class ModDataFixers {
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.FIX_LAYER_SIZE
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
+            }
+        }
+    );
+    
+    public static final ModDataFix CAVE_CARVER_NONE_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_5_2_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());

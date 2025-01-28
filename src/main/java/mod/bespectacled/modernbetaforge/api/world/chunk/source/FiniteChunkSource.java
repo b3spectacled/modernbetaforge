@@ -19,7 +19,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -31,7 +30,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefau
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockTorch;
@@ -99,15 +97,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
     }
     
-    /**
-     * Inherited from {@link ChunkSource#getSpawnLocator() getSpawnLocator}.
-     * Uses {@link IndevSpawnLocator} by default.
-     */
-    @Override
-    public SpawnLocator getSpawnLocator() {
-        return new IndevSpawnLocator();
-    }
-    
     @Override
     public void provideInitialChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
@@ -127,7 +116,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public void provideProcessedChunk(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, List<StructureComponent> structureComponents) { }
 
     @Override
-    public void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
+    public final void provideSurface(World world, Biome[] biomes, ChunkPrimer chunkPrimer, int chunkX, int chunkZ) { }
     
     /**
      * Inherited from {@link ChunkSource#getHeight(int, int, mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type) getHeight}.

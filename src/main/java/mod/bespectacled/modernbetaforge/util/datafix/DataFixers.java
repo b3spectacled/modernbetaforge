@@ -230,6 +230,14 @@ public class DataFixers {
         factory.layerSize = biomeSize;
     }
     
+    public static void fixCaveCarverNone(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        boolean useCaves = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_CAVES, true);
+        
+        if (!useCaves) {
+            factory.caveCarver = ModernBetaBuiltInTypes.Carver.NONE.getRegistryString();
+        }
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }

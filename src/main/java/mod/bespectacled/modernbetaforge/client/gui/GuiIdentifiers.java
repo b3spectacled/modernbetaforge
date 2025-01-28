@@ -66,9 +66,10 @@ public class GuiIdentifiers {
     public static final int PG0_B_USE_FORTRESSES = 127;
     public static final int PG0_B_USE_LAVA_POCKETS = 128;
     
-    public static final int PG0_S_CAVE_HEIGHT = 129;
-    public static final int PG0_S_CAVE_COUNT = 130;
-    public static final int PG0_S_CAVE_CHANCE = 131;
+    public static final int PG0_S_CAVE_WIDTH = 129;
+    public static final int PG0_S_CAVE_HEIGHT = 130;
+    public static final int PG0_S_CAVE_COUNT = 131;
+    public static final int PG0_S_CAVE_CHANCE = 132;
     
     public static final int PG0_L_INDEV_SEA_LEVEL = 150;
     

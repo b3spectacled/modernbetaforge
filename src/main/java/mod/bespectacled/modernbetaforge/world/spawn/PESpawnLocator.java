@@ -5,7 +5,6 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
@@ -18,13 +17,9 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class PESpawnLocator implements SpawnLocator {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
-        if (!(chunkSource instanceof NoiseChunkSource))
-            return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
-        
         ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
         SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceBuilderKey).apply(chunkSource, chunkSource.getGeneratorSettings());
 
-        boolean failed = false;
         int x = 0;
         int z = 0;
         int attempts = 0;
@@ -33,11 +28,7 @@ public class PESpawnLocator implements SpawnLocator {
         
         while(!this.isSandAt(x, z, chunkSource, biomeSource, surfaceBuilder, random)) {
             if (attempts > 10000) {
-                failed = true;
-                x = 128;
-                z = 128;
-                
-                break;
+                return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
             }
             
             x += random.nextInt(32) - random.nextInt(32);
@@ -53,7 +44,7 @@ public class PESpawnLocator implements SpawnLocator {
             attempts++;
         }
         
-        int y = chunkSource.getHeight(x, z, failed ? HeightmapChunk.Type.OCEAN : HeightmapChunk.Type.FLOOR) + 1;
+        int y = chunkSource.getHeight(x, z, HeightmapChunk.Type.FLOOR) + 1;
         
         return new BlockPos(x, y, z);
     }

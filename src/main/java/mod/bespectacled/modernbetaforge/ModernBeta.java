@@ -33,9 +33,9 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.5.1.1";
+    public static final String VERSION = "1.5.2.0";
     public static final String MCVERSION = "1.12.2";
-    public static final int DATA_VERSION = 1500;
+    public static final int DATA_VERSION = 1520;
     
     private static final Logger LOGGER = LogManager.getLogger(MODID);
     

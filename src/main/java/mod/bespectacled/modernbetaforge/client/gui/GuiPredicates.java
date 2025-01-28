@@ -37,11 +37,11 @@ public class GuiPredicates {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     
     public static final GuiPredicate SURFACE_BUILDER_TEST;
-    public static final GuiPredicate CAVE_CARVER_TEST;
     public static final GuiPredicate SINGLE_BIOME_TEST;
     public static final GuiPredicate REPLACE_OCEAN_TEST;
     public static final GuiPredicate REPLACE_BEACH_TEST;
     public static final GuiPredicate SEA_LEVEL_TEST;
+    public static final GuiPredicate CAVE_WIDTH_TEST;
     public static final GuiPredicate CAVE_HEIGHT_TEST;
     public static final GuiPredicate CAVE_COUNT_TEST;
     public static final GuiPredicate CAVE_CHANCE_TEST;
@@ -148,6 +148,10 @@ public class GuiPredicates {
     
     private static boolean isCarverEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Carver type) {
         return settings.caveCarver.equals(type.getRegistryString());
+    }
+    
+    private static boolean isCarverEnabled(ModernBetaGeneratorSettings settings) {
+        return !settings.caveCarver.equals(ModernBetaBuiltInTypes.Carver.NONE.getRegistryString());
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
@@ -359,7 +363,6 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE
         );
-        CAVE_CARVER_TEST = new GuiPredicate(settings -> settings.useCaves, GuiIdentifiers.PG0_S_CARVER, GuiIdentifiers.PG0_B_CARVER);
         SINGLE_BIOME_TEST = new GuiPredicate(settings -> isSingleBiome(settings), GuiIdentifiers.PG0_B_FIXED);
         REPLACE_OCEAN_TEST = new GuiPredicate(
             settings -> {
@@ -378,9 +381,10 @@ public class GuiPredicates {
             GuiIdentifiers.PG0_B_USE_BEACH
         );
         SEA_LEVEL_TEST = new GuiPredicate(SURFACE_BUILDER_TEST::test, GuiIdentifiers.PG0_S_SEA_LEVEL);
-        CAVE_HEIGHT_TEST = new GuiPredicate(settings -> !isCarverEqualTo(settings, ModernBetaBuiltInTypes.Carver.RELEASE) && settings.useCaves, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
-        CAVE_COUNT_TEST = new GuiPredicate(CAVE_HEIGHT_TEST::test, GuiIdentifiers.PG0_S_CAVE_COUNT);
-        CAVE_CHANCE_TEST = new GuiPredicate(CAVE_HEIGHT_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
+        CAVE_WIDTH_TEST = new GuiPredicate(settings -> !isCarverEqualTo(settings, ModernBetaBuiltInTypes.Carver.RELEASE) && isCarverEnabled(settings), GuiIdentifiers.PG0_S_CAVE_WIDTH);
+        CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
+        CAVE_COUNT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_COUNT);
+        CAVE_CHANCE_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
         USE_STRONGHOLDS_TEST = new GuiPredicate(
             settings -> {
                 Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));

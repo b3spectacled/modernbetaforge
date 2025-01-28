@@ -66,6 +66,7 @@ createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.replaceBeachBiomes=Beach Biomes
 
 # Page 1 - Other Feature Settings
+createWorld.customize.custom.caveWidth=Cave Width
 createWorld.customize.custom.caveHeight=Cave Height
 createWorld.customize.custom.caveCount=Cave Count
 createWorld.customize.custom.caveChance=Cave Rarity
@@ -171,6 +172,7 @@ createWorld.customize.custom.surfaceBuilder.modernbetaforge.infdev_227=Infdev 22
 createWorld.customize.custom.surfaceBuilder.modernbetaforge.pe=Pocket Ed.
 createWorld.customize.custom.surfaceBuilder.modernbetaforge.release=Release
 
+createWorld.customize.custom.caveCarver.modernbetaforge.none=None
 createWorld.customize.custom.caveCarver.modernbetaforge.beta=Beta
 createWorld.customize.custom.caveCarver.modernbetaforge.beta_1_8=Beta 1.8
 createWorld.customize.custom.caveCarver.modernbetaforge.release=Release

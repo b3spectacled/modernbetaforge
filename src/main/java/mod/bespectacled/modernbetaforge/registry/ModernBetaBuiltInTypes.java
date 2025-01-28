@@ -91,6 +91,7 @@ public class ModernBetaBuiltInTypes {
     }
     
     public enum Carver {
+        NONE("none"),
         BETA("beta"),
         BETA_1_8("beta_1_8"),
         RELEASE("release");

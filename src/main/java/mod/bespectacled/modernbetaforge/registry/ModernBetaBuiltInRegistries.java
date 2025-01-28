@@ -24,6 +24,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBeta18Cave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenNoOp;
 import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
@@ -95,6 +96,7 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerCaveCarvers() {
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey(), MapGenNoOp::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), MapGenBetaCave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA_1_8.getRegistryKey(), MapGenBeta18Cave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (chunkSource, settings) -> new MapGenCaves());
@@ -143,6 +145,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SCALE_NOISE_SCALE_Z, new DataFix(NbtTags.SCALE_NOISE_SCALE_Z, DataFixers::fixScaleNoiseScaleZ));
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_SIZE, new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize));
+        
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CAVE_CARVER_NONE, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone));
     }
 
     @SideOnly(Side.CLIENT)
@@ -168,11 +172,11 @@ public class ModernBetaBuiltInRegistries {
     @SideOnly(Side.CLIENT)
     public static void registerPredicates() {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SURFACE_BUILDER, GuiPredicates.SURFACE_BUILDER_TEST);
-        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_CARVER, GuiPredicates.CAVE_CARVER_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SINGLE_BIOME, GuiPredicates.SINGLE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_OCEAN, GuiPredicates.REPLACE_OCEAN_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_BEACH, GuiPredicates.REPLACE_BEACH_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SEA_LEVEL, GuiPredicates.SEA_LEVEL_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_WIDTH, GuiPredicates.CAVE_WIDTH_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_HEIGHT, GuiPredicates.CAVE_HEIGHT_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_COUNT, GuiPredicates.CAVE_COUNT_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_CHANCE, GuiPredicates.CAVE_CHANCE_TEST);

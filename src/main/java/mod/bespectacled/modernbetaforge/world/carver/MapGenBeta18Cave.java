@@ -15,7 +15,7 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
     }
     
     public MapGenBeta18Cave() {
-        super(BlockStates.STONE, BlockStates.WATER, 128, 40, 15);
+        super(BlockStates.STONE, BlockStates.WATER, 1.0f, 128, 40, 15);
     }
     
     @Override
@@ -40,8 +40,8 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
     
     @Override
     protected void recursiveGenerate(World world, int chunkX, int chunkZ, int originChunkX, int originChunkZ, ChunkPrimer chunkPrimer) {
-        int caveCount = this.rand.nextInt(this.rand.nextInt(this.rand.nextInt(this.getBaseCaveCount()) + 1) + 1);
-        if (this.rand.nextInt(this.getRegionalCaveChance()) != 0) {
+        int caveCount = this.rand.nextInt(this.rand.nextInt(this.rand.nextInt(this.caveCount) + 1) + 1);
+        if (this.rand.nextInt(this.caveChance) != 0) {
             caveCount = 0;
         }
 
@@ -68,13 +68,13 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
     
     @Override
     protected float getTunnelSystemWidth(Random random) {
-        float tunnelSysWidth = super.getTunnelSystemWidth(random);
+        float tunnelSysWidth = this.getBaseTunnelSystemWidth(random);
         
         if (random.nextInt(10) == 0) {
             tunnelSysWidth *= random.nextFloat() * random.nextFloat() * 3F + 1.0F;
         }
         
-        return tunnelSysWidth;
+        return tunnelSysWidth * this.caveWidth;
     }
 
     private void carveCave(long seed, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {

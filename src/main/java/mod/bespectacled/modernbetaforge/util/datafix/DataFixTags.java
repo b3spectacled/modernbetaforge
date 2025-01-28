@@ -29,4 +29,5 @@ public class DataFixTags {
     public static final ResourceLocation FIX_SCALE_NOISE_SCALE_Z = ModernBeta.createRegistryKey("fix_scaleNoiseScaleZ");
     public static final ResourceLocation FIX_LAYER_SIZE = ModernBeta.createRegistryKey("fix_layerSize");
     public static final ResourceLocation FIX_BIOME_DEPTH_SCALE = ModernBeta.createRegistryKey("fix_useBiomeDepthScale");
+    public static final ResourceLocation FIX_CAVE_CARVER_NONE = ModernBeta.createRegistryKey("fix_caveCarverNone");
 }

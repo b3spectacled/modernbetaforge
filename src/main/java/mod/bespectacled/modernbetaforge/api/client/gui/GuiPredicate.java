@@ -9,12 +9,14 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.util.ResourceLocation;
 
 public class GuiPredicate {
+    @Deprecated public static final ResourceLocation CAVE_CARVER = createRegistryKey(NbtTags.CAVE_CARVER);
+    
     public static final ResourceLocation SURFACE_BUILDER = createRegistryKey(NbtTags.SURFACE_BUILDER);
-    public static final ResourceLocation CAVE_CARVER = createRegistryKey(NbtTags.CAVE_CARVER);
     public static final ResourceLocation SINGLE_BIOME = createRegistryKey(NbtTags.SINGLE_BIOME);
     public static final ResourceLocation REPLACE_OCEAN = createRegistryKey(NbtTags.REPLACE_OCEAN_BIOMES);
     public static final ResourceLocation REPLACE_BEACH = createRegistryKey(NbtTags.REPLACE_BEACH_BIOMES);
     public static final ResourceLocation SEA_LEVEL = createRegistryKey(NbtTags.SEA_LEVEL);
+    public static final ResourceLocation CAVE_WIDTH = createRegistryKey(NbtTags.CAVE_WIDTH);
     public static final ResourceLocation CAVE_HEIGHT = createRegistryKey(NbtTags.CAVE_HEIGHT);
     public static final ResourceLocation CAVE_COUNT = createRegistryKey(NbtTags.CAVE_COUNT);
     public static final ResourceLocation CAVE_CHANCE = createRegistryKey(NbtTags.CAVE_CHANCE);
