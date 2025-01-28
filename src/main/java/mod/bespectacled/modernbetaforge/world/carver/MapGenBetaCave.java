@@ -58,7 +58,7 @@ public class MapGenBetaCave extends MapGenBase {
         this.carvables = this.initializeCarvables(defaultBlock.getBlock());
         
         this.caveWidth = caveWidth;
-        this.caveHeight = MathHelper.clamp(caveHeight, 9, 255);
+        this.caveHeight = caveHeight;
         this.caveCount = caveCount;
         this.caveChance = caveChance;
         

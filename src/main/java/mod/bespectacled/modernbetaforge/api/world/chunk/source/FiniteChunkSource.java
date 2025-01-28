@@ -56,11 +56,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public abstract class FiniteChunkSource extends ChunkSource {
     private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
     
-    private static final int MIN_WIDTH = 64;
-    private static final int MAX_WIDTH = 2560;
-    private static final int MIN_HEIGHT = 64;
-    private static final int MAX_HEIGHT = 256;
-    
     protected static final Block PLACEHOLDER_BLOCK = Blocks.ANVIL;
     protected static final int MAX_FLOODS = 640;
     
@@ -88,9 +83,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     public FiniteChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
         
-        this.levelWidth = MathHelper.clamp(settings.levelWidth >> 4 << 4, MIN_WIDTH, MAX_WIDTH);
-        this.levelLength = MathHelper.clamp(settings.levelLength >> 4 << 4, MIN_WIDTH, MAX_WIDTH);
-        this.levelHeight = MathHelper.clamp(settings.levelHeight, MIN_HEIGHT, MAX_HEIGHT);
+        this.levelWidth = settings.levelWidth >> 4 << 4;
+        this.levelLength = settings.levelLength >> 4 << 4;
+        this.levelHeight = settings.levelHeight;
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
             .get(new ResourceLocation(settings.biomeSource))

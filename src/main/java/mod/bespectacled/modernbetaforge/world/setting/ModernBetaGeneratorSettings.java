@@ -39,31 +39,35 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 
 public class ModernBetaGeneratorSettings {
-    public static final float MIN_HEIGHT = 1.0f;
-    public static final float MAX_HEIGHT = 255.0f;
+    public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
+    public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     
-    public static final float MIN_SEA_LEVEL = 0.0f;
-    public static final float MAX_SEA_LEVEL = MAX_HEIGHT;
-    public static final float MIN_DUNGEON_CHANCE = 1.0f;
-    public static final float MAX_DUNGEON_CHANCE = 100.0f;
-    public static final float MIN_WATER_LAKE_CHANCE = 1.0f;
-    public static final float MAX_WATER_LAKE_CHANCE = 100.0f;
-    public static final float MIN_LAVA_LAKE_CHANCE = 10.0f;
-    public static final float MAX_LAVA_LAKE_CHANCE = 100.0f;
+    public static final int MIN_HEIGHT = 1;
+    public static final int MAX_HEIGHT = 255;
     
-    public static final float MIN_ORE_SIZE = 1.0f;
-    public static final float MAX_ORE_SIZE = 50.0f;
-    public static final float MIN_ORE_COUNT = 0.0f;
-    public static final float MAX_ORE_COUNT = 40.0f;
-    public static final float MIN_ORE_HEIGHT = 0.0f;
-    public static final float MAX_ORE_HEIGHT = MAX_HEIGHT;
-    public static final float MIN_ORE_CENTER = 0.0f;
-    public static final float MAX_ORE_CENTER = MAX_HEIGHT;
-    public static final float MIN_ORE_SPREAD = 1.0f;
-    public static final float MAX_ORE_SPREAD = MAX_HEIGHT;
+    public static final int MIN_SEA_LEVEL = 0;
+    public static final int MAX_SEA_LEVEL = MAX_HEIGHT;
+    public static final int MIN_DUNGEON_CHANCE = 1;
+    public static final int MAX_DUNGEON_CHANCE = 100;
+    public static final int MIN_WATER_LAKE_CHANCE = 1;
+    public static final int MAX_WATER_LAKE_CHANCE = 100;
+    public static final int MIN_LAVA_LAKE_CHANCE = 10;
+    public static final int MAX_LAVA_LAKE_CHANCE = 100;
+    
+    public static final int MIN_ORE_SIZE = 1;
+    public static final int MAX_ORE_SIZE = 50;
+    public static final int MIN_ORE_COUNT = 0;
+    public static final int MAX_ORE_COUNT = 40;
+    public static final int MIN_ORE_HEIGHT = 0;
+    public static final int MAX_ORE_HEIGHT = MAX_HEIGHT;
+    public static final int MIN_ORE_CENTER = 0;
+    public static final int MAX_ORE_CENTER = MAX_HEIGHT;
+    public static final int MIN_ORE_SPREAD = 1;
+    public static final int MAX_ORE_SPREAD = MAX_HEIGHT;
     
     public static final float MIN_CAVE_WIDTH = 1.0f;
     public static final float MAX_CAVE_WIDTH = 5.0f;
@@ -93,8 +97,8 @@ public class ModernBetaGeneratorSettings {
     public static final float MAX_HEIGHT_SCALE = 6000.0f;
     public static final float MIN_STRETCH_Y = 0.01f;
     public static final float MAX_STRETCH_Y = 50.0f;
-    public static final float MIN_LIMIT = 1.0f;
-    public static final float MAX_LIMIT = 5000.0f;
+    public static final float MIN_LIMIT_SCALE = 1.0f;
+    public static final float MAX_LIMIT_SCALE = 5000.0f;
     public static final float MIN_BIOME_SCALE = 0.1f;
     public static final float MAX_BIOME_SCALE = 8.0f;
     public static final float MIN_BIOME_WEIGHT = 1.0f;
@@ -1742,6 +1746,121 @@ public class ModernBetaGeneratorSettings {
                 factory.tundraBiomeBase = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
                 factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
                 factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
+                
+                /* Clamp values */
+                
+                factory.coordinateScale = MathHelper.clamp(factory.coordinateScale, MIN_COORD_SCALE, MAX_COORD_SCALE);
+                factory.heightScale = MathHelper.clamp(factory.heightScale, MIN_HEIGHT_SCALE, MAX_HEIGHT_SCALE);
+                factory.lowerLimitScale = MathHelper.clamp(factory.lowerLimitScale, MIN_LIMIT_SCALE, MAX_LIMIT_SCALE);
+                factory.upperLimitScale = MathHelper.clamp(factory.upperLimitScale, MIN_LIMIT_SCALE, MAX_LIMIT_SCALE);
+                factory.scaleNoiseScaleX = MathHelper.clamp(factory.scaleNoiseScaleX, MIN_SCALE_NOISE, MAX_SCALE_NOISE);
+                factory.scaleNoiseScaleZ = MathHelper.clamp(factory.scaleNoiseScaleZ, MIN_SCALE_NOISE, MAX_SCALE_NOISE);
+                factory.depthNoiseScaleX = MathHelper.clamp(factory.depthNoiseScaleX, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE);
+                factory.depthNoiseScaleZ = MathHelper.clamp(factory.depthNoiseScaleZ, MIN_DEPTH_NOISE, MAX_DEPTH_NOISE);
+                factory.mainNoiseScaleX = MathHelper.clamp(factory.mainNoiseScaleX, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                factory.mainNoiseScaleY = MathHelper.clamp(factory.mainNoiseScaleY, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                factory.mainNoiseScaleZ = MathHelper.clamp(factory.mainNoiseScaleZ, MIN_MAIN_NOISE, MAX_MAIN_NOISE);
+                factory.baseSize = MathHelper.clamp(factory.baseSize, MIN_BASE_SIZE, MAX_BASE_SIZE);
+                factory.stretchY = MathHelper.clamp(factory.stretchY, MIN_STRETCH_Y, MAX_STRETCH_Y);
+                factory.seaLevel = MathHelper.clamp(factory.seaLevel, MIN_SEA_LEVEL, MAX_SEA_LEVEL);
+                factory.height = MathHelper.clamp(factory.height, MIN_HEIGHT, MAX_HEIGHT);
+
+                factory.tempNoiseScale = MathHelper.clamp(factory.tempNoiseScale, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                factory.rainNoiseScale = MathHelper.clamp(factory.rainNoiseScale, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                factory.detailNoiseScale = MathHelper.clamp(factory.detailNoiseScale, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
+                
+                factory.biomeDepthWeight = MathHelper.clamp(factory.biomeDepthWeight, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                factory.biomeDepthOffset = MathHelper.clamp(factory.biomeDepthOffset, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                factory.biomeScaleWeight = MathHelper.clamp(factory.biomeScaleWeight, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
+                factory.biomeScaleOffset = MathHelper.clamp(factory.biomeScaleOffset, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+
+                factory.biomeSize = MathHelper.clamp(factory.biomeSize, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                factory.riverSize = MathHelper.clamp(factory.riverSize, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
+                factory.layerSize = MathHelper.clamp(factory.layerSize, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                
+                factory.caveWidth = MathHelper.clamp(factory.caveWidth, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH);
+                factory.caveHeight = MathHelper.clamp(factory.caveHeight, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT);
+                factory.caveCount = MathHelper.clamp(factory.caveCount, MIN_CAVE_COUNT, MAX_CAVE_COUNT);
+                factory.caveChance = MathHelper.clamp(factory.caveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
+                
+                factory.dungeonChance = MathHelper.clamp(factory.dungeonChance, MIN_DUNGEON_CHANCE, MAX_DUNGEON_CHANCE);
+                factory.waterLakeChance = MathHelper.clamp(factory.waterLakeChance, MIN_WATER_LAKE_CHANCE, MAX_WATER_LAKE_CHANCE);
+                factory.lavaLakeChance = MathHelper.clamp(factory.lavaLakeChance, MIN_LAVA_LAKE_CHANCE, MAX_LAVA_LAKE_CHANCE);
+
+                factory.levelWidth = MathHelper.clamp(factory.levelWidth, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
+                factory.levelLength = MathHelper.clamp(factory.levelLength, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
+                factory.levelHeight = MathHelper.clamp(factory.levelHeight, LEVEL_HEIGHTS[0], LEVEL_HEIGHTS[LEVEL_HEIGHTS.length - 1]);
+                
+                factory.claySize = MathHelper.clamp(factory.claySize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.clayCount = MathHelper.clamp(factory.clayCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.clayMinHeight = MathHelper.clamp(factory.clayMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.clayMaxHeight = MathHelper.clamp(factory.clayMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.dirtSize = MathHelper.clamp(factory.dirtSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.dirtCount = MathHelper.clamp(factory.dirtCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.dirtMinHeight = MathHelper.clamp(factory.dirtMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.dirtMaxHeight = MathHelper.clamp(factory.dirtMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.gravelSize = MathHelper.clamp(factory.gravelSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.gravelCount = MathHelper.clamp(factory.gravelCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.gravelMinHeight = MathHelper.clamp(factory.gravelMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.gravelMaxHeight = MathHelper.clamp(factory.gravelMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.graniteSize = MathHelper.clamp(factory.graniteSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.graniteCount = MathHelper.clamp(factory.graniteCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.graniteMinHeight = MathHelper.clamp(factory.graniteMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.graniteMaxHeight = MathHelper.clamp(factory.graniteMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.dioriteSize = MathHelper.clamp(factory.dioriteSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.dioriteCount = MathHelper.clamp(factory.dioriteCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.dioriteMinHeight = MathHelper.clamp(factory.dioriteMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.dioriteMaxHeight = MathHelper.clamp(factory.dioriteMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.andesiteSize = MathHelper.clamp(factory.andesiteSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.andesiteCount = MathHelper.clamp(factory.andesiteCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.andesiteMinHeight = MathHelper.clamp(factory.andesiteMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.andesiteMaxHeight = MathHelper.clamp(factory.andesiteMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.coalSize = MathHelper.clamp(factory.coalSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.coalCount = MathHelper.clamp(factory.coalCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.coalMinHeight = MathHelper.clamp(factory.coalMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.coalMaxHeight = MathHelper.clamp(factory.coalMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.ironSize = MathHelper.clamp(factory.ironSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.ironCount = MathHelper.clamp(factory.ironCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.ironMinHeight = MathHelper.clamp(factory.ironMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.ironMaxHeight = MathHelper.clamp(factory.ironMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.goldSize = MathHelper.clamp(factory.goldSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.goldCount = MathHelper.clamp(factory.goldCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.goldMinHeight = MathHelper.clamp(factory.goldMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.goldMaxHeight = MathHelper.clamp(factory.goldMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.redstoneSize = MathHelper.clamp(factory.redstoneSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.redstoneCount = MathHelper.clamp(factory.redstoneCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.redstoneMinHeight = MathHelper.clamp(factory.redstoneMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.redstoneMaxHeight = MathHelper.clamp(factory.redstoneMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.diamondSize = MathHelper.clamp(factory.diamondSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.diamondCount = MathHelper.clamp(factory.diamondCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.diamondMinHeight = MathHelper.clamp(factory.diamondMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.diamondMaxHeight = MathHelper.clamp(factory.diamondMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.lapisSize = MathHelper.clamp(factory.lapisSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.lapisCount = MathHelper.clamp(factory.lapisCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.lapisCenterHeight = MathHelper.clamp(factory.lapisCenterHeight, MIN_ORE_CENTER, MAX_ORE_CENTER);
+                factory.lapisSpread = MathHelper.clamp(factory.lapisSpread, MIN_ORE_SPREAD, MAX_ORE_SPREAD);
+                
+                factory.emeraldSize = MathHelper.clamp(factory.emeraldSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.emeraldCount = MathHelper.clamp(factory.emeraldCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                factory.emeraldMinHeight = MathHelper.clamp(factory.emeraldMinHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                factory.emeraldMaxHeight = MathHelper.clamp(factory.emeraldMaxHeight, MIN_ORE_HEIGHT, MAX_ORE_HEIGHT);
+                
+                factory.quartzSize = MathHelper.clamp(factory.quartzSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.quartzCount = MathHelper.clamp(factory.quartzCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
+                
+                factory.magmaSize = MathHelper.clamp(factory.magmaSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
+                factory.magmaCount = MathHelper.clamp(factory.magmaCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
                 
                 ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
                     Property<?> property = ModernBetaRegistries.PROPERTY.get(key);

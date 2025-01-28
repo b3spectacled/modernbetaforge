@@ -126,11 +126,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     public void initGui() {
-        int resolutionNdx = getNdx(GuiScreenCustomizeWorld.LEVEL_WIDTHS, this.resolution);
+        int resolutionNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.resolution);
         
         this.buttonList.clear();
         this.biomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeBlend"), true));
-        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, GuiScreenCustomizeWorld.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
+        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
         this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
         this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
         
@@ -321,7 +321,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public String getText(int id, String entryString, float entryValue) {
         if (id == GUI_ID_RESOLUTION) {
-            return String.format("%s: %d", entryString, GuiScreenCustomizeWorld.LEVEL_WIDTHS[(int)entryValue]);
+            return String.format("%s: %d", entryString, ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
         }
         
         return String.format("%d", (int)entryValue);
@@ -337,7 +337,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void setEntryValue(int id, float value) {
         if (id == GUI_ID_RESOLUTION) {
-            this.resolution = GuiScreenCustomizeWorld.LEVEL_WIDTHS[(int)value];
+            this.resolution = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
         }
     }
 
