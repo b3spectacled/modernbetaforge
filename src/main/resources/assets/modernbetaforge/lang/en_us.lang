@@ -92,6 +92,7 @@ createWorld.customize.custom.levelLength=Level Length
 createWorld.customize.custom.levelHeight=Level Height
 createWorld.customize.custom.levelHouse=Indev House
 createWorld.customize.custom.useIndevCaves=Indev Caves
+createWorld.customize.custom.levelCaveWidth=Indev Cave Width
 
 # Page 2 - Release Settings
 createWorld.customize.custom.riverRarity=River Rarity

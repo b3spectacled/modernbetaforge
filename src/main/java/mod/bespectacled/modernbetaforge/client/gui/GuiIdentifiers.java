@@ -90,13 +90,14 @@ public class GuiIdentifiers {
     public static final int PG1_S_LEVEL_HEIGHT = 204;
     public static final int PG1_S_LEVEL_HOUSE = 205;
     public static final int PG1_B_USE_INDEV_CAVES = 206;
+    public static final int PG1_S_LEVEL_CAVE_WIDTH = 207;
     
-    public static final int PG1_B_USE_INFDEV_WALLS = 207;
-    public static final int PG1_B_USE_INFDEV_PYRAMIDS = 208;
+    public static final int PG1_B_USE_INFDEV_WALLS = 208;
+    public static final int PG1_B_USE_INFDEV_PYRAMIDS = 209;
     
-    public static final int PG1_S_RIVER_SZ = 209;
-    public static final int PG1_S_LAYER_SZ = 210;
-    public static final int PG1_S_LAYER_TYPE = 211;
+    public static final int PG1_S_RIVER_SZ = 210;
+    public static final int PG1_S_LAYER_SZ = 211;
+    public static final int PG1_S_LAYER_TYPE = 212;
 
     public static final int PG1_L_INDEV_FEATURES = 2000;
     public static final int PG1_L_INFDEV_227_FEATURES = 2001;

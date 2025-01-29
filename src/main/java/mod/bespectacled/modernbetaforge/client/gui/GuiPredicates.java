@@ -68,6 +68,7 @@ public class GuiPredicates {
     public static final GuiPredicate LEVEL_HEIGHT_TEST;
     public static final GuiPredicate LEVEL_HOUSE_TEST;
     public static final GuiPredicate USE_INDEV_CAVES_TEST;
+    public static final GuiPredicate LEVEL_CAVE_WIDTH_TEST;
     public static final GuiPredicate USE_INFDEV_WALLS_TEST;
     public static final GuiPredicate USE_INFDEV_PYRAMIDS_TEST;
     public static final GuiPredicate RIVER_SIZE_TEST;
@@ -458,6 +459,7 @@ public class GuiPredicates {
         LEVEL_HEIGHT_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_HEIGHT);
         LEVEL_HOUSE_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_HOUSE);
         USE_INDEV_CAVES_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_B_USE_INDEV_CAVES);
+        LEVEL_CAVE_WIDTH_TEST = new GuiPredicate(settings -> isFiniteChunk(settings) && settings.useIndevCaves, GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH);
         USE_INFDEV_WALLS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_WALLS);
         USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
         RIVER_SIZE_TEST = new GuiPredicate(

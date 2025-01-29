@@ -62,6 +62,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelWidth;
     protected final int levelLength;
     protected final int levelHeight;
+    protected final float levelCaveWidth;
     protected final int[] levelHeightmap;
     protected final BiomeSource biomeSource;
     
@@ -86,6 +87,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelWidth = settings.levelWidth >> 4 << 4;
         this.levelLength = settings.levelLength >> 4 << 4;
         this.levelHeight = settings.levelHeight;
+        this.levelCaveWidth = settings.levelCaveWidth;
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
             .get(new ResourceLocation(settings.biomeSource))

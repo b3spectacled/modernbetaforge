@@ -281,6 +281,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL, String.format("%s: %s", I18n.format(PREFIX + "seaLevel"), levelSeaLevelStr)),                                                                                                                                     
             createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HOUSE, NbtTags.LEVEL_HOUSE, 0f, IndevHouse.values().length - 1, levelHouseId, this),
             createGuiButton(GuiIdentifiers.PG1_B_USE_INDEV_CAVES, NbtTags.USE_INDEV_CAVES, this.settings.useIndevCaves),
+            createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, NbtTags.LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH, this.settings.levelCaveWidth, this),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, "page1", "release"),
             null,
@@ -1341,6 +1343,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG1_S_LEVEL_HOUSE:
                     this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
                     break;
+                case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
+                    this.settings.levelCaveWidth = roundToTwoDec(entryValue);
+                    break;
+                    
                 case GuiIdentifiers.PG1_S_RIVER_SZ:
                     this.settings.riverSize = (int)entryValue;
                     break;
@@ -1917,6 +1923,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 return String.format("%2.3f", entryValue);
                 
             case GuiIdentifiers.PG0_S_CAVE_WIDTH:
+            case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
                 return String.format("%2.1f", entryValue);
             
             case GuiIdentifiers.PG0_S_CHUNK: {

@@ -58,6 +58,9 @@ public class ModernBetaGeneratorSettings {
     public static final int MIN_LAVA_LAKE_CHANCE = 10;
     public static final int MAX_LAVA_LAKE_CHANCE = 100;
     
+    public static final float MIN_LEVEL_CAVE_WIDTH = 1.0f;
+    public static final float MAX_LEVEL_CAVE_WIDTH = 5.0f;
+    
     public static final int MIN_ORE_SIZE = 1;
     public static final int MAX_ORE_SIZE = 50;
     public static final int MIN_ORE_COUNT = 0;
@@ -186,6 +189,7 @@ public class ModernBetaGeneratorSettings {
     public final int levelHeight;
     public final String levelHouse;
     public final boolean useIndevCaves;
+    public final float levelCaveWidth;
     
     public final int claySize;
     public final int clayCount;
@@ -412,6 +416,7 @@ public class ModernBetaGeneratorSettings {
         this.levelHeight = factory.levelHeight;
         this.levelHouse = factory.levelHouse;
         this.useIndevCaves = factory.useIndevCaves;
+        this.levelCaveWidth = factory.levelCaveWidth;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -681,6 +686,7 @@ public class ModernBetaGeneratorSettings {
         public int levelHeight;
         public String levelHouse;
         public boolean useIndevCaves;
+        public float levelCaveWidth;
         
         public int claySize;
         public int clayCount;
@@ -900,6 +906,7 @@ public class ModernBetaGeneratorSettings {
             this.levelHeight = 64;
             this.levelHouse = IndevHouse.OAK.id;
             this.useIndevCaves = true;
+            this.levelCaveWidth = 1.0f;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -1090,9 +1097,9 @@ public class ModernBetaGeneratorSettings {
                 this.seaLevel == factory.seaLevel &&
                 this.height == factory.height &&
                         
-                this.tempNoiseScale == factory.tempNoiseScale &&
-                this.rainNoiseScale == factory.rainNoiseScale &&
-                this.detailNoiseScale == factory.detailNoiseScale &&
+                Float.compare(factory.tempNoiseScale, this.tempNoiseScale) == 0 &&
+                Float.compare(factory.rainNoiseScale, this.rainNoiseScale) == 0 &&
+                Float.compare(factory.detailNoiseScale, this.detailNoiseScale) == 0 &&
                 
                 Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
@@ -1143,6 +1150,7 @@ public class ModernBetaGeneratorSettings {
                 this.levelHeight == factory.levelHeight &&
                 this.levelHouse.equals(factory.levelHouse) &&
                 this.useIndevCaves == factory.useIndevCaves &&
+                Float.compare(factory.levelCaveWidth, this.levelCaveWidth) == 0 &&
                 
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
@@ -1367,6 +1375,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.levelHeight;
             hashCode = 31 * hashCode + this.levelHouse.hashCode();
             hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
+            hashCode = 31 * hashCode + ((this.levelCaveWidth == 0.0f) ? 0 : Float.floatToIntBits(this.levelCaveWidth));
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1617,6 +1626,7 @@ public class ModernBetaGeneratorSettings {
                 factory.levelHeight = JsonUtils.getInt(jsonObject, NbtTags.LEVEL_HEIGHT, factory.levelHeight);
                 factory.levelHouse = JsonUtils.getString(jsonObject, NbtTags.LEVEL_HOUSE, factory.levelHouse);
                 factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
+                factory.levelCaveWidth = JsonUtils.getFloat(jsonObject, NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -1797,6 +1807,7 @@ public class ModernBetaGeneratorSettings {
                 factory.levelWidth = MathHelper.clamp(factory.levelWidth, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
                 factory.levelLength = MathHelper.clamp(factory.levelLength, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
                 factory.levelHeight = MathHelper.clamp(factory.levelHeight, LEVEL_HEIGHTS[0], LEVEL_HEIGHTS[LEVEL_HEIGHTS.length - 1]);
+                factory.levelCaveWidth = MathHelper.clamp(factory.levelCaveWidth, MIN_LEVEL_CAVE_WIDTH, MAX_LEVEL_CAVE_WIDTH);
                 
                 factory.claySize = MathHelper.clamp(factory.claySize, MIN_ORE_SIZE, MAX_ORE_SIZE);
                 factory.clayCount = MathHelper.clamp(factory.clayCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
@@ -1966,6 +1977,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.LEVEL_HEIGHT, factory.levelHeight);
             jsonObject.addProperty(NbtTags.LEVEL_HOUSE, factory.levelHouse);
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
+            jsonObject.addProperty(NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

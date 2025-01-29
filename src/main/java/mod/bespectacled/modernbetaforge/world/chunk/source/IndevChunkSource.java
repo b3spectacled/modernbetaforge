@@ -1,10 +1,13 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import java.util.Random;
+
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoiseCombined;
@@ -319,6 +322,7 @@ public class IndevChunkSource extends FiniteChunkSource {
     
     private void carveLevel() {
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64 << 1;
+        Random tunnelRandom = new Random(this.seed);
         
         for (int i = 0; i < caveCount; ++i) {
             this.setPhaseProgress(i / (float)(caveCount - 1));
@@ -333,7 +337,8 @@ public class IndevChunkSource extends FiniteChunkSource {
             float phi = this.random.nextFloat() * (float)Math.PI * 2.0f;
             float deltaPhi = 0.0f;
             
-            float caveRadius = this.random.nextFloat() * this.random.nextFloat();
+            float caveWidth = this.random.nextFloat() * this.random.nextFloat();
+            caveWidth *= MathUtil.getRandomFloatInRange(ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, this.levelCaveWidth, tunnelRandom);
             
             for (int len = 0; len < caveLen; ++len) {
                 caveX += MathHelper.sin(theta) * MathHelper.cos(phi);
@@ -354,7 +359,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                     float centerZ = caveZ + (this.random.nextFloat() * 4.0f - 2.0f) * 0.2f;
                     
                     float radius = ((float)this.levelHeight - centerY) / (float)this.levelHeight;
-                    radius = 1.2f + (radius * 3.5f + 1.0f) * caveRadius;
+                    radius = 1.2f + (radius * 3.5f + 1.0f) * caveWidth;
                     radius = radius * MathHelper.sin((float)len * (float)Math.PI / (float)caveLen);
                     
                     this.fillOblateSpheroid(centerX, centerY, centerZ, radius, Blocks.AIR);

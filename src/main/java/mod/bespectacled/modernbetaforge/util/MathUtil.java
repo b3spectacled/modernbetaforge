@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.util;
 
+import java.util.Random;
+
 import org.lwjgl.util.vector.Vector4f;
 
 import net.minecraft.util.math.Vec3d;
@@ -23,6 +25,10 @@ public class MathUtil {
     
     public static double distance(int x, int z, int pX, int pZ) {
         return Math.sqrt((pX - x) * (pX - x) + (pZ - z) * (pZ - z));
+    }
+    
+    public static float getRandomFloatInRange(float min, float max, Random random) {
+        return min + random.nextFloat() * (max - min);
     }
     
     public static Vec3d convertRGBIntToVec3d(int color) {

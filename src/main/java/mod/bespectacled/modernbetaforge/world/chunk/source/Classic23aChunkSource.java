@@ -1,10 +1,13 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import java.util.Random;
+
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -188,6 +191,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     
     private void carveLevel() {
         int caveCount = this.levelWidth * this.levelLength * this.levelHeight / 256 / 64;
+        Random tunnelRandom = new Random(this.seed);
         
         for (int i = 0; i < caveCount; ++i) {
             this.setPhaseProgress(i / (float)(caveCount - 1));
@@ -201,6 +205,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
             float deltaTheta = 0.0f;
             float phi = (float)((double)this.random.nextFloat() * Math.PI * 2.0);
             float deltaPhi = 0.0f;
+            
+            float caveWidth = MathUtil.getRandomFloatInRange(ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, this.levelCaveWidth, tunnelRandom);
             
             for (int len = 0; len < caveLen; ++len) {
                 caveX += (float)(Math.sin((double)theta) * Math.cos((double)phi));
@@ -220,7 +226,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                     float centerY = caveY + this.random.nextFloat() * 4.0f - 2.0f;
                     float centerZ = caveZ + this.random.nextFloat() * 4.0f - 2.0f;
                     
-                    float radius = (float)(Math.sin((double)len * Math.PI / (double)caveLen) * 2.5 + 1.0);
+                    float radius = (float)((Math.sin((double)len * Math.PI / (double)caveLen) * 2.5 + 1.0) * caveWidth);
                     
                     this.fillOblateSpheroid(centerX, centerY, centerZ, radius, Blocks.AIR);
                 }

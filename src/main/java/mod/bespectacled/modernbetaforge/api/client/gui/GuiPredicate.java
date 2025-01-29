@@ -42,6 +42,7 @@ public class GuiPredicate {
     public static final ResourceLocation LEVEL_LENGTH = createRegistryKey(NbtTags.LEVEL_LENGTH);
     public static final ResourceLocation LEVEL_HEIGHT = createRegistryKey(NbtTags.LEVEL_HEIGHT);
     public static final ResourceLocation LEVEL_HOUSE = createRegistryKey(NbtTags.LEVEL_HOUSE);
+    public static final ResourceLocation LEVEL_CAVE_WIDTH = createRegistryKey(NbtTags.LEVEL_CAVE_WIDTH);
     public static final ResourceLocation USE_INDEV_CAVES = createRegistryKey(NbtTags.USE_INDEV_CAVES);
     public static final ResourceLocation USE_INFDEV_WALLS = createRegistryKey(NbtTags.USE_INFDEV_WALLS);
     public static final ResourceLocation USE_INFDEV_PYRAMIDS = createRegistryKey(NbtTags.USE_INFDEV_PYRAMIDS);

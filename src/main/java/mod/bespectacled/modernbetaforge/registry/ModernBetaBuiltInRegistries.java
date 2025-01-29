@@ -217,6 +217,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LEVEL_HEIGHT, GuiPredicates.LEVEL_HEIGHT_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LEVEL_LENGTH, GuiPredicates.LEVEL_LENGTH_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LEVEL_HOUSE, GuiPredicates.LEVEL_HOUSE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.LEVEL_CAVE_WIDTH, GuiPredicates.LEVEL_CAVE_WIDTH_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_INDEV_CAVES, GuiPredicates.USE_INDEV_CAVES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_INFDEV_WALLS, GuiPredicates.USE_INFDEV_WALLS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_INFDEV_PYRAMIDS, GuiPredicates.USE_INFDEV_PYRAMIDS_TEST);

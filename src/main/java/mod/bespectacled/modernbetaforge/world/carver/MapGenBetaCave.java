@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -243,10 +244,7 @@ public class MapGenBetaCave extends MapGenBase {
     }
     
     protected final float getTunnelWidthMultiplier(Random random) {
-        float min = Math.min(this.caveWidth, 1.0f);
-        float max = Math.max(this.caveWidth, 1.0f);
-        
-        return min + random.nextFloat() * (max - min);
+        return MathUtil.getRandomFloatInRange(ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, this.caveWidth, random);
     }
 
     protected final float getBaseTunnelSystemWidth(Random random) {
