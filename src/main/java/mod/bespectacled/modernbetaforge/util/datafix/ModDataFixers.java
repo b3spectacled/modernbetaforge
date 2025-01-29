@@ -61,7 +61,10 @@ public class ModDataFixers {
                     DataFixTags.TUNDRA_BIOMES,
                     
                     // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME
+                    DataFixTags.FIX_SINGLE_BIOME,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
@@ -86,7 +89,10 @@ public class ModDataFixers {
                     DataFixTags.FIX_BIOME_DEPTH_SCALE,
 
                     // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME
+                    DataFixTags.FIX_SINGLE_BIOME,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
@@ -108,7 +114,10 @@ public class ModDataFixers {
                     DataFixTags.SURFACE_SKYLANDS,
 
                     // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME
+                    DataFixTags.FIX_SINGLE_BIOME,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
@@ -126,7 +135,12 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_SINGLE_BIOME);
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_SINGLE_BIOME,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
+                );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
@@ -143,7 +157,12 @@ public class ModDataFixers {
 
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(DataFixTags.FIX_USE_INDEV_HOUSE);
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_USE_INDEV_HOUSE,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
+                );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
             }
@@ -164,7 +183,10 @@ public class ModDataFixers {
                     DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
                     DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
                     DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
-                    DataFixTags.FIX_RESOURCE_LOCATION_CARVER
+                    DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
@@ -184,7 +206,10 @@ public class ModDataFixers {
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(
                     DataFixTags.FIX_SCALE_NOISE_SCALE_X,
-                    DataFixTags.FIX_SCALE_NOISE_SCALE_Z
+                    DataFixTags.FIX_SCALE_NOISE_SCALE_Z,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
@@ -203,7 +228,10 @@ public class ModDataFixers {
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_LAYER_SIZE
+                    DataFixTags.FIX_LAYER_SIZE,
+                    
+                    // Added in 1.5.2.0 to replace useCaves
+                    DataFixTags.FIX_CAVE_CARVER_NONE
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());

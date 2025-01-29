@@ -54,15 +54,15 @@ public class DataFixers {
         .build();
     
     private static final Map<String, String> SPAWN_LOCATORS = ImmutableMap.<String, String>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.PE.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.PE.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString())
         .build();
     
     public static void fixDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
