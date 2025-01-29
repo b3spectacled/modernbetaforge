@@ -235,14 +235,14 @@ public class MapGenBetaCave extends MapGenBase {
     }
 
     protected float getTunnelSystemWidth(Random random, Random tunnelRandom) {
-        return this.getBaseTunnelSystemWidth(random) * this.getTunnelWidthFactor(tunnelRandom);
+        return this.getBaseTunnelSystemWidth(random) * this.getTunnelWidthMultiplier(tunnelRandom);
     }
     
     protected double getTunnelWHRatio() {
         return 1.0;
     }
     
-    protected final float getTunnelWidthFactor(Random random) {
+    protected final float getTunnelWidthMultiplier(Random random) {
         float min = Math.min(this.caveWidth, 1.0f);
         float max = Math.max(this.caveWidth, 1.0f);
         

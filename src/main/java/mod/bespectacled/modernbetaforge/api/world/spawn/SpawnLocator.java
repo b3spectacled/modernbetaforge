@@ -31,8 +31,8 @@ public interface SpawnLocator {
             int minAdjacent = 9;
             
             Random random = new Random(chunkSource.getSeed());
-            int centerX = random.nextInt(512) - 256;
-            int centerZ = random.nextInt(512) - 256;
+            int centerX = spawnPos.getX() + random.nextInt(512) - 256;
+            int centerZ = spawnPos.getZ() + random.nextInt(512) - 256;
             
             while(true) {
                 int r2 = radius * radius;

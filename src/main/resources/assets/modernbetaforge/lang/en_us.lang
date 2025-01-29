@@ -183,6 +183,7 @@ createWorld.customize.custom.spawnLocator.modernbetaforge.default=Default
 createWorld.customize.custom.spawnLocator.modernbetaforge.beta=Beta
 createWorld.customize.custom.spawnLocator.modernbetaforge.pe=Pocket Ed.
 createWorld.customize.custom.spawnLocator.modernbetaforge.infdev=Infdev
+createWorld.customize.custom.spawnLocator.modernbetaforge.far_lands=Far Lands
 
 # Indev Settings Names
 createWorld.customize.custom.levelTheme.normal=Normal

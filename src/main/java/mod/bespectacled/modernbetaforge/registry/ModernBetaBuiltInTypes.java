@@ -116,11 +116,12 @@ public class ModernBetaBuiltInTypes {
     }
     
     public enum SpawnLocator {
-        NONE("none"),
-        DEFAULT("default"),
         BETA("beta"),
+        INFDEV("infdev"),
         PE("pe"),
-        INFDEV("infdev");
+        FAR_LANDS("far_lands"),
+        DEFAULT("default"),
+        NONE("none");
         
         private final String id;
         

@@ -46,6 +46,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.FarLandsSpawnLocator;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
 import mod.bespectacled.modernbetaforge.world.spawn.NoOpSpawnLocator;
 import mod.bespectacled.modernbetaforge.world.spawn.PESpawnLocator;
@@ -113,6 +114,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryKey(), new BetaSpawnLocator());
         ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryKey(), new InfdevSpawnLocator());
         ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.PE.getRegistryKey(), new PESpawnLocator());
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.FAR_LANDS.getRegistryKey(), new FarLandsSpawnLocator());
         ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryKey(), SpawnLocator.DEFAULT);
         ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.NONE.getRegistryKey(), new NoOpSpawnLocator());
     }

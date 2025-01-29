@@ -76,7 +76,7 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
             tunnelSysWidth *= random.nextFloat() * random.nextFloat() * 3F + 1.0F;
         }
         
-        return tunnelSysWidth * this.getTunnelWidthFactor(tunnelRandom);
+        return tunnelSysWidth * this.getTunnelWidthMultiplier(tunnelRandom);
     }
 
     private void carveCave(long seed, ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
