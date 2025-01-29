@@ -107,12 +107,6 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean useSpawnFuzz = false;
-        
-        @Comment({
-            "Use old spawn algorithm for initial player spawns"
-        })
-        @RequiresWorldRestart
-        public boolean useOldSpawns = true;
     }
     
     public static class CategoryServer {

@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.event;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -31,17 +30,14 @@ public class WorldEventHandlerCommon {
         
         if ((settings.getTerrainType() instanceof ModernBetaWorldType)) {
             BlockPos currentSpawnPos = world.getSpawnPoint();
-            boolean useOldSpawns = ModernBetaConfig.spawnOptions.useOldSpawns;
             
             if (chunkGenerator instanceof ModernBetaChunkGenerator && biomeProvider instanceof ModernBetaBiomeProvider) {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
                 ModernBetaGeneratorSettings generatorSettings = chunkSource.getGeneratorSettings();
                 
-                BlockPos newSpawnPos = useOldSpawns ?
-                    chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource) :
-                    null;
-                
+                BlockPos newSpawnPos = chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource);
+
                 if (newSpawnPos != null) {
                     world.getWorldInfo().setSpawn(newSpawnPos);
                     
