@@ -41,9 +41,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class ReleaseChunkSource extends NoiseChunkSource {
     private static final float[] BIOME_WEIGHTS = new float[25];
     
-    private final PerlinOctaveNoise minLimitOctaveNoise;
-    private final PerlinOctaveNoise maxLimitOctaveNoise;
-    private final PerlinOctaveNoise mainOctaveNoise;
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise depthOctaveNoise;
@@ -54,10 +51,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
     public ReleaseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
-        
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
@@ -129,58 +123,38 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         
         return builder.build();
     }
-
+    
     @Override
-    protected void sampleNoiseColumn(
-        double[] buffer,
-        int startNoiseX,
-        int startNoiseZ,
-        int localNoiseX,
-        int localNoiseZ
-    ) {
+    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
         int x = noiseX << 2;
         int z = noiseZ << 2;
         
-        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 200
+        double depthNoiseScaleX = this.settings.depthNoiseScaleX;
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
-        
-        double coordinateScale = this.settings.coordinateScale;
-        double heightScale = this.settings.heightScale;
-        
-        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
-        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
-
-        double lowerLimitScale = this.settings.lowerLimitScale;
-        double upperLimitScale = this.settings.upperLimitScale;
-        
         double baseSize = this.settings.baseSize;
-        double heightStretch = this.settings.stretchY;
-        
-        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
-        
         float biomeDepthOffset = this.settings.biomeDepthOffset;
         float biomeScaleOffset = this.settings.biomeScaleOffset;
-
         float biomeDepthWeight = this.settings.biomeDepthWeight;
         float biomeScaleWeight = this.settings.biomeScaleWeight;
+        
+        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
         double biomeScale = 0.0;
         double biomeDepth = 0.0;
         double totalBiomeWeight = 0.0;
 
-        float baseHeight = this.getBaseHeight(x, z);
+        float baseHeight = this.sampleBiome(x, z).getBaseHeight();
         
         for (int localBiomeX = -2; localBiomeX <= 2; ++localBiomeX) {
             for (int localBiomeZ = -2; localBiomeZ <= 2; ++localBiomeZ) {
                 int bX = (noiseX + localBiomeX) << 2;
                 int bZ = (noiseZ + localBiomeZ) << 2;
                 
-                float curBaseHeight = this.getBaseHeight(bX, bZ);
-                float curHeightVariation = this.getHeightVariation(bX, bZ);
+                float curBaseHeight = this.sampleBiome(bX, bZ).getBaseHeight();
+                float curHeightVariation = this.sampleBiome(bX, bZ).getHeightVariation();
                 
                 float curBiomeDepth = biomeDepthOffset + curBaseHeight * biomeDepthWeight;
                 float curBiomeScale = biomeScaleOffset + curHeightVariation * biomeScaleWeight;
@@ -231,64 +205,19 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         biomeDepth = biomeDepth * baseSize / 8.0;
         biomeDepth = baseSize + biomeDepth * 4.0;
         
-        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-            double density;
-            double densityOffset = this.getOffset(noiseY, heightStretch, biomeDepth, biomeScale);
-                 
-            double mainNoise = (this.mainOctaveNoise.sample(
-                noiseX, noiseY, noiseZ,
-                coordinateScale / mainNoiseScaleX, 
-                heightScale / mainNoiseScaleY, 
-                coordinateScale / mainNoiseScaleZ
-            ) / 10.0 + 1.0) / 2.0;
-            
-            if (mainNoise < 0.0) {
-                density = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-            } else if (mainNoise > 1.0) {
-                density = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-            } else {
-                double minLimitNoise = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-                double maxLimitNoise = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-                density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
-            }
-            
-            buffer[noiseY] = density - densityOffset;
-        }
+        return new NoiseScaleDepth(biomeScale, biomeDepth);
     }
-    
-    private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
-        double offset = ((double)noiseY - depth) * heightStretch * 128.0 / 256.0 / scale;
+
+    @Override
+    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
+        double offset = ((double)noiseY - depth) * this.settings.stretchY * 128.0 / 256.0 / scale;
         
         if (offset < 0.0)
             offset *= 4.0;
         
         return offset;
     }
-    
+
     private Biome sampleBiome(int x, int z) {
         Biome biome = this.noiseBiomeSource.getBiome(x, z);
         
@@ -300,14 +229,6 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         }
         
         return biome;
-    }
-    
-    private float getBaseHeight(int x, int z) {
-        return this.sampleBiome(x, z).getBaseHeight();
-    }
-    
-    private float getHeightVariation(int x, int z) {
-        return this.sampleBiome(x, z).getHeightVariation();
     }
     
     static {

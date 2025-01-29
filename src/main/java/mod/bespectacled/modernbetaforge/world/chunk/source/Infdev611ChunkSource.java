@@ -16,7 +16,7 @@ public class Infdev611ChunkSource extends AlphaChunkSource {
         // Invoke noise constructors to seed surface and forest noise generators correctly,
         // and also spin up new instance of Random since class member has been used in super constructor.
         
-        Random random = new Random(seed);
+        Random random = this.createRandom(seed);
         
         new PerlinOctaveNoise(random, 16, true);
         new PerlinOctaveNoise(random, 16, true);

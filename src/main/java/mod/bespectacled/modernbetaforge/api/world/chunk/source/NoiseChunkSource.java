@@ -21,6 +21,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.DensityChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -51,6 +52,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
     
     private final NoiseSettings noiseSettings;
     private final SurfaceBuilder surfaceBuilder;
+    
+    private final PerlinOctaveNoise minLimitOctaveNoise;
+    private final PerlinOctaveNoise maxLimitOctaveNoise;
+    private final PerlinOctaveNoise mainOctaveNoise;
 
     /**
      * Constructs an abstract NoiseChunkSource with necessary noise setting information.
@@ -93,6 +98,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
             .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
             .apply(this, settings);
+        
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
     }
     
     /**
@@ -169,7 +178,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Generates noise for a column at startNoiseX + localNoiseX / startNoiseZ + localNoiseZ.
+     * Samples noise for a column at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
+     * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
+     * You can override this if necessary, but otherwise just implement {@link #sampleNoiseScaleDepth(int, int, int, int) getNoiseScaleDepth}
+     * and {@link #sampleNoiseOffset(int, double, double) getNoiseOffset}.
      * 
      * @param buffer Buffer of size noiseSizeY + 1 to store noise column
      * @param startNoiseX x-coordinate start of chunk in noise coordinates.
@@ -177,13 +189,105 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param localNoiseX Current subchunk index along x-axis.
      * @param localNoiseZ Current subchunk index along z-axis.
      */
-    protected abstract void sampleNoiseColumn(
-        double[] buffer,
-        int startNoiseX,
-        int startNoiseZ,
-        int localNoiseX,
-        int localNoiseZ
-    );
+    protected void sampleNoiseColumn(double[] buffer, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+        int noiseX = startNoiseX + localNoiseX;
+        int noiseZ = startNoiseZ + localNoiseZ;
+        
+        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        double scale = noiseScaleDepth.scale;
+        double depth = noiseScaleDepth.depth;
+        
+        this.sampleNoiseColumn(buffer, noiseX, noiseZ, scale, depth);
+    }
+    
+    /**
+     * Samples the scale and depth values at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
+     * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
+     * 
+     * @param startNoiseX x-coordinate start of chunk in noise coordinates.
+     * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
+     * @param localNoiseX Current subchunk index along x-axis.
+     * @param localNoiseZ Current subchunk index along z-axis.
+     * @return A NoiseScaleDepth containing the sampled scaled and depth values.
+     */
+    protected abstract NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+    
+    /**
+     * Samples the noise offset at the given noise y-coordinate.
+     * 
+     * @param noiseY y-coordinate in noise coordinates.
+     * @param scale The terrain scale modifier.
+     * @param depth The terrain depth modifier.
+     * @return The offset by which to modify the density value at this noise y-coordinate.
+     */
+    protected abstract double sampleNoiseOffset(int noiseY, double scale, double depth);
+
+    /**
+     * Samples the noise density at the given noise coordinates and terrain scale/depth values.
+     * 
+     * @param buffer Buffer of size noiseSizeY + 1 to store noise column
+     * @param noiseX x-coordinate in noise coordinates.
+     * @param noiseZ z-coordinate in noise coordinates.
+     * @param scale The terrain scale modifier.
+     * @param depth The terrain depth modifier.
+     */
+    private void sampleNoiseColumn(double[] buffer, int noiseX, int noiseZ, double scale, double depth) {
+        double coordinateScale = this.settings.coordinateScale;
+        double heightScale = this.settings.heightScale;
+        double mainNoiseScaleX = this.settings.mainNoiseScaleX;
+        double mainNoiseScaleY = this.settings.mainNoiseScaleY;
+        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
+        double lowerLimitScale = this.settings.lowerLimitScale;
+        double upperLimitScale = this.settings.upperLimitScale;
+        
+        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
+            double density;
+            double densityOffset = this.sampleNoiseOffset(noiseY, scale, depth);
+    
+            double mainNoise = (this.mainOctaveNoise.sample(
+                noiseX, noiseY, noiseZ,
+                coordinateScale / mainNoiseScaleX, 
+                heightScale / mainNoiseScaleY, 
+                coordinateScale / mainNoiseScaleZ
+            ) / 10.0 + 1.0) / 2.0;
+            
+            if (mainNoise < 0.0) {
+                density = this.minLimitOctaveNoise.sample(
+                    noiseX, noiseY, noiseZ,
+                    coordinateScale, 
+                    heightScale, 
+                    coordinateScale
+                ) / lowerLimitScale;
+                
+            } else if (mainNoise > 1.0) {
+                density = this.maxLimitOctaveNoise.sample(
+                    noiseX, noiseY, noiseZ,
+                    coordinateScale, 
+                    heightScale, 
+                    coordinateScale
+                ) / upperLimitScale;
+                
+            } else {
+                double minLimitNoise = this.minLimitOctaveNoise.sample(
+                    noiseX, noiseY, noiseZ,
+                    coordinateScale, 
+                    heightScale, 
+                    coordinateScale
+                ) / lowerLimitScale;
+                
+                double maxLimitNoise = this.maxLimitOctaveNoise.sample(
+                    noiseX, noiseY, noiseZ,
+                    coordinateScale, 
+                    heightScale, 
+                    coordinateScale
+                ) / upperLimitScale;
+                
+                density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
+            }
+            
+            buffer[noiseY] = density - densityOffset;
+        }
+    }
 
     /**
      * Generates the base terrain for a given chunk.
@@ -411,5 +515,15 @@ public abstract class NoiseChunkSource extends ChunkSource {
         }
         
         return new DensityChunk(densityMap);
+    }
+    
+    protected static class NoiseScaleDepth {
+        public final double scale;
+        public final double depth;
+        
+        public NoiseScaleDepth(double scale, double depth) {
+            this.scale = scale;
+            this.depth = depth;
+        }
     }
 }

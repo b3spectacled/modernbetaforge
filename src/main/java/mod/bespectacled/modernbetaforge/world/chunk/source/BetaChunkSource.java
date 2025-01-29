@@ -11,9 +11,6 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.util.ResourceLocation;
 
 public class BetaChunkSource extends NoiseChunkSource {
-    private final PerlinOctaveNoise minLimitOctaveNoise;
-    private final PerlinOctaveNoise maxLimitOctaveNoise;
-    private final PerlinOctaveNoise mainOctaveNoise;
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise scaleOctaveNoise;
@@ -25,9 +22,6 @@ public class BetaChunkSource extends NoiseChunkSource {
     public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
         
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
@@ -47,13 +41,7 @@ public class BetaChunkSource extends NoiseChunkSource {
     }
 
     @Override
-    protected void sampleNoiseColumn(
-        double[] buffer,
-        int startNoiseX,
-        int startNoiseZ,
-        int localNoiseX,
-        int localNoiseZ
-    ) {
+    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int horizNoiseResolution = 16 / (this.noiseSizeX + 1);
         int x = (startNoiseX / this.noiseSizeX * 16) + localNoiseX * horizNoiseResolution + horizNoiseResolution / 2;
         int z = (startNoiseZ / this.noiseSizeZ * 16) + localNoiseZ * horizNoiseResolution + horizNoiseResolution / 2;
@@ -61,24 +49,11 @@ public class BetaChunkSource extends NoiseChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
-        double scaleNoiseScaleX = this.settings.scaleNoiseScaleX; // Default: 1.121
+        double scaleNoiseScaleX = this.settings.scaleNoiseScaleX;
         double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;
-        
-        double depthNoiseScaleX = this.settings.depthNoiseScaleX; // Default: 200
+        double depthNoiseScaleX = this.settings.depthNoiseScaleX;
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
-        
-        double coordinateScale = this.settings.coordinateScale;
-        double heightScale = this.settings.heightScale;
-        
-        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
-        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
-
-        double lowerLimitScale = this.settings.lowerLimitScale;
-        double upperLimitScale = this.settings.upperLimitScale;
-        
         double baseSize = this.settings.baseSize;
-        double heightStretch = this.settings.stretchY;
 
         double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
         double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
@@ -134,57 +109,12 @@ public class BetaChunkSource extends NoiseChunkSource {
         depth = depth * baseSize / 8.0;
         depth = baseSize + depth * 4.0;
         
-        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-            double density;
-            double densityOffset = this.getOffset(noiseY, heightStretch, depth, scale);
-                 
-            double mainNoise = (this.mainOctaveNoise.sample(
-                noiseX, noiseY, noiseZ,
-                coordinateScale / mainNoiseScaleX, 
-                heightScale / mainNoiseScaleY, 
-                coordinateScale / mainNoiseScaleZ
-            ) / 10.0 + 1.0) / 2.0;
-            
-            if (mainNoise < 0.0) {
-                density = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-            } else if (mainNoise > 1.0) {
-                density = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-            } else {
-                double minLimitNoise = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-                double maxLimitNoise = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-                density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
-            }
-            
-            buffer[noiseY] = density - densityOffset;
-        }
+        return new NoiseScaleDepth(scale, depth);
     }
-    
-    private double getOffset(int noiseY, double heightStretch, double depth, double scale) {
-        double offset = (((double)noiseY - depth) * heightStretch) / scale;
+
+    @Override
+    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
+        double offset = (((double)noiseY - depth) * this.settings.stretchY) / scale;
         
         if (offset < 0.0)
             offset *= 4.0;

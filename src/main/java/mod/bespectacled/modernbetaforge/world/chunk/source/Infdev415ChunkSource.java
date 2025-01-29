@@ -52,7 +52,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
-            double densityOffset = this.getOffset(noiseY);
+            double densityOffset = this.sampleNoiseOffset(noiseY, 0.0, 0.0);
             
             // Default values: 8.55515, 1.71103, 8.55515
             double mainNoiseVal = this.mainOctaveNoise.sample(
@@ -110,12 +110,14 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         }
     }
     
-    private double clampNoise(double density) {
-        return MathHelper.clamp(density, -10.0, 10.0);
+    @Override
+    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+        return new NoiseScaleDepth(0.0, 0.0);
     }
-    
-    private double getOffset(int noiseY) {
-        // Check if y (in scaled space) is below sealevel
+
+    @Override
+    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
+     // Check if y (in scaled space) is below sealevel
         // and increase density accordingly.
         //double offset = y * 4.0 - 64.0;
         double offset = noiseY * this.verticalNoiseResolution - (double)this.seaLevel;
@@ -124,5 +126,9 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
             offset *= 3.0;
         
         return offset;
+    }
+
+    private double clampNoise(double density) {
+        return MathHelper.clamp(density, -10.0, 10.0);
     }
 }

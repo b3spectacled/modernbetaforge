@@ -12,9 +12,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SkylandsChunkSource extends NoiseChunkSource {
-    private final PerlinOctaveNoise minLimitOctaveNoise;
-    private final PerlinOctaveNoise maxLimitOctaveNoise;
-    private final PerlinOctaveNoise mainOctaveNoise;
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
@@ -23,10 +20,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     
     public SkylandsChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
-
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
+        
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         new PerlinOctaveNoise(this.random, 10, true);
@@ -56,78 +50,14 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
         return new BiomeInjectionRules.Builder().build();
     }
+    
+    @Override
+    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+        return new NoiseScaleDepth(0.0, 0.0);
+    }
 
     @Override
-    protected void sampleNoiseColumn(
-        double[] buffer,
-        int startNoiseX,
-        int startNoiseZ,
-        int localNoiseX,
-        int localNoiseZ
-    ) {
-        int noiseX = startNoiseX + localNoiseX;
-        int noiseZ = startNoiseZ + localNoiseZ;
-        
-        double coordinateScale = this.settings.coordinateScale;
-        double heightScale = this.settings.heightScale;
-        
-        double mainNoiseScaleX = this.settings.mainNoiseScaleX; // Default: 80
-        double mainNoiseScaleY = this.settings.mainNoiseScaleY; // Default: 160
-        double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
-
-        double lowerLimitScale = this.settings.lowerLimitScale;
-        double upperLimitScale = this.settings.upperLimitScale;
-        
-        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-            double density;
-            double densityOffset = this.getOffset();
-                      
-            double mainNoise = (this.mainOctaveNoise.sample(
-                noiseX, noiseY, noiseZ,
-                coordinateScale / mainNoiseScaleX, 
-                heightScale / mainNoiseScaleY, 
-                coordinateScale / mainNoiseScaleZ
-            ) / 10.0 + 1.0) / 2.0;
-            
-            if (mainNoise < 0.0) {
-                density = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-            } else if (mainNoise > 1.0) {
-                density = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-            } else {
-                double minLimitNoise = this.minLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / lowerLimitScale;
-                
-                double maxLimitNoise = this.maxLimitOctaveNoise.sample(
-                    noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
-                    coordinateScale
-                ) / upperLimitScale;
-                
-                density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
-            }
-            
-            buffer[noiseY] = density - densityOffset;
-        }
-    }
-    
-    private double getOffset() {
+    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
         return 8.0;
     }
 }

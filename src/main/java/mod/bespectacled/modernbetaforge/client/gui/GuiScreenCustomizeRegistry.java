@@ -215,7 +215,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.displayIcons,
                     this.initialEntry,
                     this.searchBar.getText(),
-                    true,
+                    this.searchBar.isFocused() && !this.searchBar.getText().isEmpty(),
                     this.langName,
                     this.registryKeys
                 ));

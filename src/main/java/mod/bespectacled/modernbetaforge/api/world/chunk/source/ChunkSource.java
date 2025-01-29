@@ -60,7 +60,7 @@ public abstract class ChunkSource {
     public ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         this.seed = seed;
         this.settings = settings;
-        this.random = new Random(seed);
+        this.random = this.createRandom(seed);
         
         this.defaultBlock = BlockStates.STONE;
         this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
@@ -74,7 +74,7 @@ public abstract class ChunkSource {
             .map(e -> e.apply(this, this.settings))
             .collect(Collectors.toList());
         
-        Random random = new Random(seed);
+        Random random = this.createRandom(seed);
         this.beachOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 4, true));
         this.surfaceOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 4, true));
         this.forestOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 8, true));
@@ -268,6 +268,16 @@ public abstract class ChunkSource {
         }
         
         return builder.build();
+    }
+    
+    /**
+     * Creates a new Random for world generation.
+     * 
+     * @param seed The world seed
+     * @return A new Random initialized with the world seed.
+     */
+    protected Random createRandom(long seed) {
+        return new Random(seed);
     }
 
     /**
