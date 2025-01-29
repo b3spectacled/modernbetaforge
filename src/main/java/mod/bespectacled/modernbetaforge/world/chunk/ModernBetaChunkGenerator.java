@@ -23,6 +23,7 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
@@ -56,6 +57,7 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
+    private static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;
     
     private final World world;
@@ -179,9 +181,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             // Flag is village component has generated in this chunk
             boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
             
-            // Remove component chunk now that terrain has generated.
-            this.componentCache.remove(chunkX, chunkZ);
-            
             // Populate biome-specific surface
             this.chunkSource.provideSurface(this.world, biomes, chunkPrimer, chunkX, chunkZ);
             
@@ -191,9 +190,16 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             }
             
             // Carve terrain
-            for (MapGenBase carver : this.carverMap.values()) {
-                if (!villageGenerated) {
-                    carver.generate(this.world, chunkX, chunkZ, chunkPrimer);
+            for (Entry<ResourceLocation, MapGenBase> entry : this.carverMap.entrySet()) {
+                MapGenBase carver = entry.getValue();
+                
+                if (carver instanceof MapGenBetaCave) {
+                    List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
+                    ((MapGenBetaCave)carver).generate(this.world, chunkX, chunkZ, chunkPrimer, structureComponents);
+                    
+                } else if (!villageGenerated) {
+                    entry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
+                    
                 }
             }
 
@@ -203,6 +209,9 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                     structureEntry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
                 }
             }
+            
+            // Remove component chunk now that terrain has generated.
+            this.componentCache.remove(chunkX, chunkZ);
         }
         
         // Generate final chunk
@@ -406,8 +415,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         return false;
     }
     
-    public ChunkCache<ComponentChunk> getComponentCache() {
-        return this.componentCache;
+    public void cacheStructureComponent(int chunkX, int chunkZ, StructureComponent structureComponent) {
+        this.componentCache.get(chunkX, chunkZ).addComponent(structureComponent);
     }
     
     public Biome[] getBiomes(int chunkX, int chunkZ) {
@@ -480,7 +489,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         Map<ResourceLocation, MapGenBase> carverMap = new LinkedHashMap<>();
         
         carverMap.put(
-            new ResourceLocation("cave"),
+            CAVE_KEY,
             TerrainGen.getModdedMapGen(
                 ModernBetaRegistries.CAVE_CARVER
                     .get(new ResourceLocation(settings.caveCarver))

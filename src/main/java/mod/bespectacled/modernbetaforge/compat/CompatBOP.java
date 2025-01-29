@@ -20,7 +20,7 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * For biome climates, see: https://github.com/Glitchfiend/BiomesOPlenty/blob/BOP-1.12.x-7.0.x/src/main/java/biomesoplenty/api/enums/BOPClimates.java
  * 
  */
-public class CompatBOP implements Compat, BiomeCompat {
+public class CompatBOP implements Compat, BiomeCompat, NetherCompat {
     @SuppressWarnings("unchecked")
     private List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
     

@@ -445,8 +445,8 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG0_B_USE_SANDSTONE
         );
-        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> !ModCompat.isBoPLoaded(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
-        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && !ModCompat.isBoPLoaded(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
+        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> !ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
+        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && !ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
         USE_FORTRESSES_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_FORTRESSES);
         USE_LAVA_POCKETS_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
         LEVEL_THEME_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_THEME);

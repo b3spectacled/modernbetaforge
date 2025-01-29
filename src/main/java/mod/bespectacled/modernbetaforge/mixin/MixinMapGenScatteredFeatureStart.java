@@ -12,8 +12,6 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorStructureStart;
-import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
-import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.world.World;
@@ -55,7 +53,6 @@ public abstract class MixinMapGenScatteredFeatureStart {
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             ModernBetaChunkGenerator modernBetaChunkGenerator = ((ModernBetaChunkGenerator)chunkGenerator);
-            ChunkCache<ComponentChunk> componentCache = modernBetaChunkGenerator.getComponentCache();
             
             ChunkSource chunkSource = modernBetaChunkGenerator.getChunkSource();
             if (chunkSource instanceof NoiseChunkSource) {
@@ -74,9 +71,9 @@ public abstract class MixinMapGenScatteredFeatureStart {
                     int maxChunkX = box.maxX >> 4;
                     int maxChunkZ = box.maxZ >> 4;
                     
-                    for (int cZ = minChunkZ - 1; cZ <= maxChunkZ + 1; ++cZ) {
-                        for (int cX = minChunkX - 1; cX <= maxChunkX + 1; ++cX) {
-                            componentCache.get(cX, cZ).addComponent(component);
+                    for (int componentChunkX = minChunkZ - 1; componentChunkX <= maxChunkZ + 1; ++componentChunkX) {
+                        for (int componentChunkZ = minChunkX - 1; componentChunkZ <= maxChunkX + 1; ++componentChunkZ) {
+                            modernBetaChunkGenerator.cacheStructureComponent(componentChunkZ, componentChunkX, component);
                         }
                     }
                     numComponents++;

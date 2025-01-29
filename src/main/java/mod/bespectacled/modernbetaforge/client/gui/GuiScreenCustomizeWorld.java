@@ -96,8 +96,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TAB_BUTTON_WIDTH = 44;
     private static final int TAB_BUTTON_HEIGHT = 20;
     
-    
-    
     private final GuiCreateWorld parent;
     
     private final Predicate<String> floatFilter;
@@ -609,9 +607,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         GuiPageButtonList.GuiListEntry[] pageCustom = this.createCustomPropertyPage();
         
-        if (ModCompat.isBoPLoaded()) {
+        if (!ModCompat.isNetherCompatible()) {
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
-            pageBasic[pageBasic.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "page0", "netherBoP");
+            pageBasic[pageBasic.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "page0", "netherIncompatible");
             pageBasic[pageBasic.length - 1] = null;
         }
         

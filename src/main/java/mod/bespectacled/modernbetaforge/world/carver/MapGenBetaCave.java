@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
@@ -14,6 +15,8 @@ import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDynamicLiquid;
@@ -21,24 +24,33 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
 
 public class MapGenBetaCave extends MapGenBase {
+    private static final int STRUCTURE_PADDING_XZ = 4;
+    private static final int STRUCTURE_PADDING_Y = 8;
+    
     protected final Block defaultBlock;
     protected final BlockStaticLiquid defaultFluid;
     protected final BlockDynamicLiquid defaultFlowing;
     
     protected final Set<Block> carvables;
+    protected final Random tunnelRandom;
     
     protected final float caveWidth;
     protected final int caveHeight;
     protected final int caveCount;
     protected final int caveChance;
     
-    protected final Random tunnelRandom;
+    private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance);
@@ -63,6 +75,12 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveChance = caveChance;
         
         this.tunnelRandom = new Random();
+    }
+    
+    public void generate(World world, int originChunkX, int originChunkZ, ChunkPrimer chunkPrimer, List<StructureComponent> structureComponents) {
+        this.structureComponents = structureComponents;
+        
+        this.generate(world, originChunkX, originChunkZ, chunkPrimer);
     }
 
     @Override
@@ -303,23 +321,51 @@ public class MapGenBetaCave extends MapGenBase {
         }
     }
 
-    private boolean isRegionUncarvable(ChunkPrimer chunkPrimer, int mainChunkX, int mainChunkZ, int relMinX, int relMaxX, int minY, int maxY, int relMinZ, int relMaxZ) {
-        for (int relX = relMinX; relX < relMaxX; relX++) {
-            for (int relZ = relMinZ; relZ < relMaxZ; relZ++) {
-                for (int relY = maxY + 1; relY >= minY - 1; relY--) {
-
-                    if (relY < 0 || relY >= this.caveHeight) {
+    private boolean isRegionUncarvable(ChunkPrimer chunkPrimer, int mainChunkX, int mainChunkZ, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+        int startX = mainChunkX << 4;
+        int startZ = mainChunkZ << 4;
+        MutableBlockPos mutablePos = new MutableBlockPos();
+        IChunkGenerator chunkGenerator = ((WorldServer)this.world).getChunkProvider().chunkGenerator;
+        
+        for (int localX = minX; localX < maxX; localX++) {
+            int x = startX + localX;
+            
+            for (int localZ = minZ; localZ < maxZ; localZ++) {
+                int z = startZ + localZ;
+                
+                for (int y = maxY + 1; y >= minY - 1; y--) {
+                    mutablePos.setPos(x, y, z);
+                    
+                    if (y < 0 || y >= this.caveHeight) {
                         continue;
                     }
 
-                    Block block = chunkPrimer.getBlockState(relX, relY, relZ).getBlock();
+                    Block block = chunkPrimer.getBlockState(localX, y, localZ).getBlock();
 
                     if (block == this.defaultFluid || block == this.defaultFlowing) {
                         return true;
                     }
+                    
+                    if (this.structureComponents != null && !this.structureComponents.isEmpty() && chunkGenerator instanceof ModernBetaChunkGenerator) {
+                        int height = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource().getHeight(x, z, HeightmapChunk.Type.STRUCTURE);
+                        
+                        for (StructureComponent component : this.structureComponents) {
+                            StructureBoundingBox box = component.getBoundingBox();
+                            
+                            int boxMinX = box.minX - STRUCTURE_PADDING_XZ;
+                            int boxMaxX = box.maxX + STRUCTURE_PADDING_XZ;
+                            int boxMinZ = box.minZ - STRUCTURE_PADDING_XZ;
+                            int boxMaxZ = box.maxZ + STRUCTURE_PADDING_XZ;
+                            int minHeight = height - STRUCTURE_PADDING_Y;
+                            
+                            if (x >= boxMinX && x <= boxMaxX && z >= boxMinZ && z <= boxMaxZ && y >= minHeight) {
+                                return true;
+                            }
+                        }
+                    }
 
-                    if (relY != minY - 1 && this.isOnBoundary(relMinX, relMaxX, relMinZ, relMaxZ, relX, relZ)) {
-                        relY = minY;
+                    if (y != minY - 1 && this.isOnBoundary(minX, maxX, minZ, maxZ, localX, localZ)) {
+                        y = minY;
                     }
                 }
 
@@ -329,12 +375,12 @@ public class MapGenBetaCave extends MapGenBase {
         return false;
     }
 
-    private boolean isPositionExcluded(double scaledRelativeX, double scaledRelativeY, double scaledRelativeZ) {
-        return scaledRelativeY > -0.7 && scaledRelativeX * scaledRelativeX + scaledRelativeY * scaledRelativeY + scaledRelativeZ * scaledRelativeZ < 1.0;
+    private boolean isPositionExcluded(double scaledX, double scaledY, double scaledZ) {
+        return scaledY > -0.7 && scaledX * scaledX + scaledY * scaledY + scaledZ * scaledZ < 1.0;
     }
 
-    private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int relX, int relZ) {
-        return relX != minX && relX != maxX - 1 && relZ != minZ && relZ != maxZ - 1;
+    private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int localX, int localZ) {
+        return localX != minX && localX != maxX - 1 && localZ != minZ && localZ != maxZ - 1;
     }
     
     private Set<Block> initializeCarvables(Block defaultBlock) {

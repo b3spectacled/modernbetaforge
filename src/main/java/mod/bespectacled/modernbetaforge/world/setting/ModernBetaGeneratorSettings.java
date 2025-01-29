@@ -72,7 +72,7 @@ public class ModernBetaGeneratorSettings {
     public static final float MIN_CAVE_WIDTH = 1.0f;
     public static final float MAX_CAVE_WIDTH = 5.0f;
     public static final int MIN_CAVE_HEIGHT = 9;
-    public static final int MAX_CAVE_HEIGHT = (int)MAX_HEIGHT;
+    public static final int MAX_CAVE_HEIGHT = MAX_HEIGHT;
     public static final int MIN_CAVE_COUNT = 1;
     public static final int MAX_CAVE_COUNT = 100;
     public static final int MIN_CAVE_CHANCE = 1;

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.Loader;
 public class ModCompat {
     public static final String MOD_BOP = "biomesoplenty";
     public static final String MOD_GC = "galacticraftcore";
+    public static final String MOD_NETHER_API = "nether_api";
     
     public static final Map<String, Compat> LOADED_MODS = new LinkedHashMap<>();
     
@@ -21,10 +22,7 @@ public class ModCompat {
         
         loadModCompat(MOD_BOP, new CompatBOP());
         loadModCompat(MOD_GC, new CompatGC());
-    }
-    
-    public static boolean isBoPLoaded() {
-        return LOADED_MODS.containsKey(MOD_BOP);
+        loadModCompat(MOD_NETHER_API, new CompatNetherAPI());
     }
     
     public static boolean isMixinLoaderLoaded() {
@@ -33,6 +31,16 @@ public class ModCompat {
     
     public static boolean isModLoaded(String mod) {
         return LOADED_MODS.containsKey(mod);
+    }
+    
+    public static boolean isNetherCompatible() {
+        for (Compat compat : LOADED_MODS.values()) {
+            if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     private static void loadModCompat(String modName, Compat compat) {
