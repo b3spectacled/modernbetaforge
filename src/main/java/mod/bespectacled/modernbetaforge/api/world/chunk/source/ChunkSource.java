@@ -24,6 +24,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -171,7 +172,7 @@ public abstract class ChunkSource {
      * @return The spawn locator, {@link SpawnLocator#DEFAULT} by default. 
      */
     public SpawnLocator getSpawnLocator() {
-        return SpawnLocator.DEFAULT;
+        return ModernBetaRegistries.SPAWN_LOCATOR.getOrElse(new ResourceLocation(this.settings.spawnLocator), SpawnLocator.DEFAULT);
     }
     
     /**

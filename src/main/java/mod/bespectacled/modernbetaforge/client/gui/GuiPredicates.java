@@ -37,6 +37,7 @@ public class GuiPredicates {
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     
     public static final GuiPredicate SURFACE_BUILDER_TEST;
+    public static final GuiPredicate SPAWN_LOCATOR_TEST;
     public static final GuiPredicate SINGLE_BIOME_TEST;
     public static final GuiPredicate REPLACE_OCEAN_TEST;
     public static final GuiPredicate REPLACE_BEACH_TEST;
@@ -363,6 +364,7 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE
         );
+        SPAWN_LOCATOR_TEST = new GuiPredicate(settings -> !isFiniteChunk(settings), GuiIdentifiers.PG0_S_SPAWN, GuiIdentifiers.PG0_B_SPAWN);
         SINGLE_BIOME_TEST = new GuiPredicate(settings -> isSingleBiome(settings), GuiIdentifiers.PG0_B_FIXED);
         REPLACE_OCEAN_TEST = new GuiPredicate(
             settings -> {
@@ -445,8 +447,8 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG0_B_USE_SANDSTONE
         );
-        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> !ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
-        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && !ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
+        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
+        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
         USE_FORTRESSES_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_FORTRESSES);
         USE_LAVA_POCKETS_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
         LEVEL_THEME_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_THEME);

@@ -5,6 +5,7 @@ public class NbtTags {
     public static final String BIOME_SOURCE = "biomeSource";
     public static final String SURFACE_BUILDER = "surfaceBuilder";
     public static final String CAVE_CARVER = "caveCarver";
+    public static final String SPAWN_LOCATOR = "spawnLocator";
     public static final String SINGLE_BIOME = "singleBiome";
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";

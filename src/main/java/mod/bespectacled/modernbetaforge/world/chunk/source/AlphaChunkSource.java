@@ -1,10 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
 
 public class AlphaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise minLimitOctaveNoise;
@@ -39,11 +37,6 @@ public class AlphaChunkSource extends NoiseChunkSource {
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
-    }
-
-    @Override
-    public SpawnLocator getSpawnLocator() {
-        return new BetaSpawnLocator();
     }
     
     @Override

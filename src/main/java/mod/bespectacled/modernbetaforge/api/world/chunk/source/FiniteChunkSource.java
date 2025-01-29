@@ -95,7 +95,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     @Override
-    public SpawnLocator getSpawnLocator() {
+    public final SpawnLocator getSpawnLocator() {
         return new IndevSpawnLocator();
     }
     

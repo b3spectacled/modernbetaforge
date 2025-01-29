@@ -114,4 +114,30 @@ public class ModernBetaBuiltInTypes {
             return this.id;
         }
     }
+    
+    public enum SpawnLocator {
+        NONE("none"),
+        DEFAULT("default"),
+        BETA("beta"),
+        PE("pe"),
+        INFDEV("infdev");
+        
+        private final String id;
+        
+        private SpawnLocator(String id) {
+            this.id = id;
+        }
+        
+        public ResourceLocation getRegistryKey() {
+            return ModernBeta.createRegistryKey(this.id);
+        }
+        
+        public String getRegistryString() {
+            return this.getRegistryKey().toString();
+        }
+        
+        public String getId() {
+            return this.id;
+        }
+    }
 }

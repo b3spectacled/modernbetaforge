@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -44,6 +45,10 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.Infdev227SurfaceBuil
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
+import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.NoOpSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.PESpawnLocator;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraftforge.fml.relauncher.Side;
@@ -96,13 +101,21 @@ public class ModernBetaBuiltInRegistries {
     }
     
     public static void registerCaveCarvers() {
-        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey(), MapGenNoOp::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), MapGenBetaCave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA_1_8.getRegistryKey(), MapGenBeta18Cave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (chunkSource, settings) -> new MapGenCaves());
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey(), MapGenNoOp::new);
     }
     
     public static void registerBlockSources() { }
+    
+    public static void registerSpawnLocators() {
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryKey(), new BetaSpawnLocator());
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryKey(), new InfdevSpawnLocator());
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.PE.getRegistryKey(), new PESpawnLocator());
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryKey(), SpawnLocator.DEFAULT);
+        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.NONE.getRegistryKey(), new NoOpSpawnLocator());
+    }
     
     public static void registerProperties() {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("booleanProp"), new BooleanProperty(true));
@@ -172,6 +185,7 @@ public class ModernBetaBuiltInRegistries {
     @SideOnly(Side.CLIENT)
     public static void registerPredicates() {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SURFACE_BUILDER, GuiPredicates.SURFACE_BUILDER_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SPAWN_LOCATOR, GuiPredicates.SPAWN_LOCATOR_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SINGLE_BIOME, GuiPredicates.SINGLE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_OCEAN, GuiPredicates.REPLACE_OCEAN_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_BEACH, GuiPredicates.REPLACE_BEACH_TEST);

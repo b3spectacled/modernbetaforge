@@ -31,19 +31,20 @@ public class GuiIdentifiers {
     public static final int PG0_B_BIOME = 191;
     public static final int PG0_B_SURFACE = 192;
     public static final int PG0_B_CARVER = 193;
+    public static final int PG0_B_SPAWN = 194;
     
     public static final int PG0_S_CHUNK = 100;
     public static final int PG0_S_BIOME = 101;
     public static final int PG0_S_SURFACE = 102;
     public static final int PG0_S_CARVER = 103;
+    public static final int PG0_S_SPAWN = 104;
     
-    public static final int PG0_B_FIXED = 104;
+    public static final int PG0_B_FIXED = 105;
     
-    public static final int PG0_B_USE_OCEAN = 105;
-    public static final int PG0_B_USE_BEACH = 106;
+    public static final int PG0_B_USE_OCEAN = 106;
+    public static final int PG0_B_USE_BEACH = 107;
     
-    public static final int PG0_S_SEA_LEVEL = 107;
-    public static final int PG0_B_USE_CAVES = 108;
+    public static final int PG0_S_SEA_LEVEL = 108;
     public static final int PG0_B_USE_HOLDS = 109;
     public static final int PG0_B_USE_VILLAGES = 110;
     public static final int PG0_B_USE_VILLAGE_VARIANTS = 111;
@@ -472,5 +473,6 @@ public class GuiIdentifiers {
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BIOME, (str, factory) -> factory.biomeSource = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.spawnLocator = str);
     }
 }

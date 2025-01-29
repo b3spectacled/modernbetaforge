@@ -324,14 +324,21 @@ public class MapGenBetaCave extends MapGenBase {
     private boolean isRegionUncarvable(ChunkPrimer chunkPrimer, int mainChunkX, int mainChunkZ, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
         int startX = mainChunkX << 4;
         int startZ = mainChunkZ << 4;
+        
         MutableBlockPos mutablePos = new MutableBlockPos();
         IChunkGenerator chunkGenerator = ((WorldServer)this.world).getChunkProvider().chunkGenerator;
+        boolean isModernBetaChunkGenerator = chunkGenerator instanceof ModernBetaChunkGenerator;
         
         for (int localX = minX; localX < maxX; localX++) {
             int x = startX + localX;
             
             for (int localZ = minZ; localZ < maxZ; localZ++) {
                 int z = startZ + localZ;
+                int height = 255;
+                
+                if (isModernBetaChunkGenerator) {
+                    height = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource().getHeight(x, z, HeightmapChunk.Type.STRUCTURE);
+                }
                 
                 for (int y = maxY + 1; y >= minY - 1; y--) {
                     mutablePos.setPos(x, y, z);
@@ -346,9 +353,7 @@ public class MapGenBetaCave extends MapGenBase {
                         return true;
                     }
                     
-                    if (this.structureComponents != null && !this.structureComponents.isEmpty() && chunkGenerator instanceof ModernBetaChunkGenerator) {
-                        int height = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource().getHeight(x, z, HeightmapChunk.Type.STRUCTURE);
-                        
+                    if (this.structureComponents != null && !this.structureComponents.isEmpty() && isModernBetaChunkGenerator) {
                         for (StructureComponent component : this.structureComponents) {
                             StructureBoundingBox box = component.getBoundingBox();
                             
