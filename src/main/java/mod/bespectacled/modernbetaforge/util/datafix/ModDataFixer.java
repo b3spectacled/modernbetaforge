@@ -27,6 +27,7 @@ public class ModDataFixer {
         this.registerModDataFix(ModDataFixers.SCALE_NOISE_FIX);
         this.registerModDataFix(ModDataFixers.LAYER_SIZE_FIX);
         this.registerModDataFix(ModDataFixers.CAVE_CARVER_NONE_FIX);
+        this.registerModDataFix(ModDataFixers.SPAWN_LOCATOR_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {

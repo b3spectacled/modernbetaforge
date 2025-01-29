@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import java.util.Random;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -16,13 +18,14 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
     public Infdev415ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
         
-        this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.maxLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
-        this.mainOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-        this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
-        this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
-        new PerlinOctaveNoise(this.random, 5, true); // Unused in original source
-        this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 5, true);
+        Random random = this.createRandom(seed);
+        this.minLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
+        this.maxLimitOctaveNoise = new PerlinOctaveNoise(random, 16, true);
+        this.mainOctaveNoise = new PerlinOctaveNoise(random, 8, true);
+        this.beachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
+        this.surfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
+        new PerlinOctaveNoise(random, 5, true); // Unused in original source
+        this.forestOctaveNoise = new PerlinOctaveNoise(random, 5, true);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);

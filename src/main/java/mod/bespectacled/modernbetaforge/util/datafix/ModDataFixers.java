@@ -230,6 +230,25 @@ public class ModDataFixers {
         }
     );
     
+    public static final ModDataFix SPAWN_LOCATOR_FIX = new ModDataFix(
+        FixTypes.LEVEL,
+        new IFixableData() {
+            @Override
+            public int getFixVersion() {
+                return DATA_VERSION_V1_5_2_0;
+            }
+
+            @Override
+            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                List<ResourceLocation> registryKeys = Arrays.asList(
+                    DataFixTags.FIX_SPAWN_LOCATOR
+                );
+                
+                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
+            }
+        }
+    );
+    
     private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys, int fixVersion) {
         String worldName = getWorldName(compound);
         

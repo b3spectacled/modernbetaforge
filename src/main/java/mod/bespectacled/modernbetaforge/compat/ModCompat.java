@@ -46,12 +46,11 @@ public class ModCompat {
     private static void loadModCompat(String modName, Compat compat) {
         if (Loader.isModLoaded(modName)) {
             try {
-                ModernBeta.log(Level.INFO, String.format("Found mod '%s', attempting to load..", modName));
+                ModernBeta.log(Level.INFO, String.format("Found mod '%s'..", modName));
                 compat.load();
                 LOADED_MODS.put(modName, compat);
-                ModernBeta.log(Level.INFO, String.format("Done loading mod '%s'..", modName));
             } catch (Exception e) {
-                ModernBeta.log(Level.ERROR, String.format("Couldn't load mod '%s'!", modName));
+                ModernBeta.log(Level.ERROR, String.format("Couldn't load compat for mod '%s'!", modName));
             }
         }
     }

@@ -53,6 +53,18 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
         .build();
     
+    private static final Map<String, String> SPAWN_LOCATORS = ImmutableMap.<String, String>builder()
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.PE.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getId())
+        .build();
+    
     public static void fixDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
@@ -236,6 +248,12 @@ public class DataFixers {
         if (!useCaves) {
             factory.caveCarver = ModernBetaBuiltInTypes.Carver.NONE.getRegistryString();
         }
+    }
+    
+    public static void fixSpawnLocator(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
+        
+        factory.spawnLocator = SPAWN_LOCATORS.getOrDefault(registryString, ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString());
     }
     
     private static boolean isResourceFormat(String resourceString) {

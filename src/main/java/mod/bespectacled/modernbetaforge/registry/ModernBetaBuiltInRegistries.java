@@ -162,6 +162,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_SIZE, new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize));
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CAVE_CARVER_NONE, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SPAWN_LOCATOR, new DataFix(NbtTags.SPAWN_LOCATOR, DataFixers::fixSpawnLocator));
     }
 
     @SideOnly(Side.CLIENT)
