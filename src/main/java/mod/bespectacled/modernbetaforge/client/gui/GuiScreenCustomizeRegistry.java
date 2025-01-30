@@ -56,6 +56,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private String searchText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
+    private int prevMouseX;
+    private int prevMouseY;
     
     protected String title;
     
@@ -161,13 +163,15 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
         this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, 10526880);
     
+        /*
         if (this.hoveredElement != -1) {
             String tooltip = this.entries.get(this.hoveredElement).tooltip;
             
-            if (!tooltip.isEmpty()) {
-                this.drawHoveringText(this.entries.get(this.hoveredElement).tooltip, mouseX, mouseY);
+            if (!tooltip.isEmpty() && System.currentTimeMillis() - this.hoveredTime > 500L) {
+                this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(tooltip, 120), mouseX, mouseY);
             }
         }
+        */
     }
     
     @Override
@@ -320,7 +324,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         public void handleMouseInput() {
             super.handleMouseInput();
 
-            int paddingR = 13;
+            int paddingR = 0;
             int listL = (this.width - this.getListWidth()) / 2;
             int listR = (this.width + this.getListWidth()) / 2 + paddingR;
             int listMouseY = this.mouseY - this.top - this.headerPadding + (int)this.amountScrolled - 4;
@@ -331,11 +335,21 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
 
             if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
                 GuiScreenCustomizeRegistry.this.hoveredElement = element;
-                GuiScreenCustomizeRegistry.this.hoveredTime = System.currentTimeMillis();
                 
             } else {
                 GuiScreenCustomizeRegistry.this.hoveredElement = -1;
                 
+            }
+        }
+        
+        @Override
+        public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+            super.drawScreen(mouseX, mouseY, partialTicks);
+            
+            if (GuiScreenCustomizeRegistry.this.hoveredElement != -1 && mouseX != GuiScreenCustomizeRegistry.this.prevMouseX && mouseY != GuiScreenCustomizeRegistry.this.prevMouseY) {
+                GuiScreenCustomizeRegistry.this.hoveredTime = System.currentTimeMillis();
+                GuiScreenCustomizeRegistry.this.prevMouseX = mouseX;
+                GuiScreenCustomizeRegistry.this.prevMouseY = mouseY;
             }
         }
         
@@ -374,7 +388,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         @Override
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
             int paddingL = 4;
-            int paddingR = 13;
+            int paddingR = 0;
             int paddingY = 1;
             
             Tessellator tessellator = Tessellator.getInstance();
@@ -423,11 +437,15 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             int paddingL = 6;
             int paddingY = 3;
             
-            // Render Biome name
-            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, 16777215);
+            boolean hovered = GuiScreenCustomizeRegistry.this.hoveredElement == entry;
+            int nameColor = hovered ? 16777120 : 16777215;
+            int registryNameColor = hovered ? 10526785 : 10526880;
             
-            // Render Biome registry name
-            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.registryName, x + paddingL, y + 12 + paddingY, 10526880);
+            // Render name
+            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, nameColor);
+            
+            // Render registry name
+            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.registryName, x + paddingL, y + 12 + paddingY, registryNameColor);
         }
     }
     

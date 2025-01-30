@@ -51,6 +51,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private GuiButton select;
     private String shareText;
     private String listText;
+    private int hoveredElement;
+    @SuppressWarnings("unused") private long hoveredTime;
     
     protected String title;
     
@@ -77,7 +79,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.shareText = I18n.format(PREFIX + "share");
         this.listText = I18n.format(PREFIX + "list");
         
-        this.list = new ListPreset();
+        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset();
         
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
@@ -148,6 +150,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
                 break;
             case GUI_ID_SELECT:
+                this.export.setText(this.presets.get(this.list.selected).settings.toString());
                 this.parent.loadValues(this.export.getText());
                 this.parent.isSettingsModified();
                 this.mc.displayGuiScreen(this.parent);
@@ -226,6 +229,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         public int selected;
         
         public ListPreset() {
+            this(-1);
+        }
+        
+        public ListPreset(int selected) {
             super(
                 GuiScreenCustomizePresets.this.mc,
                 GuiScreenCustomizePresets.this.width,
@@ -234,7 +241,35 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 GuiScreenCustomizePresets.this.height - LIST_PADDING_BOTTOM,
                 SLOT_HEIGHT + 6
             );
-            this.selected = -1;
+            this.selected = selected;
+        }
+        
+        @Override
+        public void handleMouseInput() {
+            super.handleMouseInput();
+
+            int paddingR = 0;
+            int listL = (this.width - this.getListWidth()) / 2;
+            int listR = (this.width + this.getListWidth()) / 2 + paddingR;
+            int listMouseY = this.mouseY - this.top - this.headerPadding + (int)this.amountScrolled - 4;
+            int element = listMouseY / this.slotHeight;
+            
+            boolean inListBounds = this.isMouseYWithinSlotBounds(this.mouseY) && this.mouseY >= this.top && this.mouseY <= this.bottom;
+            boolean inSlotBounds = this.mouseX >= listL && this.mouseX <= listR;
+
+            if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
+                GuiScreenCustomizePresets.this.hoveredElement = element;
+                GuiScreenCustomizePresets.this.hoveredTime = System.currentTimeMillis();
+                
+            } else {
+                GuiScreenCustomizePresets.this.hoveredElement = -1;
+                
+            }
+        }
+        
+        @Override
+        public int getListWidth() {
+            return 233;
         }
         
         @Override
@@ -270,7 +305,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
             int size = this.getSize();
             int paddingL = 4;
-            int paddingR = 13;
+            int paddingR = 0;
             int paddingY = 1;
             
             Tessellator tessellator = Tessellator.getInstance();
@@ -287,6 +322,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 if (this.showSelectionBox && this.isSelected(preset)) {
                     int l = this.left + (this.width / 2 - this.getListWidth() / 2) + paddingL;
                     int r = this.left + this.width / 2 + this.getListWidth() / 2 + paddingR;
+                    
                     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -316,22 +352,26 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             Info info = GuiScreenCustomizePresets.this.presets.get(preset);
             int paddingY = 2;
             
+            boolean hovered = GuiScreenCustomizePresets.this.hoveredElement == preset;
+            int nameColor = hovered ? 16777120 : 16777215;
+            int descColor = hovered ? 10526785 : 10526880;
+            
             // Render preset icon
             this.blitIcon(x, y + paddingY, info.texture);
             
             // Render preset name
-            GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, 16777215);
+            GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
             
             // Render preset description, splitting if too long
-            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, 190);
+            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, 188);
             if (splitString.size() > 1) {
                 for (int i = 0; i < splitString.size(); ++i) {
                     String line = splitString.get(i);
-                    GuiScreenCustomizePresets.this.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, 10526880);
+                    GuiScreenCustomizePresets.this.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, descColor);
                 }
                 
             } else {
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, 10526880);
+                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, descColor);
             }
         }
 
