@@ -30,6 +30,11 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;
     
+    private static final int GUI_ID_SELECT = 0;
+    private static final int GUI_ID_CANCEL = 1;
+    private static final int GUI_ID_SEARCH = 2;
+    private static final int GUI_ID_RESET = 3;
+    
     private final GuiScreenCustomizeWorld parent;
     private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
     private final Function<ResourceLocation, String> nameFormatter;
@@ -48,6 +53,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private GuiTextField searchBar;
     private GuiButton select;
     private String searchText;
+    @SuppressWarnings("unused") private int hoveredElement;
+    @SuppressWarnings("unused") private long hoveredTime;
     
     protected String title;
     
@@ -110,15 +117,15 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         this.buttonList.clear();
-        this.select = this.addButton(new GuiButton(0, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
-        this.buttonList.add(new GuiButton(1, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
-        this.buttonList.add(new GuiButton(3, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
+        this.select = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
+        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
+        this.buttonList.add(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
+        this.buttonList.add(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
         
         this.searchText = I18n.format("createWorld.customize.registry.search.info");
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
-        this.list = new ListPreset(this.initialEntry);
+        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialEntry);
         
         int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / this.slotHeight;
         if (this.list.selected > numDisplayed - 1)
@@ -198,15 +205,16 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
-            case 0:
+            case GUI_ID_SELECT:
+                this.consumer.accept(this.entries.get(this.list.selected).registryName, this.settings);
                 this.parent.loadValues(this.settings.toString());
                 this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
                 this.mc.displayGuiScreen(this.parent);
                 break;
-            case 1:
+            case GUI_ID_CANCEL:
                 this.mc.displayGuiScreen(this.parent);
                 break;
-            case 2:
+            case GUI_ID_SEARCH:
                 this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                     this.parent,
                     this.consumer,
@@ -220,7 +228,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.registryKeys
                 ));
                 break;
-            case 3:
+            case GUI_ID_RESET:
                 this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                     this.parent,
                     this.consumer,
@@ -266,6 +274,19 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         public int selected;
         
+        public ListPreset(int initialEntry) {
+            super(
+                GuiScreenCustomizeRegistry.this.mc,
+                GuiScreenCustomizeRegistry.this.width,
+                GuiScreenCustomizeRegistry.this.height,
+                LIST_PADDING_TOP,
+                GuiScreenCustomizeRegistry.this.height - LIST_PADDING_BOTTOM,
+                GuiScreenCustomizeRegistry.this.slotHeight
+            );
+            
+            this.selected = initialEntry;
+        }
+        
         public ListPreset(String initialEntry) {
             super(
                 GuiScreenCustomizeRegistry.this.mc,
@@ -283,6 +304,34 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 if (info.registryName.equals(initialEntry.toString())) {
                     this.selected = i;
                 }
+            }
+        }
+        
+        @Override
+        public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+            super.drawScreen(mouseX, mouseY, partialTicks);
+        }
+
+        @Override
+        public void handleMouseInput() {
+            super.handleMouseInput();
+
+            int paddingR = 13;
+            int listL = (this.width - this.getListWidth()) / 2;
+            int listR = (this.width + this.getListWidth()) / 2 + paddingR;
+            int listMouseY = this.mouseY - this.top - this.headerPadding + (int)this.amountScrolled - 4;
+            int element = listMouseY / this.slotHeight;
+            
+            boolean inListBounds = this.isMouseYWithinSlotBounds(this.mouseY) && this.mouseY >= this.top && this.mouseY <= this.bottom;
+            boolean inSlotBounds = this.mouseX >= listL && this.mouseX <= listR;
+
+            if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
+                GuiScreenCustomizeRegistry.this.hoveredElement = element;
+                GuiScreenCustomizeRegistry.this.hoveredTime = System.currentTimeMillis();
+                
+            } else {
+                GuiScreenCustomizeRegistry.this.hoveredElement = -1;
+                
             }
         }
         
@@ -320,7 +369,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         @Override
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
-            int size = this.getSize();
             int paddingL = 4;
             int paddingR = 13;
             int paddingY = 1;
@@ -328,17 +376,18 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
 
-            for (int preset = 0; preset < size; ++preset) {
-                int y = insideTop + preset * this.slotHeight + this.headerPadding;
+            for (int element = 0; element < this.getSize(); ++element) {
+                int y = insideTop + element * this.slotHeight + this.headerPadding;
                 int height = this.slotHeight - 4;
 
                 if (y > this.bottom || y + height < this.top) {
-                    this.updateItemPos(preset, insideLeft, y, partialTicks);
+                    this.updateItemPos(element, insideLeft, y, partialTicks);
                 }
 
-                if (this.showSelectionBox && this.isSelected(preset)) {
+                if (this.showSelectionBox && this.isSelected(element)) {
                     int l = this.left + (this.width / 2 - this.getListWidth() / 2) + paddingL;
                     int r = this.left + this.width / 2 + this.getListWidth() / 2 + paddingR;
+                    
                     GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -357,9 +406,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
+                    
                 }
 
-                this.drawSlot(preset, insideLeft, y, height, mouseX, mouseY, partialTicks);
+                this.drawSlot(element, insideLeft, y, height, mouseX, mouseY, partialTicks);
             }
         }
         
@@ -381,10 +431,17 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     static class Info {
         public String name;
         public String registryName;
+        public String tooltip;
         
         public Info(String name, String registryName) {
+            this(name, registryName, "");
+        }
+        
+        public Info(String name, String registryName, String tooltip) {
             this.name = name;
             this.registryName = registryName;
+            this.tooltip = tooltip;
         }
     }
 }
+;

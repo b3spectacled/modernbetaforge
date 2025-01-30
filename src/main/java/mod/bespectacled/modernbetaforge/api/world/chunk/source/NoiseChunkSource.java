@@ -518,6 +518,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     protected static class NoiseScaleDepth {
+        public static final NoiseScaleDepth ZERO = new NoiseScaleDepth(0.0, 0.0);
+        
         public final double scale;
         public final double depth;
         

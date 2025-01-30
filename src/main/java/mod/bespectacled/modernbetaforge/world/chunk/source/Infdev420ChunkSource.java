@@ -24,7 +24,7 @@ public class Infdev420ChunkSource extends NoiseChunkSource {
     
     @Override
     protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
-        return new NoiseScaleDepth(0.0, 0.0);
+        return NoiseScaleDepth.ZERO;
     }
 
     @Override
