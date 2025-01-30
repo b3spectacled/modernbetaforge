@@ -11,7 +11,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -167,12 +167,12 @@ public abstract class ChunkSource {
     
     
     /**
-     * Gets the spawn locator used to initially place the player spawn.
+     * Gets the world spawner used to initially place the player spawn.
      * 
-     * @return The spawn locator, {@link SpawnLocator#DEFAULT} by default. 
+     * @return The world spawner, {@link WorldSpawner#DEFAULT} by default. 
      */
-    public SpawnLocator getSpawnLocator() {
-        return ModernBetaRegistries.SPAWN_LOCATOR.getOrElse(new ResourceLocation(this.settings.spawnLocator), SpawnLocator.DEFAULT);
+    public WorldSpawner getWorldSpawner() {
+        return ModernBetaRegistries.WORLD_SPAWNER.getOrElse(new ResourceLocation(this.settings.worldSpawner), WorldSpawner.DEFAULT);
     }
     
     /**

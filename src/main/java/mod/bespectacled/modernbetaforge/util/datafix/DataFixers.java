@@ -53,16 +53,16 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
         .build();
     
-    private static final Map<String, String> SPAWN_LOCATORS = ImmutableMap.<String, String>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.PE.getRegistryString())
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString())
+    private static final Map<String, String> WORLD_SPAWNERS = ImmutableMap.<String, String>builder()
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.BETA.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.BETA.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.INFDEV.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.PE.getRegistryString())
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString())
         .build();
     
     public static void fixDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
@@ -250,10 +250,10 @@ public class DataFixers {
         }
     }
     
-    public static void fixSpawnLocator(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixWorldSpawner(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
         
-        factory.spawnLocator = SPAWN_LOCATORS.getOrDefault(registryString, ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryString());
+        factory.worldSpawner = WORLD_SPAWNERS.getOrDefault(registryString, ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString());
     }
     
     private static boolean isResourceFormat(String resourceString) {

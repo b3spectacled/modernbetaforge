@@ -36,7 +36,7 @@ public class WorldEventHandlerCommon {
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
                 ModernBetaGeneratorSettings generatorSettings = chunkSource.getGeneratorSettings();
                 
-                BlockPos newSpawnPos = chunkSource.getSpawnLocator().locateSpawn(currentSpawnPos, chunkSource, biomeSource);
+                BlockPos newSpawnPos = chunkSource.getWorldSpawner().locateSpawn(currentSpawnPos, chunkSource, biomeSource);
 
                 if (newSpawnPos != null) {
                     world.getWorldInfo().setSpawn(newSpawnPos);

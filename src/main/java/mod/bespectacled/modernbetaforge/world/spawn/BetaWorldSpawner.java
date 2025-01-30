@@ -7,14 +7,14 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-public class BetaSpawnLocator implements SpawnLocator {
+public class BetaWorldSpawner implements WorldSpawner {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
         ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
@@ -28,7 +28,7 @@ public class BetaSpawnLocator implements SpawnLocator {
         
         while(!this.isSandAt(x, z, chunkSource, biomeSource, surfaceBuilder, random)) {
             if (attempts > 10000) {
-                return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
+                return WorldSpawner.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
             }
             
             x += random.nextInt(64) - random.nextInt(64);

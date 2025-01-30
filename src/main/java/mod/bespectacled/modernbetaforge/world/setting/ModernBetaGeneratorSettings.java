@@ -113,7 +113,7 @@ public class ModernBetaGeneratorSettings {
     public final String biomeSource;
     public final String surfaceBuilder;
     public final String caveCarver;
-    public final String spawnLocator;
+    public final String worldSpawner;
     
     public final String singleBiome;
     
@@ -334,7 +334,7 @@ public class ModernBetaGeneratorSettings {
         this.biomeSource = factory.biomeSource;
         this.surfaceBuilder = factory.surfaceBuilder;
         this.caveCarver = factory.caveCarver;
-        this.spawnLocator = factory.spawnLocator;
+        this.worldSpawner = factory.worldSpawner;
         
         this.singleBiome = factory.singleBiome;
         
@@ -610,7 +610,7 @@ public class ModernBetaGeneratorSettings {
         public String biomeSource;
         public String surfaceBuilder;
         public String caveCarver;
-        public String spawnLocator;
+        public String worldSpawner;
         
         public String singleBiome;
 
@@ -831,7 +831,7 @@ public class ModernBetaGeneratorSettings {
             this.biomeSource = ModernBetaBuiltInTypes.Biome.BETA.getRegistryString();
             this.surfaceBuilder = ModernBetaBuiltInTypes.Surface.BETA.getRegistryString();
             this.caveCarver = ModernBetaBuiltInTypes.Carver.BETA.getRegistryString();
-            this.spawnLocator = ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryString();
+            this.worldSpawner = ModernBetaBuiltInTypes.WorldSpawner.BETA.getRegistryString();
             
             this.singleBiome = Biomes.PLAINS.getRegistryName().toString();
             
@@ -1073,7 +1073,7 @@ public class ModernBetaGeneratorSettings {
                 this.biomeSource.equals(factory.biomeSource) &&
                 this.surfaceBuilder.equals(factory.surfaceBuilder) &&
                 this.caveCarver.equals(factory.caveCarver) &&
-                this.spawnLocator.equals(factory.spawnLocator) &&
+                this.worldSpawner.equals(factory.worldSpawner) &&
                 
                 this.singleBiome.equals(factory.singleBiome) &&
                 
@@ -1299,7 +1299,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.biomeSource.hashCode();
             hashCode = 31 * hashCode + this.surfaceBuilder.hashCode();
             hashCode = 31 * hashCode + this.caveCarver.hashCode();
-            hashCode = 31 * hashCode + this.spawnLocator.hashCode();
+            hashCode = 31 * hashCode + this.worldSpawner.hashCode();
             
             hashCode = 31 * hashCode + this.singleBiome.hashCode();
             
@@ -1550,7 +1550,7 @@ public class ModernBetaGeneratorSettings {
                 factory.biomeSource = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource);
                 factory.surfaceBuilder = JsonUtils.getString(jsonObject, NbtTags.SURFACE_BUILDER, factory.surfaceBuilder);
                 factory.caveCarver = JsonUtils.getString(jsonObject, NbtTags.CAVE_CARVER, factory.caveCarver);
-                factory.spawnLocator = JsonUtils.getString(jsonObject, NbtTags.SPAWN_LOCATOR, factory.spawnLocator);
+                factory.worldSpawner = JsonUtils.getString(jsonObject, NbtTags.WORLD_SPAWNER, factory.worldSpawner);
                 
                 factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, factory.singleBiome);
                 
@@ -1901,7 +1901,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.BIOME_SOURCE, factory.biomeSource);
             jsonObject.addProperty(NbtTags.SURFACE_BUILDER, factory.surfaceBuilder);
             jsonObject.addProperty(NbtTags.CAVE_CARVER, factory.caveCarver);
-            jsonObject.addProperty(NbtTags.SPAWN_LOCATOR, factory.spawnLocator);
+            jsonObject.addProperty(NbtTags.WORLD_SPAWNER, factory.worldSpawner);
             
             jsonObject.addProperty(NbtTags.SINGLE_BIOME, factory.singleBiome);
 

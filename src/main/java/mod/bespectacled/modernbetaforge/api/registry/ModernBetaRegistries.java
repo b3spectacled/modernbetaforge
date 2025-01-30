@@ -9,7 +9,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.gen.MapGenBase;
@@ -25,7 +25,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<CaveCarverCreator> CAVE_CARVER;
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     public static final ModernBetaRegistry<FeatureCreator> FEATURE;
-    public static final ModernBetaRegistry<SpawnLocator> SPAWN_LOCATOR;
+    public static final ModernBetaRegistry<WorldSpawner> WORLD_SPAWNER;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     public static final ModernBetaRegistry<Property<?>> PROPERTY;
     
@@ -39,7 +39,7 @@ public class ModernBetaRegistries {
         CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         FEATURE = new ModernBetaRegistry<>("FEATURE");
-        SPAWN_LOCATOR = new ModernBetaRegistry<>("SPAWN_LOCATOR");
+        WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
         PROPERTY = new ModernBetaRegistry<>("PROPERTY");
     }

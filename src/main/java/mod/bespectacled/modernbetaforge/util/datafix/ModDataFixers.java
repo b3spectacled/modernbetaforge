@@ -269,7 +269,7 @@ public class ModDataFixers {
             @Override
             public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
                 List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_SPAWN_LOCATOR
+                    DataFixTags.FIX_WORLD_SPAWNER
                 );
                 
                 return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());

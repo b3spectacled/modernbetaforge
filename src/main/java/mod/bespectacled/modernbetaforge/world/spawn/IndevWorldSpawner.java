@@ -8,17 +8,17 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 
-public class IndevSpawnLocator implements SpawnLocator {
+public class IndevWorldSpawner implements WorldSpawner {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
         if (!(chunkSource instanceof FiniteChunkSource)) {
-            return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
+            return WorldSpawner.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         }
         
         FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;

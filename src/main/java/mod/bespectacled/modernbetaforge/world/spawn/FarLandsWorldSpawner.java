@@ -7,15 +7,15 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
-public class FarLandsSpawnLocator implements SpawnLocator {
+public class FarLandsWorldSpawner implements WorldSpawner {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
         if (!(chunkSource instanceof NoiseChunkSource)) {
-            return SpawnLocator.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
+            return WorldSpawner.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         }
 
         ResourceLocation noiseSettingsKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
@@ -38,6 +38,6 @@ public class FarLandsSpawnLocator implements SpawnLocator {
         x = random.nextBoolean() ? x : random.nextBoolean() ? -x : 0;
         z = random.nextBoolean() ? z : random.nextBoolean() || x == 0 ? -z : 0;
         
-        return SpawnLocator.DEFAULT.locateSpawn(new BlockPos(x, 0, z), chunkSource, biomeSource);
+        return WorldSpawner.DEFAULT.locateSpawn(new BlockPos(x, 0, z), chunkSource, biomeSource);
     }
 }

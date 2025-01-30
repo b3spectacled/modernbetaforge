@@ -474,6 +474,6 @@ public class GuiIdentifiers {
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BIOME, (str, factory) -> factory.biomeSource = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.spawnLocator = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.worldSpawner = str);
     }
 }

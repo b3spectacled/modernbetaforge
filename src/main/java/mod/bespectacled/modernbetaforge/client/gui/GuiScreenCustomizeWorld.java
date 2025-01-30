@@ -181,7 +181,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int biomeSourceId = ModernBetaRegistries.BIOME_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
         int surfaceBuilderId = ModernBetaRegistries.SURFACE_BUILDER.getKeys().indexOf(new ResourceLocation(this.settings.surfaceBuilder));
         int caveCarverId = ModernBetaRegistries.CAVE_CARVER.getKeys().indexOf(new ResourceLocation(this.settings.caveCarver));
-        int spawnLocatorId = ModernBetaRegistries.SPAWN_LOCATOR.getKeys().indexOf(new ResourceLocation(this.settings.spawnLocator));
+        int worldSpawnerId = ModernBetaRegistries.WORLD_SPAWNER.getKeys().indexOf(new ResourceLocation(this.settings.worldSpawner));
         
         int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
         int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
@@ -217,8 +217,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG0_B_CARVER, NbtTags.CAVE_CARVER, true) :
             createGuiSlider(GuiIdentifiers.PG0_S_CARVER, NbtTags.CAVE_CARVER, 0f, ModernBetaRegistries.CAVE_CARVER.getKeys().size() - 1, caveCarverId, this);
         GuiPageButtonList.GuiListEntry spawnEntry = useMenu ? 
-            createGuiButton(GuiIdentifiers.PG0_B_SPAWN, NbtTags.SPAWN_LOCATOR, true) :
-            createGuiSlider(GuiIdentifiers.PG0_S_SPAWN, NbtTags.SPAWN_LOCATOR, 0f, ModernBetaRegistries.SPAWN_LOCATOR.getKeys().size() - 1, spawnLocatorId, this);
+            createGuiButton(GuiIdentifiers.PG0_B_SPAWN, NbtTags.WORLD_SPAWNER, true) :
+            createGuiSlider(GuiIdentifiers.PG0_S_SPAWN, NbtTags.WORLD_SPAWNER, 0f, ModernBetaRegistries.WORLD_SPAWNER.getKeys().size() - 1, worldSpawnerId, this);
         
         GuiPageButtonList.GuiListEntry[] pageBasic = {
             chunkEntry,
@@ -652,7 +652,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, -1));
         this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, -1));
         this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, -1));
-        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.spawnLocator, NbtTags.SPAWN_LOCATOR, -1));
+        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, -1));
         
         // Set biome text for Single Biome button
         this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, true, BIOME_TRUNCATE_LEN));
@@ -959,7 +959,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.openRegistryScreen((str, factory) -> factory.caveCarver = str, settings.caveCarver, NbtTags.CAVE_CARVER,  ModernBetaRegistries.CAVE_CARVER.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_SPAWN:
-                    this.openRegistryScreen((str, factory) -> factory.spawnLocator = str, settings.spawnLocator, NbtTags.SPAWN_LOCATOR,  ModernBetaRegistries.SPAWN_LOCATOR.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.worldSpawner = str, settings.worldSpawner, NbtTags.WORLD_SPAWNER,  ModernBetaRegistries.WORLD_SPAWNER.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_FIXED:
                     this.openBiomeScreen((str, factory) -> factory.singleBiome = str, settings.singleBiome);
@@ -1297,7 +1297,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.caveCarver = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_SPAWN:
-                    this.settings.spawnLocator = ModernBetaRegistries.SPAWN_LOCATOR.getKeys().get((int)entryValue).toString();
+                    this.settings.worldSpawner = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue).toString();
                     break;
                 
                 case GuiIdentifiers.PG0_S_SEA_LEVEL:
@@ -1803,8 +1803,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             langName = NbtTags.CAVE_CARVER;
                             break;
                         case GuiIdentifiers.PG0_B_SPAWN:
-                            randomKey = ModernBetaRegistries.SPAWN_LOCATOR.getRandomEntry(this.random).getKey();
-                            langName = NbtTags.SPAWN_LOCATOR;
+                            randomKey = ModernBetaRegistries.WORLD_SPAWNER.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.WORLD_SPAWNER;
                             break;
                     }
                     
@@ -1947,9 +1947,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 return I18n.format(PREFIX + "caveCarver." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_SPAWN: {
-                ResourceLocation registryKey = ModernBetaRegistries.SPAWN_LOCATOR.getKeys().get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue);
                 
-                return I18n.format(PREFIX + "spawnLocator." + getFormattedRegistryString(registryKey));
+                return I18n.format(PREFIX + "worldSpawner." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG1_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;

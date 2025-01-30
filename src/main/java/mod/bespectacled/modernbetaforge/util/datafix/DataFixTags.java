@@ -30,5 +30,5 @@ public class DataFixTags {
     public static final ResourceLocation FIX_LAYER_SIZE = ModernBeta.createRegistryKey("fix_layerSize");
     public static final ResourceLocation FIX_BIOME_DEPTH_SCALE = ModernBeta.createRegistryKey("fix_useBiomeDepthScale");
     public static final ResourceLocation FIX_CAVE_CARVER_NONE = ModernBeta.createRegistryKey("fix_caveCarverNone");
-    public static final ResourceLocation FIX_SPAWN_LOCATOR = ModernBeta.createRegistryKey("fix_spawnLocator");
+    public static final ResourceLocation FIX_WORLD_SPAWNER = ModernBeta.createRegistryKey("fix_worldSpawner");
 }

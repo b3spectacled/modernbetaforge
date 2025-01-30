@@ -59,7 +59,7 @@ createWorld.customize.custom.chunkSource=Chunk Source
 createWorld.customize.custom.biomeSource=Biome Source
 createWorld.customize.custom.surfaceBuilder=Surface Builder
 createWorld.customize.custom.caveCarver=Cave Carver
-createWorld.customize.custom.spawnLocator=Spawn Locator
+createWorld.customize.custom.worldSpawner=World Spawner
 createWorld.customize.custom.biome=Biome
 
 # Page 1 - Biome Replacement Settings
@@ -179,12 +179,12 @@ createWorld.customize.custom.caveCarver.modernbetaforge.beta=Beta
 createWorld.customize.custom.caveCarver.modernbetaforge.beta_1_8=Beta 1.8
 createWorld.customize.custom.caveCarver.modernbetaforge.release=Release
 
-createWorld.customize.custom.spawnLocator.modernbetaforge.none=None
-createWorld.customize.custom.spawnLocator.modernbetaforge.default=Default
-createWorld.customize.custom.spawnLocator.modernbetaforge.beta=Beta
-createWorld.customize.custom.spawnLocator.modernbetaforge.pe=Pocket Ed.
-createWorld.customize.custom.spawnLocator.modernbetaforge.infdev=Infdev
-createWorld.customize.custom.spawnLocator.modernbetaforge.far_lands=Far Lands
+createWorld.customize.custom.worldSpawner.modernbetaforge.none=None
+createWorld.customize.custom.worldSpawner.modernbetaforge.default=Default
+createWorld.customize.custom.worldSpawner.modernbetaforge.beta=Beta
+createWorld.customize.custom.worldSpawner.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.worldSpawner.modernbetaforge.infdev=Infdev
+createWorld.customize.custom.worldSpawner.modernbetaforge.far_lands=Far Lands
 
 # Indev Settings Names
 createWorld.customize.custom.levelTheme.normal=Normal

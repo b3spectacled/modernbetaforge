@@ -115,7 +115,7 @@ public class ModernBetaBuiltInTypes {
         }
     }
     
-    public enum SpawnLocator {
+    public enum WorldSpawner {
         BETA("beta"),
         INFDEV("infdev"),
         PE("pe"),
@@ -125,7 +125,7 @@ public class ModernBetaBuiltInTypes {
         
         private final String id;
         
-        private SpawnLocator(String id) {
+        private WorldSpawner(String id) {
             this.id = id;
         }
         

@@ -78,7 +78,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
-        ModernBetaBuiltInRegistries.registerSpawnLocators();
+        ModernBetaBuiltInRegistries.registerWorldSpawners();
         ModernBetaBuiltInRegistries.registerDataFixes();
         //ModernBetaBuiltInRegistries.registerProperties();
         

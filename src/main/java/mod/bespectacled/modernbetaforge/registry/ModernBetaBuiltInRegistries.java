@@ -11,7 +11,7 @@ import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -45,11 +45,11 @@ import mod.bespectacled.modernbetaforge.world.chunk.surface.Infdev227SurfaceBuil
 import mod.bespectacled.modernbetaforge.world.chunk.surface.InfdevSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.PESurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
-import mod.bespectacled.modernbetaforge.world.spawn.BetaSpawnLocator;
-import mod.bespectacled.modernbetaforge.world.spawn.FarLandsSpawnLocator;
-import mod.bespectacled.modernbetaforge.world.spawn.InfdevSpawnLocator;
-import mod.bespectacled.modernbetaforge.world.spawn.NoOpSpawnLocator;
-import mod.bespectacled.modernbetaforge.world.spawn.PESpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.BetaWorldSpawner;
+import mod.bespectacled.modernbetaforge.world.spawn.FarLandsWorldSpawner;
+import mod.bespectacled.modernbetaforge.world.spawn.InfdevWorldSpawner;
+import mod.bespectacled.modernbetaforge.world.spawn.NoOpWorldSpawner;
+import mod.bespectacled.modernbetaforge.world.spawn.PEWorldSpawner;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraftforge.fml.relauncher.Side;
@@ -110,13 +110,13 @@ public class ModernBetaBuiltInRegistries {
     
     public static void registerBlockSources() { }
     
-    public static void registerSpawnLocators() {
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.BETA.getRegistryKey(), new BetaSpawnLocator());
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.INFDEV.getRegistryKey(), new InfdevSpawnLocator());
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.PE.getRegistryKey(), new PESpawnLocator());
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.FAR_LANDS.getRegistryKey(), new FarLandsSpawnLocator());
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.DEFAULT.getRegistryKey(), SpawnLocator.DEFAULT);
-        ModernBetaRegistries.SPAWN_LOCATOR.register(ModernBetaBuiltInTypes.SpawnLocator.NONE.getRegistryKey(), new NoOpSpawnLocator());
+    public static void registerWorldSpawners() {
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.BETA.getRegistryKey(), new BetaWorldSpawner());
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.INFDEV.getRegistryKey(), new InfdevWorldSpawner());
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.PE.getRegistryKey(), new PEWorldSpawner());
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.FAR_LANDS.getRegistryKey(), new FarLandsWorldSpawner());
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryKey(), WorldSpawner.DEFAULT);
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.NONE.getRegistryKey(), new NoOpWorldSpawner());
     }
     
     public static void registerProperties() {
@@ -162,7 +162,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_SIZE, new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize));
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CAVE_CARVER_NONE, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone));
-        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SPAWN_LOCATOR, new DataFix(NbtTags.SPAWN_LOCATOR, DataFixers::fixSpawnLocator));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixWorldSpawner));
     }
 
     @SideOnly(Side.CLIENT)

@@ -19,7 +19,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
-import mod.bespectacled.modernbetaforge.api.world.spawn.SpawnLocator;
+import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -31,7 +31,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefau
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import mod.bespectacled.modernbetaforge.world.spawn.IndevSpawnLocator;
+import mod.bespectacled.modernbetaforge.world.spawn.IndevWorldSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockTorch;
@@ -97,8 +97,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     @Override
-    public final SpawnLocator getSpawnLocator() {
-        return new IndevSpawnLocator();
+    public final WorldSpawner getWorldSpawner() {
+        return new IndevWorldSpawner();
     }
     
     @Override

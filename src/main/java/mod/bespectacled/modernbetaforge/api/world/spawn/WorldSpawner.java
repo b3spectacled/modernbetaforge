@@ -8,7 +8,7 @@ import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import net.minecraft.util.math.BlockPos;
 
-public interface SpawnLocator {
+public interface WorldSpawner {
     /**
      * Locates initial player spawn point.
      * 
@@ -21,18 +21,18 @@ public interface SpawnLocator {
     BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource);
     
     /**
-     * The default spawn locator.
+     * The default world spawner.
      * This will attempt to find solid ground with adjacent blocks to spawn the player.
      */
-    public static final SpawnLocator DEFAULT = new SpawnLocator() {
+    public static final WorldSpawner DEFAULT = new WorldSpawner() {
         @Override
         public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
             int radius = 64;
             int minAdjacent = 9;
             
             Random random = new Random(chunkSource.getSeed());
-            int centerX = spawnPos.getX() + random.nextInt(512) - 256;
-            int centerZ = spawnPos.getZ() + random.nextInt(512) - 256;
+            int centerX = spawnPos.getX() + random.nextInt(256) - 128;
+            int centerZ = spawnPos.getZ() + random.nextInt(256) - 128;
             
             while(true) {
                 int r2 = radius * radius;

@@ -54,7 +54,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private GuiTextField searchBar;
     private GuiButton select;
     private String searchText;
-    @SuppressWarnings("unused") private int hoveredElement;
+    private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
     
     protected String title;
