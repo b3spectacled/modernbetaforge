@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final String PREFIX = "createWorld.customize.custom";
+    private static final String PREFIX_TOOLTIP = PREFIX + ".tooltip";
     private static final int DEFAULT_SLOT_HEIGHT = 32;
     private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;
@@ -153,13 +154,20 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        
         this.list.drawScreen(mouseX, mouseY, partialTicks);
+        this.searchBar.drawTextBox();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
         this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, 10526880);
-        this.searchBar.drawTextBox();
-        
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    
+        if (this.hoveredElement != -1) {
+            String tooltip = this.entries.get(this.hoveredElement).tooltip;
+            
+            if (!tooltip.isEmpty()) {
+                this.drawHoveringText(this.entries.get(this.hoveredElement).tooltip, mouseX, mouseY);
+            }
+        }
     }
     
     @Override
@@ -254,13 +262,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         for (ResourceLocation registryKey : this.registryKeys) {
             String formattedName = this.nameFormatter.apply(registryKey);
+            String tooltipKey = String.format("%s.%s.%s.%s", PREFIX_TOOLTIP, this.langName, registryKey.getNamespace(), registryKey.getPath());
             
             if (this.searchEntry == null ||
                 this.searchEntry.isEmpty() ||
                 formattedName.toLowerCase().contains(this.searchEntry.toLowerCase()) ||
                 registryKey.toString().toLowerCase().contains(this.searchEntry.toLowerCase())
             ) {
-                entries.add(new Info(formattedName, registryKey.toString()));
+                entries.add(new Info(formattedName, registryKey.toString(), I18n.hasKey(tooltipKey) ? I18n.format(tooltipKey) : ""));
             }
         }
         
@@ -305,11 +314,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.selected = i;
                 }
             }
-        }
-        
-        @Override
-        public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-            super.drawScreen(mouseX, mouseY, partialTicks);
         }
 
         @Override
@@ -376,15 +380,15 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
 
-            for (int element = 0; element < this.getSize(); ++element) {
-                int y = insideTop + element * this.slotHeight + this.headerPadding;
+            for (int entry = 0; entry < this.getSize(); ++entry) {
+                int y = insideTop + entry * this.slotHeight + this.headerPadding;
                 int height = this.slotHeight - 4;
 
                 if (y > this.bottom || y + height < this.top) {
-                    this.updateItemPos(element, insideLeft, y, partialTicks);
+                    this.updateItemPos(entry, insideLeft, y, partialTicks);
                 }
 
-                if (this.showSelectionBox && this.isSelected(element)) {
+                if (this.showSelectionBox && this.isSelected(entry)) {
                     int l = this.left + (this.width / 2 - this.getListWidth() / 2) + paddingL;
                     int r = this.left + this.width / 2 + this.getListWidth() / 2 + paddingR;
                     
@@ -409,15 +413,15 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     
                 }
 
-                this.drawSlot(element, insideLeft, y, height, mouseX, mouseY, partialTicks);
+                this.drawSlot(entry, insideLeft, y, height, mouseX, mouseY, partialTicks);
             }
         }
         
         @Override
-        protected void drawSlot(int biome, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
-            Info info = GuiScreenCustomizeRegistry.this.entries.get(biome);
-            int paddingY = 3;
+        protected void drawSlot(int entry, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
+            Info info = GuiScreenCustomizeRegistry.this.entries.get(entry);
             int paddingL = 6;
+            int paddingY = 3;
             
             // Render Biome name
             GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, 16777215);
