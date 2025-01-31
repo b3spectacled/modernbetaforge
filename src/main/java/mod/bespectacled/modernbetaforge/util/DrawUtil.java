@@ -150,7 +150,8 @@ public class DrawUtil {
                         int imageY = startZ + localZ;
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, height, z));
+                        int oceanHeight = chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN);
+                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, oceanHeight, z));
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
@@ -225,8 +226,9 @@ public class DrawUtil {
                         int imageY = startZ + localZ;
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
+                        int oceanHeight = chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN);
                         Biome biome = biomeSource.getBiome(x, z);
-                        mutablePos.setPos(x, height, z);
+                        mutablePos.setPos(x, oceanHeight, z);
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);

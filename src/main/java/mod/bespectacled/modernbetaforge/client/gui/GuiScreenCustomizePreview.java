@@ -214,10 +214,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 );
                 GlStateManager.disableBlend();
                 
-                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "E", this.width / 2 + viewportSize / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
-                this.drawCenteredString(fontRenderer, "W", this.width / 2 - viewportSize / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16776960);
+                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, 16777120);
+                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, 16777120);
+                this.drawCenteredString(fontRenderer, "E", this.width / 2 + viewportSize / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
+                this.drawCenteredString(fontRenderer, "W", this.width / 2 - viewportSize / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
                 break;
                 
             case STARTED:
