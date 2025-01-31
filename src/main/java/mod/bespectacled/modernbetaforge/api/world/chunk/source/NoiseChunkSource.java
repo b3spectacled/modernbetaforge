@@ -193,53 +193,20 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
-        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
-        double scale = noiseScaleDepth.scale;
-        double depth = noiseScaleDepth.depth;
-        
-        this.sampleNoiseColumn(buffer, noiseX, noiseZ, scale, depth);
-    }
-    
-    /**
-     * Samples the scale and depth values at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
-     * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
-     * 
-     * @param startNoiseX x-coordinate start of chunk in noise coordinates.
-     * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
-     * @param localNoiseX Current subchunk index along x-axis.
-     * @param localNoiseZ Current subchunk index along z-axis.
-     * @return A NoiseScaleDepth containing the sampled scaled and depth values.
-     */
-    protected abstract NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
-    
-    /**
-     * Samples the noise offset at the given noise y-coordinate.
-     * 
-     * @param noiseY y-coordinate in noise coordinates.
-     * @param scale The terrain scale modifier.
-     * @param depth The terrain depth modifier.
-     * @return The offset by which to modify the density value at this noise y-coordinate.
-     */
-    protected abstract double sampleNoiseOffset(int noiseY, double scale, double depth);
-
-    /**
-     * Samples the noise density at the given noise coordinates and terrain scale/depth values.
-     * 
-     * @param buffer Buffer of size noiseSizeY + 1 to store noise column
-     * @param noiseX x-coordinate in noise coordinates.
-     * @param noiseZ z-coordinate in noise coordinates.
-     * @param scale The terrain scale modifier.
-     * @param depth The terrain depth modifier.
-     */
-    private void sampleNoiseColumn(double[] buffer, int noiseX, int noiseZ, double scale, double depth) {
         double coordinateScale = this.settings.coordinateScale;
         double heightScale = this.settings.heightScale;
+        
         double mainNoiseScaleX = this.settings.mainNoiseScaleX;
         double mainNoiseScaleY = this.settings.mainNoiseScaleY;
         double mainNoiseScaleZ = this.settings.mainNoiseScaleZ;
+        
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
         
+        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        double scale = noiseScaleDepth.scale;
+        double depth = noiseScaleDepth.depth;
+
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
             double densityOffset = this.sampleNoiseOffset(noiseY, scale, depth);
@@ -287,6 +254,34 @@ public abstract class NoiseChunkSource extends ChunkSource {
             
             buffer[noiseY] = density - densityOffset;
         }
+    }
+    
+    /**
+     * Samples the scale and depth values at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
+     * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
+     * TODO: Make this abstract in 1.6.0.0.
+     * 
+     * @param startNoiseX x-coordinate start of chunk in noise coordinates.
+     * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
+     * @param localNoiseX Current subchunk index along x-axis.
+     * @param localNoiseZ Current subchunk index along z-axis.
+     * @return A NoiseScaleDepth containing the sampled scaled and depth values.
+     */
+    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+        return NoiseScaleDepth.ZERO;
+    }
+    
+    /**
+     * Samples the noise offset at the given noise y-coordinate.
+     * TODO: Make this abstract in 1.6.0.0.
+     * 
+     * @param noiseY y-coordinate in noise coordinates.
+     * @param scale The terrain scale modifier.
+     * @param depth The terrain depth modifier.
+     * @return The offset by which to modify the density value at this noise y-coordinate.
+     */
+    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
+        return 0.0;
     }
 
     /**
