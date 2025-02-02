@@ -82,13 +82,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset();
         
         boolean exportFocused = this.export != null ? this.export.isFocused() : false;
-        int cursorPosition = this.export != null ? this.export.getCursorPosition() : this.export.getMaxStringLength();
+        int cursorPosition = this.export != null ? this.export.getCursorPosition() : -1;
         
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
         this.setInitialExportText();
         this.export.setFocused(exportFocused);
-        this.export.setCursorPosition(cursorPosition);
+        if (cursorPosition != -1) this.export.setCursorPosition(cursorPosition);
 
         this.updateButtonValidity();
     }
