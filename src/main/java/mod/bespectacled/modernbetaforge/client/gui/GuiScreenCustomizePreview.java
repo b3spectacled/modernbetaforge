@@ -88,6 +88,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ListPreset list;
     private BufferedImage mapImage;
     private DynamicTexture mapTexture;
+    private float mapAlpha;
     private ProgressState state;
     private int resolution;
     private boolean useBiomeBlend;
@@ -199,7 +200,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.loadMapTexture();
         switch(this.state) {
             case LOADED:
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                this.mapAlpha = (float)MathUtil.lerp(partialTicks * 0.5f, this.mapAlpha, 1.0f);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
                 this.mc.getTextureManager().bindTexture(this.mapLocation);
                 GlStateManager.enableBlend();
                 Gui.drawModalRectWithCustomSizedTexture(
@@ -397,6 +399,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.mapImage = null;
         this.progress = 0.0f;
         this.state = ProgressState.STARTED;
+        this.mapAlpha = 0.25f;
         this.updateButtonsEnabled(this.state);
         this.deleteMapTexture();
         long time = System.currentTimeMillis();

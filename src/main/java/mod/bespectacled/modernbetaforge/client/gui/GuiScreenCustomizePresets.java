@@ -72,19 +72,24 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
-        this.select = this.<GuiButton>addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
-        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        this.addButton(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
+        this.select = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
+        this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
         
         this.shareText = I18n.format(PREFIX + "share");
         this.listText = I18n.format(PREFIX + "list");
         
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset();
         
+        boolean exportFocused = this.export != null ? this.export.isFocused() : false;
+        int cursorPosition = this.export != null ? this.export.getCursorPosition() : this.export.getMaxStringLength();
+        
         this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
         this.export.setMaxStringLength(MAX_PRESET_LENGTH);
-        this.export.setText(this.parent.getSettingsString());
-        
+        this.setInitialExportText();
+        this.export.setFocused(exportFocused);
+        this.export.setCursorPosition(cursorPosition);
+
         this.updateButtonValidity();
     }
     
@@ -150,7 +155,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
                 break;
             case GUI_ID_SELECT:
-                this.export.setText(this.presets.get(this.list.selected).settings.toString());
                 this.parent.loadValues(this.export.getText());
                 this.parent.isSettingsModified();
                 this.mc.displayGuiScreen(this.parent);
@@ -219,6 +223,15 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     private String getFilterString() {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
+    }
+    
+    private void setInitialExportText() {
+        boolean presetSelected = this.list != null && this.list.selected != -1;
+
+        this.export.setText(presetSelected ?
+            this.presets.get(this.list.selected).settings.toString() :
+            this.parent.getSettingsString()
+        );
     }
 
     @SideOnly(Side.CLIENT)

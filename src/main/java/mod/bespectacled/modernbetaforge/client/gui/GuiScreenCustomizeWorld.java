@@ -796,13 +796,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setGuiEnabled();
         this.updatePageControls();
         this.isSettingsModified();
+        
+        // Set buttons disabled if in confirmation dialog
+        if (this.confirmMode == GuiIdentifiers.FUNC_DFLT) {
+            this.setConfirmationControls(true);
+        }
     }
     
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         
-        if (!this.tabClicked) {
+        if (!this.tabClicked && this.confirmMode != GuiIdentifiers.FUNC_DFLT) {
             this.pageList.handleMouseInput();
         }
     }

@@ -777,7 +777,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     private boolean trySaveLevel(World world, LevelDataContainer levelDataContainer) {
         FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
         boolean saved = false;
-        
+
         try {
             dataHandler.setLevelData(levelDataContainer.levelData, levelDataContainer.levelMap);
             dataHandler.writeToDisk();
