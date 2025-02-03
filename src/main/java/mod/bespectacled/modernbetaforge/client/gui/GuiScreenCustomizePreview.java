@@ -200,7 +200,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.loadMapTexture();
         switch(this.state) {
             case LOADED:
-                this.mapAlpha = (float)MathUtil.lerp(partialTicks * 0.5f, this.mapAlpha, 1.0f);
+                this.mapAlpha = (float)MathUtil.lerp(partialTicks * 0.75f, this.mapAlpha, 1.0f);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
                 this.mc.getTextureManager().bindTexture(this.mapLocation);
                 GlStateManager.enableBlend();
