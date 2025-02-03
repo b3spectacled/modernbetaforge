@@ -81,10 +81,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private SurfaceBuilder surfaceBuilder;
     private BiomeInjectionRules injectionRules;
     
-    private GuiListButton biomeBlend;
-    private GuiSlider resolutionSlider;
-    private GuiButton generate;
-    private GuiButton cancel;
+    private GuiListButton buttonBiomeBlend;
+    private GuiSlider sliderResolution;
+    private GuiButton buttonGenerate;
+    private GuiButton buttonCancel;
     private ListPreset list;
     private BufferedImage mapImage;
     private DynamicTexture mapTexture;
@@ -130,14 +130,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int resolutionNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.resolution);
         
         this.buttonList.clear();
-        this.biomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeBlend"), true));
-        this.resolutionSlider = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
-        this.generate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
-        this.cancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
+        this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeBlend"), true));
+        this.sliderResolution = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
+        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
+        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
         
-        this.biomeBlend.width = 90;
-        this.resolutionSlider.width = 90;
-        this.biomeBlend.setValue(this.useBiomeBlend);
+        this.buttonBiomeBlend.width = 90;
+        this.sliderResolution.width = 90;
+        this.buttonBiomeBlend.setValue(this.useBiomeBlend);
         
         this.hintText = I18n.format(PREFIX + "hint");
         this.progressText = "";
@@ -459,10 +459,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void updateButtonsEnabled(ProgressState state) {
         boolean enabled = state != ProgressState.STARTED;
         
-        this.biomeBlend.enabled = enabled;
-        this.resolutionSlider.enabled = enabled;
-        this.generate.enabled = enabled;
-        this.cancel.enabled = enabled;
+        this.buttonBiomeBlend.enabled = enabled;
+        this.sliderResolution.enabled = enabled;
+        this.buttonGenerate.enabled = enabled;
+        this.buttonCancel.enabled = enabled;
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {

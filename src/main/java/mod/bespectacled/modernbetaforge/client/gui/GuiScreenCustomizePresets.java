@@ -41,16 +41,23 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
     private static final int GUI_ID_CANCEL = 2;
+    private static final int GUI_ID_SAVE = 3;
+    private static final int GUI_ID_EDIT = 4;
+    private static final int GUI_ID_DELETE = 5;
     
     private final GuiScreenCustomizeWorld parent;
     private final FilterType filterType;
     private final List<Info> presets;
     
     private ListPreset list;
-    private GuiTextField export;
-    private GuiButton select;
+    private GuiTextField fieldExport;
+    private GuiButton buttonSave;
+    private GuiButton buttonEdit;
+    private GuiButton buttonDelete;
+    private GuiButton buttonFilter;
+    private GuiButton buttonSelect;
+    private GuiButton buttonCancel;
     private String shareText;
-    private String listText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
     
@@ -72,23 +79,25 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         this.buttonList.clear();
-        this.addButton(new GuiButton(GUI_ID_FILTER, this.width / 2 - 153, this.height - 27, 100, 20, this.getFilterString()));
-        this.select = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 50, this.height - 27, 100, 20, I18n.format(PREFIX + "select")));
-        this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 53, this.height - 27, 100, 20, I18n.format("gui.cancel")));
+        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, this.width / 2 + 2, this.height - 27, 75, 20, this.getFilterString()));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 + 2, this.height - 50, 152, 20, I18n.format(PREFIX + "select")));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 80, this.height - 27, 75, 20, I18n.format("gui.cancel")));
+        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, this.width / 2 - 154, this.height - 50, 152, 20, I18n.format(PREFIX + "save")));
+        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, this.width / 2 - 154, this.height - 27, 75, 20, I18n.format(PREFIX + "edit")));
+        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, this.width / 2 - 76, this.height - 27, 75, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
-        this.listText = I18n.format(PREFIX + "list");
-        
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset();
         
-        boolean exportFocused = this.export != null ? this.export.isFocused() : false;
-        int cursorPosition = this.export != null ? this.export.getCursorPosition() : -1;
+        String exportText = this.fieldExport != null ? this.fieldExport.getText() : null;
+        boolean exportFocused = this.fieldExport != null ? this.fieldExport.isFocused() : false;
+        int cursorPosition = this.fieldExport != null ? this.fieldExport.getCursorPosition() : -1;
         
-        this.export = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
-        this.export.setMaxStringLength(MAX_PRESET_LENGTH);
-        this.setInitialExportText();
-        this.export.setFocused(exportFocused);
-        if (cursorPosition != -1) this.export.setCursorPosition(cursorPosition);
+        this.fieldExport = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
+        this.fieldExport.setMaxStringLength(MAX_PRESET_LENGTH);
+        this.setInitialExportText(exportText);
+        this.fieldExport.setFocused(exportFocused);
+        if (cursorPosition != -1) this.fieldExport.setCursorPosition(cursorPosition);
 
         this.updateButtonValidity();
     }
@@ -111,34 +120,40 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
         this.drawString(this.fontRenderer, this.shareText, 50, 30, 10526880);
-        this.drawString(this.fontRenderer, this.listText, 50, 70, 10526880);
-        this.export.drawTextBox();
+        this.fieldExport.drawTextBox();
         
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
     @Override
     public void updateScreen() {
-        this.export.updateCursorCounter();
+        this.fieldExport.updateCursorCounter();
         super.updateScreen();
     }
     
     public void updateButtonValidity() {
-        this.select.enabled = this.hasValidSelection();
+        boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
+        
+        this.buttonSelect.enabled = this.hasValidSelection();
+        this.buttonSave.enabled = false; // TODO: Update when done
+        this.buttonEdit.enabled = editable;
+        this.buttonDelete.enabled = editable;
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
-        this.export.mouseClicked(mouseX, mouseY, clicked);
+        this.fieldExport.mouseClicked(mouseX, mouseY, clicked);
         
         super.mouseClicked(mouseX, mouseY, clicked);
     }
 
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
-        if (!this.export.textboxKeyTyped(character, keyCode)) {
+        if (!this.fieldExport.textboxKeyTyped(character, keyCode)) {
             super.keyTyped(character, keyCode);
         }
+        
+        this.updateButtonValidity();
     }
 
     @Override
@@ -155,7 +170,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
                 break;
             case GUI_ID_SELECT:
-                this.parent.loadValues(this.export.getText());
+                this.parent.loadValues(this.fieldExport.getText());
                 this.parent.isSettingsModified();
                 this.mc.displayGuiScreen(this.parent);
                 break;
@@ -166,7 +181,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
 
     private boolean hasValidSelection() {
-        return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.export.getText().length() > 1;
+        return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.fieldExport.getText().length() > 1;
     }
     
     private List<Info> loadPresets(FilterType filterType) {
@@ -203,7 +218,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             texture = GuiCustomizePreset.formatTexture(key);
             factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(preset.settings);
             
-            presets.add(new Info(name, desc, texture, factory));
+            presets.add(new Info(name, desc, texture, factory, false));
         }
 
         if (filterType == FilterType.ALL || filterType == FilterType.CUSTOM) {
@@ -214,7 +229,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 texture = new ResourceLocation("textures/misc/unknown_pack.png");
                 factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(customPreset);
                 
-                presets.add(new Info(name, texture, factory));
+                presets.add(new Info(name, "", texture, factory, true));
             }
         }
         
@@ -225,19 +240,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
     
-    private void setInitialExportText() {
+    private void setInitialExportText(String initialText) {
         boolean presetSelected = this.list != null && this.list.selected != -1;
 
-        this.export.setText(presetSelected ?
-            this.presets.get(this.list.selected).settings.toString() :
-            this.parent.getSettingsString()
-        );
+        this.fieldExport.setText(presetSelected || initialText != null ? initialText : this.parent.getSettingsString());
     }
 
     @SideOnly(Side.CLIENT)
     private class ListPreset extends GuiSlot {
-        private static final int LIST_PADDING_TOP = 80;
-        private static final int LIST_PADDING_BOTTOM = 32;
+        private static final int LIST_PADDING_TOP = 66;
+        private static final int LIST_PADDING_BOTTOM = 54;
         
         public int selected;
         
@@ -295,12 +307,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this.selected = selected;
             
             GuiScreenCustomizePresets.this.updateButtonValidity();
-            GuiScreenCustomizePresets.this.export.setText(GuiScreenCustomizePresets.this.presets.get(GuiScreenCustomizePresets.this.list.selected).settings.toString());
+            GuiScreenCustomizePresets.this.fieldExport.setText(GuiScreenCustomizePresets.this.presets.get(GuiScreenCustomizePresets.this.list.selected).settings.toString());
             
             if (doubleClicked) {
                 SoundUtil.playClickSound(this.mc.getSoundHandler());
                 
-                GuiScreenCustomizePresets.this.parent.loadValues(GuiScreenCustomizePresets.this.export.getText());
+                GuiScreenCustomizePresets.this.parent.loadValues(GuiScreenCustomizePresets.this.fieldExport.getText());
                 GuiScreenCustomizePresets.this.parent.isSettingsModified();
                 GuiScreenCustomizePresets.this.mc.displayGuiScreen(GuiScreenCustomizePresets.this.parent);
             } 
@@ -415,20 +427,18 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     @SideOnly(Side.CLIENT)
     private static class Info {
-        public String name;
-        public String desc;
-        public ResourceLocation texture;
-        public ModernBetaGeneratorSettings.Factory settings;
+        public final String name;
+        public final String desc;
+        public final ResourceLocation texture;
+        public final ModernBetaGeneratorSettings.Factory settings;
+        public final boolean custom;
         
-        public Info(String name, String desc, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory) {
+        public Info(String name, String desc, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory, boolean custom) {
             this.name = name;
             this.desc = desc;
             this.texture = texture;
             this.settings = factory;
-        }
-        
-        public Info(String name, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory) {
-            this(name, "", texture, factory);
+            this.custom = custom;
         }
     }
 }

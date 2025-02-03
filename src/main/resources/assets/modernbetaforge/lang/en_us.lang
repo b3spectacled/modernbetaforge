@@ -12,6 +12,9 @@ createWorld.customize.presets.filter.all=All
 createWorld.customize.presets.filter.builtin=Built-in
 createWorld.customize.presets.filter.addon=Add-on
 createWorld.customize.presets.filter.custom=Custom
+createWorld.customize.presets.save=Save Preset
+createWorld.customize.presets.edit=Edit
+createWorld.customize.presets.delete=Delete
 
 # Preview
 createWorld.customize.preview.preview=Preview

@@ -51,8 +51,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
 
     private ModernBetaGeneratorSettings.Factory settings;
     private ListPreset list;
-    private GuiTextField searchBar;
-    private GuiButton select;
+    private GuiTextField fieldSearch;
+    private GuiButton buttonSelect;
     private String searchText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
@@ -120,7 +120,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         this.buttonList.clear();
-        this.select = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
         this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
         this.buttonList.add(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
         this.buttonList.add(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
@@ -134,10 +134,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         if (this.list.selected > numDisplayed - 1)
             this.list.scrollBy(this.slotHeight * (this.list.selected - numDisplayed + 1));
         
-        this.searchBar = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
-        this.searchBar.setMaxStringLength(MAX_SEARCH_LENGTH);
-        this.searchBar.setText(this.searchEntry);
-        this.searchBar.setFocused(this.startSearchFocused);
+        this.fieldSearch = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
+        this.fieldSearch.setMaxStringLength(MAX_SEARCH_LENGTH);
+        this.fieldSearch.setText(this.searchEntry);
+        this.fieldSearch.setFocused(this.startSearchFocused);
         
         this.updateButtonValidity();
     }
@@ -157,7 +157,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.searchBar.drawTextBox();
+        this.fieldSearch.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
@@ -176,28 +176,28 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     
     @Override
     public void updateScreen() {
-        this.searchBar.updateCursorCounter();
+        this.fieldSearch.updateCursorCounter();
         super.updateScreen();
     }
     
     public void updateButtonValidity() {
-        this.select.enabled = this.hasValidSelection();
+        this.buttonSelect.enabled = this.hasValidSelection();
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
-        this.searchBar.mouseClicked(mouseX, mouseY, clicked);
+        this.fieldSearch.mouseClicked(mouseX, mouseY, clicked);
         
         super.mouseClicked(mouseX, mouseY, clicked);
     }
 
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
-        if (!this.searchBar.textboxKeyTyped(character, keyCode)) {
+        if (!this.fieldSearch.textboxKeyTyped(character, keyCode)) {
             super.keyTyped(character, keyCode);
         }
         
-        if (this.searchBar.isFocused() && keyCode == 28 || keyCode == 156) {
+        if (this.fieldSearch.isFocused() && keyCode == 28 || keyCode == 156) {
             SoundUtil.playClickSound(this.mc.getSoundHandler());
             this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                 this.parent,
@@ -206,7 +206,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.slotHeight,
                 this.displayIcons,
                 this.initialEntry,
-                this.searchBar.getText(),
+                this.fieldSearch.getText(),
                 true,
                 this.langName,
                 this.registryKeys
@@ -234,8 +234,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.slotHeight,
                     this.displayIcons,
                     this.initialEntry,
-                    this.searchBar.getText(),
-                    this.searchBar.isFocused() && !this.searchBar.getText().isEmpty(),
+                    this.fieldSearch.getText(),
+                    this.fieldSearch.isFocused() && !this.fieldSearch.getText().isEmpty(),
                     this.langName,
                     this.registryKeys
                 ));

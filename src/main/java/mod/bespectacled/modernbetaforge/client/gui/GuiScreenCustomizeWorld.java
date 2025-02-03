@@ -113,13 +113,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     protected Map<Integer, GuiButton> pageTabMap;
     
     private GuiPageButtonList pageList;
-    private GuiButton done;
-    private GuiButton randomize;
-    private GuiButton defaults;
-    private GuiButton confirm;
-    private GuiButton cancel;
-   private GuiButton presets;
-    private GuiButton preview;
+    private GuiButton buttonDone;
+    private GuiButton buttonRandomize;
+    private GuiButton buttonDefaults;
+    private GuiButton buttonConfirm;
+    private GuiButton buttonCancel;
+    private GuiButton buttonPresets;
+    private GuiButton buttonPreview;
     
     private boolean settingsModified;
     private int confirmMode;
@@ -760,26 +760,26 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int presetsX = this.width / 2 + BUTTON_WIDTH / 2 + 3;
         int doneX = this.width / 2 + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
 
-        this.defaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.randomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.preview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
-        this.presets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.done = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
+        this.buttonDefaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.buttonRandomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.buttonPreview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.buttonPresets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
         
-        this.defaults.enabled = this.settingsModified;
+        this.buttonDefaults.enabled = this.settingsModified;
         
-        this.confirm = new GuiButton(GuiIdentifiers.FUNC_CONF, this.width / 2 - 55, 160, 50, 20, I18n.format("gui.yes"));
-        this.confirm.visible = false;
+        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, this.width / 2 - 55, 160, 50, 20, I18n.format("gui.yes"));
+        this.buttonConfirm.visible = false;
         
-        this.cancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, this.width / 2 + 5, 160, 50, 20, I18n.format("gui.no"));
-        this.cancel.visible = false;
+        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, this.width / 2 + 5, 160, 50, 20, I18n.format("gui.no"));
+        this.buttonCancel.visible = false;
 
-        this.buttonList.add(this.confirm);
-        this.buttonList.add(this.cancel);
+        this.buttonList.add(this.buttonConfirm);
+        this.buttonList.add(this.buttonCancel);
         
         if (this.confirmMode != 0) {
-            this.confirm.visible = true;
-            this.cancel.visible = true;
+            this.buttonConfirm.visible = true;
+            this.buttonCancel.visible = true;
         }
         
         GuiIdentifiers.assertOffsets();
@@ -1596,8 +1596,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
             this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
             
-            this.confirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.cancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
+            this.buttonConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
+            this.buttonCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
         }
     }
     
@@ -1623,7 +1623,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.defaults.enabled = settingsModified;
+        this.buttonDefaults.enabled = settingsModified;
     }
 
     @Override
@@ -2015,13 +2015,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void setConfirmationControls(boolean setConfirm) {
-        this.confirm.visible = setConfirm;
-        this.cancel.visible = setConfirm;
-        this.randomize.enabled = !setConfirm;
-        this.done.enabled = !setConfirm;
-        this.defaults.enabled = (this.settingsModified && !setConfirm);
-        this.presets.enabled = !setConfirm;
-        this.preview.enabled = !setConfirm;
+        this.buttonConfirm.visible = setConfirm;
+        this.buttonCancel.visible = setConfirm;
+        this.buttonRandomize.enabled = !setConfirm;
+        this.buttonDone.enabled = !setConfirm;
+        this.buttonDefaults.enabled = (this.settingsModified && !setConfirm);
+        this.buttonPresets.enabled = !setConfirm;
+        this.buttonPreview.enabled = !setConfirm;
         this.pageList.setActive(!setConfirm);
         
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
@@ -2033,7 +2033,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int page = this.pageList.getPage();
         
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
-        this.randomize.enabled = page < 5 || page == 6;
+        this.buttonRandomize.enabled = page < 5 || page == 6;
         
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
             if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + page) {
