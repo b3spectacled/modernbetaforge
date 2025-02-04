@@ -786,11 +786,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.createPagedList();
         this.createPageTabs();
-        
-        if (curPage != 0) {
-            this.pageList.setPage(curPage);
-            this.pageList.scrollBy(curScroll);
-        }
+
+        this.pageList.setPage(curPage);
+        this.pageList.scrollBy(curScroll);
         
         // Set default enabled for certain options
         this.setGuiEnabled();

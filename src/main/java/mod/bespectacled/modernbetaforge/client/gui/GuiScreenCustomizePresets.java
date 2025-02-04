@@ -10,9 +10,12 @@ import org.lwjgl.input.Keyboard;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler.PresetData;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -23,20 +26,33 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePresets extends GuiScreen {
-    private enum FilterType {
+    public enum FilterType {
         ALL, BUILTIN, ADDON, CUSTOM
+    }
+    
+    private enum ModalState {
+        NONE, SAVE, EDIT, DELETE, OVERWRITE
     }
     
     private static final String PREFIX = "createWorld.customize.presets.";
     private static final String PREFIX_FILTER = "createWorld.customize.presets.filter";
     
     private static final int SLOT_HEIGHT = 32;
+    private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_LENGTH = 50000;
+    private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
+    private static final int MAX_PRESET_NAME_LENGTH = 25;
+    private static final int MAX_PRESET_DESC_LENGTH = 50;
+    private static final int MODAL_WIDTH = 320 / 2;
+    private static final int MODAL_HEIGHT = 200 / 2;
+    private static final int MODAL_WIDTH_SMALL = 225 / 2;
+    private static final int MODAL_HEIGHT_SMALL = 125 / 2;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -44,60 +60,94 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int GUI_ID_SAVE = 3;
     private static final int GUI_ID_EDIT = 4;
     private static final int GUI_ID_DELETE = 5;
+    private static final int GUI_ID_EXPORT = 6;
+    
+    private static final int GUI_ID_MODAL_CONFIRM = 10;
+    private static final int GUI_ID_MODAL_CANCEL = 11;
+    private static final int GUI_ID_MODAL_NAME = 12;
+    private static final int GUI_ID_MODAL_DESC = 13;
+    private static final int GUI_ID_MODAL_SETTINGS = 14;
     
     private final GuiScreenCustomizeWorld parent;
     private final FilterType filterType;
+    private final GuiCustomizePresetsDataHandler dataHandler;
     private final List<Info> presets;
+    private final int initialPreset;
     
     private ListPreset list;
     private GuiTextField fieldExport;
+    private GuiTextField fieldModalName;
+    private GuiTextField fieldModalDesc;
+    private GuiTextField fieldModalSettings;
     private GuiButton buttonSave;
     private GuiButton buttonEdit;
     private GuiButton buttonDelete;
     private GuiButton buttonFilter;
     private GuiButton buttonSelect;
     private GuiButton buttonCancel;
+    private GuiButton buttonModalConfirm;
+    private GuiButton buttonModalCancel;
     private String shareText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
+    private ModalState modalState;
+    private long confirmExitTime;
     
     protected String title;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
-        this(parent, FilterType.ALL);
+        this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1);
     }
     
-    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType) {
+    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType, int initialPreset) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.filterType = filterType;
-        this.presets = this.loadPresets(filterType);
+        this.dataHandler = new GuiCustomizePresetsDataHandler(Minecraft.getMinecraft());
+        this.presets = this.loadPresets(filterType, this.dataHandler);
+        this.initialPreset = initialPreset;
+        this.hoveredElement = -1;
+        this.modalState = ModalState.NONE;
     }
     
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        
+        int modalWidth = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
+        int modalHeight = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
+        
         this.buttonList.clear();
-        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, this.width / 2 + 2, this.height - 27, 75, 20, this.getFilterString()));
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 + 2, this.height - 50, 152, 20, I18n.format(PREFIX + "select")));
-        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 80, this.height - 27, 75, 20, I18n.format("gui.cancel")));
-        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, this.width / 2 - 154, this.height - 50, 152, 20, I18n.format(PREFIX + "save")));
-        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, this.width / 2 - 154, this.height - 27, 75, 20, I18n.format(PREFIX + "edit")));
-        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, this.width / 2 - 76, this.height - 27, 75, 20, I18n.format(PREFIX + "delete")));
+        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, centerX + 2, this.height - 27, 75, 20, this.getFilterString()));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, centerX + 2, this.height - 50, 152, 20, I18n.format(PREFIX + "select")));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, centerX + 80, this.height - 27, 75, 20, I18n.format("gui.cancel")));
+        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, centerX - 154, this.height - 50, 152, 20, I18n.format(PREFIX + "save")));
+        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, centerX - 154, this.height - 27, 75, 20, I18n.format(PREFIX + "edit")));
+        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, centerX - 76, this.height - 27, 75, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
-        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset();
+        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialPreset);
         
-        String exportText = this.fieldExport != null ? this.fieldExport.getText() : null;
-        boolean exportFocused = this.fieldExport != null ? this.fieldExport.isFocused() : false;
-        int cursorPosition = this.fieldExport != null ? this.fieldExport.getCursorPosition() : -1;
+        int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / (SLOT_HEIGHT + SLOT_PADDING);
+        if (this.list.selected > numDisplayed - 1) {
+            this.list.scrollBy(SLOT_HEIGHT * (this.list.selected + 1));
+        }
         
-        this.fieldExport = new GuiTextField(2, this.fontRenderer, 50, 40, this.width - 100, 20);
-        this.fieldExport.setMaxStringLength(MAX_PRESET_LENGTH);
-        this.setInitialExportText(exportText);
-        this.fieldExport.setFocused(exportFocused);
-        if (cursorPosition != -1) this.fieldExport.setCursorPosition(cursorPosition);
+        String initialExportText = this.getInitialExportText();
+        String initialModalNameText = this.fieldModalName != null ? this.fieldModalName.getText() : "";
+        String initialModalDescText = this.fieldModalDesc != null ? this.fieldModalDesc.getText() : "";
+        String intialModalSettingsText = this.fieldModalSettings != null ? this.fieldModalSettings.getText() : initialExportText;
+
+        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, 50, 40, this.width - 100, 20, initialExportText, MAX_PRESET_LENGTH);
+        
+        this.buttonModalConfirm = this.addButton(new GuiButton(GUI_ID_MODAL_CONFIRM, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm")));
+        this.buttonModalCancel = this.addButton(new GuiButton(GUI_ID_MODAL_CANCEL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format("gui.cancel")));
+        this.fieldModalName = this.createInitialField(this.fieldModalName, GUI_ID_MODAL_NAME, centerX - modalWidth + 10, centerY - 50, modalWidth * 2 - 20, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
+        this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, modalWidth * 2 - 20, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
+        this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, modalWidth * 2 - 20, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
 
         this.updateButtonValidity();
     }
@@ -105,7 +155,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        this.list.handleMouseInput();
+        
+        if (this.canInteract() && this.modalState == ModalState.NONE) {
+            this.list.handleMouseInput();
+        }
     }
     
     @Override
@@ -116,40 +169,165 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        
+
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
         this.drawString(this.fontRenderer, this.shareText, 50, 30, 10526880);
         this.fieldExport.drawTextBox();
         
         super.drawScreen(mouseX, mouseY, partialTicks);
+        
+        if (this.modalState != ModalState.NONE) {
+            Info selectedPreset = this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
+            
+            Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
+            
+            int centerX = this.width / 2;
+            int centerY = this.height / 2;
+            
+            int modalWidth = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
+            int modalHeight = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
+            
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
+            this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
+            this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
+            
+            GlStateManager.disableLighting();
+            GlStateManager.disableFog();
+            
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            
+            this.mc.getTextureManager().bindTexture(GuiScreenCustomizeWorld.OPTIONS_BACKGROUND);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
+            
+            tessellator.draw();
+            
+            String confirmTitle = "";
+            
+            switch (this.modalState) {
+                case SAVE:
+                    confirmTitle = I18n.format(PREFIX + "save.title");
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), centerX - modalWidth + 10, centerY - 60, 10526880);
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), centerX - modalWidth + 10, centerY - 20, 10526880);
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), centerX - modalWidth + 10, centerY + 20, 10526880);
+                    this.fieldModalName.drawTextBox();
+                    this.fieldModalDesc.drawTextBox();
+                    this.fieldModalSettings.drawTextBox();
+                    break;
+                case EDIT:
+                    confirmTitle = I18n.format(PREFIX + "edit.title");
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), centerX - modalWidth + 10, centerY - 60, 10526880);
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), centerX - modalWidth + 10, centerY - 20, 10526880);
+                    this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), centerX - modalWidth + 10, centerY + 20, 10526880);
+                    this.fieldModalName.drawTextBox();
+                    this.fieldModalDesc.drawTextBox();
+                    this.fieldModalSettings.drawTextBox();
+                    break;
+                case DELETE:
+                    confirmTitle = I18n.format(PREFIX + "delete.title");
+                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "delete.confirm"), centerX, centerY - 12, 16752800);
+                    this.drawCenteredString(this.fontRenderer, selectedPreset.name, centerX, centerY + 6, 16777215);
+                    break;
+                case OVERWRITE:
+                    confirmTitle = I18n.format(PREFIX + "overwrite.title");
+                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "overwrite.confirm"), centerX, centerY - 12, 16752800);
+                    this.drawCenteredString(this.fontRenderer, selectedPreset.name, centerX, centerY + 6, 16777215);
+                    break;
+                case NONE:
+                    break;
+            }
+
+            this.drawCenteredString(this.fontRenderer, confirmTitle, centerX, centerY - modalHeight + 10, 16777215);
+            
+            this.buttonModalConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
+            this.buttonModalCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
+        }
     }
     
     @Override
     public void updateScreen() {
         this.fieldExport.updateCursorCounter();
+        this.fieldModalName.updateCursorCounter();
+        this.fieldModalDesc.updateCursorCounter();
+        this.fieldModalSettings.updateCursorCounter();
         super.updateScreen();
     }
     
     public void updateButtonValidity() {
         boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
         
-        this.buttonSelect.enabled = this.hasValidSelection();
-        this.buttonSave.enabled = false; // TODO: Update when done
-        this.buttonEdit.enabled = editable;
-        this.buttonDelete.enabled = editable;
+        switch (this.modalState) {
+            case NONE:
+                this.buttonSave.enabled = true;
+                this.buttonEdit.enabled = editable;
+                this.buttonDelete.enabled = editable;
+                this.buttonSelect.enabled = this.hasValidSelection();
+                this.buttonFilter.enabled = true;
+                this.buttonCancel.enabled = true;
+                this.buttonModalConfirm.visible = false;
+                this.buttonModalCancel.visible = false;
+                this.fieldModalName.setVisible(false);
+                this.fieldModalDesc.setVisible(false);
+                break;
+            case SAVE:
+                this.fieldModalName.setVisible(true);
+                this.fieldModalDesc.setVisible(true);
+                this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
+            case EDIT:
+                this.fieldModalName.setVisible(true);
+                this.fieldModalDesc.setVisible(true);
+                this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
+            default:
+                this.buttonSave.enabled = false;
+                this.buttonEdit.enabled = false;
+                this.buttonDelete.enabled = false;
+                this.buttonSelect.enabled = false;
+                this.buttonFilter.enabled = false;
+                this.buttonCancel.enabled = false;
+                this.buttonModalConfirm.visible = true;
+                this.buttonModalCancel.visible = true;
+                this.buttonModalConfirm.enabled = this.modalState == ModalState.DELETE || !this.fieldModalName.getText().isEmpty();
+                this.buttonModalCancel.enabled = true;
+        }
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
-        this.fieldExport.mouseClicked(mouseX, mouseY, clicked);
-        
         super.mouseClicked(mouseX, mouseY, clicked);
+        
+        switch (this.modalState) {
+            case NONE:
+                this.fieldExport.mouseClicked(mouseX, mouseY, clicked);
+                break;
+            case SAVE:
+            case EDIT:
+                this.fieldModalName.mouseClicked(mouseX, mouseY, clicked);
+                this.fieldModalDesc.mouseClicked(mouseX, mouseY, clicked);
+                this.fieldModalSettings.mouseClicked(mouseX, mouseY, clicked);
+                break;
+            default:
+        }
+        
+        this.updateButtonValidity();
     }
 
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
-        if (!this.fieldExport.textboxKeyTyped(character, keyCode)) {
+        boolean fieldTyped = 
+            this.fieldExport.textboxKeyTyped(character, keyCode) ||
+            this.fieldModalName.textboxKeyTyped(character, keyCode) ||
+            this.fieldModalDesc.textboxKeyTyped(character, keyCode) ||
+            this.fieldModalSettings.textboxKeyTyped(character, keyCode);
+        
+        if (!fieldTyped) {
             super.keyTyped(character, keyCode);
         }
         
@@ -158,16 +336,17 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
+        Info selectedPreset = this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
+        
         switch (guiButton.id) {
             case GUI_ID_FILTER:
                 FilterType[] values = FilterType.values();
-                
                 int increment = GuiScreen.isShiftKeyDown() ? -1 : 1;
                 int index = this.filterType.ordinal() + increment;
                 if (index < 0) index = values.length - 1;
-                
                 FilterType filterType = values[index % values.length];
-                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType));
+                
+                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType, -1));
                 break;
             case GUI_ID_SELECT:
                 this.parent.loadValues(this.fieldExport.getText());
@@ -177,14 +356,83 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             case GUI_ID_CANCEL:
                 this.mc.displayGuiScreen(this.parent);
                 break;
+            case GUI_ID_SAVE:
+                this.fieldModalName.setText("");
+                this.fieldModalDesc.setText("");
+                this.fieldModalSettings.setText(this.getInitialExportText());
+                this.setModalState(ModalState.SAVE);
+                break;
+            case GUI_ID_EDIT:
+                this.fieldModalName.setText(selectedPreset.name);
+                this.fieldModalDesc.setText(selectedPreset.desc);
+                this.fieldModalSettings.setText(selectedPreset.settings.toString());
+                this.setModalState(ModalState.EDIT);
+                break;
+            case GUI_ID_DELETE:
+                this.setModalState(ModalState.DELETE);
+                break;
+            case GUI_ID_MODAL_CONFIRM:
+                switch (this.modalState) {
+                    case SAVE:
+                        if (this.dataHandler.containsPreset(this.fieldModalName.getText())) {
+                            this.setModalState(ModalState.OVERWRITE);
+                        } else {
+                            this.dataHandler.addPreset(this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
+                            this.dataHandler.writePresets();
+                            this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size()));
+                        }
+                        break;
+                    case DELETE:
+                        this.dataHandler.removePreset(selectedPreset.name);
+                        this.dataHandler.writePresets();
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1));
+                        break;
+                    case EDIT:
+                        this.dataHandler.removePreset(selectedPreset.name);
+                        this.dataHandler.addPreset(this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
+                        this.dataHandler.writePresets();
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected));
+                        break;
+                    case OVERWRITE:
+                        this.dataHandler.removePreset(this.fieldModalName.getText());
+                        this.dataHandler.addPreset(this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldExport.getText());
+                        this.dataHandler.writePresets();
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size()));
+                        break;
+                    default:
+                }
+                break;
+            case GUI_ID_MODAL_CANCEL:
+                this.setModalState(ModalState.NONE);
+                break;
         }
+        
+        this.updateButtonValidity();
     }
 
     private boolean hasValidSelection() {
         return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.fieldExport.getText().length() > 1;
     }
     
-    private List<Info> loadPresets(FilterType filterType) {
+    private void setModalState(ModalState state) {
+        if (this.modalState != state) {
+            this.confirmExitTime = System.currentTimeMillis();
+        }
+        
+        int centerY = this.height / 2;
+        int modalHeight = state == ModalState.DELETE || state == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
+        
+        this.buttonModalConfirm.y = centerY + modalHeight - 25;
+        this.buttonModalCancel.y = centerY + modalHeight - 25;
+        
+        this.modalState = state;
+    }
+    
+    private boolean canInteract() {
+        return System.currentTimeMillis() - this.confirmExitTime > 100L;
+    }
+    
+    private List<Info> loadPresets(FilterType filterType, GuiCustomizePresetsDataHandler dataHandler) {
         List<Info> presets = new ArrayList<>();
         
         String name;
@@ -222,14 +470,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
 
         if (filterType == FilterType.ALL || filterType == FilterType.CUSTOM) {
-            String[] customPresets = ModernBetaConfig.guiOptions.customPresets;
-            for (int i = 0; i < customPresets.length; ++i) {
-                String customPreset = customPresets[i];
-                name = I18n.format("createWorld.customize.custom.preset.custom").concat(String.format(" %d", i + 1));
+            for (PresetData presetData : dataHandler.getPresets()) {
+                name = presetData.name;
+                desc = presetData.desc;
                 texture = new ResourceLocation("textures/misc/unknown_pack.png");
-                factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(customPreset);
+                factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(presetData.settings);
                 
-                presets.add(new Info(name, "", texture, factory, true));
+                presets.add(new Info(name, desc, texture, factory, true));
             }
         }
         
@@ -240,10 +487,23 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
     
-    private void setInitialExportText(String initialText) {
-        boolean presetSelected = this.list != null && this.list.selected != -1;
-
-        this.fieldExport.setText(presetSelected || initialText != null ? initialText : this.parent.getSettingsString());
+    private GuiTextField createInitialField(GuiTextField textField, int id, int x, int y, int width, int height, String initialText, int maxLength) {
+        GuiTextField newTextField = new GuiTextField(id, this.fontRenderer, x, y, width, height);
+        boolean initialized = textField != null;
+        
+        boolean initialFocused = initialized ? textField.isFocused() : false;
+        int initialCursorPos = initialized ? textField.getCursorPosition() : -1;
+        
+        newTextField.setMaxStringLength(maxLength);
+        newTextField.setText(initialText);
+        newTextField.setFocused(initialFocused);
+        if (initialCursorPos != -1) newTextField.setCursorPosition(initialCursorPos);
+        
+        return newTextField;
+    }
+    
+    private String getInitialExportText() {
+        return this.fieldExport != null ? this.fieldExport.getText() : this.parent.getSettingsString();
     }
 
     @SideOnly(Side.CLIENT)
@@ -253,10 +513,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         public int selected;
         
-        public ListPreset() {
-            this(-1);
-        }
-        
         public ListPreset(int selected) {
             super(
                 GuiScreenCustomizePresets.this.mc,
@@ -264,9 +520,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 GuiScreenCustomizePresets.this.height,
                 LIST_PADDING_TOP,
                 GuiScreenCustomizePresets.this.height - LIST_PADDING_BOTTOM,
-                SLOT_HEIGHT + 6
+                SLOT_HEIGHT + SLOT_PADDING
             );
-            this.selected = selected;
+            
+            this.selected = MathHelper.clamp(selected, -1, GuiScreenCustomizePresets.this.presets.size() - 1);
         }
         
         @Override
@@ -388,7 +645,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
             
             // Render preset description, splitting if too long
-            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, 188);
+            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, MAX_PRESET_DESC_LINE_LENGTH);
             if (splitString.size() > 1) {
                 for (int i = 0; i < splitString.size(); ++i) {
                     String line = splitString.get(i);
@@ -432,6 +689,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         public final ResourceLocation texture;
         public final ModernBetaGeneratorSettings.Factory settings;
         public final boolean custom;
+        
+        public Info() {
+            this("", "", null, null, false);
+        }
         
         public Info(String name, String desc, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory, boolean custom) {
             this.name = name;

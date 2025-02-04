@@ -131,8 +131,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialEntry);
         
         int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / this.slotHeight;
-        if (this.list.selected > numDisplayed - 1)
-            this.list.scrollBy(this.slotHeight * (this.list.selected - numDisplayed + 1));
+        if (this.list.selected > numDisplayed - 1) {
+            this.list.scrollBy(this.slotHeight * (this.list.selected + 1));
+        }
         
         this.fieldSearch = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
         this.fieldSearch.setMaxStringLength(MAX_SEARCH_LENGTH);

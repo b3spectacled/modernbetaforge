@@ -15,6 +15,16 @@ createWorld.customize.presets.filter.custom=Custom
 createWorld.customize.presets.save=Save Preset
 createWorld.customize.presets.edit=Edit
 createWorld.customize.presets.delete=Delete
+createWorld.customize.presets.confirm=Confirm
+createWorld.customize.presets.save.title=Save Preset
+createWorld.customize.presets.edit.title=Edit Preset
+createWorld.customize.presets.delete.title=Delete Preset
+createWorld.customize.presets.overwrite.title=Overwrite Preset
+createWorld.customize.presets.name=Enter name..
+createWorld.customize.presets.desc=Enter description..
+createWorld.customize.presets.settings=Enter settings..
+createWorld.customize.presets.delete.confirm=Delete this preset?
+createWorld.customize.presets.overwrite.confirm=Preset already exists. Overwrite?
 
 # Preview
 createWorld.customize.preview.preview=Preview
@@ -280,8 +290,8 @@ modernbetaforge.general.visualoptions=Visual Options
 modernbetaforge.general.serveroptions=Server Options
 modernbetaforge.general.debugoptions=Debug Options
 
-modernbetaforge.general.guioptions.custompresets=Custom World Presets
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
+modernbetaforge.general.guioptions.defaultpresetfilter=Default World Preset Filter
 modernbetaforge.general.guioptions.usemodernbetaasdefault=Default to Modern Beta World Type
 modernbetaforge.general.guioptions.usemenusforbasicsettings=Menus for Basic Settings
 

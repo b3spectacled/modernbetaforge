@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.config;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets.FilterType;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeInt;
@@ -21,16 +22,16 @@ public class ModernBetaConfig {
     
     public static class CategoryGui {
         @Comment({
-            "Add custom Modern Beta world presets"
-        })
-        @RequiresWorldRestart
-        public String[] customPresets = {};
-
-        @Comment({
             "Default Modern Beta world preset"
         })
         @RequiresWorldRestart
         public String defaultPreset = "";
+        
+        @Comment({
+            "Default Modern Beta world preset filter"
+        })
+        @RequiresWorldRestart
+        public FilterType defaultPresetFilter = FilterType.ALL;
 
         @Comment({
             "Set Modern Beta world type as default"
