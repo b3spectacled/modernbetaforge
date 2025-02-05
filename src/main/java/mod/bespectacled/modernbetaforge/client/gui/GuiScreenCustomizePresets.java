@@ -45,6 +45,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         ModernBeta.createRegistryKey("textures/gui/presets/pack.png"),
         new ResourceLocation("textures/blocks/grass_side.png"),
         new ResourceLocation("textures/blocks/dirt.png"),
+        new ResourceLocation("textures/blocks/sand.png"),
+        new ResourceLocation("textures/blocks/gravel.png"),
         new ResourceLocation("textures/blocks/stone.png"),
         new ResourceLocation("textures/blocks/cobblestone.png"),
         new ResourceLocation("textures/blocks/log_oak.png"),
