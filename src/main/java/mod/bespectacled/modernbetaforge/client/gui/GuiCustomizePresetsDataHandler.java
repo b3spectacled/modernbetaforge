@@ -52,11 +52,11 @@ public class GuiCustomizePresetsDataHandler {
         }
     }
     
-    public int replacePreset(int icon, String name, String desc, String settings) {
+    public int replacePreset(int icon, String prevName, String name, String desc, String settings) {
         int ndx = 0;
         
-        if (this.containsPreset(name)) {
-            ndx = this.presets.indexOf(new PresetData(name));
+        if (this.containsPreset(prevName)) {
+            ndx = this.presets.indexOf(new PresetData(prevName));
             
             this.presets.remove(ndx);
             this.presets.add(ndx, new PresetData(icon, name, desc, settings));

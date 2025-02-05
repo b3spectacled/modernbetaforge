@@ -73,8 +73,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_LENGTH = 50000;
     private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
-    private static final int MAX_PRESET_NAME_LENGTH = 25;
-    private static final int MAX_PRESET_DESC_LENGTH = 50;
+    private static final int MAX_PRESET_NAME_LENGTH = 30;
+    private static final int MAX_PRESET_DESC_LENGTH = 60;
     private static final int MODAL_WIDTH = 320 / 2;
     private static final int MODAL_HEIGHT = 200 / 2;
     private static final int MODAL_WIDTH_SMALL = 225 / 2;
@@ -192,8 +192,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalName = this.createInitialField(this.fieldModalName, GUI_ID_MODAL_NAME, centerX - modalWidth + 10, centerY - 50, MODAL_NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
         this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
-        
-        ModernBeta.log("INITIAL PRESET: " + this.initialPreset);
         
         this.updateButtonValidity();
     }
@@ -449,12 +447,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                         this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1));
                         break;
                     case EDIT:
-                        this.dataHandler.replacePreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
+                        this.dataHandler.replacePreset(this.selectedIcon, selectedPreset.name, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
                         this.dataHandler.writePresets();
                         this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected));
                         break;
                     case OVERWRITE:
-                        int ndx = this.dataHandler.replacePreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
+                        int ndx = this.dataHandler.replacePreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
                         this.dataHandler.writePresets();
                         this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx));
                         break;
