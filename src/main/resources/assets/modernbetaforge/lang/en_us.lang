@@ -20,9 +20,12 @@ createWorld.customize.presets.save.title=Save Preset
 createWorld.customize.presets.edit.title=Edit Preset
 createWorld.customize.presets.delete.title=Delete Preset
 createWorld.customize.presets.overwrite.title=Overwrite Preset
-createWorld.customize.presets.name=Enter name..
-createWorld.customize.presets.desc=Enter description..
-createWorld.customize.presets.settings=Enter settings..
+createWorld.customize.presets.name=Name (Required)
+createWorld.customize.presets.desc=Description
+createWorld.customize.presets.settings=Settings
+createWorld.customize.presets.next=>
+createWorld.customize.presets.prev=<
+createWorld.customize.presets.icon=Icon
 createWorld.customize.presets.delete.confirm=Delete this preset?
 createWorld.customize.presets.overwrite.confirm=Preset already exists. Overwrite?
 

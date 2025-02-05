@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 
@@ -26,7 +25,7 @@ public class GuiCustomizePresetsDataHandler {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     private final File configDirectory;
-    private final Set<PresetData> presets;
+    private final List<PresetData> presets;
 
     public GuiCustomizePresetsDataHandler(Minecraft mc) {
         this.configDirectory = new File(mc.gameDir, "config");
@@ -43,8 +42,8 @@ public class GuiCustomizePresetsDataHandler {
         }
     }
     
-    public void addPreset(String name, String desc, String settings) {
-        this.presets.add(new PresetData(name, desc, settings));
+    public void addPreset(int icon, String name, String desc, String settings) {
+        this.presets.add(new PresetData(icon, name, desc, settings));
     }
     
     public void removePreset(String name) {
@@ -53,25 +52,39 @@ public class GuiCustomizePresetsDataHandler {
         }
     }
     
+    public int replacePreset(int icon, String name, String desc, String settings) {
+        int ndx = 0;
+        
+        if (this.containsPreset(name)) {
+            ndx = this.presets.indexOf(new PresetData(name));
+            
+            this.presets.remove(ndx);
+            this.presets.add(ndx, new PresetData(icon, name, desc, settings));
+        }
+        
+        return ndx;
+    }
+    
     public boolean containsPreset(String name) {
         return this.presets.contains(new PresetData(name));
     }
     
-    public List<PresetData> getPresets() {
-        List<PresetData> list = new LinkedList<>();
-        list.addAll(this.presets);
-        
-        return list;
+    public PresetData getPreset(String name) {
+        return this.presets.get(this.presets.indexOf(new PresetData(name)));
     }
     
-    private Set<PresetData> readPresets() {
-        Set<PresetData> presets;
+    public List<PresetData> getPresets() {
+        return this.presets;
+    }
+    
+    private List<PresetData> readPresets() {
+        List<PresetData> presets;
         
         try {
             presets = readFromDisk();
             
         } catch (Exception e) {
-            presets = new LinkedHashSet<>();
+            presets = new LinkedList<>();
             
             ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded!", FILE_NAME));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
@@ -86,9 +99,9 @@ public class GuiCustomizePresetsDataHandler {
         }
     }
 
-    private Set<PresetData> readFromDisk() throws Exception {
+    private List<PresetData> readFromDisk() throws Exception {
         try (Reader reader = new FileReader(new File(this.configDirectory, FILE_NAME))) {
-            Type type = new TypeToken<Set<PresetData>>(){}.getType();
+            Type type = new TypeToken<List<PresetData>>(){}.getType();
             return GSON.fromJson(reader, type);
         }
     }
@@ -96,15 +109,17 @@ public class GuiCustomizePresetsDataHandler {
     public static class PresetData implements Serializable {
         private static final long serialVersionUID = 3417451508681238782L;
         
+        public final int icon;
         public final String name;
         public final String desc;
         public final String settings;
         
         private PresetData(String name) {
-            this(name, "", "");
+            this(0, name, "", "");
         }
         
-        private PresetData(String name, String desc, String settings) {
+        private PresetData(int icon, String name, String desc, String settings) {
+            this.icon = icon;
             this.name = name.trim();
             this.desc = desc.trim();
             this.settings = settings.trim();
