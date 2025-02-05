@@ -193,6 +193,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
         
+        ModernBeta.log("INITIAL PRESET: " + this.initialPreset);
+        
         this.updateButtonValidity();
     }
     
@@ -589,7 +591,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
 
     private String getInitialExportText() {
-        return this.fieldExport != null ? this.fieldExport.getText() : this.parent.getSettingsString();
+        return this.fieldExport != null ?
+            this.fieldExport.getText() :
+            this.list != null && this.list.selected > -1 ?
+                this.presets.get(this.list.selected).settings.toString() :
+                this.parent.getSettingsString();
     }
 
     private String getFilterText() {
