@@ -265,13 +265,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     break;
                 case DELETE:
                     confirmTitle = I18n.format(PREFIX + "delete.title");
-                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "delete.confirm"), centerX, centerY - 12, 16752800);
-                    this.drawCenteredString(this.fontRenderer, selectedPreset.name, centerX, centerY + 6, 16777215);
+                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "delete.confirm"), centerX, centerY - 16, 16752800);
+                    this.drawCenteredString(this.fontRenderer, selectedPreset.name, centerX, centerY + 2, 16777215);
                     break;
                 case OVERWRITE:
                     confirmTitle = I18n.format(PREFIX + "overwrite.title");
-                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "overwrite.confirm"), centerX, centerY - 12, 16752800);
-                    this.drawCenteredString(this.fontRenderer, this.fieldModalName.getText(), centerX, centerY + 6, 16777215);
+                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "overwrite.confirm"), centerX, centerY - 16, 16752800);
+                    this.drawCenteredString(this.fontRenderer, this.fieldModalName.getText(), centerX, centerY + 2, 16777215);
                     break;
                 case NONE:
                     break;
@@ -525,7 +525,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         String name;
         String desc;
-        int textureId;
         ResourceLocation texture;
         ModernBetaGeneratorSettings.Factory factory;
         
