@@ -924,7 +924,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
             }
 
-            if (newEntryValue != entryValue) {
+            if (newEntryValue != entryValue && entryValue != 0.0f) {
                 ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
             }
             

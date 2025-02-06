@@ -413,6 +413,9 @@ public class GuiIdentifiers {
         assertOffset(PG4_S_B_DPTH_OF, PG5_F_B_DPTH_OF);
         assertOffset(PG4_S_B_SCLE_WT, PG5_F_B_SCLE_WT);
         assertOffset(PG4_S_B_SCLE_OF, PG5_F_B_SCLE_OF);
+        
+        assertOffset(PG4_S_SCLE_NS_X, PG5_F_SCLE_NS_X);
+        assertOffset(PG4_S_SCLE_NS_Z, PG5_F_SCLE_NS_Z);
     }
 
     private static void assertOffset(int sliderId, int fieldId) {
