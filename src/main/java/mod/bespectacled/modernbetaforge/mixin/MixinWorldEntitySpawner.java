@@ -11,14 +11,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.world.gen.IChunkGenerator;
 
 @Mixin(WorldEntitySpawner.class)
 public abstract class MixinWorldEntitySpawner {
@@ -46,8 +48,11 @@ public abstract class MixinWorldEntitySpawner {
     )
     private static List<SpawnListEntry> injectPerformWorldGenSpawning(List<SpawnListEntry> spawnEntries) {
         if (modernBeta_world != null && modernBeta_biome != null) {
-            if (modernBeta_world.getWorldInfo().getTerrainType() instanceof ModernBetaWorldType) {
-                ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(modernBeta_world.getWorldInfo().getGeneratorOptions());         
+            WorldServer worldServer = (WorldServer)modernBeta_world;
+            IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
+            
+            if (chunkGenerator instanceof ModernBetaChunkGenerator) {
+                ModernBetaGeneratorSettings settings = ((ModernBetaChunkGenerator)chunkGenerator).getGeneratorSettings();
                 return ModernBetaBiomeMobs.modifySpawnList(new ArrayList<>(spawnEntries), EnumCreatureType.CREATURE, modernBeta_biome, settings);
             }
         }

@@ -30,11 +30,14 @@ public interface WorldSpawner {
             int radius = 64;
             int minAdjacent = 9;
             
+            int numTries = 0;
+            int maxTries = 10000;
+            
             Random random = new Random(chunkSource.getSeed());
             int centerX = spawnPos.getX() + random.nextInt(256) - 128;
             int centerZ = spawnPos.getZ() + random.nextInt(256) - 128;
             
-            while(true) {
+            while (numTries < maxTries) {
                 int r2 = radius * radius;
 
                 for (int dX = centerX - radius; dX < centerX + radius; ++dX) {
@@ -63,12 +66,16 @@ public interface WorldSpawner {
                                     return new BlockPos(dX, surfaceY + 1, dZ);
                                 }
                             }
+                            
+                            numTries++;
                         }
                     }
                 }
                 
                 radius *= 2;
             }
+            
+            return spawnPos;
         }
     };
 }
