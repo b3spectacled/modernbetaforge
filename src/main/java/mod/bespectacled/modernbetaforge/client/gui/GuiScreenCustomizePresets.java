@@ -81,7 +81,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         new IconTexture(KZ, 10.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
         new IconTexture(KZ, 0.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
         new IconTexture(KZ, 4.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
-        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
+        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
+        new IconTexture(new ResourceLocation("textures/entity/steve.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/alex.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/zombie/zombie.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/skeleton/skeleton.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
+        new IconTexture(new ResourceLocation("textures/entity/creeper/creeper.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0)
     };
     
     private static final String PREFIX = "createWorld.customize.presets.";
@@ -536,8 +541,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         
         bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(boxL + 1, boxB, 0.0).tex(icon.u, icon.v + icon.w).endVertex();
-        bufferBuilder.pos(boxR, boxB, 0.0).tex(icon.u + icon.w, icon.v + icon.w).endVertex();
+        bufferBuilder.pos(boxL + 1, boxB, 0.0).tex(icon.u, icon.v + icon.h).endVertex();
+        bufferBuilder.pos(boxR, boxB, 0.0).tex(icon.u + icon.w, icon.v + icon.h).endVertex();
         bufferBuilder.pos(boxR, boxT + 1, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
         bufferBuilder.pos(boxL + 1, boxT + 1, 0.0).tex(icon.u, icon.v).endVertex();
         
@@ -835,8 +840,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(icon.u, icon.v + icon.w).endVertex();
-            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(icon.u + icon.w, icon.v + icon.w).endVertex();
+            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(icon.u, icon.v + icon.h).endVertex();
+            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(icon.u + icon.w, icon.v + icon.h).endVertex();
             bufferBuilder.pos(iX + SLOT_HEIGHT, iY + 0, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
             bufferBuilder.pos(iX + 0, iY + 0, 0.0).tex(icon.u, icon.v).endVertex();
             
@@ -879,16 +884,22 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         public final double u;
         public final double v;
         public final double w;
+        public final double h;
         
         public IconTexture(ResourceLocation identifier) {
-            this(identifier, 0.0, 0.0, 1.0);
+            this(identifier, 0.0, 0.0, 1.0, 1.0);
         }
         
         public IconTexture(ResourceLocation identifier, double u, double v, double w) {
+            this(identifier, u, v, w, w);
+        }
+        
+        public IconTexture(ResourceLocation identifier, double u, double v, double w, double h) {
             this.identifier = identifier;
             this.u = u;
             this.v = v;
             this.w = w;
+            this.h = h;
         }
     }
 }
