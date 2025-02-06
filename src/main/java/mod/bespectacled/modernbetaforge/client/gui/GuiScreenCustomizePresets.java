@@ -40,30 +40,48 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         NONE, SAVE, EDIT, DELETE, OVERWRITE
     }
     
-    private static final ResourceLocation[] ICON_IDENTIFIERS = {
-        new ResourceLocation("textures/misc/unknown_pack.png"),
-        ModernBeta.createRegistryKey("textures/gui/presets/pack.png"),
-        new ResourceLocation("textures/blocks/grass_side.png"),
-        new ResourceLocation("textures/blocks/dirt.png"),
-        new ResourceLocation("textures/blocks/sand.png"),
-        new ResourceLocation("textures/blocks/gravel.png"),
-        new ResourceLocation("textures/blocks/stone.png"),
-        new ResourceLocation("textures/blocks/cobblestone.png"),
-        new ResourceLocation("textures/blocks/log_oak.png"),
-        new ResourceLocation("textures/blocks/planks_oak.png"),
-        new ResourceLocation("textures/blocks/coal_ore.png"),
-        new ResourceLocation("textures/blocks/iron_ore.png"),
-        new ResourceLocation("textures/blocks/gold_ore.png"),
-        new ResourceLocation("textures/blocks/redstone_ore.png"),
-        new ResourceLocation("textures/blocks/diamond_ore.png"),
-        new ResourceLocation("textures/blocks/lapis_ore.png"),
-        new ResourceLocation("textures/blocks/obsidian.png"),
-        new ResourceLocation("textures/blocks/netherrack.png"),
-        new ResourceLocation("textures/blocks/glowstone.png"),
-        new ResourceLocation("textures/blocks/end_stone.png"),
-        new ResourceLocation("textures/blocks/sponge.png"),
-        new ResourceLocation("textures/blocks/tnt_side.png"),
-        new ResourceLocation("textures/blocks/pumpkin_face_off.png")
+    private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
+    private static final IconTexture[] ICON_TEXTURES = {
+        new IconTexture(new ResourceLocation("textures/misc/unknown_pack.png")),
+        new IconTexture(ModernBeta.createRegistryKey("textures/gui/presets/pack.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/grass_side.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/dirt.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/sand.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/gravel.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/stone.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/cobblestone.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/log_oak.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/planks_oak.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/coal_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/iron_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/gold_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/redstone_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/diamond_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/lapis_ore.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/obsidian.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/netherrack.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/glowstone.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/end_stone.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/sponge.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/tnt_side.png")),
+        new IconTexture(new ResourceLocation("textures/blocks/pumpkin_face_off.png")),
+        new IconTexture(KZ, 0.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 1.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 2.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 3.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 4.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 5.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 6.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 0.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
+        new IconTexture(KZ, 0.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 2.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 4.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 6.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 8.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 10.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
+        new IconTexture(KZ, 0.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
+        new IconTexture(KZ, 4.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
+        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
     private static final String PREFIX = "createWorld.customize.presets.";
@@ -342,7 +360,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
                 this.buttonModalCancel.enabled = true;
                 this.buttonModalPrev.enabled = this.selectedIcon > 0;
-                this.buttonModalNext.enabled = this.selectedIcon < ICON_IDENTIFIERS.length - 1;
+                this.buttonModalNext.enabled = this.selectedIcon < ICON_TEXTURES.length - 1;
                 this.fieldModalName.setVisible(true);
                 this.fieldModalDesc.setVisible(true);
                 this.fieldModalSettings.setVisible(true);
@@ -394,6 +412,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         Info selectedPreset = this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
+        int amount = GuiScreen.isShiftKeyDown() ? 5 : 1;
         
         switch (guiButton.id) {
             case GUI_ID_FILTER:
@@ -424,7 +443,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.fieldModalName.setText(selectedPreset.name);
                 this.fieldModalDesc.setText(selectedPreset.desc);
                 this.fieldModalSettings.setText(selectedPreset.settings.toString());
-                this.selectedIcon = MathHelper.clamp(this.dataHandler.getPreset(selectedPreset.name).icon, 0, ICON_IDENTIFIERS.length - 1);
+                this.selectedIcon = MathHelper.clamp(this.dataHandler.getPreset(selectedPreset.name).icon, 0, ICON_TEXTURES.length - 1);
                 this.updateModalState(ModalState.EDIT);
                 break;
             case GUI_ID_DELETE:
@@ -460,10 +479,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 }
                 break;
             case GUI_ID_MODAL_PREV:
-                this.selectedIcon--;
+                this.incrementSelectedIcon(-amount);
                 break;
             case GUI_ID_MODAL_NEXT:
-                this.selectedIcon++;
+                this.incrementSelectedIcon(amount);
                 break;
             case GUI_ID_MODAL_CANCEL:
                 this.updateModalState(ModalState.NONE);
@@ -475,6 +494,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     private void drawSaveScreen(int centerX, int centerY, int modalWidth, int modalHeight) {
+        IconTexture icon = ICON_TEXTURES[this.selectedIcon];
         int textStartX = centerX - modalWidth + 10;
         
         this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, 10526880);
@@ -501,23 +521,25 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
         int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
 
-        this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "icon"), boxL + MODAL_ICON_SIZE / 2 + 1, boxT - 10, 10526880);
+        String iconText = String.format("%d/%d", this.selectedIcon + 1, ICON_TEXTURES.length);
+        
+        this.drawCenteredString(this.fontRenderer, iconText, boxL + MODAL_ICON_SIZE / 2 + 1, boxT - 10, 10526880);
         this.drawHorizontalLine(boxL, boxR, boxT, -2039584);
         this.drawHorizontalLine(boxL, boxR, boxB, -6250336);
         this.drawVerticalLine(boxL, boxT, boxB, -2039584);
         this.drawVerticalLine(boxR, boxT, boxB, -6250336);
         
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.mc.getTextureManager().bindTexture(ICON_IDENTIFIERS[this.selectedIcon]);
+        this.mc.getTextureManager().bindTexture(icon.identifier);
         
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         
         bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(boxL + 1, boxB, 0.0).tex(0.0, 1.0).endVertex();
-        bufferBuilder.pos(boxR, boxB, 0.0).tex(1.0, 1.0).endVertex();
-        bufferBuilder.pos(boxR, boxT + 1, 0.0).tex(1.0, 0.0).endVertex();
-        bufferBuilder.pos(boxL + 1, boxT + 1, 0.0).tex(0.0, 0.0).endVertex();
+        bufferBuilder.pos(boxL + 1, boxB, 0.0).tex(icon.u, icon.v + icon.w).endVertex();
+        bufferBuilder.pos(boxR, boxB, 0.0).tex(icon.u + icon.w, icon.v + icon.w).endVertex();
+        bufferBuilder.pos(boxR, boxT + 1, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
+        bufferBuilder.pos(boxL + 1, boxT + 1, 0.0).tex(icon.u, icon.v).endVertex();
         
         tessellator.draw();
     }
@@ -527,7 +549,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         String name;
         String desc;
-        ResourceLocation texture;
+        IconTexture texture;
         ModernBetaGeneratorSettings.Factory factory;
         
         List<ResourceLocation> filteredKeys = ModernBetaClientRegistries.GUI_PRESET.getKeys()
@@ -553,7 +575,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             
             name = GuiCustomizePreset.formatName(key);
             desc = GuiCustomizePreset.formatInfo(key);
-            texture = GuiCustomizePreset.formatTexture(key);
+            texture = new IconTexture(GuiCustomizePreset.formatTexture(key));
             factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(preset.settings);
             
             presets.add(new Info(name, desc, texture, factory, false));
@@ -563,7 +585,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             for (PresetData presetData : dataHandler.getPresets()) {
                 name = presetData.name;
                 desc = presetData.desc;
-                texture = ICON_IDENTIFIERS[MathHelper.clamp(presetData.icon, 0, ICON_IDENTIFIERS.length - 1)];
+                texture = ICON_TEXTURES[MathHelper.clamp(presetData.icon, 0, ICON_TEXTURES.length - 1)];
                 factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(presetData.settings);
                 
                 presets.add(new Info(name, desc, texture, factory, true));
@@ -640,6 +662,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     private boolean canInteract() {
         return System.currentTimeMillis() - this.confirmExitTime > 100L;
+    }
+    
+    private void incrementSelectedIcon(int amount) {
+        this.selectedIcon = MathHelper.clamp(this.selectedIcon + amount, 0, ICON_TEXTURES.length - 1);
     }
     
     @SideOnly(Side.CLIENT)
@@ -775,7 +801,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int descColor = hovered ? 10526785 : 10526880;
             
             // Render preset icon
-            this.blitIcon(x, y + paddingY, info.getTexture());
+            this.blitIcon(x, y + paddingY, info.icon());
             
             // Render preset name
             GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
@@ -793,26 +819,26 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             }
         }
 
-        private void blitIcon(int x, int y, ResourceLocation resourceLocation) {
+        private void blitIcon(int x, int y, IconTexture icon) {
             int iX = x + 5;
             int iY = y;
-            
+
             GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY - 1, -2039584);
             GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, -6250336);
             GuiScreenCustomizePresets.this.drawVerticalLine(iX - 1, iY - 1, iY + SLOT_HEIGHT, -2039584);
             GuiScreenCustomizePresets.this.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            this.mc.getTextureManager().bindTexture(resourceLocation);
+            this.mc.getTextureManager().bindTexture(icon.identifier);
             
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(0.0, 1.0).endVertex();
-            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(1.0, 1.0).endVertex();
-            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + 0, 0.0).tex(1.0, 0.0).endVertex();
-            bufferBuilder.pos(iX + 0, iY + 0, 0.0).tex(0.0, 0.0).endVertex();
+            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(icon.u, icon.v + icon.w).endVertex();
+            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(icon.u + icon.w, icon.v + icon.w).endVertex();
+            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + 0, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
+            bufferBuilder.pos(iX + 0, iY + 0, 0.0).tex(icon.u, icon.v).endVertex();
             
             tessellator.draw();
         }
@@ -822,7 +848,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static class Info {
         public final String name;
         public final String desc;
-        public final ResourceLocation texture;
+        public final IconTexture icon;
         public final ModernBetaGeneratorSettings.Factory settings;
         public final boolean custom;
         
@@ -830,20 +856,39 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this("", "",  null, null, false);
         }
         
-        public Info(String name, String desc, ResourceLocation texture, ModernBetaGeneratorSettings.Factory factory, boolean custom) {
+        public Info(String name, String desc, IconTexture icon, ModernBetaGeneratorSettings.Factory factory, boolean custom) {
             this.name = name;
             this.desc = desc;
-            this.texture = texture;
+            this.icon = icon;
             this.settings = factory;
             this.custom = custom;
         }
         
-        public ResourceLocation getTexture() {
-            if (this.texture != null) {
-                return this.texture;
+        public IconTexture icon() {
+            if (this.icon != null) {
+                return this.icon;
             }
             
-            return ICON_IDENTIFIERS[0];
+            return ICON_TEXTURES[0];
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static class IconTexture {
+        public final ResourceLocation identifier;
+        public final double u;
+        public final double v;
+        public final double w;
+        
+        public IconTexture(ResourceLocation identifier) {
+            this(identifier, 0.0, 0.0, 1.0);
+        }
+        
+        public IconTexture(ResourceLocation identifier, double u, double v, double w) {
+            this.identifier = identifier;
+            this.u = u;
+            this.v = v;
+            this.w = w;
         }
     }
 }
