@@ -68,6 +68,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         new IconTexture(new ResourceLocation("textures/blocks/sponge.png")),
         new IconTexture(new ResourceLocation("textures/blocks/tnt_side.png")),
         new IconTexture(new ResourceLocation("textures/blocks/pumpkin_face_off.png")),
+        new IconTexture(new ResourceLocation("textures/entity/steve.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/alex.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/zombie/zombie.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
+        new IconTexture(new ResourceLocation("textures/entity/skeleton/skeleton.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
+        new IconTexture(new ResourceLocation("textures/entity/creeper/creeper.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
         new IconTexture(KZ, 0.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
         new IconTexture(KZ, 1.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
         new IconTexture(KZ, 2.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
@@ -84,12 +89,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         new IconTexture(KZ, 10.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
         new IconTexture(KZ, 0.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
         new IconTexture(KZ, 4.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
-        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
-        new IconTexture(new ResourceLocation("textures/entity/steve.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/alex.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/zombie/zombie.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/skeleton/skeleton.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
-        new IconTexture(new ResourceLocation("textures/entity/creeper/creeper.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0)
+        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
     private static final String PREFIX = "createWorld.customize.presets.";
