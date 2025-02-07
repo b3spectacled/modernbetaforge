@@ -242,8 +242,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
         if (this.iconBounds.inBounds(mouseX, mouseY) && Mouse.hasWheel()) {
-            this.incrementSelectedIcon(Mouse.getEventDWheel() / 120);
-            this.updateButtonValidity();
+            int dWheel = Mouse.getEventDWheel();
+            
+            if (dWheel != 0) {
+                this.incrementSelectedIcon(dWheel < 0 ? -1 : 1);
+                this.updateButtonValidity();
+            }
         }
     }
     
@@ -567,7 +571,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         tessellator.draw();
         
-        if (this.iconBounds.inBounds(mouseX, mouseY)) {
+        if (this.iconBounds.inBounds(mouseX, mouseY) && Mouse.hasWheel()) {
             int offsetX = 6;
             int offsetY = 12;
             
