@@ -41,7 +41,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         NONE, SAVE, EDIT, DELETE, OVERWRITE
     }
     
-    private static final ResourceLocation SCROLL = ModernBeta.createRegistryKey("textures/gui/scroll.png");
+    private static final ResourceLocation SCROLL_UP = ModernBeta.createRegistryKey("textures/gui/scroll_up.png");
+    private static final ResourceLocation SCROLL_DOWN = ModernBeta.createRegistryKey("textures/gui/scroll_down.png");
     private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
     private static final IconTexture[] ICON_TEXTURES = {
         new IconTexture(new ResourceLocation("textures/misc/unknown_pack.png")),
@@ -111,7 +112,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int MODAL_ICON_PADDING_T = 36;
     private static final int MODAL_ICON_SIZE = 50;
     private static final int SCROLL_TEXTURE_SIZE_W = 13;
-    private static final int SCROLL_TEXTURE_SIZE_H = 19;
+    private static final int SCROLL_TEXTURE_SIZE_H = 9;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -576,15 +577,29 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int scrollB = mouseY + (int)(SCROLL_TEXTURE_SIZE_H / 1.0) - offsetY;
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            this.mc.getTextureManager().bindTexture(SCROLL);
             
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
-            bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
-            bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
-            bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
+            if (this.selectedIcon < ICON_TEXTURES.length - 1) {
+                this.mc.getTextureManager().bindTexture(SCROLL_UP);
+                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
+                bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
+                bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
+                bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
+                tessellator.draw();
+            }
             
-            tessellator.draw();
+            if (this.selectedIcon > 0) {
+                scrollT += SCROLL_TEXTURE_SIZE_H + 1;
+                scrollB += SCROLL_TEXTURE_SIZE_H + 1;
+                
+                this.mc.getTextureManager().bindTexture(SCROLL_DOWN);
+                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
+                bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
+                bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
+                bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
+                tessellator.draw();
+            }
         }
     }
 
