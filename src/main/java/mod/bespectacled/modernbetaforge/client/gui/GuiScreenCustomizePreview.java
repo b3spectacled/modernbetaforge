@@ -71,8 +71,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorWrapper executor;
     private final ResourceLocation mapLocation;
-    private final BoundsChecker mapBounds;
-    private final BoundsChecker seedFieldBounds;
+    private final GuiBoundsChecker mapBounds;
+    private final GuiBoundsChecker seedFieldBounds;
     private final MutableBlockPos mutablePos;
     
     private long seed;
@@ -112,8 +112,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.settings = settings;
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapLocation = ModernBeta.createRegistryKey("map_preview");
-        this.mapBounds = new BoundsChecker();
-        this.seedFieldBounds = new BoundsChecker();
+        this.mapBounds = new GuiBoundsChecker();
+        this.seedFieldBounds = new GuiBoundsChecker();
         this.mutablePos = new MutableBlockPos();
 
         this.seed = parseSeed(worldSeed);
@@ -580,44 +580,5 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) { }
         
-    }
-    
-    @SideOnly(Side.CLIENT)
-    private static class BoundsChecker {
-        private int x;
-        private int y;
-        private int width;
-        private int height;
-        
-        public BoundsChecker() {
-            this.x = 0;
-            this.y = 0;
-            this.width = 0;
-            this.height = 0;
-        }
-        
-        public void updateBounds(int x, int y, int width, int height) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-        
-        public boolean inBounds(int mouseX, int mouseY) {
-            int left = this.x;
-            int right = this.x + this.width;
-            int top = this.y;
-            int bottom = this.y + this.height;
-            
-            return mouseX >= left && mouseX < right && mouseY >= top && mouseY < bottom;
-        }
-        
-        public int getRelativeX(int mouseX) {
-            return mouseX - this.x;
-        }
-        
-        public int getRelativeY(int mouseY) {
-            return mouseY - this.y;
-        }
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
@@ -40,6 +41,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         NONE, SAVE, EDIT, DELETE, OVERWRITE
     }
     
+    private static final ResourceLocation SCROLL = ModernBeta.createRegistryKey("textures/gui/scroll.png");
     private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
     private static final IconTexture[] ICON_TEXTURES = {
         new IconTexture(new ResourceLocation("textures/misc/unknown_pack.png")),
@@ -108,6 +110,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int MODAL_ICON_PADDING_R = 20;
     private static final int MODAL_ICON_PADDING_T = 36;
     private static final int MODAL_ICON_SIZE = 50;
+    private static final int SCROLL_TEXTURE_SIZE_W = 13;
+    private static final int SCROLL_TEXTURE_SIZE_H = 19;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -130,6 +134,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final GuiCustomizePresetsDataHandler dataHandler;
     private final List<Info> presets;
     private final int initialPreset;
+    private final GuiBoundsChecker iconBounds;
     
     private ListPreset list;
     private GuiTextField fieldExport;
@@ -166,6 +171,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.dataHandler = new GuiCustomizePresetsDataHandler(Minecraft.getMinecraft());
         this.presets = this.loadPresets(filterType, this.dataHandler);
         this.initialPreset = initialPreset;
+        this.iconBounds = new GuiBoundsChecker();
+        
         this.hoveredElement = -1;
         this.modalState = ModalState.NONE;
     }
@@ -182,6 +189,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         int boxL = centerX + modalWidth - MODAL_ICON_SIZE - 1 - MODAL_ICON_PADDING_R;
         int boxR = centerX + modalWidth - 0 - MODAL_ICON_PADDING_R;
+        int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
         int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
         
         this.buttonList.clear();
@@ -216,6 +224,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
         
+        this.iconBounds.updateBounds(boxL + 1, boxT + 1, MODAL_ICON_SIZE - 1, MODAL_ICON_SIZE - 1);
+        
         this.updateButtonValidity();
     }
     
@@ -225,6 +235,14 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         if (this.canInteract() && this.modalState == ModalState.NONE) {
             this.list.handleMouseInput();
+        }
+        
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        
+        if (this.iconBounds.inBounds(mouseX, mouseY) && Mouse.hasWheel()) {
+            this.incrementSelectedIcon(Mouse.getEventDWheel() / 120);
+            this.updateButtonValidity();
         }
     }
     
@@ -282,11 +300,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             switch (this.modalState) {
                 case SAVE:
                     confirmTitle = I18n.format(PREFIX + "save.title");
-                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight);
+                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight, mouseX, mouseY);
                     break;
                 case EDIT:
                     confirmTitle = I18n.format(PREFIX + "edit.title");
-                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight);
+                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight, mouseX, mouseY);
                     break;
                 case DELETE:
                     confirmTitle = I18n.format(PREFIX + "delete.title");
@@ -498,7 +516,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.updateButtonValidity();
     }
     
-    private void drawSaveScreen(int centerX, int centerY, int modalWidth, int modalHeight) {
+    private void drawSaveScreen(int centerX, int centerY, int modalWidth, int modalHeight, int mouseX, int mouseY) {
         IconTexture icon = ICON_TEXTURES[this.selectedIcon];
         int textStartX = centerX - modalWidth + 10;
         
@@ -547,6 +565,27 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         bufferBuilder.pos(boxL + 1, boxT + 1, 0.0).tex(icon.u, icon.v).endVertex();
         
         tessellator.draw();
+        
+        if (this.iconBounds.inBounds(mouseX, mouseY)) {
+            int offsetX = 6;
+            int offsetY = 12;
+            
+            int scrollL = mouseX + offsetX;
+            int scrollR = mouseX + (int)(SCROLL_TEXTURE_SIZE_W / 1.0) + offsetX;
+            int scrollT = mouseY - offsetY;
+            int scrollB = mouseY + (int)(SCROLL_TEXTURE_SIZE_H / 1.0) - offsetY;
+            
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            this.mc.getTextureManager().bindTexture(SCROLL);
+            
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+            bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
+            bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
+            bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
+            bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
+            
+            tessellator.draw();
+        }
     }
 
     private List<Info> loadPresets(FilterType filterType, GuiCustomizePresetsDataHandler dataHandler) {
