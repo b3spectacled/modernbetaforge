@@ -11,6 +11,10 @@ public class MathUtil {
         return start + delta * (end - start);
     }
     
+    public static float lerp(float delta, float start, float end) {
+        return start + delta * (end - start);
+    }
+    
     public static double clampedLerp(double start, double end, double delta) {
         if (delta < 0.0) {
             return start;

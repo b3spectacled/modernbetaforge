@@ -267,14 +267,13 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         for (ResourceLocation registryKey : this.registryKeys) {
             String formattedName = this.nameFormatter.apply(registryKey);
-            String tooltipKey = String.format("%s.%s.%s.%s", PREFIX_TOOLTIP, this.langName, registryKey.getNamespace(), registryKey.getPath());
             
             if (this.searchEntry == null ||
                 this.searchEntry.isEmpty() ||
                 formattedName.toLowerCase().contains(this.searchEntry.toLowerCase()) ||
                 registryKey.toString().toLowerCase().contains(this.searchEntry.toLowerCase())
             ) {
-                entries.add(new Info(formattedName, registryKey.toString(), I18n.hasKey(tooltipKey) ? I18n.format(tooltipKey) : ""));
+                entries.add(new Info(formattedName, registryKey.toString()));
             }
         }
         
@@ -282,7 +281,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     }
     
     @SideOnly(Side.CLIENT)
-    public class ListPreset extends GuiSlot {
+    private class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 66;
         private static final int LIST_PADDING_BOTTOM = 32;
         
@@ -454,16 +453,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     static class Info {
         public String name;
         public String registryName;
-        public String tooltip;
-        
+
         public Info(String name, String registryName) {
-            this(name, registryName, "");
-        }
-        
-        public Info(String name, String registryName, String tooltip) {
             this.name = name;
             this.registryName = registryName;
-            this.tooltip = tooltip;
         }
     }
 }

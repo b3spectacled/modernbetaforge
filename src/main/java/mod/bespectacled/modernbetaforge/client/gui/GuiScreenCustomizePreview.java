@@ -70,7 +70,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final String worldSeed;
     private final ModernBetaGeneratorSettings settings;
     private final ExecutorWrapper executor;
-    private final ResourceLocation mapLocation;
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
     private final MutableBlockPos mutablePos;
@@ -86,15 +85,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
     private ListPreset list;
-    private BufferedImage mapImage;
-    private DynamicTexture mapTexture;
-    private float mapAlpha;
     private ProgressState state;
     private int resolution;
     private boolean useBiomeBlend;
     private float progress;
-    private String hintText;
-    private String progressText;
+    private MapTexture prevMapTexture;
+    private MapTexture mapTexture;
     private boolean hoveredSeedField;
     private boolean hoveredMap;
     private boolean copiedSeedField;
@@ -111,7 +107,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.worldSeed = worldSeed;
         this.settings = settings;
         this.executor = new ExecutorWrapper(1, "map_preview");
-        this.mapLocation = ModernBeta.createRegistryKey("map_preview");
         this.mapBounds = new GuiBoundsChecker();
         this.seedFieldBounds = new GuiBoundsChecker();
         this.mutablePos = new MutableBlockPos();
@@ -123,6 +118,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.resolution = 512;
         this.useBiomeBlend = true;
         this.progress = 0.0f;
+        this.mapTexture = new MapTexture(ModernBeta.createRegistryKey("map_preview"));
     }
     
     @Override
@@ -138,9 +134,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend.width = 90;
         this.sliderResolution.width = 90;
         this.buttonBiomeBlend.setValue(this.useBiomeBlend);
-        
-        this.hintText = I18n.format(PREFIX + "hint");
-        this.progressText = "";
         
         this.list = new ListPreset();
 
@@ -191,43 +184,38 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textureY = this.height / 2 - viewportSize / 2;
         textureY -= TEXTURE_Y_OFFSET;
 
+        int boxL = this.width / 2 - 60;
+        int boxR = this.width / 2 + 60;
+        int boxT = this.height / 2 - HINT_TEXT_OFFSET - 8;
+        int boxB = this.height / 2 - PROGRESS_TEXT_OFFSET + 16;
+
         drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, MathUtil.convertARGBComponentsToInt(50, 0, 0, 0));
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, -2039584);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, -6250336);
         this.drawVerticalLine(textureX - 1, textureY - 1, textureY + viewportSize, -2039584);
         this.drawVerticalLine(textureX + viewportSize, textureY - 1, textureY + viewportSize, -6250336);
         
-        this.loadMapTexture();
         switch(this.state) {
+            case SUCCEEDED:
+                this.mapTexture.loadMapTexture();
+                this.state = ProgressState.LOADED;
+                // Allow cascading into LOADED case for smooth transition
+        
             case LOADED:
-                //this.mapAlpha = (float)MathUtil.lerp(partialTicks * 0.25f, this.mapAlpha, 1.0f);
-                this.mapAlpha = 1.0f;
-                GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
-                this.mc.getTextureManager().bindTexture(this.mapLocation);
-                GlStateManager.enableBlend();
-                Gui.drawModalRectWithCustomSizedTexture(
-                    textureX,
-                    textureY,
-                    0.0f,
-                    0.0f,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize
-                );
-                GlStateManager.disableBlend();
-                
-                this.drawCenteredString(fontRenderer, "N", this.width / 2 + 2, this.height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, 16777120);
-                this.drawCenteredString(fontRenderer, "S", this.width / 2 + 2, this.height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, 16777120);
-                this.drawCenteredString(fontRenderer, "E", this.width / 2 + viewportSize / 2 - 4, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
-                this.drawCenteredString(fontRenderer, "W", this.width / 2 - viewportSize / 2 + 5, this.height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
+                if (this.mapTexture.mapAlpha < 1.0f) {
+                    this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                    this.mapTexture.lerpAlpha(partialTicks);
+                }
+                this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
                 break;
                 
             case STARTED:
-                this.hintText = I18n.format(PREFIX + "progress");
-                this.progressText = String.format("%d%%", (int)(this.progress * 100.0));
+                if (this.prevMapTexture.mapTexture != null) {
+                    this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                    drawRect(boxL, boxT, boxR, boxB, MathUtil.convertARGBComponentsToInt(200, 0, 0, 0));
+                }
                 
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
+                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
                 
                 if (this.chunkSource instanceof FiniteChunkSource && !((FiniteChunkSource)this.chunkSource).hasPregenerated()) {
                     String levelProgressText = ((FiniteChunkSource)this.chunkSource).getPhase();
@@ -236,21 +224,17 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.drawCenteredString(this.fontRenderer, levelProgressText + "..", this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
                     }
                 } else {
-                    this.drawCenteredString(this.fontRenderer, this.progressText, this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
+                    this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), this.width / 2, this.height / 2 - PROGRESS_TEXT_OFFSET, 16777215);
                 }
                 
                 break;
                 
             case FAILED:
-                this.hintText = I18n.format(PREFIX + "failure");
-                
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
+                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "failure"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
                 break;
                 
             default:
-                this.hintText = I18n.format(PREFIX + "hint");
-
-                this.drawCenteredString(this.fontRenderer, this.hintText, this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
+                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "hint"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, 16777215);
         }
 
         String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
@@ -391,19 +375,25 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 break;
             case GUI_ID_CANCEL:
                 this.executor.shutdown();
+                this.mapTexture.unloadAll();
+                this.prevMapTexture.unloadAll();
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }
     }
     
     private void drawTerrainMap() {
-        this.mapImage = null;
         this.progress = 0.0f;
         this.state = ProgressState.STARTED;
-        this.mapAlpha = 0.25f;
         this.updateButtonsEnabled(this.state);
-        this.deleteMapTexture();
         long time = System.currentTimeMillis();
+
+        if (this.prevMapTexture != null) {
+            this.prevMapTexture.unloadAll();
+        }
+        
+        this.prevMapTexture = new MapTexture(this.mapTexture.mapIdentifier, this.mapTexture.mapImage, this.mapTexture.mapTexture, 1.0f);
+        this.mapTexture = new MapTexture(ModernBeta.createRegistryKey("map_preview_" + new Random().nextLong()));
 
         if (this.worldSeed.isEmpty()) {
             this.seed = new Random().nextLong();
@@ -414,14 +404,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         Runnable runnable = () -> {
             try {
                 ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.resolution));
-                this.mapImage = DrawUtil.createTerrainMapForPreview(
+                this.mapTexture.loadMapImage(DrawUtil.createTerrainMapForPreview(
                     this.chunkSource,
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.resolution,
                     this.useBiomeBlend,
                     current -> this.progress = current
-                );
+                ));
                 ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
                 this.state = ProgressState.SUCCEEDED;
                 
@@ -437,24 +427,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         };
         
         this.executor.queueRunnable(runnable);
-    }
-    
-    private void loadMapTexture() {
-        if (this.state == ProgressState.SUCCEEDED) {
-            this.mapTexture = new DynamicTexture(this.mapImage.getWidth(), this.mapImage.getHeight());
-            this.mc.getTextureManager().loadTexture(this.mapLocation, this.mapTexture);
-
-            this.mapImage.getRGB(0, 0, this.mapImage.getWidth(), this.mapImage.getHeight(), this.mapTexture.getTextureData(), 0, this.mapImage.getWidth());
-            this.mapTexture.updateDynamicTexture();
-            this.mapImage = null;
-            
-            this.state = ProgressState.LOADED;
-        }
-    }
-    
-    private void deleteMapTexture() {
-        this.mc.getTextureManager().deleteTexture(this.mapLocation);
-        this.mapTexture = null;
     }
     
     private void updateButtonsEnabled(ProgressState state) {
@@ -581,5 +553,87 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) { }
         
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private class MapTexture {
+        private final ResourceLocation mapIdentifier;
+        private BufferedImage mapImage;
+        private DynamicTexture mapTexture;
+        private float mapAlpha;
+        
+        public MapTexture(ResourceLocation mapIdentifier) {
+            this(mapIdentifier, null, null, 0.0f);
+        }
+        
+        public MapTexture(ResourceLocation mapIdentifier, BufferedImage mapImage, DynamicTexture mapTexture, float mapAlpha) {
+            this.mapIdentifier = mapIdentifier;
+            this.mapImage = mapImage;
+            this.mapTexture = mapTexture;
+            this.mapAlpha = mapAlpha;
+        }
+        
+        public void loadMapImage(BufferedImage mapImage) {
+            this.mapImage = mapImage;
+        }
+        
+        public void loadMapTexture() {
+            int mapWidth = this.mapImage.getWidth();
+            int mapHeight = this.mapImage.getHeight();
+            
+            this.mapTexture = new DynamicTexture(mapWidth, mapHeight);
+            GuiScreenCustomizePreview.this.mc.getTextureManager().loadTexture(this.mapIdentifier, this.mapTexture);
+
+            this.mapImage.getRGB(0, 0, mapWidth, mapHeight, this.mapTexture.getTextureData(), 0, mapWidth);
+            this.mapTexture.updateDynamicTexture();
+            this.unloadMapImage();
+        }
+        
+        public void unloadMapImage() {
+            this.mapImage = null;
+        }
+        
+        public void unloadMapTexture() {
+            GuiScreenCustomizePreview.this.mc.getTextureManager().deleteTexture(this.mapIdentifier);
+            this.mapTexture = null;
+        }
+        
+        public void unloadAll() {
+            this.unloadMapImage();
+            this.unloadMapTexture();
+        }
+        
+        public void drawMapTexture(int textureX, int textureY, int viewportSize) {
+            GuiScreenCustomizePreview preview = GuiScreenCustomizePreview.this;
+            
+            int width = preview.width;
+            int height = preview.height;
+            
+            if (this.mapTexture != null) {
+                GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
+                preview.mc.getTextureManager().bindTexture(this.mapIdentifier);
+                GlStateManager.enableBlend();
+                Gui.drawModalRectWithCustomSizedTexture(
+                    textureX,
+                    textureY,
+                    0.0f,
+                    0.0f,
+                    viewportSize,
+                    viewportSize,
+                    viewportSize,
+                    viewportSize
+                );
+                GlStateManager.disableBlend();
+                
+                preview.drawCenteredString(fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, 16777120);
+                preview.drawCenteredString(fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, 16777120);
+                preview.drawCenteredString(fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
+                preview.drawCenteredString(fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - TEXTURE_Y_OFFSET, 16777120);
+            }
+        }
+        
+        public void lerpAlpha(float partialTicks) {
+            this.mapAlpha = MathUtil.lerp(partialTicks * 0.5f, this.mapAlpha, 1.0f);
+        }
     }
 }
