@@ -373,26 +373,23 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
             case GUI_ID_GENERATE:
-                this.drawTerrainMap();
+                this.createTerrainMap();
                 break;
             case GUI_ID_CANCEL:
                 this.executor.shutdown();
-                this.mapTexture.unloadAll();
-                this.prevMapTexture.unloadAll();
+                this.unloadMapTexture(this.mapTexture);
+                this.unloadMapTexture(this.prevMapTexture);
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }
     }
     
-    private void drawTerrainMap() {
+    private void createTerrainMap() {
         this.progress = 0.0f;
         this.state = ProgressState.STARTED;
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
-
-        if (this.prevMapTexture != null) {
-            this.prevMapTexture.unloadAll();
-        }
+        this.unloadMapTexture(this.prevMapTexture);
         
         this.prevMapTexture = new MapTexture(this.mapTexture.mapIdentifier, this.mapTexture.mapImage, this.mapTexture.mapTexture, 1.0f);
         this.mapTexture = new MapTexture(ModernBeta.createRegistryKey("map_preview_" + new Random().nextLong()));
@@ -429,6 +426,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         };
         
         this.executor.queueRunnable(runnable);
+    }
+    
+    private void unloadMapTexture(MapTexture mapTexture) {
+        if (mapTexture != null) {
+            mapTexture.unloadAll();
+        }
     }
     
     private void updateButtonsEnabled(ProgressState state) {
