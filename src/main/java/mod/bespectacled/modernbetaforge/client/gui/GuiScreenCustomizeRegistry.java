@@ -26,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final String PREFIX = "createWorld.customize.custom";
-    private static final String PREFIX_TOOLTIP = PREFIX + ".tooltip";
     private static final int DEFAULT_SLOT_HEIGHT = 32;
     private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;

@@ -202,10 +202,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
+                this.prevMapTexture.lerpAlpha(partialTicks, 0.5f, 0.0f);
                 if (this.mapTexture.mapAlpha < 1.0f) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
-                    this.mapTexture.lerpAlpha(partialTicks);
+                    this.mapTexture.lerpAlpha(partialTicks, 0.75f, 1.0f);
                 }
+                
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
                 break;
                 
@@ -632,8 +634,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             }
         }
         
-        public void lerpAlpha(float partialTicks) {
-            this.mapAlpha = MathUtil.lerp(partialTicks * 0.5f, this.mapAlpha, 1.0f);
+        public void lerpAlpha(float partialTicks, float scale, float target) {
+            this.mapAlpha = MathUtil.lerp(partialTicks * scale, this.mapAlpha, target);
         }
     }
 }
