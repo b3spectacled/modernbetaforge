@@ -113,6 +113,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int MODAL_ICON_SIZE = 50;
     private static final int SCROLL_TEXTURE_SIZE_W = 13;
     private static final int SCROLL_TEXTURE_SIZE_H = 9;
+    private static final int BUTTON_SMALL_SPACE = 4;
+    private static final int BUTTON_SMALL_WIDTH = 80;
+    private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SMALL_SPACE;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -193,13 +196,20 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
         int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
         
+        int selectX = centerX + 2;
+        int filterX = centerX + 2;
+        int cancelX = centerX + BUTTON_SMALL_WIDTH + BUTTON_LARGE_WIDTH - BUTTON_SMALL_WIDTH * 2 + 2;
+        int saveX = centerX - BUTTON_LARGE_WIDTH - 2;
+        int editX = centerX - BUTTON_LARGE_WIDTH - 2;
+        int deleteX = centerX - BUTTON_SMALL_WIDTH - 2;
+        
         this.buttonList.clear();
-        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, centerX + 2, this.height - 27, 75, 20, this.getFilterText()));
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, centerX + 2, this.height - 50, 152, 20, I18n.format(PREFIX + "select")));
-        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, centerX + 80, this.height - 27, 75, 20, I18n.format("gui.cancel")));
-        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, centerX - 154, this.height - 50, 152, 20, I18n.format(PREFIX + "save")));
-        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, centerX - 154, this.height - 27, 75, 20, I18n.format(PREFIX + "edit")));
-        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, centerX - 76, this.height - 27, 75, 20, I18n.format(PREFIX + "delete")));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "select")));
+        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, filterX, this.height - 27, BUTTON_SMALL_WIDTH, 20, this.getFilterText()));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format("gui.cancel")));
+        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, saveX, this.height - 50, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "save")));
+        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, editX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format(PREFIX + "edit")));
+        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, deleteX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialPreset);
