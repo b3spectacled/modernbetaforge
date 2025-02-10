@@ -359,7 +359,7 @@ public class DrawUtil {
         Vec3d color = Vec3d.ZERO;
         int centerX = blockPos.getX();
         int centerZ = blockPos.getZ();
-        int blendDist = 3;
+        int blendDist = 2;
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         int blocks = 0;
