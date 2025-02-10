@@ -228,7 +228,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
         
-        this.iconBounds.updateBounds(boxL + 1, boxT + 1, MODAL_ICON_SIZE - 1, MODAL_ICON_SIZE - 1);
+        this.iconBounds.updateBounds(boxL + 1, boxT + 1, MODAL_ICON_SIZE, MODAL_ICON_SIZE);
         
         this.updateButtonValidity();
     }
