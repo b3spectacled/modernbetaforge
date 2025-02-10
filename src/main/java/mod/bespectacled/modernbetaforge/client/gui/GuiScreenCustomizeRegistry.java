@@ -129,9 +129,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialEntry);
         
-        int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / this.slotHeight;
-        if (this.list.selected > numDisplayed - 1) {
-            this.list.scrollBy(this.slotHeight * (this.list.selected + 1));
+        int slotHeight = this.slotHeight;
+        int slotSelected = this.list.selected;
+        int slotsDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / slotHeight;
+
+        if (slotSelected > slotsDisplayed - 1) {
+            this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
         }
         
         this.fieldSearch = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);

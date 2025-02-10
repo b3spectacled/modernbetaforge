@@ -204,9 +204,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialPreset);
         
-        int numDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / (SLOT_HEIGHT + SLOT_PADDING);
-        if (this.list.selected > numDisplayed - 1) {
-            this.list.scrollBy(SLOT_HEIGHT * (this.list.selected + 1));
+        int slotHeight = SLOT_HEIGHT + SLOT_PADDING;
+        int slotSelected = this.list.selected;
+        int slotsDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / slotHeight;
+
+        if (slotSelected > slotsDisplayed - 1) {
+            this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
         }
         
         String initialExportText = this.getInitialExportText();
