@@ -4,8 +4,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import mod.bespectacled.modernbetaforge.command.DrawBiomeMapCommand;
-import mod.bespectacled.modernbetaforge.command.DrawTerrainMapCommand;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandlerCommon;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
@@ -94,8 +92,5 @@ public class ModernBeta {
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) { }
     
     @EventHandler
-    private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
-        event.registerServerCommand(new DrawTerrainMapCommand());
-        event.registerServerCommand(new DrawBiomeMapCommand());
-    }
+    private void onFMLServerStartingEvent(FMLServerStartingEvent event) { }
 }

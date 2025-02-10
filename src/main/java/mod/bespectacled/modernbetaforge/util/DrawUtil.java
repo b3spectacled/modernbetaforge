@@ -15,13 +15,15 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuil
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
+import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.Biome;
@@ -54,7 +56,7 @@ public class DrawUtil {
             this.snowy = snowy;
         }
     }
-
+    
     private static final int COLOR_GRASS = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
@@ -67,133 +69,26 @@ public class DrawUtil {
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
-    public static BufferedImage createBiomeMap(ModernBetaBiomeProvider biomeProvider, BlockPos center, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
-        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
-        BiomeSource biomeSource = biomeProvider.getBiomeSource();
-        MutableBlockPos mutablePos = new MutableBlockPos();
-        
-        int chunkWidth = width >> 4;
-        int chunkLength = length >> 4;
-        
-        int offsetX = width / 2 - center.getX();
-        int offsetZ = length / 2 - center.getZ();
-        
-        for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
-            int startX = chunkX << 4;
-            progressTracker.accept(chunkX / (float)chunkWidth);
-            
-            for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
-                int startZ = chunkZ << 4;
-                
-                for (int localX = 0; localX < 16; ++localX) {
-                    int x = startX + localX - offsetX;
-                    int imageX = startX + localX;
-                   
-                    for (int localZ = 0; localZ < 16; ++localZ) {
-                        int z = startZ + localZ - offsetZ;
-                        int imageY = startZ + localZ;
-                        
-                        TerrainType terrainType = TerrainType.GRASS;
-                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, 0, z));
-
-                        terrainType = getBaseTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, terrainType);
-                        
-                        if (drawMarkers) {
-                            terrainType = getTerrainTypeByMarker(x, z, terrainType);
-                        }
-
-                        int color = getTerrainTypeColor(mutablePos, biome, biomeSource, true, terrainType);
-                        Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
-                        
-                        if (terrainType == TerrainType.GRASS) {
-                            colorVec = scale(colorVec, 0.71f);
-                        }
-                        Vector4f mapColor = scale(colorVec, 0.86f);
-                        
-                        image.setRGB(imageX, imageY, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
-                    }
-                }
-            }
-        }
-        
-        return image;
-    }
-
-    public static BufferedImage createTerrainMap(ChunkSource chunkSource, ModernBetaBiomeProvider biomeProvider, SurfaceBuilder surfaceBuilder, BlockPos center, int width, int length, boolean drawMarkers, Consumer<Float> progressTracker) {
-        BufferedImage image = new BufferedImage(width, length, BufferedImage.TYPE_INT_ARGB);
-        MutableBlockPos mutablePos = new MutableBlockPos();
-        
-        Random random = new Random(chunkSource.getSeed());
-        
-        int chunkWidth = width >> 4;
-        int chunkLength = length >> 4;
-        
-        int offsetX = width / 2 - center.getX();
-        int offsetZ = length / 2 - center.getZ();
-        
-        for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
-            int startX = chunkX << 4;
-            progressTracker.accept(chunkX / (float)chunkWidth);
-            
-            for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
-                int startZ = chunkZ << 4;
-                
-                random = surfaceBuilder.createSurfaceRandom(chunkX, chunkZ);
-                
-                for (int localX = 0; localX < 16; ++localX) {
-                    int x = startX + localX - offsetX;
-                    int imageX = startX + localX;
-                   
-                    for (int localZ = 0; localZ < 16; ++localZ) {
-                        int z = startZ + localZ - offsetZ;
-                        int imageY = startZ + localZ;
-                        
-                        int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
-                        int oceanHeight = chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN);
-                        Biome biome = biomeProvider.getBiome(mutablePos.setPos(x, oceanHeight, z));
-
-                        TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
-                        terrainType = getTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeProvider.getBiomeSource(), terrainType);
-                        
-                        if (drawMarkers) {
-                            terrainType = getTerrainTypeByMarker(x, z, terrainType);
-                        }
-
-                        int color = getTerrainTypeColor(mutablePos, biome, biomeProvider.getBiomeSource(), true, terrainType);
-                        Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
-                        
-                        if (terrainType == TerrainType.GRASS) {
-                            colorVec = scale(colorVec, 0.71f);
-                        }
-                        Vector4f mapColor = scale(colorVec, 0.86f);
-                        
-                        int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
-                        if (terrainType == TerrainType.ICE) {
-                            elevationDiff = 0;
-                        }
-                        
-                        if (elevationDiff > 0) {
-                            mapColor = colorVec;
-                        } else if (elevationDiff < 0) {
-                            mapColor = scale(colorVec, 0.71f);
-                        }
-                        
-                        image.setRGB(imageX, imageY, terrainType == TerrainType.MARKER ? TerrainType.MARKER.color : MathUtil.convertARGBVector4fToInt(mapColor));
-                    }
-                }
-            }
-        }
-
-        return image;
+    public static BufferedImage createTerrainMapForPreview(
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        SurfaceBuilder surfaceBuilder,
+        BiomeInjectionRules injectionRules,
+        int size,
+        Consumer<Float> progressTracker
+    ) {
+        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, injectionRules, size, false, progressTracker);
     }
     
-    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, Consumer<Float> progressTracker) {
-        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, size, false, progressTracker);
-    }
-    
-    public static BufferedImage createTerrainMapForPreview(ChunkSource chunkSource, BiomeSource biomeSource, SurfaceBuilder surfaceBuilder, int size, boolean useBiomeBlend, Consumer<Float> progressTracker) {
+    public static BufferedImage createTerrainMapForPreview(
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        SurfaceBuilder surfaceBuilder,
+        BiomeInjectionRules injectionRules,
+        int size,
+        boolean useBiomeBlend,
+        Consumer<Float> progressTracker
+    ) {
         // Make sure to reset climate samplers if world was previously loaded.
         BetaColorSampler.INSTANCE.resetClimateSamplers();
         
@@ -234,7 +129,7 @@ public class DrawUtil {
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
                         terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, terrainType);
 
-                        int color = getTerrainTypeColor(mutablePos, biome, biomeSource, useBiomeBlend, terrainType);
+                        int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, injectionRules, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                         
                         if (terrainType == TerrainType.GRASS) {
@@ -263,37 +158,26 @@ public class DrawUtil {
         return image;
     }
     
-    private static boolean inCenter(int x, int z) {
-        return inCenter(x, z, 0, 0);
-    }
-    
-    private static boolean inCenter(int x, int z, int offsetX, int offsetZ) {
-        x += offsetX;
-        z += offsetZ;
+    public static BiomeInjectionContext createInjectionContext(ChunkSource chunkSource, int x, int z, Biome biome) {
+        int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
+        boolean inWater = height < chunkSource.getSeaLevel() - 1;
         
-        if (x > 7 || x < -7 || z > 7 || z < -7) {
-            return false;
+        if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
+            FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
+            int offsetX = finiteChunkSource.getLevelWidth() / 2;
+            int offsetZ = finiteChunkSource.getLevelLength() / 2;
+                
+            x += offsetX;
+            z += offsetZ;
+            
+            Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
+            
+            inWater = blockAbove == Blocks.WATER;
         }
         
-        int distance = (int)MathHelper.sqrt(x * x + z * z);
+        IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
         
-        if (distance > 0 && distance < 3) {
-            return true;
-        } else if (distance > 3 && distance < 4) {
-            return false;
-        } else if (distance > 4 && distance < 7) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    private static boolean onAxisX(int x, int z) {
-        return x == 0 && z != 0;
-    }
-    
-    private static boolean onAxisZ(int x, int z) {
-        return x != 0 && z == 0;
+        return new BiomeInjectionContext(new BlockPos(x, height, z), BlockStates.STONE, stateAbove, biome);
     }
     
     private static Vector4f scale(Vector4f vector, float factor) {
@@ -394,16 +278,6 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getBaseTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
-        terrainType = getTerrainTypeByBiome(biome, terrainType);
-        
-        if (BiomeDictionary.hasType(biome, Type.OCEAN) || BiomeDictionary.hasType(biome, Type.RIVER)) {
-            terrainType = TerrainType.WATER;
-        }
-        
-        return terrainType;
-    }
-    
     private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, TerrainType terrainType) {
         if (terrainType.snowy) {
             if (canFreeze(blockPos, biome, biomeSource, 64)) {
@@ -415,22 +289,6 @@ public class DrawUtil {
             if (canFreeze(blockPos, biome, biomeSource, 64)) {
                 terrainType = TerrainType.ICE;
             }
-        }
-        
-        return terrainType;
-    }
-    
-    private static TerrainType getTerrainTypeByMarker(int x, int z, TerrainType terrainType) {
-        if (inCenter(x, z)) {
-            terrainType = TerrainType.MARKER;
-        }
-        
-        if (onAxisX(x, z) && z % 10 == 0) {
-            terrainType = TerrainType.MARKER;
-        }
-        
-        if (onAxisZ(x, z) && x % 10 == 0) {
-            terrainType = TerrainType.MARKER;
         }
         
         return terrainType;
@@ -467,8 +325,14 @@ public class DrawUtil {
         return canFreeze;
     }
     
-    private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, BiomeSource biomeSource, boolean useBiomeBlend, TerrainType terrainType) {
+    private static int getTerrainTypeColor(BlockPos blockPos, Biome biome, ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules injectionRules, boolean useBiomeBlend, TerrainType terrainType) {
         int color = terrainType.color;
+        int x = blockPos.getX();
+        int z = blockPos.getZ();
+        
+        BiomeInjectionContext context = createInjectionContext(chunkSource, x, z, biome);
+        Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+        biome = injectedBiome != null ? injectedBiome : biome;
         
         if (terrainType == TerrainType.GRASS) {
             color = biome.getGrassColorAtPos(blockPos);
@@ -480,7 +344,7 @@ public class DrawUtil {
                     color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
                     
                 } else {
-                    color = blendBiomeColor(blockPos, biomeSource);
+                    color = blendBiomeColor(blockPos, chunkSource, biomeSource, injectionRules);
                     
                 }
             }
@@ -491,7 +355,7 @@ public class DrawUtil {
         return color;
     }
     
-    private static int blendBiomeColor(BlockPos blockPos, BiomeSource biomeSource) {
+    private static int blendBiomeColor(BlockPos blockPos, ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules injectionRules) {
         Vec3d color = Vec3d.ZERO;
         int centerX = blockPos.getX();
         int centerZ = blockPos.getZ();
@@ -502,6 +366,11 @@ public class DrawUtil {
         for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
             for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
                 Biome biome = biomeSource.getBiome(x, z);
+
+                BiomeInjectionContext context = createInjectionContext(chunkSource, x, z, biome);
+                Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+                biome = injectedBiome != null ? injectedBiome : biome;
+                
                 color = color.add(MathUtil.convertRGBIntToVec3d(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z))));
                 blocks++;
             }

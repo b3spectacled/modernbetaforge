@@ -19,7 +19,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -28,8 +27,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListButton;
@@ -41,9 +38,7 @@ import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,7 +67,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ExecutorWrapper executor;
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
-    private final MutableBlockPos mutablePos;
     
     private long seed;
     private ChunkSource chunkSource;
@@ -109,7 +103,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapBounds = new GuiBoundsChecker();
         this.seedFieldBounds = new GuiBoundsChecker();
-        this.mutablePos = new MutableBlockPos();
 
         this.seed = parseSeed(worldSeed);
         this.initSources(this.seed, settings);
@@ -280,7 +273,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.biomeSource.getBiome((int)x, (int)y);
             
-            BiomeInjectionContext context = this.createInjectionContext((int)x, (int)y, height, biome);
+            BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, (int)x, (int)y, biome);
             Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.PRE_SURFACE);
             biome = injectedBiome != null ? injectedBiome : biome;
             
@@ -407,6 +400,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.chunkSource,
                     this.biomeSource,
                     this.surfaceBuilder,
+                    this.injectionRules,
                     this.resolution,
                     this.useBiomeBlend,
                     current -> this.progress = current
@@ -477,27 +471,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private int getSeedFieldWidth() {
         return this.fontRenderer.getStringWidth(this.getFormattedSeed());
-    }
-    
-    private BiomeInjectionContext createInjectionContext(int x, int z, int height, Biome biome) {
-        boolean inWater = height < this.chunkSource.getSeaLevel() - 1;
-        
-        if (chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).inWorldBounds(x, z)) {
-            FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
-            int offsetX = finiteChunkSource.getLevelWidth() / 2;
-            int offsetZ = finiteChunkSource.getLevelLength() / 2;
-                
-            x += offsetX;
-            z += offsetZ;
-            
-            Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
-            
-            inWater = blockAbove == Blocks.WATER;
-        }
-        
-        IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
-        
-        return new BiomeInjectionContext(this.mutablePos.setPos(x, height, z), BlockStates.STONE, stateAbove, biome);
     }
     
     private static long parseSeed(String seedString) {
