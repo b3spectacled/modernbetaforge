@@ -112,6 +112,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.langName = langName;
         this.registryKeys = registryKeys;
         this.entries = this.loadEntries();
+        this.hoveredElement = -1;
     }
     
     @Override
