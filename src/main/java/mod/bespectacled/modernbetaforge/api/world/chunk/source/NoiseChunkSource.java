@@ -259,7 +259,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Samples the scale and depth values at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
      * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
-     * TODO: Make this abstract in 1.6.0.0.
      * 
      * @param startNoiseX x-coordinate start of chunk in noise coordinates.
      * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
@@ -267,22 +266,17 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param localNoiseZ Current subchunk index along z-axis.
      * @return A NoiseScaleDepth containing the sampled scaled and depth values.
      */
-    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
-        return NoiseScaleDepth.ZERO;
-    }
+    protected abstract NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
     
     /**
      * Samples the noise offset at the given noise y-coordinate.
-     * TODO: Make this abstract in 1.6.0.0.
      * 
      * @param noiseY y-coordinate in noise coordinates.
      * @param scale The terrain scale modifier.
      * @param depth The terrain depth modifier.
      * @return The offset by which to modify the density value at this noise y-coordinate.
      */
-    protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
-        return 0.0;
-    }
+    protected abstract double sampleNoiseOffset(int noiseY, double scale, double depth);
 
     /**
      * Generates the base terrain for a given chunk.

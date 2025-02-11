@@ -9,8 +9,6 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.util.ResourceLocation;
 
 public class GuiPredicate {
-    @Deprecated public static final ResourceLocation CAVE_CARVER = createRegistryKey(NbtTags.CAVE_CARVER);
-    
     public static final ResourceLocation SURFACE_BUILDER = createRegistryKey(NbtTags.SURFACE_BUILDER);
     public static final ResourceLocation SPAWN_LOCATOR = createRegistryKey(NbtTags.WORLD_SPAWNER);
     public static final ResourceLocation SINGLE_BIOME = createRegistryKey(NbtTags.SINGLE_BIOME);

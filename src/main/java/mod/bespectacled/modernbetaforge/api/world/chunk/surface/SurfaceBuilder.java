@@ -32,8 +32,6 @@ public abstract class SurfaceBuilder {
     protected final ModernBetaGeneratorSettings settings;
     
     private final SimplexOctaveNoise surfaceOctaveNoise;
-    @Deprecated private final PerlinOctaveNoise defaultBeachOctaveNoise;
-    @Deprecated private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
 
     // Set for specifying which biomes should use their vanilla surface builders.
     // Done on per-biome basis for best mod compatibility.
@@ -56,9 +54,7 @@ public abstract class SurfaceBuilder {
         
         Random random = new Random(chunkSource.getSeed());
         this.surfaceOctaveNoise = new SimplexOctaveNoise(random, 4);
-        this.defaultBeachOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        this.defaultSurfaceOctaveNoise = new PerlinOctaveNoise(random, 4, true);
-        
+
         // Init custom/vanilla surface info
         this.biomesWithCustomSurfaces.addAll(
             Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
@@ -123,17 +119,6 @@ public abstract class SurfaceBuilder {
     }
 
     /**
-     * Gets whether the surface builder generates beaches.
-     * [Deprecated] This was previously used just for the map previewer. Don't use this.
-     * 
-     * @return Whether the surface builder generates beaches. False by default.
-     */
-    @Deprecated
-    public boolean generatesBeaches() {
-        return false;
-    }
-    
-    /**
      * Gets the world height, from generator settings.
      * 
      * @return The world height.
@@ -197,29 +182,5 @@ public abstract class SurfaceBuilder {
         }
         
         return false;
-    }
-
-    /**
-     * Gets the PerlinOctaveNoise sampler used for beach generation.
-     * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
-     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
-     * 
-     * @return The noise sampler.
-     */
-    @Deprecated
-    protected PerlinOctaveNoise getBeachOctaveNoise() {
-        return this.chunkSource.getBeachOctaveNoise().orElse(this.defaultBeachOctaveNoise);
-    }
-
-    /**
-     * Gets the PerlinOctaveNoise sampler used for surface generation.
-     * Will try to use the sampler from {@link ChunkSource#getSurfaceOctaveNoise() getSurfaceOctaveNoise} if possible, otherwise a default sampler.
-     * [Deprecated] This method has been moved to {@link NoiseSurfaceBuilder}.
-     *
-     * @return The noise sampler.
-     */
-    @Deprecated
-    protected PerlinOctaveNoise getSurfaceOctaveNoise() {
-        return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
     }
 }
