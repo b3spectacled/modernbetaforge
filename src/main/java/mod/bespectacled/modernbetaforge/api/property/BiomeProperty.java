@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 
 public final class BiomeProperty extends StringProperty {
     /**
-     * Constructs a new BiomeProperty with an initial biome, storing the biome's registry name.
+     * Constructs a new BiomeProperty with an initial biome, storing the biome registry name.
      * 
-     * @param value The initial Biome registry name value.
+     * @param value The initial biome registry name value.
      */
     public BiomeProperty(ResourceLocation value) {
         super(value.toString());

@@ -22,7 +22,7 @@ public class BlockProperty extends StringProperty {
 
     @Override
     public String getType() {
-        return "biome";
+        return "block";
     }
 
     @Override

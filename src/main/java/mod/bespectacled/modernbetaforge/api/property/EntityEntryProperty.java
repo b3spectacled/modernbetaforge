@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class EntityEntryProperty extends StringProperty {
     /**
-     * Constructs a new BlockProperty with an initial entity type, storing the entity type registry name.
+     * Constructs a new EntityEntryProperty with an initial entity entry, storing the entity entry registry name.
      * 
-     * @param value The initial block registry name value.
+     * @param value The initial entity entry registry name value.
      */
     public EntityEntryProperty(ResourceLocation value) {
         super(value.toString());
@@ -22,7 +22,7 @@ public class EntityEntryProperty extends StringProperty {
 
     @Override
     public String getType() {
-        return "biome";
+        return "entity";
     }
 
     @Override
