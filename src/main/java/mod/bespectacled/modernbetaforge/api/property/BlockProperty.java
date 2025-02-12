@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public class BlockProperty extends StringProperty {
+public final class BlockProperty extends StringProperty {
     /**
      * Constructs a new BlockProperty with an initial block, storing the block registry name.
      * 

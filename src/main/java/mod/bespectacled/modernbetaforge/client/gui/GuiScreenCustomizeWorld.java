@@ -1836,7 +1836,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     .orElse(-1);
                 
                 if (guiButtonComponent instanceof GuiListButton && buttonId != -1) {
-                    String registryName = ForgeRegistryUtil.getRandomEntry(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
+                    String registryName = ForgeRegistryUtil.getRandom(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
                     String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? "fixedBiome" : "";
                     int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
                     
@@ -2265,7 +2265,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             registryName,
             langName,
             truncateLen,
-            e -> ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(e), ForgeRegistries.BIOMES).getBiomeName()
+            e -> ForgeRegistryUtil.get(new ResourceLocation(e), ForgeRegistries.BIOMES).getBiomeName()
         );
     }
     

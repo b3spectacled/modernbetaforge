@@ -59,7 +59,7 @@ public abstract class SurfaceBuilder {
         this.biomesWithCustomSurfaces.addAll(
             Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
                 .stream()
-                .map(id -> ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(id), ForgeRegistries.BIOMES))
+                .map(id -> ForgeRegistryUtil.get(new ResourceLocation(id), ForgeRegistries.BIOMES))
                 .collect(Collectors.toList())
         );
         

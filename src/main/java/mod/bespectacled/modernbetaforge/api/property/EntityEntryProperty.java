@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public class EntityEntryProperty extends StringProperty {
+public final class EntityEntryProperty extends StringProperty {
     /**
      * Constructs a new EntityEntryProperty with an initial entity entry, storing the entity entry registry name.
      * 

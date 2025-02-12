@@ -605,15 +605,15 @@ public class ModernBetaGeneratorSettings {
     }
     
     public Biome getBiomeProperty(ResourceLocation registryKey) {
-        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BIOMES);
+        return ForgeRegistryUtil.get(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BIOMES);
     }
     
     public Block getBlockProperty(ResourceLocation registryKey) {
-        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BLOCKS);
+        return ForgeRegistryUtil.get(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BLOCKS);
     }
     
     public EntityEntry getEntityEntryProperty(ResourceLocation registryKey) {
-        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.ENTITIES);
+        return ForgeRegistryUtil.get(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.ENTITIES);
     }
     
     public static class Factory {
