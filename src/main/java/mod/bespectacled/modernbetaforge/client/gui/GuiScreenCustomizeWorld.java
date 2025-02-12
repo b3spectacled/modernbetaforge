@@ -74,7 +74,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
@@ -2187,32 +2186,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return false;
     }
     
-    private List<ResourceLocation> getForgeRegistryKeys(IForgeRegistry<?> registry, Predicate<ResourceLocation> predicate) {
-        return registry.getEntries()
-            .stream()
-            .map(e -> e.getKey())
-            .filter(predicate)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-    
-    private List<ResourceLocation> getForgeRegistryKeys(IForgeRegistry<?> registry) {
-        return this.getForgeRegistryKeys(registry, e -> true);
-    }
-    
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BIOMES.getValue(key).getBiomeName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", this.getForgeRegistryKeys(ForgeRegistries.BIOMES)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES)));
     }
     
     private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", this.getForgeRegistryKeys(ForgeRegistries.BLOCKS)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS)));
     }
     
     private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.ENTITIES.getValue(key).getName();
         Predicate<ResourceLocation> predicate = key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass());
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", this.getForgeRegistryKeys(ForgeRegistries.ENTITIES, predicate)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "entity", ForgeRegistryUtil.getKeys(ForgeRegistries.ENTITIES, predicate)));
     }
     
     private void openRegistryScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, List<ResourceLocation> registryKeys) {

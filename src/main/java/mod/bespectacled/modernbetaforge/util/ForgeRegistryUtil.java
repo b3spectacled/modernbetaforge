@@ -1,10 +1,14 @@
 package mod.bespectacled.modernbetaforge.util;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
+
+import com.google.common.base.Predicate;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraft.util.ResourceLocation;
@@ -41,4 +45,16 @@ public class ForgeRegistryUtil<T> {
         
         return entries.get(random.nextInt(entries.size()));
     }
-}
+    
+    public static <T> List<ResourceLocation> getKeys(IForgeRegistry<? extends T> registry, Predicate<ResourceLocation> filter) {
+        return registry.getEntries()
+                .stream()
+                .map(e -> e.getKey())
+                .filter(filter)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    public static <T> List<ResourceLocation> getKeys(IForgeRegistry<? extends T> registry) {
+        return getKeys(registry, e -> true);
+    }
+ }

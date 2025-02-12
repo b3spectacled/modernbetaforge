@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.util.GenLayerUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -37,6 +36,8 @@ import net.minecraft.world.gen.layer.IntCache;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.WorldTypeEvent;
 
 public class ReleaseChunkSource extends NoiseChunkSource {
     private static final float[] BIOME_WEIGHTS = new float[25];
@@ -254,7 +255,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             factory.riverSize = settings.riverSize;
 
             GenLayer[] genLayers = ModernBetaGenLayer.initNoiseLayers(seed, WorldType.CUSTOMIZED, factory.build(), settings);
-            genLayers = GenLayerUtil.getModdedBiomeGenerators(WorldType.CUSTOMIZED, seed, genLayers);
+            genLayers = getModdedBiomeGenerators(WorldType.CUSTOMIZED, seed, genLayers);
             
             this.genLayer = genLayers[1];
             this.biomeCache = new ChunkCache<>(
@@ -311,6 +312,13 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             }
             
             ModernBeta.log(Level.DEBUG, String.format("Validated biome layers!"));
+        }
+        
+        private static GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original) {
+            WorldTypeEvent.InitBiomeGens event = new WorldTypeEvent.InitBiomeGens(worldType, seed, original);
+            MinecraftForge.TERRAIN_GEN_BUS.post(event);
+            
+            return event.getNewBiomeGens();
         }
     }
 }
