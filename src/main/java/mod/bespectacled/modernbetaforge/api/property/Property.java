@@ -6,6 +6,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
@@ -50,7 +51,7 @@ public abstract class Property<T> {
     public abstract GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier);
     
     /**
-     * Accept a GUI generator settings setter for the property.
+     * Accept a GUI generator settings visitor for the property.
      * 
      * @param visitor The property visitor.
      * @param guiIdentifier The id of the GUI button.
@@ -59,6 +60,14 @@ public abstract class Property<T> {
      */
     public abstract void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey);
 
+    /**
+     * Accept a name formatter visitor for the property.
+     * 
+     * @param visitor The property visitor.
+     * @return The formatted name for the property.
+     */
+    public abstract String visitNameFormatter(PropertyVisitor visitor);
+    
     /**
      * Gets the format string for use with the customization GUI.
      * 

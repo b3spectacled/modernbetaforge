@@ -4,11 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ClimateMap {
     private final Map<String, ClimateMapping> climateMap;
@@ -177,9 +178,9 @@ public class ClimateMap {
         public final boolean containsOnlyBetaBiomes;
         
         public ClimateMapping(String baseBiome, String oceanBiome, String beachBiome) {
-            this.baseBiome = BiomeUtil.getBiome(new ResourceLocation(baseBiome), "landBiome");
-            this.oceanBiome = BiomeUtil.getBiome(new ResourceLocation(oceanBiome), "oceanBiome");
-            this.beachBiome = BiomeUtil.getBiome(new ResourceLocation(beachBiome), "beachBiome");
+            this.baseBiome = ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(baseBiome), ForgeRegistries.BIOMES);
+            this.oceanBiome = ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(oceanBiome), ForgeRegistries.BIOMES);
+            this.beachBiome = ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(beachBiome), ForgeRegistries.BIOMES);
             
             this.containsOnlyBetaBiomes = 
                 ModernBetaBiomeLists.BETA_BIOMES.contains(this.baseBiome) &&

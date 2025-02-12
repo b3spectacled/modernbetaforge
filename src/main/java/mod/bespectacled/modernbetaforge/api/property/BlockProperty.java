@@ -10,19 +10,19 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public final class BooleanProperty extends Property<Boolean> {
+public class BlockProperty extends StringProperty {
     /**
-     * Constructs a new BooleanProperty.
+     * Constructs a new BlockProperty with an initial block, storing the block registry name.
      * 
-     * @param value The initial boolean value.
+     * @param value The initial block registry name value.
      */
-    public BooleanProperty(boolean value) {
-        super(value);
+    public BlockProperty(ResourceLocation value) {
+        super(value.toString());
     }
-    
+
     @Override
     public String getType() {
-        return "boolean";
+        return "biome";
     }
 
     @Override
@@ -34,19 +34,14 @@ public final class BooleanProperty extends Property<Boolean> {
     public GuiPageButtonList.GuiListEntry visitGui(GuiPropertyVisitor visitor, int guiIdentifier) {
         return visitor.visit(this, guiIdentifier);
     }
-
+    
     @Override
     public void visitEntryValue(EntryValuePropertyVisitor visitor, int guiIdentifier, Object value, ResourceLocation registryKey) {
-        visitor.visit(this, guiIdentifier, (Boolean)value, registryKey);
+        visitor.visit(this, guiIdentifier, registryKey);
     }
 
     @Override
     public String visitNameFormatter(PropertyVisitor visitor) {
         return visitor.visit(this);
-    }
-
-    @Override
-    public String getFormatter() {
-        return "%b";
     }
 }

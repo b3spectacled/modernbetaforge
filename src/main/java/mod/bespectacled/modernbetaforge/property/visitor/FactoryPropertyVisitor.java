@@ -3,7 +3,9 @@ package mod.bespectacled.modernbetaforge.property.visitor;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
@@ -23,4 +25,8 @@ public interface FactoryPropertyVisitor {
     void visit(ListProperty property, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject);
     
     void visit(BiomeProperty property, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject);
+    
+    void visit(BlockProperty property, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject);
+    
+    void visit(EntityEntryProperty property, ModernBetaGeneratorSettings.Factory factory, ResourceLocation registryKey, JsonObject jsonObject);
 }

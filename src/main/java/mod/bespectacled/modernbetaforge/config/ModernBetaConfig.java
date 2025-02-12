@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets.Fil
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeInt;
+import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.Config.RequiresWorldRestart;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -123,6 +124,12 @@ public class ModernBetaConfig {
             "Display Modern Beta debug info in debug screen."
         })
         public boolean displayDebugInfo = false;
+        
+        @Comment({
+            "Register debug properties at mod start-up."
+        })
+        @RequiresMcRestart
+        public boolean registerDebugProperties = false;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)

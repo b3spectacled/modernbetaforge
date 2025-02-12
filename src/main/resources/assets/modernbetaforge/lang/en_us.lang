@@ -77,6 +77,8 @@ createWorld.customize.custom.surfaceBuilder=Surface Builder
 createWorld.customize.custom.caveCarver=Cave Carver
 createWorld.customize.custom.worldSpawner=World Spawner
 createWorld.customize.custom.biome=Biome
+createWorld.customize.custom.block=Block
+createWorld.customize.custom.entity=Entity
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
@@ -315,8 +317,9 @@ modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Tempera
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
+modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 
-## Test Properties (Not used!)
+## Test Properties (For Debug Only!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge
 createWorld.customize.custom.modernbetaforge.booleanprop=Boolean Prop
 createWorld.customize.custom.modernbetaforge.intprop=Int Prop
@@ -327,3 +330,5 @@ createWorld.customize.custom.modernbetaforge.stringprop=String Prop
 createWorld.customize.custom.modernbetaforge.listprop=List Prop
 createWorld.customize.custom.modernbetaforge.biomeprop=Biome Prop
 createWorld.customize.custom.modernbetaforge.biomeprop2=Biome Prop 2
+createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
+createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop

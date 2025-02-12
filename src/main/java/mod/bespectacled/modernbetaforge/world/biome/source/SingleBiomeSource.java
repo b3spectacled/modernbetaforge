@@ -2,10 +2,11 @@ package mod.bespectacled.modernbetaforge.world.biome.source;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class SingleBiomeSource extends BiomeSource implements NoiseBiomeSource {
     private final Biome biome;
@@ -13,7 +14,7 @@ public class SingleBiomeSource extends BiomeSource implements NoiseBiomeSource {
     public SingleBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
         
-        this.biome = BiomeUtil.getBiome(new ResourceLocation(settings.singleBiome), "singleBiome");
+        this.biome = ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(settings.singleBiome), ForgeRegistries.BIOMES);
     }
 
     @Override

@@ -12,9 +12,8 @@ import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
-import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -23,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class SurfaceBuilder {
     protected final IBlockState defaultBlock;
@@ -59,7 +59,7 @@ public abstract class SurfaceBuilder {
         this.biomesWithCustomSurfaces.addAll(
             Arrays.asList(ModernBetaConfig.generatorOptions.biomesWithCustomSurfaces)
                 .stream()
-                .map(id -> BiomeUtil.getBiome(new ResourceLocation(id), "custom_surfaces"))
+                .map(id -> ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(id), ForgeRegistries.BIOMES))
                 .collect(Collectors.toList())
         );
         

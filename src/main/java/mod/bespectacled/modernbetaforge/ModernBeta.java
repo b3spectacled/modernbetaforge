@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandlerCommon;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
@@ -78,7 +79,10 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerWorldSpawners();
         ModernBetaBuiltInRegistries.registerDataFixes();
-        //ModernBetaBuiltInRegistries.registerProperties();
+        
+        if (ModernBetaConfig.debugOptions.registerDebugProperties) {
+            ModernBetaBuiltInRegistries.registerProperties();
+        }
         
         ModCompat.loadModCompat();
          

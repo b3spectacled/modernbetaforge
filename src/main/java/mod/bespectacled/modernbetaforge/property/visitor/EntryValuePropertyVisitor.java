@@ -1,7 +1,9 @@
 package mod.bespectacled.modernbetaforge.property.visitor;
 
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
@@ -9,7 +11,7 @@ import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.util.ResourceLocation;
 
 public interface EntryValuePropertyVisitor {
-    void visit(BooleanProperty property, int guiIdentifier, boolean value, ResourceLocation registryKeye);
+    void visit(BooleanProperty property, int guiIdentifier, boolean value, ResourceLocation registryKey);
     
     void visit(FloatProperty property, int guiIdentifier, Object value, ResourceLocation registryKey);
     
@@ -20,4 +22,8 @@ public interface EntryValuePropertyVisitor {
     void visit(ListProperty property, int guiIdentifier, float value, ResourceLocation registryKey);
     
     void visit(BiomeProperty property, int guiIdentifier, ResourceLocation registryKey);
+    
+    void visit(BlockProperty property, int guiIdentifier, ResourceLocation registryKey);
+    
+    void visit(EntityEntryProperty property, int guiIdentifier, ResourceLocation registryKey);
 }

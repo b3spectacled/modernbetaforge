@@ -19,7 +19,9 @@ import com.google.gson.JsonSerializer;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
@@ -29,18 +31,21 @@ import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModernBetaGeneratorSettings {
     public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
@@ -600,7 +605,15 @@ public class ModernBetaGeneratorSettings {
     }
     
     public Biome getBiomeProperty(ResourceLocation registryKey) {
-        return BiomeUtil.getBiome(new ResourceLocation(this.getStringProperty(registryKey)), "biome_property");
+        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BIOMES);
+    }
+    
+    public Block getBlockProperty(ResourceLocation registryKey) {
+        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.BLOCKS);
+    }
+    
+    public EntityEntry getEntityEntryProperty(ResourceLocation registryKey) {
+        return ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(this.getStringProperty(registryKey)), ForgeRegistries.ENTITIES);
     }
     
     public static class Factory {
@@ -2180,6 +2193,20 @@ public class ModernBetaGeneratorSettings {
             factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
         }
 
+        @Override
+        public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            
+            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value)));
+        }
+
+        @Override
+        public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            
+            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value)));
+        }
+
     }
     
     private static class ReadFactoryPropertyVisitor implements FactoryPropertyVisitor {
@@ -2231,6 +2258,20 @@ public class ModernBetaGeneratorSettings {
             factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
         }
 
+        @Override
+        public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value)));
+        }
+
+        @Override
+        public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value)));
+        }
+
     }
     
     private static class WriteFactoryPropertyVisitor implements FactoryPropertyVisitor {
@@ -2264,5 +2305,14 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(registryKey.toString(), property.getValue());
         }
 
+        @Override
+        public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+
+        @Override
+        public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
     }
 }

@@ -27,7 +27,9 @@ import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
@@ -40,8 +42,9 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
-import mod.bespectacled.modernbetaforge.util.BiomeUtil;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
@@ -55,6 +58,7 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList;
+import net.minecraft.client.gui.GuiPageButtonList.GuiListEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiSlider.FormatHelper;
@@ -64,12 +68,13 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
@@ -655,65 +660,59 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, -1));
         
         // Set biome text for Single Biome button
-        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, true, BIOME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, "fixedBiome", BIOME_TRUNCATE_LEN));
         
         // Set biome text for Beta Biome buttons
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, false, -1));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, false, -1));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach));
         
         for (Entry<Integer, ResourceLocation> entry : this.customIds.entrySet()) {
             Property<?> property = this.settings.customProperties.get(entry.getValue());
+            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
             
-            if (property instanceof BooleanProperty) {
-                BooleanProperty booleanProperty = (BooleanProperty)property;
-                
-                this.setTextButton(entry.getKey(), I18n.format(booleanProperty.getValue() ? "gui.yes" : "gui.no"));
-                
-            } if (property instanceof BiomeProperty) {
-                BiomeProperty biomeProperty = (BiomeProperty)property;
-                
-                this.setTextButton(entry.getKey(), getFormattedBiomeName(biomeProperty.getValue(), false, -1));
+            if (formattedName != null && !formattedName.isEmpty()) {
+                this.setTextButton(entry.getKey(), formattedName);
             }
         }
     }
@@ -1837,12 +1836,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     .orElse(-1);
                 
                 if (guiButtonComponent instanceof GuiListButton && buttonId != -1) {
-                    String registryName = BiomeUtil.getRandomBiome(this.random).getRegistryName().toString();
-                    boolean prefix = buttonId == GuiIdentifiers.PG0_B_FIXED;
+                    String registryName = ForgeRegistryUtil.getRandomEntry(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
+                    String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? "fixedBiome" : "";
                     int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
                     
                     GuiIdentifiers.BIOME_SETTINGS.get(buttonId).accept(registryName,  this.settings);
-                    this.setTextButton(buttonId, getFormattedBiomeName(registryName, prefix, truncateLen));
+                    this.setTextButton(buttonId, getFormattedBiomeName(registryName, langName, truncateLen));
                 }
                 
             } else {
@@ -2188,16 +2187,32 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return false;
     }
     
-    private List<ResourceLocation> getBiomeKeys() {
-        return ForgeRegistries.BIOMES.getEntries()
+    private List<ResourceLocation> getForgeRegistryKeys(IForgeRegistry<?> registry, Predicate<ResourceLocation> predicate) {
+        return registry.getEntries()
             .stream()
             .map(e -> e.getKey())
+            .filter(predicate)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    private List<ResourceLocation> getForgeRegistryKeys(IForgeRegistry<?> registry) {
+        return this.getForgeRegistryKeys(registry, e -> true);
     }
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BIOMES.getValue(key).getBiomeName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", this.getBiomeKeys()));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", this.getForgeRegistryKeys(ForgeRegistries.BIOMES)));
+    }
+    
+    private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
+        Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", this.getForgeRegistryKeys(ForgeRegistries.BLOCKS)));
+    }
+    
+    private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
+        Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.ENTITIES.getValue(key).getName();
+        Predicate<ResourceLocation> predicate = key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass());
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", this.getForgeRegistryKeys(ForgeRegistries.ENTITIES, predicate)));
     }
     
     private void openRegistryScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, List<ResourceLocation> registryKeys) {
@@ -2241,16 +2256,28 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
     }
     
-    private static String getFormattedBiomeName(String registryName, boolean prefix, int truncateLen) {
-        Biome biome = BiomeUtil.getBiome(new ResourceLocation(registryName), "generator");
-        String biomeName = biome.getBiomeName();
+    private static String getFormattedBiomeName(String registryName) {
+        return getFormattedBiomeName(registryName, "", -1);
+    }
+    
+    private static String getFormattedBiomeName(String registryName, String langName, int truncateLen) {
+        return getFormattedForgeRegistryName(
+            registryName,
+            langName,
+            truncateLen,
+            e -> ForgeRegistryUtil.getRegistryEntry(new ResourceLocation(e), ForgeRegistries.BIOMES).getBiomeName()
+        );
+    }
+    
+    private static String getFormattedForgeRegistryName(String registryName, String langName, int truncateLen, Function<String, String> nameFormatter) {
+        String formattedName = nameFormatter.apply(registryName);
         
         // Truncate if biome name is too long to fit in button
-        if (truncateLen > 0 && biomeName.length() > truncateLen) {
-            biomeName = biomeName.substring(0, truncateLen) + "...";
+        if (truncateLen > 0 && formattedName.length() > truncateLen) {
+            formattedName = formattedName.substring(0, truncateLen) + "...";
         }
         
-        return prefix ? String.format("%s: %s", I18n.format(PREFIX + "fixedBiome"), biomeName) : biomeName;
+        return !langName.isEmpty() ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
     }
 
     private static int getNdx(int[] arr, int val) {
@@ -2347,6 +2374,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public GuiPageButtonList.GuiListEntry visit(BiomeProperty property, int guiIdentifier) {
             return createGuiButton(guiIdentifier, "enabled", true);
         }
+
+        @Override
+        public GuiListEntry visit(BlockProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", true);
+        }
+
+        @Override
+        public GuiListEntry visit(EntityEntryProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", true);
+        }
         
     }
     
@@ -2428,7 +2465,71 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 (str, factory) -> ((BiomeProperty)factory.customProperties.get(registryKey)).setValue(str),
                 property.getValue()
             );
+        }
+
+        @Override
+        public void visit(BlockProperty property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreenCustomizeWorld.this.openBlockScreen(
+                (str, factory) -> ((BlockProperty)factory.customProperties.get(registryKey)).setValue(str),
+                property.getValue()
+            );
+        }
+
+        @Override
+        public void visit(EntityEntryProperty property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreenCustomizeWorld.this.openEntityScreen(
+                (str, factory) -> ((EntityEntryProperty)factory.customProperties.get(registryKey)).setValue(str),
+                property.getValue()
+            );
         };
         
+    }
+    
+    private class NameFormatterPropertyVisitor implements PropertyVisitor {
+        @Override
+        public String visit(BooleanProperty property) {
+            return I18n.format(property.getValue() ? "gui.yes" : "gui.no");
+        }
+
+        @Override
+        public String visit(FloatProperty property) {
+            return null;
+        }
+
+        @Override
+        public String visit(IntProperty property) {
+            return null;
+        }
+
+        @Override
+        public String visit(StringProperty property) {
+            return null;
+        }
+
+        @Override
+        public String visit(ListProperty property) {
+            return null;
+        }
+
+        @Override
+        public String visit(BiomeProperty property) {
+            return getFormattedBiomeName(property.getValue());
+        }
+
+        @Override
+        public String visit(BlockProperty property) {
+            Function<String, String> nameFormatter = registryKey ->
+                ForgeRegistries.BLOCKS.getValue(new ResourceLocation(registryKey)).getLocalizedName();
+                
+            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
+
+        @Override
+        public String visit(EntityEntryProperty property) {
+            Function<String, String> nameFormatter = registryKey ->
+                ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryKey)).getName();
+            
+            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
     }
 }

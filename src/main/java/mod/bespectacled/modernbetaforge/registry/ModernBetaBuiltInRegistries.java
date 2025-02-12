@@ -3,7 +3,9 @@ package mod.bespectacled.modernbetaforge.registry;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
@@ -51,6 +53,8 @@ import mod.bespectacled.modernbetaforge.world.spawn.InfdevWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.NoOpWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.PEWorldSpawner;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -129,6 +133,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("listProp"), new ListProperty(1, new String[] { "test0", "test1", "test2" }));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty(Biomes.PLAINS.getRegistryName()));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp2"), new BiomeProperty(ModernBetaBiomeHolders.ALPHA.getRegistryName()));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
     }
     
     public static void registerDataFixes() {
