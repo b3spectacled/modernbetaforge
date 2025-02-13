@@ -6,7 +6,10 @@ public class NbtTags {
     public static final String SURFACE_BUILDER = "surfaceBuilder";
     public static final String CAVE_CARVER = "caveCarver";
     public static final String WORLD_SPAWNER = "worldSpawner";
+    
     public static final String SINGLE_BIOME = "singleBiome";
+    public static final String DEFAULT_BLOCK = "defaultBlock";
+    public static final String DEFAULT_FLUID = "defaultFluid";
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";
@@ -31,7 +34,6 @@ public class NbtTags {
     public static final String WATER_LAKE_CHANCE = "waterLakeChance";
     public static final String USE_LAVA_LAKES = "useLavaLakes";
     public static final String LAVA_LAKE_CHANCE = "lavaLakeChance";
-    public static final String USE_LAVA_OCEANS = "useLavaOceans";
     
     public static final String USE_OLD_NETHER = "useOldNether";
     public static final String USE_NETHER_CAVES = "useNetherCaves";
@@ -181,6 +183,7 @@ public class NbtTags {
     
     public static final String DEPR_FIXED_BIOME = "fixedBiome";
     public static final String DEPR_USE_CAVES = "useCaves";
+    public static final String DEPR_USE_LAVA_OCEANS = "useLavaOceans";
     
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";

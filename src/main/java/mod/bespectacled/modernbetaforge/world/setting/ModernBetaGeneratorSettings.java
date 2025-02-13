@@ -2,11 +2,14 @@ package mod.bespectacled.modernbetaforge.world.setting;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,7 +43,9 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -49,6 +54,19 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModernBetaGeneratorSettings {
+    public static final List<ResourceLocation> DEFAULT_BLOCKS = ImmutableList.of(
+        Blocks.STONE.getRegistryName(),
+        Blocks.NETHERRACK.getRegistryName(),
+        Blocks.END_STONE.getRegistryName()
+    );
+    public static final List<ResourceLocation> DEFAULT_FLUIDS = ImmutableList.copyOf(
+        ForgeRegistries.BLOCKS.getValuesCollection()
+            .stream()
+            .filter(b -> b instanceof BlockStaticLiquid)
+            .map(b -> b.getRegistryName())
+            .collect(Collectors.toList())
+    );
+    
     public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     
@@ -122,6 +140,8 @@ public class ModernBetaGeneratorSettings {
     public final String worldSpawner;
     
     public final String singleBiome;
+    public final String defaultBlock;
+    public final String defaultFluid;
     
     public final boolean replaceOceanBiomes;
     public final boolean replaceBeachBiomes;
@@ -176,7 +196,6 @@ public class ModernBetaGeneratorSettings {
     public final int waterLakeChance;
     public final boolean useLavaLakes;
     public final int lavaLakeChance;
-    public final boolean useLavaOceans;
     
     public final boolean useSandstone;
     
@@ -343,6 +362,8 @@ public class ModernBetaGeneratorSettings {
         this.worldSpawner = factory.worldSpawner;
         
         this.singleBiome = factory.singleBiome;
+        this.defaultBlock = factory.defaultBlock;
+        this.defaultFluid = factory.defaultFluid;
         
         this.replaceOceanBiomes = factory.replaceOceanBiomes;
         this.replaceBeachBiomes = factory.replaceBeachBiomes;
@@ -403,7 +424,6 @@ public class ModernBetaGeneratorSettings {
         this.waterLakeChance = factory.waterLakeChance;
         this.useLavaLakes = factory.useLavaLakes;
         this.lavaLakeChance = factory.lavaLakeChance;
-        this.useLavaOceans = factory.useLavaOceans;
         
         this.useSandstone = factory.useSandstone;
         
@@ -627,6 +647,8 @@ public class ModernBetaGeneratorSettings {
         public String worldSpawner;
         
         public String singleBiome;
+        public String defaultBlock;
+        public String defaultFluid;
 
         public boolean replaceOceanBiomes;
         public boolean replaceBeachBiomes;
@@ -681,7 +703,6 @@ public class ModernBetaGeneratorSettings {
         public int waterLakeChance;
         public boolean useLavaLakes;
         public int lavaLakeChance;
-        public boolean useLavaOceans;
         
         public boolean useSandstone;
         
@@ -848,6 +869,8 @@ public class ModernBetaGeneratorSettings {
             this.worldSpawner = ModernBetaBuiltInTypes.WorldSpawner.BETA.getRegistryString();
             
             this.singleBiome = Biomes.PLAINS.getRegistryName().toString();
+            this.defaultBlock = Blocks.STONE.getRegistryName().toString();
+            this.defaultFluid = Blocks.WATER.getRegistryName().toString();
             
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;
@@ -1090,6 +1113,8 @@ public class ModernBetaGeneratorSettings {
                 this.worldSpawner.equals(factory.worldSpawner) &&
                 
                 this.singleBiome.equals(factory.singleBiome) &&
+                this.defaultBlock.equals(factory.defaultBlock) &&
+                this.defaultFluid.equals(factory.defaultFluid) &&
                 
                 this.replaceOceanBiomes == factory.replaceOceanBiomes &&
                 this.replaceBeachBiomes == factory.replaceBeachBiomes &&
@@ -1145,7 +1170,6 @@ public class ModernBetaGeneratorSettings {
                 this.waterLakeChance == factory.waterLakeChance &&
                 this.useLavaLakes == factory.useLavaLakes &&
                 this.lavaLakeChance == factory.lavaLakeChance &&
-                this.useLavaOceans == factory.useLavaOceans &&
                 
                 this.useSandstone == factory.useSandstone &&
                 
@@ -1316,6 +1340,8 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.worldSpawner.hashCode();
             
             hashCode = 31 * hashCode + this.singleBiome.hashCode();
+            hashCode = 31 * hashCode + this.defaultBlock.hashCode();
+            hashCode = 31 * hashCode + this.defaultFluid.hashCode();
             
             hashCode = 31 * hashCode + (this.replaceOceanBiomes ? 1 : 0);
             hashCode = 31 * hashCode + (this.replaceBeachBiomes ? 1 : 0);
@@ -1370,7 +1396,6 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.waterLakeChance;
             hashCode = 31 * hashCode + (this.useLavaLakes ? 1 : 0);
             hashCode = 31 * hashCode + this.lavaLakeChance;
-            hashCode = 31 * hashCode + (this.useLavaOceans ? 1 : 0);
             
             hashCode = 31 * hashCode + (this.useSandstone ? 1 : 0);
             
@@ -1567,6 +1592,8 @@ public class ModernBetaGeneratorSettings {
                 factory.worldSpawner = JsonUtils.getString(jsonObject, NbtTags.WORLD_SPAWNER, factory.worldSpawner);
                 
                 factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, factory.singleBiome);
+                factory.defaultBlock = JsonUtils.getString(jsonObject, NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
+                factory.defaultFluid = JsonUtils.getString(jsonObject, NbtTags.DEFAULT_FLUID, factory.defaultFluid);
                 
                 factory.replaceOceanBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
                 factory.replaceBeachBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
@@ -1621,7 +1648,6 @@ public class ModernBetaGeneratorSettings {
                 factory.waterLakeChance = JsonUtils.getInt(jsonObject, NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
                 factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
                 factory.lavaLakeChance = JsonUtils.getInt(jsonObject, NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-                factory.useLavaOceans = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_OCEANS, factory.useLavaOceans);
                 
                 factory.useSandstone = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SANDSTONE, factory.useSandstone);
                 
@@ -1918,6 +1944,8 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.WORLD_SPAWNER, factory.worldSpawner);
             
             jsonObject.addProperty(NbtTags.SINGLE_BIOME, factory.singleBiome);
+            jsonObject.addProperty(NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
+            jsonObject.addProperty(NbtTags.DEFAULT_FLUID, factory.defaultFluid);
 
             jsonObject.addProperty(NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
@@ -1972,7 +2000,6 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
             jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
             jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-            jsonObject.addProperty(NbtTags.USE_LAVA_OCEANS, factory.useLavaOceans);
             
             jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             

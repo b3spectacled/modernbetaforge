@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -30,6 +29,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ChunkSource {
     protected static final int OCEAN_MIN_DEPTH = 4;
@@ -62,8 +62,8 @@ public abstract class ChunkSource {
         this.settings = settings;
         this.random = this.createRandom(seed);
         
-        this.defaultBlock = BlockStates.STONE;
-        this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
+        this.defaultBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(settings.defaultBlock)).getDefaultState();
+        this.defaultFluid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(settings.defaultFluid)).getDefaultState();
         
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;

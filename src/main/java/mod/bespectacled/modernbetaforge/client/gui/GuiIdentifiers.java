@@ -27,11 +27,6 @@ public class GuiIdentifiers {
     /* Page 1 */
     
     // Entries
-    public static final int PG0_B_CHUNK = 190;
-    public static final int PG0_B_BIOME = 191;
-    public static final int PG0_B_SURFACE = 192;
-    public static final int PG0_B_CARVER = 193;
-    public static final int PG0_B_SPAWN = 194;
     
     public static final int PG0_S_CHUNK = 100;
     public static final int PG0_S_BIOME = 101;
@@ -71,6 +66,17 @@ public class GuiIdentifiers {
     public static final int PG0_S_CAVE_HEIGHT = 130;
     public static final int PG0_S_CAVE_COUNT = 131;
     public static final int PG0_S_CAVE_CHANCE = 132;
+    
+    public static final int PG0_S_BLOCK = 133;
+    public static final int PG0_S_FLUID = 134;
+    
+    public static final int PG0_B_CHUNK = 190;
+    public static final int PG0_B_BIOME = 191;
+    public static final int PG0_B_SURFACE = 192;
+    public static final int PG0_B_CARVER = 193;
+    public static final int PG0_B_SPAWN = 194;
+    public static final int PG0_B_BLOCK = 195;
+    public static final int PG0_B_FLUID = 196;
     
     public static final int PG0_L_INDEV_SEA_LEVEL = 150;
     
@@ -478,5 +484,7 @@ public class GuiIdentifiers {
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str);
         BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.worldSpawner = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BLOCK, (str, factory) -> factory.defaultBlock = str);
+        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_FLUID, (str, factory) -> factory.defaultFluid = str);
     }
 }

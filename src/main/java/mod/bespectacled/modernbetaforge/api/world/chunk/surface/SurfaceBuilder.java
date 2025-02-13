@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
@@ -46,8 +45,8 @@ public abstract class SurfaceBuilder {
      * @param settings The generator settings.
      */
     public SurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this.defaultBlock = BlockStates.STONE;
-        this.defaultFluid = settings.useLavaOceans ? BlockStates.LAVA : BlockStates.WATER;
+        this.defaultBlock = chunkSource.getDefaultBlock();
+        this.defaultFluid = chunkSource.getDefaultFluid();
         
         this.chunkSource = chunkSource;
         this.settings = settings;

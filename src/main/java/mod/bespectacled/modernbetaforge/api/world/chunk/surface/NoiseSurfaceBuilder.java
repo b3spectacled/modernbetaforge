@@ -9,9 +9,12 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
     private final PerlinOctaveNoise defaultBeachOctaveNoise;
@@ -99,13 +102,15 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                         fillerBlock = biome.fillerBlock;
 
                         if (isGravelBeach) {
-                            topBlock = BlockStates.AIR;
-                            fillerBlock = BlockStates.GRAVEL;
+                            topBlock = this.getGravelBeachTopBlock(biome);
+                            fillerBlock = this.getGravelBeachFillerBlock(biome);
                         }
 
                         if (isBeach) {
-                            topBlock = BlockStates.SAND;
-                            fillerBlock = BlockStates.SAND;
+                            IBlockState beachBlock = this.getBeachBlock(biome);
+                            
+                            topBlock = beachBlock;
+                            fillerBlock = beachBlock;
                         }
                     }
 
@@ -224,5 +229,47 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      */
     protected PerlinOctaveNoise getSurfaceOctaveNoise() {
         return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
+    }
+    
+    /**
+     * Gets the top blockstate for gravel beach generation.
+     * 
+     * @param biome The biome to check for selecting the blockstate.
+     * @return The top block for gravel beach generation.
+     */
+    private IBlockState getGravelBeachTopBlock(Biome biome) {
+        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+            return BlockStates.GRAVEL;
+        }
+        
+        return BlockStates.AIR;
+    }
+    
+    /**
+     * Gets the filler blockstate for gravel beach generation.
+     * 
+     * @param biome The biome to check for selecting the blockstate.
+     * @return The filler blockstate for gravel beach generation.
+     */
+    private IBlockState getGravelBeachFillerBlock(Biome biome) {
+        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+            return this.defaultBlock;
+        }
+        
+        return BlockStates.GRAVEL;
+    }
+
+    /**
+     * Gets the blockstate for beach generation.
+     * 
+     * @param biome The biome to check for selecting the blockstate.
+     * @return The blockstate for beach generation.
+     */
+    private IBlockState getBeachBlock(Biome biome) {
+        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+            return Blocks.SOUL_SAND.getDefaultState();
+        }
+        
+        return BlockStates.SAND;
     }
 }

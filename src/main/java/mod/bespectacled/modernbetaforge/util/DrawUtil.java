@@ -213,11 +213,11 @@ public class DrawUtil {
                 }
                 
                 if (blockAbove == Blocks.WATER) {
-                    terrainType = getTerrainTypeByFluid(chunkSource);
+                    terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
                 }
                 
             } else if (height < chunkSource.getSeaLevel() - 1) {
-                terrainType = getTerrainTypeByFluid(chunkSource);
+                terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
             }
             
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
@@ -247,11 +247,11 @@ public class DrawUtil {
             }
             
             if (height < chunkSource.getSeaLevel() - 1) {
-                terrainType = getTerrainTypeByFluid(chunkSource);
+                terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
             }
             
         } else if (height < chunkSource.getSeaLevel() - 1) {
-            terrainType = getTerrainTypeByFluid(chunkSource);
+            terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
         }
         
         if (height <= 0) {
@@ -294,8 +294,8 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getTerrainTypeByFluid(ChunkSource chunkSource) {
-        return chunkSource.getGeneratorSettings().useLavaOceans ? TerrainType.FIRE : TerrainType.WATER;
+    private static TerrainType getTerrainTypeByFluid(String defaultFluid) {
+        return defaultFluid.equals(Blocks.LAVA.getRegistryName().toString()) ? TerrainType.FIRE : TerrainType.WATER;
     }
     
     private static boolean canFreeze(BlockPos blockPos, Biome biome, BiomeSource biomeSource, int seaLevel) {

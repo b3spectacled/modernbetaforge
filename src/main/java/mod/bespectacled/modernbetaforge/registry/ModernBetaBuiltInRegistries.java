@@ -27,6 +27,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBeta18Cave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenCavesExtended;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenNoOp;
 import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
@@ -58,7 +59,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.MapGenCaves;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -112,7 +112,7 @@ public class ModernBetaBuiltInRegistries {
     public static void registerCaveCarvers() {
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA.getRegistryKey(), MapGenBetaCave::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.BETA_1_8.getRegistryKey(), MapGenBeta18Cave::new);
-        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), (chunkSource, settings) -> new MapGenCaves());
+        ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), MapGenCavesExtended::new);
         ModernBetaRegistries.CAVE_CARVER.register(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey(), MapGenNoOp::new);
     }
     
@@ -181,6 +181,8 @@ public class ModernBetaBuiltInRegistries {
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CAVE_CARVER_NONE, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixWorldSpawner));
+        
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_DEFAULT_FLUID, new DataFix(NbtTags.DEFAULT_FLUID, DataFixers::fixDefaultFluid));
     }
 
     @SideOnly(Side.CLIENT)

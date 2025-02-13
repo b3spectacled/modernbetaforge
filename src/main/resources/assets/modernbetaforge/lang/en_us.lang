@@ -79,6 +79,8 @@ createWorld.customize.custom.worldSpawner=World Spawner
 createWorld.customize.custom.biome=Biome
 createWorld.customize.custom.block=Block
 createWorld.customize.custom.entity=Entity
+createWorld.customize.custom.defaultBlock=Default Block
+createWorld.customize.custom.defaultFluid=Default Fluid
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes

@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
 
 public class DataFixers {
@@ -254,6 +255,14 @@ public class DataFixers {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
         
         factory.worldSpawner = WORLD_SPAWNERS.getOrDefault(registryString, ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString());
+    }
+    
+    public static void fixDefaultFluid(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        boolean useLavaOceans = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_LAVA_OCEANS, false);
+        
+        if (useLavaOceans) {
+            factory.defaultFluid = Blocks.LAVA.getRegistryName().toString();
+        }
     }
     
     private static boolean isResourceFormat(String resourceString) {

@@ -24,6 +24,7 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenRavineExtended;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
@@ -40,7 +41,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
@@ -493,7 +493,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             TerrainGen.getModdedMapGen(
                 ModernBetaRegistries.CAVE_CARVER
                     .get(new ResourceLocation(settings.caveCarver))
-                    .apply(this.getChunkSource(), settings),
+                    .apply(this.chunkSource, settings),
                 InitMapGenEvent.EventType.CAVE
             )
         );
@@ -501,7 +501,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         if (settings.useRavines) {
             carverMap.put(
                 new ResourceLocation("ravine"),
-                TerrainGen.getModdedMapGen(new MapGenRavine(), InitMapGenEvent.EventType.RAVINE)
+                TerrainGen.getModdedMapGen(
+                    new MapGenRavineExtended(this.chunkSource, settings),
+                    InitMapGenEvent.EventType.RAVINE
+                )
             );
         }
         

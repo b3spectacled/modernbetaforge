@@ -22,6 +22,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_4_0_0 = 1400;
     private static final int DATA_VERSION_V1_5_0_0 = 1500;
     private static final int DATA_VERSION_V1_5_2_0 = 1520;
+    private static final int DATA_VERSION_V1_6_0_0 = 1600;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -37,245 +38,157 @@ public class ModDataFixers {
      * 
      */
     
-    public static final ModDataFix BIOME_MAP_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_1_0_0;
-            }
+    public static final ModDataFix BIOME_MAP_FIX = createModDataFix(
+        DATA_VERSION_V1_1_0_0,
+        DataFixTags.DESERT_BIOMES,
+        DataFixTags.FOREST_BIOMES,
+        DataFixTags.ICE_DESERT_BIOMES,
+        DataFixTags.PLAINS_BIOMES,
+        DataFixTags.RAINFOREST_BIOMES,
+        DataFixTags.SAVANNA_BIOMES,
+        DataFixTags.SHRUBLAND_BIOMES,
+        DataFixTags.SEASONAL_FOREST_BIOMES,
+        DataFixTags.SWAMPLAND_BIOMES,
+        DataFixTags.TAIGA_BIOMES,
+        DataFixTags.TUNDRA_BIOMES,
+        
+        // Added in 1.3.0.0 to replace fixedBiome
+        DataFixTags.FIX_SINGLE_BIOME,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
+    );
 
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.DESERT_BIOMES,
-                    DataFixTags.FOREST_BIOMES,
-                    DataFixTags.ICE_DESERT_BIOMES,
-                    DataFixTags.PLAINS_BIOMES,
-                    DataFixTags.RAINFOREST_BIOMES,
-                    DataFixTags.SAVANNA_BIOMES,
-                    DataFixTags.SHRUBLAND_BIOMES,
-                    DataFixTags.SEASONAL_FOREST_BIOMES,
-                    DataFixTags.SWAMPLAND_BIOMES,
-                    DataFixTags.TAIGA_BIOMES,
-                    DataFixTags.TUNDRA_BIOMES,
-                    
-                    // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = createModDataFix(
+        DATA_VERSION_V1_2_0_0,
+        DataFixTags.USE_SANDSTONE,
+        DataFixTags.SPAWN_WOLVES,
+        DataFixTags.SURFACE_BUILDER,
+        DataFixTags.FIX_BIOME_DEPTH_SCALE,
+
+        // Added in 1.3.0.0 to replace fixedBiome
+        DataFixTags.FIX_SINGLE_BIOME,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_2_0_0;
-            }
+    public static final ModDataFix SKYLANDS_SURFACE_FIX = createModDataFix(
+        DATA_VERSION_V1_2_2_2,
+        DataFixTags.SURFACE_SKYLANDS,
 
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.USE_SANDSTONE,
-                    DataFixTags.SPAWN_WOLVES,
-                    DataFixTags.SURFACE_BUILDER,
-                    DataFixTags.FIX_BIOME_DEPTH_SCALE,
-
-                    // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+        // Added in 1.3.0.0 to replace fixedBiome
+        DataFixTags.FIX_SINGLE_BIOME,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix SKYLANDS_SURFACE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_2_2_2;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.SURFACE_SKYLANDS,
-
-                    // Added in 1.3.0.0 to replace fixedBiome
-                    DataFixTags.FIX_SINGLE_BIOME,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix SINGLE_BIOME_FIX = createModDataFix(
+        DATA_VERSION_V1_3_0_0,
+        DataFixTags.FIX_SINGLE_BIOME,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix SINGLE_BIOME_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_3_0_0;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_SINGLE_BIOME,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix INDEV_HOUSE_FIX = createModDataFix(
+        DATA_VERSION_V1_3_1_0,
+        DataFixTags.FIX_USE_INDEV_HOUSE,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix INDEV_HOUSE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_3_1_0;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_USE_INDEV_HOUSE,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix RESOURCE_LOCATION_FIX = createModDataFix(
+        DATA_VERSION_V1_4_0_0,
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix RESOURCE_LOCATION_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_4_0_0;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
-                    DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
-                    DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
-                    DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix SCALE_NOISE_FIX = createModDataFix(
+        DATA_VERSION_V1_4_0_0,
+        DataFixTags.FIX_SCALE_NOISE_SCALE_X,
+        DataFixTags.FIX_SCALE_NOISE_SCALE_Z,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID  
     );
     
-    public static final ModDataFix SCALE_NOISE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_4_0_0;
-            }
+    public static final ModDataFix LAYER_SIZE_FIX = createModDataFix(
+        DATA_VERSION_V1_5_0_0,
+        DataFixTags.FIX_LAYER_SIZE,
+        
+        // Added in 1.5.2.0 to replace useCaves
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
+    );
 
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_SCALE_NOISE_SCALE_X,
-                    DataFixTags.FIX_SCALE_NOISE_SCALE_Z,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
+    public static final ModDataFix CAVE_CARVER_NONE_FIX = createModDataFix(
+        DATA_VERSION_V1_5_2_0,
+        DataFixTags.FIX_CAVE_CARVER_NONE,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
+    );
+
+    public static final ModDataFix SPAWN_LOCATOR_FIX = createModDataFix(
+        DATA_VERSION_V1_5_2_0,
+        DataFixTags.FIX_WORLD_SPAWNER,
+        
+        // Added in 1.6.0.0 to replace useLavaOceans
+        DataFixTags.FIX_DEFAULT_FLUID
+    );
+
+    public static final ModDataFix DEFAULT_FLUID_FIX = createModDataFix(
+        DATA_VERSION_V1_6_0_0,
+        DataFixTags.FIX_DEFAULT_FLUID
     );
     
-    public static final ModDataFix LAYER_SIZE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_5_0_0;
-            }
+    private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {
+        return new ModDataFix(
+            FixTypes.LEVEL,
+            new IFixableData() {
+                @Override
+                public int getFixVersion() {
+                    return fixVersion;
+                }
 
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_LAYER_SIZE,
-                    
-                    // Added in 1.5.2.0 to replace useCaves
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
+                @Override
+                public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
+                    return fixGeneratorSettings(compound, Arrays.asList(dataFixTags), this.getFixVersion());
+                }
             }
-        }
-    );
-    
-    public static final ModDataFix CAVE_CARVER_NONE_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_5_2_0;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_CAVE_CARVER_NONE
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
-    );
-    
-    public static final ModDataFix SPAWN_LOCATOR_FIX = new ModDataFix(
-        FixTypes.LEVEL,
-        new IFixableData() {
-            @Override
-            public int getFixVersion() {
-                return DATA_VERSION_V1_5_2_0;
-            }
-
-            @Override
-            public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                List<ResourceLocation> registryKeys = Arrays.asList(
-                    DataFixTags.FIX_WORLD_SPAWNER
-                );
-                
-                return fixGeneratorSettings(compound, registryKeys, this.getFixVersion());
-            }
-        }
-    );
+        );
+    }
     
     private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys, int fixVersion) {
         String worldName = getWorldName(compound);
