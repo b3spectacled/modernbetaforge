@@ -52,10 +52,14 @@ import mod.bespectacled.modernbetaforge.world.spawn.FarLandsWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.NoOpWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.PEWorldSpawner;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.MapGenCaves;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -123,6 +127,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.NONE.getRegistryKey(), new NoOpWorldSpawner());
     }
     
+    @SuppressWarnings("deprecation")
     public static void registerProperties() {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("booleanProp"), new BooleanProperty(true));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("intProp"), new IntProperty(4, -50, 500, PropertyGuiType.SLIDER));
@@ -134,6 +139,13 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty(Biomes.PLAINS.getRegistryName()));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp2"), new BiomeProperty(ModernBetaBiomeHolders.ALPHA.getRegistryName()));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistries.BLOCKS.getValue(key) instanceof BlockStaticLiquid));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("solidProp"), new BlockProperty(Blocks.STONE.getRegistryName(), key -> {
+            Block block = ForgeRegistries.BLOCKS.getValue(key);
+            Material material = block.getMaterial(block.getDefaultState());
+            
+            return material != null && material.equals(Material.ROCK) && material.isOpaque() && material.isSolid();
+        }));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
     }
     

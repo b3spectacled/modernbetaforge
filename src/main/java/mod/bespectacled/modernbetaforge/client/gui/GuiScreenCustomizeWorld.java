@@ -68,7 +68,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -2187,18 +2186,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
+        this.openBiomeScreen(consumer, initial, key -> true);
+    }
+    
+    private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BIOMES.getValue(key).getBiomeName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES, predicate)));
     }
     
-    private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
+    private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
     }
     
-    private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
+    private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.ENTITIES.getValue(key).getName();
-        Predicate<ResourceLocation> predicate = key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass());
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "entity", ForgeRegistryUtil.getKeys(ForgeRegistries.ENTITIES, predicate)));
     }
     
@@ -2450,7 +2452,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public void visit(BiomeProperty property, int guiIdentifier, ResourceLocation registryKey) {
             GuiScreenCustomizeWorld.this.openBiomeScreen(
                 (str, factory) -> ((BiomeProperty)factory.customProperties.get(registryKey)).setValue(str),
-                property.getValue()
+                property.getValue(),
+                property.getFilter()::test
             );
         }
 
@@ -2458,7 +2461,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public void visit(BlockProperty property, int guiIdentifier, ResourceLocation registryKey) {
             GuiScreenCustomizeWorld.this.openBlockScreen(
                 (str, factory) -> ((BlockProperty)factory.customProperties.get(registryKey)).setValue(str),
-                property.getValue()
+                property.getValue(),
+                property.getFilter()::test
             );
         }
 
@@ -2466,7 +2470,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public void visit(EntityEntryProperty property, int guiIdentifier, ResourceLocation registryKey) {
             GuiScreenCustomizeWorld.this.openEntityScreen(
                 (str, factory) -> ((EntityEntryProperty)factory.customProperties.get(registryKey)).setValue(str),
-                property.getValue()
+                property.getValue(),
+                property.getFilter()::test
             );
         };
         

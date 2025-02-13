@@ -331,4 +331,6 @@ createWorld.customize.custom.modernbetaforge.listprop=List Prop
 createWorld.customize.custom.modernbetaforge.biomeprop=Biome Prop
 createWorld.customize.custom.modernbetaforge.biomeprop2=Biome Prop 2
 createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
+createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
+createWorld.customize.custom.modernbetaforge.solidprop=Solid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop

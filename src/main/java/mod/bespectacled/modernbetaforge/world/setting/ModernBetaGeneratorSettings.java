@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.world.setting;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.apache.logging.log4j.Level;
 
@@ -2189,22 +2190,25 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value), predicate));
         }
 
         @Override
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value), predicate));
         }
 
         @Override
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value), predicate));
         }
 
     }
@@ -2254,22 +2258,25 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value), predicate));
         }
 
         @Override
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value), predicate));
         }
 
         @Override
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value)));
+            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value), predicate));
         }
 
     }
