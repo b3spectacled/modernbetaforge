@@ -181,7 +181,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
                         block = Blocks.DIRT;
                      
                     if (y <= stoneThreshold)
-                        block = Blocks.STONE;
+                        block = this.defaultBlock.getBlock();
 
                     this.setLevelBlock(x, y, z, block);
                 }

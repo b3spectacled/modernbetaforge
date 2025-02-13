@@ -258,7 +258,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                         block = Blocks.DIRT;
                      
                     if (y <= stoneThreshold)
-                        block = Blocks.STONE;
+                        block = this.defaultBlock.getBlock();
                      
                     if (this.levelType == IndevType.FLOATING && y < roundedHeight)
                         block = Blocks.AIR;
