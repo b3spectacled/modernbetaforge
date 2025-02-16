@@ -15,13 +15,14 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuil
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -38,6 +39,8 @@ public class DrawUtil {
         STONE(COLOR_STONE, true),
         TERRACOTTA(COLOR_TERRACOTTA, true),
         MYCELIUM(COLOR_MYCELIUM, true),
+        NETHER(COLOR_NETHER, true),
+        SOUL_SAND(COLOR_SOUL_SAND, true),
         WATER(COLOR_WATER),
         FIRE(COLOR_FIRE),
         ICE(COLOR_ICE),
@@ -67,6 +70,8 @@ public class DrawUtil {
     private static final int COLOR_STONE = MathUtil.convertARGBComponentsToInt(255, 112, 112, 112);
     private static final int COLOR_TERRACOTTA = MathUtil.convertARGBComponentsToInt(255, 216, 127, 51);
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
+    private static final int COLOR_NETHER = MathUtil.convertARGBComponentsToInt(255, 112, 2, 0);
+    private static final int COLOR_SOUL_SAND = MathUtil.convertARGBComponentsToInt(255, 102, 76, 51);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
     public static BufferedImage createTerrainMapForPreview(
@@ -177,7 +182,7 @@ public class DrawUtil {
         
         IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
         
-        return new BiomeInjectionContext(new BlockPos(x, height, z), BlockStates.STONE, stateAbove, biome);
+        return new BiomeInjectionContext(new BlockPos(x, height, z), chunkSource.getDefaultBlock(), stateAbove, biome);
     }
     
     private static Vector4f scale(Vector4f vector, float factor) {
@@ -192,6 +197,9 @@ public class DrawUtil {
     
     private static TerrainType getBaseTerrainType(ChunkSource chunkSource, SurfaceBuilder surfaceBuilder, int x, int z, int height, Biome biome, Random random) {
         TerrainType terrainType = TerrainType.GRASS;
+        TerrainType defaultBlock = getTerrainTypeByStone(chunkSource);
+        TerrainType defaultFluid = getTerrainTypeByFluid(chunkSource);
+        boolean isNether = BiomeDictionary.hasType(biome, Type.NETHER);
         
         if (chunkSource instanceof FiniteChunkSource) {
             FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
@@ -213,11 +221,11 @@ public class DrawUtil {
                 }
                 
                 if (blockAbove == Blocks.WATER) {
-                    terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
+                    terrainType = defaultFluid;
                 }
                 
             } else if (height < chunkSource.getSeaLevel() - 1) {
-                terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
+                terrainType = defaultFluid;
             }
             
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
@@ -228,30 +236,33 @@ public class DrawUtil {
             int surfaceDepth = noiseSurfaceBuilder.sampleSurfaceDepth(x, z, random);
             
             if (noiseSurfaceBuilder.isBasin(surfaceDepth)) {
-                terrainType = TerrainType.STONE;
+                terrainType = defaultBlock;
                 
             } else if (noiseSurfaceBuilder.atBeachDepth(height)) {
                 if (isGravelBeach) {
                     terrainType = TerrainType.STONE;
-                    height--;
+                    
+                    if (!isNether) {
+                        height--;
+                    }
                 }
                 
                 if (isBeach) {
-                    terrainType = TerrainType.SAND;
+                    terrainType = isNether ? TerrainType.SOUL_SAND : TerrainType.SAND;
                     
                     // Undo above height change if no gravel beaches
-                    if (isGravelBeach) {
+                    if (isGravelBeach && !isNether) {
                         height++;
                     }
                 }
             }
             
             if (height < chunkSource.getSeaLevel() - 1) {
-                terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
+                terrainType = defaultFluid;
             }
             
         } else if (height < chunkSource.getSeaLevel() - 1) {
-            terrainType = getTerrainTypeByFluid(chunkSource.getGeneratorSettings().defaultFluid);
+            terrainType = defaultFluid;
         }
         
         if (height <= 0) {
@@ -270,6 +281,12 @@ public class DrawUtil {
                 terrainType = TerrainType.TERRACOTTA;
             
             } else if (BiomeDictionary.hasType(biome, Type.SANDY) || BiomeDictionary.hasType(biome, Type.BEACH)) {
+                terrainType = TerrainType.SAND;
+                
+            } else if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+                terrainType = TerrainType.NETHER;
+                
+            } else if (BiomeDictionary.hasType(biome, Type.END)) {
                 terrainType = TerrainType.SAND;
                 
             }
@@ -294,8 +311,24 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getTerrainTypeByFluid(String defaultFluid) {
-        return defaultFluid.equals(Blocks.LAVA.getRegistryName().toString()) ? TerrainType.FIRE : TerrainType.WATER;
+    private static TerrainType getTerrainTypeByStone(ChunkSource chunkSource) {
+        ResourceLocation defaultBlock = new ResourceLocation(chunkSource.getGeneratorSettings().defaultBlock);
+        
+        if (defaultBlock.equals(Blocks.NETHERRACK.getRegistryName())) {
+            return TerrainType.NETHER;
+            
+        } else if (defaultBlock.equals(Blocks.END_STONE.getRegistryName())) {
+            return TerrainType.SAND;
+            
+        }
+        
+        return TerrainType.STONE;
+    }
+
+    private static TerrainType getTerrainTypeByFluid(ChunkSource chunkSource) {
+        ResourceLocation defaultFluid = new ResourceLocation(chunkSource.getGeneratorSettings().defaultFluid);
+        
+        return defaultFluid.equals(Blocks.LAVA.getRegistryName()) ? TerrainType.FIRE : TerrainType.WATER;
     }
     
     private static boolean canFreeze(BlockPos blockPos, Biome biome, BiomeSource biomeSource, int seaLevel) {
@@ -310,7 +343,7 @@ public class DrawUtil {
             
             canFreeze = temp < 0.5;
             
-        } else if (biome instanceof BiomeBeta) {
+        } else if (biome instanceof BiomeBetaSky) {
             double temp = biome.getDefaultTemperature();
             temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
             

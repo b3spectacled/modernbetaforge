@@ -226,15 +226,8 @@ createWorld.customize.custom.layerType.islands=Islands
 createWorld.customize.custom.layerType.small_islands=Small Islands
 createWorld.customize.custom.layerType.pangaea=Pangaea
 
-# Single Biome Customization
-createWorld.customize.custom.biomes.title=Customize Biome
-createWorld.customize.biomes.select=Use Biome
-createWorld.customize.biomes.reset=Reset
-createWorld.customize.biomes.search=Search
-createWorld.customize.biomes.search.info=Search by name or registry name..
-
 # Registry Customization
-createWorld.customize.custom.registry.title=Customize
+createWorld.customize.custom.registry.title=Select
 createWorld.customize.registry.select=Use
 createWorld.customize.registry.reset=Reset
 createWorld.customize.registry.search=Search
