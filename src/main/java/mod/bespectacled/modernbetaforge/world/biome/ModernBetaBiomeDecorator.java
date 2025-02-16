@@ -33,6 +33,10 @@ import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
+    private static final WorldGenerator WORLD_GEN_WATER_LAKES = new WorldGenLakes(Blocks.WATER);
+    private static final WorldGenerator WORLD_GEN_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
+    private static final WorldGenerator WORLD_GEN_DUNGEONS = new WorldGenDungeons();
+    
     private final WorldGenerator worldGenWaterfall = new WorldGenLiquids(Blocks.FLOWING_WATER);
     private final WorldGenerator worldGenLavafall = new WorldGenLiquids(Blocks.FLOWING_LAVA);
     
@@ -307,7 +311,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(settings.height);
             int z = startZ + random.nextInt(16) + 8;
             
-            (new WorldGenLakes(Blocks.WATER)).generate(world, random, mutablePos.setPos(x, y, z));
+            WORLD_GEN_WATER_LAKES.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
@@ -321,7 +325,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int z = startZ + random.nextInt(16) + 8;
             
             if (y < 64 || random.nextInt(10) == 0) {
-                (new WorldGenLakes(Blocks.LAVA)).generate(world, random, mutablePos.setPos(x, y, z));
+                WORLD_GEN_LAVA_LAKES.generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
     }
@@ -335,7 +339,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(settings.height);
             int z = startZ + random.nextInt(16) + 8;
             
-            new WorldGenDungeons().generate(world, random, mutablePos.setPos(x, y, z));
+            WORLD_GEN_DUNGEONS.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
