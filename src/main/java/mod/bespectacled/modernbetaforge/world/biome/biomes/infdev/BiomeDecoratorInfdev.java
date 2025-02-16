@@ -24,7 +24,7 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
     
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
-        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
         int startX = startPos.getX();

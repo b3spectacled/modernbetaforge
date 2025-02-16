@@ -58,7 +58,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     protected abstract int getTreeCount(World world, Random random, Biome biome, BlockPos startPos);
     
     protected void populateOres(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos) {
-        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         
         // Ore generators
         this.worldGenClay = new WorldGenClay(settings.claySize);

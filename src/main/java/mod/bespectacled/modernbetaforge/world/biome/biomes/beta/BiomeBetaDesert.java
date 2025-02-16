@@ -44,8 +44,8 @@ public class BiomeBetaDesert extends BiomeBeta {
     @Override
     public void decorate(World world, Random random, BlockPos startPos) {
         super.decorate(world, random, startPos);
-        
-        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(world.getWorldInfo().getGeneratorOptions());
+
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         ChunkPos chunkPos = new ChunkPos(startPos);
         
         if (settings.useDesertWells && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DESERT_WELL) && random.nextInt(1000) == 0) {

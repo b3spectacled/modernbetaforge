@@ -39,6 +39,7 @@ import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
@@ -49,6 +50,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -2171,6 +2174,16 @@ public class ModernBetaGeneratorSettings {
     
     public static ModernBetaGeneratorSettings build(String generatorSettings) {
         return ModernBetaGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
+    }
+    
+    public static ModernBetaGeneratorSettings buildOrGet(World world) {
+        if (world instanceof WorldServer && ((WorldServer)world).getChunkProvider().chunkGenerator instanceof ModernBetaChunkGenerator) {
+            ModernBetaChunkGenerator chunkGenerator = (ModernBetaChunkGenerator)((WorldServer)world).getChunkProvider().chunkGenerator;
+
+            return chunkGenerator.getGeneratorSettings();
+        }
+        
+        return build(world.getWorldInfo().getGeneratorOptions());
     }
     
     private static class NewFactoryPropertyVisitor implements FactoryPropertyVisitor {
