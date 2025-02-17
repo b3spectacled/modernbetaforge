@@ -33,6 +33,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSetting
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Classic23aChunkSource;
+import mod.bespectacled.modernbetaforge.world.chunk.source.EndChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.IndevChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev227ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev415ChunkSource;
@@ -77,6 +78,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryKey(), Classic23aChunkSource::new);
         ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(), PEChunkSource::new);
         ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(), ReleaseChunkSource::new);
+        ModernBetaRegistries.CHUNK_SOURCE.register(ModernBetaBuiltInTypes.Chunk.END.getRegistryKey(), EndChunkSource::new);
     }
     
     public static void registerBiomeSources() {
@@ -97,6 +99,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.NOISE_SETTING.register(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryKey(), ModernBetaNoiseSettings.INFDEV_415);
         ModernBetaRegistries.NOISE_SETTING.register(ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(), ModernBetaNoiseSettings.PE);
         ModernBetaRegistries.NOISE_SETTING.register(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryKey(), ModernBetaNoiseSettings.RELEASE);
+        ModernBetaRegistries.NOISE_SETTING.register(ModernBetaBuiltInTypes.Chunk.END.getRegistryKey(), ModernBetaNoiseSettings.END);
     }
     
     public static void registerSurfaceBuilders() {
@@ -199,6 +202,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("classic_0_0_23a"), GuiCustomizePresets.PRESET_CLASSIC_0_0_23A);
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("classic_skylands"), GuiCustomizePresets.PRESET_CLASSIC_SKYLANDS);
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("beta_skylands"), GuiCustomizePresets.PRESET_BETA_SKYLANDS);
+        ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("beta_end"), GuiCustomizePresets.PRESET_BETA_END);
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("beta_pe"), GuiCustomizePresets.PRESET_BETA_PE);
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("beta_realistic"), GuiCustomizePresets.PRESET_BETA_REALISTIC);
         ModernBetaClientRegistries.GUI_PRESET.register(ModernBeta.createRegistryKey("beta_plus"), GuiCustomizePresets.PRESET_BETA_PLUS);

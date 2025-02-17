@@ -1,6 +1,5 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +22,6 @@ import mod.bespectacled.modernbetaforge.util.chunk.DensityChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
-import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.StructureWeightSampler;
 import net.minecraft.block.state.IBlockState;
@@ -326,20 +324,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @return A HeightmapChunk, containing an array of ints containing the heights for the entire chunk.
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
-        short minStructureHeight = this instanceof SkylandsChunkSource ? (short)32 : 0;
-        short minHeight = 0;
         short worldMinY = 0;
         short worldHeight = (short)this.worldHeight;
+        short minStructureHeight = 32;
         
         short[] heightmapSurface = new short[256];
         short[] heightmapOcean = new short[256];
         short[] heightmapFloor = new short[256];
         short[] heightmapStructure = new short[256];
-        
-        Arrays.fill(heightmapSurface, minHeight);
-        Arrays.fill(heightmapOcean, minHeight);
-        Arrays.fill(heightmapFloor, worldMinY);
-        Arrays.fill(heightmapStructure, minStructureHeight);
         
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
@@ -360,12 +352,17 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     // Capture topmost solid/fluid block height.
                     if (y < this.getSeaLevel() || isSolid) {
                         heightmapOcean[ndx] = height;
-                        heightmapStructure[ndx] = height;
                     }
                     
                     // Capture topmost solid block height.
                     if (isSolid) {
                         heightmapSurface[ndx] = height;
+                    }
+                    
+                    // Capture structure height at lowest possible solid block height,
+                    // if above a certain height.
+                    if (isSolid && height >= 8) {
+                        heightmapStructure[ndx] = height;
                     }
                     
                     // Capture lowest solid block height.
@@ -379,6 +376,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     
                     if (!isSolid && heightmapFloor[ndx] == worldHeight) {
                         heightmapFloor[ndx] = (short)(height - 1);
+                    }
+                    
+                    // If no solid ground found (i.e. Skylands-style world types),
+                    // then place structure height at 32.
+                    if (height == 0 && heightmapStructure[ndx] == 0) {
+                        heightmapStructure[ndx] = minStructureHeight;
                     }
                 }
             }

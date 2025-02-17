@@ -14,6 +14,7 @@ public class ModernBetaBuiltInTypes {
         INFDEV_611("infdev_611"),
         PE("pe"),
         RELEASE("release"),
+        END("end"),
         INDEV("indev"),
         CLASSIC_0_0_23A("classic_0_0_23a");
         

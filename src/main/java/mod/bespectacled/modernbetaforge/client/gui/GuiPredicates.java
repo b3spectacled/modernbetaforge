@@ -15,10 +15,12 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -34,6 +36,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiPredicates {
     private static final Map<ResourceLocation, List<Integer>> NOISE_SETTINGS = new LinkedHashMap<>();
+    private static final List<Integer> DEFAULT_NOISE_SETTINGS = ImmutableList.of(
+        GuiIdentifiers.PG4_S_MAIN_NS_X,
+        GuiIdentifiers.PG4_S_MAIN_NS_Y,
+        GuiIdentifiers.PG4_S_MAIN_NS_Z,
+        GuiIdentifiers.PG4_S_COORD_SCL,
+        GuiIdentifiers.PG4_S_HEIGH_SCL,
+        GuiIdentifiers.PG4_S_UPPER_LIM,
+        GuiIdentifiers.PG4_S_LOWER_LIM,
+        GuiIdentifiers.PG4_S_HEIGH_LIM
+    );
+    
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     
     public static final GuiPredicate SURFACE_BUILDER_TEST;
@@ -136,6 +149,18 @@ public class GuiPredicates {
     
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
+    private static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(new ResourceLocation(settings.chunkSource)).apply(0L, settings);
+        
+        return clazz.isAssignableFrom(chunkSource.getClass());
+    }
+    
+    private static boolean isBiomeInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
+        
+        return clazz.isAssignableFrom(biomeSource.getClass());
+    }
+    
     private static boolean isChunkEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Chunk type) {
         return settings.chunkSource.equals(type.getRegistryString());
     }
@@ -191,13 +216,18 @@ public class GuiPredicates {
     }
     
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
-        ResourceLocation chunkSource = new ResourceLocation(settings.chunkSource);
+        ResourceLocation registryKey = new ResourceLocation(settings.chunkSource);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings);
         
-        if (!NOISE_SETTINGS.containsKey(chunkSource)) {
+        if (!(chunkSource instanceof NoiseChunkSource)) {
             return false;
         }
         
-        return NOISE_SETTINGS.get(chunkSource).contains(guiId);
+        if (!NOISE_SETTINGS.containsKey(registryKey)) {
+            return DEFAULT_NOISE_SETTINGS.contains(guiId);
+        }
+        
+        return NOISE_SETTINGS.get(registryKey).contains(guiId);
     }
 
     static {
@@ -357,32 +387,34 @@ public class GuiPredicates {
             )
         );
         
+        NOISE_SETTINGS.put(
+            ModernBetaBuiltInTypes.Chunk.END.getRegistryKey(),
+            ImmutableList.of(
+                GuiIdentifiers.PG4_S_MAIN_NS_X,
+                GuiIdentifiers.PG4_S_MAIN_NS_Y,
+                GuiIdentifiers.PG4_S_MAIN_NS_Z,
+                GuiIdentifiers.PG4_S_SCLE_NS_X,
+                GuiIdentifiers.PG4_S_SCLE_NS_Z,
+                GuiIdentifiers.PG4_S_COORD_SCL,
+                GuiIdentifiers.PG4_S_HEIGH_SCL,
+                GuiIdentifiers.PG4_S_UPPER_LIM,
+                GuiIdentifiers.PG4_S_LOWER_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_LIM
+            )
+        );
+        
         SURFACE_BUILDER_TEST = new GuiPredicate(
             settings -> {
-                boolean isSkylands = isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.SKYLANDS);
+                boolean isFloating = isChunkInstanceOf(settings, SkylandsChunkSource.class);
 
-                return !isSkylands && !isFiniteChunk(settings);
+                return !isFloating && !isFiniteChunk(settings);
             },
             GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE
         );
         SPAWN_LOCATOR_TEST = new GuiPredicate(settings -> !isFiniteChunk(settings), GuiIdentifiers.PG0_S_SPAWN, GuiIdentifiers.PG0_B_SPAWN);
         SINGLE_BIOME_TEST = new GuiPredicate(settings -> isSingleBiome(settings), GuiIdentifiers.PG0_B_FIXED);
-        REPLACE_OCEAN_TEST = new GuiPredicate(
-            settings -> {
-                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-    
-                return biomeSource instanceof BiomeResolverOcean;
-            },
-            GuiIdentifiers.PG0_B_USE_OCEAN
-        );
-        REPLACE_BEACH_TEST = new GuiPredicate(
-            settings -> {
-                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-    
-                return biomeSource instanceof BiomeResolverBeach;
-            },
-            GuiIdentifiers.PG0_B_USE_BEACH
-        );
+        REPLACE_OCEAN_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverOcean.class), GuiIdentifiers.PG0_B_USE_OCEAN);
+        REPLACE_BEACH_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverBeach.class), GuiIdentifiers.PG0_B_USE_BEACH);
         SEA_LEVEL_TEST = new GuiPredicate(SURFACE_BUILDER_TEST::test, GuiIdentifiers.PG0_S_SEA_LEVEL);
         CAVE_WIDTH_TEST = new GuiPredicate(settings -> !isCarverEqualTo(settings, ModernBetaBuiltInTypes.Carver.RELEASE) && isCarverEnabled(settings), GuiIdentifiers.PG0_S_CAVE_WIDTH);
         CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
@@ -463,25 +495,11 @@ public class GuiPredicates {
         USE_INFDEV_WALLS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_WALLS);
         USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
         RIVER_SIZE_TEST = new GuiPredicate(
-            settings -> {
-                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-                return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !(biomeSource instanceof NoiseBiomeSource);
-            },
+            settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class),
             GuiIdentifiers.PG1_S_RIVER_SZ
         );
-        LAYER_SIZE_TEST = new GuiPredicate(
-            settings -> {
-                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-                return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !(biomeSource instanceof NoiseBiomeSource);
-            },
-            GuiIdentifiers.PG1_S_LAYER_SZ
-        );
-        LAYER_TYPE_TEST = new GuiPredicate(settings -> {
-            BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-            return isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE)  && !(biomeSource instanceof NoiseBiomeSource);
-            },
-            GuiIdentifiers.PG1_S_LAYER_TYPE
-        );
+        LAYER_SIZE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test, GuiIdentifiers.PG1_S_LAYER_SZ);
+        LAYER_TYPE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test,GuiIdentifiers.PG1_S_LAYER_TYPE);
         
         USE_TALL_GRASS_TEST = new GuiPredicate(
             settings -> {
@@ -559,11 +577,7 @@ public class GuiPredicates {
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
         BIOME_SCALE_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_OF), GuiIdentifiers.PG4_S_B_SCLE_OF, GuiIdentifiers.PG5_F_B_SCLE_OF);
         USE_BIOME_DEPTH_SCALE_TEST = new GuiPredicate(
-            settings -> {
-                BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
-                
-                return containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !(biomeSource instanceof NoiseBiomeSource);
-            },
+            settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class),
             GuiIdentifiers.PG4_B_USE_BDS
         );
         
