@@ -59,6 +59,9 @@ public class NbtTags {
     public static final String LAYER_TYPE = "layerType";
     public static final String LAYER_SIZE = "layerSize";
     
+    public static final String END_ISLAND_OFFSET = "endIslandOffset";
+    public static final String END_ISLAND_WEIGHT = "endIslandWeight";
+    
     public static final String CLAY_SIZE = "claySize";
     public static final String CLAY_COUNT = "clayCount";
     public static final String CLAY_MIN_HEIGHT = "clayMinHeight";

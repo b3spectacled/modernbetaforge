@@ -469,7 +469,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
-            createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale)
+            createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
+            null,
+            
+            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page4", "end"),
+            null,
+            createGuiSlider(GuiIdentifiers.PG4_S_END_WT, NbtTags.END_ISLAND_WEIGHT, ModernBetaGeneratorSettings.MIN_END_WEIGHT, ModernBetaGeneratorSettings.MAX_END_WEIGHT, this.settings.endIslandWeight, this),
+            createGuiSlider(GuiIdentifiers.PG4_S_END_OF, NbtTags.END_ISLAND_OFFSET, ModernBetaGeneratorSettings.MIN_END_OFFSET, ModernBetaGeneratorSettings.MAX_END_OFFSET, this.settings.endIslandOffset, this),
         };
         
         GuiPageButtonList.GuiListEntry[] pageNoise1 = {
@@ -520,7 +526,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_WT, I18n.format(PREFIX + NbtTags.BIOME_SCALE_WEIGHT) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_B_SCLE_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_OF, I18n.format(PREFIX + NbtTags.BIOME_SCALE_OFFSET) + ":"),
-            createGuiField(GuiIdentifiers.PG5_F_B_SCLE_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter)
+            createGuiField(GuiIdentifiers.PG5_F_B_SCLE_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
+            
+            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page5", "end"),
+            null,
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_WT, I18n.format(PREFIX + NbtTags.END_ISLAND_WEIGHT) + ":"),
+            createGuiField(GuiIdentifiers.PG5_F_END_WT, String.format("%2.3f", this.settings.endIslandWeight), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OF, I18n.format(PREFIX + NbtTags.END_ISLAND_OFFSET) + ":"),
+            createGuiField(GuiIdentifiers.PG5_F_END_OF, String.format("%2.3f", this.settings.endIslandOffset), this.floatFilter)
         };
         
         GuiPageButtonList.GuiListEntry[] pageClimate = {
@@ -933,13 +946,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeScaleOffset;
                     break;
+                case GuiIdentifiers.PG5_F_END_WT:
+                    this.settings.endIslandWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_END_WEIGHT, ModernBetaGeneratorSettings.MAX_END_WEIGHT);
+                    newEntryValue = this.settings.endIslandWeight;
+                    break;
+                case GuiIdentifiers.PG5_F_END_OF:
+                    this.settings.endIslandOffset = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_END_OFFSET, ModernBetaGeneratorSettings.MAX_END_OFFSET);
+                    newEntryValue = this.settings.endIslandOffset;
+                    break;
             }
 
             if (newEntryValue != entryValue && entryValue != 0.0f) {
                 ((GuiTextField)this.pageList.getComponent(entry)).setText(this.getFormattedValue(entry, newEntryValue));
             }
             
-            if (entry >= GuiIdentifiers.PG5_F_MAIN_NS_X && entry <= GuiIdentifiers.PG5_F_SCLE_NS_Z) {
+            if (entry >= GuiIdentifiers.PG5_F_MAIN_NS_X && entry <= GuiIdentifiers.PG5_FIELD_END) {
                 Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetBackward(entry));
                 if (gui != null) {
                     ((GuiSlider)gui).setSliderValue(newEntryValue, false);
@@ -1300,6 +1321,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG4_S_B_SCLE_OF:
                     this.settings.biomeScaleOffset = roundToThreeDec(entryValue);
                     break;
+                case GuiIdentifiers.PG4_S_END_OF:
+                    this.settings.endIslandOffset = roundToThreeDec(entryValue);
+                    break;
+                case GuiIdentifiers.PG4_S_END_WT:
+                    this.settings.endIslandWeight = roundToThreeDec(entryValue);
+                    break;
                     
                 case GuiIdentifiers.PG0_S_CHUNK:
                     this.settings.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue).toString();
@@ -1554,7 +1581,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
             }
             
-            if (entry >= GuiIdentifiers.PG4_S_MAIN_NS_X && entry <= GuiIdentifiers.PG4_S_SCLE_NS_Z) {
+            if (entry >= GuiIdentifiers.PG4_S_MAIN_NS_X && entry <= GuiIdentifiers.PG4_SLIDER_END) {
                 Gui gui = this.pageList.getComponent(GuiIdentifiers.offsetForward(entry));
                 if (gui != null) {
                     ((GuiTextField)gui).setText(this.getFormattedValue(entry, entryValue));
@@ -1952,6 +1979,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG4_S_B_DPTH_OF:
             case GuiIdentifiers.PG4_S_B_SCLE_WT:
             case GuiIdentifiers.PG4_S_B_SCLE_OF:
+            case GuiIdentifiers.PG4_S_END_WT:
+            case GuiIdentifiers.PG4_S_END_OF:
             
             case GuiIdentifiers.PG5_F_BASE_SIZE:
             case GuiIdentifiers.PG5_F_STRETCH_Y:
@@ -1962,6 +1991,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG5_F_B_DPTH_OF:
             case GuiIdentifiers.PG5_F_B_SCLE_WT:
             case GuiIdentifiers.PG5_F_B_SCLE_OF:
+            case GuiIdentifiers.PG5_F_END_WT:
+            case GuiIdentifiers.PG5_F_END_OF:
                 return String.format("%2.3f", entryValue);
                 
             case GuiIdentifiers.PG0_S_CAVE_WIDTH:

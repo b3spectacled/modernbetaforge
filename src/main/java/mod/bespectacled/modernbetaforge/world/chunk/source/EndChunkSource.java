@@ -24,8 +24,8 @@ public class EndChunkSource extends SkylandsChunkSource {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
-        double endIslandOffset = 100.0;
-        double endIslandWeight = 8.0;
+        double endIslandOffset = this.settings.endIslandOffset;
+        double endIslandWeight = this.settings.endIslandWeight;
         
         double scaleNoiseScaleX = this.settings.scaleNoiseScaleX;
         double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;

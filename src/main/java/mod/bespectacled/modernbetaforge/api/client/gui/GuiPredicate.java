@@ -107,6 +107,9 @@ public class GuiPredicate {
     public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);
     public static final ResourceLocation BEACH_BIOME = createRegistryKey(NbtTags.BEACH_BIOME);
     
+    public static final ResourceLocation END_ISLAND_OFFSET = createRegistryKey(NbtTags.END_ISLAND_OFFSET);
+    public static final ResourceLocation END_ISLAND_WEIGHT = createRegistryKey(NbtTags.END_ISLAND_WEIGHT);
+    
     private Predicate<ModernBetaGeneratorSettings> predicate;
     private final int[] guiIds;
     

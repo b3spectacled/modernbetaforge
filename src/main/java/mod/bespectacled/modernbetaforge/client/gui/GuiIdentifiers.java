@@ -259,11 +259,16 @@ public class GuiIdentifiers {
     public static final int PG4_S_SCLE_NS_X = 523;
     public static final int PG4_S_SCLE_NS_Z = 524;
 
+    public static final int PG4_S_END_OF = 525;
+    public static final int PG4_S_END_WT = 526;
+
+    public static final int PG4_SLIDER_END = 549;
     public static final int PG4_B_USE_BDS = 550;
     
     // Labels
     public static final int PG4_L_BETA_LABL = 1500;
     public static final int PG4_L_RELE_LABL = 1501;
+    public static final int PG4_L_END_LABL = 1502;
     
     /* Page 6 */
     
@@ -293,6 +298,11 @@ public class GuiIdentifiers {
     public static final int PG5_F_SCLE_NS_X = 623;
     public static final int PG5_F_SCLE_NS_Z = 624;
     
+    public static final int PG5_F_END_OF = 625;
+    public static final int PG5_F_END_WT = 626;
+    
+    public static final int PG5_FIELD_END = 649;
+    
     // Labels
     public static final int PG5_L_MAIN_NS_X = 1600;
     public static final int PG5_L_MAIN_NS_Y = 1601;
@@ -320,6 +330,9 @@ public class GuiIdentifiers {
     
     public static final int PG5_L_SCLE_NS_X = 1623;
     public static final int PG5_L_SCLE_NS_Z = 1624;
+    
+    public static final int PG5_L_END_OF = 1625;
+    public static final int PG5_L_END_WT = 1626;
     
     /* Page 7 */
     
