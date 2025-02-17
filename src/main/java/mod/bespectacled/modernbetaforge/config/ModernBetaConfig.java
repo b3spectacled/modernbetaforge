@@ -130,6 +130,12 @@ public class ModernBetaConfig {
         })
         @RequiresMcRestart
         public boolean registerDebugProperties = false;
+        
+        @Comment({
+            "Debug block sources."
+        })
+        @RequiresWorldRestart
+        public boolean debugBlockSources = false;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)

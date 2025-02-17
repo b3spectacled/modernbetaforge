@@ -313,6 +313,7 @@ modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clien
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
+modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
 
 ## Test Properties (For Debug Only!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge
