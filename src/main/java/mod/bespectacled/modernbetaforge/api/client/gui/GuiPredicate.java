@@ -109,6 +109,9 @@ public class GuiPredicate {
     
     public static final ResourceLocation END_ISLAND_OFFSET = createRegistryKey(NbtTags.END_ISLAND_OFFSET);
     public static final ResourceLocation END_ISLAND_WEIGHT = createRegistryKey(NbtTags.END_ISLAND_WEIGHT);
+    public static final ResourceLocation END_OUTER_ISLAND_DISTANCE = createRegistryKey(NbtTags.END_OUTER_ISLAND_DISTANCE);
+    public static final ResourceLocation END_OUTER_ISLAND_OFFSET = createRegistryKey(NbtTags.END_OUTER_ISLAND_OFFSET);
+    public static final ResourceLocation USE_END_OUTER_ISLANDS = createRegistryKey(NbtTags.USE_END_OUTER_ISLANDS);
     
     private Predicate<ModernBetaGeneratorSettings> predicate;
     private final int[] guiIds;

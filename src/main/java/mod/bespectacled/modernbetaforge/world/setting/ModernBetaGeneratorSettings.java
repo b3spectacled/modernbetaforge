@@ -139,6 +139,8 @@ public class ModernBetaGeneratorSettings {
     public static final float MAX_END_OFFSET = 2000.0f;
     public static final float MIN_END_WEIGHT = 1.0f;
     public static final float MAX_END_WEIGHT = 20.0f;
+    public static final int MIN_END_DIST = 0;
+    public static final int MAX_END_DIST = 256;
     
     public final String chunkSource;
     public final String biomeSource;
@@ -185,6 +187,9 @@ public class ModernBetaGeneratorSettings {
     
     public final float endIslandOffset;
     public final float endIslandWeight;
+    public final float endOuterIslandOffset;
+    public final int endOuterIslandDistance;
+    public final boolean useEndOuterIslands;
     
     public final float caveWidth;
     public final int caveHeight;
@@ -410,6 +415,9 @@ public class ModernBetaGeneratorSettings {
         
         this.endIslandOffset = factory.endIslandOffset;
         this.endIslandWeight = factory.endIslandWeight;
+        this.endOuterIslandOffset = factory.endOuterIslandOffset;
+        this.endOuterIslandDistance = factory.endOuterIslandDistance;
+        this.useEndOuterIslands = factory.useEndOuterIslands;
         
         this.caveWidth = factory.caveWidth;
         this.caveHeight = factory.caveHeight;
@@ -698,6 +706,9 @@ public class ModernBetaGeneratorSettings {
         
         public float endIslandOffset;
         public float endIslandWeight;
+        public float endOuterIslandOffset;
+        public int endOuterIslandDistance;
+        public boolean useEndOuterIslands;
         
         public float caveWidth;
         public int caveHeight;
@@ -923,6 +934,9 @@ public class ModernBetaGeneratorSettings {
             
             this.endIslandOffset = 100.0f;
             this.endIslandWeight = 8.0f;
+            this.endOuterIslandOffset = 100.0f;
+            this.endOuterIslandDistance = 64;
+            this.useEndOuterIslands = true;
             
             this.caveWidth = 1.0f;
             this.caveHeight = 128;
@@ -1171,6 +1185,9 @@ public class ModernBetaGeneratorSettings {
                         
                 Float.compare(factory.endIslandOffset, this.endIslandOffset) == 0 &&
                 Float.compare(factory.endIslandWeight, this.endIslandWeight) == 0 &&
+                Float.compare(factory.endOuterIslandOffset, this.endOuterIslandOffset) == 0 &&
+                this.endOuterIslandDistance == factory.endOuterIslandDistance &&
+                this.useEndOuterIslands == factory.useEndOuterIslands &&
 
                 Float.compare(factory.caveWidth, this.caveWidth) == 0 &&
                 this.caveHeight == factory.caveHeight &&
@@ -1400,6 +1417,9 @@ public class ModernBetaGeneratorSettings {
             
             hashCode = 31 * hashCode + ((this.endIslandOffset == 0.0f) ? 0 : Float.floatToIntBits(this.endIslandOffset));
             hashCode = 31 * hashCode + ((this.endIslandWeight == 0.0f) ? 0 : Float.floatToIntBits(this.endIslandWeight));
+            hashCode = 31 * hashCode + ((this.endOuterIslandOffset == 0.0f) ? 0 : Float.floatToIntBits(this.endOuterIslandOffset));
+            hashCode = 31 * hashCode + this.endOuterIslandDistance;
+            hashCode = 31 * hashCode + (this.useEndOuterIslands ? 1 : 0);
 
             hashCode = 31 * hashCode + ((this.caveWidth == 0.0f) ? 0 : Float.floatToIntBits(this.caveWidth));
             hashCode = 31 * hashCode + this.caveHeight;
@@ -1655,6 +1675,9 @@ public class ModernBetaGeneratorSettings {
                 
                 factory.endIslandOffset = JsonUtils.getFloat(jsonObject, NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
                 factory.endIslandWeight = JsonUtils.getFloat(jsonObject, NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);
+                factory.endOuterIslandOffset = JsonUtils.getFloat(jsonObject, NbtTags.END_OUTER_ISLAND_OFFSET, factory.endOuterIslandOffset);
+                factory.endOuterIslandDistance = JsonUtils.getInt(jsonObject, NbtTags.END_OUTER_ISLAND_DISTANCE, factory.endOuterIslandDistance);
+                factory.useEndOuterIslands = JsonUtils.getBoolean(jsonObject, NbtTags.USE_END_OUTER_ISLANDS, factory.useEndOuterIslands);
                 
                 factory.caveWidth = JsonUtils.getFloat(jsonObject, NbtTags.CAVE_WIDTH, factory.caveWidth);
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
@@ -1832,6 +1855,10 @@ public class ModernBetaGeneratorSettings {
                 factory.tundraBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
                 factory.tundraBiomeBeach = JsonUtils.getString(jsonObject, NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
                 
+                /* Compatibility with Vanilla settings */
+                factory.caveCarver = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_CAVES, true) ? factory.caveCarver : ModernBetaBuiltInTypes.Carver.NONE.getRegistryString();
+                factory.defaultFluid = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_LAVA_OCEANS, false) ? Blocks.LAVA.getRegistryName().toString() : factory.defaultFluid;
+                
                 /* Clamp values */
                 
                 factory.coordinateScale = MathHelper.clamp(factory.coordinateScale, MIN_COORD_SCALE, MAX_COORD_SCALE);
@@ -1865,6 +1892,8 @@ public class ModernBetaGeneratorSettings {
                 
                 factory.endIslandOffset = MathHelper.clamp(factory.endIslandOffset, MIN_END_OFFSET, MAX_END_OFFSET);
                 factory.endIslandWeight = MathHelper.clamp(factory.endIslandWeight, MIN_END_WEIGHT, MAX_END_WEIGHT);
+                factory.endOuterIslandOffset = MathHelper.clamp(factory.endOuterIslandOffset, MIN_END_OFFSET, MAX_END_OFFSET);
+                factory.endOuterIslandDistance = MathHelper.clamp(factory.endOuterIslandDistance, MIN_END_DIST, MAX_END_DIST);
                 
                 factory.caveWidth = MathHelper.clamp(factory.caveWidth, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH);
                 factory.caveHeight = MathHelper.clamp(factory.caveHeight, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT);
@@ -2013,6 +2042,9 @@ public class ModernBetaGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
             jsonObject.addProperty(NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);
+            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_OFFSET, factory.endOuterIslandOffset);
+            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_DISTANCE, factory.endOuterIslandDistance);
+            jsonObject.addProperty(NbtTags.USE_END_OUTER_ISLANDS, factory.useEndOuterIslands);
 
             jsonObject.addProperty(NbtTags.CAVE_WIDTH, factory.caveWidth);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);

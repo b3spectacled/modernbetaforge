@@ -145,6 +145,9 @@ public class GuiPredicates {
     public static final GuiPredicate USE_BIOME_DEPTH_SCALE_TEST;
     public static final GuiPredicate END_ISLAND_WEIGHT_TEST;
     public static final GuiPredicate END_ISLAND_OFFSET_TEST;
+    public static final GuiPredicate END_OUTER_ISLAND_DISTANCE_TEST;
+    public static final GuiPredicate END_OUTER_ISLAND_OFFSET_TEST;
+    public static final GuiPredicate USE_END_OUTER_ISLANDS_TEST;
     
     public static final GuiPredicate BASE_BIOME_TEST;
     public static final GuiPredicate OCEAN_BIOME_TEST;
@@ -404,7 +407,10 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_LOWER_LIM,
                 GuiIdentifiers.PG4_S_HEIGH_LIM,
                 GuiIdentifiers.PG4_S_END_WT,
-                GuiIdentifiers.PG4_S_END_OF
+                GuiIdentifiers.PG4_S_END_OF,
+                GuiIdentifiers.PG4_B_USE_END_OUT,
+                GuiIdentifiers.PG4_S_END_OUT_DT,
+                GuiIdentifiers.PG4_S_END_OUT_OF
             )
         );
         
@@ -596,6 +602,9 @@ public class GuiPredicates {
         );
         END_ISLAND_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_WT), GuiIdentifiers.PG4_S_END_WT, GuiIdentifiers.PG5_F_END_WT);
         END_ISLAND_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OF), GuiIdentifiers.PG4_S_END_OF, GuiIdentifiers.PG5_F_END_OF);
+        USE_END_OUTER_ISLANDS_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_END_OUT), GuiIdentifiers.PG4_B_USE_END_OUT);
+        END_OUTER_ISLAND_DISTANCE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OUT_DT) && settings.useEndOuterIslands, GuiIdentifiers.PG4_S_END_OUT_DT, GuiIdentifiers.PG5_F_END_OUT_DT);
+        END_OUTER_ISLAND_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OUT_OF) && settings.useEndOuterIslands, GuiIdentifiers.PG4_S_END_OUT_OF, GuiIdentifiers.PG5_F_END_OUT_OF);
         
         BASE_BIOME_TEST = new GuiPredicate(
             settings -> isBetaOrPEBiomeSource(settings),

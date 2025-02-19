@@ -61,6 +61,9 @@ public class NbtTags {
     
     public static final String END_ISLAND_OFFSET = "endIslandOffset";
     public static final String END_ISLAND_WEIGHT = "endIslandWeight";
+    public static final String END_OUTER_ISLAND_OFFSET = "endOuterIslandOffset";
+    public static final String END_OUTER_ISLAND_DISTANCE = "endOuterIslandDistance";
+    public static final String USE_END_OUTER_ISLANDS = "useEndOuterIslands";
     
     public static final String CLAY_SIZE = "claySize";
     public static final String CLAY_COUNT = "clayCount";

@@ -151,8 +151,11 @@ createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
 createWorld.customize.custom.useBiomeDepthScale=Override Depth/Scale
-createWorld.customize.custom.endIslandOffset=End Island Offset
-createWorld.customize.custom.endIslandWeight=End Island Weight
+createWorld.customize.custom.endIslandOffset=Island Offset
+createWorld.customize.custom.endIslandWeight=Island Weight
+createWorld.customize.custom.endOuterIslandDistance=Outer Island Distance
+createWorld.customize.custom.endOuterIslandOffset=Outer Island Offset
+createWorld.customize.custom.useEndOuterIslands=Use Outer Islands
 
 # Page 7 - World Customization Beta Biomes
 createWorld.customize.custom.desertBiomes=Desert

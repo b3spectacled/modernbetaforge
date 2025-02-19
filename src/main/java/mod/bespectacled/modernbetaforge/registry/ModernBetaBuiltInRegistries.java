@@ -309,6 +309,9 @@ public class ModernBetaBuiltInRegistries {
         
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.END_ISLAND_OFFSET, GuiPredicates.END_ISLAND_OFFSET_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.END_ISLAND_WEIGHT, GuiPredicates.END_ISLAND_WEIGHT_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.END_OUTER_ISLAND_DISTANCE, GuiPredicates.END_OUTER_ISLAND_DISTANCE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.END_OUTER_ISLAND_OFFSET, GuiPredicates.END_OUTER_ISLAND_OFFSET_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_END_OUTER_ISLANDS, GuiPredicates.USE_END_OUTER_ISLANDS_TEST);
         
         // ModernBetaClientRegistries.GUI_PREDICATE.register(ModernBeta.createRegistryKey("biomeProp"), GuiPredicates.DEV_BIOME_PROP_TEST);
     }
