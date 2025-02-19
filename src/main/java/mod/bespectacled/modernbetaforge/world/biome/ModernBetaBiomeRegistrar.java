@@ -42,7 +42,7 @@ public class ModernBetaBiomeRegistrar {
         
         biomeRegistry.register(new BiomeBetaIceDesert(), ModernBetaBiomeTags.BETA_ICE_DESERT, Type.SANDY, Type.SNOWY, Type.COLD, Type.SPARSE);
         biomeRegistry.register(new BiomeBetaTundra(), ModernBetaBiomeTags.BETA_TUNDRA, Type.SNOWY, Type.COLD, Type.SPARSE);
-        biomeRegistry.register(new BiomeBetaSavanna(), ModernBetaBiomeTags.BETA_SAVANNA, Type.PLAINS, Type.SAVANNA, Type.SPARSE, Type.DRY);
+        biomeRegistry.register(new BiomeBetaSavanna(), ModernBetaBiomeTags.BETA_SAVANNA, Type.SAVANNA, Type.SPARSE, Type.DRY);
         biomeRegistry.register(new BiomeBetaDesert(), ModernBetaBiomeTags.BETA_DESERT, Type.SANDY, Type.HOT, Type.SPARSE, Type.DRY);
         biomeRegistry.register(new BiomeBetaSwampland(), ModernBetaBiomeTags.BETA_SWAMPLAND, Type.SWAMP, Type.SPARSE, Type.WET);
         biomeRegistry.register(new BiomeBetaTaiga(), ModernBetaBiomeTags.BETA_TAIGA, Type.SNOWY, Type.COLD, Type.CONIFEROUS);

@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.compat.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
@@ -527,11 +528,20 @@ public class GuiPredicates {
         USE_MELONS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_MELONS);
         USE_DESERT_WELLS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_WELLS);
         USE_FOSSILS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_FOSSILS);
-        USE_BIRCH_TREES_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_BIRCH);
-        USE_PINE_TREES_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_PINE);
-        USE_SWAMP_TREES_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_SWAMP);
-        USE_JUNGLE_TREES_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_JUNGLE);
-        USE_ACACIA_TREES_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_ACACIA);
+        USE_BIRCH_TREES_TEST = new GuiPredicate(
+            settings -> {
+                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+                boolean isFixedBiomeSource = isSingleBiome(settings);
+                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(ModCompat.MOD_DYNAMIC_TREES);
+                
+                return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings));
+            },
+            GuiIdentifiers.PG2_B_USE_BIRCH
+        );
+        USE_PINE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_PINE);
+        USE_SWAMP_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_SWAMP);
+        USE_JUNGLE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_JUNGLE);
+        USE_ACACIA_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_ACACIA);
         SPAWN_NEW_CREATURE_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_CREATURE);
         SPAWN_NEW_MONSTER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_MONSTER);
         SPAWN_WATER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WATER);

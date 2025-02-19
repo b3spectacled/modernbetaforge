@@ -535,13 +535,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private static class ChunkPrimerContainer {
         public final ChunkPrimer chunkPrimer;
         public final Biome[] biomes;
-        
-        /**
-         * Constructs a container that holds a chunk primer and biome array.
-         * 
-         * @param chunkPrimer
-         * @param biomes
-         */
+
         public ChunkPrimerContainer(ChunkPrimer chunkPrimer, Biome[] biomes) {
             this.chunkPrimer = chunkPrimer;
             this.biomes = biomes;

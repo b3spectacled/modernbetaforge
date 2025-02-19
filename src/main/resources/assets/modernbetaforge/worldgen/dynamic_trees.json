@@ -1,0 +1,149 @@
+[
+	{
+		"__comment" : "Default selector",
+		"select": { "name": "modernbetaforge:.*" },
+		"apply": {
+			"cancelvanilla": true,
+			"species" : "oak",
+			"density" : { "math" : { "mul": [ "trees", "noise" ] } },
+			"chance" : "standard"
+		}
+	},
+	{
+		"__comment" : "Default forests",
+		"select": { "type": "forest", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : {
+				"random" : {
+					"oak" : 4,
+					"birch" : 1
+				}
+			},
+			"chance": 1.0,
+			"forestness" : 1.0
+		}
+  },
+  {
+		"__comment" : "Seasonal forests",
+		"select": { "name": "modernbetaforge:.*seasonal_forest.*" },
+		"apply": {
+			"species" : "oak",
+      "chance": 0.5,
+			"forestness" : 0.5
+		}
+	},
+  {
+		"__comment" : "Rainforests",
+		"select": { "type": "jungle", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "oak",
+			"forestness" : 1.0
+		}
+	},
+	{
+		"__comment" : "Deserts",
+		"select": { "type": "sandy", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "cactus",
+			"density" : { "math": { "add" : [ { "mul" : [ "noise", 0.6 ] }, 0.4 ] } },
+			"chance": 0.075
+		}
+	},
+	{
+		"__comment" : "Swamplands",
+		"select": { "type": "swamp", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "oak",
+			"chance": 0.1
+		}
+	},
+	{
+		"__comment" : "Savannas",
+		"select": { "type": "savanna", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "oak",
+			"chance": 0.1
+		}
+	},
+	{
+		"__comment" : "Shrublands",
+		"select": { "type": "plains", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "oak",
+			"chance": 0.1
+		}
+	},
+	{
+		"__comment" : "Plains",
+		"select": { "name": "modernbetaforge:.*plains.*" },
+		"apply": {
+			"species" : "oak",
+			"chance": 0.0
+		}
+	},
+	{
+		"__comment" : "Tundras",
+		"select": { "name": "modernbetaforge:.*tundra.*" },
+		"apply": {
+			"species" : "spruce",
+			"chance": 0.0
+		}
+	},
+	{
+		"__comment" : "Taigas",
+		"select": { "type": "coniferous", "name": "modernbetaforge:.*" },
+		"apply": {
+			"species" : "spruce",
+			"chance": 1.0,
+			"forestness" : 1.0
+		}
+	},
+	{
+		"__comment" : "Beaches",
+		"select": { "name": "modernbetaforge:.*beach.*" },
+		"apply": {
+			"chance": 0.0
+		}
+	},
+	{
+		"__comment" : "Alpha biomes",
+		"select": { "name": "modernbetaforge:.*alpha.*" },
+		"apply": {
+			"species": "oak",
+			"chance": { "math": { "ifgt" : [ "radius", 5, 0.5, 1.0 ] } }
+		}
+	},
+	{
+		"__comment" : "Infdev biomes",
+		"select": { "name": "modernbetaforge:.*infdev.*" },
+		"apply": {
+			"species" : "oak", 
+			"chance": { "math": { "ifgt" : [ "radius", 5, 0.5, 1.0 ] } }
+		}
+	},
+	{
+		"__comment" : "Infdev 227 biome",
+		"select": { "name": "modernbetaforge:infdev_227" },
+		"apply": {
+			"chance": 0.0
+		}
+	},
+	{
+		"__comment" : "Indev biomes",
+		"select": { "name": "modernbetaforge:.*indev.*" },
+		"apply": {
+			"species" : "oak",
+			"chance": 0.33
+		}
+	},
+	{
+		"__comment" : "Indev Woods biome",
+		"select": { "name": "modernbetaforge:indev_woods" },
+		"apply": {
+			"species" : "oak",
+			"density" : { "math": { "div" : [ "noise", 3.0 ] } },
+			"multipass" : true,
+      "chance": 1.0
+		}
+	}
+]

@@ -38,6 +38,7 @@ import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.compat.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
@@ -643,6 +644,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
             pageBasic[pageBasic.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, "page0", "netherIncompatible");
             pageBasic[pageBasic.length - 1] = null;
+        }
+        
+        if (ModCompat.isModLoaded(ModCompat.MOD_DYNAMIC_TREES) && CompatDynamicTrees.isEnabled()) {
+            pageBiome = Arrays.copyOf(pageBiome, pageBiome.length + 2);
+            pageBiome[pageBiome.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_TREES, "page2", "treesIncompatible");
+            pageBiome[pageBiome.length - 1] = null;
         }
         
         GuiPageButtonList.GuiListEntry[][] pages = new GuiPageButtonList.GuiListEntry[][] {

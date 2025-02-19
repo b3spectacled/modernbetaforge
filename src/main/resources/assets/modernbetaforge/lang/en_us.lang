@@ -64,7 +64,7 @@ createWorld.customize.custom.label.page1.release=Release Chunk Settings
 createWorld.customize.custom.label.page2.beta=Beta Biome Feature Settings
 createWorld.customize.custom.label.page2.release=Release Biome Feature Settings
 createWorld.customize.custom.label.page2.mobSpawn=Modern Beta Biome Mob Settings
-createWorld.customize.custom.label.page2.mods=Loaded Mods
+createWorld.customize.custom.label.page2.treesIncompatible=Tree options are incompatible with Dynamic Trees!
 createWorld.customize.custom.label.page4.beta=Beta/Pocket Edition Noise Settings
 createWorld.customize.custom.label.page4.release=Release Noise Settings
 createWorld.customize.custom.label.page5.beta=Beta/Pocket Edition Noise Settings
@@ -296,6 +296,7 @@ modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
 modernbetaforge.general.serveroptions=Server Options
 modernbetaforge.general.debugoptions=Debug Options
+modernbetaforge.general.compatoptions=Mod Compatibility Options
 
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
 modernbetaforge.general.guioptions.defaultpresetfilter=Default World Preset Filter
@@ -321,6 +322,8 @@ modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clien
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
+
+modernbetaforge.general.compatoptions.dynamictrees_usemoderntrees=[Dynamic Trees] Use Modern Trees
 
 ## Test Properties (For Debug Only!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge

@@ -352,19 +352,19 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     // Capture topmost solid/fluid block height.
                     if (y < this.getSeaLevel() || isSolid) {
                         heightmapOcean[ndx] = height;
+                        
+                        // Capture structure height at lowest possible solid block height,
+                        // if above a certain height.
+                        if (height >= 8) {
+                            heightmapStructure[ndx] = height;
+                        }
                     }
                     
                     // Capture topmost solid block height.
                     if (isSolid) {
                         heightmapSurface[ndx] = height;
                     }
-                    
-                    // Capture structure height at lowest possible solid block height,
-                    // if above a certain height.
-                    if (isSolid && height >= 8) {
-                        heightmapStructure[ndx] = height;
-                    }
-                    
+
                     // Capture lowest solid block height.
                     // First, set max world height as flag when hitting first solid layer
                     // then set the actual height value when hitting first non-solid layer.

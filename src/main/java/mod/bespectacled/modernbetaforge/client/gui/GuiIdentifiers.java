@@ -139,6 +139,7 @@ public class GuiIdentifiers {
     public static final int PG2_L_MOBS = 1301;
     public static final int PG2_L_RELEASE = 1302;
     public static final int PG2_L_MODS = 1303;
+    public static final int PG0_L_TREES = 1304;
     
     /* Page 4 */
     

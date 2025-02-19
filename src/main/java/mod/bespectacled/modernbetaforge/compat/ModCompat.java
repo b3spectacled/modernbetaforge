@@ -9,9 +9,10 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraftforge.fml.common.Loader;
 
 public class ModCompat {
-    public static final String MOD_BOP = "biomesoplenty";
-    public static final String MOD_GC = "galacticraftcore";
+    public static final String MOD_BIOMES_O_PLENTY = "biomesoplenty";
+    public static final String MOD_GALACTICRAFT = "galacticraftcore";
     public static final String MOD_NETHER_API = "nether_api";
+    public static final String MOD_DYNAMIC_TREES = "dynamictrees";
     
     public static final Map<String, Compat> LOADED_MODS = new LinkedHashMap<>();
     
@@ -20,9 +21,10 @@ public class ModCompat {
             ModernBeta.log(Level.WARN, "MixinBooter was not found or an alternate mixin loader was installed..");
         }
         
-        loadModCompat(MOD_BOP, new CompatBOP());
-        loadModCompat(MOD_GC, new CompatGC());
+        loadModCompat(MOD_BIOMES_O_PLENTY, new CompatBiomesOPlenty());
+        loadModCompat(MOD_GALACTICRAFT, new CompatGalacticraft());
         loadModCompat(MOD_NETHER_API, new CompatNetherAPI());
+        loadModCompat(MOD_DYNAMIC_TREES, new CompatDynamicTrees());
     }
     
     public static boolean isMixinLoaderLoaded() {

@@ -20,6 +20,7 @@ public class ModernBetaConfig {
     public static CategorySpawn spawnOptions = new CategorySpawn();
     public static CategoryServer serverOptions = new CategoryServer();
     public static CategoryDebug debugOptions = new CategoryDebug();
+    public static CategoryCompat compatOptions = new CategoryCompat();
     
     public static class CategoryGui {
         @Comment({
@@ -136,6 +137,14 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean debugBlockSources = false;
+    }
+    
+    public static class CategoryCompat {
+        @Comment({
+            "Use alternate modern trees config for Beta biomes."
+        })
+        @RequiresMcRestart
+        public boolean dynamictrees_useModernTrees = false;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)
