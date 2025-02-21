@@ -9,7 +9,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuil
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -17,8 +16,9 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class BetaWorldSpawner implements WorldSpawner {
     @Override
     public BlockPos locateSpawn(BlockPos spawnPos, ChunkSource chunkSource, BiomeSource biomeSource) {
-        ResourceLocation surfaceBuilderKey = new ResourceLocation(chunkSource.getGeneratorSettings().surfaceBuilder);
-        SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceBuilderKey).apply(chunkSource, chunkSource.getGeneratorSettings());
+        SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
+            .get(chunkSource.getGeneratorSettings().surfaceBuilder)
+            .apply(chunkSource, chunkSource.getGeneratorSettings());
 
         int x = 0;
         int z = 0;

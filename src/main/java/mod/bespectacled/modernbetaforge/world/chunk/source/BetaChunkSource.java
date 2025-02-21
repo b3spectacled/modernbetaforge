@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.util.ResourceLocation;
 
 public class BetaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise beachOctaveNoise;
@@ -29,7 +28,7 @@ public class BetaChunkSource extends NoiseChunkSource {
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
        
         BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(new ResourceLocation(settings.biomeSource))
+            .get(settings.biomeSource)
             .apply(seed, settings);
         this.climateSampler = biomeSource instanceof ClimateSampler ?
             (ClimateSampler)biomeSource :

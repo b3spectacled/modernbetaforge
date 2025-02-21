@@ -312,7 +312,7 @@ public class DrawUtil {
     }
     
     private static TerrainType getTerrainTypeByStone(ChunkSource chunkSource) {
-        ResourceLocation defaultBlock = new ResourceLocation(chunkSource.getGeneratorSettings().defaultBlock);
+        ResourceLocation defaultBlock = chunkSource.getGeneratorSettings().defaultBlock;
         
         if (defaultBlock.equals(Blocks.NETHERRACK.getRegistryName())) {
             return TerrainType.NETHER;
@@ -326,7 +326,7 @@ public class DrawUtil {
     }
 
     private static TerrainType getTerrainTypeByFluid(ChunkSource chunkSource) {
-        ResourceLocation defaultFluid = new ResourceLocation(chunkSource.getGeneratorSettings().defaultFluid);
+        ResourceLocation defaultFluid = chunkSource.getGeneratorSettings().defaultFluid;
         
         return defaultFluid.equals(Blocks.LAVA.getRegistryName()) ? TerrainType.FIRE : TerrainType.WATER;
     }

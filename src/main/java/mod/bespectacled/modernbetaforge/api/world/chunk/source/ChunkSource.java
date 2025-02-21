@@ -23,7 +23,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -62,8 +61,8 @@ public abstract class ChunkSource {
         this.settings = settings;
         this.random = this.createRandom(seed);
         
-        this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(new ResourceLocation(settings.defaultBlock)).get().getDefaultState();
-        this.defaultFluid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(settings.defaultFluid)).getDefaultState();
+        this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(settings.defaultBlock).get().getDefaultState();
+        this.defaultFluid = ForgeRegistries.BLOCKS.getValue(settings.defaultFluid).getDefaultState();
         
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
@@ -172,7 +171,7 @@ public abstract class ChunkSource {
      * @return The world spawner, {@link WorldSpawner#DEFAULT} by default. 
      */
     public WorldSpawner getWorldSpawner() {
-        return ModernBetaRegistries.WORLD_SPAWNER.getOrElse(new ResourceLocation(this.settings.worldSpawner), WorldSpawner.DEFAULT);
+        return ModernBetaRegistries.WORLD_SPAWNER.getOrElse(this.settings.worldSpawner, WorldSpawner.DEFAULT);
     }
     
     /**

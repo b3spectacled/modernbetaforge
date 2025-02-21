@@ -56,15 +56,10 @@ public class DebugInfoEventHandler {
                 ChunkSource chunkSource = ((ModernBetaChunkGenerator)chunkGenerator).getChunkSource();
                 ModernBetaGeneratorSettings settings = chunkSource.getGeneratorSettings();
                 
-                String chunkKey = settings.chunkSource;
-                String biomeKey = settings.biomeSource;
-                String surfaceKey = settings.surfaceBuilder;
-                String carverKey = settings.caveCarver;
-                
-                String chunkText = String.format("[Modern Beta] Chunk Source: %s", chunkKey);
-                String biomeText = String.format("[Modern Beta] Biome Source: %s", biomeKey);
-                String surfaceText = String.format("[Modern Beta] Surface Builder: %s", surfaceKey);
-                String carverText = String.format("[Modern Beta] Cave Carver: %s", carverKey);
+                String chunkText = String.format("[Modern Beta] Chunk Source: %s", settings.chunkSource);
+                String biomeText = String.format("[Modern Beta] Biome Source: %s", settings.biomeSource);
+                String surfaceText = String.format("[Modern Beta] Surface Builder: %s", settings.surfaceBuilder);
+                String carverText = String.format("[Modern Beta] Cave Carver: %s", settings.caveCarver);
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 addDebugText(event, chunkText);

@@ -8,7 +8,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class FarLandsWorldSpawner implements WorldSpawner {
@@ -18,8 +17,7 @@ public class FarLandsWorldSpawner implements WorldSpawner {
             return WorldSpawner.DEFAULT.locateSpawn(spawnPos, chunkSource, biomeSource);
         }
 
-        ResourceLocation noiseSettingsKey = new ResourceLocation(chunkSource.getGeneratorSettings().chunkSource);
-        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(noiseSettingsKey);
+        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(chunkSource.getGeneratorSettings().chunkSource);
         Random random = new Random();
         
         double coordinateScale = chunkSource.getGeneratorSettings().coordinateScale;

@@ -16,7 +16,6 @@ import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
@@ -37,7 +36,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             ModernBetaGeneratorSettings.build();
 
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(new ResourceLocation(this.settings.biomeSource))
+            .get(this.settings.biomeSource)
             .apply(worldInfo.getSeed(), this.settings);
         this.biomeCache = new ChunkCache<BiomeChunk>(
             "biomes",

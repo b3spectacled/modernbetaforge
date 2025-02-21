@@ -63,10 +63,20 @@ public class ForgeRegistryUtil<T> {
         return getKeys(registry, e -> true);
     }
     
+    public static Fluid getFluid(ResourceLocation registryKey) {
+        return FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .filter(f -> f.getBlock() != null && f.getBlock().getRegistryName().equals(registryKey))
+            .findFirst()
+            .orElse(FluidRegistry.WATER);
+    }
+    
     public static List<Block> getFluidBlocks() {
         return FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
+            .filter(f -> f.getBlock() != null)
             .map(f -> f.getBlock())
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -75,6 +85,7 @@ public class ForgeRegistryUtil<T> {
         return FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
+            .filter(f -> f.getBlock() != null)
             .map(f -> f.getBlock().getRegistryName())
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -83,6 +94,7 @@ public class ForgeRegistryUtil<T> {
         return FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
+            .filter(f -> f.getBlock() != null)
             .map(f -> f.getLocalizedName(new FluidStack(f, 0)))
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -91,6 +103,7 @@ public class ForgeRegistryUtil<T> {
         Optional<Fluid> fluid = FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
+            .filter(f -> f.getBlock() != null)
             .filter(f -> f.getBlock().getRegistryName().equals(blockKey))
             .findFirst();
             
@@ -105,6 +118,7 @@ public class ForgeRegistryUtil<T> {
         return FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
+            .filter(f -> f.getBlock() != null)
             .anyMatch(f -> f.getBlock() == block);
     }
     

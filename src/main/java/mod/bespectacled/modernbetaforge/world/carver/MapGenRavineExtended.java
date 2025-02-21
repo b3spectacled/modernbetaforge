@@ -3,6 +3,9 @@ package mod.bespectacled.modernbetaforge.world.carver;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -21,7 +24,9 @@ public class MapGenRavineExtended extends MapGenRavine {
         this.defaultFluids.add(chunkSource.getDefaultFluid().getBlock());
         try {
             this.defaultFluids.add(BlockLiquid.getFlowingBlock(chunkSource.getDefaultFluid().getMaterial()));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            ModernBeta.log(Level.DEBUG, "Ravine carver fluid is not flowable!");
+        }
     }
     
     @Override

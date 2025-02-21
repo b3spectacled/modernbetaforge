@@ -125,15 +125,15 @@ public class ModernBetaGeneratorSettings {
     public static final int MIN_END_DIST = 0;
     public static final int MAX_END_DIST = 256;
     
-    public final String chunkSource;
-    public final String biomeSource;
-    public final String surfaceBuilder;
-    public final String caveCarver;
-    public final String worldSpawner;
+    public final ResourceLocation chunkSource;
+    public final ResourceLocation biomeSource;
+    public final ResourceLocation surfaceBuilder;
+    public final ResourceLocation caveCarver;
+    public final ResourceLocation worldSpawner;
     
-    public final String singleBiome;
-    public final String defaultBlock;
-    public final String defaultFluid;
+    public final ResourceLocation singleBiome;
+    public final ResourceLocation defaultBlock;
+    public final ResourceLocation defaultFluid;
     
     public final boolean replaceOceanBiomes;
     public final boolean replaceBeachBiomes;
@@ -306,62 +306,62 @@ public class ModernBetaGeneratorSettings {
     
     public final boolean useModdedBiomes;
     
-    public final String desertBiomeBase;
-    public final String desertBiomeOcean;
-    public final String desertBiomeBeach;
+    public final ResourceLocation desertBiomeBase;
+    public final ResourceLocation desertBiomeOcean;
+    public final ResourceLocation desertBiomeBeach;
     
-    public final String forestBiomeBase;
-    public final String forestBiomeOcean;
-    public final String forestBiomeBeach;
+    public final ResourceLocation forestBiomeBase;
+    public final ResourceLocation forestBiomeOcean;
+    public final ResourceLocation forestBiomeBeach;
     
-    public final String iceDesertBiomeBase;
-    public final String iceDesertBiomeOcean;
-    public final String iceDesertBiomeBeach;
+    public final ResourceLocation iceDesertBiomeBase;
+    public final ResourceLocation iceDesertBiomeOcean;
+    public final ResourceLocation iceDesertBiomeBeach;
     
-    public final String plainsBiomeBase;
-    public final String plainsBiomeOcean;
-    public final String plainsBiomeBeach;
+    public final ResourceLocation plainsBiomeBase;
+    public final ResourceLocation plainsBiomeOcean;
+    public final ResourceLocation plainsBiomeBeach;
     
-    public final String rainforestBiomeBase;
-    public final String rainforestBiomeOcean;
-    public final String rainforestBiomeBeach;
+    public final ResourceLocation rainforestBiomeBase;
+    public final ResourceLocation rainforestBiomeOcean;
+    public final ResourceLocation rainforestBiomeBeach;
     
-    public final String savannaBiomeBase;
-    public final String savannaBiomeOcean;
-    public final String savannaBiomeBeach;
+    public final ResourceLocation savannaBiomeBase;
+    public final ResourceLocation savannaBiomeOcean;
+    public final ResourceLocation savannaBiomeBeach;
     
-    public final String shrublandBiomeBase;
-    public final String shrublandBiomeOcean;
-    public final String shrublandBiomeBeach;
+    public final ResourceLocation shrublandBiomeBase;
+    public final ResourceLocation shrublandBiomeOcean;
+    public final ResourceLocation shrublandBiomeBeach;
     
-    public final String seasonalForestBiomeBase;
-    public final String seasonalForestBiomeOcean;
-    public final String seasonalForestBiomeBeach;
+    public final ResourceLocation seasonalForestBiomeBase;
+    public final ResourceLocation seasonalForestBiomeOcean;
+    public final ResourceLocation seasonalForestBiomeBeach;
     
-    public final String swamplandBiomeBase;
-    public final String swamplandBiomeOcean;
-    public final String swamplandBiomeBeach;
+    public final ResourceLocation swamplandBiomeBase;
+    public final ResourceLocation swamplandBiomeOcean;
+    public final ResourceLocation swamplandBiomeBeach;
     
-    public final String taigaBiomeBase;
-    public final String taigaBiomeOcean;
-    public final String taigaBiomeBeach;
+    public final ResourceLocation taigaBiomeBase;
+    public final ResourceLocation taigaBiomeOcean;
+    public final ResourceLocation taigaBiomeBeach;
     
-    public final String tundraBiomeBase;
-    public final String tundraBiomeOcean;
-    public final String tundraBiomeBeach;
+    public final ResourceLocation tundraBiomeBase;
+    public final ResourceLocation tundraBiomeOcean;
+    public final ResourceLocation tundraBiomeBeach;
     
     private final Map<ResourceLocation, Property<?>> customProperties;
     
     private ModernBetaGeneratorSettings(Factory factory) {
-        this.chunkSource = factory.chunkSource;
-        this.biomeSource = factory.biomeSource;
-        this.surfaceBuilder = factory.surfaceBuilder;
-        this.caveCarver = factory.caveCarver;
-        this.worldSpawner = factory.worldSpawner;
+        this.chunkSource = new ResourceLocation(factory.chunkSource);
+        this.biomeSource = new ResourceLocation(factory.biomeSource);
+        this.surfaceBuilder = new ResourceLocation(factory.surfaceBuilder);
+        this.caveCarver = new ResourceLocation(factory.caveCarver);
+        this.worldSpawner = new ResourceLocation(factory.worldSpawner);
         
-        this.singleBiome = factory.singleBiome;
-        this.defaultBlock = factory.defaultBlock;
-        this.defaultFluid = factory.defaultFluid;
+        this.singleBiome = new ResourceLocation(factory.singleBiome);
+        this.defaultBlock = new ResourceLocation(factory.defaultBlock);
+        this.defaultFluid = new ResourceLocation(factory.defaultFluid);
         
         this.replaceOceanBiomes = factory.replaceOceanBiomes;
         this.replaceBeachBiomes = factory.replaceBeachBiomes;
@@ -534,49 +534,49 @@ public class ModernBetaGeneratorSettings {
         
         this.useModdedBiomes = factory.useModdedBiomes;
         
-        this.desertBiomeBase = factory.desertBiomeBase;
-        this.desertBiomeOcean = factory.desertBiomeOcean;
-        this.desertBiomeBeach = factory.desertBiomeBeach;
+        this.desertBiomeBase = new ResourceLocation(factory.desertBiomeBase);
+        this.desertBiomeOcean = new ResourceLocation(factory.desertBiomeOcean);
+        this.desertBiomeBeach = new ResourceLocation(factory.desertBiomeBeach);
         
-        this.forestBiomeBase = factory.forestBiomeBase;
-        this.forestBiomeOcean = factory.forestBiomeOcean;
-        this.forestBiomeBeach = factory.forestBiomeBeach;
+        this.forestBiomeBase = new ResourceLocation(factory.forestBiomeBase);
+        this.forestBiomeOcean = new ResourceLocation(factory.forestBiomeOcean);
+        this.forestBiomeBeach = new ResourceLocation(factory.forestBiomeBeach);
         
-        this.iceDesertBiomeBase = factory.iceDesertBiomeBase;
-        this.iceDesertBiomeOcean = factory.iceDesertBiomeOcean;
-        this.iceDesertBiomeBeach = factory.iceDesertBiomeBeach;
+        this.iceDesertBiomeBase = new ResourceLocation(factory.iceDesertBiomeBase);
+        this.iceDesertBiomeOcean = new ResourceLocation(factory.iceDesertBiomeOcean);
+        this.iceDesertBiomeBeach = new ResourceLocation(factory.iceDesertBiomeBeach);
         
-        this.plainsBiomeBase = factory.plainsBiomeBase;
-        this.plainsBiomeOcean = factory.plainsBiomeOcean;
-        this.plainsBiomeBeach = factory.plainsBiomeBeach;
+        this.plainsBiomeBase = new ResourceLocation(factory.plainsBiomeBase);
+        this.plainsBiomeOcean = new ResourceLocation(factory.plainsBiomeOcean);
+        this.plainsBiomeBeach = new ResourceLocation(factory.plainsBiomeBeach);
         
-        this.rainforestBiomeBase = factory.rainforestBiomeBase;
-        this.rainforestBiomeOcean = factory.rainforestBiomeOcean;
-        this.rainforestBiomeBeach = factory.rainforestBiomeBeach;
+        this.rainforestBiomeBase = new ResourceLocation(factory.rainforestBiomeBase);
+        this.rainforestBiomeOcean = new ResourceLocation(factory.rainforestBiomeOcean);
+        this.rainforestBiomeBeach = new ResourceLocation(factory.rainforestBiomeBeach);
         
-        this.savannaBiomeBase = factory.savannaBiomeBase;
-        this.savannaBiomeOcean = factory.savannaBiomeOcean;
-        this.savannaBiomeBeach = factory.savannaBiomeBeach;
+        this.savannaBiomeBase = new ResourceLocation(factory.savannaBiomeBase);
+        this.savannaBiomeOcean = new ResourceLocation(factory.savannaBiomeOcean);
+        this.savannaBiomeBeach = new ResourceLocation(factory.savannaBiomeBeach);
         
-        this.shrublandBiomeBase = factory.shrublandBiomeBase;
-        this.shrublandBiomeOcean = factory.shrublandBiomeOcean;
-        this.shrublandBiomeBeach = factory.shrublandBiomeBeach;
+        this.shrublandBiomeBase = new ResourceLocation(factory.shrublandBiomeBase);
+        this.shrublandBiomeOcean = new ResourceLocation(factory.shrublandBiomeOcean);
+        this.shrublandBiomeBeach = new ResourceLocation(factory.shrublandBiomeBeach);
         
-        this.seasonalForestBiomeBase = factory.seasonalForestBiomeBase;
-        this.seasonalForestBiomeOcean = factory.seasonalForestBiomeOcean;
-        this.seasonalForestBiomeBeach = factory.seasonalForestBiomeBeach;
+        this.seasonalForestBiomeBase = new ResourceLocation(factory.seasonalForestBiomeBase);
+        this.seasonalForestBiomeOcean = new ResourceLocation(factory.seasonalForestBiomeOcean);
+        this.seasonalForestBiomeBeach = new ResourceLocation(factory.seasonalForestBiomeBeach);
         
-        this.swamplandBiomeBase = factory.swamplandBiomeBase;
-        this.swamplandBiomeOcean = factory.swamplandBiomeOcean;
-        this.swamplandBiomeBeach = factory.swamplandBiomeBeach;
+        this.swamplandBiomeBase = new ResourceLocation(factory.swamplandBiomeBase);
+        this.swamplandBiomeOcean = new ResourceLocation(factory.swamplandBiomeOcean);
+        this.swamplandBiomeBeach = new ResourceLocation(factory.swamplandBiomeBeach);
         
-        this.taigaBiomeBase = factory.taigaBiomeBase;
-        this.taigaBiomeOcean = factory.taigaBiomeOcean;
-        this.taigaBiomeBeach = factory.taigaBiomeBeach;
+        this.taigaBiomeBase = new ResourceLocation(factory.taigaBiomeBase);
+        this.taigaBiomeOcean = new ResourceLocation(factory.taigaBiomeOcean);
+        this.taigaBiomeBeach = new ResourceLocation(factory.taigaBiomeBeach);
         
-        this.tundraBiomeBase = factory.tundraBiomeBase;
-        this.tundraBiomeOcean = factory.tundraBiomeOcean;
-        this.tundraBiomeBeach = factory.tundraBiomeBeach;
+        this.tundraBiomeBase = new ResourceLocation(factory.tundraBiomeBase);
+        this.tundraBiomeOcean = new ResourceLocation(factory.tundraBiomeOcean);
+        this.tundraBiomeBeach = new ResourceLocation(factory.tundraBiomeBeach);
         
         this.customProperties = ImmutableMap.copyOf(factory.customProperties);
     }

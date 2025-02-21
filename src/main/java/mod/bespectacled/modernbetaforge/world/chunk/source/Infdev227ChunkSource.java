@@ -16,7 +16,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -45,7 +44,7 @@ public class Infdev227ChunkSource extends ChunkSource {
         
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmapChunk);
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
-            .get(new ResourceLocation(this.settings.surfaceBuilder))
+            .get(this.settings.surfaceBuilder)
             .apply(this, settings);
         
         // Cloud height was y128 in this version

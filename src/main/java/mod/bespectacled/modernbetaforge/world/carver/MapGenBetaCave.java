@@ -68,7 +68,9 @@ public class MapGenBetaCave extends MapGenBase {
         this.defaultFluids.add(defaultFluid.getBlock());
         try {
             this.defaultFluids.add(BlockLiquid.getFlowingBlock(defaultFluid.getMaterial()));
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            ModernBeta.log(Level.DEBUG, "Cave carver fluid is not flowable!");
+        }
         
         this.carvables = this.initializeCarvables(defaultBlock.getBlock());
         

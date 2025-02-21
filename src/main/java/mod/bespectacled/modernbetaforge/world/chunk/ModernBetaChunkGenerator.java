@@ -86,7 +86,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.world = world;
         this.random = new Random(world.getSeed());
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE
-            .get(new ResourceLocation(settings.chunkSource))
+            .get(settings.chunkSource)
             .apply(world.getSeed(), settings);
         this.settings = settings;
 
@@ -271,8 +271,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             // Generate lakes, dungeons
             
             boolean populateWaterLakes = TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE);
-            if (this.settings.useWaterLakes &&  populateWaterLakes && !hasVillageGenerated ) {
-                ModernBetaBiomeDecorator.populateWaterLakes(this.world, this.random, this.settings, mutablePos, chunkX, chunkZ);
+            if (this.settings.useWaterLakes &&  populateWaterLakes && !hasVillageGenerated) {
+                ModernBetaBiomeDecorator.populateWaterLakes(this.world, this.random, this.settings, mutablePos, chunkX, chunkZ, this.chunkSource.getDefaultFluid());
             }
             
             boolean populateLavaLakes = TerrainGen.populate(this, world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAVA);
@@ -492,7 +492,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             CAVE_KEY,
             TerrainGen.getModdedMapGen(
                 ModernBetaRegistries.CAVE_CARVER
-                    .get(new ResourceLocation(settings.caveCarver))
+                    .get(settings.caveCarver)
                     .apply(this.chunkSource, settings),
                 InitMapGenEvent.EventType.CAVE
             )

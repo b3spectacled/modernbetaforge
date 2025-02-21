@@ -22,7 +22,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameType;
@@ -59,7 +58,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(new ResourceLocation(settings.biomeSource))
+            .get(settings.biomeSource)
             .apply(seed, settings);
         this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource ?
             (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(seed, settings);

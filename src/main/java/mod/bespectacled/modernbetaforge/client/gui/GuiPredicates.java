@@ -156,39 +156,39 @@ public class GuiPredicates {
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
     private static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(new ResourceLocation(settings.chunkSource)).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
         
         return clazz.isAssignableFrom(chunkSource.getClass());
     }
     
     private static boolean isBiomeInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(new ResourceLocation(settings.biomeSource)).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
         
         return clazz.isAssignableFrom(biomeSource.getClass());
     }
     
     private static boolean isChunkEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Chunk type) {
-        return settings.chunkSource.equals(type.getRegistryString());
+        return settings.chunkSource.equals(type.getRegistryKey());
     }
     
     private static boolean isBiomeEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Biome type) {
-        return settings.biomeSource.equals(type.getRegistryString());
+        return settings.biomeSource.equals(type.getRegistryKey());
     }
     
     private static boolean isSurfaceEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Surface type) {
-        return settings.surfaceBuilder.equals(type.getRegistryString());
+        return settings.surfaceBuilder.equals(type.getRegistryKey());
     }
     
     private static boolean isCarverEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Carver type) {
-        return settings.caveCarver.equals(type.getRegistryString());
+        return settings.caveCarver.equals(type.getRegistryKey());
     }
     
     private static boolean isCarverEnabled(ModernBetaGeneratorSettings settings) {
-        return !settings.caveCarver.equals(ModernBetaBuiltInTypes.Carver.NONE.getRegistryString());
+        return !settings.caveCarver.equals(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey());
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(new ResourceLocation(settings.chunkSource)).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
         
         return chunkSource instanceof FiniteChunkSource;
     }
@@ -198,13 +198,13 @@ public class GuiPredicates {
     }
     
     private static boolean isModernBetaBiome(ModernBetaGeneratorSettings settings) {
-        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
         
         return biome instanceof ModernBetaBiome;
     }
     
     private static boolean isBetaBiome(ModernBetaGeneratorSettings settings) {
-        Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
         
         return biome instanceof BiomeBeta;
     }
@@ -222,7 +222,7 @@ public class GuiPredicates {
     }
     
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
-        ResourceLocation registryKey = new ResourceLocation(settings.chunkSource);
+        ResourceLocation registryKey = settings.chunkSource;
         ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings);
         
         if (!(chunkSource instanceof NoiseChunkSource)) {
@@ -433,7 +433,7 @@ public class GuiPredicates {
         CAVE_CHANCE_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
         USE_STRONGHOLDS_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
     
                 return isSingleBiome(settings) ? STRONGHOLD.allowedBiomes.contains(biome) : true;
             },
@@ -441,7 +441,7 @@ public class GuiPredicates {
         );
         USE_VILLAGES_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
     
                 return isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
             },
@@ -449,7 +449,7 @@ public class GuiPredicates {
         );
         USE_VILLAGE_VARIANTS_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
                 boolean hasVillages = isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
     
                 return hasVillages && settings.useVillages; 
@@ -458,7 +458,7 @@ public class GuiPredicates {
         );
         USE_TEMPLES_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
     
                 return isSingleBiome(settings) ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
             },
@@ -466,7 +466,7 @@ public class GuiPredicates {
         );
         USE_MONUMENTS_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
     
                 return isSingleBiome(settings) ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
             },
@@ -474,7 +474,7 @@ public class GuiPredicates {
         );
         USE_MANSIONS_TEST = new GuiPredicate(
             settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(settings.singleBiome));
+                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
     
                 return isSingleBiome(settings) ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
             },

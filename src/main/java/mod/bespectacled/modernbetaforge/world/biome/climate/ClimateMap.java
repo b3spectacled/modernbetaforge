@@ -177,10 +177,10 @@ public class ClimateMap {
         
         public final boolean containsOnlyBetaBiomes;
         
-        public ClimateMapping(String baseBiome, String oceanBiome, String beachBiome) {
-            this.baseBiome = ForgeRegistryUtil.get(new ResourceLocation(baseBiome), ForgeRegistries.BIOMES);
-            this.oceanBiome = ForgeRegistryUtil.get(new ResourceLocation(oceanBiome), ForgeRegistries.BIOMES);
-            this.beachBiome = ForgeRegistryUtil.get(new ResourceLocation(beachBiome), ForgeRegistries.BIOMES);
+        public ClimateMapping(ResourceLocation baseBiome, ResourceLocation oceanBiome, ResourceLocation beachBiome) {
+            this.baseBiome = ForgeRegistryUtil.get(baseBiome, ForgeRegistries.BIOMES);
+            this.oceanBiome = ForgeRegistryUtil.get(oceanBiome, ForgeRegistries.BIOMES);
+            this.beachBiome = ForgeRegistryUtil.get(beachBiome, ForgeRegistries.BIOMES);
             
             this.containsOnlyBetaBiomes = 
                 ModernBetaBiomeLists.BETA_BIOMES.contains(this.baseBiome) &&

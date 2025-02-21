@@ -92,7 +92,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelCaveWidth = settings.levelCaveWidth;
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(new ResourceLocation(settings.biomeSource))
+            .get(settings.biomeSource)
             .apply(seed, settings);
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);

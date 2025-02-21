@@ -438,13 +438,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
-        ResourceLocation chunkKey = new ResourceLocation(settings.chunkSource);
-        ResourceLocation biomeKey = new ResourceLocation(settings.biomeSource);
-        ResourceLocation surfaceKey = new ResourceLocation(settings.surfaceBuilder);
-        
-        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(chunkKey).apply(seed, settings);
-        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(biomeKey).apply(seed, settings);
-        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(surfaceKey).apply(this.chunkSource, settings);
+        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(seed, settings);
+        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(seed, settings);
+        this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(settings.surfaceBuilder).apply(this.chunkSource, settings);
         this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
     }
     

@@ -64,7 +64,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     public NoiseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
         
-        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(new ResourceLocation(settings.chunkSource));
+        NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
         
         this.verticalNoiseResolution = noiseSettings.sizeVertical * 4;
         this.horizontalNoiseResolution = noiseSettings.sizeHorizontal * 4;
@@ -94,7 +94,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.noiseSettings = noiseSettings;
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
-            .getOrElse(new ResourceLocation(settings.surfaceBuilder), ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
+            .getOrElse(settings.surfaceBuilder, ModernBetaBuiltInTypes.Surface.BETA.getRegistryKey())
             .apply(this, settings);
         
         this.minLimitOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);

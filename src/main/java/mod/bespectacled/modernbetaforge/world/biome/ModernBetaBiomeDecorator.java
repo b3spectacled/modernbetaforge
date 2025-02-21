@@ -7,14 +7,19 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -31,13 +36,13 @@ import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
-    private static final WorldGenerator WORLD_GEN_WATER_LAKES = new WorldGenLakes(Blocks.WATER);
     private static final WorldGenerator WORLD_GEN_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
     private static final WorldGenerator WORLD_GEN_DUNGEONS = new WorldGenDungeons();
     
-    private final WorldGenerator worldGenWaterfall = new WorldGenLiquids(Blocks.FLOWING_WATER);
     private final WorldGenerator worldGenLavafall = new WorldGenLiquids(Blocks.FLOWING_LAVA);
     
     private WorldGenerator worldGenClay;
@@ -215,6 +220,13 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     protected void populateWaterfalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
+        
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
+        Block fluidBlock = ForgeRegistryUtil.getFluid(settings.defaultFluid).getBlock();
+        
+        if (fluidBlock == null || fluidBlock == Blocks.WATER || fluidBlock == Blocks.FLOWING_WATER) {
+            fluidBlock = Blocks.FLOWING_WATER;
+        }
 
         height -= 8;
         for (int i = 0; i < 50; ++i) {
@@ -222,7 +234,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(random.nextInt(height) + 8);
             int z = startZ + random.nextInt(16) + 8;
             
-            this.worldGenWaterfall.generate(world, random, mutablePos.setPos(x, y, z));
+            new WorldGenLiquids(fluidBlock).generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
@@ -302,7 +314,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         return random.nextInt(spread) + random.nextInt(spread) + centerHeight - spread;
     }
     
-    public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+    public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ, IBlockState defaultFluid) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -311,7 +323,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(settings.height);
             int z = startZ + random.nextInt(16) + 8;
             
-            WORLD_GEN_WATER_LAKES.generate(world, random, mutablePos.setPos(x, y, z));
+            new WorldGenLakes(defaultFluid.getBlock()).generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
