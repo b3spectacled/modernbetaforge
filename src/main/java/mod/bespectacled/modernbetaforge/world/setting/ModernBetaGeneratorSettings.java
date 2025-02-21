@@ -2,14 +2,11 @@ package mod.bespectacled.modernbetaforge.world.setting;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.Level;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,7 +41,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
@@ -57,19 +53,6 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModernBetaGeneratorSettings {
-    public static final List<ResourceLocation> DEFAULT_BLOCKS = ImmutableList.of(
-        Blocks.STONE.getRegistryName(),
-        Blocks.NETHERRACK.getRegistryName(),
-        Blocks.END_STONE.getRegistryName()
-    );
-    public static final List<ResourceLocation> DEFAULT_FLUIDS = ImmutableList.copyOf(
-        ForgeRegistries.BLOCKS.getValuesCollection()
-            .stream()
-            .filter(b -> b instanceof BlockStaticLiquid)
-            .map(b -> b.getRegistryName())
-            .collect(Collectors.toList())
-    );
-    
     public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     

@@ -238,7 +238,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @return The top block for gravel beach generation.
      */
     private IBlockState getGravelBeachTopBlock(Biome biome) {
-        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+        if (this.isNether(biome)) {
             return BlockStates.GRAVEL;
         }
         
@@ -252,7 +252,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @return The filler blockstate for gravel beach generation.
      */
     private IBlockState getGravelBeachFillerBlock(Biome biome) {
-        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+        if (this.isNether(biome)) {
             return this.defaultBlock;
         }
         
@@ -266,10 +266,20 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * @return The blockstate for beach generation.
      */
     private IBlockState getBeachBlock(Biome biome) {
-        if (BiomeDictionary.hasType(biome, Type.NETHER)) {
+        if (this.isNether(biome)) {
             return Blocks.SOUL_SAND.getDefaultState();
         }
         
         return BlockStates.SAND;
+    }
+    
+    /*
+     * Gets whether the biome should be treated as the Nether for purpose of beach generation.
+     * 
+     * @param biome The biome to check.
+     * @return Whether to treat the current region as the Nether.
+     */
+    private boolean isNether(Biome biome) {
+        return BiomeDictionary.hasType(biome, Type.NETHER);
     }
 }

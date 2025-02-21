@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.util;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,11 @@ import org.apache.logging.log4j.Level;
 import com.google.common.base.Predicate;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ForgeRegistryUtil<T> {
@@ -56,5 +61,56 @@ public class ForgeRegistryUtil<T> {
     
     public static <T> List<ResourceLocation> getKeys(IForgeRegistry<? extends T> registry) {
         return getKeys(registry, e -> true);
+    }
+    
+    public static List<Block> getFluidBlocks() {
+        return FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .map(f -> f.getBlock())
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    public static List<ResourceLocation> getFluidBlockRegistryNames() {
+        return FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .map(f -> f.getBlock().getRegistryName())
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    public static List<String> getFluidNames() {
+        return FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .map(f -> f.getLocalizedName(new FluidStack(f, 0)))
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    public static String getFluidLocalizedName(ResourceLocation blockKey) {
+        Optional<Fluid> fluid = FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .filter(f -> f.getBlock().getRegistryName().equals(blockKey))
+            .findFirst();
+            
+        if (fluid.isPresent()) {
+            return fluid.get().getLocalizedName(new FluidStack(fluid.get(), 0));
+        }
+        
+        return "Unknown Fluid";
+    }
+    
+    public static boolean isForgeFluid(Block block) {
+        return FluidRegistry.getRegisteredFluids()
+            .values()
+            .stream()
+            .anyMatch(f -> f.getBlock() == block);
+    }
+    
+    public static ResourceLocation getRandomFluidRegistryName(Random random) {
+        List<ResourceLocation> entries = new ArrayList<>(getFluidBlockRegistryNames());
+
+        return entries.get(random.nextInt(entries.size()));
     }
  }

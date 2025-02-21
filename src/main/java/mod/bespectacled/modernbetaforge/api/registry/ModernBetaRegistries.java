@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
+import java.util.function.Supplier;
+
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
@@ -12,6 +14,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.Block;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -26,6 +29,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     public static final ModernBetaRegistry<FeatureCreator> FEATURE;
     public static final ModernBetaRegistry<WorldSpawner> WORLD_SPAWNER;
+    public static final ModernBetaRegistry<Supplier<Block>> DEFAULT_BLOCK;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
     public static final ModernBetaRegistry<Property<?>> PROPERTY;
     
@@ -40,6 +44,7 @@ public class ModernBetaRegistries {
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         FEATURE = new ModernBetaRegistry<>("FEATURE");
         WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
+        DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
         PROPERTY = new ModernBetaRegistry<>("PROPERTY");
     }

@@ -78,6 +78,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerWorldSpawners();
+        ModernBetaBuiltInRegistries.registerDefaultBlocks();
         ModernBetaBuiltInRegistries.registerDataFixes();
         
         if (ModernBetaConfig.debugOptions.registerDebugProperties) {

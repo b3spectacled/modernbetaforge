@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -20,9 +21,7 @@ import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDynamicLiquid;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -40,8 +39,7 @@ public class MapGenBetaCave extends MapGenBase {
     private static final int STRUCTURE_PADDING_Y = 8;
     
     protected final Block defaultBlock;
-    protected final BlockStaticLiquid defaultFluid;
-    protected final BlockDynamicLiquid defaultFlowing;
+    protected final Set<Block> defaultFluids;
     
     protected final Set<Block> carvables;
     protected final Random tunnelRandom;
@@ -65,8 +63,12 @@ public class MapGenBetaCave extends MapGenBase {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
-        this.defaultFluid = (BlockStaticLiquid)defaultFluid.getBlock();
-        this.defaultFlowing = BlockLiquid.getFlowingBlock(defaultFluid.getMaterial());
+        this.defaultFluids = new HashSet<>();
+
+        this.defaultFluids.add(defaultFluid.getBlock());
+        try {
+            this.defaultFluids.add(BlockLiquid.getFlowingBlock(defaultFluid.getMaterial()));
+        } catch (Exception e) { }
         
         this.carvables = this.initializeCarvables(defaultBlock.getBlock());
         
@@ -344,10 +346,8 @@ public class MapGenBetaCave extends MapGenBase {
                     if (y < 0 || y >= this.caveHeight) {
                         continue;
                     }
-
-                    Block block = chunkPrimer.getBlockState(localX, y, localZ).getBlock();
-
-                    if (block == this.defaultFluid || block == this.defaultFlowing) {
+                    
+                    if (this.defaultFluids.contains(chunkPrimer.getBlockState(localX, y, localZ).getBlock())) {
                         return true;
                     }
                     

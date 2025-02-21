@@ -62,7 +62,7 @@ public abstract class ChunkSource {
         this.settings = settings;
         this.random = this.createRandom(seed);
         
-        this.defaultBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(settings.defaultBlock)).getDefaultState();
+        this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(new ResourceLocation(settings.defaultBlock)).get().getDefaultState();
         this.defaultFluid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(settings.defaultFluid)).getDefaultState();
         
         this.worldHeight = settings.height;

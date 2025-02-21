@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
@@ -56,7 +57,6 @@ import mod.bespectacled.modernbetaforge.world.spawn.InfdevWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.NoOpWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.PEWorldSpawner;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -132,6 +132,12 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.NONE.getRegistryKey(), new NoOpWorldSpawner());
     }
     
+    public static void registerDefaultBlocks() {
+        ModernBetaRegistries.DEFAULT_BLOCK.register(Blocks.STONE.getRegistryName(), () -> Blocks.STONE);
+        ModernBetaRegistries.DEFAULT_BLOCK.register(Blocks.NETHERRACK.getRegistryName(), () -> Blocks.NETHERRACK);
+        ModernBetaRegistries.DEFAULT_BLOCK.register(Blocks.END_STONE.getRegistryName(), () -> Blocks.END_STONE);
+    }
+    
     @SuppressWarnings("deprecation")
     public static void registerProperties() {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("booleanProp"), new BooleanProperty(true));
@@ -144,7 +150,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty(Biomes.PLAINS.getRegistryName()));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp2"), new BiomeProperty(ModernBetaBiomeHolders.ALPHA.getRegistryName()));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
-        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistries.BLOCKS.getValue(key) instanceof BlockStaticLiquid));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistryUtil.getFluidBlockRegistryNames().contains(key)));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("solidProp"), new BlockProperty(Blocks.STONE.getRegistryName(), key -> {
             Block block = ForgeRegistries.BLOCKS.getValue(key);
             Material material = block.getMaterial(block.getDefaultState());

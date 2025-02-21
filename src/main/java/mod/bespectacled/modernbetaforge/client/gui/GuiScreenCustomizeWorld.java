@@ -53,6 +53,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
@@ -188,8 +189,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int caveCarverId = ModernBetaRegistries.CAVE_CARVER.getKeys().indexOf(new ResourceLocation(this.settings.caveCarver));
         int worldSpawnerId = ModernBetaRegistries.WORLD_SPAWNER.getKeys().indexOf(new ResourceLocation(this.settings.worldSpawner));
         
-        int defaultBlockId = ModernBetaGeneratorSettings.DEFAULT_BLOCKS.indexOf(new ResourceLocation(this.settings.defaultBlock));
-        int defaultFluidId = ModernBetaGeneratorSettings.DEFAULT_FLUIDS.indexOf(new ResourceLocation(this.settings.defaultFluid));
+        int defaultBlockId = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().indexOf(new ResourceLocation(this.settings.defaultBlock));
+        int defaultFluidId = ForgeRegistryUtil.getFluidBlockRegistryNames().indexOf(new ResourceLocation(this.settings.defaultFluid));
         
         int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
         int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
@@ -229,10 +230,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG0_S_SPAWN, NbtTags.WORLD_SPAWNER, 0f, ModernBetaRegistries.WORLD_SPAWNER.getKeys().size() - 1, worldSpawnerId, this);
         GuiPageButtonList.GuiListEntry blockEntry = useMenu ? 
             createGuiButton(GuiIdentifiers.PG0_B_BLOCK, NbtTags.DEFAULT_BLOCK, true) :
-            createGuiSlider(GuiIdentifiers.PG0_S_BLOCK, NbtTags.DEFAULT_BLOCK, 0f, ModernBetaGeneratorSettings.DEFAULT_BLOCKS.size() - 1, defaultBlockId, this);
+            createGuiSlider(GuiIdentifiers.PG0_S_BLOCK, NbtTags.DEFAULT_BLOCK, 0f, ModernBetaRegistries.DEFAULT_BLOCK.getKeys().size() - 1, defaultBlockId, this);
         GuiPageButtonList.GuiListEntry fluidEntry = useMenu ? 
             createGuiButton(GuiIdentifiers.PG0_B_FLUID, NbtTags.DEFAULT_FLUID, true) :
-            createGuiSlider(GuiIdentifiers.PG0_S_FLUID, NbtTags.DEFAULT_FLUID, 0f, ModernBetaGeneratorSettings.DEFAULT_FLUIDS.size() - 1, defaultFluidId, this);
+            createGuiSlider(GuiIdentifiers.PG0_S_FLUID, NbtTags.DEFAULT_FLUID, 0f, ForgeRegistryUtil.getFluidBlockRegistryNames().size() - 1, defaultFluidId, this);
         
         GuiPageButtonList.GuiListEntry[] pageBasic = {
             chunkEntry,
@@ -697,7 +698,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         // Set text for default block options
         this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_BLOCK_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedBlockName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, DEFAULT_BLOCK_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedFluidName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, DEFAULT_BLOCK_TRUNCATE_LEN));
         
         // Set biome text for Single Biome button
         this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, "fixedBiome", BIOME_TRUNCATE_LEN));
@@ -1023,10 +1024,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.openBiomeScreen((str, factory) -> factory.singleBiome = str, settings.singleBiome);
                     break;
                 case GuiIdentifiers.PG0_B_BLOCK:
-                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, settings.defaultBlock, key -> ModernBetaGeneratorSettings.DEFAULT_BLOCKS.contains(key));
+                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, settings.defaultBlock, key -> ModernBetaRegistries.DEFAULT_BLOCK.contains(key));
                     break;
                 case GuiIdentifiers.PG0_B_FLUID:
-                    this.openBlockScreen((str, factory) -> factory.defaultFluid = str, settings.defaultFluid, key -> ModernBetaGeneratorSettings.DEFAULT_FLUIDS.contains(key));
+                    this.openFluidScreen((str, factory) -> factory.defaultFluid = str, settings.defaultFluid, key -> true);
                     break;
                     
                 case GuiIdentifiers.PG6_DSRT_LAND:
@@ -1376,10 +1377,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.worldSpawner = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_BLOCK:
-                    this.settings.defaultBlock = ModernBetaGeneratorSettings.DEFAULT_BLOCKS.get((int)entryValue).toString();
+                    this.settings.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().get((int)entryValue).toString();
                     break;
                 case GuiIdentifiers.PG0_S_FLUID:
-                    this.settings.defaultFluid = ModernBetaGeneratorSettings.DEFAULT_FLUIDS.get((int)entryValue).toString();
+                    this.settings.defaultFluid = ForgeRegistryUtil.getFluidBlockRegistryNames().get((int)entryValue).toString();
                     break;
                 
                 case GuiIdentifiers.PG0_S_SEA_LEVEL:
@@ -1863,26 +1864,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     .findFirst()
                     .orElse(-1);
                 
-                if (buttonId == GuiIdentifiers.PG0_B_BLOCK || buttonId == GuiIdentifiers.PG0_B_FLUID) {
-                    ResourceLocation randomKey;
-                    String formattedName = null;
-                            
-                    switch (buttonId) {
-                        case GuiIdentifiers.PG0_B_BLOCK:
-                            randomKey = ModernBetaGeneratorSettings.DEFAULT_BLOCKS.get(this.random.nextInt(ModernBetaGeneratorSettings.DEFAULT_BLOCKS.size()));
-                            formattedName = getFormattedBlockName(randomKey.toString(), NbtTags.DEFAULT_BLOCK, DEFAULT_BLOCK_TRUNCATE_LEN);
-                            break;
-                        case GuiIdentifiers.PG0_B_FLUID:
-                            randomKey = ModernBetaGeneratorSettings.DEFAULT_FLUIDS.get(this.random.nextInt(ModernBetaGeneratorSettings.DEFAULT_FLUIDS.size()));
-                            formattedName = getFormattedBlockName(randomKey.toString(), NbtTags.DEFAULT_FLUID, DEFAULT_BLOCK_TRUNCATE_LEN);
-                            break;
-                    }
-                    
-                    if (formattedName != null) {
-                        this.setTextButton(buttonId, formattedName);
-                    }
-                    
-                } else if (guiButtonComponent instanceof GuiListButton && buttonId != -1) {
+                if (guiButtonComponent instanceof GuiListButton && buttonId != -1) {
                     ResourceLocation randomKey = null;
                     String langName = null;
                     
@@ -1907,13 +1889,25 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             randomKey = ModernBetaRegistries.WORLD_SPAWNER.getRandomEntry(this.random).getKey();
                             langName = NbtTags.WORLD_SPAWNER;
                             break;
+                        case GuiIdentifiers.PG0_B_BLOCK:
+                            randomKey = ModernBetaRegistries.DEFAULT_BLOCK.getRandomEntry(this.random).getKey();
+                            langName = NbtTags.DEFAULT_BLOCK;
+                            break;
+                        case GuiIdentifiers.PG0_B_FLUID:
+                            randomKey = ForgeRegistryUtil.getRandomFluidRegistryName(this.random);
+                            langName = NbtTags.DEFAULT_FLUID;
+                            break;
+                            
                     }
                     
                     if (randomKey != null && langName != null) {
                         String registryName = randomKey.toString();
+                        String formattedName = buttonId == GuiIdentifiers.PG0_B_BLOCK || buttonId == GuiIdentifiers.PG0_B_FLUID ?
+                            getFormattedBlockName(registryName, langName, DEFAULT_BLOCK_TRUNCATE_LEN) :
+                            getFormattedRegistryName(registryName, langName, -1);
                         
                         GuiIdentifiers.BASE_SETTINGS.get(buttonId).accept(registryName, this.settings);
-                        this.setTextButton(buttonId, getFormattedRegistryName(registryName, langName, -1));
+                        this.setTextButton(buttonId, formattedName);
                     }
                 }
                 
@@ -2059,14 +2053,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 return I18n.format(PREFIX + "worldSpawner." + getFormattedRegistryString(registryKey));
             }
             case GuiIdentifiers.PG0_S_BLOCK: {
-                ResourceLocation registryKey = ModernBetaGeneratorSettings.DEFAULT_BLOCKS.get((int)entryValue);
+                ResourceLocation registryKey = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().get((int)entryValue);
 
                 return ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
             }
             case GuiIdentifiers.PG0_S_FLUID: {
-                ResourceLocation registryKey = ModernBetaGeneratorSettings.DEFAULT_FLUIDS.get((int)entryValue);
+                ResourceLocation registryKey = ForgeRegistryUtil.getFluidBlockRegistryNames().get((int)entryValue);
                 
-                return ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
+                return ForgeRegistryUtil.getFluidLocalizedName(registryKey);
             }
             case GuiIdentifiers.PG1_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
@@ -2314,8 +2308,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
-        Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
+        Function<ResourceLocation, String> nameFormatter = key -> {
+            Block block = ForgeRegistryUtil.get(key, ForgeRegistries.BLOCKS);
+            
+            return ForgeRegistryUtil.isForgeFluid(block) ? 
+                ForgeRegistryUtil.getFluidLocalizedName(key) :
+                ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
+        };
+        
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
+    }
+    
+    private void openFluidScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
+        Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistryUtil.getFluidLocalizedName(key);
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getFluidBlockRegistryNames()));
     }
     
     private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
@@ -2383,6 +2389,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             langName,
             truncateLen,
             key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BLOCKS).getLocalizedName()
+        );
+    }
+    
+    private static String getFormattedFluidName(String registryName, String langName, int truncateLen) {
+        return getFormattedForgeRegistryName(
+            registryName,
+            langName,
+            truncateLen,
+            key -> ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key))
         );
     }
     
@@ -2638,16 +2653,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
         @Override
         public String visit(BlockProperty property) {
-            Function<String, String> nameFormatter = registryKey ->
-                ForgeRegistries.BLOCKS.getValue(new ResourceLocation(registryKey)).getLocalizedName();
+            ResourceLocation registryKey = new ResourceLocation(property.getValue());
+            Block block = ForgeRegistries.BLOCKS.getValue(registryKey);
+            
+            Function<String, String> nameFormatter = key -> ForgeRegistryUtil.isForgeFluid(block) ? 
+                ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
+                ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
                 
             return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
         }
 
         @Override
         public String visit(EntityEntryProperty property) {
-            Function<String, String> nameFormatter = registryKey ->
-                ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryKey)).getName();
+            Function<String, String> nameFormatter = key ->
+                ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
             return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
         }

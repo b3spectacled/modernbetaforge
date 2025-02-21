@@ -51,6 +51,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class FiniteChunkSource extends ChunkSource {
@@ -690,6 +692,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             for (int localZ = 0; localZ < 16; ++localZ) {
                 int z = localZ + startZ;
                 Biome biome = biomeSource.getBiome(x, z);
+                boolean isNether = BiomeDictionary.hasType(biome, Type.NETHER);
                 
                 for (int y = this.levelHeight - 1; y >= 0; --y) {
                     Block block = this.getLevelBlock(x + offsetX, y, z + offsetZ);
@@ -700,6 +703,8 @@ public abstract class FiniteChunkSource extends ChunkSource {
                         blockState = biome.topBlock;
                     } else if (block == Blocks.DIRT) {
                         blockState = biome.fillerBlock;
+                    } else if (block == Blocks.SAND && isNether) {
+                        blockState = Blocks.SOUL_SAND.getDefaultState();
                     }
                     
                     defaultSource.setBlockState(blockState);
