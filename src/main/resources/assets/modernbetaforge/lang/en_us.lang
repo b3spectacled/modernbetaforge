@@ -204,6 +204,7 @@ createWorld.customize.custom.surfaceBuilder.modernbetaforge.release=Release
 
 createWorld.customize.custom.caveCarver.modernbetaforge.none=None
 createWorld.customize.custom.caveCarver.modernbetaforge.beta=Beta
+createWorld.customize.custom.caveCarver.modernbetaforge.beta_nether=Beta Nether
 createWorld.customize.custom.caveCarver.modernbetaforge.beta_1_8=Beta 1.8
 createWorld.customize.custom.caveCarver.modernbetaforge.release=Release
 

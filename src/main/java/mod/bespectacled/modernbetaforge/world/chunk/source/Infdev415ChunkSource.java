@@ -120,7 +120,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
 
     @Override
     protected double sampleNoiseOffset(int noiseY, double scale, double depth) {
-     // Check if y (in scaled space) is below sealevel
+        // Check if y (in scaled space) is below sealevel
         // and increase density accordingly.
         //double offset = y * 4.0 - 64.0;
         double offset = noiseY * this.verticalNoiseResolution - (double)this.seaLevel;
