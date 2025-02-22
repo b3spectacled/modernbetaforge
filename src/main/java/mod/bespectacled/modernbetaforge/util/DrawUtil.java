@@ -220,7 +220,7 @@ public class DrawUtil {
                     terrainType = TerrainType.STONE;
                 }
                 
-                if (blockAbove == Blocks.WATER) {
+                if (blockAbove == chunkSource.getDefaultFluid().getBlock()) {
                     terrainType = defaultFluid;
                 }
                 
