@@ -15,11 +15,9 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -36,8 +34,6 @@ import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     private static final WorldGenerator WORLD_GEN_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
@@ -227,14 +223,14 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         if (fluidBlock == null || fluidBlock == Blocks.WATER || fluidBlock == Blocks.FLOWING_WATER) {
             fluidBlock = Blocks.FLOWING_WATER;
         }
-
-        height -= 8;
+        
+        WorldGenerator worldGenLiquids = new WorldGenLiquids(fluidBlock);
         for (int i = 0; i < 50; ++i) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(random.nextInt(height) + 8);
+            int y = random.nextInt(random.nextInt(height - 8) + 8);
             int z = startZ + random.nextInt(16) + 8;
             
-            new WorldGenLiquids(fluidBlock).generate(world, random, mutablePos.setPos(x, y, z));
+            worldGenLiquids.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
@@ -242,10 +238,9 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
 
-        height -= 16;
         for (int i = 0; i < 20; ++i) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(random.nextInt(random.nextInt(height) + 8) + 8);
+            int y = random.nextInt(random.nextInt(random.nextInt(height - 16) + 8) + 8);
             int z = startZ + random.nextInt(16) + 8;
             
             this.worldGenLavafall.generate(world, random, mutablePos.setPos(x, y, z));
@@ -318,12 +313,13 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
+        WorldGenerator worldGenLakes = new WorldGenLakes(defaultFluid.getBlock());
         if (random.nextInt(settings.waterLakeChance) == 0) { // Default: 4
             int x = startX + random.nextInt(16) + 8;
             int y = random.nextInt(settings.height);
             int z = startZ + random.nextInt(16) + 8;
             
-            new WorldGenLakes(defaultFluid.getBlock()).generate(world, random, mutablePos.setPos(x, y, z));
+            worldGenLakes.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
