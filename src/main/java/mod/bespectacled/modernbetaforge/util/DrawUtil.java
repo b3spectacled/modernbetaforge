@@ -108,6 +108,8 @@ public class DrawUtil {
         int offsetX = size / 2;
         int offsetZ = size / 2;
         
+        Block defaultFluid = chunkSource.getDefaultFluid().getBlock();
+        
         for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
             int startX = chunkX << 4;
             progressTracker.accept(chunkX / (float)chunkWidth);
@@ -132,7 +134,7 @@ public class DrawUtil {
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, defaultFluid, terrainType);
 
                         int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, injectionRules, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
@@ -295,14 +297,14 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, TerrainType terrainType) {
+    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, Block defaultFluid, TerrainType terrainType) {
         if (terrainType.snowy) {
             if (canFreeze(blockPos, biome, biomeSource, 64)) {
                 terrainType = TerrainType.SNOW;
             }
         }
         
-        if (terrainType == TerrainType.WATER) {
+        if (terrainType == TerrainType.WATER && defaultFluid == Blocks.WATER) {
             if (canFreeze(blockPos, biome, biomeSource, 64)) {
                 terrainType = TerrainType.ICE;
             }
@@ -383,6 +385,17 @@ public class DrawUtil {
             }
             
             color = MathUtil.convertRGBtoARGB(color);
+            
+        } else if (terrainType == TerrainType.WATER) {
+            ResourceLocation defaultFluid = chunkSource.getGeneratorSettings().defaultFluid;
+            
+            if (!defaultFluid.equals(Blocks.WATER.getRegistryName())) {
+                int fluidColor = ForgeRegistryUtil.getFluid(defaultFluid).getColor();
+                
+                if (fluidColor != -1) {
+                    color = fluidColor;
+                }
+            }
         }
         
         return color;
