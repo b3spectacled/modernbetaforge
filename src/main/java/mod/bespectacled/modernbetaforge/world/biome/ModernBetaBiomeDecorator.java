@@ -1,7 +1,11 @@
 package mod.bespectacled.modernbetaforge.world.biome;
 
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Supplier;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -36,6 +40,8 @@ import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
+    private static final Set<Block> VANILLA_FLUIDS = ImmutableSet.of(Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA);
+    
     private static final WorldGenerator WORLD_GEN_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
     private static final WorldGenerator WORLD_GEN_DUNGEONS = new WorldGenDungeons();
     
@@ -220,7 +226,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         Block fluidBlock = ForgeRegistryUtil.getFluid(settings.defaultFluid).getBlock();
         
-        if (fluidBlock == null || fluidBlock == Blocks.WATER || fluidBlock == Blocks.FLOWING_WATER) {
+        if (fluidBlock == null || VANILLA_FLUIDS.contains(fluidBlock)) {
             fluidBlock = Blocks.FLOWING_WATER;
         }
         
@@ -312,8 +318,14 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ, IBlockState defaultFluid) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
+
+        Block fluidBlock = ForgeRegistryUtil.getFluid(settings.defaultFluid).getBlock();
         
-        WorldGenerator worldGenLakes = new WorldGenLakes(defaultFluid.getBlock());
+        if (fluidBlock == null || VANILLA_FLUIDS.contains(fluidBlock)) {
+            fluidBlock = Blocks.WATER;
+        }
+        
+        WorldGenerator worldGenLakes = new WorldGenLakes(fluidBlock);
         if (random.nextInt(settings.waterLakeChance) == 0) { // Default: 4
             int x = startX + random.nextInt(16) + 8;
             int y = random.nextInt(settings.height);
