@@ -56,8 +56,8 @@ public class CompatDynamicTrees implements Compat {
     }
     
     private static class DynamicTreesConfigHandler {
+        private static final File CONFIG_FILE = new File(new File(Minecraft.getMinecraft().gameDir, "config"), CONFIG_FILE_NAME);
         private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-        private static final File CONFIG = new File(new File(Minecraft.getMinecraft().gameDir, "config"), CONFIG_FILE_NAME);
         
         private final JsonElement defaultJson;
         
@@ -68,13 +68,13 @@ public class CompatDynamicTrees implements Compat {
         public JsonElement readConfig() {
             JsonElement loadedJson;
             
-            if (!CONFIG.isFile()) {
-                ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is missing and couldn't be loaded! A new one will be created!", CONFIG));
+            if (!CONFIG_FILE.isFile()) {
+                ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is missing and couldn't be loaded! A new one will be created!", CONFIG_FILE_NAME));
                 this.writeConfig();
             }
             
-            if ((loadedJson = JsonHelper.load(CONFIG)) == null) {
-                ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is corrupted and couldn't be loaded! The default config will be used!", CONFIG));
+            if ((loadedJson = JsonHelper.load(CONFIG_FILE)) == null) {
+                ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is corrupted and couldn't be loaded! The default config will be used!", CONFIG_FILE_NAME));
                 loadedJson = this.defaultJson;
             }
             
@@ -83,13 +83,13 @@ public class CompatDynamicTrees implements Compat {
         
         private void writeConfig() {
             try {
-                if (!CONFIG.isFile()) {
-                    try (Writer writer = new FileWriter(CONFIG)) {
+                if (!CONFIG_FILE.isFile()) {
+                    try (Writer writer = new FileWriter(CONFIG_FILE)) {
                         GSON.toJson(this.defaultJson, JsonElement.class, writer);
                     }
                 }
             } catch (Exception e) {
-                ModernBeta.log(Level.ERROR, String.format("Dynamic Trees config file '%s' couldn't be saved!", CONFIG));
+                ModernBeta.log(Level.ERROR, String.format("Dynamic Trees config file '%s' couldn't be saved!", CONFIG_FILE_NAME));
                 ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
             }
         }

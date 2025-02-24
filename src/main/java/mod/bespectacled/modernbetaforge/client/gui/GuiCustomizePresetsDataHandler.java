@@ -21,23 +21,22 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraft.client.Minecraft;
 
 public class GuiCustomizePresetsDataHandler {
-    public static final String FILE_NAME = ModernBeta.MODID + "_presets.json";
+    private static final String CONFIG_FILE_NAME = ModernBeta.MODID + "_presets.json";
+    private static final File CONFIG_FILE =  new File(new File(Minecraft.getMinecraft().gameDir, "config"), CONFIG_FILE_NAME);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
-    private final File configDirectory;
     private final List<PresetData> presets;
 
-    public GuiCustomizePresetsDataHandler(Minecraft mc) {
-        this.configDirectory = new File(mc.gameDir, "config");
+    public GuiCustomizePresetsDataHandler() {
         this.presets = this.readPresets();
     }
     
     public void writePresets() {
-        try (Writer writer = new FileWriter(new File(this.configDirectory, FILE_NAME))) {
+        try (Writer writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(this.presets, LinkedHashSet.class, writer);
             
         } catch (Exception e) {
-            ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", FILE_NAME));
+            ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", CONFIG_FILE_NAME));
             ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
         }
     }
@@ -80,14 +79,14 @@ public class GuiCustomizePresetsDataHandler {
     private List<PresetData> readPresets() {
         List<PresetData> presets;
         
-        try (Reader reader = new FileReader(new File(this.configDirectory, FILE_NAME))) {
+        try (Reader reader = new FileReader(CONFIG_FILE)) {
             Type type = new TypeToken<List<PresetData>>(){}.getType();
             return GSON.fromJson(reader, type);
             
         } catch (Exception e) {
             presets = new LinkedList<>();
             
-            ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded! A new one will be created!", FILE_NAME));
+            ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded! A new one will be created!", CONFIG_FILE_NAME));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
         

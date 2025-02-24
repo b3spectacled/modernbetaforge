@@ -15,7 +15,6 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandle
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -172,7 +171,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.filterType = filterType;
-        this.dataHandler = new GuiCustomizePresetsDataHandler(Minecraft.getMinecraft());
+        this.dataHandler = new GuiCustomizePresetsDataHandler();
         this.presets = this.loadPresets(filterType, this.dataHandler);
         this.initialPreset = initialPreset;
         this.iconBounds = new GuiBoundsChecker();
