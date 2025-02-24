@@ -1,10 +1,12 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +20,7 @@ public class BiomeInjectionRules {
     }
     
     public Biome test(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
-        List<BiomeInjectionRule> rules = this.ruleMap.get(step);
+        List<BiomeInjectionRule> rules = this.getRules(step);
         
         if (rules == null) {
             return null;
@@ -32,6 +34,14 @@ public class BiomeInjectionRules {
         }
         
         return null;
+    }
+    
+    private List<BiomeInjectionRule> getRules(BiomeInjectionStep step) {
+        if (step == BiomeInjectionStep.ALL) {
+            return this.ruleMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
+        }
+        
+        return this.ruleMap.get(step);
     }
 
     public static class Builder {

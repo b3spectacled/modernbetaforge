@@ -273,8 +273,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.biomeSource.getBiome((int)x, (int)y);
             
-            BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, (int)x, (int)y, biome);
-            Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.PRE_SURFACE);
+            BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, this.surfaceBuilder, (int)x, (int)y, biome);
+            Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.ALL);
             biome = injectedBiome != null ? injectedBiome : biome;
             
             String coordinateText = String.format("%d, %d, %d", (int)x, height, (int)y);
