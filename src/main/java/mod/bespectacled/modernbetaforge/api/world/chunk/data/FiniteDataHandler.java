@@ -3,7 +3,6 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -46,25 +45,64 @@ public class FiniteDataHandler {
     }
     
     /**
-     * Sets given byte level data array into the finite data container.
+     * Sets given byte level data array into the finite data container,
+     * then attempts to write the current finite data to disk using GZIP compression,
+     * and finally returns whether the save was successful.
      * 
      * @param levelData Level byte array provided by FiniteChunkSource object.
      * @param levelMap Level byte-string id map.
+     * @return Whether the level file was successfully saved.
      */
-    public void setLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
+    public boolean writeLevelData(byte[] levelData, BiMap<Byte, String> levelMap) {
+        boolean saved = false;
+        
         this.finiteData.setLevelData(levelData, levelMap);
+        try(FileOutputStream fos = new FileOutputStream(new File(this.worldDirectory, FILE_NAME));
+            GZIPOutputStream gos = new GZIPOutputStream(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(gos)
+        ) {
+            oos.writeObject(this.finiteData);
+            saved = true;
+            
+        } catch (Exception e) {
+            ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FILE_NAME));
+            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            
+        }
+        
+        return saved;
     }
     
     /**
-     * Gets a new LevelDataContainer populated from the loaded finite data.
+     * Attempts to read finite data from disk using GZIP compression,
+     * then gets a new LevelDataContainer populated from the loaded finite data.
      * 
      * @param levelWidth The level width.
      * @param levelHeight The level height.
      * @param levelLength The level length
      * @return A new LevelDataContainer populated from the loaded finite data.
      */
-    public LevelDataContainer getLevelData(int levelWidth, int levelHeight, int levelLength) {
-        return this.finiteData.getLevelData(levelWidth, levelHeight, levelLength);
+    public LevelDataContainer readLevelData(int levelWidth, int levelHeight, int levelLength) {
+        LevelDataContainer levelDataContainer;
+        
+        try(FileInputStream fis = new FileInputStream(new File(this.worldDirectory, FILE_NAME));
+            GZIPInputStream gis = new GZIPInputStream(fis);
+            ObjectInputStream ois = new ObjectInputStream(gis)
+        ) {
+            this.finiteData = (FiniteData)ois.readObject();
+            levelDataContainer = this.finiteData.getLevelData(levelWidth, levelHeight, levelLength);
+            
+        } catch (Exception e) {
+            levelDataContainer = new LevelDataContainer(levelWidth, levelHeight, levelLength);
+            
+            ModernBeta.log(Level.WARN, String.format(
+                "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
+                FiniteDataHandler.FILE_NAME
+            ));
+            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
+        }
+    
+        return levelDataContainer;
     }
     
     /**
@@ -74,39 +112,6 @@ public class FiniteDataHandler {
      */
     private static int getFiniteVersion() {
         return FINITE_VERSION_V1_3_1_0;
-    }
-    
-    /**
-     * Attempts to write the current finite data to disk. Uses GZIP compression.
-     * 
-     * @throws IOException if the finite data can't be written to disk
-     */
-    public void writeToDisk() throws IOException {
-        File file = new File(this.worldDirectory, FILE_NAME);
-
-        try(FileOutputStream fos = new FileOutputStream(file);
-            GZIPOutputStream gos = new GZIPOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(gos)
-        ) {
-            oos.writeObject(this.finiteData);
-        }
-    }
-    
-    /**
-     * Attempts to read finite data from disk. Uses GZIP compression.
-     * 
-     * @throws IOException if the finite data can't be read from disk
-     * @throws ClassNotFoundException if the finite data class is not found (when would this happen?)
-     */
-    public void readFromDisk() throws IOException, ClassNotFoundException {
-        File file = new File(this.worldDirectory, FILE_NAME);
-        
-        try(FileInputStream fis = new FileInputStream(file);
-            GZIPInputStream gis = new GZIPInputStream(fis);
-            ObjectInputStream ois = new ObjectInputStream(gis)
-        ) {
-            this.finiteData = (FiniteData)ois.readObject();
-        }
     }
     
     private static class FiniteData implements Serializable {

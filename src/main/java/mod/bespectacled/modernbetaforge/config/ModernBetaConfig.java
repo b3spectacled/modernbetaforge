@@ -136,6 +136,12 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean debugBlockSources = false;
+        
+        @Comment({
+            "Debug Indev level saving functionality."
+        })
+        @RequiresWorldRestart
+        public boolean debugIndevLevelSaves = false;
     }
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)

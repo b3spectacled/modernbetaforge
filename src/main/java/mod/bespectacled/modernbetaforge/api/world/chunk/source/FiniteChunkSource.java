@@ -56,8 +56,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class FiniteChunkSource extends ChunkSource {
-    private static final boolean DEBUG_LEVEL_DATA_HANDLER = false;
-    
     protected static final Block PLACEHOLDER_BLOCK = Blocks.ANVIL;
     protected static final int MAX_FLOODS = 640;
     
@@ -280,7 +278,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         if (ModernBetaConfig.generatorOptions.saveIndevLevels) {
             this.trySaveLevel(world, this.levelDataContainer);
             
-            if (DEBUG_LEVEL_DATA_HANDLER) {
+            if (ModernBetaConfig.debugOptions.debugIndevLevelSaves) {
                 this.debugLevelDataHandler(world, this.levelDataContainer);
             }
         }
@@ -750,26 +748,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @return LevelDataContainer containing level data and level block map.
      */
     private LevelDataContainer tryLoadLevel(World world) {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
-        LevelDataContainer levelDataContainer;
-        
-        ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
-        try {
-            dataHandler.readFromDisk();
-            levelDataContainer = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
-            
-            ModernBeta.log(Level.INFO, String.format("Level file '%s' was loaded..", FiniteDataHandler.FILE_NAME));
-        } catch (Exception e) {
-            levelDataContainer = new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
-            
-            ModernBeta.log(Level.WARN, String.format(
-                "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
-                FiniteDataHandler.FILE_NAME
-            ));
-            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
-        }
-        
-        return levelDataContainer;
+        return new FiniteDataHandler(world, this).readLevelData(this.levelWidth, this.levelHeight, this.levelLength);
     }
     
     /**
@@ -780,21 +759,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @return Whether the file was successfully saved.
      */
     private boolean trySaveLevel(World world, LevelDataContainer levelDataContainer) {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
-        boolean saved = false;
-
-        try {
-            dataHandler.setLevelData(levelDataContainer.levelData, levelDataContainer.levelMap);
-            dataHandler.writeToDisk();
-            
-            ModernBeta.log(Level.INFO, String.format("Level file '%s' was saved..", FiniteDataHandler.FILE_NAME));
-            saved = true;
-        } catch (Exception e) {
-            ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FiniteDataHandler.FILE_NAME));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
-        }
-        
-        return saved;
+        return new FiniteDataHandler(world, this).writeLevelData(levelDataContainer.levelData, levelDataContainer.levelMap);
     }
     
     /**
@@ -805,12 +770,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * @param levelDataContainer The active level data container to be debugged against.
      */ 
     private void debugLevelDataHandler(World world, LevelDataContainer levelDataContainer) {
-        FiniteDataHandler dataHandler = new FiniteDataHandler(world, this);
-
         ModernBeta.log(Level.INFO, String.format("Attempting to read level file '%s'..", FiniteDataHandler.FILE_NAME));
         try {
-            dataHandler.readFromDisk();
-            LevelDataContainer readLevelData = dataHandler.getLevelData(this.levelWidth, this.levelHeight, this.levelLength);
+            LevelDataContainer readLevelData = new FiniteDataHandler(world, this).readLevelData(this.levelWidth, this.levelHeight, this.levelLength);
             
             for (int x = 0; x < this.levelWidth; ++x) {
                 for (int y = 0; y < this.levelHeight; ++y) {

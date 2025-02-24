@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.compat;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+
 import org.apache.logging.log4j.Level;
 
 import com.ferreusveritas.dynamictrees.api.WorldGenRegistry;
@@ -39,15 +40,13 @@ public class CompatDynamicTrees implements Compat {
     }
 
     private static class BiomeDataBasePopulator implements IBiomeDataBasePopulator {
-        public static final ResourceLocation PATH = ModernBeta.createRegistryKey("worldgen/dynamic_trees.json");
+        private static final ResourceLocation DEFAULT_PATH = ModernBeta.createRegistryKey("worldgen/dynamic_trees.json");
 
         private final BiomeDataBasePopulatorJson jsonPopulator;
 
         public BiomeDataBasePopulator() {
-            DynamicTreesConfigHandler configHandler = new DynamicTreesConfigHandler(PATH);
-            configHandler.readConfig();
-
-            this.jsonPopulator = new BiomeDataBasePopulatorJson(configHandler.loadedJson);
+            DynamicTreesConfigHandler configHandler = new DynamicTreesConfigHandler(DEFAULT_PATH);
+            this.jsonPopulator = new BiomeDataBasePopulatorJson(configHandler.readConfig());
         }
 
         @Override
@@ -61,22 +60,25 @@ public class CompatDynamicTrees implements Compat {
         private static final File CONFIG = new File(new File(Minecraft.getMinecraft().gameDir, "config"), CONFIG_FILE_NAME);
         
         private final JsonElement defaultJson;
-        private JsonElement loadedJson;
         
         public DynamicTreesConfigHandler(ResourceLocation defaultPath) {
             this.defaultJson = JsonHelper.load(defaultPath);
         }
         
-        public void readConfig() {
+        public JsonElement readConfig() {
+            JsonElement loadedJson;
+            
             if (!CONFIG.isFile()) {
                 ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is missing and couldn't be loaded! A new one will be created!", CONFIG));
                 this.writeConfig();
             }
             
-            if ((this.loadedJson = JsonHelper.load(CONFIG)) == null) {
+            if ((loadedJson = JsonHelper.load(CONFIG)) == null) {
                 ModernBeta.log(Level.WARN, String.format("Dynamic Trees config file '%s' is corrupted and couldn't be loaded! The default config will be used!", CONFIG));
-                this.loadedJson = defaultJson;
+                loadedJson = this.defaultJson;
             }
+            
+            return loadedJson;
         }
         
         private void writeConfig() {
