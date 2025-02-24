@@ -179,11 +179,11 @@ public class DrawUtil {
             
             Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
             
-            inWater = blockAbove == Blocks.WATER;
+            inWater = blockAbove == chunkSource.getDefaultFluid().getBlock();
         }
         
         IBlockState state = chunkSource.getDefaultBlock();
-        IBlockState stateAbove = inWater ? BlockStates.WATER : BlockStates.AIR;
+        IBlockState stateAbove = inWater ? chunkSource.getDefaultFluid() : BlockStates.AIR;
         
         if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
