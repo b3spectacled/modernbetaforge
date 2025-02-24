@@ -86,7 +86,7 @@ public class GuiCustomizePresetsDataHandler {
         } catch (Exception e) {
             presets = new LinkedList<>();
             
-            ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded!", FILE_NAME));
+            ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded! A new one will be created!", FILE_NAME));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
         

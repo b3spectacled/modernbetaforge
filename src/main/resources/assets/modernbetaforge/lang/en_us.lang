@@ -300,7 +300,6 @@ modernbetaforge.general.spawnoptions=Spawn Options
 modernbetaforge.general.visualoptions=Visual Options
 modernbetaforge.general.serveroptions=Server Options
 modernbetaforge.general.debugoptions=Debug Options
-modernbetaforge.general.compatoptions=Mod Compatibility Options
 
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
 modernbetaforge.general.guioptions.defaultpresetfilter=Default World Preset Filter
@@ -311,7 +310,6 @@ modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Cu
 modernbetaforge.general.generatoroptions.saveindevlevels=Save Indev Levels
 
 modernbetaforge.general.spawnoptions.usespawnfuzz=Spawn Fuzz
-modernbetaforge.general.spawnoptions.useoldspawns=Old Player Spawns
 
 modernbetaforge.general.visualoptions.usebetabiomecolors=Beta Biome Colors
 modernbetaforge.general.visualoptions.usebetaskycolors=Beta Sky Colors
@@ -326,8 +324,6 @@ modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clien
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
-
-modernbetaforge.general.compatoptions.dynamictrees_usemoderntrees=[Dynamic Trees] Use Modern Trees
 
 ## Test Properties (For Debug Only!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge
