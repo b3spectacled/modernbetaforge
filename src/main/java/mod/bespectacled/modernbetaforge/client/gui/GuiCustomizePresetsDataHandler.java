@@ -33,8 +33,8 @@ public class GuiCustomizePresetsDataHandler {
     }
     
     public void writePresets() {
-        try {
-            this.writeToDisk();
+        try (Writer writer = new FileWriter(new File(this.configDirectory, FILE_NAME))) {
+            GSON.toJson(this.presets, LinkedHashSet.class, writer);
             
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", FILE_NAME));
@@ -80,8 +80,9 @@ public class GuiCustomizePresetsDataHandler {
     private List<PresetData> readPresets() {
         List<PresetData> presets;
         
-        try {
-            presets = readFromDisk();
+        try (Reader reader = new FileReader(new File(this.configDirectory, FILE_NAME))) {
+            Type type = new TypeToken<List<PresetData>>(){}.getType();
+            return GSON.fromJson(reader, type);
             
         } catch (Exception e) {
             presets = new LinkedList<>();
@@ -91,19 +92,6 @@ public class GuiCustomizePresetsDataHandler {
         }
         
         return presets;
-    }
-    
-    private void writeToDisk() throws Exception {
-        try (Writer writer = new FileWriter(new File(this.configDirectory, FILE_NAME))) {
-            GSON.toJson(this.presets, LinkedHashSet.class, writer);
-        }
-    }
-
-    private List<PresetData> readFromDisk() throws Exception {
-        try (Reader reader = new FileReader(new File(this.configDirectory, FILE_NAME))) {
-            Type type = new TypeToken<List<PresetData>>(){}.getType();
-            return GSON.fromJson(reader, type);
-        }
     }
     
     public static class PresetData implements Serializable {
