@@ -42,7 +42,7 @@
 	},
 	{
 		"__comment" : "Deserts",
-		"select": { "type": "sandy", "name": "modernbetaforge:.*" },
+		"select": { "name": "modernbetaforge:beta_desert" },
 		"apply": {
 			"species" : "cactus",
 			"density" : { "math": { "add" : [ { "mul" : [ "noise", 0.6 ] }, 0.4 ] } },

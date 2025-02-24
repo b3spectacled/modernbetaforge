@@ -1024,10 +1024,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.openBiomeScreen((str, factory) -> factory.singleBiome = str, settings.singleBiome);
                     break;
                 case GuiIdentifiers.PG0_B_BLOCK:
-                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, settings.defaultBlock, key -> ModernBetaRegistries.DEFAULT_BLOCK.contains(key));
+                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, settings.defaultBlock, NbtTags.DEFAULT_BLOCK, key -> ModernBetaRegistries.DEFAULT_BLOCK.contains(key));
                     break;
                 case GuiIdentifiers.PG0_B_FLUID:
-                    this.openFluidScreen((str, factory) -> factory.defaultFluid = str, settings.defaultFluid, key -> true);
+                    this.openFluidScreen((str, factory) -> factory.defaultFluid = str, settings.defaultFluid, NbtTags.DEFAULT_FLUID, key -> true);
                     break;
                     
                 case GuiIdentifiers.PG6_DSRT_LAND:
@@ -2306,8 +2306,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BIOMES.getValue(key).getBiomeName();
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES, predicate)));
     }
-    
+
     private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
+        this.openBlockScreen(consumer, initial, "block", predicate);
+    }
+    
+    private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> {
             Block block = ForgeRegistryUtil.get(key, ForgeRegistries.BLOCKS);
             
@@ -2316,12 +2320,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
         };
         
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
     }
     
-    private void openFluidScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
+    private void openFluidScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistryUtil.getFluidLocalizedName(key);
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "block", ForgeRegistryUtil.getFluidBlockRegistryNames()));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getFluidBlockRegistryNames()));
     }
     
     private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
