@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeInjector {
     private final BiomeInjectionRules rules;
@@ -54,12 +55,12 @@ public class BiomeInjector {
         return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
     }
     
-    public static boolean isBeachBlock(IBlockState blockState) {
+    public static boolean isBeachBlock(IBlockState blockState, Biome biome) {
         Block block = blockState.getBlock();
         
         // Only handle sand beaches,
         // due to limitation of heightmap cache.
-        return block == Blocks.SAND;
+        return block == (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) ? Blocks.SOUL_SAND : Blocks.SAND);
     }
     
     public static boolean atOceanDepth(int topHeight, int oceanDepth, int seaLevel) {

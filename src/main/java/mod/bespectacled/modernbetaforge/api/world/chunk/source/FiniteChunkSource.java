@@ -438,7 +438,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             BiomeInjector.isFluidBlock(context.stateAbove, this.defaultFluid);
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state);
+            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state, context.biome);
             
         if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;

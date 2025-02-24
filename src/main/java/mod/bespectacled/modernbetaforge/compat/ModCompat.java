@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.compat;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Level;
 
@@ -21,10 +22,10 @@ public class ModCompat {
             ModernBeta.log(Level.WARN, "MixinBooter was not found or an alternate mixin loader was installed..");
         }
         
-        loadModCompat(MOD_BIOMES_O_PLENTY, new CompatBiomesOPlenty());
-        loadModCompat(MOD_GALACTICRAFT, new CompatGalacticraft());
-        loadModCompat(MOD_NETHER_API, new CompatNetherAPI());
-        loadModCompat(MOD_DYNAMIC_TREES, new CompatDynamicTrees());
+        loadModCompat(MOD_BIOMES_O_PLENTY, CompatBiomesOPlenty::new);
+        loadModCompat(MOD_GALACTICRAFT, CompatGalacticraft::new);
+        loadModCompat(MOD_NETHER_API, CompatNetherAPI::new);
+        loadModCompat(MOD_DYNAMIC_TREES, CompatDynamicTrees::new);
     }
     
     public static boolean isMixinLoaderLoaded() {
@@ -45,10 +46,11 @@ public class ModCompat {
         return true;
     }
     
-    private static void loadModCompat(String modName, Compat compat) {
+    private static void loadModCompat(String modName, Supplier<Compat> supplier) {
         if (Loader.isModLoaded(modName)) {
             try {
                 ModernBeta.log(Level.INFO, String.format("Found mod '%s'..", modName));
+                Compat compat = supplier.get();
                 compat.load();
                 LOADED_MODS.put(modName, compat);
             } catch (Exception e) {
