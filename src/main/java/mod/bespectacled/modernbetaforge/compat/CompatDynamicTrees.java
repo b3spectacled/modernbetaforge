@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.compat;
 
 import com.ferreusveritas.dynamictrees.api.WorldGenRegistry;
+
 import net.minecraftforge.common.MinecraftForge;
 
 public class CompatDynamicTrees implements Compat {

@@ -63,6 +63,17 @@ public class ForgeRegistryUtil<T> {
         return getKeys(registry, e -> true);
     }
     
+    public static <T> List<T> getValues(IForgeRegistry<? extends T> registry, Predicate<T> filter) {
+        return registry.getValues()
+            .stream()
+            .filter(filter)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    
+    public static <T> List<T> getValues(IForgeRegistry<? extends T> registry) {
+        return getValues(registry, e -> true);
+    }
+    
     public static Fluid getFluid(ResourceLocation registryKey) {
         return FluidRegistry.getRegisteredFluids()
             .values()
