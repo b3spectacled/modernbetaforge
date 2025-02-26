@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.bespectacled.modernbetaforge.command.CommandDrawMap;
 import mod.bespectacled.modernbetaforge.command.CommandLocateBiome;
 import mod.bespectacled.modernbetaforge.command.CommandLocateStructure;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
@@ -102,5 +103,6 @@ public class ModernBeta {
     private void onFMLServerStartingEvent(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandLocateStructure());
         event.registerServerCommand(new CommandLocateBiome());
+        event.registerServerCommand(new CommandDrawMap());
     }
 }

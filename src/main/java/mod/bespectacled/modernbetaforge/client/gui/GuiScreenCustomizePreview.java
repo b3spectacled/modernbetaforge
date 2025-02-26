@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -396,6 +397,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         Runnable runnable = () -> {
             try {
                 ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.resolution));
+
+                // Make sure to reset climate samplers if world was previously loaded.
+                BetaColorSampler.INSTANCE.resetClimateSamplers();
+                
                 this.mapTexture.loadMapImage(DrawUtil.createTerrainMapForPreview(
                     this.chunkSource,
                     this.biomeSource,

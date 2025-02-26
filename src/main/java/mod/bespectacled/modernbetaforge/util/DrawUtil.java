@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -80,9 +79,10 @@ public class DrawUtil {
         SurfaceBuilder surfaceBuilder,
         BiomeInjectionRules injectionRules,
         int size,
+        boolean useBiomeBlend,
         Consumer<Float> progressTracker
     ) {
-        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, injectionRules, size, false, progressTracker);
+        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressTracker);
     }
     
     public static BufferedImage createTerrainMapForPreview(
@@ -90,23 +90,23 @@ public class DrawUtil {
         BiomeSource biomeSource,
         SurfaceBuilder surfaceBuilder,
         BiomeInjectionRules injectionRules,
-        int size,
+        int centerX,
+        int centerZ,
+        int sizeX,
+        int sizeZ,
         boolean useBiomeBlend,
         Consumer<Float> progressTracker
     ) {
-        // Make sure to reset climate samplers if world was previously loaded.
-        BetaColorSampler.INSTANCE.resetClimateSamplers();
-        
-        BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(sizeX, sizeZ, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
         Random random = new Random(chunkSource.getSeed());
         
-        int chunkWidth = size >> 4;
-        int chunkLength = size >> 4;
+        int chunkWidth = sizeX >> 4;
+        int chunkLength = sizeZ >> 4;
         
-        int offsetX = size / 2;
-        int offsetZ = size / 2;
+        int offsetX = sizeX / 2;
+        int offsetZ = sizeZ / 2;
         
         Block defaultFluid = chunkSource.getDefaultFluid().getBlock();
         
@@ -120,11 +120,11 @@ public class DrawUtil {
                 random = surfaceBuilder.createSurfaceRandom(chunkX, chunkZ);
                 
                 for (int localX = 0; localX < 16; ++localX) {
-                    int x = startX + localX - offsetX;
+                    int x = startX + localX - offsetX + centerX;
                     int imageX = startX + localX;
                    
                     for (int localZ = 0; localZ < 16; ++localZ) {
-                        int z = startZ + localZ - offsetZ;
+                        int z = startZ + localZ - offsetZ + centerZ;
                         int imageY = startZ + localZ;
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);

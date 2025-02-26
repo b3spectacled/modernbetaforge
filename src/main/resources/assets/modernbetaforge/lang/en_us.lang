@@ -295,6 +295,12 @@ commands.modernbetaforge.locatebiome.hover=Click to teleport
 commands.modernbetaforge.locatebiome.generator=This command can only be used in a Modern Beta overworld
 commands.modernbetaforge.locatebiome.distance=%s blocks away
 
+commands.modernbetaforge.drawmap.usage=/drawmap <width> <length> <optional:useOrigin>
+commands.modernbetaforge.drawmap.start=Drawing map of size %s/%s centered on %d/%d
+commands.modernbetaforge.drawmap.progress=Map drawing %s%% completed
+commands.modernbetaforge.drawmap.success=Saved terrain map as %s
+commands.modernbetaforge.drawmap.failure=Could not draw terrain map
+
 ## Config
 modernbetaforge.general.guioptions=GUI Settings
 modernbetaforge.general.generatoroptions=Generator Settings
