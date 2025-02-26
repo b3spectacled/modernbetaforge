@@ -96,12 +96,12 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     }
     
     @Override
-    public BlockPos findBiomePosition(int x, int z, int range, List<Biome> allowed, Random random) {
-        int minX = x - range >> 2;
-        int maxX = x + range >> 2;
+    public BlockPos findBiomePosition(int startX, int startZ, int range, List<Biome> allowed, Random random) {
+        int minX = startX - range >> 2;
+        int maxX = startX + range >> 2;
         
-        int minZ = z - range >> 2;
-        int maxZ = z + range >> 2;
+        int minZ = startZ - range >> 2;
+        int maxZ = startZ + range >> 2;
         
         int sizeX = maxX - minX + 1;
         int sizeZ = maxZ - minZ + 1;
@@ -112,14 +112,14 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         Set<Biome> allowedBiomes = new HashSet<>(allowed);
         
         for (int i = 0; i < sizeX * sizeZ; ++i) {
-            int startX = minX + i % sizeX << 2;
-            int startZ = minZ + i / sizeX << 2;
+            int x = minX + i % sizeX << 2;
+            int z = minZ + i / sizeX << 2;
             
             // Do not use injector here to speed initial world load
-            Biome biome = this.biomeSource.getBiome(startX, startZ);
+            Biome biome = this.biomeSource.getBiome(x, z);
             
             if (allowedBiomes.contains(biome) && (blockPos == null || random.nextInt(chance + 1) == 0)) {
-                blockPos = new BlockPos(startX, 0, startZ);
+                blockPos = new BlockPos(x, 0, z);
                 ++chance;
             }
         }
@@ -156,6 +156,40 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return true;
     }
     
+    /*
+     * Used for /locatebiome command
+     */
+    public BlockPos locateBiome(int startX, int startZ, int range, int steps, Biome biomeToSearch, Random random) {
+        BlockPos blockPos = null;
+        int chance = 0;
+        
+        for (int size = 0; size <= range; size += steps) {
+            for (int localX = -size; localX <= size; localX += steps) {
+                boolean atEdgeX = Math.abs(localX) == size;
+                
+                for (int localZ = -size; localZ <= size; localZ += steps) {
+                    boolean atEdgeZ = Math.abs(localZ) == size;
+                    
+                    if (!atEdgeX && !atEdgeZ) {
+                        continue;
+                    }
+                    
+                    int x = startX + localX;
+                    int z = startZ + localZ;
+                    
+                    if (this.getBiome(x, z) == biomeToSearch && (blockPos == null || random.nextInt(chance + 1) == 0)) {
+                        return new BlockPos(x, 0, z);
+                    }
+                    
+                    ++chance;
+                }
+                
+            }
+        }
+        
+        return blockPos;
+    }
+
     public Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {        
         DebugUtil.startDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
         if (biomes == null || biomes.length != sizeX * sizeZ) {

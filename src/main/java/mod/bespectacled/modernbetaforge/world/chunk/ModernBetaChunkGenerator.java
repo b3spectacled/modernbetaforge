@@ -271,7 +271,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             // Generate lakes, dungeons
             
             boolean populateWaterLakes = TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE);
-            if (this.settings.useWaterLakes &&  populateWaterLakes && !hasVillageGenerated) {
+            if (this.settings.useWaterLakes && populateWaterLakes && !hasVillageGenerated) {
                 ModernBetaBiomeDecorator.populateWaterLakes(this.world, this.random, this.settings, mutablePos, chunkX, chunkZ, this.chunkSource.getDefaultFluid());
             }
             

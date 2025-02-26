@@ -6,9 +6,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableList;
-
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +16,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommandLocateBiome extends CommandLocateExtended {
-    private static final int RANGE = 4096;
+    private static final int RANGE = 1024;
+    private static final int STEPS = 8;
     
     public CommandLocateBiome() {
         super("locatebiome", CommandLocateBiome::locate);
@@ -27,10 +27,11 @@ public class CommandLocateBiome extends CommandLocateExtended {
         int senderX = sender.getPosition().getX();
         int senderZ = sender.getPosition().getZ();
         
-        List<Biome> biomes = ImmutableList.of(ForgeRegistryUtil.get(new ResourceLocation(args[0]), ForgeRegistries.BIOMES));
+        Biome biome = ForgeRegistryUtil.get(new ResourceLocation(args[0]), ForgeRegistries.BIOMES);
         Random random = new Random(sender.getEntityWorld().getSeed());
         
-        return sender.getEntityWorld().getBiomeProvider().findBiomePosition(senderX, senderZ, RANGE, biomes, random);
+        ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)sender.getEntityWorld().getBiomeProvider();
+        return biomeProvider.locateBiome(senderX, senderZ, RANGE, STEPS, biome, random);
     }
     
     @Override

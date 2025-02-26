@@ -63,6 +63,7 @@ public class ForgeRegistryUtil<T> {
         return getKeys(registry, e -> true);
     }
     
+    @SuppressWarnings("deprecation")
     public static <T> List<T> getValues(IForgeRegistry<? extends T> registry, Predicate<T> filter) {
         return registry.getValues()
             .stream()
