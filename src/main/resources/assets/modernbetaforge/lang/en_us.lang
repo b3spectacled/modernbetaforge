@@ -285,14 +285,14 @@ commands.modernbetaforge.locate.usage=/modernbetaforge:locate <structure>
 commands.modernbetaforge.locate.success=The nearest %s is at %s %s
 commands.modernbetaforge.locate.failure=Could not find that structure nearby
 commands.modernbetaforge.locate.hover=Click to teleport
-commands.modernbetaforge.locate.generator=Cannot use this command in this world type or dimensionCommands
+commands.modernbetaforge.locate.generator=This command can only be used in a Modern Beta overworld
 commands.modernbetaforge.locate.distance=%s blocks away
 
-commands.modernbetaforge.locatebiome.usage=/modernbetaforge:locate <biome> (Note: This command cannot be used to search for beach biomes)
+commands.modernbetaforge.locatebiome.usage=/modernbetaforge:locatebiome <biome> (Note: This command cannot be used to search for beach biomes)
 commands.modernbetaforge.locatebiome.success=The nearest %s is at %s %s
 commands.modernbetaforge.locatebiome.failure=Could not find that biome nearby
 commands.modernbetaforge.locatebiome.hover=Click to teleport
-commands.modernbetaforge.locatebiome.generator=Cannot use this command in this world type or dimensionCommands
+commands.modernbetaforge.locatebiome.generator=This command can only be used in a Modern Beta overworld
 commands.modernbetaforge.locatebiome.distance=%s blocks away
 
 ## Config
