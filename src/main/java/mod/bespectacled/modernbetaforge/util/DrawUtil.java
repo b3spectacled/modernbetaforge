@@ -73,7 +73,7 @@ public class DrawUtil {
     private static final int COLOR_SOUL_SAND = MathUtil.convertARGBComponentsToInt(255, 102, 76, 51);
     private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
-    public static BufferedImage createTerrainMapForPreview(
+    public static BufferedImage createTerrainMap(
         ChunkSource chunkSource,
         BiomeSource biomeSource,
         SurfaceBuilder surfaceBuilder,
@@ -82,10 +82,10 @@ public class DrawUtil {
         boolean useBiomeBlend,
         Consumer<Float> progressTracker
     ) {
-        return createTerrainMapForPreview(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressTracker);
+        return createTerrainMap(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressTracker);
     }
     
-    public static BufferedImage createTerrainMapForPreview(
+    public static BufferedImage createTerrainMap(
         ChunkSource chunkSource,
         BiomeSource biomeSource,
         SurfaceBuilder surfaceBuilder,

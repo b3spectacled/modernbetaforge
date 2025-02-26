@@ -401,7 +401,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Make sure to reset climate samplers if world was previously loaded.
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
                 
-                this.mapTexture.loadMapImage(DrawUtil.createTerrainMapForPreview(
+                this.mapTexture.loadMapImage(DrawUtil.createTerrainMap(
                     this.chunkSource,
                     this.biomeSource,
                     this.surfaceBuilder,
