@@ -31,6 +31,8 @@ import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenCavesExtended;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenNoOp;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenRavineExtended;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.noise.ModernBetaNoiseSettings;
 import mod.bespectacled.modernbetaforge.world.chunk.source.AlphaChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.BetaChunkSource;
@@ -61,6 +63,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -111,6 +115,20 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.INFDEV.getRegistryKey(), InfdevSurfaceBuilder::new);
         ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.PE.getRegistryKey(), PESurfaceBuilder::new);
         ModernBetaRegistries.SURFACE_BUILDER.register(ModernBetaBuiltInTypes.Surface.RELEASE.getRegistryKey(), ReleaseSurfaceBuilder::new);
+    }
+    
+    public static void registerCarvers() {
+        ModernBetaRegistries.CARVER.register(ModernBetaChunkGenerator.CAVE_KEY, (chunkSource, settings) -> 
+            TerrainGen.getModdedMapGen(
+                ModernBetaRegistries.CAVE_CARVER.get(settings.caveCarver).apply(chunkSource, settings),
+                InitMapGenEvent.EventType.CAVE
+            )
+        );
+        ModernBetaRegistries.CARVER.register(ModernBetaChunkGenerator.RAVINE_KEY, (chunkSource, settings) -> 
+            settings.useRavines ? 
+                TerrainGen.getModdedMapGen(new MapGenRavineExtended(chunkSource, settings), InitMapGenEvent.EventType.RAVINE) :
+                new MapGenNoOp(chunkSource, settings)
+        );
     }
     
     public static void registerCaveCarvers() {

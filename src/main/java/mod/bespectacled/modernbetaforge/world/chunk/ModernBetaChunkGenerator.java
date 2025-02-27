@@ -24,7 +24,6 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
-import mod.bespectacled.modernbetaforge.world.carver.MapGenRavineExtended;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
@@ -51,13 +50,14 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
 import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
-    private static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
+    public static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
+    public static final ResourceLocation RAVINE_KEY = new ResourceLocation("ravine");
+    
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;
     
     private final World world;
@@ -103,7 +103,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.componentCache = new ChunkCache<>("components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
         
         this.structureMap = this.initStructures(this, settings, world.getWorldInfo().isMapFeaturesEnabled());
-        this.carverMap = this.initCarvers(settings);
+        this.carverMap = ModernBetaRegistries.CARVER
+            .getEntrySet()
+            .stream()
+            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
         
         this.customFeatures = ModernBetaRegistries.FEATURE
             .getValues()
@@ -483,32 +486,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         }
         
         return structureMap;
-    }
-    
-    private Map<ResourceLocation, MapGenBase> initCarvers(ModernBetaGeneratorSettings settings) {
-        Map<ResourceLocation, MapGenBase> carverMap = new LinkedHashMap<>();
-        
-        carverMap.put(
-            CAVE_KEY,
-            TerrainGen.getModdedMapGen(
-                ModernBetaRegistries.CAVE_CARVER
-                    .get(settings.caveCarver)
-                    .apply(this.chunkSource, settings),
-                InitMapGenEvent.EventType.CAVE
-            )
-        );
-        
-        if (settings.useRavines) {
-            carverMap.put(
-                new ResourceLocation("ravine"),
-                TerrainGen.getModdedMapGen(
-                    new MapGenRavineExtended(this.chunkSource, settings),
-                    InitMapGenEvent.EventType.RAVINE
-                )
-            );
-        }
-        
-        return carverMap;
     }
     
     private ChunkPrimerContainer provideInitialChunkPrimerContainer(int chunkX, int chunkZ) {

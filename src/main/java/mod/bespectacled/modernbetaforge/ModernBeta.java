@@ -78,6 +78,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerNoiseSources();
         ModernBetaBuiltInRegistries.registerNoiseSettings();
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
+        ModernBetaBuiltInRegistries.registerCarvers();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerWorldSpawners();

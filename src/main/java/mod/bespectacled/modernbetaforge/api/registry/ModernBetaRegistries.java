@@ -25,6 +25,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<NoiseColumnSamplerCreator> NOISE_COLUMN_SAMPLER;
     public static final ModernBetaRegistry<NoiseSettings> NOISE_SETTING;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE_BUILDER;
+    public static final ModernBetaRegistry<CarverCreator> CARVER;
     public static final ModernBetaRegistry<CaveCarverCreator> CAVE_CARVER;
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     public static final ModernBetaRegistry<FeatureCreator> FEATURE;
@@ -40,6 +41,7 @@ public class ModernBetaRegistries {
         NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>("NOISE_COLUMN_SAMPLER");
         NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
         SURFACE_BUILDER = new ModernBetaRegistry<>("SURFACE_BUILDER");
+        CARVER = new ModernBetaRegistry<>("CARVER");
         CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         FEATURE = new ModernBetaRegistry<>("FEATURE");
@@ -72,6 +74,11 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface SurfaceBuilderCreator {
         SurfaceBuilder apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface CarverCreator {
+        MapGenBase apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
