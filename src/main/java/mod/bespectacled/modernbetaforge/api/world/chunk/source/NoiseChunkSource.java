@@ -194,22 +194,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Gets a noise source identified by ResourceLocation key.
-     * 
-     * @param key The noise source key
-     * @return The noise source.
-     */
-    public NoiseSource getNoiseSource(ResourceLocation key) {
-        if (!this.noiseSources.containsKey(key)) {
-            String error = String.format("[Modern Beta] Noise Source map does not contain key '%s'!", key);
-            
-            throw new IllegalArgumentException(error);
-        }
-        
-        return this.noiseSources.get(key);
-    }
-    
-    /**
      * Gets the noise settings container.
      * 
      * @return The noise settings.
