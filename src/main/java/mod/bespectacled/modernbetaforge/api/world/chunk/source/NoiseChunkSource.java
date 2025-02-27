@@ -45,7 +45,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     private final ChunkCache<HeightmapChunk> heightmapCache;
     private final ChunkCache<DensityChunk> densityCache;
     
-    private final List<NoiseSampler> noiseSamplers;
+    private final Map<ResourceLocation, NoiseSampler> noiseSamplers;
     private final Map<ResourceLocation, NoiseSource> noiseSources;
     
     private final NoiseSettings noiseSettings;
@@ -77,12 +77,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
         
-        this.noiseSamplers = ModernBetaRegistries.NOISE_SAMPLER.getValues()
-            .stream()
-            .map(entry -> entry.apply(this, this.settings))
-            .collect(Collectors.toCollection(LinkedList<NoiseSampler>::new));
+        this.noiseSamplers = new LinkedHashMap<>();
         this.noiseSources = new LinkedHashMap<>();
-        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSources.put(
+        
+        ModernBetaRegistries.NOISE_SAMPLER.getEntrySet().forEach(entry -> this.noiseSamplers.put(
+            entry.getKey(),
+            entry.getValue().apply(this, this.settings)
+        ));
+        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> this.noiseSources.put(
             entry.getKey(),
             new NoiseSource(
                 entry.getValue().apply(this, this.settings),
@@ -160,19 +162,60 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
-     * Gets sampled terrain density from a particular layer identified by ResouceLocation key.
+     * Gets sampled terrain density from a particular layer identified by ResourceLocation key.
      * 
-     * @param key The terrain density layer
+     * @param key The terrain density layer key
      * @param x x-coordinate in block coordinates.
      * @param y y-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * @return A terrain density.
+     * @return The terrain density.
      */
     public double getDensity(ResourceLocation key, int x, int y, int z) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
         return this.densityCache.get(chunkX, chunkZ).sample(key, x, y, z);
+    }
+    
+    /**
+     * Gets a noise sampler identified by ResourceLocation key.
+     * 
+     * @param key The noise sampler key
+     * @return The noise sampler.
+     */
+    public NoiseSampler getNoiseSampler(ResourceLocation key) {
+        if (!this.noiseSamplers.containsKey(key)) {
+            String error = String.format("[Modern Beta] Noise Sampler map does not contain key '%s'!", key);
+            
+            throw new IllegalArgumentException(error);
+        }
+        
+        return this.noiseSamplers.get(key);
+    }
+    
+    /**
+     * Gets a noise source identified by ResourceLocation key.
+     * 
+     * @param key The noise source key
+     * @return The noise source.
+     */
+    public NoiseSource getNoiseSource(ResourceLocation key) {
+        if (!this.noiseSources.containsKey(key)) {
+            String error = String.format("[Modern Beta] Noise Source map does not contain key '%s'!", key);
+            
+            throw new IllegalArgumentException(error);
+        }
+        
+        return this.noiseSources.get(key);
+    }
+    
+    /**
+     * Gets the noise settings container.
+     * 
+     * @return The noise settings.
+     */
+    public NoiseSettings getNoiseSettings() {
+        return this.noiseSettings;
     }
     
     /**
@@ -456,6 +499,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
+        
+        List<NoiseSampler> noiseSamplers = this.noiseSamplers.entrySet()
+            .stream()
+            .map(e -> e.getValue())
+            .collect(Collectors.toCollection(LinkedList::new));
 
         // Create noise sources and sample.
         Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>(this.noiseSources);
@@ -464,7 +512,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             chunkX * this.noiseSizeX,
             chunkZ * this.noiseSizeZ,
             this.noiseSettings,
-            entry.getKey().equals(DensityChunk.INITIAL) ? this.noiseSamplers : ImmutableList.of()
+            entry.getKey().equals(DensityChunk.INITIAL) ? noiseSamplers : ImmutableList.of()
         ));
         
         Map<ResourceLocation, double[]> densityMap = new LinkedHashMap<>();
