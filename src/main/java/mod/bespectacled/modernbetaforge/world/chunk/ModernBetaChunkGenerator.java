@@ -71,8 +71,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final ChunkCache<ChunkPrimerContainer> initialChunkCache;
     private final ChunkCache<ComponentChunk> componentCache;
     
-    private final Map<ResourceLocation, MapGenStructure> structureMap;
-    private final Map<ResourceLocation, MapGenBase> carverMap;
+    private final Map<ResourceLocation, MapGenStructure> structures;
+    private final Map<ResourceLocation, MapGenBase> carvers;
     
     private final List<WorldGenerator> customFeatures;
     
@@ -102,8 +102,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.initialChunkCache = new ChunkCache<>("initial_chunk", this::provideInitialChunkPrimerContainer);
         this.componentCache = new ChunkCache<>("components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
         
-        this.structureMap = this.initStructures(this, settings, world.getWorldInfo().isMapFeaturesEnabled());
-        this.carverMap = ModernBetaRegistries.CARVER
+        this.structures = this.initStructures(this, settings, world.getWorldInfo().isMapFeaturesEnabled());
+        this.carvers = ModernBetaRegistries.CARVER
             .getEntrySet()
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
@@ -147,8 +147,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         ChunkPrimer containerPrimer = chunkContainer.chunkPrimer;
         
         // Generate village feature placements here, for structure weight sampling
-        if (this.structureMap.containsKey(ModernBetaStructures.VILLAGE)) {
-            this.structureMap.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, containerPrimer);
+        if (this.structures.containsKey(ModernBetaStructures.VILLAGE)) {
+            this.structures.get(ModernBetaStructures.VILLAGE).generate(this.world, chunkX, chunkZ, containerPrimer);
         }
         
         // Generate processed chunk
@@ -193,7 +193,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             }
             
             // Carve terrain
-            for (Entry<ResourceLocation, MapGenBase> entry : this.carverMap.entrySet()) {
+            for (Entry<ResourceLocation, MapGenBase> entry : this.carvers.entrySet()) {
                 MapGenBase carver = entry.getValue();
                 
                 if (carver instanceof MapGenBetaCave) {
@@ -207,7 +207,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             }
 
             // Generate map feature placements
-            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
+            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structures.entrySet()) {
                 if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
                     structureEntry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
                 }
@@ -257,7 +257,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ForgeEventFactory.onChunkPopulate(true, this, this.world, this.random, chunkX, chunkZ, false);
             
             // Actually generate map features here
-            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structureMap.entrySet()) {
+            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structures.entrySet()) {
                 if (structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
                     hasVillageGenerated = structureEntry.getValue().generateStructure(this.world, this.random, chunkPos);
                 } else {
@@ -328,8 +328,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         boolean generated = false;
         
-        if (this.structureMap.containsKey(ModernBetaStructures.MONUMENT) && chunk.getInhabitedTime() < 3600L) {
-            generated |= this.structureMap
+        if (this.structures.containsKey(ModernBetaStructures.MONUMENT) && chunk.getInhabitedTime() < 3600L) {
+            generated |= this.structures
                 .get(ModernBetaStructures.MONUMENT)
                 .generateStructure(this.world, this.random, new ChunkPos(chunkX, chunkZ));
         }
@@ -345,16 +345,16 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         Biome biome = this.world.getBiome(pos);
         
-        if (creatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.TEMPLE)) {
-            MapGenScatteredFeature feature = (MapGenScatteredFeature)this.structureMap.get(ModernBetaStructures.TEMPLE);
+        if (creatureType == EnumCreatureType.MONSTER && this.structures.containsKey(ModernBetaStructures.TEMPLE)) {
+            MapGenScatteredFeature feature = (MapGenScatteredFeature)this.structures.get(ModernBetaStructures.TEMPLE);
             
             if (feature.isSwampHut(pos)) {
                 return feature.getMonsters();
             }
         }
         
-        if (creatureType == EnumCreatureType.MONSTER && this.structureMap.containsKey(ModernBetaStructures.MONUMENT)) {
-            StructureOceanMonument feature = (StructureOceanMonument)this.structureMap.get(ModernBetaStructures.MONUMENT);
+        if (creatureType == EnumCreatureType.MONSTER && this.structures.containsKey(ModernBetaStructures.MONUMENT)) {
+            StructureOceanMonument feature = (StructureOceanMonument)this.structures.get(ModernBetaStructures.MONUMENT);
             
             if (feature.isPositionInStructure(this.world, pos)) {
                 return feature.getMonsters();
@@ -373,13 +373,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             return null;
         }
 
-        if (this.structureMap.isEmpty()) {
+        if (this.structures.isEmpty()) {
             return null;
         }
         
         ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
-        if (this.structureMap.containsKey(structureKey)) {
-            return this.structureMap.get(structureKey).getNearestStructurePos(world, pos, findUnexplored);
+        if (this.structures.containsKey(structureKey)) {
+            return this.structures.get(structureKey).getNearestStructurePos(world, pos, findUnexplored);
         }
         
         return null;
@@ -391,11 +391,11 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             return;
         }
 
-        if (this.structureMap.isEmpty()) {
+        if (this.structures.isEmpty()) {
             return;
         }
 
-        for (MapGenStructure structure : this.structureMap.values()) {
+        for (MapGenStructure structure : this.structures.values()) {
             structure.generate(this.world, chunkX, chunkZ, null);
         }
     }
@@ -406,13 +406,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             return false;
         }
 
-        if (this.structureMap.isEmpty()) {
+        if (this.structures.isEmpty()) {
             return false;
         }
         
         ResourceLocation structureKey = new ResourceLocation(structureName.toLowerCase());
-        if (this.structureMap.containsKey(structureKey)) {
-            return this.structureMap.get(structureKey).isInsideStructure(pos);
+        if (this.structures.containsKey(structureKey)) {
+            return this.structures.get(structureKey).isInsideStructure(pos);
         }
 
         return false;

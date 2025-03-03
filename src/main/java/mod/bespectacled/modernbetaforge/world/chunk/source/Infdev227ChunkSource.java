@@ -150,7 +150,7 @@ public class Infdev227ChunkSource extends ChunkSource {
                             bX = height;
                         }
                         
-                        if (y <= bX && (BlockStates.isAir(blockState)|| BlockStates.isEqual(blockState, this.defaultFluid))) {
+                        if (y <= bX && (BlockStates.isAir(blockState) || BlockStates.isEqual(blockState, this.defaultFluid))) {
                             blockState = Blocks.BRICK_BLOCK.getDefaultState();
                         }
                     }
