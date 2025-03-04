@@ -51,8 +51,7 @@ public class MapGenBetaCaveUnderwater extends MapGenBeta18Cave {
     @Override
     protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
         if (this.carvables.contains(block) && localY - 1 == LAVA_LEVEL - 1) {
-            float magmaChance = this.featureRandom.nextFloat();
-            chunkPrimer.setBlockState(localX, localY, localZ, magmaChance < 0.25 ? BlockStates.MAGMA : BlockStates.OBSIDIAN);
+            chunkPrimer.setBlockState(localX, localY, localZ, BlockStates.OBSIDIAN);
             
         } else {
             super.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
