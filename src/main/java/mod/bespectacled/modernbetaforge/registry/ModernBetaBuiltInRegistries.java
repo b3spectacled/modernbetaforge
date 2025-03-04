@@ -29,6 +29,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBeta18Cave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveUnderwater;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenCavesExtended;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenNoOp;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenRavineExtended;
@@ -125,8 +126,13 @@ public class ModernBetaBuiltInRegistries {
             )
         );
         ModernBetaRegistries.CARVER.register(ModernBetaChunkGenerator.RAVINE_KEY, (chunkSource, settings) -> 
-            settings.useRavines ? 
+            settings.useRavines ?
                 TerrainGen.getModdedMapGen(new MapGenRavineExtended(chunkSource, settings), InitMapGenEvent.EventType.RAVINE) :
+                new MapGenNoOp(chunkSource, settings)
+        );
+        ModernBetaRegistries.CARVER.register(ModernBetaChunkGenerator.CAVE_WATER_KEY, (chunkSource, settings) ->
+            settings.useUnderwaterCaves ?
+                TerrainGen.getModdedMapGen(new MapGenBetaCaveUnderwater(chunkSource, settings), InitMapGenEvent.EventType.CUSTOM) :
                 new MapGenNoOp(chunkSource, settings)
         );
     }

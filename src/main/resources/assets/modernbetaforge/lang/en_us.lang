@@ -95,6 +95,7 @@ createWorld.customize.custom.caveCount=Cave Count
 createWorld.customize.custom.caveChance=Cave Rarity
 createWorld.customize.custom.useVillageVariants=Village Variants
 createWorld.customize.custom.useSandstone=Sandstone
+createWorld.customize.custom.useUnderwaterCaves=Underwater Caves
 
 # Page 1 - Nether Settings
 createWorld.customize.custom.useOldNether=Classic Nether

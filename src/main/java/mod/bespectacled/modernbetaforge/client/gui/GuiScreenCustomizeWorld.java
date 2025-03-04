@@ -272,6 +272,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, NbtTags.WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_WATER_LAKE_CHANCE, (float)this.settings.waterLakeChance, this),
             createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, NbtTags.USE_LAVA_LAKES, this.settings.useLavaLakes),
             createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, NbtTags.LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE, (float)this.settings.lavaLakeChance, this),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES, NbtTags.USE_UNDERWATER_CAVES, this.settings.useUnderwaterCaves),
+            null,
+            
             createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "page0", "nether"),
             null,
             createGuiButton(GuiIdentifiers.PG0_B_USE_OLD_NETHER, NbtTags.USE_OLD_NETHER, this.settings.useOldNether),
@@ -1235,6 +1238,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG0_B_USE_SANDSTONE:
                     this.settings.useSandstone = entryValue;
+                    break;
+                case GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES:
+                    this.settings.useUnderwaterCaves = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG0_B_USE_OLD_NETHER:

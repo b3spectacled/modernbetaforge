@@ -70,6 +70,8 @@ public class GuiIdentifiers {
     public static final int PG0_S_BLOCK = 133;
     public static final int PG0_S_FLUID = 134;
     
+    public static final int PG0_B_USE_UNDERWATER_CAVES = 135;
+    
     public static final int PG0_B_CHUNK = 190;
     public static final int PG0_B_BIOME = 191;
     public static final int PG0_B_SURFACE = 192;

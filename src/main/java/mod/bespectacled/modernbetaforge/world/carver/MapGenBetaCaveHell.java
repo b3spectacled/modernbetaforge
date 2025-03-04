@@ -15,7 +15,7 @@ public class MapGenBetaCaveHell extends MapGenBetaCave {
     }
     
     public MapGenBetaCaveHell() {
-        super(BlockStates.NETHERRACK, BlockStates.LAVA, 1.0f, 128, 10, 5);
+        super(BlockStates.NETHERRACK, BlockStates.LAVA, BlockStates.AIR, 1.0f, 128, 10, 5);
     }
     
     @Override

@@ -5,6 +5,7 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -15,7 +16,11 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
     }
     
     public MapGenBeta18Cave() {
-        super(BlockStates.STONE, BlockStates.WATER, 1.0f, 128, 40, 15);
+        super(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128, 40, 15);
+    }
+    
+    protected MapGenBeta18Cave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance) {
+        super(defaultBlock, defaultFluid, defaultFill, caveWidth, caveHeight, caveCount, caveChance);
     }
     
     @Override

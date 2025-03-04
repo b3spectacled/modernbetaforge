@@ -34,6 +34,7 @@ public class NbtTags {
     public static final String WATER_LAKE_CHANCE = "waterLakeChance";
     public static final String USE_LAVA_LAKES = "useLavaLakes";
     public static final String LAVA_LAKE_CHANCE = "lavaLakeChance";
+    public static final String USE_UNDERWATER_CAVES = "useUnderwaterCaves";
     
     public static final String USE_OLD_NETHER = "useOldNether";
     public static final String USE_NETHER_CAVES = "useNetherCaves";

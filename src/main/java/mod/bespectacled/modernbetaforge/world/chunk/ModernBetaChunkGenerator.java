@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
@@ -57,6 +58,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
     public static final ResourceLocation RAVINE_KEY = new ResourceLocation("ravine");
+    public static final ResourceLocation CAVE_WATER_KEY = ModernBeta.createRegistryKey("cave_water");
     
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;
     
@@ -198,7 +200,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                 
                 if (carver instanceof MapGenBetaCave) {
                     List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
-                    ((MapGenBetaCave)carver).generate(this.world, chunkX, chunkZ, chunkPrimer, structureComponents);
+                    ((MapGenBetaCave)carver).generate(this.world, chunkX, chunkZ, chunkPrimer, biomes, structureComponents);
                     
                 } else if (!villageGenerated) {
                     entry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);

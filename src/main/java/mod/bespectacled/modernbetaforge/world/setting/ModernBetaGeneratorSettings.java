@@ -189,6 +189,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useMonuments;
     public final boolean useMansions;
     public final boolean useRavines;
+    public final boolean useUnderwaterCaves;
     
     public final boolean useWaterLakes;
     public final int waterLakeChance;
@@ -417,6 +418,7 @@ public class ModernBetaGeneratorSettings {
         this.useMonuments = factory.useMonuments;
         this.useMansions = factory.useMansions;
         this.useRavines = factory.useRavines;
+        this.useUnderwaterCaves = factory.useUnderwaterCaves;
         
         this.useBirchTrees = factory.useBirchTrees;
         this.usePineTrees = factory.usePineTrees;
@@ -708,6 +710,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useMonuments;
         public boolean useMansions;
         public boolean useRavines;
+        public boolean useUnderwaterCaves;
         
         public boolean useWaterLakes;
         public int waterLakeChance;
@@ -924,7 +927,7 @@ public class ModernBetaGeneratorSettings {
             this.caveWidth = 1.0f;
             this.caveHeight = 128;
             this.caveCount = 40;
-            this.caveChance= 15;
+            this.caveChance = 15;
             this.useDungeons = true;
             this.dungeonChance = 8;
             
@@ -936,6 +939,7 @@ public class ModernBetaGeneratorSettings {
             this.useMonuments = true;
             this.useMansions = true;
             this.useRavines = true;
+            this.useUnderwaterCaves = false;
             
             this.useWaterLakes = true;
             this.waterLakeChance = 4;
@@ -1187,6 +1191,7 @@ public class ModernBetaGeneratorSettings {
                 this.useMonuments == factory.useMonuments &&
                 this.useMansions == factory.useMansions &&
                 this.useRavines == factory.useRavines &&
+                this.useUnderwaterCaves == factory.useUnderwaterCaves &&
                 
                 this.useWaterLakes == factory.useWaterLakes &&
                 this.waterLakeChance == factory.waterLakeChance &&
@@ -1419,6 +1424,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useMonuments ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMansions ? 1 : 0);
             hashCode = 31 * hashCode + (this.useRavines ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useUnderwaterCaves ? 1 : 0);
             
             hashCode = 31 * hashCode + (this.useWaterLakes ? 1 : 0);
             hashCode = 31 * hashCode + this.waterLakeChance;
@@ -1677,6 +1683,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useMonuments = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MONUMENTS, factory.useMonuments);
                 factory.useMansions = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MANSIONS, factory.useMansions);
                 factory.useRavines = JsonUtils.getBoolean(jsonObject, NbtTags.USE_RAVINES, factory.useRavines);
+                factory.useUnderwaterCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
                 
                 factory.useWaterLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
                 factory.waterLakeChance = JsonUtils.getInt(jsonObject, NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
@@ -2044,6 +2051,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_MONUMENTS, factory.useMonuments);
             jsonObject.addProperty(NbtTags.USE_MANSIONS, factory.useMansions);
             jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
+            jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
             
             jsonObject.addProperty(NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);

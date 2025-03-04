@@ -28,6 +28,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
@@ -38,11 +39,15 @@ public class MapGenBetaCave extends MapGenBase {
     private static final int STRUCTURE_PADDING_XZ = 4;
     private static final int STRUCTURE_PADDING_Y = 8;
     
+    protected static final int LAVA_LEVEL = 10;
+    
     protected final Block defaultBlock;
     protected final Set<Block> defaultFluids;
+    protected final Block defaultFill;
     
     protected final Set<Block> carvables;
     protected final Random tunnelRandom;
+    protected final Random featureRandom;
     
     protected final float caveWidth;
     protected final int caveHeight;
@@ -52,18 +57,19 @@ public class MapGenBetaCave extends MapGenBase {
     private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance);
+        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance);
     }
     
     public MapGenBetaCave() {
-        this(BlockStates.STONE, BlockStates.WATER, 1.0f, 128, 40, 15);
+        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128, 40, 15);
     }
     
-    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, float caveWidth, int caveHeight, int caveCount, int caveChance) {
+    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
         this.defaultFluids = new HashSet<>();
+        this.defaultFill = defaultFill.getBlock();
 
         this.defaultFluids.add(defaultFluid.getBlock());
         try {
@@ -80,9 +86,10 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveChance = caveChance;
         
         this.tunnelRandom = new Random();
+        this.featureRandom = new Random();
     }
     
-    public void generate(World world, int originChunkX, int originChunkZ, ChunkPrimer chunkPrimer, List<StructureComponent> structureComponents) {
+    public void generate(World world, int originChunkX, int originChunkZ, ChunkPrimer chunkPrimer, Biome[] biomes, List<StructureComponent> structureComponents) {
         this.structureComponents = structureComponents;
         
         this.generate(world, originChunkX, originChunkZ, chunkPrimer);
@@ -99,8 +106,7 @@ public class MapGenBetaCave extends MapGenBase {
         for (int chunkX = originChunkX - this.range; chunkX <= originChunkX + this.range; ++chunkX) {
             for (int chunkZ = originChunkZ - this.range; chunkZ <= originChunkZ + this.range; ++chunkZ) {
                 long chunkSeed = (long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ world.getSeed();
-                this.rand.setSeed(chunkSeed);
-                this.tunnelRandom.setSeed(chunkSeed);
+                this.setRandoms(chunkSeed);
                 
                 this.recursiveGenerate(world, chunkX, chunkZ, originChunkX, originChunkZ, chunkPrimer);
             }
@@ -222,10 +228,10 @@ public class MapGenBetaCave extends MapGenBase {
 
     protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
         if (this.carvables.contains(block)) {
-            if (localY - 1 < 10) { // Set lava below y = 10
+            if (localY - 1 < LAVA_LEVEL) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
-                chunkPrimer.setBlockState(localX, localY, localZ, Blocks.AIR.getDefaultState());
+                chunkPrimer.setBlockState(localX, localY, localZ, this.defaultFill.getDefaultState());
     
                 // This replaces carved-out dirt with grass, if block that was removed was grass.
                 if (isGrassBlock && chunkPrimer.getBlockState(localX, localY - 1, localZ).getBlock() == Blocks.DIRT) {
@@ -253,6 +259,12 @@ public class MapGenBetaCave extends MapGenBase {
 
     protected final float getBaseTunnelSystemWidth(Random random) {
         return random.nextFloat() * 2.0f + random.nextFloat();
+    }
+    
+    protected final void setRandoms(long chunkSeed) {
+        this.rand.setSeed(chunkSeed);
+        this.tunnelRandom.setSeed(chunkSeed);
+        this.featureRandom.setSeed(chunkSeed);
     }
 
     private void carveCave(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
