@@ -78,7 +78,7 @@ public class MapGenBetaCave extends MapGenBase {
             ModernBeta.log(Level.DEBUG, "Cave carver fluid is not flowable!");
         }
         
-        this.carvables = this.initializeCarvables(defaultBlock.getBlock());
+        this.carvables = this.initializeCarvables(defaultBlock.getBlock()).build();
         
         this.caveWidth = caveWidth;
         this.caveHeight = caveHeight;
@@ -267,6 +267,29 @@ public class MapGenBetaCave extends MapGenBase {
         this.featureRandom.setSeed(chunkSeed);
     }
 
+    protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
+        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
+        
+        // Add default blocks
+        carvables.add(defaultBlock)
+            .add(Blocks.GRASS)
+            .add(Blocks.DIRT)
+            .add(Blocks.COAL_ORE)
+            .add(Blocks.IRON_ORE);
+        
+        // Add modded blocks
+        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+            Compat compat = entry.getValue();
+            if (compat instanceof BiomeCompat) {
+                ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));
+                
+                carvables.addAll(((BiomeCompat)compat).getCustomCarvables());
+            }
+        }
+        
+        return carvables;
+    }
+
     private void carveCave(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
         this.carveTunnels(chunkPrimer, chunkX, chunkZ, x, y, z, 1.0F + this.rand.nextFloat() * 6F, 0.0F, 0.0F, -1, -1, 0.5);
     }
@@ -398,28 +421,5 @@ public class MapGenBetaCave extends MapGenBase {
 
     private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int localX, int localZ) {
         return localX != minX && localX != maxX - 1 && localZ != minZ && localZ != maxZ - 1;
-    }
-    
-    private Set<Block> initializeCarvables(Block defaultBlock) {
-        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
-        
-        // Add default blocks
-        carvables.add(defaultBlock)
-            .add(Blocks.GRASS)
-            .add(Blocks.DIRT)
-            .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE);
-        
-        // Add modded blocks
-        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
-            Compat compat = entry.getValue();
-            if (compat instanceof BiomeCompat) {
-                ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));
-                
-                carvables.addAll(((BiomeCompat)compat).getCustomCarvables());
-            }
-        }
-        
-        return carvables.build();
     }
 }

@@ -47,7 +47,7 @@ public class BiomeInjector {
         }
     }
     
-    private Biome getInjectedBiome(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
+    public Biome getInjectedBiome(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
         return this.rules.test(context, x, z, step);
     }
     

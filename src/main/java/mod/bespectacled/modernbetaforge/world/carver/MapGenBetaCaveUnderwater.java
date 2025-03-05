@@ -2,10 +2,13 @@ package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableSet;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -57,5 +60,10 @@ public class MapGenBetaCaveUnderwater extends MapGenBeta18Cave {
             super.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
             
         }
+    }
+    
+    @Override
+    protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
+        return super.initializeCarvables(defaultBlock).add(Blocks.GRAVEL).add(Blocks.SAND);
     }
 }
