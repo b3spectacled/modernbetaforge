@@ -104,7 +104,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.initialChunkCache = new ChunkCache<>("initial_chunk", this::provideInitialChunkPrimerContainer);
         this.componentCache = new ChunkCache<>("components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
         
-        this.structures = this.initStructures(this, settings, world.getWorldInfo().isMapFeaturesEnabled());
+        this.structures = this.initStructures(settings, world.getWorldInfo().isMapFeaturesEnabled());
         this.carvers = ModernBetaRegistries.CARVER
             .getEntrySet()
             .stream()
@@ -437,7 +437,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     }
 
     private Map<ResourceLocation, MapGenStructure> initStructures(
-        ModernBetaChunkGenerator chunkGenerator,
         ModernBetaGeneratorSettings settings,
         boolean mapFeaturesEnabled
     ) {
@@ -475,7 +474,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             if (settings.useMansions) {
                 structureMap.put(
                     ModernBetaStructures.MANSION,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), EventType.WOODLAND_MANSION)
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(this), EventType.WOODLAND_MANSION)
                 );
             }
             

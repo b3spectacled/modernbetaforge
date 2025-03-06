@@ -68,15 +68,8 @@ public class MapGenBetaCave extends MapGenBase {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
-        this.defaultFluids = new HashSet<>();
+        this.defaultFluids = getDefaultFluids(defaultFluid);
         this.defaultFill = defaultFill.getBlock();
-
-        this.defaultFluids.add(defaultFluid.getBlock());
-        try {
-            this.defaultFluids.add(BlockLiquid.getFlowingBlock(defaultFluid.getMaterial()));
-        } catch (Exception e) {
-            ModernBeta.log(Level.DEBUG, "Cave carver fluid is not flowable!");
-        }
         
         this.carvables = this.initializeCarvables(defaultBlock.getBlock()).build();
         
@@ -421,5 +414,18 @@ public class MapGenBetaCave extends MapGenBase {
 
     private boolean isOnBoundary(int minX, int maxX, int minZ, int maxZ, int localX, int localZ) {
         return localX != minX && localX != maxX - 1 && localZ != minZ && localZ != maxZ - 1;
+    }
+    
+    public static Set<Block> getDefaultFluids(IBlockState defaultFluid) {
+        Set<Block> defaultFluids = new HashSet<>();
+        
+        defaultFluids.add(defaultFluid.getBlock());
+        try {
+            defaultFluids.add(BlockLiquid.getFlowingBlock(defaultFluid.getMaterial()));
+        } catch (Exception e) {
+            ModernBeta.log(Level.DEBUG, "Cave carver fluid is not flowable!");
+        }
+        
+        return defaultFluids;
     }
 }
