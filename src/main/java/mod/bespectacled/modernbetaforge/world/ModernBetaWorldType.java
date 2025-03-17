@@ -72,12 +72,6 @@ public class ModernBetaWorldType extends WorldType {
     
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean hasInfoNotice() {
-        return true;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @Override
     public void onCustomizeButton(Minecraft minecraft, GuiCreateWorld guiCreateWorld) {
         minecraft.displayGuiScreen(new GuiScreenCustomizeWorld(guiCreateWorld, guiCreateWorld.chunkProviderSettingsJson));
     }

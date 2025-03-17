@@ -51,7 +51,7 @@ createWorld.customize.custom.tab.page3=Ore
 createWorld.customize.custom.tab.page4=Noise 1
 createWorld.customize.custom.tab.page5=Noise 2
 createWorld.customize.custom.tab.page6=Climate
-createWorld.customize.custom.tab.page7=Custom
+createWorld.customize.custom.tab.page7=Add-on
 
 # Page Labels
 createWorld.customize.custom.label.page0.biomeReplacement=Biome Replacement Settings

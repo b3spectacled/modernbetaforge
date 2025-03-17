@@ -1,13 +1,18 @@
 package mod.bespectacled.modernbetaforge.world.structure;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
+import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorStructureStart;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
 
 public class StructureWeightSampler {
     private static final float[] STRUCTURE_WEIGHTS = new float[13824];
@@ -48,6 +53,38 @@ public class StructureWeightSampler {
         int centerZ = boundingBox.minZ + boundingBox.getZSize() / 2;
         
         return chunkSource.getHeight(centerX, centerZ, Type.STRUCTURE);
+    }
+    
+    public static int cacheStructures(ModernBetaChunkGenerator chunkGenerator, StructureStart start, Predicate<StructureComponent> excluder) {
+        ChunkSource chunkSource = chunkGenerator.getChunkSource();
+        int numComponents = 0;
+        
+        if (chunkSource instanceof NoiseChunkSource) {
+            AccessorStructureStart accessor = (AccessorStructureStart)start;
+            
+            for (StructureComponent component : accessor.getComponents()) {
+                if (excluder.test(component)) {
+                    continue;
+                }
+
+                StructureBoundingBox box = component.getBoundingBox();
+                
+                int minChunkX = box.minX >> 4;
+                int minChunkZ = box.minZ >> 4;
+                int maxChunkX = box.maxX >> 4;
+                int maxChunkZ = box.maxZ >> 4;
+                
+                for (int componentChunkZ = minChunkZ - 1; componentChunkZ <= maxChunkZ + 1; ++componentChunkZ) {
+                    for (int componentChunkX = minChunkX - 1; componentChunkX <= maxChunkX + 1; ++componentChunkX) {
+                        chunkGenerator.cacheStructureComponent(componentChunkX, componentChunkZ, component);
+                    }
+                }
+                
+                numComponents++;
+            }
+        }
+        
+        return numComponents;
     }
     
     private static double getStructureWeight(int x, int y, int z) {

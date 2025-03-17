@@ -265,6 +265,7 @@ public class MapGenBetaCave extends MapGenBase {
         
         // Add default blocks
         carvables.add(defaultBlock)
+            .add(Blocks.STONE)
             .add(Blocks.GRASS)
             .add(Blocks.DIRT)
             .add(Blocks.COAL_ORE)
