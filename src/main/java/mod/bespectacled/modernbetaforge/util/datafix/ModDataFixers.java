@@ -181,6 +181,11 @@ public class ModDataFixers {
         DataFixTags.FIX_CLAY_DISKS
     );
     
+    public static final ModDataFix DOUBLE_PLANT_FIX = createModDataFix(
+        DATA_VERSION_V1_6_1_0,
+        DataFixTags.FIX_DOUBLE_PLANTS
+    );
+    
     private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {
         return new ModDataFix(
             FixTypes.LEVEL,

@@ -125,6 +125,7 @@ createWorld.customize.custom.layerSize=Layer Size
 # Page 3 - Features
 createWorld.customize.custom.useTallGrass=Tall Grass
 createWorld.customize.custom.useNewFlowers=Modern Flowers
+createWorld.customize.custom.useDoublePlants=Double Plants
 createWorld.customize.custom.useLilyPads=Lily Pads
 createWorld.customize.custom.useMelons=Melons
 createWorld.customize.custom.useSandDisks=Sand Disks

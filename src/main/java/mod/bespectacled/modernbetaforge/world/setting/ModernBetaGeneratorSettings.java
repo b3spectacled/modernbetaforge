@@ -288,6 +288,7 @@ public class ModernBetaGeneratorSettings {
 
     public final boolean useTallGrass;
     public final boolean useNewFlowers;
+    public final boolean useDoublePlants;
     public final boolean useLilyPads;
     public final boolean useMelons;
     public final boolean useDesertWells;
@@ -526,6 +527,7 @@ public class ModernBetaGeneratorSettings {
 
         this.useTallGrass = factory.useTallGrass;
         this.useNewFlowers = factory.useNewFlowers;
+        this.useDoublePlants = factory.useDoublePlants;
         this.useLilyPads = factory.useLilyPads;
         this.useMelons = factory.useMelons;
         this.useDesertWells = factory.useDesertWells;
@@ -815,6 +817,7 @@ public class ModernBetaGeneratorSettings {
         
         public boolean useTallGrass;
         public boolean useNewFlowers;
+        public boolean useDoublePlants;
         public boolean useLilyPads;
         public boolean useMelons;
         public boolean useDesertWells;
@@ -1047,6 +1050,7 @@ public class ModernBetaGeneratorSettings {
             
             this.useTallGrass = true;
             this.useNewFlowers = true;
+            this.useDoublePlants = true;
             this.useLilyPads = false;
             this.useMelons = true;
             this.useDesertWells = true;
@@ -1302,6 +1306,7 @@ public class ModernBetaGeneratorSettings {
                 
                 this.useTallGrass == factory.useTallGrass &&
                 this.useNewFlowers == factory.useNewFlowers &&
+                this.useDoublePlants == factory.useDoublePlants &&
                 this.useLilyPads == factory.useLilyPads &&
                 this.useMelons == factory.useMelons &&
                 this.useDesertWells == factory.useDesertWells &&
@@ -1538,6 +1543,7 @@ public class ModernBetaGeneratorSettings {
 
             hashCode = 31 * hashCode + (this.useTallGrass ? 1 : 0);
             hashCode = 31 * hashCode + (this.useNewFlowers ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useDoublePlants ? 1 : 0);
             hashCode = 31 * hashCode + (this.useLilyPads ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMelons ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDesertWells ? 1 : 0);
@@ -1800,6 +1806,7 @@ public class ModernBetaGeneratorSettings {
 
                 factory.useTallGrass = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TALL_GRASS, factory.useTallGrass);
                 factory.useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
+                factory.useDoublePlants = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DOUBLE_PLANTS, factory.useDoublePlants);
                 factory.useLilyPads = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LILY_PADS, factory.useLilyPads);
                 factory.useMelons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MELONS, factory.useMelons);
                 factory.useDesertWells = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
@@ -2171,6 +2178,7 @@ public class ModernBetaGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
             jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
+            jsonObject.addProperty(NbtTags.USE_DOUBLE_PLANTS, factory.useDoublePlants);
             jsonObject.addProperty(NbtTags.USE_LILY_PADS, factory.useLilyPads);
             jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
             jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);

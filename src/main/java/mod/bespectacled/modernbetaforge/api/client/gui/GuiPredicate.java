@@ -47,6 +47,7 @@ public class GuiPredicate {
     
     public static final ResourceLocation USE_TALL_GRASS = createRegistryKey(NbtTags.USE_TALL_GRASS);
     public static final ResourceLocation USE_NEW_FLOWERS = createRegistryKey(NbtTags.USE_NEW_FLOWERS);
+    public static final ResourceLocation USE_DOUBLE_PLANTS = createRegistryKey(NbtTags.USE_DOUBLE_PLANTS);
     public static final ResourceLocation USE_LILY_PADS = createRegistryKey(NbtTags.USE_LILY_PADS);
     public static final ResourceLocation USE_MELONS = createRegistryKey(NbtTags.USE_MELONS);
     public static final ResourceLocation USE_DESERT_WELLS = createRegistryKey(NbtTags.USE_DESERT_WELLS);

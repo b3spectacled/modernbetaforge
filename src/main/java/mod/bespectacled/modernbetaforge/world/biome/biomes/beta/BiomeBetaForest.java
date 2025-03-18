@@ -37,7 +37,7 @@ public class BiomeBetaForest extends BiomeBeta {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         ChunkPos chunkPos = new ChunkPos(startPos);
         
-        if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
+        if (settings.useDoublePlants && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             this.addDoublePlants(world, random, startPos, random.nextInt(5) - 3);
         }
     }

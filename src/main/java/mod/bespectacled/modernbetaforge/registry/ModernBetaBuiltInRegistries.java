@@ -222,6 +222,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SAND_DISKS, new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixSandDisks));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_GRAVEL_DISKS, new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CLAY_DISKS, new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_DOUBLE_PLANTS, new DataFix(NbtTags.USE_DOUBLE_PLANTS, DataFixers::fixDoublePlants));
     }
 
     @SideOnly(Side.CLIENT)
@@ -284,6 +285,7 @@ public class ModernBetaBuiltInRegistries {
         
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_TALL_GRASS, GuiPredicates.USE_TALL_GRASS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_NEW_FLOWERS, GuiPredicates.USE_NEW_FLOWERS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_DOUBLE_PLANTS, GuiPredicates.USE_DOUBLE_PLANTS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_LILY_PADS, GuiPredicates.USE_LILY_PADS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_MELONS, GuiPredicates.USE_MELONS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_DESERT_WELLS, GuiPredicates.USE_DESERT_WELLS_TEST);

@@ -91,6 +91,7 @@ public class GuiPredicates {
     
     public static final GuiPredicate USE_TALL_GRASS_TEST;
     public static final GuiPredicate USE_NEW_FLOWERS_TEST;
+    public static final GuiPredicate USE_DOUBLE_PLANTS_TEST;
     public static final GuiPredicate USE_LILY_PADS_TEST;
     public static final GuiPredicate USE_MELONS_TEST;
     public static final GuiPredicate USE_DESERT_WELLS_TEST;
@@ -533,6 +534,7 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG2_B_USE_FLOWERS
         );
+        USE_DOUBLE_PLANTS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_DOUBLE);
         USE_LILY_PADS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_PADS);
         USE_MELONS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_MELONS);
         USE_DESERT_WELLS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_WELLS);

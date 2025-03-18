@@ -314,6 +314,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null,
             createGuiButton(GuiIdentifiers.PG2_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
             createGuiButton(GuiIdentifiers.PG2_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
+            createGuiButton(GuiIdentifiers.PG2_B_USE_DOUBLE, NbtTags.USE_DOUBLE_PLANTS, this.settings.useDoublePlants),
             createGuiButton(GuiIdentifiers.PG2_B_USE_PADS, NbtTags.USE_LILY_PADS, this.settings.useLilyPads),
             createGuiButton(GuiIdentifiers.PG2_B_USE_MELONS, NbtTags.USE_MELONS, this.settings.useMelons),
             createGuiButton(GuiIdentifiers.PG2_B_USE_WELLS, NbtTags.USE_DESERT_WELLS, this.settings.useDesertWells),
@@ -326,6 +327,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG2_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
@@ -1154,6 +1156,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG2_B_USE_FLOWERS:
                     this.settings.useNewFlowers = entryValue;
+                    break;
+                case GuiIdentifiers.PG2_B_USE_DOUBLE:
+                    this.settings.useDoublePlants = entryValue;
                     break;
                 case GuiIdentifiers.PG2_B_USE_PADS:
                     this.settings.useLilyPads = entryValue;

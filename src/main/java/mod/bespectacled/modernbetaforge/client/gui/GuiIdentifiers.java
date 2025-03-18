@@ -140,6 +140,8 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_GRAV_DISKS = 319;
     public static final int PG2_B_USE_CLAY_DISKS = 320;
     
+    public static final int PG2_B_USE_DOUBLE = 321;
+    
     // Labels
     public static final int PG2_L_BETA = 1300;
     public static final int PG2_L_MOBS = 1301;

@@ -46,7 +46,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             this.populateTrees(world, random, biome, startPos, mutablePos, treeSupplier);
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CUSTOM)) {
+        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int plantCount = this.getYellowFlowerCount(biome);
             
             populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, plantCount, settings.height);

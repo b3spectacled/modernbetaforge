@@ -35,4 +35,5 @@ public class DataFixTags {
     public static final ResourceLocation FIX_SAND_DISKS = ModernBeta.createRegistryKey("fix_useSandDisks");
     public static final ResourceLocation FIX_GRAVEL_DISKS = ModernBeta.createRegistryKey("fix_useGravelDisks");
     public static final ResourceLocation FIX_CLAY_DISKS = ModernBeta.createRegistryKey("fix_useClayDisks");
+    public static final ResourceLocation FIX_DOUBLE_PLANTS = ModernBeta.createRegistryKey("fix_useDoublePlants");
 }

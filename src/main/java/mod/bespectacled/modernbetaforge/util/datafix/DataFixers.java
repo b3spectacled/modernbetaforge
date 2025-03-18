@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DataFixers {
@@ -270,7 +271,7 @@ public class DataFixers {
     }
     
     public static void fixSandDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory, JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource));
+        boolean hasVanillaBiome = hasVanillaBiome(factory);
         
         if (hasVanillaBiome) {
             factory.useSandDisks = true;
@@ -278,7 +279,7 @@ public class DataFixers {
     }
     
     public static void fixGravelDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory, JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource));
+        boolean hasVanillaBiome = hasVanillaBiome(factory);
         
         if (hasVanillaBiome) {
             factory.useGravelDisks = true;
@@ -286,25 +287,31 @@ public class DataFixers {
     }
     
     public static void fixClayDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory, JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, factory.biomeSource));
+        boolean hasVanillaBiome = hasVanillaBiome(factory);
         
         if (hasVanillaBiome) {
             factory.useClayDisks = true;
         }
     }
     
+    public static void fixDoublePlants(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.useDoublePlants = factory.useNewFlowers;
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }
     
-    private static boolean hasVanillaBiome(ModernBetaGeneratorSettings.Factory factory, String biomeSource) {
+    private static boolean hasVanillaBiome(ModernBetaGeneratorSettings.Factory factory) {
         ModernBetaGeneratorSettings settings = factory.build();
+        ResourceLocation biomeSource = settings.biomeSource;
+        
         boolean hasVanillaBiome = true;
         
-        if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryString()) || biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryString())) {
+        if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey()) || biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())) {
             hasVanillaBiome = new ClimateMap(settings).containsNonModernBetaBiomes();
             
-        } else if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryString())) {
+        } else if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
             hasVanillaBiome = !(ForgeRegistryUtil.get(settings.singleBiome, ForgeRegistries.BIOMES) instanceof ModernBetaBiome);
             
         }

@@ -159,28 +159,28 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
 
         if (settings.useSandDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND)) {
             for (int i = 0; i < this.sandPatchesPerChunk; ++i) {
-                int x = random.nextInt(16) + 8;
-                int z = random.nextInt(16) + 8;
+                int x = startX + random.nextInt(16) + 8;
+                int z = startZ + random.nextInt(16) + 8;
                 
-                this.sandGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+                this.sandGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
             }
         }
 
         if (settings.useClayDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY)) {
             for (int i = 0; i < this.clayPerChunk; ++i) {
-                int x = random.nextInt(16) + 8;
-                int z = random.nextInt(16) + 8;
+                int x = startX + random.nextInt(16) + 8;
+                int z = startZ + random.nextInt(16) + 8;
                 
-                this.clayGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+                this.clayGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
             }
         }
 
         if (settings.useGravelDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2)) {
             for (int i = 0; i < this.gravelPatchesPerChunk; ++i) {
-                int x = random.nextInt(16) + 8;
-                int z = random.nextInt(16) + 8;
+                int x = startX + random.nextInt(16) + 8;
+                int z = startZ + random.nextInt(16) + 8;
                 
-                this.gravelGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+                this.gravelGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
             }
         }
     }

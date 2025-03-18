@@ -30,6 +30,7 @@ public class ModDataFixer {
         this.registerModDataFix(ModDataFixers.SPAWN_LOCATOR_FIX);
         this.registerModDataFix(ModDataFixers.DEFAULT_FLUID_FIX);
         this.registerModDataFix(ModDataFixers.DISKS_FIX);
+        this.registerModDataFix(ModDataFixers.DOUBLE_PLANT_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {
