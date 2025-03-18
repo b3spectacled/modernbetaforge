@@ -106,144 +106,67 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         this.oreEmerald = new WorldGenMinable(BlockStates.EMERALD_ORE, settings.emeraldSize);
         
         if (TerrainGen.generateOre(world, random, this.oreClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
-            this.populateOreStandard(world, random, startPos, this.oreClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
         }
         
         if (TerrainGen.generateOre(world, random, this.oreDirt, startPos, OreGenEvent.GenerateMinable.EventType.DIRT)) {
-            this.populateOreStandard(world, random, startPos, this.oreDirt, mutablePos, settings.dirtCount, settings.dirtMinHeight, settings.dirtMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreDirt, mutablePos, settings.dirtCount, settings.dirtMinHeight, settings.dirtMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreGravel, startPos, OreGenEvent.GenerateMinable.EventType.GRAVEL)) {
-            this.populateOreStandard(world, random, startPos, this.oreGravel, mutablePos, settings.gravelCount, settings.gravelMinHeight, settings.gravelMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreGravel, mutablePos, settings.gravelCount, settings.gravelMinHeight, settings.gravelMaxHeight);
         }
         
         if (TerrainGen.generateOre(world, random, this.oreDiorite, startPos, OreGenEvent.GenerateMinable.EventType.DIORITE)) {
-            this.populateOreStandard(world, random, startPos, this.oreDiorite, mutablePos, settings.dioriteCount, settings.dioriteMinHeight, settings.dioriteMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreDiorite, mutablePos, settings.dioriteCount, settings.dioriteMinHeight, settings.dioriteMaxHeight);
         }
         
         if (TerrainGen.generateOre(world, random, this.oreGranite, startPos, OreGenEvent.GenerateMinable.EventType.GRANITE)) {
-            this.populateOreStandard(world, random, startPos, this.oreGranite, mutablePos, settings.graniteCount, settings.graniteMinHeight, settings.graniteMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreGranite, mutablePos, settings.graniteCount, settings.graniteMinHeight, settings.graniteMaxHeight);
         }
         
         if (TerrainGen.generateOre(world, random, this.oreAndesite, startPos, OreGenEvent.GenerateMinable.EventType.ANDESITE)) {
-            this.populateOreStandard(world, random, startPos, this.oreAndesite, mutablePos, settings.andesiteCount, settings.andesiteMinHeight, settings.andesiteMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreAndesite, mutablePos, settings.andesiteCount, settings.andesiteMinHeight, settings.andesiteMaxHeight);
         }
         
         if (TerrainGen.generateOre(world, random, this.oreCoal, startPos, OreGenEvent.GenerateMinable.EventType.COAL)) {
-            this.populateOreStandard(world, random, startPos, this.oreCoal, mutablePos, settings.coalCount, settings.coalMinHeight, settings.coalMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreCoal, mutablePos, settings.coalCount, settings.coalMinHeight, settings.coalMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreIron, startPos, OreGenEvent.GenerateMinable.EventType.IRON)) {
-            this.populateOreStandard(world, random, startPos, this.oreIron, mutablePos, settings.ironCount, settings.ironMinHeight, settings.ironMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreIron, mutablePos, settings.ironCount, settings.ironMinHeight, settings.ironMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreGold, startPos, OreGenEvent.GenerateMinable.EventType.GOLD)) {
-            this.populateOreStandard(world, random, startPos, this.oreGold, mutablePos, settings.goldCount, settings.goldMinHeight, settings.goldMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreGold, mutablePos, settings.goldCount, settings.goldMinHeight, settings.goldMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreRedstone, startPos, OreGenEvent.GenerateMinable.EventType.REDSTONE)) {
-            this.populateOreStandard(world, random, startPos, this.oreRedstone, mutablePos, settings.redstoneCount, settings.redstoneMinHeight, settings.redstoneMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreRedstone, mutablePos, settings.redstoneCount, settings.redstoneMinHeight, settings.redstoneMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreDiamond, startPos, OreGenEvent.GenerateMinable.EventType.DIAMOND)) {
-            this.populateOreStandard(world, random, startPos, this.oreDiamond, mutablePos, settings.diamondCount, settings.diamondMinHeight, settings.diamondMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreDiamond, mutablePos, settings.diamondCount, settings.diamondMinHeight, settings.diamondMaxHeight);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreLapis, startPos, OreGenEvent.GenerateMinable.EventType.LAPIS)) {
-            this.populateOreSpread(world, random, startPos, this.oreLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
+            populateOreSpread(world, random, startPos, this.oreLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
         }
 
         if (TerrainGen.generateOre(world, random, this.oreEmerald, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
-            this.populateOreStandard(world, random, startPos, this.oreEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
+            populateOreStandard(world, random, startPos, this.oreEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
         }
 
         if (settings.useSandDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND)) {
-            for (int i = 0; i < this.sandPatchesPerChunk; ++i) {
-                int x = startX + random.nextInt(16) + 8;
-                int z = startZ + random.nextInt(16) + 8;
-                
-                this.sandGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
-            }
+            populateDisks(world, random, startPos, this.sandGen, mutablePos, this.sandPatchesPerChunk);
         }
 
         if (settings.useClayDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY)) {
-            for (int i = 0; i < this.clayPerChunk; ++i) {
-                int x = startX + random.nextInt(16) + 8;
-                int z = startZ + random.nextInt(16) + 8;
-                
-                this.clayGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
-            }
+            populateDisks(world, random, startPos, this.clayGen, mutablePos, this.clayPerChunk);
         }
 
         if (settings.useGravelDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2)) {
-            for (int i = 0; i < this.gravelPatchesPerChunk; ++i) {
-                int x = startX + random.nextInt(16) + 8;
-                int z = startZ + random.nextInt(16) + 8;
-                
-                this.gravelGen.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
-            }
-        }
-    }
-    
-    public static void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
-        int startX = startPos.getX();
-        int startZ = startPos.getZ();
-        
-        for (int i = 0; i < count; ++i) {
-            int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
-            int z = startZ + random.nextInt(16) + 8;
-            
-            generator.generate(world, random, mutablePos.setPos(x, y, z));
-        }
-    }
-    
-    public static void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
-        int startX = startPos.getX();
-        int startZ = startPos.getZ();
-        
-        if (random.nextInt(chance) == 0) {
-            int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
-            int z = startZ + random.nextInt(16) + 8;
-            
-            generator.generate(world, random, mutablePos.setPos(x, y, z));
-        }
-    }
-    
-    public static void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
-        int startX = startPos.getX();
-        int startZ = startPos.getZ();
-        
-        for (int i = 0; i < count; ++i) {
-            BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
-            if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
-                tallGrassType = BlockTallGrass.EnumType.FERN;
-            }
-            
-            int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
-            int z = startZ + random.nextInt(16) + 8;
-            
-            new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
-        }
-    }
-    
-    public static void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
-        int startX = startPos.getX();
-        int startZ = startPos.getZ();
-        
-        if (random.nextInt(chance) == 0) {
-            BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
-            if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
-                tallGrassType = BlockTallGrass.EnumType.FERN;
-            }
-            
-            int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
-            int z = startZ + random.nextInt(16) + 8;
-            
-            new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
+            populateDisks(world, random, startPos, this.gravelGen, mutablePos, this.gravelPatchesPerChunk);
         }
     }
     
@@ -316,51 +239,104 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         return new PerlinOctaveNoise(random, 8, true);
     }
     
-    private void populateOreStandard(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int minHeight, int maxHeight) {
+    public static void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        
+        for (int i = 0; i < count; ++i) {
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            generator.generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    public static void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        
+        if (random.nextInt(chance) == 0) {
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            generator.generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    public static void populateOreStandard(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int minHeight, int maxHeight) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
         for (int i = 0; i < count; i++) {
             int x = startX + random.nextInt(16);
-            int y = this.getOreHeight(random, minHeight, maxHeight);
+            int y = getOreHeight(random, minHeight, maxHeight);
             int z = startZ + random.nextInt(16);
             
             generator.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
-    private void populateOreSpread(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int centerHeight, int spread) {
+    public static void populateOreSpread(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int centerHeight, int spread) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
         for (int i = 0; i < count; i++) {
             int x = startX + random.nextInt(16);
-            int y = this.getOreHeightSpread(random, centerHeight, spread);
+            int y = getOreHeightSpread(random, centerHeight, spread);
             int z = startZ + random.nextInt(16);
             
             generator.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
-
-    private int getOreHeight(Random random, int minHeight, int maxHeight) {
-        if (maxHeight < minHeight) {
-            int height = minHeight;
-            
-            minHeight = maxHeight;
-            maxHeight = height;
-        } else if (maxHeight == minHeight) {
-            if (minHeight < 255) {
-                ++maxHeight;
-            } else {
-                --minHeight;
-            }
-        }
+    
+    public static void populateDisks(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
         
-        return random.nextInt(maxHeight - minHeight) + minHeight;
+        for (int i = 0; i < count; ++i) {
+            int x = startX + random.nextInt(16) + 8;
+            int z = startZ + random.nextInt(16) + 8;
+            
+            generator.generate(world, random, world.getTopSolidOrLiquidBlock(mutablePos.setPos(x, 0, z)));
+        }
     }
-
-    private int getOreHeightSpread(Random random, int centerHeight, int spread) {
-        return random.nextInt(spread) + random.nextInt(spread) + centerHeight - spread;
+    
+    public static void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        
+        for (int i = 0; i < count; ++i) {
+            BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
+            if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
+                tallGrassType = BlockTallGrass.EnumType.FERN;
+            }
+            
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
+        }
+    }
+    
+    public static void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        
+        if (random.nextInt(chance) == 0) {
+            BlockTallGrass.EnumType tallGrassType = BlockTallGrass.EnumType.GRASS;
+            if (biome instanceof BiomeBetaRainforest && random.nextInt(3) != 0) {
+                tallGrassType = BlockTallGrass.EnumType.FERN;
+            }
+            
+            int x = startX + random.nextInt(16) + 8;
+            int y = random.nextInt(height);
+            int z = startZ + random.nextInt(16) + 8;
+            
+            new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
+        }
     }
     
     public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ, IBlockState defaultFluid) {
@@ -455,5 +431,26 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
                 if (canSetSnow) world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
             }
         }
+    }
+
+    private static int getOreHeight(Random random, int minHeight, int maxHeight) {
+        if (maxHeight < minHeight) {
+            int height = minHeight;
+            
+            minHeight = maxHeight;
+            maxHeight = height;
+        } else if (maxHeight == minHeight) {
+            if (minHeight < 255) {
+                ++maxHeight;
+            } else {
+                --minHeight;
+            }
+        }
+        
+        return random.nextInt(maxHeight - minHeight) + minHeight;
+    }
+
+    private static int getOreHeightSpread(Random random, int centerHeight, int spread) {
+        return random.nextInt(spread) + random.nextInt(spread) + centerHeight - spread;
     }
 }
