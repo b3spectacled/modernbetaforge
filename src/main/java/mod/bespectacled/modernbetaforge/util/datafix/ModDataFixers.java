@@ -23,6 +23,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_5_0_0 = 1500;
     private static final int DATA_VERSION_V1_5_2_0 = 1520;
     private static final int DATA_VERSION_V1_6_0_0 = 1600;
+    private static final int DATA_VERSION_V1_6_1_0 = 1610;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -171,6 +172,13 @@ public class ModDataFixers {
     public static final ModDataFix DEFAULT_FLUID_FIX = createModDataFix(
         DATA_VERSION_V1_6_0_0,
         DataFixTags.FIX_DEFAULT_FLUID
+    );
+    
+    public static final ModDataFix DISKS_FIX = createModDataFix(
+        DATA_VERSION_V1_6_1_0,
+        DataFixTags.FIX_SAND_DISKS,
+        DataFixTags.FIX_GRAVEL_DISKS,
+        DataFixTags.FIX_CLAY_DISKS
     );
     
     private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {

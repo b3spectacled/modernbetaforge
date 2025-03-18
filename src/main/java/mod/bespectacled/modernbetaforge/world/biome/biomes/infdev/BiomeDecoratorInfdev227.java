@@ -20,7 +20,8 @@ public class BiomeDecoratorInfdev227 extends ModernBetaBiomeDecorator {
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        
+
+        this.chunkPos = startPos;
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         ChunkPos chunkPos = new ChunkPos(startX >> 4, startZ >> 4);
@@ -67,7 +68,7 @@ public class BiomeDecoratorInfdev227 extends ModernBetaBiomeDecorator {
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            this.populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
+            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));

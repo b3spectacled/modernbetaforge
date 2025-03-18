@@ -7,40 +7,23 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.block.BlockFlower.EnumFlowerType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenBush;
-import net.minecraft.world.gen.feature.WorldGenCactus;
-import net.minecraft.world.gen.feature.WorldGenDeadBush;
-import net.minecraft.world.gen.feature.WorldGenFlowers;
-import net.minecraft.world.gen.feature.WorldGenPumpkin;
-import net.minecraft.world.gen.feature.WorldGenReed;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
-    private WorldGenerator worldGenDandelion = new WorldGenFlowers(Blocks.YELLOW_FLOWER, EnumFlowerType.DANDELION);
-    private WorldGenerator worldGenPoppy = new WorldGenFlowers(Blocks.RED_FLOWER, EnumFlowerType.POPPY);
-    private WorldGenerator worldGenDeadBush = new WorldGenDeadBush();
-    private WorldGenerator worldGenBrownMushroom = new WorldGenBush(Blocks.BROWN_MUSHROOM);
-    private WorldGenerator worldGenRedMushroom = new WorldGenBush(Blocks.RED_MUSHROOM);
-    private WorldGenerator worldGenReed = new WorldGenReed();
-    private WorldGenerator worldGenPumpkin = new WorldGenPumpkin();
-    private WorldGenerator worldGenCactus = new WorldGenCactus();
-    
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        
+
+        this.chunkPos = startPos;
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         ChunkPos chunkPos = new ChunkPos(startX >> 4, startZ >> 4);
@@ -63,43 +46,43 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             this.populateTrees(world, random, biome, startPos, mutablePos, treeSupplier);
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
+        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CUSTOM)) {
             int plantCount = this.getYellowFlowerCount(biome);
             
-            this.populateWorldGenCount(world, random, startPos, this.worldGenDandelion, mutablePos, plantCount, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, plantCount, settings.height);
         }
 
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
             int plantCount = this.getTallGrassCount(biome);
 
-            this.populateTallGrassCount(world, random, biome, startPos, mutablePos, plantCount, settings.height);
+            populateTallGrassCount(world, random, biome, startPos, mutablePos, plantCount, settings.height);
         }
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
             if (biome instanceof BiomeBetaDesert) {
-                this.populateWorldGenCount(world, random, startPos, this.worldGenDeadBush, mutablePos, 2, settings.height);
+                populateWorldGenCount(world, random, startPos, FEATURE_DEAD_BUSH, mutablePos, 2, settings.height);
             }
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            this.populateWorldGenChance(world, random, startPos, this.worldGenPoppy, mutablePos, 2, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_POPPY, mutablePos, 2, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
-            this.populateWorldGenChance(world, random, startPos, this.worldGenBrownMushroom, mutablePos, 4, settings.height);
-            this.populateWorldGenChance(world, random, startPos, this.worldGenRedMushroom, mutablePos, 8, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, 4, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, 8, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.REED)) {
-            this.populateWorldGenCount(world, random, startPos, this.worldGenReed, mutablePos, 10, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_REED, mutablePos, 10, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.PUMPKIN)) {
-            this.populateWorldGenChance(world, random, startPos, this.worldGenPumpkin, mutablePos, 32, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_PUMPKIN, mutablePos, 32, settings.height);
         }
         
         if (biome instanceof BiomeBetaDesert && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CACTUS)) {
-            this.populateWorldGenCount(world, random, startPos, this.worldGenCactus, mutablePos, 10, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_CACTUS, mutablePos, 10, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {

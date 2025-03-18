@@ -18,125 +18,174 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenBush;
+import net.minecraft.world.gen.feature.WorldGenCactus;
+import net.minecraft.world.gen.feature.WorldGenDeadBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
+import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenPumpkin;
+import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
+    public static final WorldGenerator FEATURE_DANDELION = new WorldGenFlowers(Blocks.YELLOW_FLOWER, EnumFlowerType.DANDELION);
+    public static final WorldGenerator FEATURE_POPPY = new WorldGenFlowers(Blocks.RED_FLOWER, EnumFlowerType.POPPY);
+    
+    protected static final WorldGenerator FEATURE_DEAD_BUSH = new WorldGenDeadBush();
+    protected static final WorldGenerator FEATURE_BROWN_SHROOM = new WorldGenBush(Blocks.BROWN_MUSHROOM);
+    protected static final WorldGenerator FEATURE_RED_SHROOM = new WorldGenBush(Blocks.RED_MUSHROOM);
+    protected static final WorldGenerator FEATURE_REED = new WorldGenReed();
+    protected static final WorldGenerator FEATURE_PUMPKIN = new WorldGenPumpkin();
+    protected static final WorldGenerator FEATURE_CACTUS = new WorldGenCactus();
+    
+    private static final WorldGenerator FEATURE_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
+    private static final WorldGenerator FEATURE_DUNGEONS = new WorldGenDungeons();
+    private static final WorldGenerator FEATURE_LAVA_FALL = new WorldGenLiquids(Blocks.FLOWING_LAVA);
+    
     private static final Set<Block> VANILLA_FLUIDS = ImmutableSet.of(Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA);
     
-    private static final WorldGenerator WORLD_GEN_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
-    private static final WorldGenerator WORLD_GEN_DUNGEONS = new WorldGenDungeons();
+    private WorldGenerator oreClay;
+    private WorldGenerator oreDirt;
+    private WorldGenerator oreGravel;
+    private WorldGenerator oreCoal;
+    private WorldGenerator oreIron;
+    private WorldGenerator oreGold;
+    private WorldGenerator oreRedstone;
+    private WorldGenerator oreDiamond;
+    private WorldGenerator oreLapis;
     
-    private final WorldGenerator worldGenLavafall = new WorldGenLiquids(Blocks.FLOWING_LAVA);
-    
-    private WorldGenerator worldGenClay;
-    private WorldGenerator worldGenDirt;
-    private WorldGenerator worldGenGravel;
-    private WorldGenerator worldGenCoal;
-    private WorldGenerator worldGenIron;
-    private WorldGenerator worldGenGold;
-    private WorldGenerator worldGenRedstone;
-    private WorldGenerator worldGenDiamond;
-    private WorldGenerator worldGenLapis;
-    
-    private WorldGenerator worldGenGranite;
-    private WorldGenerator worldGenDiorite;
-    private WorldGenerator worldGenAndesite;
-    private WorldGenerator worldGenEmerald;
+    private WorldGenerator oreGranite;
+    private WorldGenerator oreDiorite;
+    private WorldGenerator oreAndesite;
+    private WorldGenerator oreEmerald;
     
     protected abstract int getTreeCount(World world, Random random, Biome biome, BlockPos startPos);
     
     protected void populateOres(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         
+        int startX = startPos.getX();
+        int startZ = startPos.getZ();
+        ChunkPos chunkPos = new ChunkPos(startX >> 4, startZ >> 4);
+        
         // Ore generators
-        this.worldGenClay = new WorldGenClay(settings.claySize);
-        this.worldGenDirt = new WorldGenMinable(BlockStates.DIRT, settings.dirtSize);
-        this.worldGenGravel = new WorldGenMinable(BlockStates.GRAVEL, settings.gravelSize);
-        this.worldGenCoal = new WorldGenMinable(BlockStates.COAL_ORE, settings.coalSize);
-        this.worldGenIron = new WorldGenMinable(BlockStates.IRON_ORE, settings.ironSize);
-        this.worldGenGold = new WorldGenMinable(BlockStates.GOLD_ORE, settings.goldSize);
-        this.worldGenRedstone = new WorldGenMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize);
-        this.worldGenDiamond = new WorldGenMinable(BlockStates.DIAMOND_ORE, settings.diamondSize);
-        this.worldGenLapis = new WorldGenMinable(BlockStates.LAPIS_ORE, settings.lapisSize);
+        this.oreClay = new WorldGenClay(settings.claySize);
+        this.oreDirt = new WorldGenMinable(BlockStates.DIRT, settings.dirtSize);
+        this.oreGravel = new WorldGenMinable(BlockStates.GRAVEL, settings.gravelSize);
+        this.oreCoal = new WorldGenMinable(BlockStates.COAL_ORE, settings.coalSize);
+        this.oreIron = new WorldGenMinable(BlockStates.IRON_ORE, settings.ironSize);
+        this.oreGold = new WorldGenMinable(BlockStates.GOLD_ORE, settings.goldSize);
+        this.oreRedstone = new WorldGenMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize);
+        this.oreDiamond = new WorldGenMinable(BlockStates.DIAMOND_ORE, settings.diamondSize);
+        this.oreLapis = new WorldGenMinable(BlockStates.LAPIS_ORE, settings.lapisSize);
         
         // New mineable generators
-        this.worldGenGranite = new WorldGenMinable(BlockStates.GRANITE, settings.graniteSize);
-        this.worldGenDiorite = new WorldGenMinable(BlockStates.DIORITE, settings.dioriteSize);
-        this.worldGenAndesite = new WorldGenMinable(BlockStates.ANDESITE, settings.andesiteSize);
-        this.worldGenEmerald = new WorldGenMinable(BlockStates.EMERALD_ORE, settings.emeraldSize);
+        this.oreGranite = new WorldGenMinable(BlockStates.GRANITE, settings.graniteSize);
+        this.oreDiorite = new WorldGenMinable(BlockStates.DIORITE, settings.dioriteSize);
+        this.oreAndesite = new WorldGenMinable(BlockStates.ANDESITE, settings.andesiteSize);
+        this.oreEmerald = new WorldGenMinable(BlockStates.EMERALD_ORE, settings.emeraldSize);
         
-        if (TerrainGen.generateOre(world, random, this.worldGenClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
-        }
-        
-        if (TerrainGen.generateOre(world, random, this.worldGenDirt, startPos, OreGenEvent.GenerateMinable.EventType.DIRT)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenDirt, mutablePos, settings.dirtCount, settings.dirtMinHeight, settings.dirtMaxHeight);
-        }
-
-        if (TerrainGen.generateOre(world, random, this.worldGenGravel, startPos, OreGenEvent.GenerateMinable.EventType.GRAVEL)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenGravel, mutablePos, settings.gravelCount, settings.gravelMinHeight, settings.gravelMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
+            this.populateOreStandard(world, random, startPos, this.oreClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
         }
         
-        if (TerrainGen.generateOre(world, random, this.worldGenDiorite, startPos, OreGenEvent.GenerateMinable.EventType.DIORITE)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenDiorite, mutablePos, settings.dioriteCount, settings.dioriteMinHeight, settings.dioriteMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreDirt, startPos, OreGenEvent.GenerateMinable.EventType.DIRT)) {
+            this.populateOreStandard(world, random, startPos, this.oreDirt, mutablePos, settings.dirtCount, settings.dirtMinHeight, settings.dirtMaxHeight);
+        }
+
+        if (TerrainGen.generateOre(world, random, this.oreGravel, startPos, OreGenEvent.GenerateMinable.EventType.GRAVEL)) {
+            this.populateOreStandard(world, random, startPos, this.oreGravel, mutablePos, settings.gravelCount, settings.gravelMinHeight, settings.gravelMaxHeight);
         }
         
-        if (TerrainGen.generateOre(world, random, this.worldGenGranite, startPos, OreGenEvent.GenerateMinable.EventType.GRANITE)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenGranite, mutablePos, settings.graniteCount, settings.graniteMinHeight, settings.graniteMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreDiorite, startPos, OreGenEvent.GenerateMinable.EventType.DIORITE)) {
+            this.populateOreStandard(world, random, startPos, this.oreDiorite, mutablePos, settings.dioriteCount, settings.dioriteMinHeight, settings.dioriteMaxHeight);
         }
         
-        if (TerrainGen.generateOre(world, random, this.worldGenAndesite, startPos, OreGenEvent.GenerateMinable.EventType.ANDESITE)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenAndesite, mutablePos, settings.andesiteCount, settings.andesiteMinHeight, settings.andesiteMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreGranite, startPos, OreGenEvent.GenerateMinable.EventType.GRANITE)) {
+            this.populateOreStandard(world, random, startPos, this.oreGranite, mutablePos, settings.graniteCount, settings.graniteMinHeight, settings.graniteMaxHeight);
         }
         
-        if (TerrainGen.generateOre(world, random, this.worldGenCoal, startPos, OreGenEvent.GenerateMinable.EventType.COAL)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenCoal, mutablePos, settings.coalCount, settings.coalMinHeight, settings.coalMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreAndesite, startPos, OreGenEvent.GenerateMinable.EventType.ANDESITE)) {
+            this.populateOreStandard(world, random, startPos, this.oreAndesite, mutablePos, settings.andesiteCount, settings.andesiteMinHeight, settings.andesiteMaxHeight);
+        }
+        
+        if (TerrainGen.generateOre(world, random, this.oreCoal, startPos, OreGenEvent.GenerateMinable.EventType.COAL)) {
+            this.populateOreStandard(world, random, startPos, this.oreCoal, mutablePos, settings.coalCount, settings.coalMinHeight, settings.coalMaxHeight);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenIron, startPos, OreGenEvent.GenerateMinable.EventType.IRON)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenIron, mutablePos, settings.ironCount, settings.ironMinHeight, settings.ironMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreIron, startPos, OreGenEvent.GenerateMinable.EventType.IRON)) {
+            this.populateOreStandard(world, random, startPos, this.oreIron, mutablePos, settings.ironCount, settings.ironMinHeight, settings.ironMaxHeight);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenGold, startPos, OreGenEvent.GenerateMinable.EventType.GOLD)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenGold, mutablePos, settings.goldCount, settings.goldMinHeight, settings.goldMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreGold, startPos, OreGenEvent.GenerateMinable.EventType.GOLD)) {
+            this.populateOreStandard(world, random, startPos, this.oreGold, mutablePos, settings.goldCount, settings.goldMinHeight, settings.goldMaxHeight);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenRedstone, startPos, OreGenEvent.GenerateMinable.EventType.REDSTONE)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenRedstone, mutablePos, settings.redstoneCount, settings.redstoneMinHeight, settings.redstoneMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreRedstone, startPos, OreGenEvent.GenerateMinable.EventType.REDSTONE)) {
+            this.populateOreStandard(world, random, startPos, this.oreRedstone, mutablePos, settings.redstoneCount, settings.redstoneMinHeight, settings.redstoneMaxHeight);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenDiamond, startPos, OreGenEvent.GenerateMinable.EventType.DIAMOND)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenDiamond, mutablePos, settings.diamondCount, settings.diamondMinHeight, settings.diamondMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreDiamond, startPos, OreGenEvent.GenerateMinable.EventType.DIAMOND)) {
+            this.populateOreStandard(world, random, startPos, this.oreDiamond, mutablePos, settings.diamondCount, settings.diamondMinHeight, settings.diamondMaxHeight);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenLapis, startPos, OreGenEvent.GenerateMinable.EventType.LAPIS)) {
-            this.populateOreSpread(world, random, startPos, this.worldGenLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
+        if (TerrainGen.generateOre(world, random, this.oreLapis, startPos, OreGenEvent.GenerateMinable.EventType.LAPIS)) {
+            this.populateOreSpread(world, random, startPos, this.oreLapis, mutablePos, settings.lapisCount, settings.lapisCenterHeight, settings.lapisSpread);
         }
 
-        if (TerrainGen.generateOre(world, random, this.worldGenEmerald, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
-            this.populateOreStandard(world, random, startPos, this.worldGenEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
+        if (TerrainGen.generateOre(world, random, this.oreEmerald, startPos, OreGenEvent.GenerateMinable.EventType.EMERALD)) {
+            this.populateOreStandard(world, random, startPos, this.oreEmerald, mutablePos, settings.emeraldCount, settings.emeraldMinHeight, settings.emeraldMaxHeight);
+        }
+
+        if (settings.useSandDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND)) {
+            for (int i = 0; i < this.sandPatchesPerChunk; ++i) {
+                int x = random.nextInt(16) + 8;
+                int z = random.nextInt(16) + 8;
+                
+                this.sandGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+            }
+        }
+
+        if (settings.useClayDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY)) {
+            for (int i = 0; i < this.clayPerChunk; ++i) {
+                int x = random.nextInt(16) + 8;
+                int z = random.nextInt(16) + 8;
+                
+                this.clayGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+            }
+        }
+
+        if (settings.useGravelDisks && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2)) {
+            for (int i = 0; i < this.gravelPatchesPerChunk; ++i) {
+                int x = random.nextInt(16) + 8;
+                int z = random.nextInt(16) + 8;
+                
+                this.gravelGen.generate(world, random, world.getTopSolidOrLiquidBlock(startPos.add(x, 0, z)));
+            }
         }
     }
     
-    protected void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
+    public static void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -149,7 +198,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
+    public static void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -162,7 +211,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
+    public static void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -180,7 +229,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
+    public static void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -248,7 +297,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(random.nextInt(random.nextInt(height - 16) + 8) + 8);
             int z = startZ + random.nextInt(16) + 8;
             
-            this.worldGenLavafall.generate(world, random, mutablePos.setPos(x, y, z));
+            FEATURE_LAVA_FALL.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
@@ -344,7 +393,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int z = startZ + random.nextInt(16) + 8;
             
             if (y < 64 || random.nextInt(10) == 0) {
-                WORLD_GEN_LAVA_LAKES.generate(world, random, mutablePos.setPos(x, y, z));
+                FEATURE_LAVA_LAKES.generate(world, random, mutablePos.setPos(x, y, z));
             }
         }
     }
@@ -358,7 +407,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             int y = random.nextInt(settings.height);
             int z = startZ + random.nextInt(16) + 8;
             
-            WORLD_GEN_DUNGEONS.generate(world, random, mutablePos.setPos(x, y, z));
+            FEATURE_DUNGEONS.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     

@@ -95,6 +95,9 @@ public class GuiPredicates {
     public static final GuiPredicate USE_MELONS_TEST;
     public static final GuiPredicate USE_DESERT_WELLS_TEST;
     public static final GuiPredicate USE_FOSSILS_TEST;
+    public static final GuiPredicate USE_SAND_DISKS_TEST;
+    public static final GuiPredicate USE_GRAVEL_DISKS_TEST;
+    public static final GuiPredicate USE_CLAY_DISKS_TEST;
     public static final GuiPredicate USE_BIRCH_TREES_TEST;
     public static final GuiPredicate USE_PINE_TREES_TEST;
     public static final GuiPredicate USE_SWAMP_TREES_TEST;
@@ -513,27 +516,30 @@ public class GuiPredicates {
         LAYER_TYPE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test,GuiIdentifiers.PG1_S_LAYER_TYPE);
         
         USE_TALL_GRASS_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-    
-                return isBetaPEBiomeSource || isFixedBiomeSource && isModernBetaBiome(settings);
-            },
-            GuiIdentifiers.PG2_B_USE_GRASS
-        );
-        USE_NEW_FLOWERS_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-    
-                return isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings);
-            },
-            GuiIdentifiers.PG2_B_USE_FLOWERS
-        );
-        USE_LILY_PADS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_PADS);
-        USE_MELONS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_MELONS);
-        USE_DESERT_WELLS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_WELLS);
-        USE_FOSSILS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_FOSSILS);
+                settings -> {
+                    boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+                    boolean isFixedBiomeSource = isSingleBiome(settings);
+        
+                    return isBetaPEBiomeSource || isFixedBiomeSource && isModernBetaBiome(settings);
+                },
+                GuiIdentifiers.PG2_B_USE_GRASS
+            );
+            USE_NEW_FLOWERS_TEST = new GuiPredicate(
+                settings -> {
+                    boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+                    boolean isFixedBiomeSource = isSingleBiome(settings);
+        
+                    return isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings);
+                },
+                GuiIdentifiers.PG2_B_USE_FLOWERS
+            );
+            USE_LILY_PADS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_PADS);
+            USE_MELONS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_MELONS);
+            USE_DESERT_WELLS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_WELLS);
+            USE_FOSSILS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_FOSSILS);
+        USE_SAND_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
+        USE_GRAVEL_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
+        USE_CLAY_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
         USE_BIRCH_TREES_TEST = new GuiPredicate(
             settings -> {
                 boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);

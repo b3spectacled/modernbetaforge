@@ -316,16 +316,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG2_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
             createGuiButton(GuiIdentifiers.PG2_B_USE_PADS, NbtTags.USE_LILY_PADS, this.settings.useLilyPads),
             createGuiButton(GuiIdentifiers.PG2_B_USE_MELONS, NbtTags.USE_MELONS, this.settings.useMelons),
-
             createGuiButton(GuiIdentifiers.PG2_B_USE_WELLS, NbtTags.USE_DESERT_WELLS, this.settings.useDesertWells),
             createGuiButton(GuiIdentifiers.PG2_B_USE_FOSSILS, NbtTags.USE_FOSSILS, this.settings.useFossils),
-
+            createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
+            createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
+            createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
             createGuiButton(GuiIdentifiers.PG2_B_USE_BIRCH, NbtTags.USE_BIRCH_TREES, this.settings.useBirchTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_PINE, NbtTags.USE_PINE_TREES, this.settings.usePineTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
-            null,
             
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
@@ -1167,6 +1167,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG2_B_USE_FOSSILS:
                     this.settings.useFossils = entryValue;
                     break;
+                case GuiIdentifiers.PG2_B_USE_SAND_DISKS:
+                    this.settings.useSandDisks = entryValue;
+                    break;
+                case GuiIdentifiers.PG2_B_USE_GRAV_DISKS:
+                    this.settings.useGravelDisks = entryValue;
+                    break;
+                case GuiIdentifiers.PG2_B_USE_CLAY_DISKS:
+                    this.settings.useClayDisks = entryValue;
+                    break;
+                    
                 case GuiIdentifiers.PG2_B_USE_BIRCH:
                     this.settings.useBirchTrees = entryValue;
                     break;

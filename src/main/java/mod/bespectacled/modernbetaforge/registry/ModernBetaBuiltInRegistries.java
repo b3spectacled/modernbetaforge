@@ -218,6 +218,10 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixWorldSpawner));
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_DEFAULT_FLUID, new DataFix(NbtTags.DEFAULT_FLUID, DataFixers::fixDefaultFluid));
+
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SAND_DISKS, new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixSandDisks));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_GRAVEL_DISKS, new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CLAY_DISKS, new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks));
     }
 
     @SideOnly(Side.CLIENT)
@@ -284,6 +288,9 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_MELONS, GuiPredicates.USE_MELONS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_DESERT_WELLS, GuiPredicates.USE_DESERT_WELLS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_FOSSILS, GuiPredicates.USE_FOSSILS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_SAND_DISKS, GuiPredicates.USE_SAND_DISKS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_GRAVEL_DISKS, GuiPredicates.USE_GRAVEL_DISKS_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_CLAY_DISKS, GuiPredicates.USE_CLAY_DISKS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_BIRCH_TREES, GuiPredicates.USE_BIRCH_TREES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_PINE_TREES, GuiPredicates.USE_PINE_TREES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_SWAMP_TREES, GuiPredicates.USE_SWAMP_TREES_TEST);

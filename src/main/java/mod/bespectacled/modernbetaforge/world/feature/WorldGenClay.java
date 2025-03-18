@@ -21,7 +21,7 @@ public class WorldGenClay extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, BlockPos blockPos) {
-        if(world.getBlockState(blockPos).getMaterial() != Material.WATER) {
+        if (world.getBlockState(blockPos).getMaterial() != Material.WATER) {
             return false;
         }
         

@@ -292,6 +292,9 @@ public class ModernBetaGeneratorSettings {
     public final boolean useMelons;
     public final boolean useDesertWells;
     public final boolean useFossils;
+    public final boolean useSandDisks;
+    public final boolean useGravelDisks;
+    public final boolean useClayDisks;
     
     public final boolean useBirchTrees;
     public final boolean usePineTrees;
@@ -527,6 +530,9 @@ public class ModernBetaGeneratorSettings {
         this.useMelons = factory.useMelons;
         this.useDesertWells = factory.useDesertWells;
         this.useFossils = factory.useFossils;
+        this.useSandDisks = factory.useSandDisks;
+        this.useGravelDisks = factory.useGravelDisks;
+        this.useClayDisks = factory.useClayDisks;
         
         this.spawnNewCreatureMobs = factory.spawnNewCreatureMobs;
         this.spawnNewMonsterMobs = factory.spawnNewMonsterMobs;
@@ -813,6 +819,9 @@ public class ModernBetaGeneratorSettings {
         public boolean useMelons;
         public boolean useDesertWells;
         public boolean useFossils;
+        public boolean useSandDisks;
+        public boolean useGravelDisks;
+        public boolean useClayDisks;
         
         public boolean useBirchTrees;
         public boolean usePineTrees;
@@ -1042,6 +1051,9 @@ public class ModernBetaGeneratorSettings {
             this.useMelons = true;
             this.useDesertWells = true;
             this.useFossils = true;
+            this.useSandDisks = false;
+            this.useGravelDisks = false;
+            this.useClayDisks = false;
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
@@ -1294,6 +1306,9 @@ public class ModernBetaGeneratorSettings {
                 this.useMelons == factory.useMelons &&
                 this.useDesertWells == factory.useDesertWells &&
                 this.useFossils == factory.useFossils &&
+                this.useSandDisks == factory.useSandDisks &&
+                this.useGravelDisks == factory.useGravelDisks &&
+                this.useClayDisks == factory.useClayDisks &&
                         
                 this.useBirchTrees == factory.useBirchTrees &&
                 this.usePineTrees == factory.usePineTrees &&
@@ -1527,6 +1542,9 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useMelons ? 1 : 0);
             hashCode = 31 * hashCode + (this.useDesertWells ? 1 : 0);
             hashCode = 31 * hashCode + (this.useFossils ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useSandDisks ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useGravelDisks ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useClayDisks ? 1 : 0);
 
             hashCode = 31 * hashCode + (this.useBirchTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.usePineTrees ? 1 : 0);
@@ -1786,6 +1804,9 @@ public class ModernBetaGeneratorSettings {
                 factory.useMelons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MELONS, factory.useMelons);
                 factory.useDesertWells = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
                 factory.useFossils = JsonUtils.getBoolean(jsonObject, NbtTags.USE_FOSSILS, factory.useFossils);
+                factory.useSandDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SAND_DISKS, factory.useSandDisks);
+                factory.useGravelDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
+                factory.useClayDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
                 
                 factory.useBirchTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
                 factory.usePineTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_PINE_TREES, factory.usePineTrees);
@@ -2154,6 +2175,9 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
             jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
             jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
+            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, factory.useSandDisks);
+            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
+            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
 
             jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
             jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);

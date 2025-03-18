@@ -34,6 +34,11 @@ public class BiomeBetaSwampland extends BiomeBeta {
         this.skyColor = ModernBetaBiomeColors.BETA_COOL_SKY_COLOR;
         
         this.populateAdditionalMobs(EnumCreatureType.MONSTER, false, SLIME_SWAMP);
+        
+        this.decorator.clayPerChunk = 1;
+        this.decorator.waterlilyPerChunk = 4;
+        this.decorator.sandPatchesPerChunk = 0;
+        this.decorator.gravelPatchesPerChunk = 0;
     }
     
     @Override
@@ -66,7 +71,7 @@ public class BiomeBetaSwampland extends BiomeBeta {
         }
         
         if (settings.useLilyPads && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LILYPAD)) {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < this.decorator.waterlilyPerChunk; ++i) {
                 int dX = random.nextInt(16) + 8;
                 int dZ = random.nextInt(16) + 8;
                 

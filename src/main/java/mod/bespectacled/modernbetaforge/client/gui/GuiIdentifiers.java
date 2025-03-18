@@ -136,6 +136,10 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_MODDED_BIOMES = 316;
     public static final int PG2_S_BIOME_SZ = 317;
     
+    public static final int PG2_B_USE_SAND_DISKS = 318;
+    public static final int PG2_B_USE_GRAV_DISKS = 319;
+    public static final int PG2_B_USE_CLAY_DISKS = 320;
+    
     // Labels
     public static final int PG2_L_BETA = 1300;
     public static final int PG2_L_MOBS = 1301;

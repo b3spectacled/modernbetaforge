@@ -6,33 +6,24 @@ import java.util.function.Supplier;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.block.BlockFlower.EnumFlowerType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenBush;
-import net.minecraft.world.gen.feature.WorldGenFlowers;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
-    private WorldGenerator worldGenDandelion = new WorldGenFlowers(Blocks.YELLOW_FLOWER, EnumFlowerType.DANDELION);
-    private WorldGenerator worldGenPoppy = new WorldGenFlowers(Blocks.RED_FLOWER, EnumFlowerType.POPPY);
-    private WorldGenerator worldGenBrownMushroom = new WorldGenBush(Blocks.BROWN_MUSHROOM);
-    private WorldGenerator worldGenRedMushroom = new WorldGenBush(Blocks.RED_MUSHROOM);
-    
     @Override
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
+        this.chunkPos = startPos;
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         ChunkPos chunkPos = new ChunkPos(startX >> 4, startZ >> 4);
@@ -54,21 +45,21 @@ public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int count = this.getFlowerCount(biome);
             
-            this.populateWorldGenCount(world, random, startPos, this.worldGenDandelion, mutablePos, count, settings.height);
-            this.populateWorldGenCount(world, random, startPos, this.worldGenPoppy, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_POPPY, mutablePos, count, settings.height);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
             int count = this.getMushroomCount();
             
-            this.populateWorldGenCount(world, random, startPos, this.worldGenBrownMushroom, mutablePos, count, settings.height);
-            this.populateWorldGenCount(world, random, startPos, this.worldGenRedMushroom, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, count, settings.height);
         }
 
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            this.populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
+            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));

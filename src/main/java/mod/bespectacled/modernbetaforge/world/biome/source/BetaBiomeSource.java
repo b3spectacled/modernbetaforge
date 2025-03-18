@@ -54,17 +54,17 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     
     @Override
     public boolean sampleSkyColor() {
-        return ModernBetaConfig.visualOptions.useBetaSkyColors && !this.climateMap.isModifiedMap();
+        return ModernBetaConfig.visualOptions.useBetaSkyColors && !this.climateMap.containsNonBetaBiomes();
     }
     
     @Override
     public boolean sampleBiomeColor() {
-        return ModernBetaConfig.visualOptions.useBetaBiomeColors && !this.climateMap.isModifiedMap();
+        return ModernBetaConfig.visualOptions.useBetaBiomeColors && !this.climateMap.containsNonBetaBiomes();
     }
     
     @Override
     public boolean sampleForFeatureGeneration() {
-        return !this.climateMap.isModifiedMap();
+        return !this.climateMap.containsNonBetaBiomes();
     }
     
     private Biome getBiomeByType(int x, int z, ClimateType type) {

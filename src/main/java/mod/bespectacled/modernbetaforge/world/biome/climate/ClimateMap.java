@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
-import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -14,7 +15,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class ClimateMap {
     private final Map<String, ClimateMapping> climateMap;
     private final ClimateMapping[] climateTable;
-    private final boolean modifiedMap;
+    private final boolean containsNonBetaBiomes;
+    private final boolean containsNonModernBetaBiomes;
     
     public ClimateMap(ModernBetaGeneratorSettings settings) {
         this.climateMap = new LinkedHashMap<>();
@@ -23,7 +25,8 @@ public class ClimateMap {
         this.populateBiomeMap(settings);
         this.populateBiomeLookup();
         
-        this.modifiedMap = isModifiedMap(this.climateMap);
+        this.containsNonBetaBiomes = containsNonBetaBiomes(this.climateMap);
+        this.containsNonModernBetaBiomes = containsNonModernBetaBiomes(this.climateMap);
     }
     
     public ClimateMapping getMapping(double temp, double rain) {
@@ -33,8 +36,12 @@ public class ClimateMap {
         return this.climateTable[t + r * 64];
     }
     
-    public boolean isModifiedMap() {
-        return this.modifiedMap;
+    public boolean containsNonBetaBiomes() {
+        return this.containsNonBetaBiomes;
+    }
+    
+    public boolean containsNonModernBetaBiomes() {
+        return this.containsNonModernBetaBiomes;
     }
     
     private void populateBiomeMap(ModernBetaGeneratorSettings settings) {
@@ -160,9 +167,19 @@ public class ClimateMap {
         }
     }
     
-    private static boolean isModifiedMap(Map<String, ClimateMapping> climateMap) {
+    private static boolean containsNonBetaBiomes(Map<String, ClimateMapping> climateMap) {
         for (Entry<String, ClimateMapping> mapping : climateMap.entrySet()) {
             if (!mapping.getValue().containsOnlyBetaBiomes) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private static boolean containsNonModernBetaBiomes(Map<String, ClimateMapping> climateMap) {
+        for (Entry<String, ClimateMapping> mapping : climateMap.entrySet()) {
+            if (!mapping.getValue().containsOnlyModernBetaBiomes) {
                 return true;
             }
         }
@@ -176,6 +193,7 @@ public class ClimateMap {
         public final Biome beachBiome;
         
         public final boolean containsOnlyBetaBiomes;
+        public final boolean containsOnlyModernBetaBiomes;
         
         public ClimateMapping(ResourceLocation baseBiome, ResourceLocation oceanBiome, ResourceLocation beachBiome) {
             this.baseBiome = ForgeRegistryUtil.get(baseBiome, ForgeRegistries.BIOMES);
@@ -183,9 +201,14 @@ public class ClimateMap {
             this.beachBiome = ForgeRegistryUtil.get(beachBiome, ForgeRegistries.BIOMES);
             
             this.containsOnlyBetaBiomes = 
-                ModernBetaBiomeLists.BETA_BIOMES.contains(this.baseBiome) &&
-                ModernBetaBiomeLists.BETA_BIOMES.contains(this.oceanBiome) &&
-                ModernBetaBiomeLists.BETA_BIOMES.contains(this.oceanBiome);
+                this.baseBiome instanceof BiomeBeta &&
+                this.oceanBiome instanceof BiomeBeta &&
+                this.beachBiome instanceof BiomeBeta;
+            
+            this.containsOnlyModernBetaBiomes = 
+                this.baseBiome instanceof ModernBetaBiome &&
+                this.oceanBiome instanceof ModernBetaBiome &&
+                this.beachBiome instanceof ModernBetaBiome;
         }
         
         public Biome biomeByClimateType(ClimateType type) {
