@@ -295,9 +295,6 @@ public abstract class ChunkSource {
      */
     protected void setBeachOctaveNoise(PerlinOctaveNoise beachOctaveNoise) {
         this.beachOctaveNoise = Optional.ofNullable(beachOctaveNoise);
-        
-        // Set beach noise for builtin Modern Biome surface builder
-        ModernBetaBiome.setBeachOctaveNoise(beachOctaveNoise);
     }
 
     /**
