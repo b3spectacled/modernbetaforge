@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -85,15 +86,12 @@ public class DebugInfoEventHandler {
                 }
                 addDebugText(event, seaLevelText);
                 
-                if (chunkSource instanceof ReleaseChunkSource) {
-                    ReleaseChunkSource releaseChunkSource = (ReleaseChunkSource)chunkSource;
-                    String noisebiome = releaseChunkSource.getNoiseBiome(x, z).getBiomeName();
+                if (chunkSource instanceof NoiseChunkSource) {
+                    NoiseChunkSource noiseChunkSource = (NoiseChunkSource)chunkSource;
                     
-                    String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
-                    String layerTypeText = String.format("[Modern Beta] Release Layer Type: %s", settings.layerType);
-                    
-                    addDebugText(event, noiseBiomeText);
-                    addDebugText(event, layerTypeText);
+                    addDebugText(event, "[Modern Beta] " + noiseChunkSource.debugNoiseSettings());
+                    addDebugText(event, "[Modern Beta] " + noiseChunkSource.debugNoiseCoordinates(x, y, z));
+                    addDebugText(event, "[Modern Beta] " + noiseChunkSource.debugNoiseModifiers(x, y, z));
                 }
                 
                 if (chunkSource instanceof FiniteChunkSource) {
@@ -117,6 +115,17 @@ public class DebugInfoEventHandler {
                         );
                         addDebugText(event, finiteHeightmapText);
                     }
+                }
+                
+                if (chunkSource instanceof ReleaseChunkSource) {
+                    ReleaseChunkSource releaseChunkSource = (ReleaseChunkSource)chunkSource;
+                    String noisebiome = releaseChunkSource.getNoiseBiome(x, z).getBiomeName();
+                    
+                    String noiseBiomeText = String.format("[Modern Beta] Release Noise Biome: %s", noisebiome);
+                    String layerTypeText = String.format("[Modern Beta] Release Layer Type: %s", settings.layerType);
+                    
+                    addDebugText(event, noiseBiomeText);
+                    addDebugText(event, layerTypeText);
                 }
             }
             

@@ -203,6 +203,60 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
+     * Gets the noise size values for the current chunk source.
+     * 
+     * @return A String representing the current noise size values.
+     */
+    public String debugNoiseSettings() {
+        return String.format("Noise Sizes: %d %d %d", this.noiseSizeX, this.noiseSizeY, this.noiseSizeZ);
+    }
+    
+    /**
+     * Gets the local noise coordinates for the given block coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param y y-coordinate in block cooridnates.
+     * @param z z-coordinate in block coordinates.
+     * @return A String representing the current noise coordinates.
+     */
+    public String debugNoiseCoordinates(int x, int y, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        
+        int localNoiseX = (x & 0xF) / this.noiseSizeX;
+        int localNoiseZ = (z & 0xF) / this.noiseSizeZ;
+        int noiseY = y / this.verticalNoiseResolution;
+        
+        return String.format("Noise: %d %d %d in %d %d", localNoiseX, noiseY, localNoiseZ, chunkX, chunkZ);
+    }
+
+    /**
+     * Gets the scale, depth, and offset values for the given block coordinates.
+     * 
+     * @param x x-coordinate in block coordinates.
+     * @param z z-coordinate in block coordinates.
+     * @return A String representing the current coordinates' scale, depth, and offset values.
+     */
+    public String debugNoiseModifiers(int x, int y, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+        
+        int startNoiseX = chunkX * this.noiseSizeX;
+        int startNoiseZ = chunkZ * this.noiseSizeZ;
+        
+        int localNoiseX = (x & 0xF) / this.noiseSizeX;
+        int localNoiseZ = (z & 0xF) / this.noiseSizeZ;
+        int noiseY = y / this.verticalNoiseResolution;
+        
+        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        double scale = noiseScaleDepth.scale;
+        double depth = noiseScaleDepth.depth;
+        double offset = this.sampleNoiseOffset(noiseY, scale, depth);
+        
+        return String.format("Scale: %.3f Depth: %.3f Offset: %.3f", scale, depth, offset);
+    }
+    
+    /**
      * Samples noise for a column at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
      * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
      * You can override this if necessary, but otherwise just implement {@link #sampleNoiseScaleDepth(int, int, int, int) getNoiseScaleDepth}
@@ -421,11 +475,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Sample initial noise for a given chunk.
      * 
-     * @param chunkX x-coordinate in chunk coordinates
-     * @param chunkZ z-coordinate in chunk coordinates
      * @return NoiseSource containing initial noise values for the chunk.
      */
-    private NoiseSource createInitialNoiseSource(int chunkX, int chunkZ) {
+    private NoiseSource createInitialNoiseSource() {
         NoiseSource noiseSource = new NoiseSource(
             (buffer, startX, startZ, localX, localZ, sizeX, sizeY, sizeZ) -> this.sampleNoiseColumn(
                 buffer,
@@ -491,7 +543,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
 
         // Create noise sources and sample.
         Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>(this.noiseSources);
-        noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource(chunkX, chunkZ));
+        noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource());
         noiseSources.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
             chunkX * this.noiseSizeX,
             chunkZ * this.noiseSizeZ,
