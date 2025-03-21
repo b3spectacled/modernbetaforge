@@ -96,6 +96,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private int resolution;
     private boolean useBiomeBlend;
     private float progress;
+    private float prevProgress;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
     private boolean hoveredSeedField;
@@ -199,7 +200,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int progressBarLength = boxR - boxL - 20;
         int progressBarL = boxL + 10;
         int progressBarR = progressBarL + progressBarLength;
-        int progressLength = (int)(progressBarLength * this.progress);
+
+        this.prevProgress = MathUtil.lerp(partialTicks, this.prevProgress, this.progress);
+        int progressLength = (int)(progressBarLength * this.prevProgress);
 
         drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, ARGB_PREVIEW_BOX);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, ARGB_BORDER_LIGHT);
@@ -404,6 +407,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void createTerrainMap() {
         this.progress = 0.0f;
+        this.prevProgress = 0.0f;
         this.state = ProgressState.STARTED;
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
