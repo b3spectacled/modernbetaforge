@@ -259,7 +259,6 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             this.genLayer = genLayers[1];
             this.biomeCache = new ChunkCache<>(
                 "noise_biome",
-                256,
                 (chunkX, chunkZ) -> new BiomeChunk(this.getBiomes(chunkX << 4, chunkZ << 4))
             );
             

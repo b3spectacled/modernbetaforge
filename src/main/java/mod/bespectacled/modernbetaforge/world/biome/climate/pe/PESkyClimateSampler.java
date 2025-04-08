@@ -21,9 +21,7 @@ public class PESkyClimateSampler {
         this.tempOctaveNoise = new PerlinOctaveNoise(new MTRandom(seed * 9871L), 4, true);
         
         this.skyClimateCache = new ChunkCache<>(
-            "sky", 
-            256, 
-            true, 
+            "sky",
             (chunkX, chunkZ) -> new SkyClimateChunk(chunkX, chunkZ, this::sampleSkyTempNoise)
         );
         

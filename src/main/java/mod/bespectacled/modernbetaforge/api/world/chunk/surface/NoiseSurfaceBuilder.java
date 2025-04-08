@@ -17,6 +17,8 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
 public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
+    protected static final int DEFAULT_CACHE_SIZE = 16;
+    
     private final PerlinOctaveNoise defaultBeachOctaveNoise;
     private final PerlinOctaveNoise defaultSurfaceOctaveNoise;
     

@@ -16,9 +16,9 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     public AlphaSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(chunkSource, settings, false, true, true);
         
-        this.sandCache = new ChunkCache<>("sand", 16, this::sampleSandNoise);
-        this.gravelCache = new ChunkCache<>("gravel", 16, this::sampleGravelNoise);
-        this.surfaceCache = new ChunkCache<>("surface", 16, this::sampleSurfaceNoise);
+        this.sandCache = new ChunkCache<>("sand", DEFAULT_CACHE_SIZE, this::sampleSandNoise);
+        this.gravelCache = new ChunkCache<>("gravel", DEFAULT_CACHE_SIZE, this::sampleGravelNoise);
+        this.surfaceCache = new ChunkCache<>("surface", DEFAULT_CACHE_SIZE, this::sampleSurfaceNoise);
     }
     
     @Override

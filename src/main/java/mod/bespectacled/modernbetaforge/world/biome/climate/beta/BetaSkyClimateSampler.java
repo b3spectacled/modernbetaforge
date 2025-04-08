@@ -22,9 +22,7 @@ public class BetaSkyClimateSampler {
         this.tempOctaveNoise = new SimplexOctaveNoise(new Random(seed * 9871L), 4);
         
         this.skyClimateCache = new ChunkCache<>(
-            "sky", 
-            256, 
-            true, 
+            "sky",
             (chunkX, chunkZ) -> new SkyClimateChunk(chunkX, chunkZ, this::sampleSkyTempNoise)
         );
         
