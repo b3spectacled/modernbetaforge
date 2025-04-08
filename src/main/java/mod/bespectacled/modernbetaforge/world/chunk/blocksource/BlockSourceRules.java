@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.chunk.blocksource;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
@@ -20,10 +20,11 @@ public class BlockSourceRules implements BlockSource {
 
     @Override
     public IBlockState sample(int x, int y, int z) {
-        for (BlockSource blockSource : this.rules) {
-            IBlockState blockState = blockSource.sample(x, y, z);
+        for (int i = 0; i < this.rules.size(); ++i) {
+            IBlockState blockState = this.rules.get(i).sample(x, y, z);
             
-            if (blockState == null) continue;
+            if (blockState == null)
+                continue;
             
             return blockState;
         }
@@ -36,7 +37,7 @@ public class BlockSourceRules implements BlockSource {
         private final IBlockState defaultBlock;
         
         public Builder(IBlockState defaultBlock) {
-            this.rules = new LinkedList<>();
+            this.rules = new ArrayList<>();
             this.defaultBlock = defaultBlock;
         }
         

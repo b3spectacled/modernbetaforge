@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.util.chunk;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.world.gen.structure.StructureComponent;
@@ -9,7 +9,7 @@ public class ComponentChunk {
     private final List<StructureComponent> components;
     
     public ComponentChunk(int chunkX, int chunkZ) {
-        this.components = new LinkedList<>();
+        this.components = new ArrayList<>();
     }
     
     public List<StructureComponent> getComponents() {

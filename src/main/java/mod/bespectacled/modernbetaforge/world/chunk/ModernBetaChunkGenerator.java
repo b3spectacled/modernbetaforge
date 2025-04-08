@@ -2,7 +2,6 @@ package mod.bespectacled.modernbetaforge.world.chunk;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -114,7 +113,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             .getValues()
             .stream()
             .map(feature -> feature.apply(this.chunkSource, this.settings))
-            .collect(Collectors.toCollection(LinkedList<WorldGenerator>::new));
+            .collect(Collectors.toCollection(ArrayList<WorldGenerator>::new));
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());

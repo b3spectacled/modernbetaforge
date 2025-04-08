@@ -1,7 +1,6 @@
 package mod.bespectacled.modernbetaforge.util;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -56,7 +55,7 @@ public class ForgeRegistryUtil<T> {
                 .stream()
                 .map(e -> e.getKey())
                 .filter(filter)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
     }
     
     public static <T> List<ResourceLocation> getKeys(IForgeRegistry<? extends T> registry) {
@@ -68,7 +67,7 @@ public class ForgeRegistryUtil<T> {
         return registry.getValues()
             .stream()
             .filter(filter)
-            .collect(Collectors.toCollection(LinkedList::new));
+            .collect(Collectors.toCollection(ArrayList::new));
     }
     
     public static <T> List<T> getValues(IForgeRegistry<? extends T> registry) {
@@ -90,7 +89,7 @@ public class ForgeRegistryUtil<T> {
             .stream()
             .filter(f -> f.getBlock() != null)
             .map(f -> f.getBlock().getRegistryName())
-            .collect(Collectors.toCollection(LinkedList::new));
+            .collect(Collectors.toCollection(ArrayList::new));
     }
     
     public static String getFluidLocalizedName(ResourceLocation blockKey) {

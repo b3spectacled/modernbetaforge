@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -26,8 +26,8 @@ public class BiomeInjectionRules {
             return null;
         }
         
-        for (BiomeInjectionRule rule : rules) {
-            Biome biome = rule.test(context).apply(x, z);
+        for (int i = 0; i < rules.size(); ++i) {
+            Biome biome = rules.get(i).test(context).apply(x, z);
             
             if (biome != null)
                 return biome;
@@ -53,7 +53,7 @@ public class BiomeInjectionRules {
         
         public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, BiomeInjectionStep step) {
             if (!this.ruleMap.containsKey(step)) {
-                this.ruleMap.put(step, new LinkedList<>());
+                this.ruleMap.put(step, new ArrayList<>());
             }
             
             this.ruleMap.get(step).add(new BiomeInjectionRule(rule, resolver));

@@ -34,8 +34,8 @@ public class StructureWeightSampler {
         
         double density = 0.0;
         
-        for (StructureComponent component : this.structureComponents) {
-            StructureBoundingBox box = component.getBoundingBox();
+        for (int i = 0; i < this.structureComponents.size(); ++i) {
+            StructureBoundingBox box = this.structureComponents.get(i).getBoundingBox();
             
             int height = getStructureHeight(chunkSource, box);
             int x = Math.max(0, Math.max(box.minX - posX, posX - box.maxX));

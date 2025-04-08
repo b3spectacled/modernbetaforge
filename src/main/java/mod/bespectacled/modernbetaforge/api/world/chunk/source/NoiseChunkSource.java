@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -539,7 +539,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         List<NoiseSampler> noiseSamplers = this.noiseSamplers.entrySet()
             .stream()
             .map(e -> e.getValue())
-            .collect(Collectors.toCollection(LinkedList::new));
+            .collect(Collectors.toCollection(ArrayList::new));
 
         // Create noise sources and sample.
         Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>(this.noiseSources);

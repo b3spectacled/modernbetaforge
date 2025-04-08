@@ -383,8 +383,8 @@ public class MapGenBetaCave extends MapGenBase {
                     }
                     
                     if (this.structureComponents != null && !this.structureComponents.isEmpty() && isModernBetaChunkGenerator) {
-                        for (StructureComponent component : this.structureComponents) {
-                            StructureBoundingBox box = component.getBoundingBox();
+                        for (int i = 0; i < this.structureComponents.size(); ++i) {
+                            StructureBoundingBox box = this.structureComponents.get(i).getBoundingBox();
                             
                             int boxMinX = box.minX - STRUCTURE_PADDING_XZ;
                             int boxMaxX = box.maxX + STRUCTURE_PADDING_XZ;

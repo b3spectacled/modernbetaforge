@@ -163,8 +163,8 @@ public final class NoiseSource {
                 for (int noiseY = 0; noiseY < this.noiseSizeY + 1; ++noiseY) {
                     double density = buffer[noiseY];
                     
-                    for (NoiseSampler sampler : noiseSamplers) {
-                        density = sampler.sample(
+                    for (int i = 0; i < noiseSamplers.size(); ++i) {
+                        density = noiseSamplers.get(i).sample(
                             density,
                             noiseX,
                             noiseY,
