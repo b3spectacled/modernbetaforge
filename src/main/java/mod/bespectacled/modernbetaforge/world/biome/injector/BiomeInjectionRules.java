@@ -36,6 +36,10 @@ public class BiomeInjectionRules {
         return null;
     }
     
+    public boolean isEmpty() {
+        return this.ruleMap.isEmpty();
+    }
+    
     private List<BiomeInjectionRule> getRules(BiomeInjectionStep step) {
         if (step == BiomeInjectionStep.ALL) {
             return this.ruleMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());

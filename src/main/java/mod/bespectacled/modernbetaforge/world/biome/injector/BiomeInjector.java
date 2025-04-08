@@ -51,6 +51,10 @@ public class BiomeInjector {
         return this.rules.test(context, x, z, step);
     }
     
+    public boolean hasNoRules() {
+        return this.rules.isEmpty();
+    }
+    
     public static boolean atBeachDepth(int topHeight, int seaLevel) {
         return topHeight >= seaLevel - 4 && topHeight <= seaLevel + 1;
     }

@@ -130,7 +130,8 @@ public class DebugInfoEventHandler {
             }
             
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
-                BiomeSource biomeSource = ((ModernBetaBiomeProvider)biomeProvider).getBiomeSource();
+                ModernBetaBiomeProvider modernBetaBiomeProvider = (ModernBetaBiomeProvider)biomeProvider;
+                BiomeSource biomeSource = modernBetaBiomeProvider.getBiomeSource();
                 
                 if (biomeSource instanceof ClimateSampler) {
                     ClimateSampler climateSampler = (ClimateSampler)biomeSource;
@@ -143,7 +144,7 @@ public class DebugInfoEventHandler {
                     addDebugText(event, climateText);
                 }
 
-                String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", biomeSource.getBiome(x, z).getBiomeName());
+                String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", modernBetaBiomeProvider.getBaseBiome(x, z).getBiomeName());
                 addDebugText(event, baseBiomeText);
                 addDebugText(event, "");
             }

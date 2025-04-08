@@ -59,6 +59,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public static final ResourceLocation RAVINE_KEY = new ResourceLocation("ravine");
     public static final ResourceLocation CAVE_WATER_KEY = ModernBeta.createRegistryKey("cave_water");
     
+    private static final int INITIAL_CHUNK_CAPACITY = 256;
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;
     
     private final World world;
@@ -100,7 +101,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             this.chunkSource.buildBiomeInjectorRules(this.biomeProvider.getBiomeSource())
         );
 
-        this.initialChunkCache = new ChunkCache<>("initial_chunk", this::provideInitialChunkPrimerContainer);
+        this.initialChunkCache = new ChunkCache<>("initial_chunk", INITIAL_CHUNK_CAPACITY, this::provideInitialChunk);
         this.componentCache = new ChunkCache<>("components", MAX_RENDER_DISTANCE_AREA, ComponentChunk::new);
         
         this.structures = this.initStructures(settings, world.getWorldInfo().isMapFeaturesEnabled());
@@ -424,6 +425,11 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     }
     
     public Biome[] getBiomes(int chunkX, int chunkZ) {
+        // Skip performing expensive chunk pregeneration if there are no biome injections that need it
+        if (this.biomeInjector.hasNoRules()) {
+            this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
+        }
+        
         return this.initialChunkCache.get(chunkX, chunkZ).biomes;
     }
     
@@ -488,19 +494,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         return structureMap;
     }
     
-    private ChunkPrimerContainer provideInitialChunkPrimerContainer(int chunkX, int chunkZ) {
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
-        
+    private ChunkPrimerContainer provideInitialChunk(int chunkX, int chunkZ) {
         ChunkPrimer chunkPrimer = new ChunkPrimer();
-        Biome[] biomes = new Biome[256];
+        Biome[] biomes = this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
         
         // Generate base terrain
         this.chunkSource.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
-        
-        // Generate base biome map
-        this.biomeProvider.getBaseBiomes(biomes, startX, startZ, 16, 16);
-        
+
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
             this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);

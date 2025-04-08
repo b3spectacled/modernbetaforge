@@ -13,7 +13,6 @@ import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
-import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +23,9 @@ import net.minecraft.world.storage.WorldInfo;
 public class ModernBetaBiomeProvider extends BiomeProvider {
     private final ModernBetaGeneratorSettings settings;
     private final BiomeSource biomeSource;
-    private final ChunkCache<BiomeChunk> biomeCache;
+
+    private final ChunkCache<BiomeChunk> baseBiomeCache;
+    private final ChunkCache<BiomeChunk> injectedBiomeCache;
     
     private ModernBetaChunkGenerator chunkGenerator;
     
@@ -38,16 +39,14 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
             .get(this.settings.biomeSource)
             .apply(worldInfo.getSeed(), this.settings);
-        this.biomeCache = new ChunkCache<BiomeChunk>(
+
+        this.baseBiomeCache = new ChunkCache<BiomeChunk>(
+            "base_biomes",
+            (chunkX, chunkZ) -> new BiomeChunk(this.getBaseBiomes(null, chunkX << 4, chunkZ << 4, 16, 16))
+        );
+        this.injectedBiomeCache = new ChunkCache<BiomeChunk>(
             "biomes",
-            (chunkX, chunkZ) -> {
-                // No need to pregenerate chunk if we know all the biomes will be the same (single biome)
-                Biome[] biomes = this.biomeSource instanceof SingleBiomeSource ?
-                    this.getBaseBiomes(null, chunkX << 4, chunkZ << 4, 16, 16) :
-                    this.chunkGenerator.getBiomes(chunkX, chunkZ);
-                
-                return new BiomeChunk(biomes);
-            }
+            (chunkX, chunkZ) -> new BiomeChunk(this.chunkGenerator.getBiomes(chunkX, chunkZ))
         );
         
         this.chunkGenerator = null;
@@ -156,6 +155,17 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return true;
     }
     
+    public Biome getBaseBiome(int x, int z) {
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
+            
+        return this.baseBiomeCache.get(chunkX, chunkZ).sample(x, z);
+    }
+    
+    public Biome[] getBaseBiomes(int chunkX, int chunkZ) {
+        return this.baseBiomeCache.get(chunkX, chunkZ).getBiomes();
+    }
+    
     /*
      * Used for /locatebiome command
      */
@@ -190,7 +200,19 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         return blockPos;
     }
 
-    public Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {        
+    public BiomeSource getBiomeSource() {
+        return this.biomeSource;
+    }
+    
+    public void setChunkGenerator(ModernBetaChunkGenerator chunkGenerator) {
+        this.chunkGenerator = chunkGenerator;
+    }
+    
+    public boolean useVillageVariants() {
+        return this.settings.useVillageVariants;
+    }
+    
+    private Biome[] getBaseBiomes(@Nullable Biome[] biomes, int startX, int startZ, int sizeX, int sizeZ) {        
         DebugUtil.startDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
         if (biomes == null || biomes.length != sizeX * sizeZ) {
             biomes = new Biome[sizeX * sizeZ];
@@ -205,27 +227,15 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                 biomes[localX + localZ * 16] = this.biomeSource.getBiome(x, z);
             }
         }
-
+    
         DebugUtil.endDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
         return biomes;
     }
-    
-    public BiomeSource getBiomeSource() {
-        return this.biomeSource;
-    }
-    
-    public void setChunkGenerator(ModernBetaChunkGenerator chunkGenerator) {
-        this.chunkGenerator = chunkGenerator;
-    }
-    
-    public boolean useVillageVariants() {
-        return this.settings.useVillageVariants;
-    }
-    
+
     private Biome getBiome(int x, int z) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
-        return this.biomeCache.get(chunkX, chunkZ).sample(x, z);
+        return this.injectedBiomeCache.get(chunkX, chunkZ).sample(x, z);
     }
 }

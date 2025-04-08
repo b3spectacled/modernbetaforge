@@ -21,4 +21,8 @@ public class BiomeChunk {
     public Biome sample(int x, int z) {
         return this.biomes[(x & 0xF) + (z & 0xF) * 16];
     }
+    
+    public Biome[] getBiomes() {
+        return this.biomes.clone();
+    }
 }
