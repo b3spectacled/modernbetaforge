@@ -65,7 +65,7 @@ public class WorldGenClay extends WorldGenerator {
                         double dY = (((double)y + 0.5D) - d7) / (d11 / 2.0);
                         double dZ = (((double)z + 0.5D) - d8) / (d10 / 2.0);
                         
-                        if(dX * dX + dY * dY + dZ * dZ >= 1.0) {
+                        if (dX * dX + dY * dY + dZ * dZ >= 1.0) {
                             continue;
                         }
                         

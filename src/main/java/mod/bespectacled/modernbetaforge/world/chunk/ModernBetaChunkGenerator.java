@@ -14,8 +14,8 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
+import mod.bespectacled.modernbetaforge.util.ObjectPool;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
@@ -27,7 +27,6 @@ import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -66,6 +65,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final Random random;
     private final ChunkSource chunkSource;
     private final ModernBetaGeneratorSettings settings;
+    private final ObjectPool<ChunkPrimer> primerPool;
 
     private final ModernBetaBiomeProvider biomeProvider;
     private final BiomeInjector biomeInjector;
@@ -91,6 +91,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             .get(settings.chunkSource)
             .apply(world.getSeed(), settings);
         this.settings = settings;
+        this.primerPool = new ObjectPool<>(ChunkPrimer::new);
 
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         this.biomeProvider.setChunkGenerator(this);
@@ -161,13 +162,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
                 for (int y = 0; y < 255; ++y) {
-                    IBlockState blockState = containerPrimer.getBlockState(x, y, z);
-                    
-                    if (blockState == BlockStates.AIR) {
-                        continue;
-                    }
-                    
-                    chunkPrimer.setBlockState(x, y, z, blockState);
+                    chunkPrimer.setBlockState(x, y, z, containerPrimer.getBlockState(x, y, z));
                 }
             }
         }
@@ -176,8 +171,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     @Override
     public Chunk generateChunk(int chunkX, int chunkZ) {
         DebugUtil.startDebug(DebugUtil.SECTION_GEN_CHUNK);
-
-        ChunkPrimer chunkPrimer = new ChunkPrimer();
+        
+        ChunkPrimer chunkPrimer = this.primerPool.get();
         this.setBlocksInChunk(chunkX, chunkZ, chunkPrimer);
         
         Biome[] biomes = this.initialChunkCache.get(chunkX, chunkZ).biomes;
@@ -221,6 +216,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         // Generate final chunk
         Chunk chunk = new Chunk(this.world, chunkPrimer, chunkX, chunkZ);
+        this.primerPool.release(chunkPrimer);
         
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
@@ -241,8 +237,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         BlockFalling.fallInstantly = true;
         
-        int startX = chunkX * 16;
-        int startZ = chunkZ * 16;
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
         
         ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
