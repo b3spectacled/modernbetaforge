@@ -2,11 +2,13 @@ package mod.bespectacled.modernbetaforge.config;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets.FilterType;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.Config.RequiresWorldRestart;
+import net.minecraftforge.common.config.Config.SlidingOption;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,6 +61,14 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean saveIndevLevels = true;
+        
+        @Comment({
+            "Max size of chunk cache. Higher values may improve performance at the cost of memory consumption, particularly in heavily-modded worlds."
+        })
+        @RequiresWorldRestart
+        @SlidingOption
+        @RangeInt(min = ChunkCache.MIN_CACHE_SIZE, max = ChunkCache.MAX_CACHE_SIZE)
+        public int chunkCacheSize = ChunkCache.DEFAULT_CACHE_SIZE;
     }
 
     public static class CategoryVisual {

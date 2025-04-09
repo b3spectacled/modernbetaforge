@@ -17,7 +17,7 @@ public class SkylandsSurfaceBuilder extends NoiseSurfaceBuilder {
     public SkylandsSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(chunkSource, settings, false, false, false);
         
-        this.surfaceCache = new ChunkCache<>("surface", DEFAULT_CACHE_SIZE, this::sampleSurfaceNoise);
+        this.surfaceCache = new ChunkCache<>("surface", this::sampleSurfaceNoise);
     }
     
     @Override

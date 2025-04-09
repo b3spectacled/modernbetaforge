@@ -4,14 +4,18 @@ import java.util.concurrent.locks.StampedLock;
 import java.util.function.BiFunction;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 
 /*
  * Generic threadsafe(???) cache for anything that outputs T given pair of integer chunk coordinates.
  * 
  */
 public class ChunkCache<T> {
-    private static final int DEFAULT_CACHE_SIZE = 64;
+    public static final int MIN_CACHE_SIZE = 16;
+    public static final int MAX_CACHE_SIZE = 256;
+    public static final int DEFAULT_CACHE_SIZE = 32;
     
     @SuppressWarnings("unused")
     private final String name;
@@ -39,7 +43,7 @@ public class ChunkCache<T> {
     }
     
     public ChunkCache(String name, BiFunction<Integer, Integer, T> chunkFunc) {
-        this(name, DEFAULT_CACHE_SIZE, true, chunkFunc);
+        this(name, MathHelper.clamp(ModernBetaConfig.generatorOptions.chunkCacheSize, MIN_CACHE_SIZE, MAX_CACHE_SIZE), true, chunkFunc);
     }
     
     public void clear() {

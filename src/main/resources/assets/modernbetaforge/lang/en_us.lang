@@ -321,6 +321,7 @@ modernbetaforge.general.guioptions.usemenusforbasicsettings=Menus for Basic Sett
 
 modernbetaforge.general.generatoroptions.biomeswithcustomsurfaces=Biomes with Custom Surfaces
 modernbetaforge.general.generatoroptions.saveindevlevels=Save Indev Levels
+modernbetaforge.general.generatoroptions.chunkcachesize=Chunk Cache Size
 
 modernbetaforge.general.spawnoptions.usespawnfuzz=Spawn Fuzz
 
