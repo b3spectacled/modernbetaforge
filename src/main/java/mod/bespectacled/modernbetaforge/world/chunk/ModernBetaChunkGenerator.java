@@ -423,7 +423,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public Biome[] getBiomes(int chunkX, int chunkZ) {
         // Skip performing expensive chunk pregeneration if there are no biome injections that need it
         if (this.biomeInjector.hasNoRules()) {
-            this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
+            return this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
         }
         
         return this.initialChunkCache.get(chunkX, chunkZ).biomes;
