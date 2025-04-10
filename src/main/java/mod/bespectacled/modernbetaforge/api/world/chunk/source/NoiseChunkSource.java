@@ -46,7 +46,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
     private final ChunkCache<DensityChunk> densityCache;
     
     private final Map<ResourceLocation, NoiseSampler> noiseSamplers;
-    private final Map<ResourceLocation, NoiseSource> noiseSources;
     
     private final NoiseSettings noiseSettings;
     private final SurfaceBuilder surfaceBuilder;
@@ -78,20 +77,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
         
         this.noiseSamplers = new LinkedHashMap<>();
-        this.noiseSources = new LinkedHashMap<>();
-        
         ModernBetaRegistries.NOISE_SAMPLER.getEntrySet().forEach(entry -> this.noiseSamplers.put(
             entry.getKey(),
             entry.getValue().apply(this, this.settings)
-        ));
-        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> this.noiseSources.put(
-            entry.getKey(),
-            new NoiseSource(
-                entry.getValue().apply(this, this.settings),
-                this.noiseSizeX,
-                this.noiseSizeY,
-                this.noiseSizeZ
-            )
         ));
         
         this.noiseSettings = noiseSettings;
@@ -543,7 +531,16 @@ public abstract class NoiseChunkSource extends ChunkSource {
             .collect(Collectors.toCollection(ArrayList::new));
 
         // Create noise sources and sample.
-        Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>(this.noiseSources);
+        Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>();
+        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSources.put(
+            entry.getKey(),
+            new NoiseSource(
+                entry.getValue().apply(this, this.settings),
+                this.noiseSizeX,
+                this.noiseSizeY,
+                this.noiseSizeZ
+            )
+        ));
         noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource());
         noiseSources.entrySet().forEach(entry -> entry.getValue().sampleInitialNoise(
             chunkX * this.noiseSizeX,

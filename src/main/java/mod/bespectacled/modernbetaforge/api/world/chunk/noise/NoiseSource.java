@@ -10,9 +10,7 @@ public final class NoiseSource {
     private final int noiseSizeX;
     private final int noiseSizeY;
     private final int noiseSizeZ;
-    private final int noiseSize;
-    
-    private double[] noise;
+    private final double[] noise;
 
     private double lowerNW;
     private double lowerSW;
@@ -53,7 +51,7 @@ public final class NoiseSource {
         this.noiseSizeX = noiseSizeX;
         this.noiseSizeY = noiseSizeY;
         this.noiseSizeZ = noiseSizeZ;
-        this.noiseSize = (noiseSizeX + 1) * (noiseSizeY + 1) * (noiseSizeZ + 1);
+        this.noise = new double[(noiseSizeX + 1) * (noiseSizeY + 1) * (noiseSizeZ + 1)];
     }
     
     /**
@@ -65,10 +63,7 @@ public final class NoiseSource {
      * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
      */
     public final void sampleInitialNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
-        this.noise = this.sampleNoise(startNoiseX, startNoiseZ, noiseSettings, noiseSamplers);
-        
-        if (this.noise.length != this.noiseSize)
-            throw new IllegalStateException("[Modern Beta] Noise array length is invalid!");
+        this.sampleNoise(startNoiseX, startNoiseZ, noiseSettings, noiseSamplers);
     }
     
     /**
@@ -137,11 +132,9 @@ public final class NoiseSource {
      * @param startNoiseZ z-coordinate in noise coordinates.
      * @param noiseSettings Noise settings, including slides.
      * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
-     * @return Array containing the initial densities for the chunk.
      */
-    private double[] sampleNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
+    private void sampleNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
         double[] buffer = new double[(this.noiseSizeY + 1)];
-        double[] noise = new double[this.noiseSize];
         
         int ndx = 0;
         for (int localNoiseX = 0; localNoiseX < this.noiseSizeX + 1; ++localNoiseX) {
@@ -178,11 +171,9 @@ public final class NoiseSource {
                     density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY);
                     density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
                     
-                    noise[ndx++] = density;
+                    this.noise[ndx++] = density;
                 }
             }
         }
-        
-        return noise;
     }
 }
