@@ -3,17 +3,20 @@ package mod.bespectacled.modernbetaforge.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ObjectPool<T> {
     private static final long EXPIRATION_TIME = 5000L;
     
     private final Supplier<T> constructor;
+    private final Consumer<T> cleanFunc;
     private final Map<T, Long> available;
     private final Map<T, Long> used;
     
-    public ObjectPool(Supplier<T> constructor) {
+    public ObjectPool(Supplier<T> constructor, Consumer<T> cleanFunc) {
         this.constructor = constructor;
+        this.cleanFunc = cleanFunc;
         this.available = new HashMap<>();
         this.used = new HashMap<>();
     }
@@ -39,6 +42,7 @@ public class ObjectPool<T> {
     }
     
     public synchronized void release(T t) {
+        this.cleanFunc.accept(t);
         this.available.put(t, System.currentTimeMillis());
         this.used.remove(t);
     }

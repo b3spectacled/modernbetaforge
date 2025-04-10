@@ -91,7 +91,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             .get(settings.chunkSource)
             .apply(world.getSeed(), settings);
         this.settings = settings;
-        this.primerPool = new ObjectPool<>(ChunkPrimer::new);
+        this.primerPool = new ObjectPool<>(ChunkPrimer::new, chunkPrimer -> {});
 
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
         this.biomeProvider.setChunkGenerator(this);

@@ -234,6 +234,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * Gets the scale, depth, and offset values for the given block coordinates.
      * 
      * @param x x-coordinate in block coordinates.
+     * @param y y-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @return A String representing the current coordinates' scale, depth, and offset values.
      */
