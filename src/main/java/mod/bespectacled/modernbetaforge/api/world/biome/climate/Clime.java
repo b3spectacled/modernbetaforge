@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.api.world.biome.climate;
 
 public class Clime {
-    private final double temp;
-    private final double rain;
+    private final float temp;
+    private final float rain;
     
     /**
      * Constructs a container to hold a climate temperature and rainfall value.
@@ -11,8 +11,8 @@ public class Clime {
      * @param rain A rainfall value.
      */
     public Clime(double temp, double rain) {
-        this.temp = temp;
-        this.rain = rain;
+        this.temp = (float)temp;
+        this.rain = (float)rain;
     }
     
     /**

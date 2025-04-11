@@ -63,7 +63,7 @@ public class ModernBetaConfig {
         public boolean saveIndevLevels = true;
         
         @Comment({
-            "Max size of chunk cache. Higher values may improve performance at the cost of memory consumption, particularly in heavily-modded worlds."
+            "Max size of chunk cache. Higher values may improve performance at the cost of memory consumption, particularly in heavily-modded worlds. You probably don't need to change this!"
         })
         @RequiresWorldRestart
         @SlidingOption
