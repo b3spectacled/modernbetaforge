@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.biome;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
@@ -17,7 +17,7 @@ public class ModernBetaBiomeLists {
     public static final List<Biome> BUILTIN_BIOMES_WITH_CUSTOM_SURFACES;
     
     static {
-        BETA_BIOMES = Arrays.asList(
+        BETA_BIOMES = ImmutableList.<Biome>builder().add(
             ModernBetaBiomeHolders.BETA_ICE_DESERT,
             ModernBetaBiomeHolders.BETA_TUNDRA,
             ModernBetaBiomeHolders.BETA_SAVANNA,
@@ -37,33 +37,34 @@ public class ModernBetaBiomeLists {
             ModernBetaBiomeHolders.BETA_SNOWY_BEACH,
             
             ModernBetaBiomeHolders.BETA_SKY
-        );
+        ).build();
         
-        ALPHA_BIOMES = Arrays.asList(
+        ALPHA_BIOMES = ImmutableList.<Biome>builder().add(
             ModernBetaBiomeHolders.ALPHA,
             ModernBetaBiomeHolders.ALPHA_WINTER
-        );
+        ).build();
         
-        INFDEV_BIOMES = Arrays.asList(
+        INFDEV_BIOMES = ImmutableList.<Biome>builder().add(
             ModernBetaBiomeHolders.INFDEV_227,
             ModernBetaBiomeHolders.INFDEV_415,
             ModernBetaBiomeHolders.INFDEV_420,
             ModernBetaBiomeHolders.INFDEV_611
-        );
+        ).build();
         
-        INDEV_BIOMES = Arrays.asList(
+        INDEV_BIOMES = ImmutableList.<Biome>builder().add(
             ModernBetaBiomeHolders.INDEV_NORMAL,
             ModernBetaBiomeHolders.INDEV_PARADISE,
             ModernBetaBiomeHolders.INDEV_WOODS
-        );
+        ).build();
         
-        ALL_BIOMES = new ArrayList<>();
-        ALL_BIOMES.addAll(BETA_BIOMES);
-        ALL_BIOMES.addAll(ALPHA_BIOMES);
-        ALL_BIOMES.addAll(INFDEV_BIOMES);
-        ALL_BIOMES.addAll(INDEV_BIOMES);
+        ALL_BIOMES = ImmutableList.<Biome>builder()
+            .addAll(BETA_BIOMES)
+            .addAll(ALPHA_BIOMES)
+            .addAll(INFDEV_BIOMES)
+            .addAll(INDEV_BIOMES)
+            .build();
         
-        BUILTIN_BIOMES_WITH_CUSTOM_SURFACES = Arrays.asList(
+        BUILTIN_BIOMES_WITH_CUSTOM_SURFACES = ImmutableList.<Biome>builder().add(
             // Badlands
             Biomes.MESA,
             Biomes.MESA_CLEAR_ROCK,
@@ -100,6 +101,6 @@ public class ModernBetaBiomeLists {
             Biomes.OCEAN,
             Biomes.DEEP_OCEAN,
             Biomes.FROZEN_OCEAN
-        );
+        ).build();
     }
 }
