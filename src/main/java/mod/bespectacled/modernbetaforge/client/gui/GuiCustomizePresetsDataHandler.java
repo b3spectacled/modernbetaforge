@@ -112,6 +112,8 @@ public class GuiCustomizePresetsDataHandler {
             this.settings = settings.trim();
         }
         
+        /* Treat presets with the same name as equal */
+        
         @Override
         public boolean equals(Object o) {
             if (o == this) {
@@ -125,7 +127,6 @@ public class GuiCustomizePresetsDataHandler {
             return this.name.equals(((PresetData)o).name);
         }
         
-        // This also needs to overridden for equality checks to work properly
         @Override
         public int hashCode() {
             return this.name.hashCode();

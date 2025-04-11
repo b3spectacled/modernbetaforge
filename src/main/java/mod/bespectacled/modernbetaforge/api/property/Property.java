@@ -109,4 +109,12 @@ public abstract class Property<T> {
             this.getType().equals(other.getType()) &&    
             this.getValue().equals(other.getValue());
     }
+    
+    @Override
+    public int hashCode() {
+        int hashCode = this.value.hashCode();
+        hashCode = 31 * hashCode + this.getType().hashCode();
+        
+        return hashCode;
+    }
 }

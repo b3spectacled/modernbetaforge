@@ -237,5 +237,14 @@ public class ClimateMap {
                 this.oceanBiome.equals(other.oceanBiome) &&
                 this.beachBiome.equals(other.beachBiome);
         }
+        
+        @Override
+        public int hashCode() {
+            int hashCode = this.baseBiome.hashCode();
+            hashCode = 31 * hashCode + this.oceanBiome.hashCode();
+            hashCode = 31 * hashCode + this.beachBiome.hashCode();
+            
+            return hashCode;
+        }
     }
 }
