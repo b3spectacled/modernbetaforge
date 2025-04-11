@@ -128,7 +128,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.searchText = I18n.format("createWorld.customize.registry.search.info");
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
-        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialEntry);
+        this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialEntry);
         
         int slotHeight = this.slotHeight;
         int slotSelected = this.list.selected;
@@ -284,38 +284,42 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     }
     
     @SideOnly(Side.CLIENT)
-    private class ListPreset extends GuiSlot {
+    private static class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 66;
         private static final int LIST_PADDING_BOTTOM = 32;
         
+        private final GuiScreenCustomizeRegistry parent;
         public int selected;
         
-        public ListPreset(int initialEntry) {
+        public ListPreset(GuiScreenCustomizeRegistry parent, int initialEntry) {
             super(
-                GuiScreenCustomizeRegistry.this.mc,
-                GuiScreenCustomizeRegistry.this.width,
-                GuiScreenCustomizeRegistry.this.height,
+                parent.mc,
+                parent.width,
+                parent.height,
                 LIST_PADDING_TOP,
-                GuiScreenCustomizeRegistry.this.height - LIST_PADDING_BOTTOM,
-                GuiScreenCustomizeRegistry.this.slotHeight
+                parent.height - LIST_PADDING_BOTTOM,
+                parent.slotHeight
             );
             
+            this.parent = parent;
             this.selected = initialEntry;
         }
         
-        public ListPreset(String initialEntry) {
+        public ListPreset(GuiScreenCustomizeRegistry parent, String initialEntry) {
             super(
-                GuiScreenCustomizeRegistry.this.mc,
-                GuiScreenCustomizeRegistry.this.width,
-                GuiScreenCustomizeRegistry.this.height,
+                parent.mc,
+                parent.width,
+                parent.height,
                 LIST_PADDING_TOP,
-                GuiScreenCustomizeRegistry.this.height - LIST_PADDING_BOTTOM,
-                GuiScreenCustomizeRegistry.this.slotHeight
+                parent.height - LIST_PADDING_BOTTOM,
+                parent.slotHeight
             );
-            
+
+            this.parent = parent;
             this.selected = -1;
-            for (int i = 0; i < GuiScreenCustomizeRegistry.this.entries.size(); ++i) {
-                Info info = GuiScreenCustomizeRegistry.this.entries.get(i);
+            
+            for (int i = 0; i < parent.entries.size(); ++i) {
+                Info info = parent.entries.get(i);
                 
                 if (info.registryName.equals(initialEntry.toString())) {
                     this.selected = i;
@@ -337,10 +341,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             boolean inSlotBounds = this.mouseX >= listL && this.mouseX <= listR;
 
             if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
-                GuiScreenCustomizeRegistry.this.hoveredElement = element;
+                this.parent.hoveredElement = element;
                 
             } else {
-                GuiScreenCustomizeRegistry.this.hoveredElement = -1;
+                this.parent.hoveredElement = -1;
                 
             }
         }
@@ -349,34 +353,34 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         public void drawScreen(int mouseX, int mouseY, float partialTicks) {
             super.drawScreen(mouseX, mouseY, partialTicks);
             
-            if (GuiScreenCustomizeRegistry.this.hoveredElement != -1 && mouseX != GuiScreenCustomizeRegistry.this.prevMouseX && mouseY != GuiScreenCustomizeRegistry.this.prevMouseY) {
-                GuiScreenCustomizeRegistry.this.hoveredTime = System.currentTimeMillis();
-                GuiScreenCustomizeRegistry.this.prevMouseX = mouseX;
-                GuiScreenCustomizeRegistry.this.prevMouseY = mouseY;
+            if (this.parent.hoveredElement != -1 && mouseX != this.parent.prevMouseX && mouseY != this.parent.prevMouseY) {
+                this.parent.hoveredTime = System.currentTimeMillis();
+                this.parent.prevMouseX = mouseX;
+                this.parent.prevMouseY = mouseY;
             }
         }
         
         @Override
         protected int getSize() {
-            return GuiScreenCustomizeRegistry.this.entries.size();
+            return this.parent.entries.size();
         }
         
         @Override
         protected void elementClicked(int selected, boolean doubleClicked, int mouseX, int mouseY) {
             this.selected = selected;
             
-            GuiScreenCustomizeRegistry.this.updateButtonValidity();
-            GuiScreenCustomizeRegistry.this.consumer.accept(
-                GuiScreenCustomizeRegistry.this.entries.get(GuiScreenCustomizeRegistry.this.list.selected).registryName,
-                GuiScreenCustomizeRegistry.this.settings
+            this.parent.updateButtonValidity();
+            this.parent.consumer.accept(
+                this.parent.entries.get(this.parent.list.selected).registryName,
+                this.parent.settings
             );
             
             if (doubleClicked) {
                 SoundUtil.playClickSound(this.mc.getSoundHandler());
                 
-                GuiScreenCustomizeRegistry.this.parent.loadValues(GuiScreenCustomizeRegistry.this.settings.toString());
-                GuiScreenCustomizeRegistry.this.parent.setSettingsModified(!GuiScreenCustomizeRegistry.this.settings.equals(GuiScreenCustomizeRegistry.this.parent.getDefaultSettings()));
-                GuiScreenCustomizeRegistry.this.mc.displayGuiScreen(GuiScreenCustomizeRegistry.this.parent);
+                this.parent.parent.loadValues(this.parent.settings.toString());
+                this.parent.parent.setSettingsModified(!this.parent.settings.equals(this.parent.parent.getDefaultSettings()));
+                this.parent.mc.displayGuiScreen(this.parent.parent);
             } 
         }
         
@@ -436,24 +440,24 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         @Override
         protected void drawSlot(int entry, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
-            Info info = GuiScreenCustomizeRegistry.this.entries.get(entry);
+            Info info = this.parent.entries.get(entry);
             int paddingL = 6;
             int paddingY = 3;
             
-            boolean hovered = GuiScreenCustomizeRegistry.this.hoveredElement == entry;
+            boolean hovered = this.parent.hoveredElement == entry;
             int nameColor = hovered ? 16777120 : 16777215;
             int registryNameColor = hovered ? 10526785 : 10526880;
             
             // Render name
-            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, nameColor);
+            this.parent.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, nameColor);
             
             // Render registry name
-            GuiScreenCustomizeRegistry.this.fontRenderer.drawString(info.registryName, x + paddingL, y + 12 + paddingY, registryNameColor);
+            this.parent.fontRenderer.drawString(info.registryName, x + paddingL, y + 12 + paddingY, registryNameColor);
         }
     }
     
     @SideOnly(Side.CLIENT)
-    static class Info {
+    private static class Info {
         public String name;
         public String registryName;
 

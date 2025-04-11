@@ -211,7 +211,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, deleteX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
-        this.list = this.list != null ? new ListPreset(this.list.selected) : new ListPreset(this.initialPreset);
+        this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
         
         int slotHeight = SLOT_HEIGHT + SLOT_PADDING;
         int slotSelected = this.list.selected;
@@ -744,23 +744,25 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     @SideOnly(Side.CLIENT)
-    private class ListPreset extends GuiSlot {
+    private static class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 66;
         private static final int LIST_PADDING_BOTTOM = 54;
         
+        private final GuiScreenCustomizePresets parent;
         public int selected;
         
-        public ListPreset(int selected) {
+        public ListPreset(GuiScreenCustomizePresets parent, int selected) {
             super(
-                GuiScreenCustomizePresets.this.mc,
-                GuiScreenCustomizePresets.this.width,
-                GuiScreenCustomizePresets.this.height,
+                parent.mc,
+                parent.width,
+                parent.height,
                 LIST_PADDING_TOP,
-                GuiScreenCustomizePresets.this.height - LIST_PADDING_BOTTOM,
+                parent.height - LIST_PADDING_BOTTOM,
                 SLOT_HEIGHT + SLOT_PADDING
             );
             
-            this.selected = MathHelper.clamp(selected, -1, GuiScreenCustomizePresets.this.presets.size() - 1);
+            this.parent = parent;
+            this.selected = MathHelper.clamp(selected, -1, parent.presets.size() - 1);
         }
         
         @Override
@@ -777,11 +779,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             boolean inSlotBounds = this.mouseX >= listL && this.mouseX <= listR;
 
             if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
-                GuiScreenCustomizePresets.this.hoveredElement = element;
-                GuiScreenCustomizePresets.this.hoveredTime = System.currentTimeMillis();
+                this.parent.hoveredElement = element;
+                this.parent.hoveredTime = System.currentTimeMillis();
                 
             } else {
-                GuiScreenCustomizePresets.this.hoveredElement = -1;
+                this.parent.hoveredElement = -1;
                 
             }
         }
@@ -793,22 +795,22 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         @Override
         protected int getSize() {
-            return GuiScreenCustomizePresets.this.presets.size();
+            return this.parent.presets.size();
         }
         
         @Override
         protected void elementClicked(int selected, boolean doubleClicked, int mouseX, int mouseY) {
             this.selected = selected;
             
-            GuiScreenCustomizePresets.this.updateButtonValidity();
-            GuiScreenCustomizePresets.this.fieldExport.setText(GuiScreenCustomizePresets.this.presets.get(GuiScreenCustomizePresets.this.list.selected).settings.toString());
+            this.parent.updateButtonValidity();
+            this.parent.fieldExport.setText(this.parent.presets.get(this.parent.list.selected).settings.toString());
             
             if (doubleClicked) {
                 SoundUtil.playClickSound(this.mc.getSoundHandler());
                 
-                GuiScreenCustomizePresets.this.parent.loadValues(GuiScreenCustomizePresets.this.fieldExport.getText());
-                GuiScreenCustomizePresets.this.parent.isSettingsModified();
-                GuiScreenCustomizePresets.this.mc.displayGuiScreen(GuiScreenCustomizePresets.this.parent);
+                this.parent.parent.loadValues(this.parent.fieldExport.getText());
+                this.parent.parent.isSettingsModified();
+                this.parent.mc.displayGuiScreen(this.parent.parent);
             } 
         }
         
@@ -868,10 +870,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         @Override
         protected void drawSlot(int preset, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
-            Info info = GuiScreenCustomizePresets.this.presets.get(preset);
+            Info info = this.parent.presets.get(preset);
             int paddingY = 2;
             
-            boolean hovered = GuiScreenCustomizePresets.this.hoveredElement == preset;
+            boolean hovered = this.parent.hoveredElement == preset;
             int nameColor = hovered ? 16777120 : 16777215;
             int descColor = hovered ? 10526785 : 10526880;
             
@@ -879,18 +881,18 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this.blitIcon(x, y + paddingY, info.icon());
             
             // Render preset name
-            GuiScreenCustomizePresets.this.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
+            this.parent.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
             
             // Render preset description, splitting if too long
-            List<String> splitString = GuiScreenCustomizePresets.this.fontRenderer.listFormattedStringToWidth(info.desc, MAX_PRESET_DESC_LINE_LENGTH);
+            List<String> splitString = this.parent.fontRenderer.listFormattedStringToWidth(info.desc, MAX_PRESET_DESC_LINE_LENGTH);
             if (splitString.size() > 1) {
                 for (int i = 0; i < splitString.size(); ++i) {
                     String line = splitString.get(i);
-                    GuiScreenCustomizePresets.this.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, descColor);
+                    this.parent.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, descColor);
                 }
                 
             } else {
-                GuiScreenCustomizePresets.this.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, descColor);
+                this.parent.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, descColor);
             }
         }
 
@@ -898,10 +900,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int iX = x + 5;
             int iY = y;
 
-            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY - 1, -2039584);
-            GuiScreenCustomizePresets.this.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, -6250336);
-            GuiScreenCustomizePresets.this.drawVerticalLine(iX - 1, iY - 1, iY + SLOT_HEIGHT, -2039584);
-            GuiScreenCustomizePresets.this.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
+            this.parent.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY - 1, -2039584);
+            this.parent.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, -6250336);
+            this.parent.drawVerticalLine(iX - 1, iY - 1, iY + SLOT_HEIGHT, -2039584);
+            this.parent.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             this.mc.getTextureManager().bindTexture(icon.identifier);

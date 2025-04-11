@@ -397,7 +397,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
     /*
      *  Tracks information about the tree during a single generation call.
      */
-    private class TreeInfo {
+    private static class TreeInfo {
         private int height = -1;
         private int treeHeight = -1;
         private int[][] foliageBlobPositions = null;
