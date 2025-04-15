@@ -3,181 +3,232 @@
 generator.modernbeta=Modern Beta
 
 ## World Customization
-createWorld.customize.custom.modernBeta=Modern Beta
-createWorld.customize.custom.preview=Preview
+createWorld.customize.custom.modernbetaforge.title=Modern Beta
 
 # Presets
-createWorld.customize.presets.filter=Filter
-createWorld.customize.presets.filter.all=All
-createWorld.customize.presets.filter.builtin=Built-in
-createWorld.customize.presets.filter.addon=Add-on
-createWorld.customize.presets.filter.custom=Custom
-createWorld.customize.presets.save=Save Preset
-createWorld.customize.presets.edit=Edit
-createWorld.customize.presets.delete=Delete
-createWorld.customize.presets.confirm=Confirm
-createWorld.customize.presets.save.title=Save Preset
-createWorld.customize.presets.edit.title=Edit Preset
-createWorld.customize.presets.delete.title=Delete Preset
-createWorld.customize.presets.overwrite.title=Overwrite Preset
-createWorld.customize.presets.name=Name (Required)
-createWorld.customize.presets.desc=Description
-createWorld.customize.presets.settings=Settings
-createWorld.customize.presets.next=>
-createWorld.customize.presets.prev=<
-createWorld.customize.presets.icon=Icon
-createWorld.customize.presets.delete.confirm=Delete this preset?
-createWorld.customize.presets.overwrite.confirm=Preset already exists. Overwrite?
+createWorld.customize.presets.modernbetaforge.title=World Presets
+createWorld.customize.presets.modernbetaforge.share=Use the below box to copy and paste your presets for sharing.
+createWorld.customize.presets.modernbetaforge.select=Use Preset
+createWorld.customize.presets.modernbetaforge.filter=Filter
+createWorld.customize.presets.modernbetaforge.filter.all=All
+createWorld.customize.presets.modernbetaforge.filter.builtin=Built-in
+createWorld.customize.presets.modernbetaforge.filter.addon=Add-on
+createWorld.customize.presets.modernbetaforge.filter.custom=Custom
+createWorld.customize.presets.modernbetaforge.save=Save Preset
+createWorld.customize.presets.modernbetaforge.edit=Edit
+createWorld.customize.presets.modernbetaforge.delete=Delete
+createWorld.customize.presets.modernbetaforge.confirm=Confirm
+createWorld.customize.presets.modernbetaforge.save.title=Save Preset
+createWorld.customize.presets.modernbetaforge.edit.title=Edit Preset
+createWorld.customize.presets.modernbetaforge.delete.title=Delete Preset
+createWorld.customize.presets.modernbetaforge.overwrite.title=Overwrite Preset
+createWorld.customize.presets.modernbetaforge.name=Name (Required)
+createWorld.customize.presets.modernbetaforge.desc=Description
+createWorld.customize.presets.modernbetaforge.settings=Settings
+createWorld.customize.presets.modernbetaforge.next=>
+createWorld.customize.presets.modernbetaforge.prev=<
+createWorld.customize.presets.modernbetaforge.icon=Icon
+createWorld.customize.presets.modernbetaforge.delete.confirm=Delete this preset?
+createWorld.customize.presets.modernbetaforge.overwrite.confirm=Preset already exists. Overwrite?
 
 # Preview
-createWorld.customize.preview.preview=Preview
-createWorld.customize.preview.title=Preview World Generation
-createWorld.customize.preview.resolution=Resolution
-createWorld.customize.preview.biomeBlend=Biome Blend
-createWorld.customize.preview.generate=Generate
-createWorld.customize.preview.progress=Generating preview..
-createWorld.customize.preview.hint=Preview not generated
-createWorld.customize.preview.failure=Failed to generate!
-createWorld.customize.preview.seed=World Seed
-createWorld.customize.preview.copy=Copy to clipboard
-createWorld.customize.preview.copied=Copied to clipboard!
-createWorld.customize.preview.copiedTp=Copied /tp command to clipboard!
+createWorld.customize.preview.modernbetaforge.preview=Preview
+createWorld.customize.preview.modernbetaforge.title=Preview World Generation
+createWorld.customize.preview.modernbetaforge.resolution=Resolution
+createWorld.customize.preview.modernbetaforge.biomeBlend=Biome Blend
+createWorld.customize.preview.modernbetaforge.generate=Generate
+createWorld.customize.preview.modernbetaforge.progress=Generating preview..
+createWorld.customize.preview.modernbetaforge.hint=Preview not generated
+createWorld.customize.preview.modernbetaforge.failure=Failed to generate!
+createWorld.customize.preview.modernbetaforge.seed=World Seed
+createWorld.customize.preview.modernbetaforge.copy=Copy to clipboard
+createWorld.customize.preview.modernbetaforge.copied=Copied to clipboard!
+createWorld.customize.preview.modernbetaforge.copiedTp=Copied /tp command to clipboard!
 
 # Page Tabs
-createWorld.customize.custom.tab.page0=Basic
-createWorld.customize.custom.tab.page1=Chunk
-createWorld.customize.custom.tab.page2=Biome
-createWorld.customize.custom.tab.page3=Ore
-createWorld.customize.custom.tab.page4=Noise 1
-createWorld.customize.custom.tab.page5=Noise 2
-createWorld.customize.custom.tab.page6=Climate
-createWorld.customize.custom.tab.page7=Add-on
+createWorld.customize.custom.tab.modernbetaforge.page0=Basic
+createWorld.customize.custom.tab.modernbetaforge.page1=Chunk
+createWorld.customize.custom.tab.modernbetaforge.page2=Biome
+createWorld.customize.custom.tab.modernbetaforge.page3=Ore
+createWorld.customize.custom.tab.modernbetaforge.page4=Noise 1
+createWorld.customize.custom.tab.modernbetaforge.page5=Noise 2
+createWorld.customize.custom.tab.modernbetaforge.page6=Climate
+createWorld.customize.custom.tab.modernbetaforge.page7=Add-on
 
 # Page Labels
-createWorld.customize.custom.label.page0.biomeReplacement=Biome Replacement Settings
-createWorld.customize.custom.label.page0.overworld=Overworld Settings
-createWorld.customize.custom.label.page0.nether=Nether Settings
-createWorld.customize.custom.label.page0.netherIncompatible=Classic Nether is incompatible with another installed mod!
-createWorld.customize.custom.label.page1.infdev227=Infdev 20100227 Chunk Settings
-createWorld.customize.custom.label.page1.indev=Indev/Classic Chunk Settings
-createWorld.customize.custom.label.page1.release=Release Chunk Settings
-createWorld.customize.custom.label.page2.beta=Beta Biome Feature Settings
-createWorld.customize.custom.label.page2.release=Release Biome Feature Settings
-createWorld.customize.custom.label.page2.mobSpawn=Modern Beta Biome Mob Settings
-createWorld.customize.custom.label.page2.treesIncompatible=Tree options are incompatible with Dynamic Trees!
-createWorld.customize.custom.label.page4.beta=Beta/Pocket Edition Noise Settings
-createWorld.customize.custom.label.page4.release=Release Noise Settings
-createWorld.customize.custom.label.page5.beta=Beta/Pocket Edition Noise Settings
-createWorld.customize.custom.label.page5.release=Release Noise Settings
-createWorld.customize.custom.label.page4.end=End Noise Settings
-createWorld.customize.custom.label.page5.end=End Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page0.biomeReplacement=Biome Replacement Settings
+createWorld.customize.custom.label.modernbetaforge.page0.overworld=Overworld Settings
+createWorld.customize.custom.label.modernbetaforge.page0.nether=Nether Settings
+createWorld.customize.custom.label.modernbetaforge.page0.netherIncompatible=Classic Nether is incompatible with another installed mod!
+createWorld.customize.custom.label.modernbetaforge.page1.infdev227=Infdev 20100227 Chunk Settings
+createWorld.customize.custom.label.modernbetaforge.page1.indev=Indev/Classic Chunk Settings
+createWorld.customize.custom.label.modernbetaforge.page1.release=Release Chunk Settings
+createWorld.customize.custom.label.modernbetaforge.page2.beta=Beta Biome Feature Settings
+createWorld.customize.custom.label.modernbetaforge.page2.release=Release Biome Feature Settings
+createWorld.customize.custom.label.modernbetaforge.page2.mobSpawn=Modern Beta Biome Mob Settings
+createWorld.customize.custom.label.modernbetaforge.page2.treesIncompatible=Tree options are incompatible with Dynamic Trees!
+createWorld.customize.custom.label.modernbetaforge.page4.beta=Beta/Pocket Edition Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page4.release=Release Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page5.beta=Beta/Pocket Edition Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page5.release=Release Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page4.end=End Noise Settings
+createWorld.customize.custom.label.modernbetaforge.page5.end=End Noise Settings
+
+# Page Buttons
+createWorld.customize.custom.modernbetaforge.defaults=Defaults
+createWorld.customize.custom.modernbetaforge.randomize=Randomize
+createWorld.customize.custom.modernbetaforge.preview=Preview
+createWorld.customize.custom.modernbetaforge.presets=Presets
+
+# Page Confirm
+createWorld.customize.custom.modernbetaforge.confirmTitle=Warning!
+createWorld.customize.custom.modernbetaforge.confirm1=This will overwrite your current
+createWorld.customize.custom.modernbetaforge.confirm2=setings and cannot be undone.
 
 # Page 1 - Main Settings
-createWorld.customize.custom.chunkSource=Chunk Source
-createWorld.customize.custom.biomeSource=Biome Source
-createWorld.customize.custom.surfaceBuilder=Surface Builder
-createWorld.customize.custom.caveCarver=Cave Carver
-createWorld.customize.custom.worldSpawner=World Spawner
-createWorld.customize.custom.biome=Biome
-createWorld.customize.custom.block=Block
-createWorld.customize.custom.entity=Entity
-createWorld.customize.custom.defaultBlock=Default Block
-createWorld.customize.custom.defaultFluid=Default Fluid
+createWorld.customize.custom.modernbetaforge.chunkSource=Chunk Source
+createWorld.customize.custom.modernbetaforge.biomeSource=Biome Source
+createWorld.customize.custom.modernbetaforge.surfaceBuilder=Surface Builder
+createWorld.customize.custom.modernbetaforge.caveCarver=Cave Carver
+createWorld.customize.custom.modernbetaforge.worldSpawner=World Spawner
+createWorld.customize.custom.modernbetaforge.fixedBiome=Biome
+createWorld.customize.custom.modernbetaforge.biome=Biome
+createWorld.customize.custom.modernbetaforge.block=Block
+createWorld.customize.custom.modernbetaforge.entity=Entity
+createWorld.customize.custom.modernbetaforge.defaultBlock=Default Block
+createWorld.customize.custom.modernbetaforge.defaultFluid=Default Fluid
 
 # Page 1 - Biome Replacement Settings
-createWorld.customize.custom.replaceOceanBiomes=Ocean Biomes
-createWorld.customize.custom.replaceBeachBiomes=Beach Biomes
+createWorld.customize.custom.modernbetaforge.replaceOceanBiomes=Ocean Biomes
+createWorld.customize.custom.modernbetaforge.replaceBeachBiomes=Beach Biomes
 
 # Page 1 - Other Feature Settings
-createWorld.customize.custom.caveWidth=Cave Width
-createWorld.customize.custom.caveHeight=Cave Height
-createWorld.customize.custom.caveCount=Cave Count
-createWorld.customize.custom.caveChance=Cave Rarity
-createWorld.customize.custom.useVillageVariants=Village Variants
-createWorld.customize.custom.useSandstone=Sandstone
-createWorld.customize.custom.useUnderwaterCaves=Ocean Caves
+createWorld.customize.custom.modernbetaforge.caveWidth=Cave Width
+createWorld.customize.custom.modernbetaforge.caveHeight=Cave Height
+createWorld.customize.custom.modernbetaforge.caveCount=Cave Count
+createWorld.customize.custom.modernbetaforge.caveChance=Cave Rarity
+createWorld.customize.custom.modernbetaforge.useSandstone=Sandstone
+createWorld.customize.custom.modernbetaforge.useUnderwaterCaves=Ocean Caves
+createWorld.customize.custom.modernbetaforge.seaLevel=Sea Level
+createWorld.customize.custom.modernbetaforge.useRavines=Ravines
+createWorld.customize.custom.modernbetaforge.useMineShafts=Mineshafts
+createWorld.customize.custom.modernbetaforge.useVillages=Villages
+createWorld.customize.custom.modernbetaforge.useVillageVariants=Village Variants
+createWorld.customize.custom.modernbetaforge.useStrongholds=Strongholds
+createWorld.customize.custom.modernbetaforge.useTemples=Temples
+createWorld.customize.custom.modernbetaforge.useMonuments=Ocean Monuments
+createWorld.customize.custom.modernbetaforge.useMansions=Woodland Mansions
+createWorld.customize.custom.modernbetaforge.useDungeons=Dungeons
+createWorld.customize.custom.modernbetaforge.dungeonChance=Dungeon Chance
+createWorld.customize.custom.modernbetaforge.useWaterLakes=Water Lakes
+createWorld.customize.custom.modernbetaforge.waterLakeChance=Water Lake Chance
+createWorld.customize.custom.modernbetaforge.useLavaLakes=Lava Lakes
+createWorld.customize.custom.modernbetaforge.lavaLakeChance=Lava Lake Chance
 
 # Page 1 - Nether Settings
-createWorld.customize.custom.useOldNether=Classic Nether
-createWorld.customize.custom.useNetherCaves=Nether Caves
-createWorld.customize.custom.useFortresses=Nether Fortresses
-createWorld.customize.custom.useLavaPockets=Lava Pockets
+createWorld.customize.custom.modernbetaforge.useOldNether=Classic Nether
+createWorld.customize.custom.modernbetaforge.useNetherCaves=Nether Caves
+createWorld.customize.custom.modernbetaforge.useFortresses=Nether Fortresses
+createWorld.customize.custom.modernbetaforge.useLavaPockets=Lava Pockets
 
 # Page 2 - Infdev 227 Settings
-createWorld.customize.custom.useInfdevWalls=Infdev Obsidian Walls
-createWorld.customize.custom.useInfdevPyramids=Infdev Brick Pyramids
+createWorld.customize.custom.modernbetaforge.useInfdevWalls=Infdev Obsidian Walls
+createWorld.customize.custom.modernbetaforge.useInfdevPyramids=Infdev Brick Pyramids
 
 # Page 2 - Indev Settings
-createWorld.customize.custom.levelTheme=Level Theme
-createWorld.customize.custom.levelType=Level Type
-createWorld.customize.custom.levelWidth=Level Width
-createWorld.customize.custom.levelLength=Level Length
-createWorld.customize.custom.levelHeight=Level Height
-createWorld.customize.custom.levelHouse=Indev House
-createWorld.customize.custom.useIndevCaves=Indev Caves
-createWorld.customize.custom.levelCaveWidth=Indev Cave Width
+createWorld.customize.custom.modernbetaforge.levelTheme=Level Theme
+createWorld.customize.custom.modernbetaforge.levelType=Level Type
+createWorld.customize.custom.modernbetaforge.levelWidth=Level Width
+createWorld.customize.custom.modernbetaforge.levelLength=Level Length
+createWorld.customize.custom.modernbetaforge.levelHeight=Level Height
+createWorld.customize.custom.modernbetaforge.levelHouse=Indev House
+createWorld.customize.custom.modernbetaforge.useIndevCaves=Indev Caves
+createWorld.customize.custom.modernbetaforge.levelCaveWidth=Indev Cave Width
 
 # Page 2 - Release Settings
-createWorld.customize.custom.riverRarity=River Rarity
-createWorld.customize.custom.layerType=Layer Type
-createWorld.customize.custom.layerSize=Layer Size
+createWorld.customize.custom.modernbetaforge.riverRarity=River Rarity
+createWorld.customize.custom.modernbetaforge.layerType=Layer Type
+createWorld.customize.custom.modernbetaforge.layerSize=Layer Size
 
 # Page 3 - Features
-createWorld.customize.custom.useTallGrass=Tall Grass
-createWorld.customize.custom.useNewFlowers=Modern Flowers
-createWorld.customize.custom.useDoublePlants=Double Plants
-createWorld.customize.custom.useLilyPads=Lily Pads
-createWorld.customize.custom.useMelons=Melons
-createWorld.customize.custom.useSandDisks=Sand Disks
-createWorld.customize.custom.useGravelDisks=Gravel Disks
-createWorld.customize.custom.useClayDisks=Clay Disks
-createWorld.customize.custom.useDesertWells=Desert Wells
-createWorld.customize.custom.useFossils=Fossils
-createWorld.customize.custom.useBirchTrees=Birch Trees
-createWorld.customize.custom.usePineTrees=Pine Trees
-createWorld.customize.custom.useSwampTrees=Swamp Trees
-createWorld.customize.custom.useAcaciaTrees=Acacia Trees
-createWorld.customize.custom.useJungleTrees=Jungle Trees
-createWorld.customize.custom.useModdedBiomes=Mod Biome Compatibility
-createWorld.customize.custom.biomeSize=Biome Size
+createWorld.customize.custom.modernbetaforge.useTallGrass=Tall Grass
+createWorld.customize.custom.modernbetaforge.useNewFlowers=Modern Flowers
+createWorld.customize.custom.modernbetaforge.useDoublePlants=Double Plants
+createWorld.customize.custom.modernbetaforge.useLilyPads=Lily Pads
+createWorld.customize.custom.modernbetaforge.useMelons=Melons
+createWorld.customize.custom.modernbetaforge.useSandDisks=Sand Disks
+createWorld.customize.custom.modernbetaforge.useGravelDisks=Gravel Disks
+createWorld.customize.custom.modernbetaforge.useClayDisks=Clay Disks
+createWorld.customize.custom.modernbetaforge.useDesertWells=Desert Wells
+createWorld.customize.custom.modernbetaforge.useFossils=Fossils
+createWorld.customize.custom.modernbetaforge.useBirchTrees=Birch Trees
+createWorld.customize.custom.modernbetaforge.usePineTrees=Pine Trees
+createWorld.customize.custom.modernbetaforge.useSwampTrees=Swamp Trees
+createWorld.customize.custom.modernbetaforge.useAcaciaTrees=Acacia Trees
+createWorld.customize.custom.modernbetaforge.useJungleTrees=Jungle Trees
+createWorld.customize.custom.modernbetaforge.useModdedBiomes=Mod Biome Compatibility
+createWorld.customize.custom.modernbetaforge.biomeSize=Biome Size
 
-# Page 4 - Mobs
-createWorld.customize.custom.spawnNewCreatureMobs=Modern Passive Mobs
-createWorld.customize.custom.spawnNewMonsterMobs=Modern Hostile Mobs
-createWorld.customize.custom.spawnWaterMobs=Water Mobs
-createWorld.customize.custom.spawnAmbientMobs=Ambient Mobs
-createWorld.customize.custom.spawnWolves=Wolves
+# Page 3 - Mobs
+createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs=Modern Passive Mobs
+createWorld.customize.custom.modernbetaforge.spawnNewMonsterMobs=Modern Hostile Mobs
+createWorld.customize.custom.modernbetaforge.spawnWaterMobs=Water Mobs
+createWorld.customize.custom.modernbetaforge.spawnAmbientMobs=Ambient Mobs
+createWorld.customize.custom.modernbetaforge.spawnWolves=Wolves
+
+# Page 4 - Ores
+createWorld.customize.custom.modernbetaforge.size=Spawn Size
+createWorld.customize.custom.modernbetaforge.count=Spawn Tries
+createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
+createWorld.customize.custom.modernbetaforge.maxHeight=Max. Height
+createWorld.customize.custom.modernbetaforge.center=Center Height
+createWorld.customize.custom.modernbetaforge.spread=Spread Height
 
 # Page 5/6
-createWorld.customize.custom.scaleNoiseScaleX=Scale Noise Scale X
-createWorld.customize.custom.scaleNoiseScaleZ=Scale Noise Scale Z
-createWorld.customize.custom.height=World Height
-createWorld.customize.custom.tempNoiseScale=Temp Noise Scale
-createWorld.customize.custom.rainNoiseScale=Rainfall Noise Scale
-createWorld.customize.custom.detailNoiseScale=Detail Noise Scale
-createWorld.customize.custom.useBiomeDepthScale=Override Depth/Scale
-createWorld.customize.custom.endIslandOffset=Island Offset
-createWorld.customize.custom.endIslandWeight=Island Weight
-createWorld.customize.custom.endOuterIslandDistance=Outer Island Distance
-createWorld.customize.custom.endOuterIslandOffset=Outer Island Offset
-createWorld.customize.custom.useEndOuterIslands=Use Outer Islands
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleX=Main Noise Scale X
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleY=Main Noise Scale Y
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleZ=Main Noise Scale Z
+createWorld.customize.custom.modernbetaforge.scaleNoiseScaleX=Scale Noise Scale X
+createWorld.customize.custom.modernbetaforge.scaleNoiseScaleZ=Scale Noise Scale Z
+createWorld.customize.custom.modernbetaforge.depthNoiseScaleX=Depth Noise Scale X
+createWorld.customize.custom.modernbetaforge.depthNoiseScaleZ=Depth Noise Scale Z
+createWorld.customize.custom.modernbetaforge.baseSize=Depth Base Size
+createWorld.customize.custom.modernbetaforge.coordinateScale=Coordinate Scale
+createWorld.customize.custom.modernbetaforge.heightScale=Height Scale
+createWorld.customize.custom.modernbetaforge.stretchY=Height Stretch
+createWorld.customize.custom.modernbetaforge.upperLimitScale=Upper Limit Scale
+createWorld.customize.custom.modernbetaforge.lowerLimitScale=Lower Limit Scale
+createWorld.customize.custom.modernbetaforge.height=World Height
+createWorld.customize.custom.modernbetaforge.tempNoiseScale=Temp Noise Scale
+createWorld.customize.custom.modernbetaforge.rainNoiseScale=Rainfall Noise Scale
+createWorld.customize.custom.modernbetaforge.detailNoiseScale=Detail Noise Scale
+createWorld.customize.custom.modernbetaforge.biomeDepthWeight=Biome Depth Weight
+createWorld.customize.custom.modernbetaforge.biomeDepthOffset=Biome Depth Offset
+createWorld.customize.custom.modernbetaforge.biomeScaleWeight=Biome Scale Weight
+createWorld.customize.custom.modernbetaforge.biomeScaleOffset=Biome Scale Offset
+createWorld.customize.custom.modernbetaforge.useBiomeDepthScale=Override Depth/Scale
+createWorld.customize.custom.modernbetaforge.endIslandOffset=Island Offset
+createWorld.customize.custom.modernbetaforge.endIslandWeight=Island Weight
+createWorld.customize.custom.modernbetaforge.endOuterIslandDistance=Outer Island Distance
+createWorld.customize.custom.modernbetaforge.endOuterIslandOffset=Outer Island Offset
+createWorld.customize.custom.modernbetaforge.useEndOuterIslands=Use Outer Islands
 
 # Page 7 - World Customization Beta Biomes
-createWorld.customize.custom.desertBiomes=Desert
-createWorld.customize.custom.forestBiomes=Forest
-createWorld.customize.custom.iceDesertBiomes=Ice Desert
-createWorld.customize.custom.plainsBiomes=Plains
-createWorld.customize.custom.rainforestBiomes=Rainforest
-createWorld.customize.custom.savannaBiomes=Savanna
-createWorld.customize.custom.shrublandBiomes=Shrubland
-createWorld.customize.custom.seasonalForestBiomes=Seasonal Forest
-createWorld.customize.custom.swamplandBiomes=Swampland
-createWorld.customize.custom.taigaBiomes=Taiga
-createWorld.customize.custom.tundraBiomes=Tundra
+createWorld.customize.custom.modernbetaforge.desertBiomes=Desert
+createWorld.customize.custom.modernbetaforge.forestBiomes=Forest
+createWorld.customize.custom.modernbetaforge.iceDesertBiomes=Ice Desert
+createWorld.customize.custom.modernbetaforge.plainsBiomes=Plains
+createWorld.customize.custom.modernbetaforge.rainforestBiomes=Rainforest
+createWorld.customize.custom.modernbetaforge.savannaBiomes=Savanna
+createWorld.customize.custom.modernbetaforge.shrublandBiomes=Shrubland
+createWorld.customize.custom.modernbetaforge.seasonalForestBiomes=Seasonal Forest
+createWorld.customize.custom.modernbetaforge.swamplandBiomes=Swampland
+createWorld.customize.custom.modernbetaforge.taigaBiomes=Taiga
+createWorld.customize.custom.modernbetaforge.tundraBiomes=Tundra
 
-createWorld.customize.custom.baseBiome=Base Biome
-createWorld.customize.custom.oceanBiome=Ocean Biome
-createWorld.customize.custom.beachBiome=Beach Biome
+createWorld.customize.custom.modernbetaforge.baseBiome=Base Biome
+createWorld.customize.custom.modernbetaforge.oceanBiome=Ocean Biome
+createWorld.customize.custom.modernbetaforge.beachBiome=Beach Biome
 
 ## Page 8 - Addons
 createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
@@ -193,72 +244,72 @@ createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
 createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
 
 # Main Settings Names
-createWorld.customize.custom.chunkSource.modernbetaforge.beta=Beta
-createWorld.customize.custom.chunkSource.modernbetaforge.alpha=Alpha
-createWorld.customize.custom.chunkSource.modernbetaforge.skylands=Skylands
-createWorld.customize.custom.chunkSource.modernbetaforge.infdev_227=Infdev 227
-createWorld.customize.custom.chunkSource.modernbetaforge.infdev_420=Infdev 420
-createWorld.customize.custom.chunkSource.modernbetaforge.infdev_415=Infdev 415
-createWorld.customize.custom.chunkSource.modernbetaforge.infdev_611=Infdev 611
-createWorld.customize.custom.chunkSource.modernbetaforge.pe=Pocket Ed.
-createWorld.customize.custom.chunkSource.modernbetaforge.release=Release
-createWorld.customize.custom.chunkSource.modernbetaforge.end=The End
-createWorld.customize.custom.chunkSource.modernbetaforge.indev=Indev
-createWorld.customize.custom.chunkSource.modernbetaforge.classic_0_0_23a=c0.0.023a
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.alpha=Alpha
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.skylands=Skylands
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_227=Infdev 227
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_420=Infdev 420
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_415=Infdev 415
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_611=Infdev 611
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.release=Release
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.end=The End
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.indev=Indev
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.classic_0_0_23a=c0.0.023a
 
-createWorld.customize.custom.biomeSource.modernbetaforge.beta=Beta
-createWorld.customize.custom.biomeSource.modernbetaforge.single=Single Biome
-createWorld.customize.custom.biomeSource.modernbetaforge.pe=Pocket Ed.
-createWorld.customize.custom.biomeSource.modernbetaforge.release=Release
+createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.beta=Beta
+createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.single=Single Biome
+createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.release=Release
 
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.beta=Beta
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.alpha=Alpha
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.alpha_1_2=Alpha 1.2
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.skylands=Skylands
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.infdev=Infdev
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.infdev_227=Infdev 227
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.pe=Pocket Ed.
-createWorld.customize.custom.surfaceBuilder.modernbetaforge.release=Release
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.beta=Beta
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.alpha=Alpha
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.alpha_1_2=Alpha 1.2
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.skylands=Skylands
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.infdev=Infdev
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.infdev_227=Infdev 227
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.release=Release
 
-createWorld.customize.custom.caveCarver.modernbetaforge.none=None
-createWorld.customize.custom.caveCarver.modernbetaforge.beta=Beta
-createWorld.customize.custom.caveCarver.modernbetaforge.beta_nether=Beta Nether
-createWorld.customize.custom.caveCarver.modernbetaforge.beta_1_8=Beta 1.8
-createWorld.customize.custom.caveCarver.modernbetaforge.release=Release
+createWorld.customize.custom.modernbetaforge.caveCarver.modernbetaforge.none=None
+createWorld.customize.custom.modernbetaforge.caveCarver.modernbetaforge.beta=Beta
+createWorld.customize.custom.modernbetaforge.caveCarver.modernbetaforge.beta_nether=Beta Nether
+createWorld.customize.custom.modernbetaforge.caveCarver.modernbetaforge.beta_1_8=Beta 1.8
+createWorld.customize.custom.modernbetaforge.caveCarver.modernbetaforge.release=Release
 
-createWorld.customize.custom.worldSpawner.modernbetaforge.none=None
-createWorld.customize.custom.worldSpawner.modernbetaforge.default=Default
-createWorld.customize.custom.worldSpawner.modernbetaforge.beta=Beta
-createWorld.customize.custom.worldSpawner.modernbetaforge.pe=Pocket Ed.
-createWorld.customize.custom.worldSpawner.modernbetaforge.infdev=Infdev
-createWorld.customize.custom.worldSpawner.modernbetaforge.far_lands=Far Lands
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.none=None
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.default=Default
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.beta=Beta
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.infdev=Infdev
+createWorld.customize.custom.modernbetaforge.worldSpawner.modernbetaforge.far_lands=Far Lands
 
 # Indev Settings Names
-createWorld.customize.custom.levelTheme.normal=Normal
-createWorld.customize.custom.levelTheme.paradise=Paradise
-createWorld.customize.custom.levelTheme.woods=Woods
+createWorld.customize.custom.modernbetaforge.levelTheme.normal=Normal
+createWorld.customize.custom.modernbetaforge.levelTheme.paradise=Paradise
+createWorld.customize.custom.modernbetaforge.levelTheme.woods=Woods
 
-createWorld.customize.custom.levelType.island=Island
-createWorld.customize.custom.levelType.floating=Floating
-createWorld.customize.custom.levelType.inland=Inland
+createWorld.customize.custom.modernbetaforge.levelType.island=Island
+createWorld.customize.custom.modernbetaforge.levelType.floating=Floating
+createWorld.customize.custom.modernbetaforge.levelType.inland=Inland
 
-createWorld.customize.custom.levelHouse.oak=Oak
-createWorld.customize.custom.levelHouse.mossy=Mossy
-createWorld.customize.custom.levelHouse.none=None
+createWorld.customize.custom.modernbetaforge.levelHouse.oak=Oak
+createWorld.customize.custom.modernbetaforge.levelHouse.mossy=Mossy
+createWorld.customize.custom.modernbetaforge.levelHouse.none=None
 
 # Layer Type Names
-createWorld.customize.custom.layerType.vanilla=Vanilla
-createWorld.customize.custom.layerType.continental=Continental
-createWorld.customize.custom.layerType.islands=Islands
-createWorld.customize.custom.layerType.small_islands=Small Islands
-createWorld.customize.custom.layerType.pangaea=Pangaea
+createWorld.customize.custom.modernbetaforge.layerType.vanilla=Vanilla
+createWorld.customize.custom.modernbetaforge.layerType.continental=Continental
+createWorld.customize.custom.modernbetaforge.layerType.islands=Islands
+createWorld.customize.custom.modernbetaforge.layerType.small_islands=Small Islands
+createWorld.customize.custom.modernbetaforge.layerType.pangaea=Pangaea
 
 # Registry Customization
-createWorld.customize.custom.registry.title=Select
-createWorld.customize.registry.select=Use
-createWorld.customize.registry.reset=Reset
-createWorld.customize.registry.search=Search
-createWorld.customize.registry.search.info=Search by name or registry name..
+createWorld.customize.registry.modernbetaforge.title=Select
+createWorld.customize.registry.modernbetaforge.select=Use
+createWorld.customize.registry.modernbetaforge.reset=Reset
+createWorld.customize.registry.modernbetaforge.search=Search
+createWorld.customize.registry.modernbetaforge.search.info=Search by name or registry name..
 
 ## World Customization Presets
 createWorld.customize.custom.preset.modernbetaforge.classic_beta=Classic Beta

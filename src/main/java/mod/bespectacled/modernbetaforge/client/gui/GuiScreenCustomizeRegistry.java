@@ -25,7 +25,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeRegistry extends GuiScreen {
-    private static final String PREFIX = "createWorld.customize.custom";
+    private static final String PREFIX_REGISTRY = "createWorld.customize.registry.modernbetaforge.";
+    private static final String PREFIX_SETTINGS = "createWorld.customize.custom.modernbetaforge.";
+    
     private static final int DEFAULT_SLOT_HEIGHT = 32;
     private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;
@@ -97,8 +99,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     ) {
         this.title = String.format(
             "%s %s",
-            I18n.format("createWorld.customize.custom.registry.title"),
-            I18n.format(PREFIX + "." + langName)
+            I18n.format(PREFIX_REGISTRY + "title"),
+            I18n.format(PREFIX_SETTINGS + langName)
         );
         this.parent = parent;
         this.consumer = consumer;
@@ -120,12 +122,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         this.buttonList.clear();
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format("createWorld.customize.registry.select") + " " + I18n.format(PREFIX + "." + langName)));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
         this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format("createWorld.customize.registry.search")));
-        this.buttonList.add(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format("createWorld.customize.registry.reset")));
+        this.buttonList.add(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "search")));
+        this.buttonList.add(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "reset")));
         
-        this.searchText = I18n.format("createWorld.customize.registry.search.info");
+        this.searchText = I18n.format(PREFIX_REGISTRY + "search.info");
         
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialEntry);

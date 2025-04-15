@@ -78,10 +78,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
-    
-    private static final String PREFIX = "createWorld.customize.custom.";
-    private static final String PREFIX_TAB = "createWorld.customize.custom.tab.";
-    private static final String PREFIX_LABEL = "createWorld.customize.custom.label.";
+    private static final String PREFIX_ADDON = "createWorld.customize.custom.";
+    private static final String PREFIX = "createWorld.customize.custom.modernbetaforge.";
+    private static final String PREFIX_TAB = "createWorld.customize.custom.tab.modernbetaforge.";
+    private static final String PREFIX_LABEL = "createWorld.customize.custom.label.modernbetaforge.";
     private static final DecimalFormat DF_THREE = new DecimalFormat("#.###");
     private static final DecimalFormat DF_ONE = new DecimalFormat("#.#");
     
@@ -422,14 +422,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CTR, "center", ModernBetaGeneratorSettings.MIN_ORE_CENTER, ModernBetaGeneratorSettings.MAX_ORE_CENTER, (float)this.settings.lapisCenterHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SPR, "spread", ModernBetaGeneratorSettings.MIN_ORE_SPREAD, ModernBetaGeneratorSettings.MAX_ORE_SPREAD, (float)this.settings.lapisSpread, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, String.format("%s (%s)", I18n.format("tile.oreEmerald.name"), I18n.format(PREFIX + "modernBeta"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, I18n.format("tile.oreEmerald.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.emeraldSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMaxHeight, this),
 
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, String.format("%s (%s)", I18n.format("tile.clay.name"), I18n.format(PREFIX + "modernBeta"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, I18n.format("tile.clay.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
@@ -1853,13 +1853,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         for (String namespace : modRegistryKeys.keySet()) {
             List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace);
             
-            pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + namespace));
+            pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX_ADDON + namespace));
             pageList[ndx++] = null;
             
             for (ResourceLocation registryKey : registryKeys) {
                 Property<?> property = this.settings.customProperties.get(registryKey);
                 
-                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX + getFormattedRegistryString(registryKey)) + ":");
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX_ADDON + getFormattedRegistryString(registryKey)) + ":");
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), this.customId);
                 
                 this.customIds.put(this.customId++, registryKey);
@@ -1914,14 +1914,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             randomKey = ForgeRegistryUtil.getRandomFluidRegistryName(this.random);
                             langName = NbtTags.DEFAULT_FLUID;
                             break;
-                            
                     }
                     
                     if (randomKey != null && langName != null) {
                         String registryName = randomKey.toString();
-                        String formattedName = buttonId == GuiIdentifiers.PG0_B_BLOCK || buttonId == GuiIdentifiers.PG0_B_FLUID ?
+                        String formattedName = buttonId == GuiIdentifiers.PG0_B_BLOCK ?
                             getFormattedBlockName(registryName, langName, DEFAULT_BLOCK_TRUNCATE_LEN) :
-                            getFormattedRegistryName(registryName, langName, -1);
+                            buttonId == GuiIdentifiers.PG0_B_FLUID ? 
+                                getFormattedFluidName(registryName, langName, DEFAULT_BLOCK_TRUNCATE_LEN) :
+                                getFormattedRegistryName(registryName, langName, -1);
                         
                         GuiIdentifiers.BASE_SETTINGS.get(buttonId).accept(registryName, this.settings);
                         this.setTextButton(buttonId, formattedName);
@@ -2351,7 +2352,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void openRegistryScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, List<ResourceLocation> registryKeys) {
-        Function<ResourceLocation, String> nameFormatter = key -> I18n.format(String.format("%s.%s.%s.%s", "createWorld.customize.custom", nbtTag, key.getNamespace(), key.getPath()));
+        Function<ResourceLocation, String> nameFormatter = key -> I18n.format(String.format("%s.%s.%s.%s", "createWorld.customize.custom.modernbetaforge", nbtTag, key.getNamespace(), key.getPath()));
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, registryKeys));
     }
     

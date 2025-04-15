@@ -50,7 +50,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         NOT_STARTED, STARTED, FAILED, SUCCEEDED, LOADED;
     }
     
-    private static final String PREFIX = "createWorld.customize.preview.";
+    private static final String PREFIX = "createWorld.customize.preview.modernbetaforge.";
     
     private static final int TEXTURE_Y_OFFSET = 10;
     private static final int HINT_TEXT_OFFSET = 22;

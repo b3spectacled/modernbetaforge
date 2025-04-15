@@ -91,8 +91,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
-    private static final String PREFIX = "createWorld.customize.presets.";
-    private static final String PREFIX_FILTER = "createWorld.customize.presets.filter";
+    private static final String PREFIX = "createWorld.customize.presets.modernbetaforge.";
+    private static final String PREFIX_FILTER = "createWorld.customize.presets.modernbetaforge.filter";
     
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
