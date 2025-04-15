@@ -23,7 +23,7 @@ public class CompatThaumcraft implements Compat, ClientCompat {
 
     @Override
     public void load() {
-        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_MAGICAL_FOREST_CHANCE, new FloatProperty(
             0.05f,
             0.0f,

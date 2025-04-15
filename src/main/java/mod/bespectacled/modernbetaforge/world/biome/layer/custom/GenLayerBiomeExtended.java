@@ -35,7 +35,7 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
         super(seed, parent, worldType, vanillaSettings);
 
         this.populateInitialBiomes(this.biomes, worldType);
-        this.populateAdditionalBiomes(this.biomes, settings.useModdedBiomes);
+        this.populateAdditionalBiomes(this.biomes, settings);
     }
     
     @Override
@@ -79,18 +79,20 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
         }
     }
     
-    private void populateAdditionalBiomes(List<BiomeEntry>[] biomes, boolean useModdedBiomes) {
-        if (useModdedBiomes) {
-            for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
-                Compat compat = entry.getValue();
-                if (compat instanceof BiomeCompat) {
-                    ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
-                    BiomeCompat biomeCompat = (BiomeCompat)compat;
-                    
+    private void populateAdditionalBiomes(List<BiomeEntry>[] biomes, ModernBetaGeneratorSettings settings) {
+        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+            Compat compat = entry.getValue();
+            
+            if (compat instanceof BiomeCompat) {
+                ModernBeta.log(Level.DEBUG, String.format("Adding biomes to Release Biome Source from mod '%s'", entry.getKey()));
+                BiomeCompat biomeCompat = (BiomeCompat)compat;
+                
+                if (biomeCompat.shouldGetBiomeEntries(settings)) {
                     for (BiomeType type : BiomeType.values()) {
                         int ndx = type.ordinal();
                         biomes[ndx].addAll(biomeCompat.getBiomeEntries()[ndx]);
                     }
+                    
                 }
             }
         }

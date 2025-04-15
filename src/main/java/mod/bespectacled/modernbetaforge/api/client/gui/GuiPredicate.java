@@ -65,7 +65,6 @@ public class GuiPredicate {
     public static final ResourceLocation SPAWN_WATER_MOBS = createRegistryKey(NbtTags.SPAWN_WATER_MOBS);
     public static final ResourceLocation SPAWN_AMBIENT_MOBS = createRegistryKey(NbtTags.SPAWN_AMBIENT_MOBS);
     public static final ResourceLocation SPAWN_WOLVES = createRegistryKey(NbtTags.SPAWN_WOLVES);
-    public static final ResourceLocation USE_MODDED_BIOMES = createRegistryKey(NbtTags.USE_MODDED_BIOMES);
     public static final ResourceLocation BIOME_SIZE = createRegistryKey(NbtTags.BIOME_SIZE);
     
     public static final ResourceLocation CLAY_SIZE = createRegistryKey(NbtTags.CLAY_SIZE);

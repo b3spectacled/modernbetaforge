@@ -331,8 +331,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
-            createGuiButton(GuiIdentifiers.PG2_B_USE_MODDED_BIOMES, NbtTags.USE_MODDED_BIOMES, this.settings.useModdedBiomes),
             createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.biomeSize, this),
+            null,
         
             createGuiLabel(GuiIdentifiers.PG2_L_MOBS, "page2", "mobSpawn"),
             null,
@@ -1196,10 +1196,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG2_B_USE_ACACIA:
                     this.settings.useAcaciaTrees = entryValue;
-                    break;
-                    
-                case GuiIdentifiers.PG2_B_USE_MODDED_BIOMES:
-                    this.settings.useModdedBiomes = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG2_B_SPAWN_CREATURE:

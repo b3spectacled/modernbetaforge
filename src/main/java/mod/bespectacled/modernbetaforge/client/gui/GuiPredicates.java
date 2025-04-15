@@ -109,7 +109,6 @@ public class GuiPredicates {
     public static final GuiPredicate SPAWN_WATER_MOBS_TEST;
     public static final GuiPredicate SPAWN_AMBIENT_MOBS_TEST;
     public static final GuiPredicate SPAWN_WOLVES_TEST;
-    public static final GuiPredicate USE_MODDED_BIOMES_TEST;
     public static final GuiPredicate BIOME_SIZE_TEST;
     
     public static final GuiPredicate CLAY_SIZE_TEST;
@@ -561,10 +560,6 @@ public class GuiPredicates {
         SPAWN_WATER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WATER);
         SPAWN_AMBIENT_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_AMBIENT);
         SPAWN_WOLVES_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WOLVES);
-        USE_MODDED_BIOMES_TEST = new GuiPredicate(
-            settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
-            GuiIdentifiers.PG2_B_USE_MODDED_BIOMES
-        );
         BIOME_SIZE_TEST = new GuiPredicate(
             settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
             GuiIdentifiers.PG2_S_BIOME_SZ

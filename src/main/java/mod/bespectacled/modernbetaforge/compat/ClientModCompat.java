@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
 import net.minecraftforge.fml.common.Loader;
@@ -17,6 +18,7 @@ public class ClientModCompat {
     public static final Map<String, ClientCompat> LOADED_MODS = new LinkedHashMap<>();
     
     public static void loadCompat() {
+        loadCompat(new CompatBiomesOPlenty());
         loadCompat(new CompatBuildCraftEnergy());
         loadCompat(new CompatThaumcraft());
     }

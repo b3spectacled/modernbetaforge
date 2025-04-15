@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
+import mod.bespectacled.modernbetaforge.compat.CarverCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -274,10 +274,10 @@ public class MapGenBetaCave extends MapGenBase {
         // Add modded blocks
         for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
             Compat compat = entry.getValue();
-            if (compat instanceof BiomeCompat) {
+            if (compat instanceof CarverCompat) {
                 ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));
                 
-                carvables.addAll(((BiomeCompat)compat).getCustomCarvables());
+                carvables.addAll(((CarverCompat)compat).getCarvables());
             }
         }
         

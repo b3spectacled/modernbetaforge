@@ -303,7 +303,6 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SPAWN_WATER_MOBS, GuiPredicates.SPAWN_WATER_MOBS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SPAWN_AMBIENT_MOBS, GuiPredicates.SPAWN_AMBIENT_MOBS_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SPAWN_WOLVES, GuiPredicates.SPAWN_WOLVES_TEST);
-        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.USE_MODDED_BIOMES, GuiPredicates.USE_MODDED_BIOMES_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CLAY_SIZE, GuiPredicates.CLAY_SIZE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CLAY_COUNT, GuiPredicates.CLAY_COUNT_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CLAY_MIN_HEIGHT, GuiPredicates.CLAY_MIN_HEIGHT_TEST);

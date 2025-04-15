@@ -53,7 +53,6 @@ public class NbtTags {
     public static final String USE_INDEV_CAVES = "useIndevCaves";
     public static final String LEVEL_CAVE_WIDTH = "levelCaveWidth";
     
-    public static final String USE_MODDED_BIOMES = "useModdedBiomes";
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     public static final String BIOME_SIZE = "biomeSize";
     public static final String RIVER_SIZE = "riverSize";
@@ -195,6 +194,7 @@ public class NbtTags {
     public static final String DEPR_FIXED_BIOME = "fixedBiome";
     public static final String DEPR_USE_CAVES = "useCaves";
     public static final String DEPR_USE_LAVA_OCEANS = "useLavaOceans";
+    public static final String DEPR_USE_MODDED_BIOMES = "useModdedBiomes";
     
     public static final String DEPR_LAND_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";

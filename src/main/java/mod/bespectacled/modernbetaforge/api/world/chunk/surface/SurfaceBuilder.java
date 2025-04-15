@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
@@ -65,9 +65,9 @@ public abstract class SurfaceBuilder {
         // Init modded surface info
         for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
             Compat compat = entry.getValue();
-            if (compat instanceof BiomeCompat) {
-                BiomeCompat biomeCompat = (BiomeCompat)compat;
-                this.biomesWithCustomSurfaces.addAll(biomeCompat.getCustomSurfaces());
+            if (compat instanceof SurfaceCompat) {
+                SurfaceCompat surfaceCompat = (SurfaceCompat)compat;
+                this.biomesWithCustomSurfaces.addAll(surfaceCompat.getBiomesWithCustomSurfaces());
             }
         }
     }

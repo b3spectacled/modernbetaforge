@@ -8,10 +8,21 @@ import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.block.BOPBlocks;
+import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
+import mod.bespectacled.modernbetaforge.compat.CarverCompat;
+import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.NetherCompat;
+import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
+import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
@@ -23,15 +34,19 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * For biome climates, see: https://github.com/Glitchfiend/BiomesOPlenty/blob/BOP-1.12.x-7.0.x/src/main/java/biomesoplenty/api/enums/BOPClimates.java
  * 
  */
-public class CompatBiomesOPlenty implements Compat, BiomeCompat, NetherCompat {
+public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat, CarverCompat, NetherCompat {
     public static final String MOD_ID = "biomesoplenty";
     public static final String ADDON_ID = "compat" + MOD_ID;
+    
+    public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     
     @SuppressWarnings("unchecked")
     private List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
     
     @Override
     public void load() {
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));  
+        
         for (BiomeType type : BiomeType.values()) {
             this.biomeEntries[type.ordinal()] = new ArrayList<BiomeEntry>();
         }
@@ -113,14 +128,26 @@ public class CompatBiomesOPlenty implements Compat, BiomeCompat, NetherCompat {
     public String getModId() {
         return MOD_ID;
     }
+    
+    @Override
+    public void loadClient() {
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class)
+        ));
+    }
 
     @Override
     public List<BiomeEntry>[] getBiomeEntries() {
         return this.biomeEntries;
     }
+    
+    @Override
+    public boolean shouldGetBiomeEntries(ModernBetaGeneratorSettings settings) {
+        return settings.getBooleanProperty(KEY_USE_COMPAT);
+    }
 
     @Override
-    public List<Biome> getCustomSurfaces() {
+    public List<Biome> getBiomesWithCustomSurfaces() {
         ImmutableList.Builder<Biome> builder = new ImmutableList.Builder<>();
 
         this.addBiomeSurface(builder, BOPBiomes.alps);
@@ -146,7 +173,7 @@ public class CompatBiomesOPlenty implements Compat, BiomeCompat, NetherCompat {
     }
     
     @Override
-    public List<Block> getCustomCarvables() {
+    public List<Block> getCarvables() {
         ImmutableList.Builder<Block> builder = new ImmutableList.Builder<>();
         
         this.addCarverBlock(builder, BOPBlocks.grass);

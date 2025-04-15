@@ -180,6 +180,9 @@ createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
 ## Page 8 - Addons
+createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
+createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
+
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.oildesertchance=Oil Desert Chance

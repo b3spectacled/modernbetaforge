@@ -309,8 +309,6 @@ public class ModernBetaGeneratorSettings {
     public final boolean spawnAmbientMobs;
     public final boolean spawnWolves;
     
-    public final boolean useModdedBiomes;
-    
     public final ResourceLocation desertBiomeBase;
     public final ResourceLocation desertBiomeOcean;
     public final ResourceLocation desertBiomeBeach;
@@ -541,8 +539,6 @@ public class ModernBetaGeneratorSettings {
         this.spawnWaterMobs = factory.spawnWaterMobs;
         this.spawnAmbientMobs = factory.spawnAmbientMobs;
         this.spawnWolves = factory.spawnWolves;
-        
-        this.useModdedBiomes = factory.useModdedBiomes;
         
         this.desertBiomeBase = new ResourceLocation(factory.desertBiomeBase);
         this.desertBiomeOcean = new ResourceLocation(factory.desertBiomeOcean);
@@ -838,8 +834,6 @@ public class ModernBetaGeneratorSettings {
         public boolean spawnAmbientMobs;
         public boolean spawnWolves;
         
-        public boolean useModdedBiomes;
-        
         public String desertBiomeBase;
         public String desertBiomeOcean;
         public String desertBiomeBeach;
@@ -1070,8 +1064,6 @@ public class ModernBetaGeneratorSettings {
             this.spawnWaterMobs = true;
             this.spawnAmbientMobs = true;
             this.spawnWolves = true;
-            
-            this.useModdedBiomes = true;
             
             this.desertBiomeBase = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_DESERT).toString();
             this.desertBiomeOcean = ModernBeta.createRegistryKey(ModernBetaBiomeTags.BETA_OCEAN).toString();
@@ -1326,8 +1318,6 @@ public class ModernBetaGeneratorSettings {
                 this.spawnWaterMobs == factory.spawnWaterMobs &&
                 this.spawnAmbientMobs == factory.spawnAmbientMobs &&
                 this.spawnWolves == factory.spawnWolves &&
-                        
-                this.useModdedBiomes == factory.useModdedBiomes &&
                 
                 this.desertBiomeBase.equals(factory.desertBiomeBase) &&
                 this.desertBiomeOcean.equals(factory.desertBiomeOcean) &&
@@ -1563,8 +1553,6 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.spawnWaterMobs ? 1 : 0);
             hashCode = 31 * hashCode + (this.spawnAmbientMobs ? 1 : 0);
             hashCode = 31 * hashCode + (this.spawnWolves ? 1 : 0);
-
-            hashCode = 31 * hashCode + (this.useModdedBiomes ? 1 : 0);
             
             hashCode = 31 * hashCode + this.desertBiomeBase.hashCode();
             hashCode = 31 * hashCode + this.desertBiomeOcean.hashCode();
@@ -1826,8 +1814,6 @@ public class ModernBetaGeneratorSettings {
                 factory.spawnWaterMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
                 factory.spawnAmbientMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
                 factory.spawnWolves = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_WOLVES, factory.spawnWolves);
-                
-                factory.useModdedBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MODDED_BIOMES, factory.useModdedBiomes);
 
                 factory.desertBiomeBase = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
                 factory.desertBiomeOcean = JsonUtils.getString(jsonObject, NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
@@ -2198,9 +2184,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
             jsonObject.addProperty(NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
             jsonObject.addProperty(NbtTags.SPAWN_WOLVES, factory.spawnWolves);
-            
-            jsonObject.addProperty(NbtTags.USE_MODDED_BIOMES, factory.useModdedBiomes);
-            
+
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BEACH, factory.desertBiomeBeach);

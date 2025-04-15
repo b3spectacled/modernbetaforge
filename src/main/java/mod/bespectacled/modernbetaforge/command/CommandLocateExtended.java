@@ -53,7 +53,7 @@ public abstract class CommandLocateExtended extends CommandLocate {
             int z = blockPos.getZ();
             int height = Math.max(worldServer.getHeight(x, z), chunkGenerator.getChunkSource().getHeight(x, z, Type.OCEAN)) + 1;
             
-            int distance = (int)MathUtil.distance(senderX, senderZ, x, z);
+            long distance = (long)MathUtil.distance(senderX, senderZ, x, z);
             
             ITextComponent textPosition = new TextComponentString(String.format("[%d, %d, %d]", x, height, z));
             textPosition.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, String.format("/tp @s %d %d %d", x, height, z)));
