@@ -31,7 +31,7 @@ public class SkylandsSurfaceBuilder extends NoiseSurfaceBuilder {
         int chunkZ = z >> 4;
         double noise = this.surfaceCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
         
-        return (int)(noise / 3.0 + 3.0 + random.nextDouble() * 0.25);
+        return (int)(noise / 3.0 + 3.0 + this.getSurfaceVariation(random) * 0.25);
     }
 
     @Override

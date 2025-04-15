@@ -5,11 +5,16 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerOceanless extends GenLayer {
-    private static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
+public class GenLayerFixed extends GenLayer {
+    public static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
+    public static final int OCEAN = Biome.getIdForBiome(Biomes.OCEAN);
     
-    public GenLayerOceanless(long seed) {
+    private final int fixedBiome;
+    
+    public GenLayerFixed(long seed, int fixedBiome) {
         super(seed);
+        
+        this.fixedBiome = fixedBiome;
     }
 
     @Override
@@ -18,7 +23,7 @@ public class GenLayerOceanless extends GenLayer {
 
         for (int y = 0; y < areaHeight; ++y) {
             for (int x = 0; x < areaWidth; ++x) {
-                ints[x + y * areaWidth] = PLAINS;
+                ints[x + y * areaWidth] = this.fixedBiome;
             }
         }
 

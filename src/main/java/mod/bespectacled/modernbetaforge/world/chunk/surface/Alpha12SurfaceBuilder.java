@@ -27,7 +27,7 @@ public class Alpha12SurfaceBuilder extends NoiseSurfaceBuilder {
         int chunkZ = z >> 4;
         double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
         
-        return noise + random.nextDouble() * 0.2 > 0.0;
+        return noise + this.getSurfaceVariation(random) * 0.2 > 0.0;
     }
     
     @Override
@@ -36,7 +36,7 @@ public class Alpha12SurfaceBuilder extends NoiseSurfaceBuilder {
         int chunkZ = z >> 4;
         double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
         
-        return noise + random.nextDouble() * 0.2 > 3.0;
+        return noise + this.getSurfaceVariation(random) * 0.2 > 3.0;
     }
     
     @Override
@@ -45,7 +45,7 @@ public class Alpha12SurfaceBuilder extends NoiseSurfaceBuilder {
         int chunkZ = z >> 4;
         double noise = this.surfaceCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
         
-        return (int)(noise / 3.0 + 3.0 + random.nextDouble() * 0.25);
+        return (int)(noise / 3.0 + 3.0 + this.getSurfaceVariation(random) * 0.25);
     }
     
     @Override

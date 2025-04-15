@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge;
 
+import mod.bespectacled.modernbetaforge.compat.ClientModCompat;
 import mod.bespectacled.modernbetaforge.event.BlockColorsEventHandler;
 import mod.bespectacled.modernbetaforge.event.DebugInfoEventHandler;
 import mod.bespectacled.modernbetaforge.event.InitGuiEventHandler;
@@ -15,11 +16,13 @@ public class ModernBetaClientProxy implements ModernBetaProxy {
     
     @Override
     public void init() {
-        ModernBetaBuiltInRegistries.registerPresets();
-        ModernBetaBuiltInRegistries.registerPredicates();
-        
         MinecraftForge.EVENT_BUS.register(new DebugInfoEventHandler());
         MinecraftForge.EVENT_BUS.register(new WorldEventHandlerClient());
         MinecraftForge.EVENT_BUS.register(new InitGuiEventHandler());
+        
+        ModernBetaBuiltInRegistries.registerPresets();
+        ModernBetaBuiltInRegistries.registerPredicates();
+
+        ClientModCompat.loadCompat();
     }
 }

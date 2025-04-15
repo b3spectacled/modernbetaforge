@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.biome.layer;
 
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerBiomeExtended;
-import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanless;
+import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerFixed;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddForest;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddMoreSnow;
 import mod.bespectacled.modernbetaforge.world.biome.layer.custom.GenLayerOceanlessAddSnow;
@@ -35,7 +35,7 @@ public class ModernBetaGenLayer {
         ChunkGeneratorSettings vanillaSettings = new ChunkGeneratorSettings.Factory().build();
         int biomeSize = settings.biomeSize;
         
-        GenLayer genLayer = new GenLayerOceanless(1L);
+        GenLayer genLayer = new GenLayerFixed(1L, GenLayerFixed.PLAINS);
         genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
         genLayer = new GenLayerOceanlessAddForest(1L, genLayer);
         genLayer = new GenLayerZoom(2001L, genLayer);
@@ -69,6 +69,20 @@ public class ModernBetaGenLayer {
                 genLayer = new GenLayerShore(1000L, genLayer);
             }
         }
+        
+        GenLayer genLayerNoise = new GenLayerSmooth(1000L, genLayer);
+        GenLayer genLayerVoronoi = new GenLayerVoronoiZoom(10L, genLayerNoise);
+        genLayerNoise.initWorldGenSeed(seed);
+        genLayerVoronoi.initWorldGenSeed(seed);
+        
+        return new GenLayer[] { genLayerNoise, genLayerVoronoi, genLayerNoise };
+    }
+    
+    public static GenLayer[] initOceanLayers(long seed, WorldType worldType, ModernBetaGeneratorSettings settings) {
+        int biomeSize = settings.biomeSize;
+        
+        GenLayer genLayer = new GenLayerFixed(2L, GenLayerFixed.OCEAN);
+        genLayer = GenLayerZoom.magnify(2001L, genLayer, biomeSize);
         
         GenLayer genLayerNoise = new GenLayerSmooth(1000L, genLayer);
         GenLayer genLayerVoronoi = new GenLayerVoronoiZoom(10L, genLayerNoise);

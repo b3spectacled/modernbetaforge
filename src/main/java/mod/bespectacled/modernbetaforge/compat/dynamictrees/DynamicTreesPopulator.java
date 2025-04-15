@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.compat;
+package mod.bespectacled.modernbetaforge.compat.dynamictrees;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,13 +20,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class CompatDynamicTreesPopulator implements IBiomeDataBasePopulator {
+public class DynamicTreesPopulator implements IBiomeDataBasePopulator {
     private static final String CONFIG_FILE_NAME = ModernBeta.MODID + "_dynamictrees.cfg";
     private static final ResourceLocation DEFAULT_PATH = ModernBeta.createRegistryKey("worldgen/dynamic_trees.json");
 
     private final BiomeDataBasePopulatorJson jsonPopulator;
 
-    public CompatDynamicTreesPopulator() {
+    public DynamicTreesPopulator() {
         DynamicTreesConfigHandler configHandler = new DynamicTreesConfigHandler(DEFAULT_PATH);
         this.jsonPopulator = new BiomeDataBasePopulatorJson(configHandler.readConfig());
     }
@@ -38,7 +38,7 @@ public class CompatDynamicTreesPopulator implements IBiomeDataBasePopulator {
     
     @SubscribeEvent
     public static void registerDataBasePopulators(BiomeDataBasePopulatorRegistryEvent event) {
-        event.register(new CompatDynamicTreesPopulator());
+        event.register(new DynamicTreesPopulator());
     }
     
     private static class DynamicTreesConfigHandler {

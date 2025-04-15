@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.world.chunk.surface;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
@@ -39,7 +41,7 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
         double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
 
         // MCPE uses nextFloat() instead of nextDouble()
-        return noise + random.nextFloat() * 0.2 > 0.0;
+        return noise + this.getSurfaceVariation(random) * 0.2 > 0.0;
     }
     
     @Override
@@ -49,7 +51,7 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
         double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
 
         // MCPE uses nextFloat() instead of nextDouble()
-        return noise + random.nextFloat() * 0.2 > 3.0;
+        return noise + this.getSurfaceVariation(random) * 0.2 > 3.0;
     }
     
     @Override
@@ -59,12 +61,17 @@ public class PESurfaceBuilder extends NoiseSurfaceBuilder {
         double noise = this.surfaceCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
 
         // MCPE uses nextFloat() instead of nextDouble()
-        return (int)(noise / 3.0 + 3.0 + random.nextFloat() * 0.25);
+        return (int)(noise / 3.0 + 3.0 + this.getSurfaceVariation(random) * 0.25);
     }
     
     @Override
     public boolean isBasin(int surfaceDepth) {
         return surfaceDepth <= 0;
+    }
+    
+    @Override
+    protected double getSurfaceVariation(@Nullable Random random) {
+        return random != null ? random.nextFloat() : 0.0;
     }
     
     private SurfaceNoiseChunk sampleSandNoise(int chunkX, int chunkZ) {

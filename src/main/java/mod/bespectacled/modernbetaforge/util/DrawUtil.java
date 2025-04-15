@@ -13,6 +13,8 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -97,6 +99,12 @@ public class DrawUtil {
         boolean useBiomeBlend,
         Consumer<Float> progressTracker
     ) {
+        ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>("biome_draw", (chunkX, chunkZ) -> new BiomeChunk(
+            chunkX,
+            chunkZ,
+            (x, z) -> getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules)
+        ));
+        
         BufferedImage image = new BufferedImage(sizeX, sizeZ, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
         
@@ -136,7 +144,7 @@ public class DrawUtil {
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
                         terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, defaultFluid, terrainType);
 
-                        int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, surfaceBuilder, injectionRules, useBiomeBlend, terrainType);
+                        int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, biomeCache, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                         
                         if (terrainType == TerrainType.GRASS) {
@@ -188,7 +196,7 @@ public class DrawUtil {
         if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
-            if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isBeach(x, z, new NoOpRandom())) {
+            if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isBeach(x, z, null)) {
                 state = BlockStates.SAND;
             }
         }
@@ -374,18 +382,18 @@ public class DrawUtil {
         Biome biome,
         ChunkSource chunkSource,
         BiomeSource biomeSource,
-        SurfaceBuilder surfaceBuilder,
-        BiomeInjectionRules injectionRules,
+        ChunkCache<BiomeChunk> biomeCache,
         boolean useBiomeBlend,
         TerrainType terrainType
     ) {
         int color = terrainType.color;
         int x = blockPos.getX();
         int z = blockPos.getZ();
+
+        int chunkX = x >> 4;
+        int chunkZ = z >> 4;
         
-        BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
-        Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
-        biome = injectedBiome != null ? injectedBiome : biome;
+        biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
         
         if (terrainType == TerrainType.GRASS) {
             color = biome.getGrassColorAtPos(blockPos);
@@ -397,7 +405,7 @@ public class DrawUtil {
                     color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
                     
                 } else {
-                    color = blendBiomeColor(blockPos, chunkSource, biomeSource, surfaceBuilder, injectionRules);
+                    color = blendBiomeColor(blockPos, biomeCache);
                     
                 }
             }
@@ -419,13 +427,7 @@ public class DrawUtil {
         return color;
     }
     
-    private static int blendBiomeColor(
-        BlockPos blockPos,
-        ChunkSource chunkSource,
-        BiomeSource biomeSource,
-        SurfaceBuilder surfaceBuilder,
-        BiomeInjectionRules injectionRules
-    ) {
+    private static int blendBiomeColor(BlockPos blockPos, ChunkCache<BiomeChunk> biomeCache) {
         Vec3d color = Vec3d.ZERO;
         int centerX = blockPos.getX();
         int centerZ = blockPos.getZ();
@@ -435,11 +437,10 @@ public class DrawUtil {
         int blocks = 0;
         for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
             for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
-                Biome biome = biomeSource.getBiome(x, z);
-
-                BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
-                Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
-                biome = injectedBiome != null ? injectedBiome : biome;
+                int chunkX = x >> 4;
+                int chunkZ = z >> 4;
+                
+                Biome biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
                 
                 color = color.add(MathUtil.convertRGBIntToVec3d(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z))));
                 blocks++;
@@ -447,5 +448,33 @@ public class DrawUtil {
         }
         
         return MathUtil.convertRGBVec3dToInt(color.scale(1.0 / blocks));
+    }
+    
+    private static Biome[] getInjectedBiome(
+        int startX,
+        int startZ,
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        SurfaceBuilder surfaceBuilder,
+        BiomeInjectionRules injectionRules
+    ) {
+        Biome[] biomes = new Biome[256];
+        
+        int ndx = 0;
+        for (int z = startZ; z < startZ + 16; ++z) {
+            for (int x = startX; x < startX + 16; ++x) {
+                Biome biome = biomeSource.getBiome(x, z);
+                BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+                Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+                
+                biome = injectedBiome != null ? injectedBiome : biome;
+                context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+                injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
+                
+                biomes[ndx++] = injectedBiome != null ? injectedBiome : biome;
+            }
+        }
+        
+        return biomes;
     }
 }

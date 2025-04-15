@@ -3,6 +3,8 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.surface;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
+import javax.annotation.Nullable;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -168,30 +170,30 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
+     * @param random The random used to vary surface transition. Can be null if transitions aren't implemented.
      * @return Whether beaches should generate at the given coordinates.
      */
-    public abstract boolean isBeach(int x, int z, Random random);
+    public abstract boolean isBeach(int x, int z, @Nullable Random random);
 
     /**
      * Determines whether gravel beaches should generate at the given coordinates.
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
+     * @param random The random used to vary surface transition. Can be null if transitions aren't implemented.
      * @return Whether gravel beaches should generate at the given coordinates.
      */
-    public abstract boolean isGravelBeach(int x, int z, Random random);
+    public abstract boolean isGravelBeach(int x, int z, @Nullable Random random);
     
     /**
      * Samples the surface depth at the given coordinates.
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
-     * @param random The random used to vary surface transition.
+     * @param random The random used to vary surface transition. Can be null if transitions aren't implemented.
      * @return The surface depth used to determine the depth of topsoil.
      */
-    public abstract int sampleSurfaceDepth(int x, int z, Random random);
+    public abstract int sampleSurfaceDepth(int x, int z, @Nullable Random random);
     
     /**
      * Determines whether stone basins should generate given the surface depth.
@@ -229,6 +231,16 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      */
     protected PerlinOctaveNoise getSurfaceOctaveNoise() {
         return this.chunkSource.getSurfaceOctaveNoise().orElse(this.defaultSurfaceOctaveNoise);
+    }
+    
+    /**
+     * Gets the random variation for generating edges of surfaces.
+     * 
+     * @param random The random to sample. Can be null.
+     * @return A double value for varying surface transition. If {@code random} is null then returns 0.0.
+     */
+    protected double getSurfaceVariation(@Nullable Random random) {
+        return random != null ? random.nextDouble() : 0.0;
     }
     
     /**

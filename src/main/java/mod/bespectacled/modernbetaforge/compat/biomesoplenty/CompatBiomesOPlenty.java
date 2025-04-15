@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.compat;
+package mod.bespectacled.modernbetaforge.compat.biomesoplenty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,9 @@ import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.block.BOPBlocks;
+import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
+import mod.bespectacled.modernbetaforge.compat.Compat;
+import mod.bespectacled.modernbetaforge.compat.NetherCompat;
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
@@ -21,6 +24,9 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * 
  */
 public class CompatBiomesOPlenty implements Compat, BiomeCompat, NetherCompat {
+    public static final String MOD_ID = "biomesoplenty";
+    public static final String ADDON_ID = "compat" + MOD_ID;
+    
     @SuppressWarnings("unchecked")
     private List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
     
@@ -101,6 +107,11 @@ public class CompatBiomesOPlenty implements Compat, BiomeCompat, NetherCompat {
         this.addBiomeEntry(ndx, BOPBiomes.snowy_forest, 7);
         this.addBiomeEntry(ndx, BOPBiomes.snowy_tundra, 10);
         this.addBiomeEntry(ndx, BOPBiomes.glacier, 5);
+    }
+    
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
     @Override

@@ -7,7 +7,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.BiomeResolverCreator;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
@@ -252,18 +254,24 @@ public abstract class ChunkSource {
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
             BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state, context.biome);
-            
-        if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
-            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
-            
-            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
-        }
         
         if (replaceOceans && biomeSource instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeSource;
     
             builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
             builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+        }
+        
+        for (BiomeResolverCreator resolverCreator : ModernBetaRegistries.BIOME_RESOLVER.getValues()) {
+            BiomeResolverCustom customResolver = resolverCreator.apply(this, this.settings);
+            
+            builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, BiomeInjectionStep.CUSTOM);
+        }
+        
+        if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
+            BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
+            
+            builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
         }
         
         return builder.build();

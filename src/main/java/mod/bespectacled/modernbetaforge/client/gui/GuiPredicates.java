@@ -16,8 +16,8 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
-import mod.bespectacled.modernbetaforge.compat.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
@@ -159,13 +159,13 @@ public class GuiPredicates {
     
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
-    private static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
+    public static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
         ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
         
         return clazz.isAssignableFrom(chunkSource.getClass());
     }
     
-    private static boolean isBiomeInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
+    public static boolean isBiomeInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
         BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
         
         return clazz.isAssignableFrom(biomeSource.getClass());
@@ -546,7 +546,7 @@ public class GuiPredicates {
             settings -> {
                 boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
                 boolean isFixedBiomeSource = isSingleBiome(settings);
-                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(ModCompat.MOD_DYNAMIC_TREES);
+                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID);
                 
                 return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings));
             },

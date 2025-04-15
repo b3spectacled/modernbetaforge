@@ -179,6 +179,16 @@ createWorld.customize.custom.baseBiome=Base Biome
 createWorld.customize.custom.oceanBiome=Ocean Biome
 createWorld.customize.custom.beachBiome=Beach Biome
 
+## Page 8 - Addons
+createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
+createWorld.customize.custom.compatbuildcraftenergy.usecompat=Enable Compatibility
+createWorld.customize.custom.compatbuildcraftenergy.oildesertchance=Oil Desert Chance
+createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance=Oil Ocean Chance
+
+createWorld.customize.custom.compatthaumcraft=Thaumcraft Compatibility
+createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
+createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
+
 # Main Settings Names
 createWorld.customize.custom.chunkSource.modernbetaforge.beta=Beta
 createWorld.customize.custom.chunkSource.modernbetaforge.alpha=Alpha

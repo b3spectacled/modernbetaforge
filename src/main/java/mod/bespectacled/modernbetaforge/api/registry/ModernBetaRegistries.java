@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.registry;
 import java.util.function.Supplier;
 
 import mod.bespectacled.modernbetaforge.api.property.Property;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseColumnSampler;
@@ -21,6 +22,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK_SOURCE;
     public static final ModernBetaRegistry<BiomeSourceCreator> BIOME_SOURCE;
+    public static final ModernBetaRegistry<BiomeResolverCreator> BIOME_RESOLVER;
     public static final ModernBetaRegistry<NoiseSamplerCreator> NOISE_SAMPLER;
     public static final ModernBetaRegistry<NoiseColumnSamplerCreator> NOISE_COLUMN_SAMPLER;
     public static final ModernBetaRegistry<NoiseSettings> NOISE_SETTING;
@@ -37,6 +39,7 @@ public class ModernBetaRegistries {
     static {
         CHUNK_SOURCE = new ModernBetaRegistry<>("CHUNK_SOURCE");
         BIOME_SOURCE = new ModernBetaRegistry<>("BIOME_SOURCE");
+        BIOME_RESOLVER = new ModernBetaRegistry<>("BIOME_RESOLVER");
         NOISE_SAMPLER = new ModernBetaRegistry<>("NOISE_SAMPLER");
         NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>("NOISE_COLUMN_SAMPLER");
         NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
@@ -59,6 +62,11 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface BiomeSourceCreator {
         BiomeSource apply(long seed, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface BiomeResolverCreator {
+        BiomeResolverCustom apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface

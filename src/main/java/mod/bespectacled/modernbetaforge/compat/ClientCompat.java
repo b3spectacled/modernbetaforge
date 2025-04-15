@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.compat;
 
-public interface Compat {
-    void load();
+public interface ClientCompat {
+    void loadClient();
     
     String getModId();
 }
