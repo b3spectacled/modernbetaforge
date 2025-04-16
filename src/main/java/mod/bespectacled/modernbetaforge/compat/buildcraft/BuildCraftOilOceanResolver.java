@@ -41,7 +41,7 @@ public class BuildCraftOilOceanResolver implements BiomeResolverCustom {
     
     @Override
     public Biome getCustomBiome(int x, int z) {
-        if (this.climateSampler.sample(x, z) < this.chance) {
+        if (this.climateSampler.sample(x, z) <= this.chance) {
             return this.biome;
         }
         

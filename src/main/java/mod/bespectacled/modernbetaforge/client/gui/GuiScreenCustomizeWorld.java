@@ -2352,7 +2352,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void openRegistryScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, List<ResourceLocation> registryKeys) {
-        Function<ResourceLocation, String> nameFormatter = key -> I18n.format(String.format("%s.%s.%s.%s", "createWorld.customize.custom.modernbetaforge", nbtTag, key.getNamespace(), key.getPath()));
+        Function<ResourceLocation, String> nameFormatter = key -> I18n.format(String.format("%s%s.%s.%s", PREFIX, nbtTag, key.getNamespace(), key.getPath()));
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, registryKeys));
     }
     
