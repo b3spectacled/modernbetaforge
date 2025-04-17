@@ -6,6 +6,9 @@ import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import net.minecraft.util.math.MathHelper;
 
 public class SimpleClimateSampler {
+    private static final int CLIMATE_OCTAVES = 4;
+    private static final int DETAIL_OCTAVES = 2;
+    
     private final SimplexOctaveNoise climateOctaveNoise;
     private final SimplexOctaveNoise detailOctaveNoise;
     
@@ -13,8 +16,8 @@ public class SimpleClimateSampler {
     private final double detailScale;
     
     public SimpleClimateSampler(long seed, long climateSeedMultiplier, long detailSeedMultiplier) {
-        this.climateOctaveNoise = new SimplexOctaveNoise(new Random(seed * climateSeedMultiplier), 4);
-        this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * detailSeedMultiplier), 2);
+        this.climateOctaveNoise = new SimplexOctaveNoise(new Random(seed * climateSeedMultiplier), CLIMATE_OCTAVES);
+        this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * detailSeedMultiplier), DETAIL_OCTAVES);
         
         this.climateScale = 0.025;
         this.detailScale = 0.050;

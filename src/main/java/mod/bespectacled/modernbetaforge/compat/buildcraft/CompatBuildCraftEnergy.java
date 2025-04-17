@@ -27,13 +27,13 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
     public void load() {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_OIL_DESERT_CHANCE, new FloatProperty(
-            0.25f,
+            0.1f,
             0.0f,
             1.0f,
             PropertyGuiType.SLIDER
         ));
         ModernBetaRegistries.PROPERTY.register(KEY_OIL_OCEAN_CHANCE, new FloatProperty(
-            0.25f,
+            0.1f,
             0.0f,
             1.0f,
             PropertyGuiType.SLIDER

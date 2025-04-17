@@ -41,6 +41,10 @@ public class ThaumcraftMagicalForestResolver implements BiomeResolverCustom {
 
     @Override
     public Biome getCustomBiome(int x, int z) {
+        if (this.chance <= 0.0) {
+            return null;
+        }
+        
         if (this.climateSampler.sample(x, z) <= this.chance) {
             return this.biome;
         }
