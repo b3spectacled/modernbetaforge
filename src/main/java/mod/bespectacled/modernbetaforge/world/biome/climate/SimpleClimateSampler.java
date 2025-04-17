@@ -15,9 +15,9 @@ public class SimpleClimateSampler {
     private final double climateScale;
     private final double detailScale;
     
-    public SimpleClimateSampler(long seed, long climateSeedMultiplier, long detailSeedMultiplier) {
-        this.climateOctaveNoise = new SimplexOctaveNoise(new Random(seed * climateSeedMultiplier), CLIMATE_OCTAVES);
-        this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * detailSeedMultiplier), DETAIL_OCTAVES);
+    public SimpleClimateSampler(long seed, long climateSeed, long detailSeed) {
+        this.climateOctaveNoise = new SimplexOctaveNoise(new Random(seed * climateSeed), CLIMATE_OCTAVES);
+        this.detailOctaveNoise = new SimplexOctaveNoise(new Random(seed * detailSeed), DETAIL_OCTAVES);
         
         this.climateScale = 0.025;
         this.detailScale = 0.050;
