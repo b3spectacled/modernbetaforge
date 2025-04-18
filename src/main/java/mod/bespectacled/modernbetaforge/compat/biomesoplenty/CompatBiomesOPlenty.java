@@ -40,12 +40,17 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     
     public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     
+    public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = new ResourceLocation(ADDON_ID, "resolverCoralReef");
+    public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = new ResourceLocation(ADDON_ID, "resolverKelpForest");
+    
     @SuppressWarnings("unchecked")
     private List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
     
     @Override
     public void load() {
-        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));  
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
+        ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
+        ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);
         
         for (BiomeType type : BiomeType.values()) {
             this.biomeEntries[type.ordinal()] = new ArrayList<BiomeEntry>();

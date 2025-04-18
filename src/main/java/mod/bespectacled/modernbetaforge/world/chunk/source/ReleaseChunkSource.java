@@ -6,7 +6,9 @@ import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.BiomeResolverCreator;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -118,6 +120,16 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
             
             builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
+        }
+        
+        for (BiomeResolverCreator resolverCreator : ModernBetaRegistries.BIOME_RESOLVER.getValues()) {
+            BiomeResolverCustom customResolver = resolverCreator.apply(this, this.settings);
+            BiomeInjectionStep injectionStep = customResolver.getInjectionStep();
+            
+            if (injectionStep == BiomeInjectionStep.ALL)
+                injectionStep = BiomeInjectionStep.POST_SURFACE;
+            
+            builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, injectionStep);
         }
         
         return builder.build();

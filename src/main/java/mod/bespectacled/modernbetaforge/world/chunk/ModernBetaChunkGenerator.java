@@ -500,7 +500,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
             this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.CUSTOM);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);

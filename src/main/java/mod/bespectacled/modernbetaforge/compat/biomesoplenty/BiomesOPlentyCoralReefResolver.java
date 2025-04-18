@@ -1,37 +1,39 @@
-package mod.bespectacled.modernbetaforge.compat.thaumcraft;
+package mod.bespectacled.modernbetaforge.compat.biomesoplenty;
 
 import java.util.function.Predicate;
 
+import biomesoplenty.api.biome.BOPBiomes;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverAddSingleBiome;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-public class ThaumcraftMagicalForestResolver extends BiomeResolverAddSingleBiome {
-    public static final ResourceLocation BIOME_ID = new ResourceLocation(CompatThaumcraft.MOD_ID, "magical_forest");
-    
+public class BiomesOPlentyCoralReefResolver extends BiomeResolverAddSingleBiome {
     private final boolean isReleaseBiomeSource;
     private final boolean useCompat;
-    
-    public ThaumcraftMagicalForestResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BIOME_ID, chunkSource.getSeed(), 8363L, 21061L, settings.getFloatProperty(CompatThaumcraft.KEY_MAGICAL_FOREST_CHANCE));
 
+    public BiomesOPlentyCoralReefResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        super(BOPBiomes.coral_reef.get(), chunkSource.getSeed(), 2027L, 26183L, 0.1f);
+        
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
-        this.useCompat = settings.getBooleanProperty(CompatThaumcraft.KEY_USE_COMPAT);
+        this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);
     }
     
     @Override
     public BiomeInjectionStep getInjectionStep() {
-        return BiomeInjectionStep.PRE_SURFACE;
+        return BiomeInjectionStep.POST_SURFACE;
     }
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context -> !this.isReleaseBiomeSource && this.useCompat && BiomeDictionary.hasType(context.biome, Type.FOREST);
+        return context ->
+            this.isReleaseBiomeSource &&
+            this.useCompat &&
+            BiomeDictionary.hasType(context.biome, Type.OCEAN) &&
+            !BiomeDictionary.hasType(context.biome, Type.COLD);
     }
 }
