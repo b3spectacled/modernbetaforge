@@ -3,11 +3,14 @@ package mod.bespectacled.modernbetaforge.compat.biomesoplenty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.block.BOPBlocks;
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
@@ -48,6 +51,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     
     @Override
     public void load() {
+        ModernBeta.log(Level.WARN, "Biomes O' Plenty has been detected, classic Nether settings will be disabled due to incompatibilties!");
+        
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);

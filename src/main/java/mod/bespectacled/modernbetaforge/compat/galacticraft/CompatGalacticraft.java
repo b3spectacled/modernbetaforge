@@ -10,7 +10,7 @@ public class CompatGalacticraft implements Compat {
     
     @Override
     public void load() {
-        ModernBeta.log(Level.WARN, "Galacticraft has been loaded, sky/fog visual features may not work correctly due to incompatibilties!");
+        ModernBeta.log(Level.WARN, "Galacticraft has been detected, sky/fog visual features may not work correctly due to incompatibilties!");
     }
     
     @Override
