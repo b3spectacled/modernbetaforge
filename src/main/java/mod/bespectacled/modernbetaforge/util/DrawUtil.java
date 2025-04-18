@@ -465,11 +465,16 @@ public class DrawUtil {
             for (int x = startX; x < startX + 16; ++x) {
                 Biome biome = biomeSource.getBiome(x, z);
                 BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+                
                 Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
                 biome = injectedBiome != null ? injectedBiome : biome;
+                context.setBiome(biome);
                 
-                context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
                 injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
+                biome = injectedBiome != null ? injectedBiome : biome;
+                context.setBiome(biome);
+                
+                injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.POST_SURFACE);
                 biomes[ndx++] = injectedBiome != null ? injectedBiome : biome;
             }
         }
