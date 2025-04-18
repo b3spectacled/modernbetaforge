@@ -247,13 +247,13 @@ public abstract class ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            BiomeInjector.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel());
+            BiomeInjector.atOceanDepth(context.getPos().getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel());
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            BiomeInjector.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH, this.getSeaLevel());
+            BiomeInjector.atOceanDepth(context.getPos().getY(), OCEAN_MIN_DEPTH, this.getSeaLevel());
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state, context.biome);
+            BiomeInjector.atBeachDepth(context.getPos().getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.getState(), context.getBiome());
         
         if (replaceOceans && biomeSource instanceof BiomeResolverOcean) {
             BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeSource;

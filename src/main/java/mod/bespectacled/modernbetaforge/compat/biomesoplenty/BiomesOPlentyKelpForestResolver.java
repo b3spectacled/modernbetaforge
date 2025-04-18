@@ -27,7 +27,7 @@ public class BiomesOPlentyKelpForestResolver extends BiomeResolverAddSingleBiome
         return context ->
             this.isReleaseBiomeSource &&
             this.useCompat &&
-            BiomeDictionary.hasType(context.biome, Type.OCEAN) &&
-            !BiomeDictionary.hasType(context.biome, Type.COLD);
+            BiomeDictionary.hasType(context.getBiome(), Type.OCEAN) &&
+            !BiomeDictionary.hasType(context.getBiome(), Type.COLD);
     }
 }

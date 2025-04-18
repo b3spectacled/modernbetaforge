@@ -26,6 +26,6 @@ public class ThaumcraftMagicalForestResolver extends BiomeResolverAddSingleBiome
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context -> !this.isReleaseBiomeSource && this.useCompat && BiomeDictionary.hasType(context.biome, Type.FOREST);
+        return context -> !this.isReleaseBiomeSource && this.useCompat && BiomeDictionary.hasType(context.getBiome(), Type.FOREST);
     }
 }

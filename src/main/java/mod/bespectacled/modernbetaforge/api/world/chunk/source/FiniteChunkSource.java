@@ -15,7 +15,9 @@ import com.google.common.collect.HashBiMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.BiomeResolverCreator;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
@@ -430,15 +432,22 @@ public abstract class FiniteChunkSource extends ChunkSource {
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
         
         Predicate<BiomeInjectionContext> deepOceanPredicate = context -> 
-            BiomeInjector.atOceanDepth(context.pos.getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
-            BiomeInjector.isFluidBlock(context.stateAbove, this.defaultFluid);
+            BiomeInjector.atOceanDepth(context.getPos().getY(), DEEP_OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
+            BiomeInjector.isFluidBlock(context.getStateAbove(), this.defaultFluid);
         
         Predicate<BiomeInjectionContext> oceanPredicate = context -> 
-            BiomeInjector.atOceanDepth(context.pos.getY(), OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
-            BiomeInjector.isFluidBlock(context.stateAbove, this.defaultFluid);
+            BiomeInjector.atOceanDepth(context.getPos().getY(), OCEAN_MIN_DEPTH, this.getSeaLevel()) &&
+            BiomeInjector.isFluidBlock(context.getStateAbove(), this.defaultFluid);
             
         Predicate<BiomeInjectionContext> beachPredicate = context ->
-            BiomeInjector.atBeachDepth(context.pos.getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.state, context.biome);
+            BiomeInjector.atBeachDepth(context.getPos().getY(), this.getSeaLevel()) && BiomeInjector.isBeachBlock(context.getState(), context.getBiome());
+            
+        if (replaceOceans && biomeSource instanceof BiomeResolverOcean) {
+            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeSource;
+    
+            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+        }
             
         if (replaceBeaches && biomeSource instanceof BiomeResolverBeach) {
             BiomeResolverBeach biomeResolverBeach = (BiomeResolverBeach)biomeSource;
@@ -446,11 +455,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
             builder.add(beachPredicate, biomeResolverBeach::getBeachBiome, BiomeInjectionStep.POST_SURFACE);
         }
         
-        if (replaceOceans && biomeSource instanceof BiomeResolverOcean) {
-            BiomeResolverOcean biomeResolverOcean = (BiomeResolverOcean)biomeSource;
-    
-            builder.add(deepOceanPredicate, biomeResolverOcean::getDeepOceanBiome, BiomeInjectionStep.PRE_SURFACE);
-            builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
+        for (BiomeResolverCreator resolverCreator : ModernBetaRegistries.BIOME_RESOLVER.getValues()) {
+            BiomeResolverCustom customResolver = resolverCreator.apply(this, this.settings);
+            
+            builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, BiomeInjectionStep.CUSTOM);
         }
         
         return builder.build();

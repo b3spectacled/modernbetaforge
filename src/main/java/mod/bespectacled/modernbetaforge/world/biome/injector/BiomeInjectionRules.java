@@ -1,15 +1,14 @@
 package mod.bespectacled.modernbetaforge.world.biome.injector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeInjectionRules {
@@ -41,10 +40,6 @@ public class BiomeInjectionRules {
     }
     
     private List<BiomeInjectionRule> getRules(BiomeInjectionStep step) {
-        if (step == BiomeInjectionStep.ALL) {
-            return this.ruleMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
-        }
-        
         return this.ruleMap.get(step);
     }
 
@@ -53,13 +48,13 @@ public class BiomeInjectionRules {
         
         public Builder() {
             this.ruleMap = new LinkedHashMap<>();
+            
+            this.ruleMap.put(BiomeInjectionStep.PRE_SURFACE, new ArrayList<>());
+            this.ruleMap.put(BiomeInjectionStep.CUSTOM, new ArrayList<>());
+            this.ruleMap.put(BiomeInjectionStep.POST_SURFACE, new ArrayList<>());
         }
         
         public Builder add(Predicate<BiomeInjectionContext> rule, BiomeInjectionResolver resolver, BiomeInjectionStep step) {
-            if (!this.ruleMap.containsKey(step)) {
-                this.ruleMap.put(step, new ArrayList<>());
-            }
-            
             this.ruleMap.get(step).add(new BiomeInjectionRule(rule, resolver));
             
             return this;
@@ -88,15 +83,51 @@ public class BiomeInjectionRules {
     }
     
     public static class BiomeInjectionContext {
-        public final BlockPos pos;
-        public final IBlockState state;
-        public final IBlockState stateAbove;
-        public final Biome biome;
+        private MutableBlockPos pos;
+        private IBlockState state;
+        private IBlockState stateAbove;
+        private Biome biome;
+        
+        public BiomeInjectionContext() {
+            this(BlockPos.ORIGIN, null, null, null);
+        }
         
         public BiomeInjectionContext(BlockPos pos, IBlockState state, IBlockState stateAbove, Biome biome) {
-            this.pos = pos;
+            this.pos = new MutableBlockPos(pos);
             this.state = state;
             this.stateAbove = stateAbove;
+            this.biome = biome;
+        }
+        
+        public BlockPos getPos() {
+            return this.pos;
+        }
+        
+        public IBlockState getState() {
+            return this.state;
+        }
+        
+        public IBlockState getStateAbove() {
+            return this.stateAbove;
+        }
+        
+        public Biome getBiome() {
+            return this.biome;
+        }
+        
+        public void setPos(int x, int y, int z) {
+            this.pos.setPos(x, y, z);
+        }
+        
+        public void setState(IBlockState blockState) {
+            this.state = blockState;
+        }
+        
+        public void setStateAbove(IBlockState blockState) {
+            this.stateAbove = blockState;
+        }
+        
+        public void setBiome(Biome biome) {
             this.biome = biome;
         }
     }

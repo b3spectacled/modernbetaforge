@@ -7,7 +7,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -23,7 +22,8 @@ public class BiomeInjector {
     public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ, BiomeInjectionStep step) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
-
+        
+        BiomeInjectionContext context = new BiomeInjectionContext();
         for (int localZ = 0; localZ < 16; ++localZ) {
             for (int localX = 0; localX < 16; ++localX) {
                 int x = localX + startX;
@@ -33,12 +33,11 @@ public class BiomeInjector {
                 int height = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE), 0, 255);
                 int heightAbove = MathHelper.clamp(chunkSource.getHeight(x, z, Type.SURFACE) + 1, 0, 255);
                 
-                BlockPos blockPos = new BlockPos(x, height, z);
-                IBlockState blockState = chunkPrimer.getBlockState(localX, height, localZ);
-                IBlockState blockStateAbove = chunkPrimer.getBlockState(localX, heightAbove, localZ);
-                Biome biome = biomes[ndx];
+                context.setPos(x, height, z);
+                context.setState(chunkPrimer.getBlockState(localX, height, localZ));
+                context.setStateAbove(chunkPrimer.getBlockState(localX, heightAbove, localZ));
+                context.setBiome(biomes[ndx]);
                 
-                BiomeInjectionContext context = new BiomeInjectionContext(blockPos, blockState, blockStateAbove, biome);
                 Biome injectedBiome = this.getInjectedBiome(context, x, z, step);
                 if (injectedBiome != null) {
                     biomes[ndx] = injectedBiome;
