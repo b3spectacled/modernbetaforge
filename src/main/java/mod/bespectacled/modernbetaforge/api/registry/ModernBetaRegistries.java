@@ -17,7 +17,6 @@ import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class ModernBetaRegistries {
     public static final ModernBetaRegistry<ChunkSourceCreator> CHUNK_SOURCE;
@@ -30,7 +29,6 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<CarverCreator> CARVER;
     public static final ModernBetaRegistry<CaveCarverCreator> CAVE_CARVER;
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
-    public static final ModernBetaRegistry<FeatureCreator> FEATURE;
     public static final ModernBetaRegistry<WorldSpawner> WORLD_SPAWNER;
     public static final ModernBetaRegistry<Supplier<Block>> DEFAULT_BLOCK;
     public static final ModernBetaRegistry<DataFix> DATA_FIX;
@@ -47,7 +45,6 @@ public class ModernBetaRegistries {
         CARVER = new ModernBetaRegistry<>("CARVER");
         CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
-        FEATURE = new ModernBetaRegistry<>("FEATURE");
         WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
         DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
         DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
@@ -97,10 +94,5 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface BlockSourceCreator {
         BlockSource apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
-    }
-    
-    @FunctionalInterface
-    public static interface FeatureCreator {
-        WorldGenerator apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
 }

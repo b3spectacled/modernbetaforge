@@ -39,7 +39,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
@@ -76,8 +75,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final Map<ResourceLocation, MapGenStructure> structures;
     private final Map<ResourceLocation, MapGenBase> carvers;
     
-    private final List<WorldGenerator> customFeatures;
-    
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         
@@ -110,12 +107,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             .getEntrySet()
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
-        
-        this.customFeatures = ModernBetaRegistries.FEATURE
-            .getValues()
-            .stream()
-            .map(feature -> feature.apply(this.chunkSource, this.settings))
-            .collect(Collectors.toCollection(ArrayList<WorldGenerator>::new));
 
         // Important for correct structure spawning when y < seaLevel, e.g. villages, monuments
         world.setSeaLevel(this.chunkSource.getSeaLevel());
@@ -288,13 +279,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             
             // Generate biome features
             biome.decorate(this.world, this.random, new BlockPos(startX, 0, startZ));
-            
-            // Generate custom features
-            if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.CUSTOM)) {
-                for (WorldGenerator feature : this.customFeatures) {
-                    feature.generate(this.world, this.random, mutablePos.setPos(startX, 0, startZ));
-                }
-            }
             
             // Generate animals
             if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
