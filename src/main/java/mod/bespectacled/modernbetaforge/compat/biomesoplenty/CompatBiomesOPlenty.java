@@ -173,6 +173,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         this.addBiomeSurface(builder, BOPBiomes.shield);
         this.addBiomeSurface(builder, BOPBiomes.wetland);
         this.addBiomeSurface(builder, BOPBiomes.xeric_shrubland);
+        this.addBiomeSurface(builder, BOPBiomes.coral_reef);
+        this.addBiomeSurface(builder, BOPBiomes.kelp_forest);
         
         return builder.build();
     }

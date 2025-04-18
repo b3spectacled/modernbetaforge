@@ -124,12 +124,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         
         for (BiomeResolverCreator resolverCreator : ModernBetaRegistries.BIOME_RESOLVER.getValues()) {
             BiomeResolverCustom customResolver = resolverCreator.apply(this, this.settings);
-            BiomeInjectionStep injectionStep = customResolver.getInjectionStep();
             
-            if (injectionStep == BiomeInjectionStep.ALL)
-                injectionStep = BiomeInjectionStep.POST_SURFACE;
-            
-            builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, injectionStep);
+            builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, BiomeInjectionStep.CUSTOM);
         }
         
         return builder.build();

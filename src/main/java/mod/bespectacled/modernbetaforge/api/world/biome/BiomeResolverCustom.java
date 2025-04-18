@@ -3,19 +3,9 @@ package mod.bespectacled.modernbetaforge.api.world.biome;
 import java.util.function.Predicate;
 
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
-import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import net.minecraft.world.biome.Biome;
 
 public interface BiomeResolverCustom {
-    /**
-     * Gets the biome injection step to replace biome.
-     * Should be one of {@link BiomeInjectionStep#PRE_SURFACE} or {@link BiomeInjectionStep#POST_SURFACE}.
-     * If {@link BiomeInjectionStep#ALL} is specified, it is treated as {@link BiomeInjectionStep#POST_SURFACE}.
-     * 
-     * @return The biome injection step to replace biome.
-     */
-    BiomeInjectionStep getInjectionStep();
-    
     /**
      * Gets the predicate with which to check whether to use {@link #getCustomBiome(int, int) getCustomBiome}.
      * 

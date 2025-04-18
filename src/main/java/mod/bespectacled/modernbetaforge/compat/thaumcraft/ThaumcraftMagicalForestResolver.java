@@ -6,7 +6,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverAddSingleBi
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
-import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
@@ -23,11 +22,6 @@ public class ThaumcraftMagicalForestResolver extends BiomeResolverAddSingleBiome
 
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatThaumcraft.KEY_USE_COMPAT);
-    }
-    
-    @Override
-    public BiomeInjectionStep getInjectionStep() {
-        return BiomeInjectionStep.PRE_SURFACE;
     }
 
     @Override

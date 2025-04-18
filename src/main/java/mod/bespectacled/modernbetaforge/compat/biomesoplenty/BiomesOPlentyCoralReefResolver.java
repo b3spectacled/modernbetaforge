@@ -7,7 +7,6 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverAddSingleBi
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
-import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -21,11 +20,6 @@ public class BiomesOPlentyCoralReefResolver extends BiomeResolverAddSingleBiome 
         
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);
-    }
-    
-    @Override
-    public BiomeInjectionStep getInjectionStep() {
-        return BiomeInjectionStep.POST_SURFACE;
     }
 
     @Override
