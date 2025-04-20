@@ -233,13 +233,16 @@ createWorld.customize.custom.modernbetaforge.beachBiome=Beach Biome
 ## Page 8 - Addons
 createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
+createWorld.customize.custom.compatbiomesoplenty.usecompat.info=Note: Release biome source only.
 
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
+createWorld.customize.custom.compatbuildcraftenergy.info=Note: Non-Release biome sources only.
 createWorld.customize.custom.compatbuildcraftenergy.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.oildesertchance=Oil Desert Chance
 createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance=Oil Ocean Chance
 
 createWorld.customize.custom.compatthaumcraft=Thaumcraft Compatibility
+createWorld.customize.custom.compatthaumcraft.info=Note: Non-Release biome sources only.
 createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
 createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
 

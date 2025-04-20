@@ -57,8 +57,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int PROGRESS_TEXT_OFFSET = 5;
     
     private static final int RGB_WHITE = 16777215;
-    private static final int RGB_GREY = 16777120;
-    private static final int RGB_YELLOW = 10526880;
+    private static final int RGB_YELLOW = 16777120;
+    private static final int RGB_GREY = 10526880;
     
     private static final int ARGB_BORDER_LIGHT = -2039584;
     private static final int ARGB_BORDER_DARK = -6250336;
@@ -265,7 +265,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         String seedField = this.getFormattedSeed();
         int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
         int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
-        int seedColor = this.hoveredSeedField ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_YELLOW : RGB_GREY : RGB_WHITE;
+        int seedColor = this.hoveredSeedField ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_GREY : RGB_YELLOW : RGB_WHITE;
         int seedFieldX = this.width / 2 + seedTextLen / 2 - seedFieldLen;
         int seedFieldHeight = this.height / 2 + viewportSize / 2;
         
@@ -641,10 +641,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 );
                 GlStateManager.disableBlend();
                 
-                this.parent.drawCenteredString(this.parent.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, RGB_GREY);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, RGB_GREY);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_GREY);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_GREY);
+                this.parent.drawCenteredString(this.parent.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, RGB_YELLOW);
+                this.parent.drawCenteredString(this.parent.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, RGB_YELLOW);
+                this.parent.drawCenteredString(this.parent.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_YELLOW);
+                this.parent.drawCenteredString(this.parent.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_YELLOW);
             }
         }
         
