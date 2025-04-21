@@ -33,7 +33,9 @@ import net.minecraft.world.gen.layer.GenLayerZoom;
 public class ModernBetaGenLayer {
     public static GenLayer[] initBiomeLayers(long seed, WorldType worldType, ModernBetaGeneratorSettings settings) {
         ChunkGeneratorSettings vanillaSettings = new ChunkGeneratorSettings.Factory().build();
+        
         int biomeSize = settings.biomeSize;
+        int snowyBiomeChance = settings.snowyBiomeChance;
         
         GenLayer genLayer = new GenLayerFixed(1L, GenLayerFixed.PLAINS);
         genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
@@ -42,9 +44,10 @@ public class ModernBetaGenLayer {
         genLayer = new GenLayerOceanlessAddForest(2L, genLayer);
         genLayer = new GenLayerOceanlessAddForest(50L, genLayer);
         genLayer = new GenLayerOceanlessAddForest(70L, genLayer);
-        genLayer = new GenLayerOceanlessAddSnow(2L, genLayer);
+        genLayer = new GenLayerOceanlessAddSnow(2L, genLayer, snowyBiomeChance);
         genLayer = new GenLayerOceanlessAddMoreSnow(2L, genLayer);
         genLayer = new GenLayerOceanlessAddForest(3L, genLayer);
+        genLayer = new GenLayerOceanlessAddMoreSnow(3L, genLayer, 3);
         genLayer = addClimateLayers(genLayer);
         genLayer = new GenLayerZoom(2002L, genLayer);
         genLayer = new GenLayerZoom(2003L, genLayer);

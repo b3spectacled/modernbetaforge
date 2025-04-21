@@ -335,7 +335,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, RGB_HEADER, "page2", "release"),
             null,
             createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.biomeSize, this),
-            null,
+            createGuiSlider(GuiIdentifiers.PG2_S_SNOWY_CHANCE, NbtTags.SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MIN_SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MAX_SNOWY_BIOME_CHANCE, this.settings.snowyBiomeChance, this),
         
             createGuiLabel(GuiIdentifiers.PG2_L_MOBS, RGB_HEADER, "page2", "mobSpawn"),
             null,
@@ -1462,6 +1462,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
                 case GuiIdentifiers.PG2_S_BIOME_SZ:
                     this.settings.biomeSize = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG2_S_SNOWY_CHANCE:
+                    this.settings.snowyBiomeChance = (int)entryValue;
                     break;
     
                 case GuiIdentifiers.PG3_S_CLAY_SIZE:

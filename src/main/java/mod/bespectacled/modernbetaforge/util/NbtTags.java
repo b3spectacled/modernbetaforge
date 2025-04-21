@@ -58,6 +58,7 @@ public class NbtTags {
     public static final String RIVER_SIZE = "riverSize";
     public static final String LAYER_TYPE = "layerType";
     public static final String LAYER_SIZE = "layerSize";
+    public static final String SNOWY_BIOME_CHANCE = "snowyBiomeChance";
     
     public static final String END_ISLAND_OFFSET = "endIslandOffset";
     public static final String END_ISLAND_WEIGHT = "endIslandWeight";

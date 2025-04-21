@@ -7,11 +7,26 @@ import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerOceanlessAddMoreSnow extends GenLayer {
     private static final int FOREST = Biome.getIdForBiome(Biomes.FOREST);
-    private static final int SNOW_CHANCE = 1;
+    private static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
+    private static final int DEFAULT_SNOWY_BIOME_CHANCE = 1;
+    
+    private final int snowyBiomeChance;
+    private final int biomeToReplace;
     
     public GenLayerOceanlessAddMoreSnow(long seed, GenLayer parent) {
+        this(seed, parent, DEFAULT_SNOWY_BIOME_CHANCE, PLAINS);
+    }
+    
+    public GenLayerOceanlessAddMoreSnow(long seed, GenLayer parent, int snowyBiomeChance) {
+        this(seed, parent, snowyBiomeChance, PLAINS);
+    }
+    
+    public GenLayerOceanlessAddMoreSnow(long seed, GenLayer parent, int snowyBiomeChance, int biomeToReplace) {
         super(seed);
+        
         this.parent = parent;
+        this.snowyBiomeChance = snowyBiomeChance;
+        this.biomeToReplace = biomeToReplace;
     }
 
     @Override
@@ -39,7 +54,7 @@ public class GenLayerOceanlessAddMoreSnow extends GenLayer {
                 if (nw == FOREST) adjacent++;
                 if (ne == FOREST) adjacent++;
 
-                if (adjacent > 1 && ctr == 1 && this.nextInt(SNOW_CHANCE) == 0) {
+                if (adjacent > 1 && ctr == this.biomeToReplace && this.nextInt(this.snowyBiomeChance) == 0) {
                     ints[x + y * areaWidth] = FOREST;
                 } else {
                     ints[x + y * areaWidth] = ctr;

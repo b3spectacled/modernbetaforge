@@ -71,6 +71,9 @@ public class ModernBetaGeneratorSettings {
     public static final float MIN_LEVEL_CAVE_WIDTH = 1.0f;
     public static final float MAX_LEVEL_CAVE_WIDTH = 5.0f;
     
+    public static final int MIN_SNOWY_BIOME_CHANCE = 1;
+    public static final int MAX_SNOWY_BIOME_CHANCE = 12;
+    
     public static final int MIN_ORE_SIZE = 1;
     public static final int MAX_ORE_SIZE = 50;
     public static final int MIN_ORE_COUNT = 0;
@@ -167,6 +170,7 @@ public class ModernBetaGeneratorSettings {
     public final int riverSize;
     public final String layerType;
     public final int layerSize;
+    public final int snowyBiomeChance;
     
     public final float endIslandOffset;
     public final float endIslandWeight;
@@ -398,6 +402,7 @@ public class ModernBetaGeneratorSettings {
         this.riverSize = factory.riverSize;
         this.layerType = factory.layerType;
         this.layerSize = factory.layerSize;
+        this.snowyBiomeChance = factory.snowyBiomeChance;
         
         this.endIslandOffset = factory.endIslandOffset;
         this.endIslandWeight = factory.endIslandWeight;
@@ -692,6 +697,7 @@ public class ModernBetaGeneratorSettings {
         public int riverSize;
         public String layerType;
         public int layerSize;
+        public int snowyBiomeChance;
         
         public float endIslandOffset;
         public float endIslandWeight;
@@ -923,6 +929,7 @@ public class ModernBetaGeneratorSettings {
             this.riverSize = 4;
             this.layerType = GenLayerType.VANILLA.id;
             this.layerSize = 4;
+            this.snowyBiomeChance = 6;
             
             this.endIslandOffset = 100.0f;
             this.endIslandWeight = 8.0f;
@@ -1177,6 +1184,7 @@ public class ModernBetaGeneratorSettings {
                 this.riverSize == factory.riverSize &&
                 this.layerType.equals(factory.layerType) &&
                 this.layerSize == factory.layerSize &&
+                this.snowyBiomeChance == factory.snowyBiomeChance &&
                         
                 Float.compare(factory.endIslandOffset, this.endIslandOffset) == 0 &&
                 Float.compare(factory.endIslandWeight, this.endIslandWeight) == 0 &&
@@ -1412,6 +1420,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.riverSize;
             hashCode = 31 * hashCode + this.layerType.hashCode();
             hashCode = 31 * hashCode + this.layerSize;
+            hashCode = 31 * hashCode + this.snowyBiomeChance;
             
             hashCode = 31 * hashCode + ((this.endIslandOffset == 0.0f) ? 0 : Float.floatToIntBits(this.endIslandOffset));
             hashCode = 31 * hashCode + ((this.endIslandWeight == 0.0f) ? 0 : Float.floatToIntBits(this.endIslandWeight));
@@ -1673,6 +1682,7 @@ public class ModernBetaGeneratorSettings {
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 factory.layerType = JsonUtils.getString(jsonObject, NbtTags.LAYER_TYPE, factory.layerType);
                 factory.layerSize = JsonUtils.getInt(jsonObject, NbtTags.LAYER_SIZE, factory.layerSize);
+                factory.snowyBiomeChance = JsonUtils.getInt(jsonObject, NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
                 
                 factory.endIslandOffset = JsonUtils.getFloat(jsonObject, NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
                 factory.endIslandWeight = JsonUtils.getFloat(jsonObject, NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);
@@ -1893,6 +1903,7 @@ public class ModernBetaGeneratorSettings {
                 factory.biomeSize = MathHelper.clamp(factory.biomeSize, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
                 factory.riverSize = MathHelper.clamp(factory.riverSize, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
                 factory.layerSize = MathHelper.clamp(factory.layerSize, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
+                factory.snowyBiomeChance = MathHelper.clamp(factory.snowyBiomeChance, MIN_SNOWY_BIOME_CHANCE, MAX_SNOWY_BIOME_CHANCE);
                 
                 factory.endIslandOffset = MathHelper.clamp(factory.endIslandOffset, MIN_END_OFFSET, MAX_END_OFFSET);
                 factory.endIslandWeight = MathHelper.clamp(factory.endIslandWeight, MIN_END_WEIGHT, MAX_END_WEIGHT);
@@ -2043,6 +2054,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
             jsonObject.addProperty(NbtTags.LAYER_SIZE, factory.layerSize);
+            jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
 
             jsonObject.addProperty(NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
             jsonObject.addProperty(NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);

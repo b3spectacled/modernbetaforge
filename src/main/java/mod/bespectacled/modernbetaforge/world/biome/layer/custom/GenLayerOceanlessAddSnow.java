@@ -9,11 +9,19 @@ public class GenLayerOceanlessAddSnow extends GenLayer {
     private static final int FOREST = Biome.getIdForBiome(Biomes.FOREST);
     private static final int EXTREME_HILLS = Biome.getIdForBiome(Biomes.EXTREME_HILLS);
     private static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
-    private static final int SNOW_CHANCE = 6; // Vanilla is 6
+    private static final int DEFAULT_SNOWY_BIOME_CHANCE = 6; // Vanilla is 6
+    
+    private final int snowyBiomeChance;
     
     public GenLayerOceanlessAddSnow(long seed, GenLayer parent) {
+        this(seed, parent, DEFAULT_SNOWY_BIOME_CHANCE);
+    }
+    
+    public GenLayerOceanlessAddSnow(long seed, GenLayer parent, int snowyBiomeChance) {
         super(seed);
+        
         this.parent = parent;
+        this.snowyBiomeChance = snowyBiomeChance;
     }
 
     @Override
@@ -30,14 +38,14 @@ public class GenLayerOceanlessAddSnow extends GenLayer {
                 int ctr = parentInts[x + 1 + (y + 1) * parentWidth];
                 this.initChunkSeed((long)(x + areaX), (long)(y + areaY));
 
-                int chance = this.nextInt(SNOW_CHANCE);
-
-                if (chance == 0) {
+                int chance = this.nextInt(this.snowyBiomeChance);
+                
+                if (chance == 0) {        // Governs icy biome chance
                     ctr = FOREST;
-                } else if (chance <= 1) {
+                } else if (chance <= 1) { // Governs temperate biome chance, including taigas and extreme hills
                     ctr = EXTREME_HILLS;
                 } else {
-                    ctr = PLAINS;
+                    ctr = PLAINS;         // Governs hot biome chance
                 }
 
                 ints[x + y * areaWidth] = ctr;

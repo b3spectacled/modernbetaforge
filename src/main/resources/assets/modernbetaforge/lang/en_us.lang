@@ -166,8 +166,9 @@ createWorld.customize.custom.modernbetaforge.usePineTrees=Pine Trees
 createWorld.customize.custom.modernbetaforge.useSwampTrees=Swamp Trees
 createWorld.customize.custom.modernbetaforge.useAcaciaTrees=Acacia Trees
 createWorld.customize.custom.modernbetaforge.useJungleTrees=Jungle Trees
-createWorld.customize.custom.modernbetaforge.useModdedBiomes=Mod Biome Compatibility
+
 createWorld.customize.custom.modernbetaforge.biomeSize=Biome Size
+createWorld.customize.custom.modernbetaforge.snowyBiomeChance=Snowy Biome Rarity
 
 # Page 3 - Mobs
 createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs=Modern Passive Mobs

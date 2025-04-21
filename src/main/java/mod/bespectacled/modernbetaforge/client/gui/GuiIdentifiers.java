@@ -133,7 +133,8 @@ public class GuiIdentifiers {
     public static final int PG2_B_SPAWN_AMBIENT = 314;
     public static final int PG2_B_SPAWN_WOLVES = 315;
     
-    public static final int PG2_S_BIOME_SZ = 317;
+    public static final int PG2_S_BIOME_SZ = 316;
+    public static final int PG2_S_SNOWY_CHANCE = 317;
     
     public static final int PG2_B_USE_SAND_DISKS = 318;
     public static final int PG2_B_USE_GRAV_DISKS = 319;
