@@ -929,7 +929,7 @@ public class ModernBetaGeneratorSettings {
             this.riverSize = 4;
             this.layerType = GenLayerType.VANILLA.id;
             this.layerSize = 4;
-            this.snowyBiomeChance = 6;
+            this.snowyBiomeChance = 8;
             
             this.endIslandOffset = 100.0f;
             this.endIslandWeight = 8.0f;

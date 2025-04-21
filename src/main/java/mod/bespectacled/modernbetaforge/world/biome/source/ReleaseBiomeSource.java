@@ -54,9 +54,10 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         
-        Biome biome = this.oceanCache.get(chunkX, chunkZ).sample(x, z);
+        Biome baseBiome = this.biomeCache.get(chunkX, chunkZ).sample(x, z);
+        Biome oceanBiome = this.oceanCache.get(chunkX, chunkZ).sample(x, z);
         
-        return isSnowy(biome) ? Biomes.FROZEN_OCEAN : biome;
+        return isSnowy(baseBiome) ? Biomes.FROZEN_OCEAN : oceanBiome;
     }
     
     @Override
