@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.api.registry;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 
 public final class ModernBetaRegistry<T> {
     private final String name;
-    private final Map<ResourceLocation, T> registryEntries;
+    private final Map<ResourceLocation, RegistryEntry<T>> registryEntries;
     
     protected ModernBetaRegistry(String name) {
         this.name = name;
@@ -30,14 +31,14 @@ public final class ModernBetaRegistry<T> {
         if (this.contains(registryKey)) 
             throw new IllegalArgumentException("[Modern Beta] Registry " + this.name + " already contains entry named " + registryKey);
         
-        this.registryEntries.put(registryKey, entry);
+        this.registryEntries.put(registryKey, new RegistryEntry<>(entry));
     }
     
     public T get(ResourceLocation registryKey) {
         if (!this.contains(registryKey))
             throw new NoSuchElementException("[Modern Beta] Registry " + this.name + " does not contain entry named " + registryKey);
         
-        return this.registryEntries.get(registryKey);
+        return this.registryEntries.get(registryKey).entry;
     }
     
     public T getOrElse(ResourceLocation registryKey, ResourceLocation alternateKey) {
@@ -48,7 +49,7 @@ public final class ModernBetaRegistry<T> {
             return this.get(alternateKey);
         }
         
-        return this.registryEntries.get(registryKey);
+        return this.registryEntries.get(registryKey).entry;
     }
     
     public T getOrElse(ResourceLocation registryKey, T alternateValue) {
@@ -59,7 +60,7 @@ public final class ModernBetaRegistry<T> {
             return alternateValue;
         }
         
-        return this.registryEntries.get(registryKey);
+        return this.registryEntries.get(registryKey).entry;
     }
     
     public boolean contains(ResourceLocation registryKey) {
@@ -73,7 +74,7 @@ public final class ModernBetaRegistry<T> {
     public List<T> getValues() {
         return this.registryEntries.entrySet()
             .stream()
-            .map(e -> e.getValue())
+            .map(e -> e.getValue().entry)
             .collect(Collectors.toList());
     }
     
@@ -84,12 +85,23 @@ public final class ModernBetaRegistry<T> {
     }
     
     public Set<Entry<ResourceLocation, T>> getEntrySet() {
-        return this.registryEntries.entrySet();
+        return this.registryEntries.entrySet()
+            .stream()
+            .map(e -> new SimpleEntry<ResourceLocation, T>(e.getKey(), e.getValue().entry))
+            .collect(Collectors.toSet());
     }
     
     public Entry<ResourceLocation, T> getRandomEntry(Random random) {
-        List<Entry<ResourceLocation, T>> entries = new ArrayList<>(this.registryEntries.entrySet());
+        List<Entry<ResourceLocation, T>> entries = new ArrayList<>(this.getEntrySet());
         
         return entries.get(random.nextInt(entries.size()));
+    }
+    
+    private static class RegistryEntry<T> {
+        private final T entry;
+        
+        private RegistryEntry(T entry) {
+            this.entry = entry;
+        }
     }
 }
