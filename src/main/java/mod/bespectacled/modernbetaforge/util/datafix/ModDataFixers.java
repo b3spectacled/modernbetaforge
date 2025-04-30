@@ -24,6 +24,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_5_2_0 = 1520;
     private static final int DATA_VERSION_V1_6_0_0 = 1600;
     private static final int DATA_VERSION_V1_6_1_0 = 1610;
+    private static final int DATA_VERSION_V1_7_0_0 = 1700;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -60,7 +61,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
 
     public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = createModDataFix(
@@ -77,7 +81,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix SKYLANDS_SURFACE_FIX = createModDataFix(
@@ -91,7 +98,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix SINGLE_BIOME_FIX = createModDataFix(
@@ -102,7 +112,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix INDEV_HOUSE_FIX = createModDataFix(
@@ -113,7 +126,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix RESOURCE_LOCATION_FIX = createModDataFix(
@@ -127,7 +143,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix SCALE_NOISE_FIX = createModDataFix(
@@ -139,7 +158,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID  
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix LAYER_SIZE_FIX = createModDataFix(
@@ -150,7 +172,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
 
     public static final ModDataFix CAVE_CARVER_NONE_FIX = createModDataFix(
@@ -158,7 +183,10 @@ public class ModDataFixers {
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
 
     public static final ModDataFix SPAWN_LOCATOR_FIX = createModDataFix(
@@ -166,24 +194,43 @@ public class ModDataFixers {
         DataFixTags.FIX_WORLD_SPAWNER,
         
         // Added in 1.6.0.0 to replace useLavaOceans
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
 
     public static final ModDataFix DEFAULT_FLUID_FIX = createModDataFix(
         DATA_VERSION_V1_6_0_0,
-        DataFixTags.FIX_DEFAULT_FLUID
+        DataFixTags.FIX_DEFAULT_FLUID,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix DISKS_FIX = createModDataFix(
         DATA_VERSION_V1_6_1_0,
         DataFixTags.FIX_SAND_DISKS,
         DataFixTags.FIX_GRAVEL_DISKS,
-        DataFixTags.FIX_CLAY_DISKS
+        DataFixTags.FIX_CLAY_DISKS,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     public static final ModDataFix DOUBLE_PLANT_FIX = createModDataFix(
         DATA_VERSION_V1_6_1_0,
-        DataFixTags.FIX_DOUBLE_PLANTS
+        DataFixTags.FIX_DOUBLE_PLANTS,
+        
+        // Added in 1.7.0.0 to replace useModdedBiomes
+        DataFixTags.FIX_BOP_COMPAT
+    );
+    
+    public static final ModDataFix LAYER_VERSION_FIX = createModDataFix(
+        DATA_VERSION_V1_7_0_0,
+        DataFixTags.FIX_SNOWY_BIOME_CHANCE,
+        DataFixTags.FIX_LAYER_VERSION_1600,
+        DataFixTags.FIX_BOP_COMPAT
     );
     
     private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {

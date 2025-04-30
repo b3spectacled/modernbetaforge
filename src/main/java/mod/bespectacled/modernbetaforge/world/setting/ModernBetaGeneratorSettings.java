@@ -36,6 +36,7 @@ import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
+import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
@@ -170,6 +171,7 @@ public class ModernBetaGeneratorSettings {
     public final int riverSize;
     public final String layerType;
     public final int layerSize;
+    public final int layerVersion;
     public final int snowyBiomeChance;
     
     public final float endIslandOffset;
@@ -402,6 +404,7 @@ public class ModernBetaGeneratorSettings {
         this.riverSize = factory.riverSize;
         this.layerType = factory.layerType;
         this.layerSize = factory.layerSize;
+        this.layerVersion = factory.layerVersion;
         this.snowyBiomeChance = factory.snowyBiomeChance;
         
         this.endIslandOffset = factory.endIslandOffset;
@@ -697,6 +700,7 @@ public class ModernBetaGeneratorSettings {
         public int riverSize;
         public String layerType;
         public int layerSize;
+        public int layerVersion;
         public int snowyBiomeChance;
         
         public float endIslandOffset;
@@ -929,6 +933,7 @@ public class ModernBetaGeneratorSettings {
             this.riverSize = 4;
             this.layerType = GenLayerType.VANILLA.id;
             this.layerSize = 4;
+            this.layerVersion = GenLayerVersion.getVersion();
             this.snowyBiomeChance = 8;
             
             this.endIslandOffset = 100.0f;
@@ -1184,6 +1189,7 @@ public class ModernBetaGeneratorSettings {
                 this.riverSize == factory.riverSize &&
                 this.layerType.equals(factory.layerType) &&
                 this.layerSize == factory.layerSize &&
+                this.layerVersion == factory.layerVersion &&
                 this.snowyBiomeChance == factory.snowyBiomeChance &&
                         
                 Float.compare(factory.endIslandOffset, this.endIslandOffset) == 0 &&
@@ -1420,6 +1426,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.riverSize;
             hashCode = 31 * hashCode + this.layerType.hashCode();
             hashCode = 31 * hashCode + this.layerSize;
+            hashCode = 31 * hashCode + this.layerVersion;
             hashCode = 31 * hashCode + this.snowyBiomeChance;
             
             hashCode = 31 * hashCode + ((this.endIslandOffset == 0.0f) ? 0 : Float.floatToIntBits(this.endIslandOffset));
@@ -1682,6 +1689,7 @@ public class ModernBetaGeneratorSettings {
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 factory.layerType = JsonUtils.getString(jsonObject, NbtTags.LAYER_TYPE, factory.layerType);
                 factory.layerSize = JsonUtils.getInt(jsonObject, NbtTags.LAYER_SIZE, factory.layerSize);
+                factory.layerVersion = JsonUtils.getInt(jsonObject, NbtTags.LAYER_VERSION, factory.layerVersion);
                 factory.snowyBiomeChance = JsonUtils.getInt(jsonObject, NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
                 
                 factory.endIslandOffset = JsonUtils.getFloat(jsonObject, NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
@@ -2054,6 +2062,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
             jsonObject.addProperty(NbtTags.LAYER_SIZE, factory.layerSize);
+            jsonObject.addProperty(NbtTags.LAYER_VERSION, factory.layerVersion);
             jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
 
             jsonObject.addProperty(NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);

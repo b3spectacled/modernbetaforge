@@ -223,6 +223,10 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_GRAVEL_DISKS, new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_CLAY_DISKS, new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_DOUBLE_PLANTS, new DataFix(NbtTags.USE_DOUBLE_PLANTS, DataFixers::fixDoublePlants));
+
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SNOWY_BIOME_CHANCE, new DataFix(NbtTags.SNOWY_BIOME_CHANCE, DataFixers::fixSnowyBiomeChance));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_VERSION_1600, new DataFix(NbtTags.LAYER_VERSION, DataFixers::fixLayerVersion1600));
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_BOP_COMPAT, new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat));
     }
 
     @SideOnly(Side.CLIENT)

@@ -47,7 +47,11 @@ public class ModernBetaGenLayer {
         genLayer = new GenLayerOceanlessAddSnow(2L, genLayer, snowyBiomeChance);
         genLayer = new GenLayerOceanlessAddMoreSnow(2L, genLayer);
         genLayer = new GenLayerOceanlessAddForest(3L, genLayer);
-        genLayer = new GenLayerOceanlessAddMoreSnow(3L, genLayer, 3);
+        
+        if (settings.layerVersion >= GenLayerVersion.LAYER_VERSION_V1_7_0_0) {
+            genLayer = new GenLayerOceanlessAddMoreSnow(3L, genLayer, 3);
+        }
+        
         genLayer = addClimateLayers(genLayer);
         genLayer = new GenLayerZoom(2002L, genLayer);
         genLayer = new GenLayerZoom(2003L, genLayer);

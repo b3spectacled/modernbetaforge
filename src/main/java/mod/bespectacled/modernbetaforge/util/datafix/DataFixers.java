@@ -11,11 +11,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
+import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Blocks;
@@ -296,6 +300,22 @@ public class DataFixers {
     
     public static void fixDoublePlants(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
         factory.useDoublePlants = factory.useNewFlowers;
+    }
+    
+    public static void fixSnowyBiomeChance(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.snowyBiomeChance = 6;
+    }
+    
+    public static void fixLayerVersion1600(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        factory.layerVersion = GenLayerVersion.LAYER_VERSION_V1_6_0_0;
+    }
+    
+    public static void fixBoPCompat(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID) && factory.customProperties.containsKey(CompatBiomesOPlenty.KEY_USE_COMPAT)) {
+            boolean useModdedBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_MODDED_BIOMES, true);
+            
+            factory.customProperties.put(CompatBiomesOPlenty.KEY_USE_COMPAT, new BooleanProperty(useModdedBiomes));
+        }
     }
     
     private static boolean isResourceFormat(String resourceString) {

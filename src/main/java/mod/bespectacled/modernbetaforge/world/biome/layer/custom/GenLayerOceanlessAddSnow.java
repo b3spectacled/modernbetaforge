@@ -6,10 +6,11 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerOceanlessAddSnow extends GenLayer {
+    public static final int DEFAULT_SNOWY_BIOME_CHANCE = 6; // Vanilla is 6
+    
     private static final int FOREST = Biome.getIdForBiome(Biomes.FOREST);
     private static final int EXTREME_HILLS = Biome.getIdForBiome(Biomes.EXTREME_HILLS);
     private static final int PLAINS = Biome.getIdForBiome(Biomes.PLAINS);
-    private static final int DEFAULT_SNOWY_BIOME_CHANCE = 6; // Vanilla is 6
     
     private final int snowyBiomeChance;
     
