@@ -67,11 +67,7 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
     
     @Override
     public Biome getBeachBiome(int x, int z) {
-        Biome biome = this.getBiome(x, z);
-        
-        return isSnowy(biome) ?
-            Biomes.COLD_BEACH :
-            BiomeDictionary.hasType(biome, Type.MOUNTAIN) ? Biomes.STONE_BEACH : Biomes.BEACH;
+        return isSnowy(this.getBiome(x, z)) ? Biomes.COLD_BEACH : Biomes.BEACH;
     }
     
     @Override

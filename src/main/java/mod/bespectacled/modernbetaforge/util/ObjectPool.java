@@ -52,7 +52,6 @@ public class ObjectPool<T> {
         this.push(this.used, t, now);
         
         return t;
-        
     }
     
     private void push(Map<T, Long> map, T t, long now) {
