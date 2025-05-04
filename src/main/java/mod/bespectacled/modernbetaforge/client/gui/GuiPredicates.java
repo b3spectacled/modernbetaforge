@@ -567,7 +567,10 @@ public class GuiPredicates {
             settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
             GuiIdentifiers.PG2_S_BIOME_SZ
         );
-        SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(BIOME_SIZE_TEST::test, GuiIdentifiers.PG2_S_SNOWY_CHANCE);
+        SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(
+            settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
+            GuiIdentifiers.PG2_S_SNOWY_CHANCE
+        );
         
         CLAY_SIZE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_SIZE);
         CLAY_COUNT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_CNT);
