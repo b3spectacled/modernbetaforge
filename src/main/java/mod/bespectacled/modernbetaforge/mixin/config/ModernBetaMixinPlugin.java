@@ -40,9 +40,7 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void onLoad(String mixinPackage) { 
-        ConfigManager.sync(ModernBeta.MODID, Config.Type.INSTANCE);
-    }
+    public void onLoad(String mixinPackage) { }
 
     @Override
     public String getRefMapperConfig() {
