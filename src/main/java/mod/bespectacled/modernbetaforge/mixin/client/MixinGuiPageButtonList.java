@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiColoredLabelEntry;
-import mod.bespectacled.modernbetaforge.mixin.accessor.AccessorGuiSlot;
+import mod.bespectacled.modernbetaforge.mixin.client.accessor.AccessorGuiSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiPageButtonList;

@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.mixin.accessor;
+package mod.bespectacled.modernbetaforge.mixin.client.accessor;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;

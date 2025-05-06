@@ -4,6 +4,7 @@
     "compatibilityLevel": "JAVA_8",
     "minVersion": "0.8",
     "required": true,
+    "plugin": "mod.bespectacled.modernbetaforge.mixin.config.ModernBetaMixinPlugin",
     "injectors": {
         "defaultRequire": 0
     },
@@ -25,8 +26,8 @@
       "client.MixinEntityRenderer",
       "client.MixinGuiCreateWorld",
       "client.MixinWorld",
-      "accessor.AccessorEntityRenderer",
-      "accessor.AccessorGuiSlot"
+      "client.accessor.AccessorEntityRenderer",
+      "client.accessor.AccessorGuiSlot"
     ],
     "server": []
 }
