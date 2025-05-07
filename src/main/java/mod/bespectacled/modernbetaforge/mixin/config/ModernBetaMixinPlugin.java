@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import com.google.common.collect.ImmutableMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 
 /*
  * This plugin is of dubious usefulness at the moment;
