@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.input.Keyboard;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -46,6 +48,7 @@ import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
+import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
@@ -87,6 +90,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private static final int RGB_INFO = 10526880;
     private static final int RGB_HEADER = 16777215;
+    
+    private static final int ARGB_KEY_ICON_BACK_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 120, 120, 120);
+    private static final int ARGB_KEY_ICON_BORDER_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 160, 160, 160);
+    private static final int ARGB_KEY_ICON_BACK_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 40, 40, 40);
+    private static final int ARGB_KEY_ICON_BORDER_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 0, 0, 0);
+    private static final int RGB_KEY_ICON_TEXT_ACTIVE = 16777215;
+    private static final int RGB_KEY_ICON_TEXT_INACTIVE = 10526880;
+    
+    private static final int KEY_ICON_WIDTH = 14;
     
     private static final int PAGE_TITLE_HEIGHT = 6;
     
@@ -140,6 +152,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private int customId;
     private BiMap<Integer, ResourceLocation> customIds;
+    
+    private int tabStartX;
+    private int tabEndX;
     
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
         this.title = I18n.format("options.customizeTitle");
@@ -767,7 +782,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private void createPageTabs() {
-        int x = this.width / 2 - (TAB_BUTTON_WIDTH * this.pageList.getPageCount() / 2) - (TAB_SPACE *  this.pageList.getPageCount() / 2);
+        this.tabStartX = this.width / 2 - (TAB_BUTTON_WIDTH * this.pageList.getPageCount() / 2) - (TAB_SPACE *  this.pageList.getPageCount() / 2);
+        int x = this.tabStartX;
         
         this.pageTabMap = new LinkedHashMap<>();
         for (int i = 0; i < this.pageList.getPageCount(); ++i) {
@@ -787,6 +803,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             x += TAB_BUTTON_WIDTH + TAB_SPACE;
         }
+        
+        this.tabEndX = x - TAB_SPACE;
     }
     
     @Override
@@ -1662,10 +1680,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        boolean leftKeyActive = this.pageList.getPage() > 0;
+        boolean rightKeyActive = this.pageList.getPage() < this.pageList.getPageCount() - 1;
+        
         this.drawDefaultBackground();
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, 16777215);
+        this.drawKeyIcon("A", this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, leftKeyActive);
+        this.drawKeyIcon("D", this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, rightKeyActive);
+        
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         if (this.confirmMode != 0) {
@@ -1791,16 +1815,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             return;
         }
         
+        boolean usedSpecialKey = false;
+        
         switch (keyCode) {
-            case 208:
+            case Keyboard.KEY_DOWN:
                 this.modifyFocusValue(-1.0f);
+                usedSpecialKey = true;
                 break;
-            case 200:
+            case Keyboard.KEY_UP:
                 this.modifyFocusValue(1.0f);
+                usedSpecialKey = true;
                 break;
-            default:
-                this.pageList.onKeyPressed(typedChar, keyCode);
+            case Keyboard.KEY_A:
+                usedSpecialKey = this.modifyPageValue(-1);
                 break;
+            case Keyboard.KEY_D:
+                usedSpecialKey = this.modifyPageValue(1);
+                break;
+        }
+        
+        if (!usedSpecialKey) {
+            this.pageList.onKeyPressed(typedChar, keyCode);
         }
     }
 
@@ -2236,6 +2271,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setEntryValue(guiTextId, guiTextString);
     }
     
+    private boolean modifyPageValue(int amount) {
+        Gui guiComponent = this.pageList.getFocusedControl();
+        if (guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
+            return false;
+        }
+        
+        int pageNext = this.pageList.getPage() + amount;
+        int pageCount = this.pageList.getPageCount();
+        
+        if (pageNext >= 0 && pageNext < pageCount) {
+            this.pageList.setPage(pageNext);
+            this.updatePageControls();
+            this.playSound();
+        }
+        
+        return true;
+    }
+    
     private void setTextButton(int id, String value) {
         Gui guiComponent = this.pageList.getComponent(id);
         if (guiComponent != null) {
@@ -2343,6 +2396,19 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return false;
+    }
+    
+    private void drawKeyIcon(String key, int x, int y, boolean active) {
+        int colorBorder = active ? ARGB_KEY_ICON_BORDER_ACTIVE : ARGB_KEY_ICON_BORDER_INACTIVE;
+        int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
+        int colorText = active ? RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
+        
+        drawHorizontalLine(x - 1, x + KEY_ICON_WIDTH, y - 1, colorBorder);
+        drawHorizontalLine(x - 1, x + KEY_ICON_WIDTH, y + KEY_ICON_WIDTH, colorBorder);
+        drawVerticalLine(x - 1, y - 1, y + KEY_ICON_WIDTH, colorBorder);
+        drawVerticalLine(x + KEY_ICON_WIDTH, y - 1, y + KEY_ICON_WIDTH, colorBorder);
+        drawRect(x + 1, y + 1, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH - 1, colorBack);
+        this.drawCenteredString(this.fontRenderer, key, x + KEY_ICON_WIDTH / 2, y + KEY_ICON_WIDTH / 4, colorText);
     }
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
