@@ -95,8 +95,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int ARGB_KEY_ICON_BORDER_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 160, 160, 160);
     private static final int ARGB_KEY_ICON_BACK_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 40, 40, 40);
     private static final int ARGB_KEY_ICON_BORDER_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 0, 0, 0);
-    private static final int RGB_KEY_ICON_TEXT_ACTIVE = 16777215;
-    private static final int RGB_KEY_ICON_TEXT_INACTIVE = 10526880;
+    private static final int RGB_KEY_ICON_TEXT_ACTIVE = 13158600;
+    private static final int RGB_KEY_ICON_TEXT_INACTIVE = 7895160;
     
     private static final int KEY_ICON_WIDTH = 14;
     
@@ -2403,8 +2403,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
         int colorText = active ? RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
         
-        drawHorizontalLine(x - 1, x + KEY_ICON_WIDTH, y - 1, colorBorder);
-        drawHorizontalLine(x - 1, x + KEY_ICON_WIDTH, y + KEY_ICON_WIDTH, colorBorder);
+        drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y - 1, colorBorder);
+        drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH, colorBorder);
         drawVerticalLine(x - 1, y - 1, y + KEY_ICON_WIDTH, colorBorder);
         drawVerticalLine(x + KEY_ICON_WIDTH, y - 1, y + KEY_ICON_WIDTH, colorBorder);
         drawRect(x + 1, y + 1, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH - 1, colorBack);
