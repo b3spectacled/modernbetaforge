@@ -99,8 +99,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private float prevProgress;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
-    private boolean hoveredSeedField;
-    private boolean hoveredMap;
     private boolean copiedSeedField;
     private boolean copiedTpCommand;
     private long copiedSeedFieldTime;
@@ -161,8 +159,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
-        this.hoveredSeedField = this.seedFieldBounds.inBounds(mouseX, mouseY);
-        this.hoveredMap = this.mapBounds.inBounds(mouseX, mouseY);
+        this.seedFieldBounds.updateHovered(mouseX, mouseY);
+        this.mapBounds.updateHovered(mouseX, mouseY);
     }
     
     @Override
@@ -265,7 +263,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         String seedField = this.getFormattedSeed();
         int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
         int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
-        int seedColor = this.hoveredSeedField ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_GREY : RGB_YELLOW : RGB_WHITE;
+        int seedColor = this.seedFieldBounds.isHovered() ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_GREY : RGB_YELLOW : RGB_WHITE;
         int seedFieldX = this.width / 2 + seedTextLen / 2 - seedFieldLen;
         int seedFieldHeight = this.height / 2 + viewportSize / 2;
         
@@ -280,7 +278,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
         }
         
-        if (this.hoveredSeedField && !this.copiedSeedField && !this.copiedTpCommand) {
+        if (this.seedFieldBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand) {
             this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
             
         } else if (this.copiedSeedField) {
@@ -374,7 +372,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == 0 && this.hoveredSeedField) {
+        if (mouseButton == 0 && this.seedFieldBounds.isHovered()) {
             GuiScreen.setClipboardString(this.getFormattedSeed());
             ModernBeta.log(I18n.format(PREFIX + "copied"));
             
@@ -384,7 +382,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.copiedTpCommand = false;
         }
         
-        if (mouseButton == 0 && this.hoveredMap && this.state == ProgressState.LOADED) {
+        if (mouseButton == 0 && this.mapBounds.isHovered() && this.state == ProgressState.LOADED) {
             if (this.tpCallback != null) {
                 GuiScreen.setClipboardString(this.tpCallback.get());
             }

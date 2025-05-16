@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.BiMap;
@@ -97,6 +98,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int ARGB_KEY_ICON_BORDER_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 0, 0, 0);
     private static final int RGB_KEY_ICON_TEXT_ACTIVE = 13158600;
     private static final int RGB_KEY_ICON_TEXT_INACTIVE = 7895160;
+    private static final int RGB_KEY_ICON_TEXT_HOVERED = 13158500;
     
     private static final int KEY_ICON_WIDTH = 14;
     
@@ -126,6 +128,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private ModernBetaGeneratorSettings.Factory settings;
     
     private final Random random;
+    
+    private final GuiBoundsChecker leftKeyBounds;
+    private final GuiBoundsChecker rightKeyBounds;
     
     protected String title;
     protected String subtitle;
@@ -193,6 +198,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)parent;
+        
+        this.leftKeyBounds = new GuiBoundsChecker();
+        this.rightKeyBounds = new GuiBoundsChecker();
         
         this.loadValues(string);
     }
@@ -865,6 +873,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.confirmMode == GuiIdentifiers.FUNC_DFLT) {
             this.setConfirmationControls(true);
         }
+        
+        this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, KEY_ICON_WIDTH, KEY_ICON_WIDTH);
+        this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, KEY_ICON_WIDTH, KEY_ICON_WIDTH);
     }
     
     @Override
@@ -874,6 +885,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (!this.tabClicked && this.confirmMode != GuiIdentifiers.FUNC_DFLT) {
             this.pageList.handleMouseInput();
         }
+        
+        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        
+        this.leftKeyBounds.updateHovered(mouseX, mouseY);
+        this.rightKeyBounds.updateHovered(mouseX, mouseY);
     }
     
     @Override
@@ -1687,8 +1704,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, 16777215);
-        this.drawKeyIcon("A", this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, leftKeyActive);
-        this.drawKeyIcon("D", this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, rightKeyActive);
+        this.drawKeyIcon("A", this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, leftKeyActive, this.leftKeyBounds.isHovered());
+        this.drawKeyIcon("D", this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, rightKeyActive, this.rightKeyBounds.isHovered());
         
         super.drawScreen(mouseX, mouseY, partialTicks);
         
@@ -1842,6 +1859,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
+        
+        if (this.leftKeyBounds.isHovered()) {
+            this.modifyPageValue(-1);
+        }
+        
+        if (this.rightKeyBounds.isHovered()) {
+            this.modifyPageValue(1);
+        }
+        
         this.clicked = true;
         
         if (this.isMouseOverPageTab(mouseX, mouseY)) {
@@ -2398,10 +2424,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return false;
     }
     
-    private void drawKeyIcon(String key, int x, int y, boolean active) {
+    private void drawKeyIcon(String key, int x, int y, boolean active, boolean hovered) {
         int colorBorder = active ? ARGB_KEY_ICON_BORDER_ACTIVE : ARGB_KEY_ICON_BORDER_INACTIVE;
         int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
-        int colorText = active ? RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
+        int colorText = active ? hovered ? RGB_KEY_ICON_TEXT_HOVERED : RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
         
         drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y - 1, colorBorder);
         drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH, colorBorder);
