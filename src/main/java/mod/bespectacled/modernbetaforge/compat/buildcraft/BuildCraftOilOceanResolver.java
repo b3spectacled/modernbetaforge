@@ -25,7 +25,12 @@ public class BuildCraftOilOceanResolver extends BiomeResolverAddSingleBiome {
     }
     
     @Override
+    public boolean useCustomResolver() {
+        return this.useCompat && !this.isReleaseBiomeSource;
+    }
+    
+    @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context -> !this.isReleaseBiomeSource && this.useCompat && BiomeDictionary.hasType(context.getBiome(), Type.OCEAN);
+        return context -> BiomeDictionary.hasType(context.getBiome(), Type.OCEAN);
     }
 }

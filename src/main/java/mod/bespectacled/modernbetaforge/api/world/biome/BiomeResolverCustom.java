@@ -7,6 +7,15 @@ import net.minecraft.world.biome.Biome;
 
 public interface BiomeResolverCustom {
     /**
+     * Check if the predicate should be added to the list of injection rules.
+     * 
+     * @return Whether the predicate should be added to the list of injection rules.
+     */
+    default boolean useCustomResolver() {
+        return true;
+    }
+    
+    /**
      * Gets the predicate with which to check whether to use {@link #getCustomBiome(int, int) getCustomBiome}.
      * 
      * @return The predicate to check whether to resolve the custom biome.

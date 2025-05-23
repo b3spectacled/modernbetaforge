@@ -13,9 +13,11 @@ import net.minecraft.world.biome.Biome;
 
 public class BiomeInjectionRules {
     private final Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap;
+    private final boolean isEmpty;
     
     private BiomeInjectionRules(Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap) {
         this.ruleMap = ruleMap;
+        this.isEmpty = checkIfEmpty(this.ruleMap);
     }
     
     public Biome test(BiomeInjectionContext context, int x, int z, BiomeInjectionStep step) {
@@ -36,11 +38,23 @@ public class BiomeInjectionRules {
     }
     
     public boolean isEmpty() {
-        return this.ruleMap.isEmpty();
+        return this.isEmpty;
     }
     
     private List<BiomeInjectionRule> getRules(BiomeInjectionStep step) {
         return this.ruleMap.get(step);
+    }
+    
+    private static boolean checkIfEmpty(Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap) {
+        boolean isEmpty = true;
+        
+        for (BiomeInjectionStep step : ruleMap.keySet()) {
+            if (!ruleMap.get(step).isEmpty()) {
+                isEmpty = false;
+            }
+        }
+        
+        return isEmpty;
     }
 
     public static class Builder {

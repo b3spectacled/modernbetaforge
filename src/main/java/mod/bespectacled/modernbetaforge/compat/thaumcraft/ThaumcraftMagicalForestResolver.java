@@ -23,9 +23,14 @@ public class ThaumcraftMagicalForestResolver extends BiomeResolverAddSingleBiome
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatThaumcraft.KEY_USE_COMPAT);
     }
+    
+    @Override
+    public boolean useCustomResolver() {
+        return this.useCompat && !this.isReleaseBiomeSource;
+    }
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context -> !this.isReleaseBiomeSource && this.useCompat && BiomeDictionary.hasType(context.getBiome(), Type.FOREST);
+        return context -> BiomeDictionary.hasType(context.getBiome(), Type.FOREST);
     }
 }

@@ -21,12 +21,15 @@ public class BiomesOPlentyCoralReefResolver extends BiomeResolverAddSingleBiome 
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);
     }
+    
+    @Override
+    public boolean useCustomResolver() {
+        return this.useCompat && this.isReleaseBiomeSource;
+    }
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
         return context ->
-            this.isReleaseBiomeSource &&
-            this.useCompat &&
             BiomeDictionary.hasType(context.getBiome(), Type.OCEAN) &&
             !BiomeDictionary.hasType(context.getBiome(), Type.COLD);
     }
