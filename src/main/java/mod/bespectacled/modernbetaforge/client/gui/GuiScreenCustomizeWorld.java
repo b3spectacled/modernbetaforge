@@ -273,6 +273,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null,
             createGuiButton(GuiIdentifiers.PG0_B_USE_OCEAN, NbtTags.REPLACE_OCEAN_BIOMES, this.settings.replaceOceanBiomes),
             createGuiButton(GuiIdentifiers.PG0_B_USE_BEACH, NbtTags.REPLACE_BEACH_BIOMES, this.settings.replaceBeachBiomes),
+            createGuiButton(GuiIdentifiers.PG0_B_USE_RIVER, NbtTags.REPLACE_RIVER_BIOMES, this.settings.replaceRiverBiomes),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, RGB_HEADER, "page0", "overworld"),
             null,
@@ -1189,6 +1191,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG0_B_USE_BEACH:
                     this.settings.replaceBeachBiomes = entryValue;
                     break;
+                case GuiIdentifiers.PG0_B_USE_RIVER:
+                    this.settings.replaceRiverBiomes = entryValue;
+                    break;
+                    
                 case GuiIdentifiers.PG2_B_USE_GRASS:
                     this.settings.useTallGrass = entryValue;
                     break;

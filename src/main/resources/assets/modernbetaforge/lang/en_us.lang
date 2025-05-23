@@ -101,6 +101,7 @@ createWorld.customize.custom.modernbetaforge.defaultFluid=Default Fluid
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.modernbetaforge.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.modernbetaforge.replaceBeachBiomes=Beach Biomes
+createWorld.customize.custom.modernbetaforge.replaceRiverBiomes=River Biomes
 
 # Page 1 - Other Feature Settings
 createWorld.customize.custom.modernbetaforge.caveWidth=Cave Width

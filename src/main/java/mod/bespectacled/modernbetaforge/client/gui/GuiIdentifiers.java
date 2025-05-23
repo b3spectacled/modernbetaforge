@@ -38,39 +38,40 @@ public class GuiIdentifiers {
     
     public static final int PG0_B_USE_OCEAN = 106;
     public static final int PG0_B_USE_BEACH = 107;
+    public static final int PG0_B_USE_RIVER = 108;
     
-    public static final int PG0_S_SEA_LEVEL = 108;
-    public static final int PG0_B_USE_HOLDS = 109;
-    public static final int PG0_B_USE_VILLAGES = 110;
-    public static final int PG0_B_USE_VILLAGE_VARIANTS = 111;
-    public static final int PG0_B_USE_SHAFTS = 112;
-    public static final int PG0_B_USE_TEMPLES = 113;
-    public static final int PG0_B_USE_MONUMENTS = 114;
-    public static final int PG0_B_USE_MANSIONS = 115;
-    public static final int PG0_B_USE_RAVINES = 116;
-    public static final int PG0_B_USE_DUNGEONS = 117;
-    public static final int PG0_S_DUNGEON_CHANCE = 118;
-    public static final int PG0_B_USE_WATER_LAKES = 119;
-    public static final int PG0_S_WATER_LAKE_CHANCE = 120;
-    public static final int PG0_B_USE_LAVA_LAKES = 121;
-    public static final int PG0_S_LAVA_LAKE_CHANCE = 122;
-    public static final int PG0_B_USE_LAVA_OCEANS = 123;
-    public static final int PG0_B_USE_SANDSTONE = 124;
+    public static final int PG0_S_SEA_LEVEL = 109;
+    public static final int PG0_B_USE_HOLDS = 110;
+    public static final int PG0_B_USE_VILLAGES = 111;
+    public static final int PG0_B_USE_VILLAGE_VARIANTS = 112;
+    public static final int PG0_B_USE_SHAFTS = 113;
+    public static final int PG0_B_USE_TEMPLES = 114;
+    public static final int PG0_B_USE_MONUMENTS = 115;
+    public static final int PG0_B_USE_MANSIONS = 116;
+    public static final int PG0_B_USE_RAVINES = 117;
+    public static final int PG0_B_USE_DUNGEONS = 118;
+    public static final int PG0_S_DUNGEON_CHANCE = 119;
+    public static final int PG0_B_USE_WATER_LAKES = 120;
+    public static final int PG0_S_WATER_LAKE_CHANCE = 121;
+    public static final int PG0_B_USE_LAVA_LAKES = 122;
+    public static final int PG0_S_LAVA_LAKE_CHANCE = 123;
+    public static final int PG0_B_USE_LAVA_OCEANS = 124;
+    public static final int PG0_B_USE_SANDSTONE = 125;
     
-    public static final int PG0_B_USE_OLD_NETHER = 125;
-    public static final int PG0_B_USE_NETHER_CAVES = 126;
-    public static final int PG0_B_USE_FORTRESSES = 127;
-    public static final int PG0_B_USE_LAVA_POCKETS = 128;
+    public static final int PG0_B_USE_OLD_NETHER = 126;
+    public static final int PG0_B_USE_NETHER_CAVES = 127;
+    public static final int PG0_B_USE_FORTRESSES = 128;
+    public static final int PG0_B_USE_LAVA_POCKETS = 129;
     
-    public static final int PG0_S_CAVE_WIDTH = 129;
-    public static final int PG0_S_CAVE_HEIGHT = 130;
-    public static final int PG0_S_CAVE_COUNT = 131;
-    public static final int PG0_S_CAVE_CHANCE = 132;
+    public static final int PG0_S_CAVE_WIDTH = 130;
+    public static final int PG0_S_CAVE_HEIGHT = 131;
+    public static final int PG0_S_CAVE_COUNT = 132;
+    public static final int PG0_S_CAVE_CHANCE = 133;
     
-    public static final int PG0_S_BLOCK = 133;
-    public static final int PG0_S_FLUID = 134;
+    public static final int PG0_S_BLOCK = 134;
+    public static final int PG0_S_FLUID = 135;
     
-    public static final int PG0_B_USE_UNDERWATER_CAVES = 135;
+    public static final int PG0_B_USE_UNDERWATER_CAVES = 136;
     
     public static final int PG0_B_CHUNK = 190;
     public static final int PG0_B_BIOME = 191;

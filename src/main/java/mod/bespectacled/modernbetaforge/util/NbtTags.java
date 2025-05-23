@@ -13,6 +13,7 @@ public class NbtTags {
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
     public static final String REPLACE_BEACH_BIOMES = "replaceBeachBiomes";
+    public static final String REPLACE_RIVER_BIOMES = "replaceRiverBiomes";
     
     public static final String CAVE_WIDTH = "caveWidth";
     public static final String CAVE_HEIGHT = "caveHeight";

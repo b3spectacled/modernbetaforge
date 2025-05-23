@@ -79,6 +79,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
         boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
+        boolean replaceRivers = this.getGeneratorSettings().replaceRiverBiomes;
         
         BiomeInjectionRules.Builder builder = new BiomeInjectionRules.Builder();
     
@@ -110,7 +111,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             builder.add(oceanPredicate, biomeResolverOcean::getOceanBiome, BiomeInjectionStep.PRE_SURFACE);
         }
         
-        if (biomeSource instanceof BiomeResolverRiver) {
+        if (replaceRivers && biomeSource instanceof BiomeResolverRiver) {
             BiomeResolverRiver biomeResolverRiver = (BiomeResolverRiver)biomeSource;
             
             builder.add(riverPredicate, biomeResolverRiver::getRiverBiome, BiomeInjectionStep.PRE_SURFACE);

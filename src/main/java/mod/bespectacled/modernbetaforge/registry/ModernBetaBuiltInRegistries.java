@@ -257,6 +257,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SINGLE_BIOME, GuiPredicates.SINGLE_BIOME_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_OCEAN, GuiPredicates.REPLACE_OCEAN_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_BEACH, GuiPredicates.REPLACE_BEACH_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.REPLACE_RIVER, GuiPredicates.REPLACE_RIVER_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SEA_LEVEL, GuiPredicates.SEA_LEVEL_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_WIDTH, GuiPredicates.CAVE_WIDTH_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.CAVE_HEIGHT, GuiPredicates.CAVE_HEIGHT_TEST);

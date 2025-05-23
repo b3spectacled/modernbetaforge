@@ -14,6 +14,7 @@ public class GuiPredicate {
     public static final ResourceLocation SINGLE_BIOME = createRegistryKey(NbtTags.SINGLE_BIOME);
     public static final ResourceLocation REPLACE_OCEAN = createRegistryKey(NbtTags.REPLACE_OCEAN_BIOMES);
     public static final ResourceLocation REPLACE_BEACH = createRegistryKey(NbtTags.REPLACE_BEACH_BIOMES);
+    public static final ResourceLocation REPLACE_RIVER = createRegistryKey(NbtTags.REPLACE_RIVER_BIOMES);
     public static final ResourceLocation SEA_LEVEL = createRegistryKey(NbtTags.SEA_LEVEL);
     public static final ResourceLocation CAVE_WIDTH = createRegistryKey(NbtTags.CAVE_WIDTH);
     public static final ResourceLocation CAVE_HEIGHT = createRegistryKey(NbtTags.CAVE_HEIGHT);

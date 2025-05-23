@@ -141,6 +141,7 @@ public class ModernBetaGeneratorSettings {
     
     public final boolean replaceOceanBiomes;
     public final boolean replaceBeachBiomes;
+    public final boolean replaceRiverBiomes;
     
     public final float coordinateScale;
     public final float heightScale;
@@ -374,6 +375,7 @@ public class ModernBetaGeneratorSettings {
         
         this.replaceOceanBiomes = factory.replaceOceanBiomes;
         this.replaceBeachBiomes = factory.replaceBeachBiomes;
+        this.replaceRiverBiomes = factory.replaceRiverBiomes;
         
         this.coordinateScale = factory.coordinateScale;
         this.heightScale = factory.heightScale;
@@ -670,6 +672,7 @@ public class ModernBetaGeneratorSettings {
 
         public boolean replaceOceanBiomes;
         public boolean replaceBeachBiomes;
+        public boolean replaceRiverBiomes;
         
         public float coordinateScale;
         public float heightScale;
@@ -903,6 +906,7 @@ public class ModernBetaGeneratorSettings {
             
             this.replaceOceanBiomes = true;
             this.replaceBeachBiomes = true;
+            this.replaceRiverBiomes = true;
             
             this.coordinateScale = 684.412f;
             this.heightScale = 684.412f;
@@ -1158,6 +1162,7 @@ public class ModernBetaGeneratorSettings {
                 
                 this.replaceOceanBiomes == factory.replaceOceanBiomes &&
                 this.replaceBeachBiomes == factory.replaceBeachBiomes &&
+                this.replaceRiverBiomes == factory.replaceRiverBiomes &&
                         
                 Float.compare(factory.coordinateScale, this.coordinateScale) == 0 &&        
                 Float.compare(factory.heightScale, this.heightScale) == 0 &&
@@ -1396,6 +1401,7 @@ public class ModernBetaGeneratorSettings {
             
             hashCode = 31 * hashCode + (this.replaceOceanBiomes ? 1 : 0);
             hashCode = 31 * hashCode + (this.replaceBeachBiomes ? 1 : 0);
+            hashCode = 31 * hashCode + (this.replaceRiverBiomes ? 1 : 0);
             
             hashCode = 31 * hashCode + ((this.coordinateScale == 0.0f) ? 0 : Float.floatToIntBits(this.coordinateScale));
             hashCode = 31 * hashCode + ((this.heightScale == 0.0f) ? 0 : Float.floatToIntBits(this.heightScale));
@@ -1659,6 +1665,7 @@ public class ModernBetaGeneratorSettings {
                 
                 factory.replaceOceanBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
                 factory.replaceBeachBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
+                factory.replaceRiverBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.REPLACE_RIVER_BIOMES, factory.replaceRiverBiomes);
                 
                 factory.coordinateScale = JsonUtils.getFloat(jsonObject, NbtTags.COORDINATE_SCALE, factory.coordinateScale);
                 factory.heightScale = JsonUtils.getFloat(jsonObject, NbtTags.HEIGHT_SCALE, factory.heightScale);
@@ -2032,6 +2039,7 @@ public class ModernBetaGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
+            jsonObject.addProperty(NbtTags.REPLACE_RIVER_BIOMES, factory.replaceRiverBiomes);
             
             jsonObject.addProperty(NbtTags.COORDINATE_SCALE, factory.coordinateScale);
             jsonObject.addProperty(NbtTags.HEIGHT_SCALE, factory.heightScale);

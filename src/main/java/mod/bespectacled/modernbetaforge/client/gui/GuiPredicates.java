@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
@@ -55,6 +56,7 @@ public class GuiPredicates {
     public static final GuiPredicate SINGLE_BIOME_TEST;
     public static final GuiPredicate REPLACE_OCEAN_TEST;
     public static final GuiPredicate REPLACE_BEACH_TEST;
+    public static final GuiPredicate REPLACE_RIVER_TEST;
     public static final GuiPredicate SEA_LEVEL_TEST;
     public static final GuiPredicate CAVE_WIDTH_TEST;
     public static final GuiPredicate CAVE_HEIGHT_TEST;
@@ -431,6 +433,7 @@ public class GuiPredicates {
         SINGLE_BIOME_TEST = new GuiPredicate(settings -> isSingleBiome(settings), GuiIdentifiers.PG0_B_FIXED);
         REPLACE_OCEAN_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverOcean.class), GuiIdentifiers.PG0_B_USE_OCEAN);
         REPLACE_BEACH_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverBeach.class), GuiIdentifiers.PG0_B_USE_BEACH);
+        REPLACE_RIVER_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverRiver.class), GuiIdentifiers.PG0_B_USE_RIVER);
         SEA_LEVEL_TEST = new GuiPredicate(SURFACE_BUILDER_TEST::test, GuiIdentifiers.PG0_S_SEA_LEVEL);
         CAVE_WIDTH_TEST = new GuiPredicate(settings -> !isCarverEqualTo(settings, ModernBetaBuiltInTypes.Carver.RELEASE) && isCarverEnabled(settings), GuiIdentifiers.PG0_S_CAVE_WIDTH);
         CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
