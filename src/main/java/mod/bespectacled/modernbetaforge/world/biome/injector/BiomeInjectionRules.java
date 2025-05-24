@@ -46,15 +46,13 @@ public class BiomeInjectionRules {
     }
     
     private static boolean checkIfEmpty(Map<BiomeInjectionStep, List<BiomeInjectionRule>> ruleMap) {
-        boolean isEmpty = true;
-        
         for (BiomeInjectionStep step : ruleMap.keySet()) {
             if (!ruleMap.get(step).isEmpty()) {
-                isEmpty = false;
+                return false;
             }
         }
         
-        return isEmpty;
+        return true;
     }
 
     public static class Builder {
