@@ -75,6 +75,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final Map<ResourceLocation, MapGenStructure> structures;
     private final Map<ResourceLocation, MapGenBase> carvers;
     
+    @SuppressWarnings("deprecation")
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         

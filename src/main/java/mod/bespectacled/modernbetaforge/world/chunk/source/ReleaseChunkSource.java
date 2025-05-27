@@ -76,7 +76,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     }
 
     @Override
-    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
+    public BiomeInjectionRules.Builder createBiomeInjectionRules(BiomeSource biomeSource) {
         boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         boolean replaceRivers = this.getGeneratorSettings().replaceRiverBiomes;
@@ -131,7 +131,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
             }
         }
         
-        return builder.build();
+        return builder;
     }
     
     @Override

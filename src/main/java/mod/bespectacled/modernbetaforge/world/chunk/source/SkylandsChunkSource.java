@@ -47,8 +47,8 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
-        return new BiomeInjectionRules.Builder().build();
+    public BiomeInjectionRules.Builder createBiomeInjectionRules(BiomeSource biomeSource) {
+        return new BiomeInjectionRules.Builder();
     }
     
     @Override

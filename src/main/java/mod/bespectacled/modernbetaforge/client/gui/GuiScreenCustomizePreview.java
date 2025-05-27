@@ -477,6 +477,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonCancel.enabled = enabled;
     }
     
+    @SuppressWarnings("deprecation")
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(seed, settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(seed, settings);

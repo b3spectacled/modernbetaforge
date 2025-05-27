@@ -425,7 +425,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     @Override
-    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
+    public BiomeInjectionRules.Builder createBiomeInjectionRules(BiomeSource biomeSource) {
         boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
@@ -463,7 +463,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             }
         }
         
-        return builder.build();
+        return builder;
     }
     
     /**

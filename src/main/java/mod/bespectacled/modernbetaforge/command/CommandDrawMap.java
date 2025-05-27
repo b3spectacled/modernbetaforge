@@ -48,6 +48,7 @@ public class CommandDrawMap extends CommandBase {
         this.path = PATH;
     }
     
+    @SuppressWarnings("deprecation")
     public BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         BiomeProvider biomeProvider = worldServer.getBiomeProvider();

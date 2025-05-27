@@ -236,11 +236,23 @@ public abstract class ChunkSource {
     
     /**
      * Builds the ruleset used for biome injection.
+     * This is deprecated, override {@link #createBiomeInjectionRules(BiomeSource) createBiomeInjectionRules} instead.
      * 
      * @param biomeSource The biome source.
      * @return The built biome injection rules.
      */
+    @Deprecated
     public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
+        return this.createBiomeInjectionRules(biomeSource).build();
+    }
+    
+    /**
+     * Creates the rule set builder used for biome injection.
+     * 
+     * @param biomeSource The biome source.
+     * @return The biome injection rules.
+     */
+    public BiomeInjectionRules.Builder createBiomeInjectionRules(BiomeSource biomeSource) {
         boolean replaceOceans = this.getGeneratorSettings().replaceOceanBiomes;
         boolean replaceBeaches = this.getGeneratorSettings().replaceBeachBiomes;
         
@@ -276,7 +288,7 @@ public abstract class ChunkSource {
             }
         }
         
-        return builder.build();
+        return builder;
     }
     
     /**
