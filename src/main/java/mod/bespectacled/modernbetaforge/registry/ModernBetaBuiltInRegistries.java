@@ -227,6 +227,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_SNOWY_BIOME_CHANCE, new DataFix(NbtTags.SNOWY_BIOME_CHANCE, DataFixers::fixSnowyBiomeChance));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_LAYER_VERSION_1600, new DataFix(NbtTags.LAYER_VERSION, DataFixers::fixLayerVersion1600));
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_BOP_COMPAT, new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat));
+        
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_REPLACE_RIVER_BIOMES, new DataFix(NbtTags.REPLACE_RIVER_BIOMES, DataFixers::fixReplaceRiverBiomes));
     }
 
     @SideOnly(Side.CLIENT)

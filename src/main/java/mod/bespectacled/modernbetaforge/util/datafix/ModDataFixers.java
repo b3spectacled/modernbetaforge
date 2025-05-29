@@ -25,6 +25,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_6_0_0 = 1600;
     private static final int DATA_VERSION_V1_6_1_0 = 1610;
     private static final int DATA_VERSION_V1_7_0_0 = 1700;
+    private static final int DATA_VERSION_V1_7_1_0 = 1710;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -231,6 +232,11 @@ public class ModDataFixers {
         DataFixTags.FIX_SNOWY_BIOME_CHANCE,
         DataFixTags.FIX_LAYER_VERSION_1600,
         DataFixTags.FIX_BOP_COMPAT
+    );
+    
+    public static final ModDataFix RIVER_BIOMES_FIX = createModDataFix(
+        DATA_VERSION_V1_7_1_0,
+        DataFixTags.FIX_REPLACE_RIVER_BIOMES
     );
     
     private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {

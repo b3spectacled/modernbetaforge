@@ -318,6 +318,12 @@ public class DataFixers {
         }
     }
     
+    public static void fixReplaceRiverBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        if (!factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString())) {
+            factory.replaceRiverBiomes = false;
+        }
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }

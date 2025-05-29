@@ -39,4 +39,5 @@ public class DataFixTags {
     public static final ResourceLocation FIX_SNOWY_BIOME_CHANCE = ModernBeta.createRegistryKey("fix_snowyBiomeChance");
     public static final ResourceLocation FIX_LAYER_VERSION_1600 = ModernBeta.createRegistryKey("fix_layerVersion_1600");
     public static final ResourceLocation FIX_BOP_COMPAT = ModernBeta.createRegistryKey("fix_useModdedBiomes");
+    public static final ResourceLocation FIX_REPLACE_RIVER_BIOMES = ModernBeta.createRegistryKey("fix_replaceRiverBiomes");
 }
