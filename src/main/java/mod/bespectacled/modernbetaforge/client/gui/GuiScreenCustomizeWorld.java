@@ -350,12 +350,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
             createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
             createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
+            createGuiButton(GuiIdentifiers.PG2_B_USE_FANCY_OAK, NbtTags.USE_NEW_FANCY_OAK_TREES, this.settings.useNewFancyOakTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_BIRCH, NbtTags.USE_BIRCH_TREES, this.settings.useBirchTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_PINE, NbtTags.USE_PINE_TREES, this.settings.usePineTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
-            null,
             
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, RGB_HEADER, "page2", "release"),
             null,
@@ -1240,6 +1240,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG2_B_USE_ACACIA:
                     this.settings.useAcaciaTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG2_B_USE_FANCY_OAK:
+                    this.settings.useNewFancyOakTrees = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG2_B_SPAWN_CREATURE:

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +35,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
     public boolean generate(World world, Random random, BlockPos pos) {
         Random treeRandom = new Random(random.nextLong());
         
-        TreeInfo treeInfo = new TreeInfo(false);
+        TreeInfo treeInfo = new TreeInfo(ModernBetaGeneratorSettings.buildOrGet(world).useNewFancyOakTrees);
         treeInfo.setHeight(5 + treeRandom.nextInt(TREE_MAX_HEIGHT));
         
         if (this.canGenerate(world, pos, treeInfo)) {

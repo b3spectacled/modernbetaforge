@@ -309,6 +309,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useSwampTrees;
     public final boolean useJungleTrees;
     public final boolean useAcaciaTrees;
+    public final boolean useNewFancyOakTrees;
 
     public final boolean spawnNewCreatureMobs;
     public final boolean spawnNewMonsterMobs;
@@ -437,6 +438,7 @@ public class ModernBetaGeneratorSettings {
         this.useSwampTrees = factory.useSwampTrees;
         this.useJungleTrees = factory.useJungleTrees;
         this.useAcaciaTrees = factory.useAcaciaTrees;
+        this.useNewFancyOakTrees = factory.useNewFancyOakTrees;
         
         this.useWaterLakes = factory.useWaterLakes;
         this.waterLakeChance = factory.waterLakeChance;
@@ -840,6 +842,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useSwampTrees;
         public boolean useJungleTrees;
         public boolean useAcaciaTrees;
+        public boolean useNewFancyOakTrees;
 
         public boolean spawnNewCreatureMobs;
         public boolean spawnNewMonsterMobs;
@@ -1074,6 +1077,7 @@ public class ModernBetaGeneratorSettings {
             this.useSwampTrees = false;
             this.useJungleTrees = false;
             this.useAcaciaTrees = false;
+            this.useNewFancyOakTrees = false;
             
             this.spawnNewCreatureMobs = true;
             this.spawnNewMonsterMobs = true;
@@ -1331,6 +1335,7 @@ public class ModernBetaGeneratorSettings {
                 this.useSwampTrees == factory.useSwampTrees &&
                 this.useJungleTrees == factory.useJungleTrees &&
                 this.useAcaciaTrees == factory.useAcaciaTrees &&
+                this.useNewFancyOakTrees == factory.useNewFancyOakTrees &&
                 
                 this.spawnNewCreatureMobs == factory.spawnNewCreatureMobs &&
                 this.spawnNewMonsterMobs == factory.spawnNewMonsterMobs &&
@@ -1569,6 +1574,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useSwampTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useJungleTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.useAcaciaTrees ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useNewFancyOakTrees ? 1 : 0);
 
             hashCode = 31 * hashCode + (this.spawnNewCreatureMobs ? 1 : 0);
             hashCode = 31 * hashCode + (this.spawnNewMonsterMobs ? 1 : 0);
@@ -1833,6 +1839,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useSwampTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
                 factory.useJungleTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
                 factory.useAcaciaTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
+                factory.useNewFancyOakTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FANCY_OAK_TREES, factory.useNewFancyOakTrees);
                 
                 factory.spawnNewCreatureMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
                 factory.spawnNewMonsterMobs = JsonUtils.getBoolean(jsonObject, NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);
@@ -2207,6 +2214,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
             jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
             jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
+            jsonObject.addProperty(NbtTags.USE_NEW_FANCY_OAK_TREES, factory.useNewFancyOakTrees);
 
             jsonObject.addProperty(NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
             jsonObject.addProperty(NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);

@@ -127,21 +127,22 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_SWAMP = 308;
     public static final int PG2_B_USE_JUNGLE = 309;
     public static final int PG2_B_USE_ACACIA = 310;
+    public static final int PG2_B_USE_FANCY_OAK = 311;
     
-    public static final int PG2_B_SPAWN_CREATURE = 311;
-    public static final int PG2_B_SPAWN_MONSTER = 312;
-    public static final int PG2_B_SPAWN_WATER = 313;
-    public static final int PG2_B_SPAWN_AMBIENT = 314;
-    public static final int PG2_B_SPAWN_WOLVES = 315;
+    public static final int PG2_B_SPAWN_CREATURE = 312;
+    public static final int PG2_B_SPAWN_MONSTER = 313;
+    public static final int PG2_B_SPAWN_WATER = 314;
+    public static final int PG2_B_SPAWN_AMBIENT = 315;
+    public static final int PG2_B_SPAWN_WOLVES = 316;
     
-    public static final int PG2_S_BIOME_SZ = 316;
-    public static final int PG2_S_SNOWY_CHANCE = 317;
+    public static final int PG2_S_BIOME_SZ = 317;
+    public static final int PG2_S_SNOWY_CHANCE = 318;
     
-    public static final int PG2_B_USE_SAND_DISKS = 318;
-    public static final int PG2_B_USE_GRAV_DISKS = 319;
-    public static final int PG2_B_USE_CLAY_DISKS = 320;
+    public static final int PG2_B_USE_SAND_DISKS = 319;
+    public static final int PG2_B_USE_GRAV_DISKS = 320;
+    public static final int PG2_B_USE_CLAY_DISKS = 321;
     
-    public static final int PG2_B_USE_DOUBLE = 321;
+    public static final int PG2_B_USE_DOUBLE = 322;
     
     // Labels
     public static final int PG2_L_BETA = 1300;

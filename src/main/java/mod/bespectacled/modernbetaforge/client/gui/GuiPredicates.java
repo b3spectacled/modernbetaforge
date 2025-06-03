@@ -21,7 +21,10 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlpha;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
@@ -106,6 +109,8 @@ public class GuiPredicates {
     public static final GuiPredicate USE_SWAMP_TREES_TEST;
     public static final GuiPredicate USE_JUNGLE_TREES_TEST;
     public static final GuiPredicate USE_ACACIA_TREES_TEST;
+    public static final GuiPredicate USE_NEW_FANCY_OAK_TREES_TEST;
+    
     public static final GuiPredicate SPAWN_NEW_CREATURE_MOBS_TEST;
     public static final GuiPredicate SPAWN_NEW_MONSTER_MOBS_TEST;
     public static final GuiPredicate SPAWN_WATER_MOBS_TEST;
@@ -214,6 +219,15 @@ public class GuiPredicates {
         Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
         
         return biome instanceof BiomeBeta;
+    }
+    
+    private static boolean isFancyOakBiome(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return biome instanceof BiomeBeta ||
+            biome instanceof BiomeAlpha ||
+            biome instanceof BiomeInfdev415 ||
+            biome instanceof BiomeInfdev420;
     }
     
     private static boolean isBetaOrPEBiomeSource(ModernBetaGeneratorSettings settings) {
@@ -560,6 +574,16 @@ public class GuiPredicates {
         USE_SWAMP_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_SWAMP);
         USE_JUNGLE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_JUNGLE);
         USE_ACACIA_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_ACACIA);
+        USE_NEW_FANCY_OAK_TREES_TEST = new GuiPredicate(
+            settings -> {
+                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+                boolean isFixedBiomeSource = isSingleBiome(settings);
+                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID);
+                
+                return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isFancyOakBiome(settings));
+            },
+            GuiIdentifiers.PG2_B_USE_FANCY_OAK
+        );
         SPAWN_NEW_CREATURE_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_CREATURE);
         SPAWN_NEW_MONSTER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_MONSTER);
         SPAWN_WATER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WATER);
