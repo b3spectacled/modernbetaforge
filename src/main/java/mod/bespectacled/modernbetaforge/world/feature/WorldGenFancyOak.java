@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +34,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
     public boolean generate(World world, Random random, BlockPos pos) {
         Random treeRandom = new Random(random.nextLong());
         
-        TreeInfo treeInfo = new TreeInfo();
+        TreeInfo treeInfo = new TreeInfo(false);
         treeInfo.setHeight(5 + treeRandom.nextInt(TREE_MAX_HEIGHT));
         
         if (this.canGenerate(world, pos, treeInfo)) {
@@ -192,7 +193,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         int[] startPos = {x, startY, z};
         int[] endPos = {x, topY, z};
         
-        this.placeBranch(world, startPos, endPos, BlockStates.OAK_LOG);
+        this.placeBranch(world, startPos, endPos, BlockStates.OAK_LOG, treeInfo.getRotateLogs());
     }
 
     private void placeTreeBranches(World world, BlockPos basePos, TreeInfo treeInfo) {
@@ -209,14 +210,14 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             
             int relY = branchStartPos[1] - basePos.getY();
             if (relY >= treeInfo.getHeight() * 0.2) {
-                this.placeBranch(world, branchStartPos, branchEndPos, BlockStates.OAK_LOG);
+                this.placeBranch(world, branchStartPos, branchEndPos, BlockStates.OAK_LOG, treeInfo.getRotateLogs());
             }
             
             curBranch++;
         }
     }
 
-    private void placeBranch(World world, int[] startPos, int[] endPos, IBlockState state) {
+    private void placeBranch(World world, int[] startPos, int[] endPos, IBlockState state, boolean rotateLogs) {
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         
         int[] distance = {0, 0, 0};
@@ -245,10 +246,14 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             int offset = 0;
             int endOffset = distance[longestSideNdx] + branchDir;
             
-            while(offset != endOffset) {
+            while (offset != endOffset) {
                 pos[longestSideNdx] = MathHelper.floor((startPos[longestSideNdx] + offset) + 0.5);
                 pos[ndx0] = MathHelper.floor(startPos[ndx0] + offset * branchStep0 + 0.5);
                 pos[ndx1] = MathHelper.floor(startPos[ndx1] + offset * branchStep1 + 0.5);
+                
+                if (rotateLogs) {
+                    state = state.withProperty(BlockLog.LOG_AXIS, this.getLogAxis(startPos, pos));
+                }
                 
                 world.setBlockState(mutable.setPos(pos[0], pos[1], pos[2]), state);
                 
@@ -394,36 +399,64 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         return -1;
     }
     
+    private BlockLog.EnumAxis getLogAxis(int[] startPos, int[] endPos) {
+        BlockLog.EnumAxis axis = BlockLog.EnumAxis.Y;
+        
+        int distX = Math.abs(endPos[0] - startPos[0]);
+        int distZ = Math.abs(endPos[2] - startPos[2]);
+        int maxLen = Math.max(distX, distZ);
+        
+        if (maxLen > 0) {
+            if (distX == maxLen) {
+                axis = BlockLog.EnumAxis.X;
+            } else if (distZ == maxLen) {
+                axis = BlockLog.EnumAxis.Z;
+            }
+        }
+        
+        return axis;
+    }
+    
     /*
      *  Tracks information about the tree during a single generation call.
      */
     private static class TreeInfo {
+        private final boolean rotateLogs;
+        
         private int height = -1;
         private int treeHeight = -1;
         private int[][] foliageBlobPositions = null;
         
+        private TreeInfo(boolean rotateLogs) {
+            this.rotateLogs = rotateLogs;
+        }
+        
+        private boolean getRotateLogs() {
+            return this.rotateLogs;
+        }
+        
         private int getHeight() { 
-            return this.height; 
+            return this.height;
         }
         
         private int getTreeHeight() { 
-            return this.treeHeight; 
+            return this.treeHeight;
         }
         
         private int[][] getFoliageBlobPositions() { 
-            return this.foliageBlobPositions; 
+            return this.foliageBlobPositions;
         }
         
         private void setHeight(int height) { 
-            this.height = height; 
+            this.height = height;
         }
         
         private void setTreeHeight(int treeHeight) { 
-            this.treeHeight = treeHeight; 
+            this.treeHeight = treeHeight;
         }
         
         private void setFoliageBlobPositions(int[][] foliageBlobPositions) { 
-            this.foliageBlobPositions = foliageBlobPositions; 
+            this.foliageBlobPositions = foliageBlobPositions;
         }
     }
 
