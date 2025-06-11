@@ -75,7 +75,7 @@ public interface WorldSpawner {
                 radius *= 2;
             }
             
-            return spawnPos;
+            return null;
         }
     };
 }
