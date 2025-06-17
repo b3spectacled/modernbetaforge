@@ -32,13 +32,7 @@ public class GuiCustomizePresetsDataHandler {
     }
     
     public void writePresets() {
-        try (Writer writer = new FileWriter(CONFIG_FILE)) {
-            GSON.toJson(this.presets, LinkedHashSet.class, writer);
-            
-        } catch (Exception e) {
-            ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", CONFIG_FILE_NAME));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
-        }
+        this.writePresets(false);
     }
     
     public void addPreset(int icon, String name, String desc, String settings) {
@@ -77,20 +71,30 @@ public class GuiCustomizePresetsDataHandler {
     }
     
     private List<PresetData> readPresets() {
-        List<PresetData> presets;
+        List<PresetData> presets = new LinkedList<>();
         
         try (Reader reader = new FileReader(CONFIG_FILE)) {
             Type type = new TypeToken<List<PresetData>>(){}.getType();
-            return GSON.fromJson(reader, type);
+            presets = GSON.fromJson(reader, type);
             
         } catch (Exception e) {
-            presets = new LinkedList<>();
-            
             ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded! A new one will be created!", CONFIG_FILE_NAME));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
+            
+            this.writePresets(true);
         }
         
         return presets;
+    }
+    
+    private void writePresets(boolean createNewConfig) {
+        try (Writer writer = new FileWriter(CONFIG_FILE)) {
+            GSON.toJson(createNewConfig ? new LinkedList<>() : this.presets, LinkedHashSet.class, writer);
+            
+        } catch (Exception e) {
+            ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", CONFIG_FILE_NAME));
+            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+        }
     }
     
     public static class PresetData implements Serializable {
