@@ -1835,7 +1835,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+        if (this.confirmMode == GuiIdentifiers.FUNC_DFLT && keyCode == Keyboard.KEY_ESCAPE) {
+            this.confirmMode = 0;
+            this.exitConfirmation();
+        } else {
+            super.keyTyped(typedChar, keyCode);
+        }
         
         if (this.confirmMode != 0) {
             return;
