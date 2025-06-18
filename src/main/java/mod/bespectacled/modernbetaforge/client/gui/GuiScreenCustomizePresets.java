@@ -443,7 +443,19 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this.fieldModalSettings.textboxKeyTyped(character, keyCode);
         
         if (!fieldTyped) {
-            super.keyTyped(character, keyCode);
+            switch (this.modalState) {
+                case SAVE:
+                case DELETE:
+                case EDIT:
+                case OVERWRITE:
+                    if (keyCode == Keyboard.KEY_ESCAPE) {
+                        this.updateModalState(ModalState.NONE);
+                        this.updateModalButtons(ModalState.NONE);
+                        break;
+                    }
+                default:
+                    super.keyTyped(character, keyCode);
+            }
         }
         
         this.updateButtonValidity();
