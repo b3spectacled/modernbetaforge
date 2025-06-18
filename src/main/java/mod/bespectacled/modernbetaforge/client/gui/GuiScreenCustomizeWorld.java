@@ -41,6 +41,8 @@ import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -2337,17 +2339,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private int getLevelSeaLevel() {
-        String chunkSource = this.settings.chunkSource;
-        String levelType = this.settings.levelType;
-        int levelHeight = this.settings.levelHeight;
-
+        ModernBetaGeneratorSettings settings = this.settings.build();
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        
         int levelSeaLevel = -1;
-        if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.INDEV.getRegistryString())) {
-            levelSeaLevel = levelType.equals(IndevType.FLOATING.id) ? 0 : levelHeight - 32;
-        } else if (chunkSource.equals(ModernBetaBuiltInTypes.Chunk.CLASSIC_0_0_23A.getRegistryString())) {
-            levelSeaLevel = levelHeight / 2;
-        } else {
-            levelSeaLevel = -1;
+        if (chunkSource instanceof FiniteChunkSource) {
+            levelSeaLevel = chunkSource.getSeaLevel();
         }
         
         return levelSeaLevel;
