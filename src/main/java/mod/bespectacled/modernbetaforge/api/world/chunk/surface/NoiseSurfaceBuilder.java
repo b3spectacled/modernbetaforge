@@ -67,6 +67,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
             int runDepth = -1;
             
             Biome biome = biomes[localX + localZ * 16];
+            boolean isNether = this.isNether(biome);
 
             IBlockState topBlock = biome.topBlock;
             IBlockState fillerBlock = biome.fillerBlock;
@@ -77,7 +78,6 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
             }
 
             for (int y = this.getWorldHeight() - 1; y >= 0; y--) {
-
                 if (this.isBedrock(y, this.useBedrockRandom ? bedrockRandom : random)) {
                     chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                     continue;
@@ -104,12 +104,12 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                         fillerBlock = biome.fillerBlock;
 
                         if (isGravelBeach) {
-                            topBlock = this.getGravelBeachTopBlock(biome);
-                            fillerBlock = this.getGravelBeachFillerBlock(biome);
+                            topBlock = this.getGravelBeachTopBlock(biome, isNether);
+                            fillerBlock = this.getGravelBeachFillerBlock(biome, isNether);
                         }
 
                         if (isBeach) {
-                            IBlockState beachBlock = this.getBeachBlock(biome);
+                            IBlockState beachBlock = this.getBeachBlock(biome, isNether);
                             
                             topBlock = beachBlock;
                             fillerBlock = beachBlock;
@@ -247,10 +247,11 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * Gets the top blockstate for gravel beach generation.
      * 
      * @param biome The biome to check for selecting the blockstate.
+     * @param isNether Whether the biome is a Nether biome.
      * @return The top block for gravel beach generation.
      */
-    private IBlockState getGravelBeachTopBlock(Biome biome) {
-        if (this.isNether(biome)) {
+    private IBlockState getGravelBeachTopBlock(Biome biome, boolean isNether) {
+        if (isNether) {
             return BlockStates.GRAVEL;
         }
         
@@ -261,10 +262,11 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * Gets the filler blockstate for gravel beach generation.
      * 
      * @param biome The biome to check for selecting the blockstate.
+     * @param isNether Whether the biome is a Nether biome.
      * @return The filler blockstate for gravel beach generation.
      */
-    private IBlockState getGravelBeachFillerBlock(Biome biome) {
-        if (this.isNether(biome)) {
+    private IBlockState getGravelBeachFillerBlock(Biome biome, boolean isNether) {
+        if (isNether) {
             return this.defaultBlock;
         }
         
@@ -275,10 +277,11 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * Gets the blockstate for beach generation.
      * 
      * @param biome The biome to check for selecting the blockstate.
+     * @param isNether Whether the biome is a Nether biome.
      * @return The blockstate for beach generation.
      */
-    private IBlockState getBeachBlock(Biome biome) {
-        if (this.isNether(biome)) {
+    private IBlockState getBeachBlock(Biome biome, boolean isNether) {
+        if (isNether) {
             return Blocks.SOUL_SAND.getDefaultState();
         }
         

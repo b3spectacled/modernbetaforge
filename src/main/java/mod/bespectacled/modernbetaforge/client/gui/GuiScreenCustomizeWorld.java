@@ -49,7 +49,6 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
-import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
