@@ -25,19 +25,19 @@ public class ModernBetaConfig {
     
     public static class CategoryGui {
         @Comment({
-            "Default Modern Beta world preset"
+            "Default Modern Beta world preset."
         })
         @RequiresWorldRestart
         public String defaultPreset = "";
         
         @Comment({
-            "Default Modern Beta world preset filter"
+            "Default Modern Beta world preset filter."
         })
         @RequiresWorldRestart
         public FilterType defaultPresetFilter = FilterType.ALL;
 
         @Comment({
-            "Set Modern Beta world type as default"
+            "Set Modern Beta world type as default."
         })
         @RequiresWorldRestart
         public boolean useModernBetaAsDefault = false;
@@ -51,13 +51,13 @@ public class ModernBetaConfig {
     
     public static class CategoryGenerator {
         @Comment({
-            "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name"
+            "Add biomes with custom surface builders for compatibility, requires fully-qualified biome registry name."
         })
         @RequiresWorldRestart
         public String[] biomesWithCustomSurfaces = {};
         
         @Comment({
-            "Save Indev level to separate file and try to load instead of regenerating level"
+            "Save Indev level to separate file and try to load instead of regenerating level."
         })
         @RequiresWorldRestart
         public boolean saveIndevLevels = true;
@@ -73,30 +73,30 @@ public class ModernBetaConfig {
 
     public static class CategoryVisual {
         @Comment({
-            "Render Beta-accurate biome colors"
+            "Render Beta-accurate biome colors."
         })
         @RequiresWorldRestart
         public boolean useBetaBiomeColors = true;
         
         @Comment({
-            "Render Beta-accurate sky colors"
+            "Render Beta-accurate sky colors."
         })
         @RequiresWorldRestart
         public boolean useBetaSkyColors = true;
         
         @Comment({
-            "Render old sugar cane colors"
+            "Render old sugar cane colors."
         })
         @RequiresWorldRestart
         public boolean useOldSugarCaneColor = true;
         
         @Comment({
-            "Render fog with old fog color blending algorithm"
+            "Render fog with old fog color blending algorithm."
         })
         public boolean useOldFogColorBlending = true;
         
         @Comment({
-            "Modern Beta world cloud height",
+            "Modern Beta world cloud height.",
         })
         @RangeInt(min = 0, max = 255)
         public int cloudHeight = 108;
@@ -107,7 +107,7 @@ public class ModernBetaConfig {
         public boolean useCustomCloudHeight = false;
         
         @Comment({
-            "Render biome colors with increasingly lower temperatures above y128"
+            "Render biome colors with increasingly lower temperatures above y128."
         })
         @RequiresWorldRestart
         public boolean useHeightTempGradient = true;
@@ -115,7 +115,7 @@ public class ModernBetaConfig {
     
     public static class CategorySpawn {
         @Comment({
-            "Use spawn fuzz for players who join the world"
+            "Use spawn fuzz for players who join the world."
         })
         @RequiresWorldRestart
         public boolean useSpawnFuzz = false;
@@ -123,10 +123,16 @@ public class ModernBetaConfig {
     
     public static class CategoryServer {
         @Comment({
-            "Send world cloud height to joining clients"
+            "Send world cloud height to clients."
         })
         @RequiresWorldRestart
         public boolean sendCloudHeight = true;
+        
+        @Comment({
+            "Send climate information for rendering Beta-accurate biome colors on the client-side. Warning: This will transmit the world seed to clients."
+        })
+        @RequiresWorldRestart
+        public boolean sendClimateInfo = false;
     }
     
     public static class CategoryDebug {

@@ -18,11 +18,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import net.minecraft.client.Minecraft;
 
 public class GuiCustomizePresetsDataHandler {
     private static final String CONFIG_FILE_NAME = ModernBeta.MODID + "_presets.json";
-    private static final File CONFIG_FILE =  new File(new File(Minecraft.getMinecraft().gameDir, "config"), CONFIG_FILE_NAME);
+    private static final File CONFIG_FILE =  new File(ModernBeta.getConfigDirectory(), CONFIG_FILE_NAME);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     private final List<PresetData> presets;

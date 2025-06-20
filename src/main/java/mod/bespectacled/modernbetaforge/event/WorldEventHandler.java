@@ -16,7 +16,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class WorldEventHandlerCommon {
+public class WorldEventHandler {
     /*
      * Modify player spawning algorithm
      */

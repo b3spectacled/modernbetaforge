@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.network;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.network.ClimateInfoMessage.ClimateInfoMessageHandler;
 import mod.bespectacled.modernbetaforge.network.CloudHeightMessage.CloudHeightMessageHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -11,5 +12,6 @@ public class ModernBetaPacketHandler {
     
     public static void register() {
         INSTANCE.registerMessage(CloudHeightMessageHandler.class, CloudHeightMessage.class, 0, Side.CLIENT);
+        INSTANCE.registerMessage(ClimateInfoMessageHandler.class, ClimateInfoMessage.class, 1, Side.CLIENT);
     }
 }

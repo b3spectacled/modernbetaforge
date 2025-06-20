@@ -1,5 +1,7 @@
 package mod.bespectacled.modernbetaforge;
 
+import java.io.File;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +11,8 @@ import mod.bespectacled.modernbetaforge.command.CommandLocateBiome;
 import mod.bespectacled.modernbetaforge.command.CommandLocateStructure;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.event.WorldEventHandlerCommon;
+import mod.bespectacled.modernbetaforge.event.PlayerEventHandler;
+import mod.bespectacled.modernbetaforge.event.WorldEventHandler;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
@@ -41,6 +44,8 @@ public class ModernBeta {
     
     private static final Logger LOGGER = LogManager.getLogger(MODID);
     
+    private static File configDir;
+    
     public static void log(Level level, String message) {
         LOGGER.log(level, "{}", message);
     }
@@ -53,6 +58,10 @@ public class ModernBeta {
         return new ResourceLocation(MODID, name);
     }
     
+    public static File getConfigDirectory() {
+        return configDir;
+    }
+    
     @SidedProxy(
         clientSide = "mod.bespectacled.modernbetaforge.ModernBetaClientProxy",
         serverSide = "mod.bespectacled.modernbetaforge.ModernBetaServerProxy"
@@ -61,12 +70,15 @@ public class ModernBeta {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        configDir = event.getModConfigurationDirectory();
+        
         proxy.preInit();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
-        MinecraftForge.EVENT_BUS.register(new WorldEventHandlerCommon());
+        MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         ModDataFixer.INSTANCE.register();
         
         ModernBetaWorldType.register();
