@@ -27,7 +27,7 @@ public class WorldInfoMessage implements IMessage {
     public static final WorldInfoMessage EMPTY = new WorldInfoMessage(0L, "");
     
     private static final int BYTE_BUFFER_LEN = 2048;
-    private static final String UTF8 = "UTF-8";
+    private static final String UTF_8 = "UTF-8";
     
     private long seed;
     private String settings;
@@ -44,7 +44,7 @@ public class WorldInfoMessage implements IMessage {
         buf.writeLong(this.seed);
         
         try {
-            byte[] bytes = this.compressBytes(this.settings.getBytes(UTF8));
+            byte[] bytes = this.compressBytes(this.settings.getBytes(UTF_8));
             ModernBeta.log(Level.DEBUG, "Compressed size: " + bytes.length);
             buf.writeBytes(bytes);
             
@@ -63,7 +63,7 @@ public class WorldInfoMessage implements IMessage {
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);
             ModernBeta.log(Level.DEBUG, "Read size: " + bytes.length);
-            this.settings = new String(this.decompressBytes(bytes), UTF8);
+            this.settings = new String(this.decompressBytes(bytes), UTF_8);
             
         } catch (UnsupportedEncodingException e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be decoded!"));
@@ -82,9 +82,9 @@ public class WorldInfoMessage implements IMessage {
         ) {            
             gos.write(bytes);
             gos.close();
-
+            
             return bos.toByteArray();
-           
+            
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be compressed!"));
             ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
@@ -108,14 +108,14 @@ public class WorldInfoMessage implements IMessage {
             while ((len = gis.read(buffer)) != -1) {
                 bos.write(buffer, 0, len);
             }
-
+            
             return bos.toByteArray();
-           
-       } catch (Exception e) {
+            
+        } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be decompressed!"));
             ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
-       }
-        
+        }
+       
         return new byte[0];
     }
 
