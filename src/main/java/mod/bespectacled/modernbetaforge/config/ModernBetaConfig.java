@@ -129,10 +129,10 @@ public class ModernBetaConfig {
         public boolean sendCloudHeight = true;
         
         @Comment({
-            "Send climate information for rendering Beta-accurate biome colors on the client-side. Warning: This will transmit the world seed to clients."
+            "Send world information for rendering Beta-accurate biome colors on the client-side. Warning: This will transmit the world seed to clients."
         })
         @RequiresWorldRestart
-        public boolean sendClimateInfo = false;
+        public boolean sendWorldInfo = false;
     }
     
     public static class CategoryDebug {

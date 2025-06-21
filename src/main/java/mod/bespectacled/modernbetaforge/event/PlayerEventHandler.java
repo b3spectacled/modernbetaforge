@@ -8,12 +8,11 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSample
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.network.ClimateInfoMessage;
+import mod.bespectacled.modernbetaforge.network.WorldInfoMessage;
 import mod.bespectacled.modernbetaforge.network.CloudHeightMessage;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
-import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -45,18 +44,10 @@ public class PlayerEventHandler {
         }
         
         if (!isSinglePlayer) {
-            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(worldServer);
-            
             ModernBetaPacketHandler.INSTANCE.sendTo(
-                !ModernBetaConfig.serverOptions.sendClimateInfo ?
-                    ClimateInfoMessage.EMPTY :
-                    new ClimateInfoMessage(
-                        settings.biomeSource.toString(),
-                        worldServer.getSeed(),
-                        settings.tempNoiseScale,
-                        settings.rainNoiseScale,
-                        settings.detailNoiseScale
-                    ),
+                ModernBetaConfig.serverOptions.sendWorldInfo ?
+                    new WorldInfoMessage(worldServer.getSeed(), worldServer.getWorldInfo().getGeneratorOptions()) :
+                    WorldInfoMessage.EMPTY,
                 player
             );
             

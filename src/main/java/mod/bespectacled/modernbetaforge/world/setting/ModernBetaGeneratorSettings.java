@@ -1636,7 +1636,7 @@ public class ModernBetaGeneratorSettings {
         }
 
         public static Factory jsonToFactory(String string) {
-            if (string.isEmpty()) {
+            if (string == null || string.isEmpty()) {
                 return new Factory();
             }
             

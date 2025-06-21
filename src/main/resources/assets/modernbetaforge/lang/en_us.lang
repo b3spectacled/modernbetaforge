@@ -401,10 +401,10 @@ modernbetaforge.general.visualoptions.useoldsugarcanecolor=Old Sugar Cane Color
 modernbetaforge.general.visualoptions.useoldfogcolorblending=Old Fog Color Blending
 modernbetaforge.general.visualoptions.cloudheight=Cloud Height
 modernbetaforge.general.visualoptions.usecustomcloudheight=Custom Cloud Height
-modernbetaforge.general.visualoptions.useheighttempgradient=Height-based Temperature Gradient
+modernbetaforge.general.visualoptions.useheighttempgradient=Height Temperature Gradient
 
 modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clients
-modernbetaforge.general.serveroptions.sendclimateinfo=Send Climate Info to Clients
+modernbetaforge.general.serveroptions.sendworldinfo=Send World Info to Clients
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties

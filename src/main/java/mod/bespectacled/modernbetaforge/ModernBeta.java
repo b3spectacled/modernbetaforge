@@ -102,7 +102,7 @@ public class ModernBeta {
         }
         
         ModCompat.loadCompat();
-         
+
         proxy.init();
     }
     
