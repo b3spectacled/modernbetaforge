@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -37,6 +38,7 @@ public class PlayerEventHandler {
     private void sendMessages(EntityPlayerMP player) {
         boolean isSinglePlayer = player.server.isSinglePlayer();
         WorldServer worldServer = player.getServerWorld();
+        BiomeProvider biomeProvider = worldServer.getBiomeProvider();
         
         if (!(worldServer.getWorldType() instanceof ModernBetaWorldType)) {
             ModernBeta.log(Level.DEBUG, "Not a Modern Beta world..");
@@ -44,12 +46,14 @@ public class PlayerEventHandler {
         }
         
         if (!isSinglePlayer) {
-            ModernBetaPacketHandler.INSTANCE.sendTo(
-                ModernBetaConfig.serverOptions.sendWorldInfo ?
-                    new WorldInfoMessage(worldServer.getSeed(), worldServer.getWorldInfo().getGeneratorOptions()) :
-                    WorldInfoMessage.EMPTY,
-                player
-            );
+            if (biomeProvider instanceof ModernBetaBiomeProvider) {
+                ModernBetaPacketHandler.INSTANCE.sendTo(
+                    ModernBetaConfig.serverOptions.sendWorldInfo ?
+                        new WorldInfoMessage(worldServer.getSeed(), worldServer.getWorldInfo().getGeneratorOptions()) :
+                        WorldInfoMessage.EMPTY,
+                    player
+                );
+            }
             
             if (ModernBetaConfig.serverOptions.sendCloudHeight) {
                 int cloudHeight = (int)ModernBetaWorldType.INSTANCE.getCloudHeight();
@@ -58,19 +62,18 @@ public class PlayerEventHandler {
             }
             
         } else {
-            ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)worldServer.getBiomeProvider();
-            BiomeSource biomeSource = biomeProvider.getBiomeSource();
-            
-            BetaColorSampler.INSTANCE.resetClimateSamplers();
+            if (biomeProvider instanceof ModernBetaBiomeProvider) {
+                BiomeSource biomeSource = ((ModernBetaBiomeProvider)worldServer.getBiomeProvider()).getBiomeSource();
+                BetaColorSampler.INSTANCE.resetClimateSamplers();
 
-            if (biomeSource instanceof ClimateSampler && ModernBetaConfig.visualOptions.useBetaBiomeColors) {
-                BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource);
+                if (biomeSource instanceof ClimateSampler && ModernBetaConfig.visualOptions.useBetaBiomeColors) {
+                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource);
+                }
+                
+                if (biomeSource instanceof SkyClimateSampler && ModernBetaConfig.visualOptions.useBetaSkyColors) {
+                    BetaColorSampler.INSTANCE.setSkyClimateSampler((SkyClimateSampler)biomeSource);
+                }
             }
-            
-            if (biomeSource instanceof SkyClimateSampler && ModernBetaConfig.visualOptions.useBetaSkyColors) {
-                BetaColorSampler.INSTANCE.setSkyClimateSampler((SkyClimateSampler)biomeSource);
-            }
-            
         }
     }
 }
