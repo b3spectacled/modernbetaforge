@@ -497,7 +497,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
-            null,
+            createGuiSlider(GuiIdentifiers.PG4_S_SNOW_OF, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this),
             
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page4", "release"),
             null,
@@ -556,6 +556,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiField(GuiIdentifiers.PG5_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SNOW_OF, I18n.format(PREFIX + NbtTags.SNOW_LINE_OFFSET) + ":"),
+            createGuiField(GuiIdentifiers.PG5_F_SNOW_OF, String.format("%d", this.settings.snowLineOffset), this.intFilter),
 
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page5", "release"),
             null,
@@ -992,6 +994,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.detailNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
                     newEntryValue = this.settings.detailNoiseScale;
                     break;
+                case GuiIdentifiers.PG5_F_SNOW_OF:
+                    this.settings.snowLineOffset = (int)MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL);
+                    newEntryValue = this.settings.snowLineOffset;
+                    break;
                 case GuiIdentifiers.PG5_F_B_DPTH_WT:
                     this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT);
                     newEntryValue = this.settings.biomeDepthWeight;
@@ -1400,6 +1406,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_S_DETL_SCL:
                     this.settings.detailNoiseScale = roundToThreeDec(entryValue);
+                    break;
+                case GuiIdentifiers.PG4_S_SNOW_OF:
+                    this.settings.snowLineOffset = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG4_S_B_DPTH_WT:
                     this.settings.biomeDepthWeight = roundToThreeDec(entryValue);

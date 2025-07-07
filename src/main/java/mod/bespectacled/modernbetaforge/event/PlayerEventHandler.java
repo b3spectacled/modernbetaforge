@@ -8,11 +8,12 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSample
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.network.WorldInfoMessage;
 import mod.bespectacled.modernbetaforge.network.CloudHeightMessage;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
+import mod.bespectacled.modernbetaforge.network.WorldInfoMessage;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
@@ -64,10 +65,11 @@ public class PlayerEventHandler {
         } else {
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
                 BiomeSource biomeSource = ((ModernBetaBiomeProvider)worldServer.getBiomeProvider()).getBiomeSource();
+                ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(worldServer);
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
 
                 if (biomeSource instanceof ClimateSampler && ModernBetaConfig.visualOptions.useBetaBiomeColors) {
-                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource);
+                    BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource, settings.snowLineOffset);
                 }
                 
                 if (biomeSource instanceof SkyClimateSampler && ModernBetaConfig.visualOptions.useBetaSkyColors) {

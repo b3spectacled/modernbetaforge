@@ -289,7 +289,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         // Generate snow / ice
         if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ICE)) {
-            ModernBetaBiomeDecorator.populateSnowIce(this.world, this.random, this.biomeProvider, mutablePos, chunkX, chunkZ);
+            ModernBetaBiomeDecorator.populateSnowIce(this.world, this.random, this.biomeProvider, mutablePos, chunkX, chunkZ, settings.snowLineOffset);
         }
         
         ForgeEventFactory.onChunkPopulate(false, this, this.world, this.random, chunkX, chunkZ, false);

@@ -266,14 +266,15 @@ public class GuiIdentifiers {
     public static final int PG4_S_TEMP_SCL = 520;
     public static final int PG4_S_RAIN_SCL = 521;
     public static final int PG4_S_DETL_SCL = 522;
+    public static final int PG4_S_SNOW_OF = 523;
     
-    public static final int PG4_S_SCLE_NS_X = 523;
-    public static final int PG4_S_SCLE_NS_Z = 524;
+    public static final int PG4_S_SCLE_NS_X = 524;
+    public static final int PG4_S_SCLE_NS_Z = 525;
 
-    public static final int PG4_S_END_OF = 525;
-    public static final int PG4_S_END_WT = 526;
-    public static final int PG4_S_END_OUT_OF = 527;
-    public static final int PG4_S_END_OUT_DT = 528;
+    public static final int PG4_S_END_OF = 526;
+    public static final int PG4_S_END_WT = 527;
+    public static final int PG4_S_END_OUT_OF = 528;
+    public static final int PG4_S_END_OUT_DT = 529;
 
     public static final int PG4_SLIDER_END = 549;
     public static final int PG4_B_USE_BDS = 550;
@@ -308,14 +309,15 @@ public class GuiIdentifiers {
     public static final int PG5_F_TEMP_SCL = 620;
     public static final int PG5_F_RAIN_SCL = 621;
     public static final int PG5_F_DETL_SCL = 622;
+    public static final int PG5_F_SNOW_OF = 623;
     
-    public static final int PG5_F_SCLE_NS_X = 623;
-    public static final int PG5_F_SCLE_NS_Z = 624;
+    public static final int PG5_F_SCLE_NS_X = 624;
+    public static final int PG5_F_SCLE_NS_Z = 625;
     
-    public static final int PG5_F_END_OF = 625;
-    public static final int PG5_F_END_WT = 626;
-    public static final int PG5_F_END_OUT_OF = 627;
-    public static final int PG5_F_END_OUT_DT = 628;
+    public static final int PG5_F_END_OF = 626;
+    public static final int PG5_F_END_WT = 627;
+    public static final int PG5_F_END_OUT_OF = 628;
+    public static final int PG5_F_END_OUT_DT = 629;
     
     public static final int PG5_FIELD_END = 649;
     
@@ -336,11 +338,12 @@ public class GuiIdentifiers {
     public static final int PG5_L_TEMP_SCL = 1613;
     public static final int PG5_L_RAIN_SCL = 1614;
     public static final int PG5_L_DETL_SCL = 1615;
+    public static final int PG5_L_SNOW_OF = 1616;
     
-    public static final int PG5_L_B_DPTH_WT = 1616;
-    public static final int PG5_L_B_DPTH_OF = 1617;
-    public static final int PG5_L_B_SCLE_WT = 1618;
-    public static final int PG5_L_B_SCLE_OF = 1619;
+    public static final int PG5_L_B_DPTH_WT = 1617;
+    public static final int PG5_L_B_DPTH_OF = 1618;
+    public static final int PG5_L_B_SCLE_WT = 1619;
+    public static final int PG5_L_B_SCLE_OF = 1620;
     public static final int PG5_L_RIVER_SZ = 1621;
     public static final int PG5_L_LAYER_SZ = 1622;
     

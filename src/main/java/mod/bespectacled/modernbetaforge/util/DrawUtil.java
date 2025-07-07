@@ -117,6 +117,7 @@ public class DrawUtil {
         int offsetZ = sizeZ / 2;
         
         Block defaultFluid = chunkSource.getDefaultFluid().getBlock();
+        int snowLineOffset = chunkSource.getGeneratorSettings().snowLineOffset;
         
         for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
             int startX = chunkX << 4;
@@ -142,7 +143,7 @@ public class DrawUtil {
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
-                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, defaultFluid, terrainType);
+                        terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, defaultFluid, terrainType, snowLineOffset);
 
                         int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, biomeCache, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
@@ -314,15 +315,15 @@ public class DrawUtil {
         return terrainType;
     }
     
-    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, Block defaultFluid, TerrainType terrainType) {
+    private static TerrainType getTerrainTypeBySnowiness(BlockPos blockPos, Biome biome, BiomeSource biomeSource, Block defaultFluid, TerrainType terrainType, int snowLineOffset) {
         if (terrainType.snowy) {
-            if (canFreeze(blockPos, biome, biomeSource, 64)) {
+            if (canFreeze(blockPos, biome, biomeSource, snowLineOffset)) {
                 terrainType = TerrainType.SNOW;
             }
         }
         
         if (terrainType == TerrainType.WATER && defaultFluid == Blocks.WATER) {
-            if (canFreeze(blockPos, biome, biomeSource, 64)) {
+            if (canFreeze(blockPos, biome, biomeSource, snowLineOffset)) {
                 terrainType = TerrainType.ICE;
             }
         }
@@ -350,7 +351,7 @@ public class DrawUtil {
         return defaultFluid.equals(Blocks.LAVA.getRegistryName()) ? TerrainType.FIRE : TerrainType.WATER;
     }
     
-    private static boolean canFreeze(BlockPos blockPos, Biome biome, BiomeSource biomeSource, int seaLevel) {
+    private static boolean canFreeze(BlockPos blockPos, Biome biome, BiomeSource biomeSource, int snowLineOffset) {
         int x = blockPos.getX();
         int y = blockPos.getY() + 1;
         int z = blockPos.getZ();
@@ -358,13 +359,13 @@ public class DrawUtil {
         
         if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
             double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
-            temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
+            temp = temp - ((double)(y - snowLineOffset) / (double)snowLineOffset) * 0.3;
             
             canFreeze = temp < 0.5;
             
         } else if (biome instanceof BiomeBetaSky) {
             double temp = biome.getDefaultTemperature();
-            temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
+            temp = temp - ((double)(y - snowLineOffset) / (double)snowLineOffset) * 0.3;
             
             canFreeze = temp < 0.5;
             

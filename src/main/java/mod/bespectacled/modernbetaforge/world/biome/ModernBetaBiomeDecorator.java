@@ -387,10 +387,9 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    public static void populateSnowIce(World world, Random random, ModernBetaBiomeProvider biomeProvider, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
+    public static void populateSnowIce(World world, Random random, ModernBetaBiomeProvider biomeProvider, MutableBlockPos mutablePos, int chunkX, int chunkZ, int snowLineOffset) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
-        int seaLevel = 64;
         
         BiomeSource biomeSource = biomeProvider.getBiomeSource();
         
@@ -409,7 +408,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
                 
                 if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleForFeatureGeneration()) {
                     double temp = ((ClimateSampler)biomeSource).sample(x, z).temp();
-                    temp = temp - ((double)(y - seaLevel) / (double)seaLevel) * 0.3;
+                    temp = temp - ((double)(y - snowLineOffset) / (double)snowLineOffset) * 0.3;
                     
                     canSetIce = BiomeBeta.canSetIceBeta(world, blockPosDown, false, temp);
                     canSetSnow = BiomeBeta.canSetSnowBeta(world, mutablePos, temp);

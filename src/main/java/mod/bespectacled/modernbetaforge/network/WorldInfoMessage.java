@@ -18,7 +18,6 @@ import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -125,16 +124,16 @@ public class WorldInfoMessage implements IMessage {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
                 
-                // Assume sendClimateInfo is true, if seed is not the default 0L
+                // Assume sendWorldInfo is true, if seed is not the default 0L
                 if (message.seed != 0L) {
-                    ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(message.settings);
+                    ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.build(message.settings);
                     
                     BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
-                        .get(new ResourceLocation(factory.biomeSource))
-                        .apply(message.seed, factory.build());
+                        .get(settings.biomeSource)
+                        .apply(message.seed, settings);
 
                     if (biomeSource instanceof ClimateSampler && ModernBetaConfig.visualOptions.useBetaBiomeColors) {
-                        BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource);
+                        BetaColorSampler.INSTANCE.setClimateSampler((ClimateSampler)biomeSource, settings.snowLineOffset);
                     }
                     
                     if (biomeSource instanceof SkyClimateSampler && ModernBetaConfig.visualOptions.useBetaSkyColors) {

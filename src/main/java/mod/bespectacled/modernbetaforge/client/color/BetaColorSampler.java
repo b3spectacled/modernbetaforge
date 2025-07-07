@@ -19,12 +19,12 @@ public class BetaColorSampler {
     
     private Optional<ClimateSampler> climateSampler;
     private Optional<SkyClimateSampler> skyClimateSampler;
-    private int seaLevel;
+    private int snowLineOffset;
     
     private BetaColorSampler() {
         this.climateSampler = Optional.empty();
         this.skyClimateSampler = Optional.empty();
-        this.seaLevel = 64;
+        this.snowLineOffset = 64;
     }
     
     public void resetClimateSamplers() {
@@ -33,7 +33,12 @@ public class BetaColorSampler {
     }
     
     public void setClimateSampler(ClimateSampler climateSampler) {
+        this.setClimateSampler(climateSampler, 64);
+    }
+    
+    public void setClimateSampler(ClimateSampler climateSampler, int snowLineOffset) {
         this.climateSampler = Optional.ofNullable(climateSampler);
+        this.snowLineOffset = snowLineOffset;
     }
     
     public void setSkyClimateSampler(SkyClimateSampler skyClimateSampler) {
@@ -50,14 +55,14 @@ public class BetaColorSampler {
     
     public int getGrassColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.snowLineOffset), 0.0, 1.0);
         
         return ColorizerGrass.getGrassColor(temp, clime.rain());
     }
     
     public int getFoliageColor(BlockPos blockPos) {
         Clime clime = this.climateSampler.get().sample(blockPos.getX(), blockPos.getZ());
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.snowLineOffset), 0.0, 1.0);
         
         return ColorizerFoliage.getFoliageColor(temp, clime.rain());
     }
@@ -74,7 +79,7 @@ public class BetaColorSampler {
         z = (int) ((long) z + (shift >> 24 & 31L));
         
         Clime clime = this.climateSampler.get().sample(x, z);
-        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.seaLevel), 0.0, 1.0);
+        double temp = MathHelper.clamp(clime.temp() - getTempOffset(blockPos.getY(), this.snowLineOffset), 0.0, 1.0);
 
         return ColorizerGrass.getGrassColor(temp, clime.rain());
     }

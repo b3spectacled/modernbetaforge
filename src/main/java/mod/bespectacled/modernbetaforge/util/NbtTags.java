@@ -123,6 +123,7 @@ public class NbtTags {
     public static final String STRETCH_Y = "stretchY";
     public static final String SEA_LEVEL = "seaLevel";
     public static final String HEIGHT = "height";
+    public static final String SNOW_LINE_OFFSET = "snowLineOffset";
     
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
