@@ -2,6 +2,9 @@ package mod.bespectacled.modernbetaforge.api.world.spawn;
 
 import java.util.Random;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -31,7 +34,7 @@ public interface WorldSpawner {
             int minAdjacent = 9;
             
             int numTries = 0;
-            int maxTries = 10000;
+            int maxTries = 32768;
             
             Random random = new Random(chunkSource.getSeed());
             int centerX = spawnPos.getX() + random.nextInt(256) - 128;
@@ -63,6 +66,7 @@ public interface WorldSpawner {
                                 
                                 // Only spawn if the spawn position is surrounded by blocks
                                 if (numAdjacent >= minAdjacent) {
+                                    ModernBeta.log(Level.DEBUG, String.format("Found spawn at %d/%d/%d with %d adjacent blocks..", dX, surfaceY + 1, dZ, numAdjacent));
                                     return new BlockPos(dX, surfaceY + 1, dZ);
                                 }
                             }
@@ -75,6 +79,7 @@ public interface WorldSpawner {
                 radius *= 2;
             }
             
+            ModernBeta.log(Level.WARN, "Unable to locate a default spawn, using vanilla algorithm..");
             return null;
         }
     };
