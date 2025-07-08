@@ -342,6 +342,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.TEMP_NOISE_SCALE, GuiPredicates.TEMP_NOISE_SCALE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.RAIN_NOISE_SCALE, GuiPredicates.RAIN_NOISE_SCALE_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.DETAIL_NOISE_SCALE, GuiPredicates.DETAIL_NOISE_SCALE_TEST);
+        ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.SNOW_LINE_OFFSET, GuiPredicates.SNOW_LINE_OFFSET_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BIOME_DEPTH_WEIGHT, GuiPredicates.BIOME_DEPTH_WEIGHT_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BIOME_DEPTH_OFFSET, GuiPredicates.BIOME_DEPTH_OFFSET_TEST);
         ModernBetaClientRegistries.GUI_PREDICATE.register(GuiPredicate.BIOME_SCALE_WEIGHT, GuiPredicates.BIOME_SCALE_WEIGHT_TEST);

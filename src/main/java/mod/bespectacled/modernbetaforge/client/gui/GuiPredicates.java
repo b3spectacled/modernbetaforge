@@ -12,6 +12,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
+import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
@@ -150,6 +151,7 @@ public class GuiPredicates {
     public static final GuiPredicate TEMP_NOISE_SCALE_TEST;
     public static final GuiPredicate RAIN_NOISE_SCALE_TEST;
     public static final GuiPredicate DETAIL_NOISE_SCALE_TEST;
+    public static final GuiPredicate SNOW_LINE_OFFSET_TEST;
     public static final GuiPredicate BIOME_DEPTH_WEIGHT_TEST;
     public static final GuiPredicate BIOME_DEPTH_OFFSET_TEST;
     public static final GuiPredicate BIOME_SCALE_WEIGHT_TEST;
@@ -240,6 +242,12 @@ public class GuiPredicates {
             isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.BETA) ||
             isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.PE) ||
             isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.PE);
+    }
+    
+    private static boolean isClimateSampler(ModernBetaGeneratorSettings settings) {
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        
+        return biomeSource instanceof ClimateSampler;
     }
     
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
@@ -629,6 +637,7 @@ public class GuiPredicates {
         TEMP_NOISE_SCALE_TEST = new GuiPredicate(settings -> isBetaOrPESource(settings), GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
         RAIN_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
         DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);
+        SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG4_S_SNOW_OF, GuiIdentifiers.PG5_F_SNOW_OF);
         BIOME_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_WT), GuiIdentifiers.PG4_S_B_DPTH_WT, GuiIdentifiers.PG5_F_B_DPTH_WT);
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
