@@ -637,7 +637,6 @@ public class GuiPredicates {
         TEMP_NOISE_SCALE_TEST = new GuiPredicate(settings -> isBetaOrPESource(settings), GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
         RAIN_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
         DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);
-        SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG4_S_SNOW_OF, GuiIdentifiers.PG5_F_SNOW_OF);
         BIOME_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_WT), GuiIdentifiers.PG4_S_B_DPTH_WT, GuiIdentifiers.PG5_F_B_DPTH_WT);
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
@@ -694,6 +693,8 @@ public class GuiPredicates {
             GuiIdentifiers.PG6_TAIG_BEACH,
             GuiIdentifiers.PG6_TUND_BEACH
         );
+        SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
+        
         DEV_BIOME_PROP_TEST = new GuiPredicate(settings -> {
             ResourceLocation registryKey = ModernBeta.createRegistryKey("booleanProp");
             

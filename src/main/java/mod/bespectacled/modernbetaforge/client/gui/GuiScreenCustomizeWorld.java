@@ -158,6 +158,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private int customId;
     private BiMap<Integer, ResourceLocation> customIds;
+    private Set<Integer> unlabeledSliders;
     
     private int tabStartX;
     private int tabEndX;
@@ -209,6 +210,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void createPagedList() {
         this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
         this.customIds = HashBiMap.create();
+        this.unlabeledSliders = new HashSet<>();
         
         int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
         int biomeSourceId = ModernBetaRegistries.BIOME_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
@@ -497,7 +499,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
-            createGuiSlider(GuiIdentifiers.PG4_S_SNOW_OF, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page4", "release"),
             null,
@@ -556,8 +558,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiField(GuiIdentifiers.PG5_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
-            createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SNOW_OF, I18n.format(PREFIX + NbtTags.SNOW_LINE_OFFSET) + ":"),
-            createGuiField(GuiIdentifiers.PG5_F_SNOW_OF, String.format("%d", this.settings.snowLineOffset), this.intFilter),
 
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page5", "release"),
             null,
@@ -583,6 +583,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageClimate = {
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_L_SNOW_OFFSET, I18n.format(PREFIX + NbtTags.SNOW_LINE_OFFSET) + ":"),
+            createGuiSliderNoLabel(GuiIdentifiers.PG6_S_SNOW_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this, this.unlabeledSliders),
+                
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
@@ -901,7 +904,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public String getText(int entry, String entryString, float entryValue) {
         // Do not append colon for custom property entries
-        if (this.customIds.containsKey(entry)) {
+        if (this.customIds.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
         
@@ -993,10 +996,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG5_F_DETL_SCL:
                     this.settings.detailNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
                     newEntryValue = this.settings.detailNoiseScale;
-                    break;
-                case GuiIdentifiers.PG5_F_SNOW_OF:
-                    this.settings.snowLineOffset = (int)MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL);
-                    newEntryValue = this.settings.snowLineOffset;
                     break;
                 case GuiIdentifiers.PG5_F_B_DPTH_WT:
                     this.settings.biomeDepthWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT);
@@ -1407,9 +1406,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG4_S_DETL_SCL:
                     this.settings.detailNoiseScale = roundToThreeDec(entryValue);
                     break;
-                case GuiIdentifiers.PG4_S_SNOW_OF:
-                    this.settings.snowLineOffset = (int)entryValue;
-                    break;
                 case GuiIdentifiers.PG4_S_B_DPTH_WT:
                     this.settings.biomeDepthWeight = roundToThreeDec(entryValue);
                     break;
@@ -1688,6 +1684,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG3_S_MGMA_CNT:
                     this.settings.magmaCount = (int)entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG6_S_SNOW_OFFSET:
+                    this.settings.snowLineOffset = (int)entryValue;
                     break;
             }
             
@@ -2521,6 +2521,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return new GuiPageButtonList.GuiSlideEntry(id, I18n.format(PREFIX + tag), true, formatHelper, minValue, maxValue, initialValue);
     }
     
+    private static GuiPageButtonList.GuiSlideEntry createGuiSliderNoLabel(int id, float minValue, float maxValue, float initialValue, FormatHelper formatHelper, Set<Integer> unlabeledSliders) {
+        unlabeledSliders.add(id);
+        return new GuiPageButtonList.GuiSlideEntry(id, "", true, formatHelper, minValue, maxValue, initialValue);
+    }
+    
     private static GuiPageButtonList.GuiButtonEntry createGuiButton(int id, String tag, boolean initialValue) {
         return new GuiPageButtonList.GuiButtonEntry(id, I18n.format(PREFIX + tag), true, initialValue);
     }
@@ -2668,7 +2673,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 "entry",
                 0.0f,
                 property.getValues().length - 1,
-                listNdx, 
+                listNdx,
                 GuiScreenCustomizeWorld.this
             );
         }

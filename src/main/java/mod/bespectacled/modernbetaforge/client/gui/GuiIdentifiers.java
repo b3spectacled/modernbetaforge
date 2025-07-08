@@ -128,21 +128,19 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_JUNGLE = 309;
     public static final int PG2_B_USE_ACACIA = 310;
     public static final int PG2_B_USE_FANCY_OAK = 311;
+    public static final int PG2_B_USE_SAND_DISKS = 312;
+    public static final int PG2_B_USE_GRAV_DISKS = 313;
+    public static final int PG2_B_USE_CLAY_DISKS = 314;
+    public static final int PG2_B_USE_DOUBLE = 315;
     
-    public static final int PG2_B_SPAWN_CREATURE = 312;
-    public static final int PG2_B_SPAWN_MONSTER = 313;
-    public static final int PG2_B_SPAWN_WATER = 314;
-    public static final int PG2_B_SPAWN_AMBIENT = 315;
-    public static final int PG2_B_SPAWN_WOLVES = 316;
+    public static final int PG2_B_SPAWN_CREATURE = 320;
+    public static final int PG2_B_SPAWN_MONSTER = 321;
+    public static final int PG2_B_SPAWN_WATER = 322;
+    public static final int PG2_B_SPAWN_AMBIENT = 323;
+    public static final int PG2_B_SPAWN_WOLVES = 324;
     
-    public static final int PG2_S_BIOME_SZ = 317;
-    public static final int PG2_S_SNOWY_CHANCE = 318;
-    
-    public static final int PG2_B_USE_SAND_DISKS = 319;
-    public static final int PG2_B_USE_GRAV_DISKS = 320;
-    public static final int PG2_B_USE_CLAY_DISKS = 321;
-    
-    public static final int PG2_B_USE_DOUBLE = 322;
+    public static final int PG2_S_BIOME_SZ = 330;
+    public static final int PG2_S_SNOWY_CHANCE = 331;
     
     // Labels
     public static final int PG2_L_BETA = 1300;
@@ -266,7 +264,6 @@ public class GuiIdentifiers {
     public static final int PG4_S_TEMP_SCL = 520;
     public static final int PG4_S_RAIN_SCL = 521;
     public static final int PG4_S_DETL_SCL = 522;
-    public static final int PG4_S_SNOW_OF = 523;
     
     public static final int PG4_S_SCLE_NS_X = 524;
     public static final int PG4_S_SCLE_NS_Z = 525;
@@ -309,7 +306,6 @@ public class GuiIdentifiers {
     public static final int PG5_F_TEMP_SCL = 620;
     public static final int PG5_F_RAIN_SCL = 621;
     public static final int PG5_F_DETL_SCL = 622;
-    public static final int PG5_F_SNOW_OF = 623;
     
     public static final int PG5_F_SCLE_NS_X = 624;
     public static final int PG5_F_SCLE_NS_Z = 625;
@@ -338,7 +334,6 @@ public class GuiIdentifiers {
     public static final int PG5_L_TEMP_SCL = 1613;
     public static final int PG5_L_RAIN_SCL = 1614;
     public static final int PG5_L_DETL_SCL = 1615;
-    public static final int PG5_L_SNOW_OF = 1616;
     
     public static final int PG5_L_B_DPTH_WT = 1617;
     public static final int PG5_L_B_DPTH_OF = 1618;
@@ -402,6 +397,8 @@ public class GuiIdentifiers {
     public static final int PG6_TUND_OCEAN = 731;
     public static final int PG6_TUND_BEACH = 732;
     
+    public static final int PG6_S_SNOW_OFFSET = 750;
+    
     // Labels
     public static final int PG6_LAND_LABL = 1700;
     public static final int PG6_OCEAN_LABL = 1701;
@@ -418,6 +415,8 @@ public class GuiIdentifiers {
     public static final int PG6_SWMP_LABL = 1711;
     public static final int PG6_TAIG_LABL = 1712;
     public static final int PG6_TUND_LABL = 1713;
+    
+    public static final int PG6_L_SNOW_OFFSET = 1750;
     
     /* Page 8 - Custom Properties */
     
