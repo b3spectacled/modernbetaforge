@@ -2028,7 +2028,6 @@ public class ModernBetaGeneratorSettings {
                 factory.magmaCount = MathHelper.clamp(factory.magmaCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
                 
                 /* Sanitize resource locations and strings */
-                
                 factory.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.validateOrElse(new ResourceLocation(factory.chunkSource), defaults.chunkSource).toString();
                 factory.biomeSource = ModernBetaRegistries.BIOME_SOURCE.validateOrElse(new ResourceLocation(factory.biomeSource), defaults.biomeSource).toString();
                 factory.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.validateOrElse(new ResourceLocation(factory.surfaceBuilder), defaults.surfaceBuilder).toString();
@@ -2415,25 +2414,31 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Biomes.PLAINS.getRegistryName(), ForgeRegistries.BIOMES);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new BiomeProperty(resourceLocation, predicate));
         }
 
         @Override
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Blocks.AIR.getRegistryName(), ForgeRegistries.BLOCKS);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new BlockProperty(resourceLocation, predicate));
         }
 
         @Override
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), new ResourceLocation("pig"), ForgeRegistries.ENTITIES);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new EntityEntryProperty(resourceLocation, predicate));
         }
 
     }
