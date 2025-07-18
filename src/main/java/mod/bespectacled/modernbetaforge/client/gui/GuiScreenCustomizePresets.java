@@ -96,7 +96,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
-    private static final int MAX_PRESET_LENGTH = 50000;
     private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
     private static final int MAX_PRESET_NAME_LENGTH = 30;
     private static final int MAX_PRESET_DESC_LENGTH = 60;
@@ -226,7 +225,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         String initialModalDescText = this.fieldModalDesc != null ? this.fieldModalDesc.getText() : "";
         String intialModalSettingsText = this.fieldModalSettings != null ? this.fieldModalSettings.getText() : initialExportText;
 
-        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, 50, 40, this.width - 100, 20, initialExportText, MAX_PRESET_LENGTH);
+        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, 50, 40, this.width - 100, 20, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
         this.buttonModalConfirm = this.addButton(new GuiButton(GUI_ID_MODAL_CONFIRM, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm")));
         this.buttonModalCancel = this.addButton(new GuiButton(GUI_ID_MODAL_CANCEL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format("gui.cancel")));
@@ -235,7 +234,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         this.fieldModalName = this.createInitialField(this.fieldModalName, GUI_ID_MODAL_NAME, centerX - modalWidth + 10, centerY - 50, MODAL_NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
         this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
-        this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, MAX_PRESET_LENGTH);
+        this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
         this.iconBounds.updateBounds(boxL + 1, boxT + 1, MODAL_ICON_SIZE, MODAL_ICON_SIZE);
         
@@ -558,15 +557,19 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
         String nameNumChars = String.format("%d", MAX_PRESET_NAME_LENGTH - this.fieldModalName.getText().length());
         String descNumChars = String.format("%d", MAX_PRESET_DESC_LENGTH - this.fieldModalDesc.getText().length());
+        String settingsNumChars = String.format("%d", ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldModalSettings.getText().length());
         
         int nameNumCharsLen = this.fontRenderer.getStringWidth(nameNumChars);
         int descNumCharsLen = this.fontRenderer.getStringWidth(descNumChars);
+        int settingsNumCharsLen = this.fontRenderer.getStringWidth(settingsNumChars);
         
         int nameNumCharsCol = MAX_PRESET_NAME_LENGTH - this.fieldModalName.getText().length() > 4 ? 10526880 : 16752800;
         int descNumCharsCol = MAX_PRESET_DESC_LENGTH - this.fieldModalDesc.getText().length() > 4 ? 10526880 : 16752800;
+        int settingsNumCharsCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldModalSettings.getText().length() > 100 ? 10526880 : 16752800;
         
         this.drawString(this.fontRenderer, nameNumChars, textStartX + MODAL_NAME_FIELD_LENGTH - nameNumCharsLen, centerY - 60, nameNumCharsCol);
         this.drawString(this.fontRenderer, descNumChars, textStartX + MODAL_DESC_FIELD_LENGTH - descNumCharsLen, centerY - 20, descNumCharsCol);
+        this.drawString(this.fontRenderer, settingsNumChars, textStartX + MODAL_SETTINGS_FIELD_LENGTH - settingsNumCharsLen, centerY + 20, settingsNumCharsCol);
         
         int boxL = centerX + modalWidth - MODAL_ICON_SIZE - 1 - MODAL_ICON_PADDING_R;
         int boxR = centerX + modalWidth - 0 - MODAL_ICON_PADDING_R;

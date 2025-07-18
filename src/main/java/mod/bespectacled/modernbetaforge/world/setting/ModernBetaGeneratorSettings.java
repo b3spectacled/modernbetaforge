@@ -57,6 +57,8 @@ public class ModernBetaGeneratorSettings {
     public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     
+    public static final int MAX_PRESET_LENGTH = 25000;
+    
     public static final int MIN_HEIGHT = 1;
     public static final int MAX_HEIGHT = 255;
     
@@ -2289,6 +2291,12 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static ModernBetaGeneratorSettings build(String generatorSettings) {
+        if (generatorSettings.length() > MAX_PRESET_LENGTH) {
+            ModernBeta.log(Level.ERROR, String.format("Generator settings string exceeds maximum length (%d)!", MAX_PRESET_LENGTH));
+            
+            return build();
+        }
+        
         return ModernBetaGeneratorSettings.Factory.jsonToFactory(generatorSettings).build();
     }
     

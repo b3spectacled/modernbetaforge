@@ -48,12 +48,16 @@ public class PlayerEventHandler {
         
         if (!isSinglePlayer) {
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
-                ModernBetaPacketHandler.INSTANCE.sendTo(
-                    ModernBetaConfig.serverOptions.sendWorldInfo ?
-                        new WorldInfoMessage(worldServer.getSeed(), worldServer.getWorldInfo().getGeneratorOptions()) :
-                        WorldInfoMessage.EMPTY,
-                    player
-                );
+                // Sanity check generator settings string length
+                WorldInfoMessage message = ModernBetaConfig.serverOptions.sendWorldInfo ?
+                    new WorldInfoMessage(
+                        worldServer.getSeed(),
+                        worldServer.getWorldInfo().getGeneratorOptions().length() < ModernBetaGeneratorSettings.MAX_PRESET_LENGTH ?
+                            worldServer.getWorldInfo().getGeneratorOptions() :
+                            ""
+                    ) : WorldInfoMessage.EMPTY;
+                
+                ModernBetaPacketHandler.INSTANCE.sendTo(message, player);
             }
             
             if (ModernBetaConfig.serverOptions.sendCloudHeight) {
