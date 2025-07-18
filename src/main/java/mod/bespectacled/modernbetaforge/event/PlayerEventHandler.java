@@ -48,13 +48,16 @@ public class PlayerEventHandler {
         
         if (!isSinglePlayer) {
             if (biomeProvider instanceof ModernBetaBiomeProvider) {
+                String generatorOptions = worldServer.getWorldInfo().getGeneratorOptions();
+                
+                // Sanitize generator options string
+                generatorOptions = ModernBetaGeneratorSettings.Factory.jsonToFactory(generatorOptions).toString();
+                
                 // Sanity check generator settings string length
                 WorldInfoMessage message = ModernBetaConfig.serverOptions.sendWorldInfo ?
                     new WorldInfoMessage(
                         worldServer.getSeed(),
-                        worldServer.getWorldInfo().getGeneratorOptions().length() < ModernBetaGeneratorSettings.MAX_PRESET_LENGTH ?
-                            worldServer.getWorldInfo().getGeneratorOptions() :
-                            ""
+                        generatorOptions.length() < ModernBetaGeneratorSettings.MAX_PRESET_LENGTH ? generatorOptions : ""
                     ) : WorldInfoMessage.EMPTY;
                 
                 ModernBetaPacketHandler.INSTANCE.sendTo(message, player);
