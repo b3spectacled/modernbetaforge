@@ -50,6 +50,19 @@ public class ForgeRegistryUtil<T> {
         return entries.get(random.nextInt(entries.size()));
     }
     
+    public static <T> ResourceLocation validateOrElse(ResourceLocation registryKey, ResourceLocation alternateKey, IForgeRegistry<? extends T> registry) {
+        T t = registry.getValue(registryKey);
+        
+        if (t == null) {
+            String warning = String.format("Did not find key '%s' for registry '%s', returning alternate key.", registryKey.toString(), registry.getRegistrySuperType());
+            ModernBeta.log(Level.WARN, warning);
+            
+            return alternateKey;
+        }
+        
+        return registryKey;
+    }
+    
     public static <T> List<ResourceLocation> getKeys(IForgeRegistry<? extends T> registry, Predicate<ResourceLocation> filter) {
         return registry.getEntries()
                 .stream()
@@ -92,11 +105,11 @@ public class ForgeRegistryUtil<T> {
             .collect(Collectors.toCollection(ArrayList::new));
     }
     
-    public static String getFluidLocalizedName(ResourceLocation blockKey) {
+    public static String getFluidLocalizedName(ResourceLocation registryKey) {
         Optional<Fluid> fluid = FluidRegistry.getRegisteredFluids()
             .values()
             .stream()
-            .filter(f -> f.getBlock() != null && blockKey.equals(f.getBlock().getRegistryName()))
+            .filter(f -> f.getBlock() != null && registryKey.equals(f.getBlock().getRegistryName()))
             .findFirst();
             
         if (fluid.isPresent()) {

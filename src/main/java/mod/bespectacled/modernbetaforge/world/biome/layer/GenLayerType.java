@@ -1,5 +1,9 @@
 package mod.bespectacled.modernbetaforge.world.biome.layer;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
+
 public enum GenLayerType {
     VANILLA("vanilla"),
     CONTINENTAL("continental"),
@@ -21,5 +25,18 @@ public enum GenLayerType {
         }
         
         throw new IllegalArgumentException("[Modern Beta] No Layer Type matching id: " + id);
+    }
+
+    public static GenLayerType fromIdOrElse(String id, GenLayerType alternate) {
+        GenLayerType type;
+        
+        try {
+            type = fromId(id);
+        } catch (IllegalArgumentException e) {
+            ModernBeta.log(Level.WARN, String.format("Did not find GenLayerType id '%s', returning alternate.", id));
+            type = alternate;
+        }
+        
+        return type;
     }
 }

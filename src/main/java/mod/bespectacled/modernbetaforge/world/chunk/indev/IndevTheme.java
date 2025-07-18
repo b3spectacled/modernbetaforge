@@ -1,5 +1,9 @@
 package mod.bespectacled.modernbetaforge.world.chunk.indev;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
+
 public enum IndevTheme {
     NORMAL("normal"),
     PARADISE("paradise"),
@@ -19,5 +23,18 @@ public enum IndevTheme {
         }
         
         throw new IllegalArgumentException("[Modern Beta] No Indev Theme matching id: " + id);
+    }
+    
+    public static IndevTheme fromIdOrElse(String id, IndevTheme alternate) {
+        IndevTheme theme;
+        
+        try {
+            theme = fromId(id);
+        } catch (IllegalArgumentException e) {
+            ModernBeta.log(Level.WARN, String.format("Did not find IndevTheme id '%s', returning alternate.", id));
+            theme = alternate;
+        }
+        
+        return theme;
     }
 }

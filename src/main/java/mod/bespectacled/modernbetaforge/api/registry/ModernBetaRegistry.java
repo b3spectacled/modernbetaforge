@@ -63,6 +63,17 @@ public final class ModernBetaRegistry<T> {
         return this.registryEntries.get(registryKey).entry;
     }
     
+    public ResourceLocation validateOrElse(ResourceLocation registryKey, ResourceLocation alternateKey) {
+        if (!this.contains(registryKey)) {
+            String warning = String.format("Did not find key '%s' for registry '%s', getting alternate key.", registryKey, this.name);
+            ModernBeta.log(Level.WARN, warning);
+
+            return alternateKey;
+        }
+        
+        return registryKey;
+    }
+    
     public boolean contains(ResourceLocation registryKey) {
         return this.registryEntries.containsKey(registryKey);
     }

@@ -1,5 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.chunk.indev;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 
@@ -30,5 +33,18 @@ public enum IndevHouse {
         }
         
         throw new IllegalArgumentException("[Modern Beta] No Indev House matching id: " + id);
+    }
+    
+    public static IndevHouse fromIdOrElse(String id, IndevHouse alternate) {
+        IndevHouse house;
+        
+        try {
+            house = fromId(id);
+        } catch (IllegalArgumentException e) {
+            ModernBeta.log(Level.WARN, String.format("Did not find IndevHouse id '%s', returning alternate.", id));
+            house = alternate;
+        }
+        
+        return house;
     }
 }

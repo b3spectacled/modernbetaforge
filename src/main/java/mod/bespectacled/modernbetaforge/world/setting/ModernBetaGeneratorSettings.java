@@ -1665,6 +1665,7 @@ public class ModernBetaGeneratorSettings {
         public Factory deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             Factory factory = new Factory();
+            ModernBetaGeneratorSettings defaults = factory.build();
             
             try {
                 factory.chunkSource = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
@@ -1905,7 +1906,6 @@ public class ModernBetaGeneratorSettings {
                 factory.defaultFluid = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_LAVA_OCEANS, false) ? Blocks.LAVA.getRegistryName().toString() : factory.defaultFluid;
                 
                 /* Clamp values */
-                
                 factory.coordinateScale = MathHelper.clamp(factory.coordinateScale, MIN_COORD_SCALE, MAX_COORD_SCALE);
                 factory.heightScale = MathHelper.clamp(factory.heightScale, MIN_HEIGHT_SCALE, MAX_HEIGHT_SCALE);
                 factory.lowerLimitScale = MathHelper.clamp(factory.lowerLimitScale, MIN_LIMIT_SCALE, MAX_LIMIT_SCALE);
@@ -2027,6 +2027,67 @@ public class ModernBetaGeneratorSettings {
                 factory.magmaSize = MathHelper.clamp(factory.magmaSize, MIN_ORE_SIZE, MAX_ORE_SIZE);
                 factory.magmaCount = MathHelper.clamp(factory.magmaCount, MIN_ORE_COUNT, MAX_ORE_COUNT);
                 
+                /* Sanitize resource locations and strings */
+                
+                factory.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.validateOrElse(new ResourceLocation(factory.chunkSource), defaults.chunkSource).toString();
+                factory.biomeSource = ModernBetaRegistries.BIOME_SOURCE.validateOrElse(new ResourceLocation(factory.biomeSource), defaults.biomeSource).toString();
+                factory.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.validateOrElse(new ResourceLocation(factory.surfaceBuilder), defaults.surfaceBuilder).toString();
+                factory.caveCarver = ModernBetaRegistries.CAVE_CARVER.validateOrElse(new ResourceLocation(factory.caveCarver), defaults.caveCarver).toString();
+                factory.worldSpawner = ModernBetaRegistries.WORLD_SPAWNER.validateOrElse(new ResourceLocation(factory.worldSpawner), defaults.worldSpawner).toString();
+                
+                factory.singleBiome = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.singleBiome), defaults.singleBiome, ForgeRegistries.BIOMES).toString();
+                factory.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.validateOrElse(new ResourceLocation(factory.defaultBlock), defaults.defaultBlock).toString();
+                factory.defaultFluid = ForgeRegistryUtil.getFluid(new ResourceLocation(factory.defaultFluid)).getBlock().getRegistryName().toString();
+                
+                factory.layerType = GenLayerType.fromIdOrElse(factory.layerType, GenLayerType.fromId(defaults.layerType)).id;
+                factory.levelTheme = IndevTheme.fromIdOrElse(factory.levelTheme, IndevTheme.fromId(defaults.levelTheme)).id;
+                factory.levelType = IndevType.fromIdOrElse(factory.levelType, IndevType.fromId(defaults.levelType)).id;
+                factory.levelHouse = IndevHouse.fromIdOrElse(factory.levelHouse, IndevHouse.fromId(defaults.levelHouse)).id;
+                
+                factory.desertBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.desertBiomeBase), defaults.desertBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.desertBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.desertBiomeOcean), defaults.desertBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.desertBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.desertBiomeBeach), defaults.desertBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.forestBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.forestBiomeBase), defaults.forestBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.forestBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.forestBiomeOcean), defaults.forestBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.forestBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.forestBiomeBeach), defaults.forestBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.iceDesertBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.iceDesertBiomeBase), defaults.iceDesertBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.iceDesertBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.iceDesertBiomeOcean), defaults.iceDesertBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.iceDesertBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.iceDesertBiomeBeach), defaults.iceDesertBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.plainsBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.plainsBiomeBase), defaults.plainsBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.plainsBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.plainsBiomeOcean), defaults.plainsBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.plainsBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.plainsBiomeBeach), defaults.plainsBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.rainforestBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.rainforestBiomeBase), defaults.rainforestBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.rainforestBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.rainforestBiomeOcean), defaults.rainforestBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.rainforestBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.rainforestBiomeBeach), defaults.rainforestBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.savannaBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.savannaBiomeBase), defaults.savannaBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.savannaBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.savannaBiomeOcean), defaults.savannaBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.savannaBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.savannaBiomeBeach), defaults.savannaBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.shrublandBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.shrublandBiomeBase), defaults.shrublandBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.shrublandBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.shrublandBiomeOcean), defaults.shrublandBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.shrublandBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.shrublandBiomeBeach), defaults.shrublandBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.seasonalForestBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.seasonalForestBiomeBase), defaults.seasonalForestBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.seasonalForestBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.seasonalForestBiomeOcean), defaults.seasonalForestBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.seasonalForestBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.seasonalForestBiomeBeach), defaults.seasonalForestBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.swamplandBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.swamplandBiomeBase), defaults.swamplandBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.swamplandBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.swamplandBiomeOcean), defaults.swamplandBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.swamplandBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.swamplandBiomeBeach), defaults.swamplandBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.taigaBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.taigaBiomeBase), defaults.taigaBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.taigaBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.taigaBiomeOcean), defaults.taigaBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.taigaBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.taigaBiomeBeach), defaults.taigaBiomeBeach, ForgeRegistries.BIOMES).toString();
+
+                factory.tundraBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.tundraBiomeBase), defaults.tundraBiomeBase, ForgeRegistries.BIOMES).toString();
+                factory.tundraBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.tundraBiomeOcean), defaults.tundraBiomeOcean, ForgeRegistries.BIOMES).toString();
+                factory.tundraBiomeBeach = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.tundraBiomeBeach), defaults.tundraBiomeBeach, ForgeRegistries.BIOMES).toString();
+
                 ModernBetaRegistries.PROPERTY.getKeys().forEach(key -> {
                     Property<?> property = ModernBetaRegistries.PROPERTY.get(key);
                     property.visitFactory(new ReadFactoryPropertyVisitor(), factory, key, jsonObject);
@@ -2422,25 +2483,31 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Biomes.PLAINS.getRegistryName(), ForgeRegistries.BIOMES);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BiomeProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new BiomeProperty(resourceLocation, predicate));
         }
 
         @Override
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Blocks.AIR.getRegistryName(), ForgeRegistries.BLOCKS);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new BlockProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new BlockProperty(resourceLocation, predicate));
         }
 
         @Override
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            
+            ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), new ResourceLocation("pig"), ForgeRegistries.ENTITIES);
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            factory.customProperties.put(registryKey, new EntityEntryProperty(new ResourceLocation(value), predicate));
+            factory.customProperties.put(registryKey, new EntityEntryProperty(resourceLocation, predicate));
         }
 
     }
