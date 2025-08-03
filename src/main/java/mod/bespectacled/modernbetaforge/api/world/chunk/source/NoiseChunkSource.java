@@ -272,7 +272,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 startNoiseX,
                 startNoiseZ,
                 localNoiseX,
-                localNoiseZ
+                localNoiseZ,
+                this.noiseSizeX,
+                this.noiseSizeZ
             );
         }
         double scale = noiseHeight.scale;
@@ -319,7 +321,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 startNoiseX,
                 startNoiseZ,
                 localNoiseX,
-                localNoiseZ
+                localNoiseZ,
+                this.noiseSizeX,
+                this.noiseSizeZ
             );
         }
         double scale = noiseHeight.scale;

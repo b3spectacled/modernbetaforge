@@ -10,7 +10,16 @@ public interface NoiseHeightSampler {
      * @param startNoiseZ z-coordinate start of chunk in noise coordinates.
      * @param localNoiseX Current subchunk index along x-axis.
      * @param localNoiseZ Current subchunk index along z-axis.
+     * @param noiseSizeX Number of subchunks in the x-axis of a chunk.
+     * @param noiseSizeZ Number of subchunks in the z-axis of a chunk.
      * @return A {@link NoiseHeight} containing the sampled scale and depth values.
      */
-    NoiseHeight sampleNoiseHeight(NoiseHeight noiseHeight, int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+    NoiseHeight sampleNoiseHeight(
+        NoiseHeight noiseHeight,
+        int startNoiseX,
+        int startNoiseZ,
+        int localNoiseX,
+        int localNoiseZ,
+        int noiseSizeX,
+        int nosieSizeZ);
 }
