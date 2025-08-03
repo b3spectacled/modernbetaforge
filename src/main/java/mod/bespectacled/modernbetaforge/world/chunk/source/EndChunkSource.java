@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.math.MathHelper;
@@ -24,7 +25,7 @@ public class EndChunkSource extends SkylandsChunkSource {
     }
     
     @Override
-    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+    protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
 
@@ -37,7 +38,7 @@ public class EndChunkSource extends SkylandsChunkSource {
         scale = MathHelper.clamp(scale, 0.0, 1.0);
         scale += 0.5;
         
-        return new NoiseScaleDepth(scale, depth);
+        return new NoiseHeight(scale, depth);
     }
 
     @Override

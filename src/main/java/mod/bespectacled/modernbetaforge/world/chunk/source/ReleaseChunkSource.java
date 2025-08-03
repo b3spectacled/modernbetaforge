@@ -13,6 +13,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.NoiseBiomeSource;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
@@ -135,7 +136,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     }
     
     @Override
-    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+    protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
@@ -215,7 +216,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         biomeDepth = biomeDepth * baseSize / 8.0;
         biomeDepth = baseSize + biomeDepth * 4.0;
         
-        return new NoiseScaleDepth(biomeScale, biomeDepth);
+        return new NoiseHeight(biomeScale, biomeDepth);
     }
 
     @Override

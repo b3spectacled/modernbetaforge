@@ -12,6 +12,8 @@ import com.google.common.collect.ImmutableList;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeightSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
@@ -46,6 +48,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     private final ChunkCache<DensityChunk> densityCache;
     
     private final Map<ResourceLocation, NoiseSampler> noiseSamplers;
+    private final Map<ResourceLocation, NoiseHeightSampler> noiseHeightSamplers;
     
     private final NoiseSettings noiseSettings;
     private final SurfaceBuilder surfaceBuilder;
@@ -78,6 +81,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.noiseSamplers = new LinkedHashMap<>();
         ModernBetaRegistries.NOISE_SAMPLER.getEntrySet().forEach(entry -> this.noiseSamplers.put(
+            entry.getKey(),
+            entry.getValue().apply(this, this.settings)
+        ));
+        this.noiseHeightSamplers = new LinkedHashMap<>();
+        ModernBetaRegistries.NOISE_HEIGHT_SAMPLER.getEntrySet().forEach(entry -> this.noiseHeightSamplers.put(
             entry.getKey(),
             entry.getValue().apply(this, this.settings)
         ));
@@ -182,6 +190,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
+     * Gets a noise height sampler identified by ResourceLocation key.
+     * 
+     * @param key The noise height sampler key
+     * @return The noise height sampler.
+     */
+    public NoiseHeightSampler getNoiseHeightSampler(ResourceLocation key) {
+        if (!this.noiseHeightSamplers.containsKey(key)) {
+            String error = String.format("[Modern Beta] Noise Height Sampler map does not contain key '%s'!", key);
+            
+            throw new IllegalArgumentException(error);
+        }
+        
+        return this.noiseHeightSamplers.get(key);
+    }
+    
+    /**
      * Gets the noise settings container.
      * 
      * @return The noise settings.
@@ -237,9 +261,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int localNoiseZ = (z & 0xF) / this.noiseSizeZ;
         int noiseY = y / this.verticalNoiseResolution;
         
-        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
-        double scale = noiseScaleDepth.scale;
-        double depth = noiseScaleDepth.depth;
+        NoiseHeight noiseHeight = this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        List<NoiseHeightSampler> noiseHeightSamplers = this.noiseHeightSamplers.entrySet()
+            .stream()
+            .map(e -> e.getValue())
+            .collect(Collectors.toCollection(ArrayList::new));
+        for (int i = 0; i < noiseHeightSamplers.size(); ++i) {
+            noiseHeight = noiseHeightSamplers.get(i).sampleNoiseHeight(
+                noiseHeight,
+                startNoiseX,
+                startNoiseZ,
+                localNoiseX,
+                localNoiseZ
+            );
+        }
+        double scale = noiseHeight.scale;
+        double depth = noiseHeight.depth;
         double offset = this.sampleNoiseOffset(noiseY, scale, depth);
         
         return String.format("Scale: %.3f Depth: %.3f Offset: %.3f", scale, depth, offset);
@@ -248,7 +285,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     /**
      * Samples noise for a column at startNoiseX + localNoiseX, startNoiseZ + localNoiseZ.
      * The startNoise and localNoise values should be added to produce the actual noise coordinate; they are kept separate for calculating accurate Beta/PE generation.
-     * You can override this if necessary, but otherwise just implement {@link #sampleNoiseScaleDepth(int, int, int, int) getNoiseScaleDepth}
+     * You can override this if necessary, but otherwise just implement {@link #sampleNoiseHeight(int, int, int, int) getNoiseHeight}
      * and {@link #sampleNoiseOffset(int, double, double) getNoiseOffset}.
      * 
      * @param buffer Buffer of size noiseSizeY + 1 to store noise column
@@ -271,9 +308,22 @@ public abstract class NoiseChunkSource extends ChunkSource {
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
         
-        NoiseScaleDepth noiseScaleDepth = this.sampleNoiseScaleDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
-        double scale = noiseScaleDepth.scale;
-        double depth = noiseScaleDepth.depth;
+        NoiseHeight noiseHeight = this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        List<NoiseHeightSampler> noiseHeightSamplers = this.noiseHeightSamplers.entrySet()
+            .stream()
+            .map(e -> e.getValue())
+            .collect(Collectors.toCollection(ArrayList::new));
+        for (int i = 0; i < noiseHeightSamplers.size(); ++i) {
+            noiseHeight = noiseHeightSamplers.get(i).sampleNoiseHeight(
+                noiseHeight,
+                startNoiseX,
+                startNoiseZ,
+                localNoiseX,
+                localNoiseZ
+            );
+        }
+        double scale = noiseHeight.scale;
+        double depth = noiseHeight.depth;
 
         for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
             double density;
@@ -334,7 +384,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @param localNoiseZ Current subchunk index along z-axis.
      * @return A NoiseScaleDepth containing the sampled scaled and depth values.
      */
-    protected abstract NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
+    protected abstract NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ);
     
     /**
      * Samples the noise offset at the given noise y-coordinate.
@@ -590,17 +640,5 @@ public abstract class NoiseChunkSource extends ChunkSource {
         }
         
         return new DensityChunk(densityMap);
-    }
-    
-    protected static class NoiseScaleDepth {
-        public static final NoiseScaleDepth ZERO = new NoiseScaleDepth(0.0, 0.0);
-        
-        public final double scale;
-        public final double depth;
-        
-        public NoiseScaleDepth(double scale, double depth) {
-            this.scale = scale;
-            this.depth = depth;
-        }
     }
 }

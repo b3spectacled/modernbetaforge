@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -34,7 +35,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
     }
 
     @Override
-    protected NoiseScaleDepth sampleNoiseScaleDepth(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
+    protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
         
@@ -85,7 +86,7 @@ public class AlphaChunkSource extends NoiseChunkSource {
         depth = depth * baseSize / 8.0;
         depth = baseSize + depth * 4.0;
         
-        return new NoiseScaleDepth(scale, depth);
+        return new NoiseHeight(scale, depth);
     }
 
     @Override

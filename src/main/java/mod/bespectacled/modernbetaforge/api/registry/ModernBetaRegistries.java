@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseColumnSampler;
+import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeightSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSampler;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
@@ -24,6 +25,7 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<BiomeResolverCreator> BIOME_RESOLVER;
     public static final ModernBetaRegistry<NoiseSamplerCreator> NOISE_SAMPLER;
     public static final ModernBetaRegistry<NoiseColumnSamplerCreator> NOISE_COLUMN_SAMPLER;
+    public static final ModernBetaRegistry<NoiseHeightSamplerCreator> NOISE_HEIGHT_SAMPLER;
     public static final ModernBetaRegistry<NoiseSettings> NOISE_SETTING;
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE_BUILDER;
     public static final ModernBetaRegistry<CarverCreator> CARVER;
@@ -40,6 +42,7 @@ public class ModernBetaRegistries {
         BIOME_RESOLVER = new ModernBetaRegistry<>("BIOME_RESOLVER");
         NOISE_SAMPLER = new ModernBetaRegistry<>("NOISE_SAMPLER");
         NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>("NOISE_COLUMN_SAMPLER");
+        NOISE_HEIGHT_SAMPLER = new ModernBetaRegistry<>("NOISE_HEIGHT_SAMPLER");
         NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
         SURFACE_BUILDER = new ModernBetaRegistry<>("SURFACE_BUILDER");
         CARVER = new ModernBetaRegistry<>("CARVER");
@@ -74,6 +77,11 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface NoiseColumnSamplerCreator {
         NoiseColumnSampler apply(NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface NoiseHeightSamplerCreator {
+        NoiseHeightSampler apply(NoiseChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
     @FunctionalInterface
