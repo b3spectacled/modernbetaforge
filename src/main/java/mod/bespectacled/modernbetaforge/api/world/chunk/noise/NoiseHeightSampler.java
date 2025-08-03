@@ -21,5 +21,6 @@ public interface NoiseHeightSampler {
         int localNoiseX,
         int localNoiseZ,
         int noiseSizeX,
-        int nosieSizeZ);
+        int noiseSizeZ
+    );
 }
