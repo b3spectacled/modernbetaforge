@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
@@ -36,6 +37,8 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureComponent;
 
 public abstract class NoiseChunkSource extends ChunkSource {
+    public final static ResourceLocation INITIAL_NOISE_HEIGHT_SAMPLER = ModernBeta.createRegistryKey("initial");
+    
     protected final int verticalNoiseResolution;   // Number of blocks in a vertical subchunk
     protected final int horizontalNoiseResolution; // Number of blocks in a horizontal subchunk 
     
@@ -88,6 +91,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
             entry.getValue().apply(this, this.settings)
         ));
         this.noiseHeightSamplerMap = new LinkedHashMap<>();
+        this.noiseHeightSamplerMap.put(
+            INITIAL_NOISE_HEIGHT_SAMPLER,
+            (noiseHeight, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, noiseSizeX, noiseSizeZ) -> 
+                this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ)
+        );
         ModernBetaRegistries.NOISE_HEIGHT_SAMPLER.getEntrySet().forEach(entry -> this.noiseHeightSamplerMap.put(
             entry.getKey(),
             entry.getValue().apply(this, this.settings)
@@ -202,7 +210,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int localNoiseX = (x & 0xF) / this.noiseSizeX;
         int localNoiseZ = (z & 0xF) / this.noiseSizeZ;
         
-        NoiseHeight noiseHeight = this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+        NoiseHeight noiseHeight = NoiseHeight.ZERO;
         for (int i = 0; i < this.noiseHeightSamplers.size(); ++i) {
             noiseHeight = this.noiseHeightSamplers.get(i).sampleNoiseHeight(
                 noiseHeight,
@@ -330,8 +338,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
-        
-        NoiseHeight noiseHeight = this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
+
+        NoiseHeight noiseHeight = NoiseHeight.ZERO;
         for (int i = 0; i < this.noiseHeightSamplers.size(); ++i) {
             noiseHeight = this.noiseHeightSamplers.get(i).sampleNoiseHeight(
                 noiseHeight,
@@ -533,7 +541,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
 
     /**
-     * Sample initial noise for a given chunk.
+     * Creates initial noise source for a given chunk.
      * 
      * @return NoiseSource containing initial noise values for the chunk.
      */
