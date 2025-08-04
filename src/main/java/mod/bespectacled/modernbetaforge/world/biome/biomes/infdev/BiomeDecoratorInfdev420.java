@@ -21,7 +21,7 @@ public class BiomeDecoratorInfdev420 extends BiomeDecoratorInfdev {
         int startZ = startPos.getZ();
         
         double scale = 0.05;
-        int treeCount = (int) (forestOctaveNoise.sampleXY(startX * scale, startZ * scale) - random.nextDouble());
+        int treeCount = (int) (forestOctaveNoise.sample(startX * scale, startZ * scale) - random.nextDouble());
         
         if (treeCount < 0)
             treeCount = 0;

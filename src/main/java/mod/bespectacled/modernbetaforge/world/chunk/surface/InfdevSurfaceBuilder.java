@@ -27,7 +27,7 @@ public class InfdevSurfaceBuilder extends NoiseSurfaceBuilder {
     
     @Override
     public int sampleSurfaceDepth(int x, int z, Random random) {
-        double noise = this.getSurfaceOctaveNoise().sampleXY(x * 0.03125 * 2.0, z * 0.03125 * 2.0);
+        double noise = this.getSurfaceOctaveNoise().sample(x * 0.03125 * 2.0, z * 0.03125 * 2.0);
         
         return (int)(noise / 3.0 + 3.0 + this.getSurfaceVariation(random) * 0.25);
     }

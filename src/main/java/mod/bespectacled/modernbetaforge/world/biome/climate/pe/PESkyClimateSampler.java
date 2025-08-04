@@ -36,6 +36,6 @@ public class PESkyClimateSampler {
     }
     
     private double sampleSkyTempNoise(int x, int z) {
-        return this.tempOctaveNoise.sampleXZ(x, z, this.tempScale, this.tempScale);
+        return this.tempOctaveNoise.scaledSample(x, z, this.tempScale, this.tempScale);
     }
 }

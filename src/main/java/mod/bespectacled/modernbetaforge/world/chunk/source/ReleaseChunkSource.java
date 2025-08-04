@@ -151,7 +151,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         float biomeDepthWeight = this.settings.biomeDepthWeight;
         float biomeScaleWeight = this.settings.biomeScaleWeight;
         
-        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
+        double depth = this.depthOctaveNoise.scaledSample(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
         double biomeScale = 0.0;
         double biomeDepth = 0.0;

@@ -21,6 +21,6 @@ public class BiomeDecoratorInfdev415 extends BiomeDecoratorInfdev {
         int startZ = startPos.getZ();
         
         double scale = 0.25;
-        return (int) forestOctaveNoise.sampleXY(startX * scale, startZ * scale) << 3;
+        return (int) forestOctaveNoise.sample(startX * scale, startZ * scale) << 3;
     }
 }

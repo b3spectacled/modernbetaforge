@@ -113,7 +113,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
             for (int z = 0; z < this.levelLength; ++z) {
                 double heightLow = this.lowOctaveNoise.sample(x * 1.3f, z * 1.3f) / 8.0 - 8.0;
                 double heightHigh = this.highOctaveNoise.sample(x * 1.3f, z * 1.3f) / 6.0 + 6.0;
-                double heightSelector = this.selectorOctaveNoise.sampleXY(x, z) / 8.0;
+                double heightSelector = this.selectorOctaveNoise.sample(x, z) / 8.0;
                 
                 if (heightSelector > 0.0) {
                     heightHigh = heightLow;
@@ -159,7 +159,7 @@ public class Classic23aChunkSource extends FiniteChunkSource {
             for (int z = 0; z < this.levelLength; ++z) {
                 int worldZ = z - this.levelLength / 2;
                 
-                int dirtDepth = (int)(this.soilOctaveNoise.sampleXY(x, z) / 24.0) - 4;
+                int dirtDepth = (int)(this.soilOctaveNoise.sample(x, z) / 24.0) - 4;
                 int dirtThreshold = this.levelHeightmap[x + z * this.levelWidth] + seaLevel;
          
                 int stoneThreshold = dirtDepth + dirtThreshold;
@@ -310,8 +310,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
             this.setPhaseProgress(x / (float)(this.levelWidth - 1));
             
             for (int z = 0; z < this.levelLength; ++z) {
-                boolean genSand = sandOctaveNoise.sampleXY(x, z) > 8.0;
-                boolean genGravel = gravelOctaveNoise.sampleXY(x, z) > 12.0;
+                boolean genSand = sandOctaveNoise.sample(x, z) > 8.0;
+                boolean genGravel = gravelOctaveNoise.sample(x, z) > 12.0;
 
                 int height = levelHeightmap[x + z * this.levelWidth];
                 Block blockUp = this.getLevelBlock(x, height + 1, z);

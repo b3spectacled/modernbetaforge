@@ -109,7 +109,7 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         int startZ = startPos.getZ();
         
         double scale = 0.5;        
-        int noiseCount = (int) ((forestOctaveNoise.sampleXY(startX * scale, startZ * scale) / 8.0 + random.nextDouble() * 4.0 + 4.0) / 3.0);
+        int noiseCount = (int) ((forestOctaveNoise.sample(startX * scale, startZ * scale) / 8.0 + random.nextDouble() * 4.0 + 4.0) / 3.0);
         int treeCount = 0;
         
         if (random.nextInt(10) == 0) {

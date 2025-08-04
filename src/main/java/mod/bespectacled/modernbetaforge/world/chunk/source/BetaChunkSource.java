@@ -55,8 +55,8 @@ public class BetaChunkSource extends NoiseChunkSource {
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         double baseSize = this.settings.baseSize;
 
-        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
-        double depth = this.depthOctaveNoise.sampleXZ(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
+        double scale = this.scaleOctaveNoise.scaledSample(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
+        double depth = this.depthOctaveNoise.scaledSample(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
         Clime clime = this.climateSampler.sample(x, z);
         double temp = clime.temp();

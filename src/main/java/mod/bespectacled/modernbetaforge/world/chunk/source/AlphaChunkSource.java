@@ -45,8 +45,8 @@ public class AlphaChunkSource extends NoiseChunkSource {
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         double baseSize = this.settings.baseSize;
         
-        double scale = this.scaleOctaveNoise.sample(noiseX, 0, noiseZ, scaleNoiseScaleX, 0.0, scaleNoiseScaleZ);
-        double depth = this.depthOctaveNoise.sample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
+        double scale = this.scaleOctaveNoise.scaledSample(noiseX, 0, noiseZ, scaleNoiseScaleX, 0.0, scaleNoiseScaleZ);
+        double depth = this.depthOctaveNoise.scaledSample(noiseX, 0, noiseZ, depthNoiseScaleX, 0.0, depthNoiseScaleZ);
         
         scale = (scale + 256.0) / 512.0;
         

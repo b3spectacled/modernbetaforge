@@ -43,9 +43,9 @@ public class PEClimateSampler {
     }
     
     public Clime sampleClimateNoise(int x, int z) {
-        double temp = this.tempOctaveNoise.sampleXZ(x, z, this.tempScale, this.tempScale);
-        double rain = this.rainOctaveNoise.sampleXZ(x, z, this.rainScale, this.rainScale);
-        double detail = this.detailOctaveNoise.sampleXZ(x, z, this.detailScale, this.detailScale);
+        double temp = this.tempOctaveNoise.scaledSample(x, z, this.tempScale, this.tempScale);
+        double rain = this.rainOctaveNoise.scaledSample(x, z, this.rainScale, this.rainScale);
+        double detail = this.detailOctaveNoise.scaledSample(x, z, this.detailScale, this.detailScale);
 
         detail = detail * 1.1 + 0.5;
 

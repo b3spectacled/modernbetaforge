@@ -166,19 +166,19 @@ public class Infdev227ChunkSource extends ChunkSource {
         float baseHeight = (float)(
             this.heightNoise0.sample(x / 0.03125f, 0.0, z / 0.03125f) - 
             this.heightNoise1.sample(x / 0.015625f, 0.0, z / 0.015625f)) / 512.0f / 4.0f;
-        float heightSelector = (float)this.selectorOctaveNoise.sampleXY(x / 4.0f, z / 4.0f);
-        float detailNoise = (float)this.detailOctaveNoise.sampleXY(x / 8.0f, z / 8.0f) / 8.0f;
+        float heightSelector = (float)this.selectorOctaveNoise.sample(x / 4.0f, z / 4.0f);
+        float detailNoise = (float)this.detailOctaveNoise.sample(x / 8.0f, z / 8.0f) / 8.0f;
         
         float additionalHeight = heightSelector > 0.0f ? 
-            ((float)(this.highOctaveNoise.sampleXY(x * 0.25714284f * 2.0f, z * 0.25714284f * 2.0f) * detailNoise / 4.0)) :
-            ((float)(this.lowOctaveNoise.sampleXY(x * 0.25714284f, z * 0.25714284f) * detailNoise));
+            ((float)(this.highOctaveNoise.sample(x * 0.25714284f * 2.0f, z * 0.25714284f * 2.0f) * detailNoise / 4.0)) :
+            ((float)(this.lowOctaveNoise.sample(x * 0.25714284f, z * 0.25714284f) * detailNoise));
             
         int height = (int)(baseHeight + this.seaLevel + additionalHeight);
 
-        if ((float)this.selectorOctaveNoise.sampleXY(x, z) < 0.0f) {
+        if ((float)this.selectorOctaveNoise.sample(x, z) < 0.0f) {
             height = height / 2 << 1;
             
-            if ((float)this.selectorOctaveNoise.sampleXY(x / 5, z / 5) < 0.0f) {
+            if ((float)this.selectorOctaveNoise.sample(x / 5, z / 5) < 0.0f) {
                 ++height;
             }
         }

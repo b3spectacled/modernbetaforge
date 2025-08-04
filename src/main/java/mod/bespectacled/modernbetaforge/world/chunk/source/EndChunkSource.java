@@ -32,7 +32,7 @@ public class EndChunkSource extends SkylandsChunkSource {
         double scaleNoiseScaleX = this.settings.scaleNoiseScaleX;
         double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;
 
-        double scale = this.scaleOctaveNoise.sampleXZ(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
+        double scale = this.scaleOctaveNoise.scaledSample(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
         double depth = this.getIslandDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
 
         scale = MathHelper.clamp(scale, 0.0, 1.0);

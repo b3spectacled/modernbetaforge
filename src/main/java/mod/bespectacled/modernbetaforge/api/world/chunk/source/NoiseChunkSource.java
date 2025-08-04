@@ -358,7 +358,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             double density;
             double densityOffset = this.sampleNoiseOffset(noiseY, scale, depth);
     
-            double mainNoise = (this.mainOctaveNoise.sample(
+            double mainNoise = (this.mainOctaveNoise.scaledSample(
                 noiseX, noiseY, noiseZ,
                 coordinateScale / mainNoiseScaleX, 
                 heightScale / mainNoiseScaleY, 
@@ -366,7 +366,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             ) / 10.0 + 1.0) / 2.0;
             
             if (mainNoise < 0.0) {
-                density = this.minLimitOctaveNoise.sample(
+                density = this.minLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
                     heightScale, 
@@ -374,7 +374,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 ) / lowerLimitScale;
                 
             } else if (mainNoise > 1.0) {
-                density = this.maxLimitOctaveNoise.sample(
+                density = this.maxLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
                     heightScale, 
@@ -382,14 +382,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 ) / upperLimitScale;
                 
             } else {
-                double minLimitNoise = this.minLimitOctaveNoise.sample(
+                double minLimitNoise = this.minLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
                     heightScale, 
                     coordinateScale
                 ) / lowerLimitScale;
                 
-                double maxLimitNoise = this.maxLimitOctaveNoise.sample(
+                double maxLimitNoise = this.maxLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
                     coordinateScale, 
                     heightScale, 

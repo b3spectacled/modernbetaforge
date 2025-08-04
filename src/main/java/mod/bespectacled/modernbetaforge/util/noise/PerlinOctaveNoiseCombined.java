@@ -17,6 +17,6 @@ public class PerlinOctaveNoiseCombined {
     }
     
     public final double sample(double x, double y) {
-        return this.firstNoise.sampleXY(x + this.secondNoise.sampleXY(x, y), y);
+        return this.firstNoise.sample(x + this.secondNoise.sample(x, y), y);
     }
 }
