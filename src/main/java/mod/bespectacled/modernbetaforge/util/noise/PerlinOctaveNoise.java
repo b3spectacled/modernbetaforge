@@ -156,9 +156,9 @@ public class PerlinOctaveNoise {
      * Beta 2D Perlin noise sampler. This functions like sample(x, 0.0, z), except yOrigin is ignored.
      * 
      * @param x x-coordinate
-     * @param y y-coordinate
+     * @param z z-coordinate
      * @param scaleX x-coordinate scale
-     * @param scaleY y-coordinate scale
+     * @param scaleZ z-coordinate scale
      * @return A noise value at the coordinate
      */
     public final double scaledSample(double x, double z, double scaleX, double scaleZ) {
