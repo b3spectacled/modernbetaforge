@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.Level;
+
 import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
@@ -230,13 +234,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * Gets a noise sampler identified by ResourceLocation key.
      * 
      * @param key The noise sampler key
-     * @return The noise sampler.
+     * @return The noise sampler if one exists, otherwise null.
      */
-    public final NoiseSampler getNoiseSampler(ResourceLocation key) {
+    public final @Nullable NoiseSampler getNoiseSampler(ResourceLocation key) {
         if (!this.noiseSamplerMap.containsKey(key)) {
-            String error = String.format("[Modern Beta] Noise Sampler map does not contain key '%s'!", key);
-            
-            throw new IllegalArgumentException(error);
+            ModernBeta.log(Level.WARN, String.format("Noise Sampler map does not contain key '%s'!", key));
+            return null;
         }
         
         return this.noiseSamplerMap.get(key);
@@ -246,13 +249,12 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * Gets a noise height sampler identified by ResourceLocation key.
      * 
      * @param key The noise height sampler key
-     * @return The noise height sampler.
+     * @return The noise height sampler if one exists, otherwise null.
      */
-    public final NoiseHeightSampler getNoiseHeightSampler(ResourceLocation key) {
+    public final @Nullable NoiseHeightSampler getNoiseHeightSampler(ResourceLocation key) {
         if (!this.noiseHeightSamplerMap.containsKey(key)) {
-            String error = String.format("[Modern Beta] Noise Height Sampler map does not contain key '%s'!", key);
-            
-            throw new IllegalArgumentException(error);
+            ModernBeta.log(Level.WARN, String.format("Noise Height Sampler map does not contain key '%s'!", key));
+            return null;
         }
         
         return this.noiseHeightSamplerMap.get(key);
