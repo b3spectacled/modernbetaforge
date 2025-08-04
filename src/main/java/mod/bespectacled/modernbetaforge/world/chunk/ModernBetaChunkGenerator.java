@@ -105,7 +105,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         this.structures = this.initStructures(settings, world.getWorldInfo().isMapFeaturesEnabled());
         this.carvers = ModernBetaRegistries.CARVER
-            .getEntrySet()
+            .getEntries()
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
 

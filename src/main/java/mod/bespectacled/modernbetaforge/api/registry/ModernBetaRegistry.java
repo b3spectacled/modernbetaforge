@@ -95,6 +95,13 @@ public final class ModernBetaRegistry<T> {
             .collect(Collectors.toList());
     }
     
+    public List<Entry<ResourceLocation, T>> getEntries() {
+        return this.registryEntries.entrySet()
+            .stream()
+            .map(e -> new SimpleEntry<ResourceLocation, T>(e.getKey(), e.getValue().entry))
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
     public Set<Entry<ResourceLocation, T>> getEntrySet() {
         return this.registryEntries.entrySet()
             .stream()

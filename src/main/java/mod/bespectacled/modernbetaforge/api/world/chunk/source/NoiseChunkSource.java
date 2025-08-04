@@ -86,7 +86,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         this.densityCache = new ChunkCache<>("density", this::sampleDensities);
         
         this.noiseSamplerMap = new LinkedHashMap<>();
-        ModernBetaRegistries.NOISE_SAMPLER.getEntrySet().forEach(entry -> this.noiseSamplerMap.put(
+        ModernBetaRegistries.NOISE_SAMPLER.getEntries().forEach(entry -> this.noiseSamplerMap.put(
             entry.getKey(),
             entry.getValue().apply(this, this.settings)
         ));
@@ -96,7 +96,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             (noiseHeight, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, noiseSizeX, noiseSizeZ) -> 
                 this.sampleNoiseHeight(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ)
         );
-        ModernBetaRegistries.NOISE_HEIGHT_SAMPLER.getEntrySet().forEach(entry -> this.noiseHeightSamplerMap.put(
+        ModernBetaRegistries.NOISE_HEIGHT_SAMPLER.getEntries().forEach(entry -> this.noiseHeightSamplerMap.put(
             entry.getKey(),
             entry.getValue().apply(this, this.settings)
         ));
@@ -607,7 +607,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         // Create noise sources and sample.
         Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>();
         noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource());
-        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntrySet().forEach(entry -> noiseSources.put(
+        ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntries().forEach(entry -> noiseSources.put(
             entry.getKey(),
             new NoiseSource(
                 entry.getValue().apply(this, this.settings),
