@@ -155,6 +155,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private boolean clicked;
     private boolean randomClicked;
     private boolean tabClicked;
+    private long lastNavPressed;
     
     private int customId;
     private BiMap<Integer, ResourceLocation> propertyMap;
@@ -1861,10 +1862,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 usedSpecialKey = true;
                 break;
             case Keyboard.KEY_A:
-                usedSpecialKey = this.modifyPageValue(-1);
+                usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? -1 : 0);
+                this.lastNavPressed = System.currentTimeMillis();
                 break;
             case Keyboard.KEY_D:
-                usedSpecialKey = this.modifyPageValue(1);
+                usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? 1 : 0);
+                this.lastNavPressed = System.currentTimeMillis();
                 break;
         }
         
@@ -2327,7 +2330,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private boolean modifyPageValue(int amount) {
         Gui guiComponent = this.pageList.getFocusedControl();
-        if (guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
+        if (amount == 0 || guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
             return false;
         }
         
