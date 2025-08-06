@@ -477,12 +477,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonCancel.enabled = enabled;
     }
     
-    @SuppressWarnings("deprecation")
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(seed, settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(seed, settings);
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(settings.surfaceBuilder).apply(this.chunkSource, settings);
-        this.injectionRules = this.chunkSource.buildBiomeInjectorRules(this.biomeSource);
+        this.injectionRules = this.chunkSource.createBiomeInjectionRules(this.biomeSource).build();
     }
     
     private String getFormattedSeed() {

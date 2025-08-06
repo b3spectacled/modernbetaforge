@@ -48,7 +48,6 @@ public class CommandDrawMap extends CommandBase {
         this.path = PATH;
     }
     
-    @SuppressWarnings("deprecation")
     public BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         BiomeProvider biomeProvider = worldServer.getBiomeProvider();
@@ -59,7 +58,7 @@ public class CommandDrawMap extends CommandBase {
             
             ChunkSource chunkSource = modernBetaChunkGenerator.getChunkSource();
             BiomeSource biomeSource = modernBetaBiomeProvider.getBiomeSource();
-            BiomeInjectionRules injectionRules = chunkSource.buildBiomeInjectorRules(biomeSource);
+            BiomeInjectionRules injectionRules = chunkSource.createBiomeInjectionRules(biomeSource).build();
             
             SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
                     .get(modernBetaChunkGenerator.getGeneratorSettings().surfaceBuilder)

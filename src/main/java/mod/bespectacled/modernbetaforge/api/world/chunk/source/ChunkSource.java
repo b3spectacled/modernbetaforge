@@ -235,18 +235,6 @@ public abstract class ChunkSource {
     public void pruneChunk(World world, int chunkX, int chunkZ) { }
     
     /**
-     * Builds the ruleset used for biome injection.
-     * This is deprecated, override {@link #createBiomeInjectionRules(BiomeSource) createBiomeInjectionRules} instead.
-     * 
-     * @param biomeSource The biome source.
-     * @return The built biome injection rules.
-     */
-    @Deprecated
-    public BiomeInjectionRules buildBiomeInjectorRules(BiomeSource biomeSource) {
-        return this.createBiomeInjectionRules(biomeSource).build();
-    }
-    
-    /**
      * Creates the rule set builder used for biome injection.
      * 
      * @param biomeSource The biome source.

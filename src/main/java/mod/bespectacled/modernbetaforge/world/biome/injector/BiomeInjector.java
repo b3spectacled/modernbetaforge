@@ -15,11 +15,19 @@ import net.minecraftforge.common.BiomeDictionary;
 public class BiomeInjector {
     private final BiomeInjectionRules rules;
     
-    public BiomeInjector(ChunkSource chunkSource, BiomeSource biomeSource, BiomeInjectionRules rules) {
+    public BiomeInjector(BiomeInjectionRules rules) {
         this.rules = rules;
     }
     
-    public void injectBiomes(Biome[] biomes, ChunkPrimer chunkPrimer, ChunkSource chunkSource, int chunkX, int chunkZ, BiomeInjectionStep step) {
+    public void injectBiomes(
+        Biome[] biomes,
+        ChunkPrimer chunkPrimer,
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        int chunkX,
+        int chunkZ,
+        BiomeInjectionStep step
+    ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
@@ -37,6 +45,7 @@ public class BiomeInjector {
                 context.setState(chunkPrimer.getBlockState(localX, height, localZ));
                 context.setStateAbove(chunkPrimer.getBlockState(localX, heightAbove, localZ));
                 context.setBiome(biomes[ndx]);
+                context.setBaseBiome(biomeSource.getBiome(x, z));
                 
                 Biome injectedBiome = this.getInjectedBiome(context, x, z, step);
                 if (injectedBiome != null) {

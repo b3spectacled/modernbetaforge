@@ -202,7 +202,7 @@ public class DrawUtil {
             }
         }
         
-        return new BiomeInjectionContext(new BlockPos(x, height, z), state, stateAbove, biome);
+        return new BiomeInjectionContext(new BlockPos(x, height, z), state, stateAbove, biome, biome);
     }
     
     private static Vector4f scale(Vector4f vector, float factor) {

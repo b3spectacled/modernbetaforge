@@ -99,16 +99,18 @@ public class BiomeInjectionRules {
         private IBlockState state;
         private IBlockState stateAbove;
         private Biome biome;
+        private Biome baseBiome;
         
         public BiomeInjectionContext() {
-            this(BlockPos.ORIGIN, null, null, null);
+            this(BlockPos.ORIGIN, null, null, null, null);
         }
         
-        public BiomeInjectionContext(BlockPos pos, IBlockState state, IBlockState stateAbove, Biome biome) {
+        public BiomeInjectionContext(BlockPos pos, IBlockState state, IBlockState stateAbove, Biome biome, Biome baseBiome) {
             this.pos = new MutableBlockPos(pos);
             this.state = state;
             this.stateAbove = stateAbove;
             this.biome = biome;
+            this.baseBiome = baseBiome;
         }
         
         public BlockPos getPos() {
@@ -127,6 +129,10 @@ public class BiomeInjectionRules {
             return this.biome;
         }
         
+        public Biome getBaseBiome() {
+            return this.baseBiome;
+        }
+        
         public void setPos(int x, int y, int z) {
             this.pos.setPos(x, y, z);
         }
@@ -141,6 +147,10 @@ public class BiomeInjectionRules {
         
         public void setBiome(Biome biome) {
             this.biome = biome;
+        }
+        
+        public void setBaseBiome(Biome biome) {
+            this.baseBiome = biome;
         }
     }
 }

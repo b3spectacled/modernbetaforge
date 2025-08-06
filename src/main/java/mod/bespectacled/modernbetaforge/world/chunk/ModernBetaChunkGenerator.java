@@ -75,7 +75,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     private final Map<ResourceLocation, MapGenStructure> structures;
     private final Map<ResourceLocation, MapGenBase> carvers;
     
-    @SuppressWarnings("deprecation")
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         
@@ -95,9 +94,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         this.biomeProvider.setChunkGenerator(this);
         
         this.biomeInjector = new BiomeInjector(
-            this.chunkSource,
-            this.biomeProvider.getBiomeSource(),
-            this.chunkSource.buildBiomeInjectorRules(this.biomeProvider.getBiomeSource())
+            this.chunkSource.createBiomeInjectionRules(this.biomeProvider.getBiomeSource()).build()
         );
 
         this.initialChunkCache = new ChunkCache<>("initial_chunk", INITIAL_CHUNK_CAPACITY, this::provideInitialChunk);
@@ -178,7 +175,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             
             // Post-process biome map, after surface generation
             if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
+                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
             }
             
             // Carve terrain
@@ -484,8 +481,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
         // Post-process biome map, before surface generation
         if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, chunkX, chunkZ, BiomeInjectionStep.CUSTOM);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.CUSTOM);
         }
         
         return new ChunkPrimerContainer(chunkPrimer, biomes);
