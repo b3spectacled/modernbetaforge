@@ -270,6 +270,33 @@ public abstract class NoiseChunkSource extends ChunkSource {
     }
     
     /**
+     * Gets the number of horizontal subchunks along x.
+     * 
+     * @return The number of horizontal subchunks along x
+     */
+    public final int getNoiseSizeX() {
+        return this.noiseSizeX;
+    }
+    
+    /**
+     * Gets the number of horizontal subchunks along z.
+     * 
+     * @return The number of horizontal subchunks along z
+     */
+    public final int getNoiseSizeZ() {
+        return this.noiseSizeZ;
+    }
+
+    /**
+     * Gets the number of vertical subchunks.
+     * 
+     * @return The number of vertical subchunks
+     */
+    public final int getNoiseSizeY() {
+        return this.noiseSizeY;
+    }
+    
+    /**
      * Gets the noise size values for the current chunk source.
      * 
      * @return A String representing the current noise size values.

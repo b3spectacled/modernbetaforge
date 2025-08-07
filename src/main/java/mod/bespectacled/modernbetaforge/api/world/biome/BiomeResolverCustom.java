@@ -24,9 +24,9 @@ public interface BiomeResolverCustom {
     
     /**
      * Gets a custom biome to overwrite the original biome at given coordinates.
-     * 
-     * @param x x-coordinate.
-     * @param z z-coordinate.
+     
+     * @param x x-coordinate in block coordinates
+     * @param z z-coordinate in block coordinates
      * @return A biome at given coordinates. May return null, in which case original biome is not replaced.
      */
     Biome getCustomBiome(int x, int z);
