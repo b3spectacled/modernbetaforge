@@ -13,15 +13,18 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class Property<T> {
     private T value;
+    private boolean display;
     
     /**
      * Constructs a new Property with initial value.
      * If registering the property to {@link ModernBetaRegistries#PROPERTY} then the initial value is the default value.
      * 
      * @param value The initial property value.
+     * @param display Whether to display the property in the customization screen.
      */
     public Property(T value) {
         this.value = value;
+        this.display = true;
     }
     
     /**
@@ -85,12 +88,30 @@ public abstract class Property<T> {
     }
     
     /**
+     * Gets whether the property should be displayed.
+     * 
+     * @return Whether the property should be displayed.
+     */
+    public boolean getDisplay() {
+        return this.display;
+    }
+    
+    /**
      * Sets the property value.
      * 
      * @param value The property value to set.
      */
     public void setValue(T value) {
         this.value = value;
+    }
+    
+    /**
+     * Sets whether the property should be displayed.
+     * 
+     * @param display
+     */
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
     
     @Override

@@ -1935,6 +1935,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         // Build map based on mod ID
         Map<String, List<ResourceLocation>> modRegistryKeys = new LinkedHashMap<>();
         for (ResourceLocation registryKey : ModernBetaRegistries.PROPERTY.getKeys()) {
+            // Ignore entries that should be hidden
+            if (!ModernBetaRegistries.PROPERTY.get(registryKey).getDisplay()) {
+                numEntries -= 2;
+                continue;
+            }
+            
             String namespace = registryKey.getNamespace();
             
             // Add new entry list if encountering new namespace (unique mod)
@@ -2725,7 +2731,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                 } catch (NumberFormatException e) { }
 
-                property.setValue(MathHelper.clamp(entryValue, property.getMinValue(), property.getMaxValue()));
+                property.setValue(entryValue);
                 newEntryValue = property.getValue();
                 
                 if (newEntryValue != entryValue) {
@@ -2751,7 +2757,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                 } catch (NumberFormatException e) { }
                 
-                property.setValue((int)MathHelper.clamp(entryValue, property.getMinValue(), property.getMaxValue()));
+                property.setValue((int)entryValue);
                 newEntryValue = property.getValue();
                 
                 if (newEntryValue != entryValue) {

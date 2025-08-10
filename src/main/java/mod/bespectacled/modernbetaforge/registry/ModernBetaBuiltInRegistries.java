@@ -182,6 +182,8 @@ public class ModernBetaBuiltInRegistries {
             return material != null && material.equals(Material.ROCK) && material.isOpaque() && material.isSolid();
         }));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
+        
+        ModernBetaRegistries.PROPERTY.get(ModernBeta.createRegistryKey("solidProp")).setDisplay(false);
     }
     
     public static void registerDataFixes() {

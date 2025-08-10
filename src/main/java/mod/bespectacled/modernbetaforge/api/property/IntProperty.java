@@ -23,7 +23,7 @@ public final class IntProperty extends RangedProperty<Integer> {
      * @param guiType The {@link PropertyGuiType}.
      */
     public IntProperty(int value, int minValue, int maxValue, PropertyGuiType guiType) {
-        super(value, minValue, maxValue, guiType);
+        super(MathHelper.clamp(value, minValue, maxValue), minValue, maxValue, guiType);
     }
     
     /**

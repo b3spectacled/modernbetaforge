@@ -2383,7 +2383,6 @@ public class ModernBetaGeneratorSettings {
             float maxValue = property.getMaxValue();
             PropertyGuiType type = property.getGuiType();
 
-            value = MathHelper.clamp(value, minValue, maxValue);
             factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, type));
         }
 
@@ -2394,7 +2393,6 @@ public class ModernBetaGeneratorSettings {
             int maxValue = property.getMaxValue();
             PropertyGuiType type = property.getGuiType();
 
-            value = MathHelper.clamp(value, minValue, maxValue);
             factory.customProperties.put(registryKey, new IntProperty(value, minValue, maxValue, type));
         }
 
@@ -2457,7 +2455,6 @@ public class ModernBetaGeneratorSettings {
             float maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
 
-            value = MathHelper.clamp(value, minValue, maxValue);
             factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, guiType));
         }
 
@@ -2468,7 +2465,6 @@ public class ModernBetaGeneratorSettings {
             int maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
 
-            value = MathHelper.clamp(value, minValue, maxValue);
             factory.customProperties.put(registryKey, new IntProperty(value, minValue, maxValue, guiType));
         }
 

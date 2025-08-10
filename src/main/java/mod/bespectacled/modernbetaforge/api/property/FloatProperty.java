@@ -23,7 +23,7 @@ public final class FloatProperty extends RangedProperty<Float> {
      * @param guiType The {@link PropertyGuiType}.
      */
     public FloatProperty(float value, float minValue, float maxValue, PropertyGuiType guiType) {
-        super(value, minValue, maxValue, guiType);
+        super(MathHelper.clamp(value, minValue, maxValue), minValue, maxValue, guiType);
     }
     
     /**
