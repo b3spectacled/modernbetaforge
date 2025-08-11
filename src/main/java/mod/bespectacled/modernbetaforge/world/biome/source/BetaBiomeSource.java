@@ -18,6 +18,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     private final ClimateMap climateMap;
     private final BetaClimateSampler climateSampler;
     private final BetaSkyClimateSampler skyClimateSampler;
+    private final boolean useClimateFeatures;
     
     public BetaBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
@@ -25,6 +26,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
         this.climateMap = new ClimateMap(settings);
         this.climateSampler = new BetaClimateSampler(seed, settings);
         this.skyClimateSampler = new BetaSkyClimateSampler(seed, settings);
+        this.useClimateFeatures = settings.useClimateFeatures;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     
     @Override
     public boolean sampleForFeatureGeneration() {
-        return !this.climateMap.containsNonBetaBiomes();
+        return this.useClimateFeatures && !this.climateMap.containsNonBetaBiomes();
     }
     
     private Biome getBiomeByType(int x, int z, ClimateType type) {

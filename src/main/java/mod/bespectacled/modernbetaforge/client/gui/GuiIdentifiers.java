@@ -398,6 +398,7 @@ public class GuiIdentifiers {
     public static final int PG6_TUND_BEACH = 732;
     
     public static final int PG6_S_SNOW_OFFSET = 750;
+    public static final int PG6_B_CLIMATE_FEAT = 751;
     
     // Labels
     public static final int PG6_LAND_LABL = 1700;
@@ -415,8 +416,6 @@ public class GuiIdentifiers {
     public static final int PG6_SWMP_LABL = 1711;
     public static final int PG6_TAIG_LABL = 1712;
     public static final int PG6_TUND_LABL = 1713;
-    
-    public static final int PG6_L_SNOW_OFFSET = 1750;
     
     /* Page 8 - Custom Properties */
     

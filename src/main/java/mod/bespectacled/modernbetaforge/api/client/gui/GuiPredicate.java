@@ -101,6 +101,7 @@ public class GuiPredicate {
     public static final ResourceLocation RAIN_NOISE_SCALE = createRegistryKey(NbtTags.RAIN_NOISE_SCALE);
     public static final ResourceLocation DETAIL_NOISE_SCALE = createRegistryKey(NbtTags.DETAIL_NOISE_SCALE);
     public static final ResourceLocation SNOW_LINE_OFFSET = createRegistryKey(NbtTags.SNOW_LINE_OFFSET);
+    public static final ResourceLocation USE_CLIMATE_FEATURES = createRegistryKey(NbtTags.USE_CLIMATE_FEATURES);
     public static final ResourceLocation BIOME_DEPTH_WEIGHT = createRegistryKey(NbtTags.BIOME_DEPTH_WEIGHT);
     public static final ResourceLocation BIOME_DEPTH_OFFSET = createRegistryKey(NbtTags.BIOME_DEPTH_OFFSET);
     public static final ResourceLocation BIOME_SCALE_WEIGHT = createRegistryKey(NbtTags.BIOME_SCALE_WEIGHT);

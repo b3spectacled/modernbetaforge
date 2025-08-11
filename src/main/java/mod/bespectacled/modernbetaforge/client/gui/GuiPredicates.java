@@ -152,6 +152,7 @@ public class GuiPredicates {
     public static final GuiPredicate RAIN_NOISE_SCALE_TEST;
     public static final GuiPredicate DETAIL_NOISE_SCALE_TEST;
     public static final GuiPredicate SNOW_LINE_OFFSET_TEST;
+    public static final GuiPredicate USE_CLIMATE_FEATURES_TEST;
     public static final GuiPredicate BIOME_DEPTH_WEIGHT_TEST;
     public static final GuiPredicate BIOME_DEPTH_OFFSET_TEST;
     public static final GuiPredicate BIOME_SCALE_WEIGHT_TEST;
@@ -694,6 +695,7 @@ public class GuiPredicates {
             GuiIdentifiers.PG6_TUND_BEACH
         );
         SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
+        USE_CLIMATE_FEATURES_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_B_CLIMATE_FEAT);
         
         DEV_BIOME_PROP_TEST = new GuiPredicate(settings -> {
             ResourceLocation registryKey = ModernBeta.createRegistryKey("booleanProp");

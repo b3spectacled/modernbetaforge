@@ -165,6 +165,7 @@ public class ModernBetaGeneratorSettings {
     public final float rainNoiseScale;
     public final float detailNoiseScale;
     public final int snowLineOffset;
+    public final boolean useClimateFeatures;
     
     public final float biomeDepthWeight;
     public final float biomeDepthOffset;
@@ -401,6 +402,7 @@ public class ModernBetaGeneratorSettings {
         this.rainNoiseScale = factory.rainNoiseScale;
         this.detailNoiseScale = factory.detailNoiseScale;
         this.snowLineOffset = factory.snowLineOffset;
+        this.useClimateFeatures = factory.useClimateFeatures;
         
         this.biomeDepthWeight = factory.biomeDepthWeight;
         this.biomeDepthOffset = factory.biomeDepthOffset;
@@ -700,6 +702,7 @@ public class ModernBetaGeneratorSettings {
         public float rainNoiseScale;
         public float detailNoiseScale;
         public int snowLineOffset;
+        public boolean useClimateFeatures;
         
         public float biomeDepthWeight;
         public float biomeDepthOffset;
@@ -936,6 +939,7 @@ public class ModernBetaGeneratorSettings {
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
             this.snowLineOffset = 64;
+            this.useClimateFeatures = true;
             
             this.biomeDepthWeight = 1.0f;
             this.biomeDepthOffset = 0.0f;
@@ -1195,6 +1199,7 @@ public class ModernBetaGeneratorSettings {
                 Float.compare(factory.rainNoiseScale, this.rainNoiseScale) == 0 &&
                 Float.compare(factory.detailNoiseScale, this.detailNoiseScale) == 0 &&
                 this.snowLineOffset == factory.snowLineOffset &&
+                this.useClimateFeatures == factory.useClimateFeatures &&
                 
                 Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
@@ -1435,6 +1440,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
             hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
             hashCode = 31 * hashCode + this.snowLineOffset;
+            hashCode = 31 * hashCode + (this.useClimateFeatures ? 1 : 0);
             
             hashCode = 31 * hashCode + ((this.biomeDepthWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthWeight));
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
@@ -1702,6 +1708,7 @@ public class ModernBetaGeneratorSettings {
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
                 factory.snowLineOffset = JsonUtils.getInt(jsonObject, NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
+                factory.useClimateFeatures = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
                 
                 factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
                 factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
@@ -2138,6 +2145,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
             jsonObject.addProperty(NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
+            jsonObject.addProperty(NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
 
             jsonObject.addProperty(NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
             jsonObject.addProperty(NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);

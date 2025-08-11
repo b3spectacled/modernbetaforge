@@ -18,6 +18,7 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
     private final ClimateMap climateMap;
     private final PEClimateSampler climateSampler;
     private final PESkyClimateSampler skyClimateSampler;
+    private final boolean useClimateFeatures;
     
     public PEBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
@@ -25,6 +26,7 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
         this.climateMap = new ClimateMap(settings);
         this.climateSampler = new PEClimateSampler(seed, settings);
         this.skyClimateSampler = new PESkyClimateSampler(seed, settings);
+        this.useClimateFeatures = settings.useClimateFeatures;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class PEBiomeSource extends BiomeSource implements ClimateSampler, SkyCli
     
     @Override
     public boolean sampleForFeatureGeneration() {
-        return !this.climateMap.containsNonBetaBiomes();
+        return this.useClimateFeatures && !this.climateMap.containsNonBetaBiomes();
     }
     
     private Biome getBiomeByType(int x, int z, ClimateType type) {

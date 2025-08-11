@@ -582,9 +582,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageClimate = {
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_L_SNOW_OFFSET, I18n.format(PREFIX + NbtTags.SNOW_LINE_OFFSET) + ":"),
-            createGuiSliderNoLabel(GuiIdentifiers.PG6_S_SNOW_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this, this.unlabeledSliders),
-                
+            createGuiButton(GuiIdentifiers.PG6_B_CLIMATE_FEAT, NbtTags.USE_CLIMATE_FEATURES, this.settings.useClimateFeatures),
+            createGuiSlider(GuiIdentifiers.PG6_S_SNOW_OFFSET, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this),
+            
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
@@ -1328,6 +1328,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_B_USE_END_OUT:
                     this.settings.useEndOuterIslands = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG6_B_CLIMATE_FEAT:
+                    this.settings.useClimateFeatures = entryValue;
                     break;
             }
         }
@@ -2532,6 +2536,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return new GuiPageButtonList.GuiSlideEntry(id, I18n.format(PREFIX + tag), true, formatHelper, minValue, maxValue, initialValue);
     }
     
+    @SuppressWarnings("unused")
     private static GuiPageButtonList.GuiSlideEntry createGuiSliderNoLabel(int id, float minValue, float maxValue, float initialValue, FormatHelper formatHelper, Set<Integer> unlabeledSliders) {
         unlabeledSliders.add(id);
         return new GuiPageButtonList.GuiSlideEntry(id, "", true, formatHelper, minValue, maxValue, initialValue);
