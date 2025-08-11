@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -87,8 +87,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final String PREFIX = "createWorld.customize.custom.modernbetaforge.";
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.modernbetaforge.";
     private static final String PREFIX_LABEL = "createWorld.customize.custom.label.modernbetaforge.";
-    private static final DecimalFormat DF_THREE = new DecimalFormat("#.###");
-    private static final DecimalFormat DF_ONE = new DecimalFormat("#.#");
 
     private static final int RGB_INFO = 10526880;
     private static final int RGB_HEADER = 16777215;
@@ -1451,7 +1449,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.seaLevel = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG0_S_CAVE_WIDTH:
-                    this.settings.caveWidth = roundToTwoDec(entryValue);
+                    this.settings.caveWidth = roundToOneDec(entryValue);
                     break;
                 case GuiIdentifiers.PG0_S_CAVE_HEIGHT:
                     this.settings.caveHeight = (int)entryValue;
@@ -1491,7 +1489,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
-                    this.settings.levelCaveWidth = roundToTwoDec(entryValue);
+                    this.settings.levelCaveWidth = roundToOneDec(entryValue);
                     break;
                     
                 case GuiIdentifiers.PG1_S_RIVER_SZ:
@@ -2103,7 +2101,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(this.propertyMap.get(entry));
             
             if (property instanceof FloatProperty) {
-                return String.format("%2.3f", entryValue);
+                return String.format(((FloatProperty)property).getFormatter(), entryValue);
             
             } else if (property instanceof IntProperty) {
                 return String.format("%d", (int)entryValue);
@@ -2611,15 +2609,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private static float roundToThreeDec(float entryValue) {
-        DF_THREE.setRoundingMode(RoundingMode.FLOOR);
+        BigDecimal bigDecimal = new BigDecimal(entryValue);
+        bigDecimal = bigDecimal.setScale(3, RoundingMode.HALF_UP);
         
-        return Floats.tryParse(DF_THREE.format(entryValue));
+        return bigDecimal.floatValue();
     }
     
-    private static float roundToTwoDec(float entryValue) {
-        DF_THREE.setRoundingMode(RoundingMode.FLOOR);
+    private static float roundToOneDec(float entryValue) {
+        BigDecimal bigDecimal = new BigDecimal(entryValue);
+        bigDecimal = bigDecimal.setScale(1, RoundingMode.HALF_UP);
         
-        return Floats.tryParse(DF_ONE.format(entryValue));
+        return bigDecimal.floatValue();
     }
 
     private class CreateGuiPropertyVisitor implements GuiPropertyVisitor {

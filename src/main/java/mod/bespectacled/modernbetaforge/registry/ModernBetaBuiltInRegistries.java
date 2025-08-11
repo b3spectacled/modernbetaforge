@@ -169,6 +169,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("intProp2"), new IntProperty(4, -50, 500, PropertyGuiType.FIELD));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp"), new FloatProperty(13.0f, 0.0f, 500.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp2"), new FloatProperty(13.0f, 0.0f, 500.0f, PropertyGuiType.FIELD));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp3"), new FloatProperty(0.5f, 0.0f, 1.0f, PropertyGuiType.SLIDER, 1));
+        ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("floatProp4"), new FloatProperty(0.5f, 0.0f, 1.0f, PropertyGuiType.FIELD, 2));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("stringProp"), new StringProperty("test"));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("listProp"), new ListProperty(1, new String[] { "test0", "test1", "test2" }));
         ModernBetaRegistries.PROPERTY.register(ModernBeta.createRegistryKey("biomeProp"), new BiomeProperty(Biomes.PLAINS.getRegistryName()));

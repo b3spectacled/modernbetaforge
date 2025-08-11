@@ -2382,8 +2382,9 @@ public class ModernBetaGeneratorSettings {
             float minValue = property.getMinValue();
             float maxValue = property.getMaxValue();
             PropertyGuiType type = property.getGuiType();
+            int decimalPlaces = property.getScale();
 
-            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, type));
+            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, type, decimalPlaces));
         }
 
         @Override
@@ -2454,8 +2455,9 @@ public class ModernBetaGeneratorSettings {
             float minValue = property.getMinValue();
             float maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
+            int decimalPlaces = property.getScale();
 
-            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, guiType));
+            factory.customProperties.put(registryKey, new FloatProperty(value, minValue, maxValue, guiType, decimalPlaces));
         }
 
         @Override

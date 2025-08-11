@@ -20,7 +20,6 @@ public abstract class Property<T> {
      * If registering the property to {@link ModernBetaRegistries#PROPERTY} then the initial value is the default value.
      * 
      * @param value The initial property value.
-     * @param display Whether to display the property in the customization screen.
      */
     public Property(T value) {
         this.value = value;
@@ -108,7 +107,7 @@ public abstract class Property<T> {
     /**
      * Sets whether the property should be displayed.
      * 
-     * @param display
+     * @param display Whether the property should be displayed.
      */
     public void setDisplay(boolean display) {
         this.display = display;
