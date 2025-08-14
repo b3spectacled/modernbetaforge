@@ -634,6 +634,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
 
         // Create noise sources and sample.
+        // Since a NoiseSource object is stateful (contains a noise array),
+        // we want to initialize a new noise source map from fresh every chunk,
+        // even if it's a bit memory intensive.
+        // This is probably not necessary as 1.12.2's terrain generation is single-threaded but still.
         Map<ResourceLocation, NoiseSource> noiseSources = new LinkedHashMap<>();
         noiseSources.put(DensityChunk.INITIAL, this.createInitialNoiseSource());
         ModernBetaRegistries.NOISE_COLUMN_SAMPLER.getEntries().forEach(entry -> noiseSources.put(
