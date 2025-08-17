@@ -21,30 +21,27 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 
-public class CommandDrawMap extends CommandBase {
+public class CommandDrawMap extends ModernBetaCommand {
     private static final String NAME = "drawmap";
     private static final String PATH = "map.png";
     
-    private final ResourceLocation name;
     private final String path;
     
     private int percentage = 0;
     
     public CommandDrawMap() {
-        this.name = ModernBeta.createRegistryKey(NAME);
+        super(NAME);
+        
         this.path = PATH;
     }
     
@@ -61,8 +58,8 @@ public class CommandDrawMap extends CommandBase {
             BiomeInjectionRules injectionRules = chunkSource.createBiomeInjectionRules(biomeSource).build();
             
             SurfaceBuilder surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER
-                    .get(modernBetaChunkGenerator.getGeneratorSettings().surfaceBuilder)
-                    .apply(chunkSource, chunkSource.getGeneratorSettings());
+                .get(modernBetaChunkGenerator.getGeneratorSettings().surfaceBuilder)
+                .apply(chunkSource, chunkSource.getGeneratorSettings());
             
             return DrawUtil.createTerrainMap(
                 chunkSource,
@@ -83,12 +80,10 @@ public class CommandDrawMap extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        WorldServer worldServer = server.getWorld(DimensionType.OVERWORLD.getId());
-        boolean success = false;
+        WorldServer worldServer = this.validateWorld(server, sender);
+        this.validateArgsLength(sender, args, 2, 3);
         
-        if (args.length != 3 && args.length != 2) {
-            throw new WrongUsageException(this.getUsage(sender), new Object[0]);
-        }
+        boolean success = false;
         
         // Reverse for natural dimensions
         int length = MathHelper.clamp(CommandBase.parseInt(args[0]) >> 4 << 4, 0, 5120);
@@ -120,16 +115,6 @@ public class CommandDrawMap extends CommandBase {
             throw new CommandException(this.getLangString("failure"), new Object[0]);
         }
     }
-
-    @Override
-    public String getName() {
-        return this.name.toString();
-    }
-
-    @Override
-    public String getUsage(ICommandSender sender) {
-        return getLangString("usage");
-    }
     
     private void setProgress(float current, ICommandSender sender) {
         int percentage = (int)(current * 100.0f);
@@ -139,9 +124,5 @@ public class CommandDrawMap extends CommandBase {
         }
         
         this.percentage = percentage;
-    }
-    
-    private String getLangString(String type) {
-        return String.format("commands.%s.%s.%s", ModernBeta.MODID, this.name.getPath(), type);
     }
 }

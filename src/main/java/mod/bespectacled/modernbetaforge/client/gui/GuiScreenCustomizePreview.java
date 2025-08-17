@@ -81,6 +81,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
     
+    protected String title;
+    
     private long seed;
     private ChunkSource chunkSource;
     private BiomeSource biomeSource;
@@ -104,8 +106,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private long copiedSeedFieldTime;
     private long copiedTpCommandTime;
     private Supplier<String> tpCallback;
-    
-    protected String title;
 
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings) {
         this.title = I18n.format(PREFIX + "title");

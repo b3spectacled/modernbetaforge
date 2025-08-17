@@ -1660,6 +1660,14 @@ public class ModernBetaGeneratorSettings {
                 return new Factory();
             }
         }
+        
+        public static Factory jsonToFactoryChecked(String string) throws Exception {
+            if (string == null || string.isEmpty()) {
+                return new Factory();
+            }
+            
+            return JsonUtils.<Factory>gsonDeserialize(Factory.JSON_ADAPTER, string, Factory.class);
+        }
 
         static {
             JSON_ADAPTER = new GsonBuilder().registerTypeAdapter(Factory.class, new Serializer()).create();

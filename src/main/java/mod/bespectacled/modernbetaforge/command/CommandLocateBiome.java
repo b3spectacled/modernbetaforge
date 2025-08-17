@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class CommandLocateBiome extends CommandLocateExtended {
+public class CommandLocateBiome extends CommandLocate {
     private static final int RANGE = 1024;
     private static final int STEPS = 8;
     

@@ -138,6 +138,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final int initialPreset;
     private final GuiBoundsChecker iconBounds;
     
+    protected String title;
+    
     private ListPreset list;
     private GuiTextField fieldExport;
     private GuiTextField fieldModalName;
@@ -159,8 +161,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @SuppressWarnings("unused") private long hoveredTime;
     private ModalState modalState;
     private long confirmExitTime;
-    
-    protected String title;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
         this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1);

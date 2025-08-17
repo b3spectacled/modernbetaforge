@@ -49,6 +49,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private final String langName;
     private final List<ResourceLocation> registryKeys;
     private final List<Info> entries;
+    
+    protected String title;
 
     private ModernBetaGeneratorSettings.Factory settings;
     private ListPreset list;
@@ -59,8 +61,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @SuppressWarnings("unused") private long hoveredTime;
     private int prevMouseX;
     private int prevMouseY;
-    
-    protected String title;
     
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,

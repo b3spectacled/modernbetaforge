@@ -363,21 +363,35 @@ commands.modernbetaforge.locate.usage=/modernbetaforge:locate <structure>
 commands.modernbetaforge.locate.success=The nearest %s is at %s %s
 commands.modernbetaforge.locate.failure=Could not find that structure nearby
 commands.modernbetaforge.locate.hover=Click to teleport
-commands.modernbetaforge.locate.generator=This command can only be used in a Modern Beta overworld
+commands.modernbetaforge.locate.generator=This command can only be used in a Modern Beta dimension
 commands.modernbetaforge.locate.distance=%s blocks away
 
 commands.modernbetaforge.locatebiome.usage=/modernbetaforge:locatebiome <biome> (Note: This command cannot be used to search for beach biomes)
 commands.modernbetaforge.locatebiome.success=The nearest %s is at %s %s
 commands.modernbetaforge.locatebiome.failure=Could not find that biome nearby
 commands.modernbetaforge.locatebiome.hover=Click to teleport
-commands.modernbetaforge.locatebiome.generator=This command can only be used in a Modern Beta overworld
+commands.modernbetaforge.locatebiome.generator=This command can only be used in a Modern Beta dimension
 commands.modernbetaforge.locatebiome.distance=%s blocks away
 
-commands.modernbetaforge.drawmap.usage=/drawmap <width> <length> <optional:useOrigin>
+commands.modernbetaforge.drawmap.usage=/modernbetaforge:drawmap <width> <length> <optional:useOrigin>
 commands.modernbetaforge.drawmap.start=Drawing map of size %s/%s centered on %d/%d
 commands.modernbetaforge.drawmap.progress=Map drawing %s%% completed
 commands.modernbetaforge.drawmap.success=Saved terrain map as %s
 commands.modernbetaforge.drawmap.failure=Could not draw terrain map
+commands.modernbetaforge.drawmap.generator=This command can only be used in a Modern Beta dimension
+
+commands.modernbetaforge.setgeneratorsetting.usage=/modernbetaforge:setgeneratorsetting <setting> <value>
+commands.modernbetaforge.setgeneratorsetting.failure=Could not set %s, it may be invalid or not exist
+commands.modernbetaforge.setgeneratorsetting.success=Set %s to %s (given: %s)
+commands.modernbetaforge.setgeneratorsetting.generator=This command can only be used in a Modern Beta dimension
+commands.modernbetaforge.setgeneratorsetting.primitive=Could not set %s, this command only supports setting boolean, number, and String values
+commands.modernbetaforge.setgeneratorsetting.parse=Could not parse %s for %s
+commands.modernbetaforge.setgeneratorsetting.warn=Please restart the world for changes to take effect
+
+commands.modernbetaforge.getgeneratorsetting.usage=/modernbetaforge:getgeneratorsetting <setting>
+commands.modernbetaforge.getgeneratorsetting.failure=Could not get %s, it may be invalid or not exist
+commands.modernbetaforge.getgeneratorsetting.success=Value of %s (%s) is %s
+commands.modernbetaforge.getgeneratorsetting.generator=This command can only be used in a Modern Beta dimension
 
 ## Config
 modernbetaforge.general.guioptions=GUI Settings

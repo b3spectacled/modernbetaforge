@@ -1,15 +1,11 @@
 package mod.bespectacled.modernbetaforge.command;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandLocate;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -19,26 +15,24 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.WorldServer;
 
-public abstract class CommandLocateExtended extends CommandLocate {
-    private final ResourceLocation name;
+public abstract class CommandLocate extends ModernBetaCommand {
     private final PositionLocator locator;
     
-    public CommandLocateExtended(String path, PositionLocator locator) {
-        this.name = ModernBeta.createRegistryKey(path);
+    public CommandLocate(String name, PositionLocator locator) {
+        super(name);
+        
         this.locator = locator;
     }
     
     @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+    
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        WorldServer worldServer = server.getWorld(sender.getEntityWorld().provider.getDimension());
-
-        if (!(worldServer.getChunkProvider().chunkGenerator instanceof ModernBetaChunkGenerator)) {
-            throw new CommandException(this.getLangString("generator"), new Object[0]);
-        }
-        
-        if (args.length != 1) {
-            throw new WrongUsageException(this.getLangString("usage"), new Object[0]);
-        }
+        WorldServer worldServer = this.validateWorld(server, sender);
+        this.validateArgsLength(sender, args, 1);
         
         String name = args[0].toLowerCase();
         BlockPos blockPos = this.locator.apply(server, sender, args);
@@ -70,20 +64,6 @@ public abstract class CommandLocateExtended extends CommandLocate {
             throw new CommandException(this.getLangString("failure"), new Object[] { name });
             
         }
-    }
-
-    @Override
-    public String getName() {
-        return this.name.toString();
-    }
-
-    @Override
-    public String getUsage(ICommandSender sender) {
-        return getLangString("usage");
-    }
-    
-    private String getLangString(String type) {
-        return String.format("commands.%s.%s.%s", ModernBeta.MODID, this.name.getPath(), type);
     }
     
     @FunctionalInterface
