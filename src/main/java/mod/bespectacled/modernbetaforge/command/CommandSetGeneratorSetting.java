@@ -32,11 +32,11 @@ public class CommandSetGeneratorSetting extends CommandGeneratorSetting {
         String generatorOptions = worldInfo.getGeneratorOptions();
         
         // Initialize new settings string if no generator options present
-        if (generatorOptions == null || generatorOptions.isEmpty()) {
+        if (generatorOptions.isEmpty()) {
             generatorOptions = new ModernBetaGeneratorSettings.Factory().toString();
         }
         
-        JsonObject jsonObject = this.Gson.fromJson(generatorOptions, JsonObject.class);
+        JsonObject jsonObject = this.gson.fromJson(generatorOptions, JsonObject.class);
         
         ITextComponent settingText = new TextComponentString(args[0]);
         settingText.getStyle().setColor(TextFormatting.YELLOW);
@@ -73,7 +73,7 @@ public class CommandSetGeneratorSetting extends CommandGeneratorSetting {
             ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactoryChecked(jsonObject.toString());
 
             // Get corrected value
-            jsonObject = this.Gson.fromJson(factory.toString(), JsonObject.class);
+            jsonObject = this.gson.fromJson(factory.toString(), JsonObject.class);
             ITextComponent newValueText = new TextComponentString(jsonObject.get(args[0]).toString());
             newValueText.getStyle().setColor(TextFormatting.AQUA);
             

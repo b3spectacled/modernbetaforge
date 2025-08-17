@@ -386,11 +386,12 @@ commands.modernbetaforge.setgeneratorsetting.success=Set %s to %s (given: %s)
 commands.modernbetaforge.setgeneratorsetting.generator=This command can only be used in a Modern Beta dimension
 commands.modernbetaforge.setgeneratorsetting.primitive=Could not set %s, this command only supports setting boolean, number, and String values
 commands.modernbetaforge.setgeneratorsetting.parse=Could not parse %s for %s
-commands.modernbetaforge.setgeneratorsetting.warn=Please restart the world for changes to take effect
+commands.modernbetaforge.setgeneratorsetting.warn=Please reopen the world for changes to take effect
 
 commands.modernbetaforge.getgeneratorsetting.usage=/modernbetaforge:getgeneratorsetting <setting>
 commands.modernbetaforge.getgeneratorsetting.failure=Could not get %s, it may be invalid or not exist
-commands.modernbetaforge.getgeneratorsetting.success=Value of %s (%s) is %s
+commands.modernbetaforge.getgeneratorsetting.empty=Could not get %s, it may be invalid or not exist
+commands.modernbetaforge.getgeneratorsetting.success=%s (%s) is %s
 commands.modernbetaforge.getgeneratorsetting.generator=This command can only be used in a Modern Beta dimension
 
 ## Config

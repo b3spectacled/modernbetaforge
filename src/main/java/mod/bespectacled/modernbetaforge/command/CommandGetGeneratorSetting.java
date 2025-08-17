@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.command;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +26,14 @@ public class CommandGetGeneratorSetting extends CommandGeneratorSetting {
         this.validateArgsLength(sender, args, 1);
         
         WorldInfo worldInfo = worldServer.getWorldInfo();
-        JsonObject jsonObject = this.Gson.fromJson(worldInfo.getGeneratorOptions(), JsonObject.class);
+        String generatorOptions = worldInfo.getGeneratorOptions();
+        
+        // Initialize new settings string if no generator options present
+        if (generatorOptions.isEmpty()) {
+            generatorOptions = new ModernBetaGeneratorSettings.Factory().toString();
+        }
+        
+        JsonObject jsonObject = this.gson.fromJson(generatorOptions, JsonObject.class);
         
         ITextComponent settingText = new TextComponentString(args[0]);
         settingText.getStyle().setColor(TextFormatting.YELLOW);

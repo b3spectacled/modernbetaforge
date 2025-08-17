@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
 public abstract class CommandGeneratorSetting extends ModernBetaCommand {
-    protected final Gson Gson = new Gson();
+    protected final Gson gson = new Gson();
 
     public CommandGeneratorSetting(String name) {
         super(name);
@@ -22,7 +22,7 @@ public abstract class CommandGeneratorSetting extends ModernBetaCommand {
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        JsonObject jsonObject = this.Gson.fromJson(new ModernBetaGeneratorSettings.Factory().toString(), JsonObject.class);
+        JsonObject jsonObject = this.gson.fromJson(new ModernBetaGeneratorSettings.Factory().toString(), JsonObject.class);
         String[] keys = jsonObject.entrySet().stream().map(e -> e.getKey()).toArray(String[]::new);
         
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, keys) : Collections.emptyList();
