@@ -41,14 +41,17 @@ public class CommandSetGeneratorSetting extends CommandGeneratorSetting {
         ITextComponent settingText = new TextComponentString(args[0]);
         settingText.getStyle().setColor(TextFormatting.YELLOW);
         
-        ITextComponent valueText = new TextComponentString(args[1]);
-        valueText.getStyle().setColor(TextFormatting.AQUA);
-        
         if (!jsonObject.has(args[0])) {
             throw new CommandException(this.getLangString("failure"), new Object[] { settingText });
         }
         
         JsonElement element = jsonObject.get(args[0]);
+        
+        ITextComponent prevText = new TextComponentString(element.toString());
+        prevText.getStyle().setColor(TextFormatting.AQUA);
+        
+        ITextComponent valueText = new TextComponentString(args[1]);
+        valueText.getStyle().setColor(TextFormatting.AQUA);
         
         // Check if element is a primitive (boolean, Number, or String)
         if (!element.isJsonPrimitive()) {
@@ -84,7 +87,7 @@ public class CommandSetGeneratorSetting extends CommandGeneratorSetting {
             worldInfo.generatorOptions = factory.toString();
             worldServer.getSaveHandler().saveWorldInfo(worldInfo);
             
-            notifyCommandListener(sender, this, this.getLangString("success"), new Object[] { settingText, newValueText, valueText });
+            notifyCommandListener(sender, this, this.getLangString("success"), new Object[] { settingText, newValueText, prevText });
             sender.sendMessage(warningText);
             
         } catch (Exception e) {

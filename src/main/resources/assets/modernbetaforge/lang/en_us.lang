@@ -382,7 +382,7 @@ commands.modernbetaforge.drawmap.generator=This command can only be used in a Mo
 
 commands.modernbetaforge.setgeneratorsetting.usage=/modernbetaforge:setgeneratorsetting <setting> <value>
 commands.modernbetaforge.setgeneratorsetting.failure=Could not set %s, it may be invalid or not exist
-commands.modernbetaforge.setgeneratorsetting.success=Set %s to %s (given: %s)
+commands.modernbetaforge.setgeneratorsetting.success=Set %s to %s (prev: %s)
 commands.modernbetaforge.setgeneratorsetting.generator=This command can only be used in a Modern Beta dimension
 commands.modernbetaforge.setgeneratorsetting.primitive=Could not set %s, this command only supports setting boolean, number, and String values
 commands.modernbetaforge.setgeneratorsetting.parse=Could not parse %s for %s
