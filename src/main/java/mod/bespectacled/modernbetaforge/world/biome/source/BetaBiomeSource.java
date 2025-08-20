@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.source;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverBeach;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
+import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverRiver;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
@@ -14,7 +15,7 @@ import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateS
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 
-public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
+public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach, BiomeResolverRiver {
     private final ClimateMap climateMap;
     private final BetaClimateSampler climateSampler;
     private final BetaSkyClimateSampler skyClimateSampler;
@@ -42,6 +43,11 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     @Override
     public Biome getBeachBiome(int x, int z) {
         return this.getBiomeByType(x, z, ClimateType.BEACH);
+    }
+
+    @Override
+    public Biome getRiverBiome(int x, int z) {
+        return this.getBiomeByType(x, z, ClimateType.BASE);
     }
 
     @Override
