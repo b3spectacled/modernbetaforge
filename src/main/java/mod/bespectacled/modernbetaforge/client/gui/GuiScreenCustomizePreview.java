@@ -106,8 +106,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private long copiedSeedFieldTime;
     private long copiedTpCommandTime;
     private Supplier<String> tpCallback;
-
-    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings) {
+    
+    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, int resolution) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.worldSeed = worldSeed;
@@ -120,7 +120,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
-        this.resolution = 512;
+        this.resolution = resolution;
         this.useBiomeBlend = true;
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
@@ -407,6 +407,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.executor.shutdown();
                 this.unloadMapTexture(this.mapTexture);
                 this.unloadMapTexture(this.prevMapTexture);
+                this.parent.setPreviewResolution(this.resolution);
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }

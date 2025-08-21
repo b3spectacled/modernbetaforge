@@ -162,6 +162,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private int tabStartX;
     private int tabEndX;
     
+    private int previewResolution;
+    
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
         this.title = I18n.format("options.customizeTitle");
         this.subtitle = "Page 1 of 6";
@@ -202,6 +204,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
+        
+        this.previewResolution = 512;
         
         this.loadValues(string);
     }
@@ -1782,6 +1786,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.settingsModified = settingsModified;
         this.buttonDefaults.enabled = settingsModified;
     }
+    
+    public void setPreviewResolution(int previewResolution) {
+        this.previewResolution = previewResolution;
+    }
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
@@ -1829,7 +1837,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.exitConfirmation();
                 break;
             case GuiIdentifiers.FUNC_PRVW:
-                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build()));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build(), this.previewResolution));
                 break;
         }
         
