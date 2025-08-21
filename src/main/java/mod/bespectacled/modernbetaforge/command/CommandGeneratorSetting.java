@@ -8,9 +8,11 @@ import javax.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public abstract class CommandGeneratorSetting extends ModernBetaCommand {
@@ -23,7 +25,17 @@ public abstract class CommandGeneratorSetting extends ModernBetaCommand {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         JsonObject jsonObject = this.gson.fromJson(new ModernBetaGeneratorSettings.Factory().toString(), JsonObject.class);
-        String[] keys = jsonObject.entrySet().stream().map(e -> e.getKey()).toArray(String[]::new);
+        String[] keys = jsonObject.entrySet().stream()
+            .filter(e -> {
+                ResourceLocation registryKey = new ResourceLocation(e.getKey());
+                if (ModernBetaRegistries.PROPERTY.contains(registryKey)) {
+                    return ModernBetaRegistries.PROPERTY.get(registryKey).getDisplay();
+                }
+                
+                return true;
+            })
+            .map(e -> e.getKey())
+            .toArray(String[]::new);
         
         return args.length == 1 ? getListOfStringsMatchingLastWord(args, keys) : Collections.emptyList();
     }
