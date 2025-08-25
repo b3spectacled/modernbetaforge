@@ -274,8 +274,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
         
         if (!seedField.isEmpty()) {
-            this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen + 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
-            this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
+            this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
+            this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen - 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
         }
         
         if (this.seedFieldBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand) {

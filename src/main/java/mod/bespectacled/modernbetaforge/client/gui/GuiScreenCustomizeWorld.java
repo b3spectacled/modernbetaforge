@@ -1790,6 +1790,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setPreviewResolution(int previewResolution) {
         this.previewResolution = previewResolution;
     }
+    
+    public void setWorldSeed(String seed) {
+        this.parent.worldSeed = seed;
+    }
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
