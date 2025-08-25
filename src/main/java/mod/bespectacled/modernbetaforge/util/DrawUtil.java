@@ -194,7 +194,7 @@ public class DrawUtil {
         IBlockState state = chunkSource.getDefaultBlock();
         IBlockState stateAbove = inWater ? chunkSource.getDefaultFluid() : BlockStates.AIR;
         
-        if (surfaceBuilder instanceof NoiseSurfaceBuilder) {
+        if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
             if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isBeach(x, z, null)) {
