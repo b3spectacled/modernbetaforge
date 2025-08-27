@@ -26,6 +26,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_6_1_0 = 1610;
     private static final int DATA_VERSION_V1_7_0_0 = 1700;
     private static final int DATA_VERSION_V1_7_1_0 = 1710;
+    private static final int DATA_VERSION_V1_8_1_0 = 1810;
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -237,6 +238,11 @@ public class ModDataFixers {
     public static final ModDataFix RIVER_BIOMES_FIX = createModDataFix(
         DATA_VERSION_V1_7_1_0,
         DataFixTags.FIX_REPLACE_RIVER_BIOMES
+    );
+    
+    public static final ModDataFix RELEASE_WORLD_SPAWNER_FIX = createModDataFix(
+        DATA_VERSION_V1_8_1_0,
+        DataFixTags.FIX_RELEASE_WORLD_SPAWNER
     );
     
     private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {

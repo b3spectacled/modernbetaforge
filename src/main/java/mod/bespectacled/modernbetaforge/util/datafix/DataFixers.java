@@ -324,6 +324,14 @@ public class DataFixers {
         }
     }
     
+    public static void fixReleaseWorldSpawner(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.WORLD_SPAWNER, factory.worldSpawner);
+        
+        if (registryString.equals(ModernBeta.createRegistryKey("none").toString())) {
+            factory.worldSpawner = ModernBetaBuiltInTypes.WorldSpawner.RELEASE.getRegistryString();
+        }
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }

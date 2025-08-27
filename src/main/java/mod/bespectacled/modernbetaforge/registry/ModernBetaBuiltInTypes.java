@@ -123,7 +123,7 @@ public class ModernBetaBuiltInTypes {
         PE("pe"),
         FAR_LANDS("far_lands"),
         DEFAULT("default"),
-        NONE("none");
+        RELEASE("release");
         
         private final String id;
         

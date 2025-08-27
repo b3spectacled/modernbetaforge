@@ -153,7 +153,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.PE.getRegistryKey(), new PEWorldSpawner());
         ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.FAR_LANDS.getRegistryKey(), new FarLandsWorldSpawner());
         ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryKey(), WorldSpawner.DEFAULT);
-        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.NONE.getRegistryKey(), new NoOpWorldSpawner());
+        ModernBetaRegistries.WORLD_SPAWNER.register(ModernBetaBuiltInTypes.WorldSpawner.RELEASE.getRegistryKey(), new NoOpWorldSpawner());
     }
     
     public static void registerDefaultBlocks() {
@@ -233,6 +233,8 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_BOP_COMPAT, new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat));
         
         ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_REPLACE_RIVER_BIOMES, new DataFix(NbtTags.REPLACE_RIVER_BIOMES, DataFixers::fixReplaceRiverBiomes));
+        
+        ModernBetaRegistries.DATA_FIX.register(DataFixTags.FIX_RELEASE_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixReleaseWorldSpawner));
     }
 
     @SideOnly(Side.CLIENT)

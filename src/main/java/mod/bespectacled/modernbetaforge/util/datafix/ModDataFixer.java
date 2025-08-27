@@ -33,6 +33,7 @@ public class ModDataFixer {
         this.registerModDataFix(ModDataFixers.DOUBLE_PLANT_FIX);
         this.registerModDataFix(ModDataFixers.LAYER_VERSION_FIX);
         this.registerModDataFix(ModDataFixers.RIVER_BIOMES_FIX);
+        this.registerModDataFix(ModDataFixers.RELEASE_WORLD_SPAWNER_FIX);
     }
     
     private void registerModDataFix(ModDataFix fix) {
