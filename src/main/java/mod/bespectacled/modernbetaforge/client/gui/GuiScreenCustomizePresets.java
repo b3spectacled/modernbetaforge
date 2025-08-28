@@ -23,6 +23,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -43,8 +44,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final ResourceLocation SCROLL_UP = ModernBeta.createRegistryKey("textures/gui/scroll_up.png");
     private static final ResourceLocation SCROLL_DOWN = ModernBeta.createRegistryKey("textures/gui/scroll_down.png");
     private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
+    private static final ResourceLocation UNKNOWN_PACK = new ResourceLocation("textures/misc/unknown_pack.png");
     private static final IconTexture[] ICON_TEXTURES = {
-        new IconTexture(new ResourceLocation("textures/misc/unknown_pack.png")),
+        new IconTexture(UNKNOWN_PACK),
         new IconTexture(ModernBeta.createRegistryKey("textures/gui/presets/pack.png")),
         new IconTexture(new ResourceLocation("textures/blocks/grass_side.png")),
         new IconTexture(new ResourceLocation("textures/blocks/dirt.png")),
@@ -921,6 +923,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this.parent.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            
+            SimpleTexture iconTexture = new SimpleTexture(icon.identifier);
+            if (!this.mc.getTextureManager().loadTexture(icon.identifier, iconTexture)) {
+                icon.identifier = UNKNOWN_PACK;
+            }
+            
             this.mc.getTextureManager().bindTexture(icon.identifier);
             
             Tessellator tessellator = Tessellator.getInstance();
@@ -967,7 +975,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     @SideOnly(Side.CLIENT)
     private static class IconTexture {
-        public final ResourceLocation identifier;
+        public ResourceLocation identifier;
         public final double u;
         public final double v;
         public final double w;

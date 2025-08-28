@@ -47,8 +47,15 @@ public class GuiCustomizePreset {
      * @return Formatted localization string
      */
     public static String formatInfo(ResourceLocation registryKey) {
-        String formattedRegistryKey = registryKey.getNamespace() + "." + registryKey.getPath();
+        String formattedRegistryKey = String.format(
+            "createWorld.customize.custom.preset.info.%s",
+            registryKey.getNamespace() + "." + registryKey.getPath()
+        );
         
-        return I18n.format(String.format("createWorld.customize.custom.preset.info.%s", formattedRegistryKey));
+        if (I18n.hasKey(formattedRegistryKey)) {
+            return I18n.format(formattedRegistryKey);
+        }
+
+        return "";
     }
 }

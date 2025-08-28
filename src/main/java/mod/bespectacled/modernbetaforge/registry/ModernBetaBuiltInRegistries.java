@@ -104,7 +104,7 @@ public class ModernBetaBuiltInRegistries {
     
     public static void registerBiomeSources() {
         ModernBetaRegistry<BiomeSourceCreator> registry = ModernBetaRegistries.BIOME_SOURCE;
-        
+
         registry.register(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey(), BetaBiomeSource::new);
         registry.register(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey(), SingleBiomeSource::new);
         registry.register(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey(), PEBiomeSource::new);
