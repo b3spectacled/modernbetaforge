@@ -16,7 +16,8 @@ public class ModernBetaBuiltInTypes {
         RELEASE("release"),
         END("end"),
         INDEV("indev"),
-        CLASSIC_0_0_23A("classic_0_0_23a");
+        CLASSIC_0_0_23A("classic_0_0_23a"),
+        DEBUG_NOISE("debug_noise");
         
         private final String id;
         

@@ -148,6 +148,12 @@ public class ModernBetaConfig {
         public boolean registerDebugProperties = false;
         
         @Comment({
+            "Register debug noise chunk source at mod start-up."
+        })
+        @RequiresMcRestart
+        public boolean registerDebugNoiseChunkSource = false;
+        
+        @Comment({
             "Debug block sources."
         })
         @RequiresWorldRestart

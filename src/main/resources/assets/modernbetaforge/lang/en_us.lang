@@ -265,6 +265,7 @@ createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.release
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.end=The End
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.indev=Indev
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.classic_0_0_23a=c0.0.023a
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.debug_noise=Debug Noise
 
 createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.beta=Beta
 createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.single=Single Biome
@@ -338,7 +339,7 @@ createWorld.customize.custom.preset.modernbetaforge.beta_realistic=Modern Beta R
 createWorld.customize.custom.preset.modernbetaforge.beta_plus=Modern Beta Plus
 createWorld.customize.custom.preset.modernbetaforge.beta_pe=Modern Beta Pocket Edition
 createWorld.customize.custom.preset.modernbetaforge.beta_release=Modern Beta Release 1.12.2
-createWorld.customize.custom.preset.custom=Custom Preset
+createWorld.customize.custom.preset.modernbetaforge.debug_noise=Debug Noise
 
 createWorld.customize.custom.preset.info.modernbetaforge.classic_beta=Based on Minecraft Beta 1.7.3
 createWorld.customize.custom.preset.info.modernbetaforge.classic_alpha_1_2=Based on Minecraft Alpha 1.2.6
@@ -426,6 +427,7 @@ modernbetaforge.general.serveroptions.sendworldinfo=Send World Info to Clients
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
+modernbetaforge.general.debugoptions.registerdebugnoisechunksource=Register Debug Noise Chunk Source
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
 modernbetaforge.general.debugoptions.debugindevlevelsaves=Debug Indev Level Saves
 
@@ -441,8 +443,6 @@ createWorld.customize.custom.modernbetaforge.floatprop4=Float Prop 4
 createWorld.customize.custom.modernbetaforge.stringprop=String Prop
 createWorld.customize.custom.modernbetaforge.listprop=List Prop
 createWorld.customize.custom.modernbetaforge.biomeprop=Biome Prop
-createWorld.customize.custom.modernbetaforge.biomeprop2=Biome Prop 2
 createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
 createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
-createWorld.customize.custom.modernbetaforge.solidprop=Solid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop

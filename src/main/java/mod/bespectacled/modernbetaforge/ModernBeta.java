@@ -89,12 +89,10 @@ public class ModernBeta {
         
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
-        ModernBetaBuiltInRegistries.registerNoiseSources();
         ModernBetaBuiltInRegistries.registerNoiseSettings();
         ModernBetaBuiltInRegistries.registerSurfaceBuilders();
         ModernBetaBuiltInRegistries.registerCarvers();
         ModernBetaBuiltInRegistries.registerCaveCarvers();
-        ModernBetaBuiltInRegistries.registerBlockSources();
         ModernBetaBuiltInRegistries.registerWorldSpawners();
         ModernBetaBuiltInRegistries.registerDefaultBlocks();
         ModernBetaBuiltInRegistries.registerDataFixes();
