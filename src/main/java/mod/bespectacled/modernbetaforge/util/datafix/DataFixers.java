@@ -79,7 +79,7 @@ public class DataFixers {
     public static void fixDesertBiomes(JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
-         String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.desertBiomeBase.toString());
+         String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.desertBiomeBase.toString());
          String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.desertBiomeOcean.toString());
          String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.desertBiomeBeach.toString());
          
@@ -91,7 +91,7 @@ public class DataFixers {
     public static void fixForestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.FOREST_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.forestBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.forestBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.forestBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.forestBiomeBeach.toString());
         
@@ -103,7 +103,7 @@ public class DataFixers {
     public static void fixIceDesertBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.ICE_DESERT_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.iceDesertBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.iceDesertBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.iceDesertBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.iceDesertBiomeBeach.toString());
         
@@ -115,7 +115,7 @@ public class DataFixers {
     public static void fixPlainsBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.PLAINS_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.plainsBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.plainsBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.plainsBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.plainsBiomeBeach.toString());
         
@@ -127,7 +127,7 @@ public class DataFixers {
     public static void fixRainforestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.RAINFOREST_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.rainforestBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.rainforestBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.rainforestBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.rainforestBiomeBeach.toString());
         
@@ -139,19 +139,19 @@ public class DataFixers {
     public static void fixSavannaBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SAVANNA_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.savannaBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.savannaBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.savannaBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.savannaBiomeBeach.toString());
         
         jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BASE, biomeBase);
-        jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BEACH, biomeOcean);
+        jsonObject.addProperty(NbtTags.SAVANNA_BIOME_OCEAN, biomeOcean);
         jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BEACH, biomeBeach);
     }
     
     public static void fixShrublandBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SHRUBLAND_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.shrublandBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.shrublandBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.shrublandBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.shrublandBiomeBeach.toString());
         
@@ -163,7 +163,7 @@ public class DataFixers {
     public static void fixSeasonalForestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.seasonalForestBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.seasonalForestBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.seasonalForestBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.seasonalForestBiomeBeach.toString());
         
@@ -175,7 +175,7 @@ public class DataFixers {
     public static void fixSwamplandBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SWAMPLAND_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.swamplandBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.swamplandBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.swamplandBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.swamplandBiomeBeach.toString());
         
@@ -187,7 +187,7 @@ public class DataFixers {
     public static void fixTaigaBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TAIGA_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.taigaBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.taigaBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.taigaBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.taigaBiomeBeach.toString());
         
@@ -199,7 +199,7 @@ public class DataFixers {
     public static void fixTundraBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TUNDRA_BIOMES);
         
-        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.tundraBiomeBase.toString());
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_BASE_BIOME, DEFAULTS.tundraBiomeBase.toString());
         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.tundraBiomeOcean.toString());
         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.tundraBiomeBeach.toString());
         

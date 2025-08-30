@@ -202,7 +202,7 @@ public class NbtTags {
     public static final String DEPR_USE_LAVA_OCEANS = "useLavaOceans";
     public static final String DEPR_USE_MODDED_BIOMES = "useModdedBiomes";
     
-    public static final String DEPR_LAND_BIOME = "landBiome";
+    public static final String DEPR_BASE_BIOME = "landBiome";
     public static final String DEPR_OCEAN_BIOME = "oceanBiome";
     public static final String DEPR_BEACH_BIOME = "beachBiome";
     
