@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.api.registry;
 
 import java.util.function.Supplier;
 
+import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverCustom;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -17,11 +18,13 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixer;
 import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
+import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.gen.MapGenBase;
 
+@SuppressWarnings("deprecation")
 public class ModernBetaRegistries {
     /**
      * Holds registered {@link ChunkSourceCreator interfaces} which instantiate {@link ChunkSource chunk sources}.
@@ -107,16 +110,22 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<Supplier<Block>> DEFAULT_BLOCK;
     
     /**
-     * Holds registered {@link DataFix datafixes} for the {@link DataFixer}.
-     * NOTE: This is not intended to be used outside of this mod at this time.
+     * Holds registered {@link ModDataFix datafixes} for the {@link ModDataFixer}.
      */
-    public static final ModernBetaRegistry<DataFix> DATA_FIX;
+    public static final ModernBetaRegistry<ModDataFix> MOD_DATA_FIX;
     
     /**
      * Holds registered {@link Property properties} for adding new generator settings.
      * Register generator settings for add-on mods for later fetching in {@link ModernBetaGeneratorSettings} here.
      */
     public static final ModernBetaRegistry<Property<?>> PROPERTY;
+    
+    /**
+     * @deprecated
+     * Holds registered {@link DataFix datafixes} for the {@link DataFixer}.
+     * NOTE: This is not intended to be used outside of this mod at this time.
+     */
+    public static final ModernBetaRegistry<DataFix> DATA_FIX;
     
     static {
         CHUNK_SOURCE = new ModernBetaRegistry<>("CHUNK_SOURCE");
@@ -132,8 +141,9 @@ public class ModernBetaRegistries {
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
         DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
-        DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
+        MOD_DATA_FIX = new ModernBetaRegistry<>("MOD_DATA_FIX");
         PROPERTY = new ModernBetaRegistry<>("PROPERTY");
+        DATA_FIX = new ModernBetaRegistry<>("DATA_FIX");
     }
     
     @FunctionalInterface

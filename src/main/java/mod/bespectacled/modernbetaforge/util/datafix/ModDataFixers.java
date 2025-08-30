@@ -1,19 +1,10 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.logging.log4j.Level;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import net.minecraft.nbt.NBTTagCompound;
+import mod.bespectacled.modernbetaforge.api.datafix.DataFix;
+import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.datafix.FixTypes;
-import net.minecraft.util.datafix.IFixType;
-import net.minecraft.util.datafix.IFixableData;
 
 public class ModDataFixers {
     private static final int DATA_VERSION_V1_1_0_0 = 1100;
@@ -30,6 +21,23 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_7_1_0 = 1710;
     private static final int DATA_VERSION_V1_8_1_0 = 1810;
     
+    public static final ResourceLocation BIOME_MAP_FIX_KEY = ModernBeta.createRegistryKey("BIOME_MAP_FIX");
+    public static final ResourceLocation SANDSTONE_WOLVES_SURFACE_FIX_KEY = ModernBeta.createRegistryKey("SANDSTONE_WOLVES_SURFACE_FIX");
+    public static final ResourceLocation SKYLANDS_SURFACE_FIX_KEY = ModernBeta.createRegistryKey("SKYLANDS_SURFACE_FIX");
+    public static final ResourceLocation SINGLE_BIOME_FIX_KEY = ModernBeta.createRegistryKey("SINGLE_BIOME_FIX");
+    public static final ResourceLocation INDEV_HOUSE_FIX_KEY = ModernBeta.createRegistryKey("INDEV_HOUSE_FIX");
+    public static final ResourceLocation RESOURCE_LOCATION_FIX_KEY = ModernBeta.createRegistryKey("RESOURCE_LOCATION_FIX");
+    public static final ResourceLocation SCALE_NOISE_FIX_KEY = ModernBeta.createRegistryKey("SCALE_NOISE_FIX");
+    public static final ResourceLocation LAYER_SIZE_FIX_KEY = ModernBeta.createRegistryKey("LAYER_SIZE_FIX");
+    public static final ResourceLocation CAVE_CARVER_NONE_FIX_KEY = ModernBeta.createRegistryKey("CAVE_CARVER_NONE_FIX");
+    public static final ResourceLocation SPAWN_LOCATOR_FIX_KEY = ModernBeta.createRegistryKey("SPAWN_LOCATOR_FIX");
+    public static final ResourceLocation DEFAULT_FLUID_FIX_KEY = ModernBeta.createRegistryKey("DEFAULT_FLUID_FIX");
+    public static final ResourceLocation DISKS_FIX_KEY = ModernBeta.createRegistryKey("DISKS_FIX");
+    public static final ResourceLocation DOUBLE_PLANT_FIX_KEY = ModernBeta.createRegistryKey("DOUBLE_PLANT_FIX");
+    public static final ResourceLocation LAYER_VERSION_FIX_KEY = ModernBeta.createRegistryKey("LAYER_VERSION_FIX");
+    public static final ResourceLocation RIVER_BIOMES_FIX_KEY = ModernBeta.createRegistryKey("RIVER_BIOMES_FIX");
+    public static final ResourceLocation RELEASE_WORLD_SPAWNER_FIX_KEY = ModernBeta.createRegistryKey("RELEASE_WORLD_SPAWNER_FIX");
+    
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
      * 
@@ -44,179 +52,104 @@ public class ModDataFixers {
      * 
      */
     
-    public static final ModDataFix BIOME_MAP_FIX = createModDataFix(
+    public static final ModDataFix BIOME_MAP_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_1_0_0,
-        DataFixTags.DESERT_BIOMES,
-        DataFixTags.FOREST_BIOMES,
-        DataFixTags.ICE_DESERT_BIOMES,
-        DataFixTags.PLAINS_BIOMES,
-        DataFixTags.RAINFOREST_BIOMES,
-        DataFixTags.SAVANNA_BIOMES,
-        DataFixTags.SHRUBLAND_BIOMES,
-        DataFixTags.SEASONAL_FOREST_BIOMES,
-        DataFixTags.SWAMPLAND_BIOMES,
-        DataFixTags.TAIGA_BIOMES,
-        DataFixTags.TUNDRA_BIOMES
+        new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes),
+        new DataFix(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes),
+        new DataFix(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes),
+        new DataFix(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes),
+        new DataFix(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes),
+        new DataFix(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes),
+        new DataFix(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes),
+        new DataFix(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes),
+        new DataFix(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes),
+        new DataFix(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes),
+        new DataFix(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes)
     );
 
-    public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = createModDataFix(
+    public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_2_0_0,
-        DataFixTags.USE_SANDSTONE,
-        DataFixTags.SPAWN_WOLVES,
-        DataFixTags.SURFACE_BUILDER,
-        DataFixTags.FIX_BIOME_DEPTH_SCALE
+        new DataFix(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone),
+        new DataFix(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves),
+        new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSurfaces),
+        new DataFix(NbtTags.USE_BIOME_DEPTH_SCALE, DataFixers::fixBiomeDepthScale)
     );
     
-    public static final ModDataFix SKYLANDS_SURFACE_FIX = createModDataFix(
+    public static final ModDataFix SKYLANDS_SURFACE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_2_2_2,
-        DataFixTags.SURFACE_SKYLANDS
+        new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSkylandsSurface)
     );
     
-    public static final ModDataFix SINGLE_BIOME_FIX = createModDataFix(
+    public static final ModDataFix SINGLE_BIOME_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_3_0_0,
-        DataFixTags.FIX_SINGLE_BIOME
+        new DataFix(NbtTags.DEPR_FIXED_BIOME, DataFixers::fixSingleBiome)
     );
     
-    public static final ModDataFix INDEV_HOUSE_FIX = createModDataFix(
+    public static final ModDataFix INDEV_HOUSE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_3_1_0,
-        DataFixTags.FIX_USE_INDEV_HOUSE
+        new DataFix(NbtTags.DEPR_USE_INDEV_HOUSE, DataFixers::fixIndevHouse)
     );
     
-    public static final ModDataFix RESOURCE_LOCATION_FIX = createModDataFix(
+    public static final ModDataFix RESOURCE_LOCATION_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_4_0_0,
-        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
-        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
-        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
-        DataFixTags.FIX_RESOURCE_LOCATION_CARVER
+        new DataFix(NbtTags.CHUNK_SOURCE, DataFixers::fixResourceLocationChunk),
+        new DataFix(NbtTags.BIOME_SOURCE, DataFixers::fixResourceLocationBiome),
+        new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixResourceLocationSurface),
+        new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixResourceLocationCarver)
     );
     
-    public static final ModDataFix SCALE_NOISE_FIX = createModDataFix(
+    public static final ModDataFix SCALE_NOISE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_4_0_0,
-        DataFixTags.FIX_SCALE_NOISE_SCALE_X,
-        DataFixTags.FIX_SCALE_NOISE_SCALE_Z
+        new DataFix(NbtTags.SCALE_NOISE_SCALE_X, DataFixers::fixScaleNoiseScaleX),
+        new DataFix(NbtTags.SCALE_NOISE_SCALE_Z, DataFixers::fixScaleNoiseScaleZ)
     );
     
-    public static final ModDataFix LAYER_SIZE_FIX = createModDataFix(
+    public static final ModDataFix LAYER_SIZE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_5_0_0,
-        DataFixTags.FIX_LAYER_SIZE
+        new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize)
     );
 
-    public static final ModDataFix CAVE_CARVER_NONE_FIX = createModDataFix(
+    public static final ModDataFix CAVE_CARVER_NONE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_5_2_0,
-        DataFixTags.FIX_CAVE_CARVER_NONE
+        new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone)
     );
 
-    public static final ModDataFix SPAWN_LOCATOR_FIX = createModDataFix(
+    public static final ModDataFix SPAWN_LOCATOR_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_5_2_0,
-        DataFixTags.FIX_WORLD_SPAWNER
+        new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixWorldSpawner)
     );
 
-    public static final ModDataFix DEFAULT_FLUID_FIX = createModDataFix(
+    public static final ModDataFix DEFAULT_FLUID_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_6_0_0,
-        DataFixTags.FIX_DEFAULT_FLUID
+        new DataFix(NbtTags.DEFAULT_FLUID, DataFixers::fixDefaultFluid)
     );
     
-    public static final ModDataFix DISKS_FIX = createModDataFix(
+    public static final ModDataFix DISKS_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_6_1_0,
-        DataFixTags.FIX_SAND_DISKS,
-        DataFixTags.FIX_GRAVEL_DISKS,
-        DataFixTags.FIX_CLAY_DISKS
+        new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixSandDisks),
+        new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks),
+        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks)
     );
     
-    public static final ModDataFix DOUBLE_PLANT_FIX = createModDataFix(
+    public static final ModDataFix DOUBLE_PLANT_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_6_1_0,
-        DataFixTags.FIX_DOUBLE_PLANTS
+        new DataFix(NbtTags.USE_DOUBLE_PLANTS, DataFixers::fixDoublePlants)
     );
     
-    public static final ModDataFix LAYER_VERSION_FIX = createModDataFix(
+    public static final ModDataFix LAYER_VERSION_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_7_0_0,
-        DataFixTags.FIX_SNOWY_BIOME_CHANCE,
-        DataFixTags.FIX_LAYER_VERSION_1600,
-        DataFixTags.FIX_BOP_COMPAT
+        new DataFix(NbtTags.SNOWY_BIOME_CHANCE, DataFixers::fixSnowyBiomeChance),
+        new DataFix(NbtTags.LAYER_VERSION, DataFixers::fixLayerVersion1600),
+        new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat)
     );
     
-    public static final ModDataFix RIVER_BIOMES_FIX = createModDataFix(
+    public static final ModDataFix RIVER_BIOMES_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_7_1_0,
-        DataFixTags.FIX_REPLACE_RIVER_BIOMES
+        new DataFix(NbtTags.REPLACE_RIVER_BIOMES, DataFixers::fixReplaceRiverBiomes)
     );
     
-    public static final ModDataFix RELEASE_WORLD_SPAWNER_FIX = createModDataFix(
+    public static final ModDataFix RELEASE_WORLD_SPAWNER_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_8_1_0,
-        DataFixTags.FIX_RELEASE_WORLD_SPAWNER
+        new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixReleaseWorldSpawner)
     );
-    
-    private static ModDataFix createModDataFix(int fixVersion, ResourceLocation... dataFixTags) {
-        return new ModDataFix(
-            FixTypes.LEVEL,
-            new IFixableData() {
-                @Override
-                public int getFixVersion() {
-                    return fixVersion;
-                }
-
-                @Override
-                public NBTTagCompound fixTagCompound(NBTTagCompound compound) {
-                    return fixGeneratorSettings(compound, Arrays.asList(dataFixTags), this.getFixVersion());
-                }
-            }
-        );
-    }
-    
-    private static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, List<ResourceLocation> registryKeys, int fixVersion) {
-        String worldName = getWorldName(compound);
-        
-        if (isModernBetaWorld(compound) && compound.hasKey("generatorOptions")) {
-            String generatorOptions = compound.getString("generatorOptions");
-            
-            JsonObject jsonObject;
-            try {
-                jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
-            } catch (Exception e) {
-                ModernBeta.log(Level.ERROR, "Couldn't parse generator options for data fixer..");
-                jsonObject = new JsonObject();      
-            }
-            
-            for (ResourceLocation registryKey : registryKeys) {
-                DataFixer.runDataFixer(registryKey, jsonObject, worldName, fixVersion);
-            }
-            
-            compound.setString("generatorOptions", jsonObject.toString().replace("\n", ""));
-        }
-        
-        return compound;
-    }
-    
-    private static boolean isModernBetaWorld(NBTTagCompound compound) {
-        if (compound.hasKey("generatorName")) {
-            return compound.getString("generatorName").equals("modernbeta");
-        }
-        
-        return false;
-    }
-    
-    private static String getWorldName(NBTTagCompound compound) {
-        if (compound.hasKey("LevelName")) {
-            return compound.getString("LevelName");
-        }
-        
-        return "";
-    }
-    
-    public static class ModDataFix {
-        private final IFixType fixType;
-        private final IFixableData fixableData;
-        
-        public ModDataFix(IFixType fixType, IFixableData fixableData) {
-            this.fixType = fixType;
-            this.fixableData = fixableData;
-        }
-        
-        public IFixType getFixType() {
-            return this.fixType;
-        }
-        
-        public IFixableData getFixableData() {
-            return this.fixableData;
-        }
-    }
 }

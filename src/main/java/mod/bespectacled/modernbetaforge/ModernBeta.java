@@ -81,7 +81,6 @@ public class ModernBeta {
     public void init(FMLInitializationEvent event) throws Exception {
         MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
-        ModDataFixer.INSTANCE.register();
         
         ModernBetaWorldType.register();
         ModernBetaStructures.register();
@@ -95,7 +94,7 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerCaveCarvers();
         ModernBetaBuiltInRegistries.registerWorldSpawners();
         ModernBetaBuiltInRegistries.registerDefaultBlocks();
-        ModernBetaBuiltInRegistries.registerDataFixes();
+        ModernBetaBuiltInRegistries.registerModDataFixes();
         
         if (ModernBetaConfig.debugOptions.registerDebugProperties) {
             ModernBetaBuiltInRegistries.registerProperties();
@@ -107,7 +106,9 @@ public class ModernBeta {
     }
     
     @EventHandler
-    public static void postInit(FMLPostInitializationEvent event) { }
+    public static void postInit(FMLPostInitializationEvent event) {
+        ModDataFixer.INSTANCE.register();
+    }
 
     @EventHandler
     private void onFMLServerAboutToStartEvent(FMLServerAboutToStartEvent event) { }

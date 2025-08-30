@@ -61,6 +61,7 @@ public class DebugInfoEventHandler {
                 String biomeText = String.format("[Modern Beta] Biome Source: %s", settings.biomeSource);
                 String surfaceText = String.format("[Modern Beta] Surface Builder: %s", settings.surfaceBuilder);
                 String carverText = String.format("[Modern Beta] Cave Carver: %s", settings.caveCarver);
+                String spawnerText = String.format("[Modern Beta] World Spawner: %s", settings.worldSpawner);
                 String seaLevelText = String.format("[Modern Beta] Sea level: %d", chunkSource.getSeaLevel());
                 
                 addDebugText(event, chunkText);
@@ -70,6 +71,7 @@ public class DebugInfoEventHandler {
                     addDebugText(event, surfaceText);
                 
                 addDebugText(event, carverText);
+                addDebugText(event, spawnerText);
                 addDebugText(event, "");
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||

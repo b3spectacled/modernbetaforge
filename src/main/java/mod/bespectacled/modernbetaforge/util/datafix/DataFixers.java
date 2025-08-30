@@ -430,19 +430,14 @@ public class DataFixers {
         return new LinkedHashMap<>();
     }
     
+    @Deprecated
     public static class DataFix {
         private final String tag;
         private final Consumer<JsonObject> dataFixConsumer;
         
-        @Deprecated
         public DataFix(String tag, BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> dataFixConsumer) {
             this.tag = tag;
             this.dataFixConsumer = (jsonObject) -> dataFixConsumer.accept(new ModernBetaGeneratorSettings.Factory(), jsonObject);
-        }
-        
-        public DataFix(String tag, Consumer<JsonObject> dataFixConsumer) {
-            this.tag = tag;
-            this.dataFixConsumer = dataFixConsumer;
         }
         
         public String getTag() {

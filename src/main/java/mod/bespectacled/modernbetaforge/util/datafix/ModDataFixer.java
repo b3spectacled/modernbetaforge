@@ -1,7 +1,15 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
+import org.apache.logging.log4j.Level;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers.ModDataFix;
+import mod.bespectacled.modernbetaforge.api.datafix.DataFix;
+import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -18,22 +26,31 @@ public class ModDataFixer {
     }
     
     public void register() {
-        this.registerModDataFix(ModDataFixers.BIOME_MAP_FIX);
-        this.registerModDataFix(ModDataFixers.SANDSTONE_WOLVES_SURFACE_FIX);
-        this.registerModDataFix(ModDataFixers.SKYLANDS_SURFACE_FIX);
-        this.registerModDataFix(ModDataFixers.SINGLE_BIOME_FIX);
-        this.registerModDataFix(ModDataFixers.INDEV_HOUSE_FIX);
-        this.registerModDataFix(ModDataFixers.RESOURCE_LOCATION_FIX);
-        this.registerModDataFix(ModDataFixers.SCALE_NOISE_FIX);
-        this.registerModDataFix(ModDataFixers.LAYER_SIZE_FIX);
-        this.registerModDataFix(ModDataFixers.CAVE_CARVER_NONE_FIX);
-        this.registerModDataFix(ModDataFixers.SPAWN_LOCATOR_FIX);
-        this.registerModDataFix(ModDataFixers.DEFAULT_FLUID_FIX);
-        this.registerModDataFix(ModDataFixers.DISKS_FIX);
-        this.registerModDataFix(ModDataFixers.DOUBLE_PLANT_FIX);
-        this.registerModDataFix(ModDataFixers.LAYER_VERSION_FIX);
-        this.registerModDataFix(ModDataFixers.RIVER_BIOMES_FIX);
-        this.registerModDataFix(ModDataFixers.RELEASE_WORLD_SPAWNER_FIX);
+        ModernBetaRegistries.MOD_DATA_FIX.getValues().forEach(value -> this.registerModDataFix(value));
+    }
+    
+    public static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, DataFix[] dataFixes, int fixVersion) {
+        String worldName = compound.hasKey("LevelName") ? compound.getString("LevelName") : "";
+        
+        if (compound.hasKey("generatorName") &&
+            compound.getString("generatorName").equals("modernbeta") &&
+            compound.hasKey("generatorOptions")
+        ) {
+            String generatorOptions = compound.getString("generatorOptions");
+            
+            JsonObject jsonObject;
+            try {
+                jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
+            } catch (Exception e) {
+                ModernBeta.log(Level.ERROR, "Couldn't parse generator options for data fixer..");
+                jsonObject = new JsonObject();      
+            }
+            
+            DataFixer.runDataFixer(dataFixes, jsonObject, worldName, fixVersion);
+            compound.setString("generatorOptions", jsonObject.toString().replace("\n", ""));
+        }
+        
+        return compound;
     }
     
     private void registerModDataFix(ModDataFix fix) {

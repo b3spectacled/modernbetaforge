@@ -5,16 +5,16 @@ import org.apache.logging.log4j.Level;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
-import net.minecraft.util.ResourceLocation;
+import mod.bespectacled.modernbetaforge.api.datafix.DataFix;
 
 public class DataFixer {
-    public static void runDataFixer(ResourceLocation registryKey, JsonObject jsonObject, String worldName, int fixVersion) {
-        DataFix dataFix = ModernBetaRegistries.DATA_FIX.get(registryKey);
-        
-        logDataFix(dataFix.getTag(), worldName, fixVersion);
-        dataFix.getDataFixConsumer().accept(jsonObject);
+    public static void runDataFixer(DataFix[] dataFixes, JsonObject jsonObject, String worldName, int fixVersion) {
+        for (int i = 0; i < dataFixes.length; ++i) {
+            DataFix dataFix = dataFixes[i];
+            
+            logDataFix(dataFix.getTag(), worldName, fixVersion);
+            dataFixes[i].getDataFixConsumer().accept(jsonObject);
+        }
     }
     
     private static void logDataFix(String key, String worldName, int fixVersion) {

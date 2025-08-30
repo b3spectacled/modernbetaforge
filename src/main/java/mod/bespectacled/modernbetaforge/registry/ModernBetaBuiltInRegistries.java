@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -29,10 +30,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
-import mod.bespectacled.modernbetaforge.util.NbtTags;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixTags;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixers;
-import mod.bespectacled.modernbetaforge.util.datafix.DataFixers.DataFix;
+import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.PEBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
@@ -209,46 +207,25 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
     }
     
-    public static void registerDataFixes() {
-        ModernBetaRegistry<DataFix> registry = ModernBetaRegistries.DATA_FIX;
+    public static void registerModDataFixes() {
+        ModernBetaRegistry<ModDataFix> registry = ModernBetaRegistries.MOD_DATA_FIX;
         
-        registry.register(DataFixTags.DESERT_BIOMES, new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes));
-        registry.register(DataFixTags.FOREST_BIOMES, new DataFix(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes));
-        registry.register(DataFixTags.ICE_DESERT_BIOMES, new DataFix(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes));
-        registry.register(DataFixTags.PLAINS_BIOMES, new DataFix(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes));
-        registry.register(DataFixTags.RAINFOREST_BIOMES, new DataFix(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes));
-        registry.register(DataFixTags.SAVANNA_BIOMES, new DataFix(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes));
-        registry.register(DataFixTags.SHRUBLAND_BIOMES, new DataFix(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes));
-        registry.register(DataFixTags.SEASONAL_FOREST_BIOMES, new DataFix(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes));
-        registry.register(DataFixTags.SWAMPLAND_BIOMES, new DataFix(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes));
-        registry.register(DataFixTags.TAIGA_BIOMES, new DataFix(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes));
-        registry.register(DataFixTags.TUNDRA_BIOMES, new DataFix(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes));
-        registry.register(DataFixTags.USE_SANDSTONE, new DataFix(NbtTags.USE_SANDSTONE, DataFixers::fixSandstone));
-        registry.register(DataFixTags.SPAWN_WOLVES, new DataFix(NbtTags.SPAWN_WOLVES, DataFixers::fixWolves));
-        registry.register(DataFixTags.SURFACE_BUILDER, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSurfaces));
-        registry.register(DataFixTags.FIX_BIOME_DEPTH_SCALE, new DataFix(NbtTags.USE_BIOME_DEPTH_SCALE, DataFixers::fixBiomeDepthScale));
-        registry.register(DataFixTags.SURFACE_SKYLANDS, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixSkylandsSurface));
-        registry.register(DataFixTags.FIX_SINGLE_BIOME, new DataFix(NbtTags.DEPR_FIXED_BIOME, DataFixers::fixSingleBiome));
-        registry.register(DataFixTags.FIX_USE_INDEV_HOUSE, new DataFix(NbtTags.DEPR_USE_INDEV_HOUSE, DataFixers::fixIndevHouse));
-        registry.register(DataFixTags.FIX_RESOURCE_LOCATION_CHUNK, new DataFix(NbtTags.CHUNK_SOURCE, DataFixers::fixResourceLocationChunk));
-        registry.register(DataFixTags.FIX_RESOURCE_LOCATION_BIOME, new DataFix(NbtTags.BIOME_SOURCE, DataFixers::fixResourceLocationBiome));
-        registry.register(DataFixTags.FIX_RESOURCE_LOCATION_SURFACE, new DataFix(NbtTags.SURFACE_BUILDER, DataFixers::fixResourceLocationSurface));
-        registry.register(DataFixTags.FIX_RESOURCE_LOCATION_CARVER, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixResourceLocationCarver));
-        registry.register(DataFixTags.FIX_SCALE_NOISE_SCALE_X, new DataFix(NbtTags.SCALE_NOISE_SCALE_X, DataFixers::fixScaleNoiseScaleX));
-        registry.register(DataFixTags.FIX_SCALE_NOISE_SCALE_Z, new DataFix(NbtTags.SCALE_NOISE_SCALE_Z, DataFixers::fixScaleNoiseScaleZ));
-        registry.register(DataFixTags.FIX_LAYER_SIZE, new DataFix(NbtTags.LAYER_SIZE, DataFixers::fixLayerSize));
-        registry.register(DataFixTags.FIX_CAVE_CARVER_NONE, new DataFix(NbtTags.CAVE_CARVER, DataFixers::fixCaveCarverNone));
-        registry.register(DataFixTags.FIX_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixWorldSpawner));
-        registry.register(DataFixTags.FIX_DEFAULT_FLUID, new DataFix(NbtTags.DEFAULT_FLUID, DataFixers::fixDefaultFluid));
-        registry.register(DataFixTags.FIX_SAND_DISKS, new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixSandDisks));
-        registry.register(DataFixTags.FIX_GRAVEL_DISKS, new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks));
-        registry.register(DataFixTags.FIX_CLAY_DISKS, new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks));
-        registry.register(DataFixTags.FIX_DOUBLE_PLANTS, new DataFix(NbtTags.USE_DOUBLE_PLANTS, DataFixers::fixDoublePlants));
-        registry.register(DataFixTags.FIX_SNOWY_BIOME_CHANCE, new DataFix(NbtTags.SNOWY_BIOME_CHANCE, DataFixers::fixSnowyBiomeChance));
-        registry.register(DataFixTags.FIX_LAYER_VERSION_1600, new DataFix(NbtTags.LAYER_VERSION, DataFixers::fixLayerVersion1600));
-        registry.register(DataFixTags.FIX_BOP_COMPAT, new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat));
-        registry.register(DataFixTags.FIX_REPLACE_RIVER_BIOMES, new DataFix(NbtTags.REPLACE_RIVER_BIOMES, DataFixers::fixReplaceRiverBiomes));
-        registry.register(DataFixTags.FIX_RELEASE_WORLD_SPAWNER, new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixReleaseWorldSpawner));
+        registry.register(ModDataFixers.BIOME_MAP_FIX_KEY, ModDataFixers.BIOME_MAP_FIX);
+        registry.register(ModDataFixers.SANDSTONE_WOLVES_SURFACE_FIX_KEY, ModDataFixers.SANDSTONE_WOLVES_SURFACE_FIX);
+        registry.register(ModDataFixers.SKYLANDS_SURFACE_FIX_KEY, ModDataFixers.SKYLANDS_SURFACE_FIX);
+        registry.register(ModDataFixers.SINGLE_BIOME_FIX_KEY, ModDataFixers.SINGLE_BIOME_FIX);
+        registry.register(ModDataFixers.INDEV_HOUSE_FIX_KEY, ModDataFixers.INDEV_HOUSE_FIX);
+        registry.register(ModDataFixers.RESOURCE_LOCATION_FIX_KEY, ModDataFixers.RESOURCE_LOCATION_FIX);
+        registry.register(ModDataFixers.SCALE_NOISE_FIX_KEY, ModDataFixers.SCALE_NOISE_FIX);
+        registry.register(ModDataFixers.LAYER_SIZE_FIX_KEY, ModDataFixers.LAYER_SIZE_FIX);
+        registry.register(ModDataFixers.CAVE_CARVER_NONE_FIX_KEY, ModDataFixers.CAVE_CARVER_NONE_FIX);
+        registry.register(ModDataFixers.SPAWN_LOCATOR_FIX_KEY, ModDataFixers.SPAWN_LOCATOR_FIX);
+        registry.register(ModDataFixers.DEFAULT_FLUID_FIX_KEY, ModDataFixers.DEFAULT_FLUID_FIX);
+        registry.register(ModDataFixers.DISKS_FIX_KEY, ModDataFixers.DISKS_FIX);
+        registry.register(ModDataFixers.DOUBLE_PLANT_FIX_KEY, ModDataFixers.DOUBLE_PLANT_FIX);
+        registry.register(ModDataFixers.LAYER_VERSION_FIX_KEY, ModDataFixers.LAYER_VERSION_FIX);
+        registry.register(ModDataFixers.RIVER_BIOMES_FIX_KEY, ModDataFixers.RIVER_BIOMES_FIX);
+        registry.register(ModDataFixers.RELEASE_WORLD_SPAWNER_FIX_KEY, ModDataFixers.RELEASE_WORLD_SPAWNER_FIX);
     }
 
     @SideOnly(Side.CLIENT)
