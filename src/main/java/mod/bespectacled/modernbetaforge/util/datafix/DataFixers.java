@@ -31,36 +31,36 @@ public class DataFixers {
     private static final Gson GSON = new Gson();
     
     private static final Map<String, Boolean> SHOULD_GEN_SANDSTONE = ImmutableMap.<String, Boolean>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), true)
         .build();
     
     private static final Map<String, Boolean> SHOULD_SPAWN_WOLVES = ImmutableMap.<String, Boolean>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), true)
         .build();
     
     private static final Map<String, String> SURFACE_BUILDERS = ImmutableMap.<String, String>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), ModernBetaBuiltInTypes.Surface.BETA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), ModernBetaBuiltInTypes.Surface.ALPHA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), ModernBetaBuiltInTypes.Surface.SKYLANDS.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), ModernBetaBuiltInTypes.Surface.PE.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.Surface.BETA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.Surface.ALPHA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.Surface.SKYLANDS.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.Surface.PE.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
         .build();
     
     private static final Map<String, String> WORLD_SPAWNERS = ImmutableMap.<String, String>builder()
@@ -164,15 +164,21 @@ public class DataFixers {
     }
     
     public static void fixSandstone(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(factory.chunkSource, factory.useSandstone);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
+        
+        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(registryString, factory.useSandstone);
     }
     
     public static void fixWolves(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(factory.chunkSource, factory.spawnWolves);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
+        
+        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(registryString, factory.spawnWolves);
     }
     
     public static void fixSurfaces(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(factory.chunkSource, factory.surfaceBuilder);
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
+        
+        factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(registryString, factory.surfaceBuilder);
     }
     
     public static void fixBiomeDepthScale(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
@@ -180,8 +186,8 @@ public class DataFixers {
     }
     
     public static void fixSkylandsSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId()))
-            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.SKYLANDS.getId();
+        if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString()))
+            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.SKYLANDS.getRegistryString();
     }
     
     public static void fixSingleBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {

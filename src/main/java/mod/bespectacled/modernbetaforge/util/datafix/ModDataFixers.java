@@ -62,6 +62,9 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.3.1.0 to fix indev house
+        DataFixTags.FIX_USE_INDEV_HOUSE,
+        
         // Added in 1.4.0.0 to fix resource tags
         DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
         DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
@@ -88,6 +91,9 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.3.1.0 to fix indev house
+        DataFixTags.FIX_USE_INDEV_HOUSE,
+        
         // Added in 1.4.0.0 to fix resource tags
         DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
         DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
@@ -111,6 +117,9 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.3.1.0 to fix indev house
+        DataFixTags.FIX_USE_INDEV_HOUSE,
+        
         // Added in 1.4.0.0 to fix resource tags
         DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
         DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
@@ -130,6 +139,9 @@ public class ModDataFixers {
     public static final ModDataFix SINGLE_BIOME_FIX = createModDataFix(
         DATA_VERSION_V1_3_0_0,
         DataFixTags.FIX_SINGLE_BIOME,
+        
+        // Added in 1.3.1.0 to fix indev house
+        DataFixTags.FIX_USE_INDEV_HOUSE,
         
         // Added in 1.4.0.0 to fix resource tags
         DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
