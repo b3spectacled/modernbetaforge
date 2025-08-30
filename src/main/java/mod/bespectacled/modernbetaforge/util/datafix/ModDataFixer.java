@@ -36,21 +36,25 @@ public class ModDataFixer {
             compound.getString("generatorName").equals("modernbeta") &&
             compound.hasKey("generatorOptions")
         ) {
-            String generatorOptions = compound.getString("generatorOptions");
-            
-            JsonObject jsonObject;
-            try {
-                jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
-            } catch (Exception e) {
-                ModernBeta.log(Level.ERROR, "Couldn't parse generator options for data fixer..");
-                jsonObject = new JsonObject();      
-            }
-            
+            JsonObject jsonObject = getAsJsonObject(compound.getString("generatorOptions"));
             DataFixer.runDataFixer(dataFixes, jsonObject, worldName, fixVersion);
             compound.setString("generatorOptions", jsonObject.toString().replace("\n", ""));
         }
         
         return compound;
+    }
+    
+    public static JsonObject getAsJsonObject(String json) {
+        JsonObject jsonObject;
+        
+        try {
+            jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        } catch (Exception e) {
+            ModernBeta.log(Level.ERROR, "Couldn't parse generator options for data fixer..");
+            jsonObject = new JsonObject();      
+        }
+        
+        return jsonObject;
     }
     
     private void registerModDataFix(ModDataFix fix) {

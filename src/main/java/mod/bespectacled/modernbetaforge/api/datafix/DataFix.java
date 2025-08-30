@@ -1,23 +1,26 @@
 package mod.bespectacled.modernbetaforge.api.datafix;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class DataFix {
     private final String tag;
-    private final Consumer<JsonObject> dataFixConsumer;
+    private final Function<JsonObject, @Nullable JsonElement> dataFixer;
 
-    public DataFix(String tag, Consumer<JsonObject> dataFixConsumer) {
+    public DataFix(String tag, Function<JsonObject, @Nullable JsonElement> dataFixer) {
         this.tag = tag;
-        this.dataFixConsumer = dataFixConsumer;
+        this.dataFixer = dataFixer;
     }
     
     public String getTag() {
         return this.tag;
     }
     
-    public Consumer<JsonObject> getDataFixConsumer() {
-        return this.dataFixConsumer;
+    public Function<JsonObject, @Nullable JsonElement> getDataFixer() {
+        return this.dataFixer;
     }
 }

@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.datafix.DataFix;
 import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import net.minecraft.util.ResourceLocation;
 
@@ -54,17 +55,49 @@ public class ModDataFixers {
     
     public static final ModDataFix BIOME_MAP_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_1_0_0,
-        new DataFix(NbtTags.DESERT_BIOMES, DataFixers::fixDesertBiomes),
-        new DataFix(NbtTags.FOREST_BIOMES, DataFixers::fixForestBiomes),
-        new DataFix(NbtTags.ICE_DESERT_BIOMES, DataFixers::fixIceDesertBiomes),
-        new DataFix(NbtTags.PLAINS_BIOMES, DataFixers::fixPlainsBiomes),
-        new DataFix(NbtTags.RAINFOREST_BIOMES, DataFixers::fixRainforestBiomes),
-        new DataFix(NbtTags.SAVANNA_BIOMES, DataFixers::fixSavannaBiomes),
-        new DataFix(NbtTags.SHRUBLAND_BIOMES, DataFixers::fixShrublandBiomes),
-        new DataFix(NbtTags.SEASONAL_FOREST_BIOMES, DataFixers::fixSeasonalForestBiomes),
-        new DataFix(NbtTags.SWAMPLAND_BIOMES, DataFixers::fixSwamplandBiomes),
-        new DataFix(NbtTags.TAIGA_BIOMES, DataFixers::fixTaigaBiomes),
-        new DataFix(NbtTags.TUNDRA_BIOMES, DataFixers::fixTundraBiomes)
+        new DataFix(NbtTags.DESERT_BIOME_BASE, DataFixers::fixDesertBiomeBase),
+        new DataFix(NbtTags.DESERT_BIOME_OCEAN, DataFixers::fixDesertBiomeOcean),
+        new DataFix(NbtTags.DESERT_BIOME_BEACH, DataFixers::fixDesertBiomeBeach),
+
+        new DataFix(NbtTags.FOREST_BIOME_BASE, DataFixers::fixForestBiomeBase),
+        new DataFix(NbtTags.FOREST_BIOME_OCEAN, DataFixers::fixForestBiomeOcean),
+        new DataFix(NbtTags.FOREST_BIOME_BEACH, DataFixers::fixForestBiomeBeach),
+
+        new DataFix(NbtTags.ICE_DESERT_BIOME_BASE, DataFixers::fixIceDesertBiomeBase),
+        new DataFix(NbtTags.ICE_DESERT_BIOME_OCEAN, DataFixers::fixIceDesertBiomeOcean),
+        new DataFix(NbtTags.ICE_DESERT_BIOME_BEACH, DataFixers::fixIceDesertBiomeBeach),
+
+        new DataFix(NbtTags.PLAINS_BIOME_BASE, DataFixers::fixPlainsBiomeBase),
+        new DataFix(NbtTags.PLAINS_BIOME_OCEAN, DataFixers::fixPlainsBiomeOcean),
+        new DataFix(NbtTags.PLAINS_BIOME_BEACH, DataFixers::fixPlainsBiomeBeach),
+
+        new DataFix(NbtTags.RAINFOREST_BIOME_BASE, DataFixers::fixRainforestBiomeBase),
+        new DataFix(NbtTags.RAINFOREST_BIOME_OCEAN, DataFixers::fixRainforestBiomeOcean),
+        new DataFix(NbtTags.RAINFOREST_BIOME_BEACH, DataFixers::fixRainforestBiomeBeach),
+
+        new DataFix(NbtTags.SAVANNA_BIOME_BASE, DataFixers::fixSavannaBiomeBase),
+        new DataFix(NbtTags.SAVANNA_BIOME_OCEAN, DataFixers::fixSavannaBiomeOcean),
+        new DataFix(NbtTags.SAVANNA_BIOME_BEACH, DataFixers::fixSavannaBiomeBeach),
+
+        new DataFix(NbtTags.SHRUBLAND_BIOME_BASE, DataFixers::fixShrublandBiomeBase),
+        new DataFix(NbtTags.SHRUBLAND_BIOME_OCEAN, DataFixers::fixShrublandBiomeOcean),
+        new DataFix(NbtTags.SHRUBLAND_BIOME_BEACH, DataFixers::fixShrublandBiomeBeach),
+
+        new DataFix(NbtTags.SEASONAL_FOREST_BIOME_BASE, DataFixers::fixSeasonalForestBiomeBase),
+        new DataFix(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, DataFixers::fixSeasonalForestBiomeOcean),
+        new DataFix(NbtTags.SEASONAL_FOREST_BIOME_BEACH, DataFixers::fixSeasonalForestBiomeBeach),
+
+        new DataFix(NbtTags.SWAMPLAND_BIOME_BASE, DataFixers::fixSwamplandBiomeBase),
+        new DataFix(NbtTags.SWAMPLAND_BIOME_OCEAN, DataFixers::fixSwamplandBiomeOcean),
+        new DataFix(NbtTags.SWAMPLAND_BIOME_BEACH, DataFixers::fixSwamplandBiomeBeach),
+
+        new DataFix(NbtTags.TAIGA_BIOME_BASE, DataFixers::fixTaigaBiomeBase),
+        new DataFix(NbtTags.TAIGA_BIOME_OCEAN, DataFixers::fixTaigaBiomeOcean),
+        new DataFix(NbtTags.TAIGA_BIOME_BEACH, DataFixers::fixTaigaBiomeBeach),
+
+        new DataFix(NbtTags.TUNDRA_BIOME_BASE, DataFixers::fixTundraBiomeBase),
+        new DataFix(NbtTags.TUNDRA_BIOME_OCEAN, DataFixers::fixTundraBiomeOcean),
+        new DataFix(NbtTags.TUNDRA_BIOME_BEACH, DataFixers::fixTundraBiomeBeach)
     );
 
     public static final ModDataFix SANDSTONE_WOLVES_SURFACE_FIX = ModDataFix.createModDataFix(
@@ -82,12 +115,12 @@ public class ModDataFixers {
     
     public static final ModDataFix SINGLE_BIOME_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_3_0_0,
-        new DataFix(NbtTags.DEPR_FIXED_BIOME, DataFixers::fixSingleBiome)
+        new DataFix(NbtTags.SINGLE_BIOME, DataFixers::fixSingleBiome)
     );
     
     public static final ModDataFix INDEV_HOUSE_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_3_1_0,
-        new DataFix(NbtTags.DEPR_USE_INDEV_HOUSE, DataFixers::fixIndevHouse)
+        new DataFix(NbtTags.LEVEL_HOUSE, DataFixers::fixIndevHouse)
     );
     
     public static final ModDataFix RESOURCE_LOCATION_FIX = ModDataFix.createModDataFix(
@@ -140,7 +173,7 @@ public class ModDataFixers {
         DATA_VERSION_V1_7_0_0,
         new DataFix(NbtTags.SNOWY_BIOME_CHANCE, DataFixers::fixSnowyBiomeChance),
         new DataFix(NbtTags.LAYER_VERSION, DataFixers::fixLayerVersion1600),
-        new DataFix(NbtTags.DEPR_USE_MODDED_BIOMES, DataFixers::fixBoPCompat)
+        new DataFix(CompatBiomesOPlenty.KEY_USE_COMPAT.toString(), DataFixers::fixBoPCompat)
     );
     
     public static final ModDataFix RIVER_BIOMES_FIX = ModDataFix.createModDataFix(
