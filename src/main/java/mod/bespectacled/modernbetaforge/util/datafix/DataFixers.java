@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.apache.logging.log4j.Level;
 
@@ -11,7 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
@@ -29,38 +29,39 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DataFixers {
     private static final Gson GSON = new Gson();
+    private static final ModernBetaGeneratorSettings DEFAULTS = ModernBetaGeneratorSettings.build();
     
     private static final Map<String, Boolean> SHOULD_GEN_SANDSTONE = ImmutableMap.<String, Boolean>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), true)
         .build();
     
     private static final Map<String, Boolean> SHOULD_SPAWN_WOLVES = ImmutableMap.<String, Boolean>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), false)
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), true)
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), false)
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), true)
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), true)
         .build();
     
     private static final Map<String, String> SURFACE_BUILDERS = ImmutableMap.<String, String>builder()
-        .put(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryString(), ModernBetaBuiltInTypes.Surface.BETA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString(), ModernBetaBuiltInTypes.Surface.ALPHA.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString(), ModernBetaBuiltInTypes.Surface.SKYLANDS.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.PE.getRegistryString(), ModernBetaBuiltInTypes.Surface.PE.getId())
-        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.BETA.getId(), ModernBetaBuiltInTypes.Surface.BETA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.ALPHA.getId(), ModernBetaBuiltInTypes.Surface.ALPHA.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId(), ModernBetaBuiltInTypes.Surface.SKYLANDS.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_420.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.INFDEV_415.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.PE.getId(), ModernBetaBuiltInTypes.Surface.PE.getId())
+        .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getId(), ModernBetaBuiltInTypes.Surface.INFDEV.getId())
         .build();
     
     private static final Map<String, String> WORLD_SPAWNERS = ImmutableMap.<String, String>builder()
@@ -75,266 +76,319 @@ public class DataFixers {
         .put(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString(), ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString())
         .build();
     
-    public static void fixDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixDesertBiomes(JsonObject jsonObject) {
          Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.DESERT_BIOMES);
          
-         factory.desertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.desertBiomeBase);
-         factory.desertBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.desertBiomeOcean);
-         factory.desertBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.desertBiomeBeach);
+         String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.desertBiomeBase.toString());
+         String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.desertBiomeOcean.toString());
+         String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.desertBiomeBeach.toString());
+         
+         jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, biomeBase);
+         jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, biomeOcean);
+         jsonObject.addProperty(NbtTags.DESERT_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixForestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixForestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.FOREST_BIOMES);
         
-        factory.forestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.forestBiomeBase);
-        factory.forestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.forestBiomeOcean);
-        factory.forestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.forestBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.forestBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.forestBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.forestBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.FOREST_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.FOREST_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.FOREST_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixIceDesertBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixIceDesertBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.ICE_DESERT_BIOMES);
         
-        factory.iceDesertBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.iceDesertBiomeBase);
-        factory.iceDesertBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.iceDesertBiomeOcean);
-        factory.iceDesertBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.iceDesertBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.iceDesertBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.iceDesertBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.iceDesertBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.ICE_DESERT_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixPlainsBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixPlainsBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.PLAINS_BIOMES);
         
-        factory.plainsBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.plainsBiomeBase);
-        factory.plainsBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.plainsBiomeOcean);
-        factory.plainsBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.plainsBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.plainsBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.plainsBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.plainsBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.PLAINS_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.PLAINS_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.PLAINS_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixRainforestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixRainforestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.RAINFOREST_BIOMES);
         
-        factory.rainforestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.rainforestBiomeBase);
-        factory.rainforestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.rainforestBiomeOcean);
-        factory.rainforestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.rainforestBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.rainforestBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.rainforestBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.rainforestBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.RAINFOREST_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixSavannaBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSavannaBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SAVANNA_BIOMES);
         
-        factory.savannaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.savannaBiomeBase);
-        factory.savannaBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.savannaBiomeOcean);
-        factory.savannaBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.savannaBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.savannaBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.savannaBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.savannaBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BEACH, biomeOcean);
+        jsonObject.addProperty(NbtTags.SAVANNA_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixShrublandBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixShrublandBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SHRUBLAND_BIOMES);
         
-        factory.shrublandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.shrublandBiomeBase);
-        factory.shrublandBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.shrublandBiomeOcean);
-        factory.shrublandBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.shrublandBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.shrublandBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.shrublandBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.shrublandBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.SHRUBLAND_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixSeasonalForestBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSeasonalForestBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SEASONAL_FOREST_BIOMES);
         
-        factory.seasonalForestBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.seasonalForestBiomeBase);
-        factory.seasonalForestBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.seasonalForestBiomeOcean);
-        factory.seasonalForestBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.seasonalForestBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.seasonalForestBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.seasonalForestBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.seasonalForestBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.SEASONAL_FOREST_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixSwamplandBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSwamplandBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.SWAMPLAND_BIOMES);
         
-        factory.swamplandBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.swamplandBiomeBase);
-        factory.swamplandBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.swamplandBiomeOcean);
-        factory.swamplandBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.swamplandBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.swamplandBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.swamplandBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.swamplandBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.SWAMPLAND_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixTaigaBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixTaigaBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TAIGA_BIOMES);
         
-        factory.taigaBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.taigaBiomeBase);
-        factory.taigaBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.taigaBiomeOcean);
-        factory.taigaBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.taigaBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.taigaBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.taigaBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.taigaBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.TAIGA_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.TAIGA_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.TAIGA_BIOME_BEACH, biomeBeach);
     }
 
-    public static void fixTundraBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixTundraBiomes(JsonObject jsonObject) {
         Map<String, String> biomeMap = deserializeBiomeMap(jsonObject, NbtTags.TUNDRA_BIOMES);
         
-        factory.tundraBiomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, factory.tundraBiomeBase);
-        factory.tundraBiomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, factory.tundraBiomeOcean);
-        factory.tundraBiomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, factory.tundraBiomeBeach);
+        String biomeBase = biomeMap.getOrDefault(NbtTags.DEPR_LAND_BIOME, DEFAULTS.tundraBiomeBase.toString());
+        String biomeOcean = biomeMap.getOrDefault(NbtTags.DEPR_OCEAN_BIOME, DEFAULTS.tundraBiomeOcean.toString());
+        String biomeBeach = biomeMap.getOrDefault(NbtTags.DEPR_BEACH_BIOME, DEFAULTS.tundraBiomeBeach.toString());
+        
+        jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BASE, biomeBase);
+        jsonObject.addProperty(NbtTags.TUNDRA_BIOME_OCEAN, biomeOcean);
+        jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BEACH, biomeBeach);
     }
     
-    public static void fixSandstone(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSandstone(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
         
-        factory.useSandstone = SHOULD_GEN_SANDSTONE.getOrDefault(registryString, factory.useSandstone);
+        jsonObject.addProperty(NbtTags.USE_SANDSTONE, SHOULD_GEN_SANDSTONE.getOrDefault(registryString, DEFAULTS.useSandstone));
     }
     
-    public static void fixWolves(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixWolves(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
         
-        factory.spawnWolves = SHOULD_SPAWN_WOLVES.getOrDefault(registryString, factory.spawnWolves);
+        jsonObject.addProperty(NbtTags.SPAWN_WOLVES, SHOULD_SPAWN_WOLVES.getOrDefault(registryString, DEFAULTS.spawnWolves));
     }
     
-    public static void fixSurfaces(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixSurfaces(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
         
-        factory.surfaceBuilder = SURFACE_BUILDERS.getOrDefault(registryString, factory.surfaceBuilder);
+        jsonObject.addProperty(NbtTags.SURFACE_BUILDER, SURFACE_BUILDERS.getOrDefault(registryString, DEFAULTS.surfaceBuilder.getPath()));
     }
     
-    public static void fixBiomeDepthScale(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.useBiomeDepthScale = false;
+    public static void fixBiomeDepthScale(JsonObject jsonObject) {
+        jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, false);
     }
     
-    public static void fixSkylandsSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        if (factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getRegistryString()))
-            factory.surfaceBuilder = ModernBetaBuiltInTypes.Surface.SKYLANDS.getRegistryString();
+    public static void fixSkylandsSurface(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
+        
+        if (registryString.equals(ModernBetaBuiltInTypes.Chunk.SKYLANDS.getId()))
+            jsonObject.addProperty(NbtTags.SURFACE_BUILDER, ModernBetaBuiltInTypes.Surface.SKYLANDS.getId());
     }
     
-    public static void fixSingleBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.singleBiome = JsonUtils.getString(jsonObject, NbtTags.DEPR_FIXED_BIOME, factory.singleBiome);
+    public static void fixSingleBiome(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.DEPR_FIXED_BIOME, DEFAULTS.singleBiome.toString());
+        
+        jsonObject.addProperty(NbtTags.SINGLE_BIOME, registryString);
     }
     
-    public static void fixIndevHouse(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixIndevHouse(JsonObject jsonObject) {
         boolean useIndevHouse = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_INDEV_HOUSE, true);
         
-        factory.levelHouse = useIndevHouse ? IndevHouse.OAK.id : IndevHouse.NONE.id;
+        jsonObject.addProperty(NbtTags.LEVEL_HOUSE, useIndevHouse ? IndevHouse.OAK.id : IndevHouse.NONE.id);
     }
     
-    public static void fixResourceLocationChunk(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixResourceLocationChunk(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, ModernBetaBuiltInTypes.Chunk.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
-            factory.chunkSource = ModernBeta.createRegistryKey(registryString).toString();
+            jsonObject.addProperty(NbtTags.CHUNK_SOURCE, ModernBeta.createRegistryKey(registryString).toString());
         }
     }
     
-    public static void fixResourceLocationBiome(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixResourceLocationBiome(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, ModernBetaBuiltInTypes.Biome.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
-            factory.biomeSource = ModernBeta.createRegistryKey(registryString).toString();
+            jsonObject.addProperty(NbtTags.BIOME_SOURCE, ModernBeta.createRegistryKey(registryString).toString());
         }
     }
     
-    public static void fixResourceLocationSurface(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixResourceLocationSurface(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.SURFACE_BUILDER, ModernBetaBuiltInTypes.Surface.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
-            factory.surfaceBuilder = ModernBeta.createRegistryKey(registryString).toString();
+            jsonObject.addProperty(NbtTags.SURFACE_BUILDER, ModernBeta.createRegistryKey(registryString).toString());
         }
     }
     
-    public static void fixResourceLocationCarver(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixResourceLocationCarver(JsonObject jsonObject) {
         String registryString = JsonUtils.getString(jsonObject, NbtTags.CAVE_CARVER, ModernBetaBuiltInTypes.Carver.BETA.getId());
         
         if (!isResourceFormat(registryString)) {
-            factory.caveCarver = ModernBeta.createRegistryKey(registryString).toString();
+            jsonObject.addProperty(NbtTags.CAVE_CARVER, ModernBeta.createRegistryKey(registryString).toString());
         }
     }
     
-    public static void fixScaleNoiseScaleX(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
+    public static void fixScaleNoiseScaleX(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, DEFAULTS.chunkSource.toString());
         boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
         boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
         
         if (isAlpha || isInfdev611) {
-            factory.scaleNoiseScaleX = 1.0f;
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_X, 1.0f);
         }
     }
     
-    public static void fixScaleNoiseScaleZ(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
+    public static void fixScaleNoiseScaleZ(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, DEFAULTS.chunkSource.toString());
         boolean isAlpha = registryString.equals(ModernBetaBuiltInTypes.Chunk.ALPHA.getRegistryString());
         boolean isInfdev611 = registryString.equals(ModernBetaBuiltInTypes.Chunk.INFDEV_611.getRegistryString());
         
         if (isAlpha || isInfdev611) {
-            factory.scaleNoiseScaleZ = 1.0f;
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_Z, 1.0f);
         }
     }
     
-    public static void fixLayerSize(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        int biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.layerSize);
-        
-        factory.layerSize = biomeSize;
+    public static void fixLayerSize(JsonObject jsonObject) {
+        int biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, DEFAULTS.layerSize);
+
+        jsonObject.addProperty(NbtTags.LAYER_SIZE, biomeSize);
     }
     
-    public static void fixCaveCarverNone(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixCaveCarverNone(JsonObject jsonObject) {
         boolean useCaves = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_CAVES, true);
         
         if (!useCaves) {
-            factory.caveCarver = ModernBetaBuiltInTypes.Carver.NONE.getRegistryString();
+            jsonObject.addProperty(NbtTags.CAVE_CARVER, ModernBetaBuiltInTypes.Carver.NONE.getRegistryString());
         }
     }
     
-    public static void fixWorldSpawner(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, factory.chunkSource);
+    public static void fixWorldSpawner(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, DEFAULTS.chunkSource.toString());
+        String defaultSpawner = ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString();
         
-        factory.worldSpawner = WORLD_SPAWNERS.getOrDefault(registryString, ModernBetaBuiltInTypes.WorldSpawner.DEFAULT.getRegistryString());
+        jsonObject.addProperty(NbtTags.WORLD_SPAWNER, WORLD_SPAWNERS.getOrDefault(registryString, defaultSpawner));
     }
     
-    public static void fixDefaultFluid(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
+    public static void fixDefaultFluid(JsonObject jsonObject) {
         boolean useLavaOceans = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_LAVA_OCEANS, false);
         
         if (useLavaOceans) {
-            factory.defaultFluid = Blocks.LAVA.getRegistryName().toString();
+            jsonObject.addProperty(NbtTags.DEFAULT_FLUID, Blocks.LAVA.getRegistryName().toString());
         }
     }
     
-    public static void fixSandDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory);
+    public static void fixSandDisks(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
         
         if (hasVanillaBiome) {
-            factory.useSandDisks = true;
+            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, true);
         }
     }
     
-    public static void fixGravelDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory);
+    public static void fixGravelDisks(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
         
         if (hasVanillaBiome) {
-            factory.useGravelDisks = true;
+            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, true);
         }
     }
     
-    public static void fixClayDisks(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(factory);
+    public static void fixClayDisks(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
         
         if (hasVanillaBiome) {
-            factory.useClayDisks = true;
+            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, true);
         }
     }
     
-    public static void fixDoublePlants(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.useDoublePlants = factory.useNewFlowers;
+    public static void fixDoublePlants(JsonObject jsonObject) {
+        boolean useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, DEFAULTS.useNewFlowers);
+        
+        jsonObject.addProperty(NbtTags.USE_DOUBLE_PLANTS, useNewFlowers);
     }
     
-    public static void fixSnowyBiomeChance(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.snowyBiomeChance = 6;
+    public static void fixSnowyBiomeChance(JsonObject jsonObject) {
+        jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, 6);
     }
     
-    public static void fixLayerVersion1600(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        factory.layerVersion = GenLayerVersion.LAYER_VERSION_V1_6_0_0;
+    public static void fixLayerVersion1600(JsonObject jsonObject) {
+        jsonObject.addProperty(NbtTags.LAYER_VERSION, GenLayerVersion.LAYER_VERSION_V1_6_0_0);
     }
     
-    public static void fixBoPCompat(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID) && factory.customProperties.containsKey(CompatBiomesOPlenty.KEY_USE_COMPAT)) {
+    public static void fixBoPCompat(JsonObject jsonObject) {
+        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID) && DEFAULTS.containsProperty(CompatBiomesOPlenty.KEY_USE_COMPAT)) {
             boolean useModdedBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_MODDED_BIOMES, true);
             
-            factory.customProperties.put(CompatBiomesOPlenty.KEY_USE_COMPAT, new BooleanProperty(useModdedBiomes));
+            jsonObject.addProperty(CompatBiomesOPlenty.KEY_USE_COMPAT.toString(), useModdedBiomes);
         }
     }
     
-    public static void fixReplaceRiverBiomes(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        if (!factory.chunkSource.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString())) {
-            factory.replaceRiverBiomes = false;
+    public static void fixReplaceRiverBiomes(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.CHUNK_SOURCE, DEFAULTS.chunkSource.toString());
+        
+        if (!registryString.equals(ModernBetaBuiltInTypes.Chunk.RELEASE.getRegistryString())) {
+            jsonObject.addProperty(NbtTags.REPLACE_RIVER_BIOMES, false);
         }
     }
     
-    public static void fixReleaseWorldSpawner(ModernBetaGeneratorSettings.Factory factory, JsonObject jsonObject) {
-        String registryString = JsonUtils.getString(jsonObject, NbtTags.WORLD_SPAWNER, factory.worldSpawner);
+    public static void fixReleaseWorldSpawner(JsonObject jsonObject) {
+        String registryString = JsonUtils.getString(jsonObject, NbtTags.WORLD_SPAWNER, DEFAULTS.worldSpawner.toString());
         
         if (registryString.equals(ModernBeta.createRegistryKey("none").toString())) {
-            factory.worldSpawner = ModernBetaBuiltInTypes.WorldSpawner.RELEASE.getRegistryString();
+            jsonObject.addProperty(NbtTags.WORLD_SPAWNER, ModernBetaBuiltInTypes.WorldSpawner.RELEASE.getRegistryString());
         }
     }
     
@@ -342,17 +396,23 @@ public class DataFixers {
         return resourceString.split(":").length == 2;
     }
     
-    private static boolean hasVanillaBiome(ModernBetaGeneratorSettings.Factory factory) {
-        ModernBetaGeneratorSettings settings = factory.build();
-        ResourceLocation biomeSource = settings.biomeSource;
+    private static boolean hasVanillaBiome(JsonObject jsonObject) {
+        String biomeSourceStr = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, ModernBetaBuiltInTypes.Biome.BETA.getId());
+        ResourceLocation biomeSource = new ResourceLocation(biomeSourceStr);
         
         boolean hasVanillaBiome = true;
         
-        if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey()) || biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())) {
-            hasVanillaBiome = new ClimateMap(settings).containsNonModernBetaBiomes();
+        if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey()) ||
+            biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())
+        ) {
+            ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(jsonObject.toString());
+            hasVanillaBiome = new ClimateMap(factory.build()).containsNonModernBetaBiomes();
             
         } else if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
-            hasVanillaBiome = !(ForgeRegistryUtil.get(settings.singleBiome, ForgeRegistries.BIOMES) instanceof ModernBetaBiome);
+            String singleBiomeStr = JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, DEFAULTS.singleBiome.toString());
+            ResourceLocation singleBiome = new ResourceLocation(singleBiomeStr);
+            
+            hasVanillaBiome = !(ForgeRegistryUtil.get(singleBiome, ForgeRegistries.BIOMES) instanceof ModernBetaBiome);
             
         }
         
@@ -372,9 +432,15 @@ public class DataFixers {
     
     public static class DataFix {
         private final String tag;
-        private final BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> dataFixConsumer;
+        private final Consumer<JsonObject> dataFixConsumer;
         
+        @Deprecated
         public DataFix(String tag, BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> dataFixConsumer) {
+            this.tag = tag;
+            this.dataFixConsumer = (jsonObject) -> dataFixConsumer.accept(new ModernBetaGeneratorSettings.Factory(), jsonObject);
+        }
+        
+        public DataFix(String tag, Consumer<JsonObject> dataFixConsumer) {
             this.tag = tag;
             this.dataFixConsumer = dataFixConsumer;
         }
@@ -383,7 +449,7 @@ public class DataFixers {
             return this.tag;
         }
         
-        public BiConsumer<ModernBetaGeneratorSettings.Factory, JsonObject> getDataFixConsumer() {
+        public Consumer<JsonObject> getDataFixConsumer() {
             return this.dataFixConsumer;
         }
     }
