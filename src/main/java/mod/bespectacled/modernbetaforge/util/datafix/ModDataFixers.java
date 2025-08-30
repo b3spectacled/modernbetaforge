@@ -3,9 +3,12 @@ package mod.bespectacled.modernbetaforge.util.datafix;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -59,6 +62,12 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.4.0.0 to fix resource tags
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+        
         // Added in 1.5.2.0 to replace useCaves
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
@@ -79,6 +88,12 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.4.0.0 to fix resource tags
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+        
         // Added in 1.5.2.0 to replace useCaves
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
@@ -96,6 +111,12 @@ public class ModDataFixers {
         // Added in 1.3.0.0 to replace fixedBiome
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.4.0.0 to fix resource tags
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+        
         // Added in 1.5.2.0 to replace useCaves
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
@@ -110,6 +131,12 @@ public class ModDataFixers {
         DATA_VERSION_V1_3_0_0,
         DataFixTags.FIX_SINGLE_BIOME,
         
+        // Added in 1.4.0.0 to fix resource tags
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
+        
         // Added in 1.5.2.0 to replace useCaves
         DataFixTags.FIX_CAVE_CARVER_NONE,
         
@@ -123,6 +150,12 @@ public class ModDataFixers {
     public static final ModDataFix INDEV_HOUSE_FIX = createModDataFix(
         DATA_VERSION_V1_3_1_0,
         DataFixTags.FIX_USE_INDEV_HOUSE,
+        
+        // Added in 1.4.0.0 to fix resource tags
+        DataFixTags.FIX_RESOURCE_LOCATION_CHUNK,
+        DataFixTags.FIX_RESOURCE_LOCATION_BIOME,
+        DataFixTags.FIX_RESOURCE_LOCATION_SURFACE,
+        DataFixTags.FIX_RESOURCE_LOCATION_CARVER,
         
         // Added in 1.5.2.0 to replace useCaves
         DataFixTags.FIX_CAVE_CARVER_NONE,
@@ -273,6 +306,7 @@ public class ModDataFixers {
             try {
                 jsonObject = new JsonParser().parse(generatorOptions).getAsJsonObject();
             } catch (Exception e) {
+                ModernBeta.log(Level.ERROR, "Couldn't parse generator options for data fixer..");
                 jsonObject = new JsonObject();      
             }
             
