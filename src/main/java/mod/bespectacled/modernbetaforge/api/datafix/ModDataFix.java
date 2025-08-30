@@ -1,10 +1,12 @@
 package mod.bespectacled.modernbetaforge.api.datafix;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.IFixType;
 import net.minecraft.util.datafix.IFixableData;
+import net.minecraftforge.common.util.ModFixs;
 
 public class ModDataFix {
     private final IFixType fixType;
@@ -23,6 +25,14 @@ public class ModDataFix {
         return this.fixableData;
     }
     
+    /**
+     * Creates a ModDataFix for the Forge {@link ModFixs}.
+     * 
+     * @param fixVersion The integer data version for the mod.
+     * @param dataFixes An array of {@link DataFix datafixes} for the target data version.
+     * 
+     * @return A ModDataFix to be registered with {@link ModernBetaRegistries#MOD_DATA_FIX}. 
+     */
     public static ModDataFix createModDataFix(int fixVersion, DataFix... dataFixes) {
         return new ModDataFix(
             FixTypes.LEVEL,
