@@ -146,6 +146,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         double depthNoiseScaleX = this.settings.depthNoiseScaleX;
         double depthNoiseScaleZ = this.settings.depthNoiseScaleZ;
         double baseSize = this.settings.baseSize;
+        
         float biomeDepthOffset = this.settings.biomeDepthOffset;
         float biomeScaleOffset = this.settings.biomeScaleOffset;
         float biomeDepthWeight = this.settings.biomeDepthWeight;
@@ -184,6 +185,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
 
         biomeScale = biomeScale / totalBiomeWeight;
         biomeDepth = biomeDepth / totalBiomeWeight;
+        
         biomeScale = biomeScale * 0.9f + 0.1f;
         biomeDepth = (biomeDepth * 4.0f - 1.0f) / 8.0f;
 
