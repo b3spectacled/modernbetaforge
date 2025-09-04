@@ -138,8 +138,17 @@ public class DrawUtil {
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                         int oceanHeight = chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN);
-                        Biome biome = biomeSource.getBiome(x, z);
                         mutablePos.setPos(x, oceanHeight, z);
+
+                        Biome biome = biomeSource.getBiome(x, z);
+                        BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+                        
+                        Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+                        biome = injectedBiome != null ? injectedBiome : biome;
+                        context.setBiome(biome);
+                        
+                        injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
+                        biome = injectedBiome != null ? injectedBiome : biome;
 
                         TerrainType terrainType = getBaseTerrainType(chunkSource, surfaceBuilder, x, z, height, biome, random);
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
