@@ -158,7 +158,6 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface BiomeResolverCreator {
-        // TODO 1.9.0.0: Update interface to include BiomeSource.
         BiomeResolverCustom apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
     
