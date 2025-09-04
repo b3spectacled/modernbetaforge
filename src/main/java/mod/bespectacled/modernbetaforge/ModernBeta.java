@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaModRegistry;
 import mod.bespectacled.modernbetaforge.command.CommandDrawMap;
 import mod.bespectacled.modernbetaforge.command.CommandGetGeneratorSetting;
 import mod.bespectacled.modernbetaforge.command.CommandLocateBiome;
@@ -79,6 +80,7 @@ public class ModernBeta {
 
     @EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
+        ModernBetaModRegistry.INSTANCE.register(MODID, DATA_VERSION);
         MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         

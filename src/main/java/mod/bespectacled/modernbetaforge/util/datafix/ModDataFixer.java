@@ -1,5 +1,10 @@
 package mod.bespectacled.modernbetaforge.util.datafix;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.JsonObject;
@@ -8,25 +13,34 @@ import com.google.gson.JsonParser;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.datafix.DataFix;
 import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaModRegistry;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ModDataFixer {
     public static final ModDataFixer INSTANCE = new ModDataFixer();
-    
-    private final CompoundDataFixer forgeDataFixer;
-    private final ModFixs modFixer;
+
+    private final Map<String, ModFixs> modFixers;
     
     private ModDataFixer() {
-        this.forgeDataFixer = FMLCommonHandler.instance().getDataFixer();
-        this.modFixer = this.forgeDataFixer.init(ModernBeta.MODID, ModernBeta.DATA_VERSION);
+        this.modFixers = initModFixers(FMLCommonHandler.instance().getDataFixer());
     }
     
     public void register() {
-        ModernBetaRegistries.MOD_DATA_FIX.getValues().forEach(value -> this.registerModDataFix(value));
+        ModernBetaRegistries.MOD_DATA_FIX.getEntries()
+            .forEach(entry -> this.registerModDataFix(entry.getKey(), entry.getValue()));
+    }
+    
+    private void registerModDataFix(ResourceLocation registryKey, ModDataFix fix) {
+        String namespace = registryKey.getNamespace();
+        
+        if (this.modFixers.containsKey(namespace)) {
+            this.modFixers.get(namespace).registerFix(fix.getFixType(), fix.getFixableData());
+        }
     }
     
     public static NBTTagCompound fixGeneratorSettings(NBTTagCompound compound, DataFix[] dataFixes, int fixVersion) {
@@ -57,7 +71,14 @@ public class ModDataFixer {
         return jsonObject;
     }
     
-    private void registerModDataFix(ModDataFix fix) {
-        this.modFixer.registerFix(fix.getFixType(), fix.getFixableData());
+    private static Map<String, ModFixs> initModFixers(CompoundDataFixer forgeDataFixer) {
+        List<Entry<String, Integer>> mods = ModernBetaModRegistry.INSTANCE.getEntries();
+        Map<String, ModFixs> modFixers = new LinkedHashMap<>();
+        
+        for (Entry<String, Integer> mod : mods) {
+            modFixers.put(mod.getKey(), forgeDataFixer.init(mod.getKey(), mod.getValue()));
+        }
+        
+        return modFixers;
     }
 }

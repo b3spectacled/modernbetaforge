@@ -111,6 +111,8 @@ public class ModernBetaRegistries {
     
     /**
      * Holds registered {@link ModDataFix datafixes} for the {@link ModDataFixer}.
+     * For datafixes to function, the mod must also register to {@link ModernBetaModRegistry}
+     * with its mod ID and current data version.
      */
     public static final ModernBetaRegistry<ModDataFix> MOD_DATA_FIX;
     
