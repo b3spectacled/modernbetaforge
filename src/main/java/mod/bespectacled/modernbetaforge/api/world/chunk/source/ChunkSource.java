@@ -272,7 +272,7 @@ public abstract class ChunkSource {
             BiomeResolverCustom customResolver = resolverCreator.apply(this, this.settings);
             
             if (customResolver.useCustomResolver()) {
-                builder.add(customResolver.getCustomPredicate(), customResolver::getCustomBiome, BiomeInjectionStep.CUSTOM);
+                builder.add(customResolver.getCustomPredicate(), (x, z) -> customResolver.getCustomBiome(x, z, biomeSource), BiomeInjectionStep.CUSTOM);
             }
         }
         
