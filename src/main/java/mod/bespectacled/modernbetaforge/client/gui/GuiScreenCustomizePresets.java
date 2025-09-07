@@ -894,8 +894,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int nameColor = hovered ? 16777120 : 16777215;
             int descColor = hovered ? 10526785 : 10526880;
             
+            int iX = x + 5;
+            int iY = y + paddingY;
+            
+            // Cull if not in list frame
+            if (iY + SLOT_HEIGHT <= LIST_PADDING_TOP || iY >= this.parent.height - LIST_PADDING_BOTTOM) {
+                return;
+            }
+            
             // Render preset icon
-            this.blitIcon(x, y + paddingY, info.icon());
+            this.blitIcon(iX, iY, info.icon());
             
             // Render preset name
             this.parent.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
@@ -914,13 +922,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
 
         private void blitIcon(int x, int y, IconTexture icon) {
-            int iX = x + 5;
-            int iY = y;
-
-            this.parent.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY - 1, -2039584);
-            this.parent.drawHorizontalLine(iX - 1, iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, -6250336);
-            this.parent.drawVerticalLine(iX - 1, iY - 1, iY + SLOT_HEIGHT, -2039584);
-            this.parent.drawVerticalLine(iX + SLOT_HEIGHT, iY - 1, iY + SLOT_HEIGHT, -6250336);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y - 1, -2039584);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y + SLOT_HEIGHT, -6250336);
+            this.parent.drawVerticalLine(x - 1, y - 1, y + SLOT_HEIGHT, -2039584);
+            this.parent.drawVerticalLine(x + SLOT_HEIGHT, y - 1, y + SLOT_HEIGHT, -6250336);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
@@ -935,10 +940,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferBuilder.pos(iX + 0, iY + SLOT_HEIGHT, 0.0).tex(icon.u, icon.v + icon.h).endVertex();
-            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + SLOT_HEIGHT, 0.0).tex(icon.u + icon.w, icon.v + icon.h).endVertex();
-            bufferBuilder.pos(iX + SLOT_HEIGHT, iY + 0, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
-            bufferBuilder.pos(iX + 0, iY + 0, 0.0).tex(icon.u, icon.v).endVertex();
+            bufferBuilder.pos(x + 0, y + SLOT_HEIGHT, 0.0).tex(icon.u, icon.v + icon.h).endVertex();
+            bufferBuilder.pos(x + SLOT_HEIGHT, y + SLOT_HEIGHT, 0.0).tex(icon.u + icon.w, icon.v + icon.h).endVertex();
+            bufferBuilder.pos(x + SLOT_HEIGHT, y + 0, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
+            bufferBuilder.pos(x + 0, y + 0, 0.0).tex(icon.u, icon.v).endVertex();
             
             tessellator.draw();
         }
