@@ -204,6 +204,20 @@ public final class ModernBetaRegistry<T> {
         return entries.get(random.nextInt(entries.size()));
     }
     
+    /**
+     * Sets the priority of an entry in the registry and returns the previous priority.
+     * 
+     * @param registryKey The registry key of the entry to modify
+     * @param priority The new integer priority
+     * @return The entry's previous priority
+     */
+    public int setPriority(ResourceLocation registryKey, int priority) {
+        if (!this.contains(registryKey))
+            throw new NoSuchElementException("[Modern Beta] Registry " + this.name + " does not contain entry named " + registryKey);
+        
+        return this.registryEntries.get(registryKey).setPriority(priority);
+    }
+    
     private List<Entry<ResourceLocation, RegistryEntry<T>>> sortRegistryEntries() {
         List<Entry<ResourceLocation, RegistryEntry<T>>> registryEntries = new ArrayList<>(this.registryEntries.entrySet());
         registryEntries.sort(Entry.comparingByValue());
@@ -215,7 +229,7 @@ public final class ModernBetaRegistry<T> {
         private static final int DEFAULT_PRIORITY = 1000;
         
         private final T entry;
-        private final int priority;
+        private int priority;
         
         private RegistryEntry(T entry) {
             this(entry, DEFAULT_PRIORITY);
@@ -224,6 +238,13 @@ public final class ModernBetaRegistry<T> {
         private RegistryEntry(T entry, int priority) {
             this.entry = entry;
             this.priority = MathHelper.clamp(priority, 1, Integer.MAX_VALUE);
+        }
+        
+        public int setPriority(int priority) {
+            int prevPriority = this.priority;
+            this.priority = priority;
+            
+            return prevPriority;
         }
 
         @Override
