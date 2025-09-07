@@ -206,6 +206,7 @@ public final class ModernBetaRegistry<T> {
     
     /**
      * Sets the priority of an entry in the registry and returns the previous priority.
+     * Throws {@link NoSuchElementException} if no entry is found.
      * 
      * @param registryKey The registry key of the entry to modify
      * @param priority The new integer priority
