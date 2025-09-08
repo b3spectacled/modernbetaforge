@@ -10,7 +10,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 
 public class ExecutorWrapper {
     private static final int INITIAL_SHUTDOWN_WAIT_TIME_MS = 1000;
-    private static final int DELAYED_SHUTDOWN_WAIT_TIME_MS = 5000;
+    private static final int DELAYED_SHUTDOWN_WAIT_TIME_MS = 10000;
     
     protected final ExecutorService executor;
     private final String name;

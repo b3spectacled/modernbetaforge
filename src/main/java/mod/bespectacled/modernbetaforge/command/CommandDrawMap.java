@@ -71,7 +71,8 @@ public class CommandDrawMap extends ModernBetaCommand {
                 width,
                 length,
                 true,
-                progressTracker
+                progressTracker,
+                () -> false
             );
         }
         

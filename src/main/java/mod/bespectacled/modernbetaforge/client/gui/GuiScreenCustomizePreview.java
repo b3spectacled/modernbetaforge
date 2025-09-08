@@ -94,6 +94,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
     private ListPreset list;
+    @SuppressWarnings("unused")
+    private ProgressState prevState;
     private ProgressState state;
     private int resolution;
     private boolean useBiomeBlend;
@@ -106,6 +108,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private long copiedSeedFieldTime;
     private long copiedTpCommandTime;
     private Supplier<String> tpCallback;
+    private boolean haltGeneration;
     
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, int resolution) {
         this.title = I18n.format(PREFIX + "title");
@@ -211,7 +214,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         switch(this.state) {
             case SUCCEEDED:
                 this.mapTexture.loadMapTexture();
-                this.state = ProgressState.LOADED;
+                this.updateState(ProgressState.LOADED);
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
@@ -404,6 +407,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.createTerrainMap();
                 break;
             case GUI_ID_CANCEL:
+                this.haltGeneration = true;
+                if (this.chunkSource instanceof FiniteChunkSource) {
+                    ((FiniteChunkSource)this.chunkSource).haltGeneration();
+                }
+                
                 this.executor.shutdown();
                 this.unloadMapTexture(this.mapTexture);
                 this.unloadMapTexture(this.prevMapTexture);
@@ -413,10 +421,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
+    private void updateState(ProgressState state) {
+        this.prevState = this.state;
+        this.state = state;
+    }
+    
     private void createTerrainMap() {
         this.progress = 0.0f;
         this.prevProgress = 0.0f;
-        this.state = ProgressState.STARTED;
+        this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
         this.unloadMapTexture(this.prevMapTexture);
@@ -437,22 +450,30 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Make sure to reset climate samplers if world was previously loaded.
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
                 
-                this.mapTexture.loadMapImage(DrawUtil.createTerrainMap(
+                BufferedImage newMapImage = DrawUtil.createTerrainMap(
                     this.chunkSource,
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.injectionRules,
                     this.resolution,
                     this.useBiomeBlend,
-                    current -> this.progress = current
-                ));
-                ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
-                this.state = ProgressState.SUCCEEDED;
+                    progress -> this.progress = progress,
+                    () -> this.haltGeneration
+                );
+
+                if (newMapImage == null) {
+                    ModernBeta.log(Level.DEBUG, "Terrain map drawing was canceled!");
+                    this.mapTexture.loadMapImage(this.prevMapTexture.mapImage);
+                } else {
+                    ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
+                    this.mapTexture.loadMapImage(newMapImage);
+                }
+                this.updateState(ProgressState.SUCCEEDED);
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, "Failed to draw terrain map!");
                 ModernBeta.log(Level.ERROR, "Error: " + e.getLocalizedMessage());
-                this.state = ProgressState.FAILED;
+                this.updateState(ProgressState.FAILED);
                 
             } finally {
                 this.updateButtonsEnabled(this.state);
@@ -475,7 +496,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend.enabled = enabled;
         this.sliderResolution.enabled = enabled;
         this.buttonGenerate.enabled = enabled;
-        this.buttonCancel.enabled = enabled;
+        this.buttonCancel.enabled = true;
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {

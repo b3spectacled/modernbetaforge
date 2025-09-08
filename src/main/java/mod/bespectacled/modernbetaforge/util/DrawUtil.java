@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.util;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.lwjgl.util.vector.Vector4f;
 
@@ -82,9 +83,10 @@ public class DrawUtil {
         BiomeInjectionRules injectionRules,
         int size,
         boolean useBiomeBlend,
-        Consumer<Float> progressTracker
+        Consumer<Float> progressCallback,
+        Supplier<Boolean> haltCallback
     ) {
-        return createTerrainMap(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressTracker);
+        return createTerrainMap(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressCallback, haltCallback);
     }
     
     public static BufferedImage createTerrainMap(
@@ -97,7 +99,8 @@ public class DrawUtil {
         int sizeX,
         int sizeZ,
         boolean useBiomeBlend,
-        Consumer<Float> progressTracker
+        Consumer<Float> progressCallback,
+        Supplier<Boolean> haltCallback
     ) {
         ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>("biome_draw", (chunkX, chunkZ) -> new BiomeChunk(
             chunkX,
@@ -120,10 +123,13 @@ public class DrawUtil {
         int snowLineOffset = chunkSource.getGeneratorSettings().snowLineOffset;
         
         for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
+            progressCallback.accept(chunkX / (float)chunkWidth);
             int startX = chunkX << 4;
-            progressTracker.accept(chunkX / (float)chunkWidth);
             
             for (int chunkZ = 0; chunkZ < chunkLength; ++chunkZ) {
+                if (haltCallback.get()) {
+                    return null;
+                }
                 int startZ = chunkZ << 4;
                 
                 random = surfaceBuilder.createSurfaceRandom(chunkX, chunkZ);

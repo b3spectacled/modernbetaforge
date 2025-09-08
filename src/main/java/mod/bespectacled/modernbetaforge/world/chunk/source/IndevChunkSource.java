@@ -83,36 +83,45 @@ public class IndevChunkSource extends FiniteChunkSource {
             this.sandOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
             this.gravelOctaveNoise = new PerlinOctaveNoise(this.random, 8, false);
 
+            if (this.haltGeneration) return;
             this.setPhase("Raising");
             this.raiseLevel();
 
+            if (this.haltGeneration) return;
             this.setPhase("Eroding");
             this.erodeLevel();
 
+            if (this.haltGeneration) return;
             this.setPhase("Soiling");
             this.soilLevel();
 
+            if (this.haltGeneration) return;
             this.setPhase("Growing");
             this.growLevel();
         }
         
         if (this.settings.useIndevCaves) {
+            if (this.haltGeneration) return;
             this.setPhase("Carving");
             this.carveLevel();
         }
         
         this.oreLevel();
-        
+
+        if (this.haltGeneration) return;
         this.setPhase("Melting");
         this.meltLevel();
         this.updateLevel();
-        
+
+        if (this.haltGeneration) return;
         this.setPhase("Watering");
         this.waterLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Planting");
         this.plantLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Assembling");
         this.assembleLevel();
     }

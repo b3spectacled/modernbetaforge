@@ -22,6 +22,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -67,9 +68,9 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final float levelCaveWidth;
     protected final int[] levelHeightmap;
     protected final BiomeSource biomeSource;
-    
     private final IndevHouse levelHouse;
-
+    
+    protected boolean haltGeneration;
     private Consumer<String> levelNotifier;
     private LevelDataContainer levelDataContainer;
     
@@ -79,6 +80,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     
     /**
      * Constructs an abstract FiniteChunkSource with necessary level information.
+     * This chunk source is designed for worlds that should be generated in one shot.
      * 
      * @param seed The world seed.
      * @param settings The generator settings.
@@ -379,6 +381,15 @@ public abstract class FiniteChunkSource extends ChunkSource {
         }
         
         return false;
+    }
+    
+    /**
+     * Sets a flag to halt generation. It is up to the implementation to make sure that {@link #haltGeneration}
+     * is checked after every phase to see if it is set and then exit prematurely if so.
+     * This is used by {@link GuiScreenCustomizePreview} to signal to halt generation so the screen can exit.
+     */
+    public void haltGeneration() {
+        this.haltGeneration = true;
     }
 
     /**

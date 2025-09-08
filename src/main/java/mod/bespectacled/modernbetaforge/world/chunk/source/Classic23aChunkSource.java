@@ -55,31 +55,39 @@ public class Classic23aChunkSource extends FiniteChunkSource {
 
     @Override
     protected void pregenerateTerrain() {
+        if (this.haltGeneration) return;
         this.setPhase("Raising");
         this.raiseLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Eroding");
         this.erodeLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Soiling");
         this.soilLevel();
         
         if (this.settings.useIndevCaves) {
+            if (this.haltGeneration) return;
             this.setPhase("Carving");
             this.carveLevel();
         }
         
         this.oreLevel();
-        
+
+        if (this.haltGeneration) return;
         this.setPhase("Watering");
         this.waterLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Melting");
         this.meltLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Growing");
         this.growLevel();
 
+        if (this.haltGeneration) return;
         this.setPhase("Assembling");
         this.assembleLevel();
     }
