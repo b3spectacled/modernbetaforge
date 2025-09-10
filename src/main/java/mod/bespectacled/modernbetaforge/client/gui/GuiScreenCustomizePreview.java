@@ -355,7 +355,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
         }
         
-        if (this.structureButtonBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand) {
+        if (this.structureButtonBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand && this.buttonStructures.enabled) {
             this.drawHoveringText(I18n.format(PREFIX + "structuresNote"), mouseX, mouseY);
         }
         
