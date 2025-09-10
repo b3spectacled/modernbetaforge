@@ -285,14 +285,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 }
                 
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
-                if (this.previewSettings.showStructures)
-                    this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
+                this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                 
                 break;
                 
             case STARTED:
                 if (this.prevMapTexture.mapTexture != null) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                    this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                     drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
                 }
                 
@@ -572,11 +572,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 long chunkPos = ChunkPos.asLong(chunkX, chunkZ);
                 
                 if (this.structureMap.containsKey(chunkPos)) {
+                    GuiBoundsChecker bounds = this.structureBounds.get(chunkPos);
                     StructureInfo info = this.structureMap.get(chunkPos);
                     
                     ResourceLocation structure = info.structure;
                     float progress = info.iconProgress;
-                    GuiBoundsChecker bounds = this.structureBounds.get(chunkPos);
+                    float alpha = info.iconAlpha;
                     
                     int iconSize = STRUCTURE_ICON_SIZE;
                     int iconOffset = STRUCTURE_ICON_SIZE / 2;
@@ -586,7 +587,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     } else {
                         progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
                     }
+                    
+                    if (this.state == ProgressState.STARTED || !this.previewSettings.showStructures) {
+                        alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
+                    } else {
+                        alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
+                    }
+                    
                     info.iconProgress = progress;
+                    info.iconAlpha = alpha;
                     
                     iconSize = Math.round(iconSize * progress);
                     iconOffset = Math.round(iconOffset * progress);
@@ -613,7 +622,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     
                     bounds.updateBounds(textureL, textureT, iconSize, iconSize);
 
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                    GlStateManager.color(1.0F, 1.0F, 1.0F, info.iconAlpha);
                     this.parent.mc.getTextureManager().bindTexture(STRUCTURE_ICONS.get(structure));
                     GlStateManager.enableBlend();
                     
@@ -911,10 +920,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static class StructureInfo {
         private final ResourceLocation structure;
         private float iconProgress;
+        private float iconAlpha;
         
         public StructureInfo(ResourceLocation structure) {
             this.structure = structure;
             this.iconProgress = 1.0f;
+            this.iconAlpha = 0.0f;
         }
     }
     
