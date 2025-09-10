@@ -43,6 +43,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview.PreviewSettings;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -162,7 +163,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private int tabStartX;
     private int tabEndX;
     
-    private int previewResolution;
+    private PreviewSettings previewSettings;
     
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
         this.title = I18n.format("options.customizeTitle");
@@ -205,7 +206,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
         
-        this.previewResolution = 512;
+        this.previewSettings = new PreviewSettings();
         
         this.loadValues(string);
     }
@@ -1787,8 +1788,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonDefaults.enabled = settingsModified;
     }
     
-    public void setPreviewResolution(int previewResolution) {
-        this.previewResolution = previewResolution;
+    public void setPreviewSettings(PreviewSettings previewSettings) {
+        this.previewSettings = previewSettings;
     }
     
     public void setWorldSeed(String seed) {
@@ -1841,7 +1842,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.exitConfirmation();
                 break;
             case GuiIdentifiers.FUNC_PRVW:
-                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build(), this.previewResolution));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build(), this.previewSettings));
                 break;
         }
         

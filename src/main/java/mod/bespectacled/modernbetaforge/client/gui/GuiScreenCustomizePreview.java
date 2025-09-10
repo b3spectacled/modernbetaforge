@@ -4,15 +4,21 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Longs;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -28,6 +34,14 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSim;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMansion;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMineshaft;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMonument;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimScatteredFeature;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimStronghold;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimVillage;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListButton;
@@ -36,10 +50,15 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiSlider.FormatHelper;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,10 +70,22 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private static final String PREFIX = "createWorld.customize.preview.modernbetaforge.";
+    private static final Map<ResourceLocation, ResourceLocation> STRUCTURE_ICONS = ImmutableMap.<ResourceLocation, ResourceLocation>builder()
+        .put(ModernBetaStructures.VILLAGE, ModernBeta.createRegistryKey("textures/gui/preview/village.png"))
+        .put(ModernBetaStructures.STRONGHOLD, ModernBeta.createRegistryKey("textures/gui/preview/stronghold.png"))
+        .put(ModernBetaStructures.MINESHAFT, ModernBeta.createRegistryKey("textures/gui/preview/mineshaft.png"))
+        .put(ModernBetaStructures.MONUMENT, ModernBeta.createRegistryKey("textures/gui/preview/monument.png"))
+        .put(ModernBetaStructures.MANSION, ModernBeta.createRegistryKey("textures/gui/preview/mansion.png"))
+        .put(ModernBetaStructures.TEMPLE, ModernBeta.createRegistryKey("textures/gui/preview/temple.png"))
+        .build();
+    private static final int STRUCTURE_ICON_SIZE = 10;
     
-    private static final int TEXTURE_Y_OFFSET = 10;
-    private static final int HINT_TEXT_OFFSET = 22;
-    private static final int PROGRESS_TEXT_OFFSET = 5;
+    private static final int TEXTURE_Y_OFFSET = 20;
+    private static final int HINT_TEXT_OFFSET = 35;
+    private static final int PROGRESS_TEXT_OFFSET = 18;
+    private static final int BUTTON_LARGE_WIDTH = 164;
+    private static final int BUTTON_SMALL_WIDTH = 108;
+    private static final int BUTTON_SPACE = 4;
     
     private static final int RGB_WHITE = 16777215;
     private static final int RGB_YELLOW = 16777120;
@@ -71,6 +102,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_RESOLUTION = 1;
     private static final int GUI_ID_GENERATE = 2;
     private static final int GUI_ID_CANCEL = 3;
+    private static final int GUI_ID_STRUCTURES = 4;
     
     private static final long COPIED_SEED_WAIT_TIME = 1000L;
     
@@ -80,6 +112,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ExecutorWrapper executor;
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
+    private final GuiBoundsChecker structureButtonBounds;
+    private final Map<Long, StructureInfo> structureMap;
+    private final Map<Long, GuiBoundsChecker> structureBounds;
     
     protected String title;
     
@@ -88,17 +123,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private BiomeSource biomeSource;
     private SurfaceBuilder surfaceBuilder;
     private BiomeInjectionRules injectionRules;
-    
-    private GuiListButton buttonBiomeBlend;
+    private Map<ResourceLocation, StructureSim> structureSims;
+
     private GuiSlider sliderResolution;
+    private GuiListButton buttonBiomeBlend;
+    private GuiListButton buttonStructures;
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
     private ListPreset list;
     @SuppressWarnings("unused")
     private ProgressState prevState;
     private ProgressState state;
-    private int resolution;
-    private boolean useBiomeBlend;
+    private PreviewSettings previewSettings;
+    private int prevResolution;
+    private int selectedResolution;
     private float progress;
     private float prevProgress;
     private MapTexture prevMapTexture;
@@ -109,8 +147,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private long copiedTpCommandTime;
     private Supplier<String> tpCallback;
     private boolean haltGeneration;
+    private long hoveredStructurePos;
+    private boolean hoveredStructure;
     
-    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, int resolution) {
+    public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, PreviewSettings previewSettings) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.worldSeed = worldSeed;
@@ -118,30 +158,43 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapBounds = new GuiBoundsChecker();
         this.seedFieldBounds = new GuiBoundsChecker();
+        this.structureButtonBounds = new GuiBoundsChecker();
+        this.structureMap = new Long2ObjectOpenHashMap<>();
+        this.structureBounds = new Long2ObjectOpenHashMap<>();
 
         this.seed = parseSeed(worldSeed);
         this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
-        this.resolution = resolution;
-        this.useBiomeBlend = true;
+        this.previewSettings = new PreviewSettings(previewSettings.resolution, previewSettings.useBiomeBlend, previewSettings.showStructures);
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
     }
     
     @Override
     public void initGui() {
-        int resolutionNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.resolution);
+        int resolutionNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.resolution);
+        
+        int generateX = this.width / 2 - BUTTON_SPACE / 2 - BUTTON_LARGE_WIDTH;
+        int cancelX = this.width / 2 + BUTTON_SPACE / 2;
+        
+        int resolutionX = generateX;
+        int biomeX = resolutionX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
+        int structureX = biomeX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
         
         this.buttonList.clear();
-        this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, this.width / 2 - 187, this.height - 27, I18n.format(PREFIX + "biomeBlend"), true));
-        this.sliderResolution = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, this.width / 2 - 92, this.height - 27, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
-        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, this.width / 2 + 3, this.height - 27, 90, 20, I18n.format(PREFIX + "generate")));
-        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 98, this.height - 27, 90, 20, I18n.format("gui.cancel")));
-        
-        this.buttonBiomeBlend.width = 90;
-        this.sliderResolution.width = 90;
-        this.buttonBiomeBlend.setValue(this.useBiomeBlend);
+        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "generate")));
+        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format("gui.cancel")));
+
+        this.sliderResolution = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, resolutionX, this.height - 50, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
+        this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
+        this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
+
+        this.sliderResolution.width = BUTTON_SMALL_WIDTH;
+        this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
+        this.buttonStructures.width = BUTTON_SMALL_WIDTH;
+        this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
+        this.buttonStructures.setValue(this.previewSettings.showStructures);
         
         this.list = new ListPreset(this);
 
@@ -152,6 +205,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
+        this.structureButtonBounds.updateBounds(structureX, this.height - 50, BUTTON_SMALL_WIDTH, 20);
         this.updateButtonsEnabled(this.state);
     }
     
@@ -162,6 +216,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
+        this.structureButtonBounds.updateHovered(mouseX, mouseY);
         this.seedFieldBounds.updateHovered(mouseX, mouseY);
         this.mapBounds.updateHovered(mouseX, mouseY);
     }
@@ -192,9 +247,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textureY = this.height / 2 - viewportSize / 2;
         textureY -= TEXTURE_Y_OFFSET;
 
-        int boxL = this.width / 2 - 60;
-        int boxR = this.width / 2 + 60;
-        int boxT = this.height / 2 - HINT_TEXT_OFFSET - 8;
+        int boxL = this.width / 2 - 56;
+        int boxR = this.width / 2 + 56;
+        int boxT = this.height / 2 - HINT_TEXT_OFFSET - 6;
         int boxB = this.height / 2 - PROGRESS_TEXT_OFFSET + 18;
         
         int progressHeight = this.height / 2 - PROGRESS_TEXT_OFFSET;
@@ -218,13 +273,21 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
+                boolean isSameMap = !this.worldSeed.isEmpty() && this.prevResolution == this.selectedResolution;
+                if (isSameMap) {
+                    this.mapTexture.mapAlpha = 1.0f;
+                }
+                
                 this.prevMapTexture.lerpAlpha(partialTicks, 0.5f, 0.0f);
                 if (this.mapTexture.mapAlpha < 1.0f) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
-                    this.mapTexture.lerpAlpha(partialTicks, 0.75f, 1.0f);
+                    this.mapTexture.lerpAlpha(partialTicks, 0.5f, 1.0f);
                 }
                 
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                if (this.previewSettings.showStructures)
+                    this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
+                
                 break;
                 
             case STARTED:
@@ -268,7 +331,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
         int seedColor = this.seedFieldBounds.isHovered() ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_GREY : RGB_YELLOW : RGB_WHITE;
         int seedFieldX = this.width / 2 + seedTextLen / 2 - seedFieldLen;
-        int seedFieldHeight = this.height / 2 + viewportSize / 2;
+        int seedFieldHeight = this.getSeedFieldY();
         
         this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, RGB_WHITE);
         this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
@@ -292,34 +355,34 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
         }
         
+        if (this.structureButtonBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand) {
+            this.drawHoveringText(I18n.format(PREFIX + "structuresNote"), mouseX, mouseY);
+        }
+        
+        this.hoveredStructure = false;
+        this.hoveredStructurePos = 0L;
+        
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
-            float x = this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.resolution;
-            float y = this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.resolution;
+            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedResolution);
+            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedResolution);
 
-            x -= (float)this.resolution / 2f;
-            y -= (float)this.resolution / 2f;
+            x -= this.selectedResolution / 2f;
+            y -= this.selectedResolution / 2f;
             
-            int height = this.chunkSource.getHeight((int)x, (int)y, HeightmapChunk.Type.SURFACE);
-            Biome biome = this.biomeSource.getBiome((int)x, (int)y);
+            int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
+            Biome biome = this.sampleBiome(x, y);
             
-            BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, this.surfaceBuilder, (int)x, (int)y, biome);
-            
-            Biome injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.PRE_SURFACE);
-            biome = injectedBiome != null ? injectedBiome : biome;
-            context.setBiome(biome);
-            
-            injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.CUSTOM);
-            biome = injectedBiome != null ? injectedBiome : biome;
-            context.setBiome(biome);
-            
-            injectedBiome = this.injectionRules.test(context, (int)x, (int)y, BiomeInjectionStep.POST_SURFACE);
-            biome = injectedBiome != null ? injectedBiome : biome;
-            
-            String coordinateText = String.format("%d, %d, %d", (int)x, height, (int)y);
+            String coordinateText = String.format("%d, %d, %d", x, height, y);
             String biomeText = biome.getBiomeName();
+            for (Entry<Long, GuiBoundsChecker> entry : this.structureBounds.entrySet()) {
+                if (entry.getValue().inBounds(mouseX, mouseY)) {
+                    this.hoveredStructure = true;
+                    this.hoveredStructurePos = entry.getKey();
+                }
+            }
             
-            int tpX = (int)x;
-            int tpZ = (int)y;
+            int tpX = x;
+            int tpZ = y;
             int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height + 1;
             this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
             
@@ -327,6 +390,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 List<String> tooltips = new ArrayList<>();
                 tooltips.add(coordinateText);
                 tooltips.add(biomeText);
+                
+                if (this.hoveredStructure && this.previewSettings.showStructures) {
+                    String structure = this.structureMap.get(this.hoveredStructurePos).structure.getPath().toLowerCase();
+                    structure = structure.substring(0, 1).toUpperCase() + structure.substring(1);
+                    
+                    tooltips.add(structure);
+                }
 
                 this.drawHoveringText(tooltips, mouseX, mouseY);
             }
@@ -350,14 +420,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void setEntryValue(int id, boolean value) { 
         if (id == GUI_ID_BIOME_COLORS) {
-            this.useBiomeBlend = value;        
+            this.previewSettings.useBiomeBlend = value;        
+        } else if (id == GUI_ID_STRUCTURES) {
+            this.previewSettings.showStructures = value;
         }
     }
 
     @Override
     public void setEntryValue(int id, float value) {
         if (id == GUI_ID_RESOLUTION) {
-            this.resolution = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
+            this.previewSettings.resolution = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
         }
     }
 
@@ -415,7 +487,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.executor.shutdown();
                 this.unloadMapTexture(this.mapTexture);
                 this.unloadMapTexture(this.prevMapTexture);
-                this.parent.setPreviewResolution(this.resolution);
+                this.parent.setPreviewSettings(this.previewSettings);
                 this.mc.displayGuiScreen(this.parent);
                 break;
         }
@@ -427,8 +499,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void createTerrainMap() {
-        this.progress = 0.0f;
         this.prevProgress = 0.0f;
+        this.progress = 0.0f;
+        this.prevResolution = this.selectedResolution;
+        this.selectedResolution = this.previewSettings.resolution;
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
@@ -445,7 +519,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         Runnable runnable = () -> {
             try {
-                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.resolution));
+                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.selectedResolution));
 
                 // Make sure to reset climate samplers if world was previously loaded.
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
@@ -455,8 +529,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.injectionRules,
-                    this.resolution,
-                    this.useBiomeBlend,
+                    this.selectedResolution,
+                    this.previewSettings.useBiomeBlend,
                     progress -> this.progress = progress,
                     () -> this.haltGeneration
                 );
@@ -468,6 +542,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
                     this.mapTexture.loadMapImage(newMapImage);
                 }
+                
+                this.sampleStructures();
                 this.updateState(ProgressState.SUCCEEDED);
                 
             } catch (Exception e) {
@@ -484,6 +560,78 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor.queueRunnable(runnable);
     }
     
+    private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
+        int chunkWidth = this.selectedResolution >> 4;
+        int chunkLength = this.selectedResolution >> 4;
+        
+        int offsetChunkX = chunkWidth / 2;
+        int offsetChunkZ = chunkLength / 2;
+
+        for (int chunkX = -offsetChunkX; chunkX <= offsetChunkX; ++chunkX) {
+            for (int chunkZ = -offsetChunkZ; chunkZ <= offsetChunkZ; ++chunkZ) {
+                long chunkPos = ChunkPos.asLong(chunkX, chunkZ);
+                
+                if (this.structureMap.containsKey(chunkPos)) {
+                    StructureInfo info = this.structureMap.get(chunkPos);
+                    
+                    ResourceLocation structure = info.structure;
+                    float progress = info.iconProgress;
+                    GuiBoundsChecker bounds = this.structureBounds.get(chunkPos);
+                    
+                    int iconSize = STRUCTURE_ICON_SIZE;
+                    int iconOffset = STRUCTURE_ICON_SIZE / 2;
+
+                    if (this.hoveredStructurePos == chunkPos) {
+                        progress = (float)MathHelper.clampedLerp(progress, 2.0f, partialTicks);
+                    } else {
+                        progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
+                    }
+                    info.iconProgress = progress;
+                    
+                    iconSize = Math.round(iconSize * progress);
+                    iconOffset = Math.round(iconOffset * progress);
+                    
+                    int x = chunkX << 4;
+                    int z = chunkZ << 4;
+                    
+                    float textureX = x + this.selectedResolution / 2f;
+                    float textureY = z + this.selectedResolution / 2f;
+                    
+                    textureX /= this.selectedResolution;
+                    textureY /= this.selectedResolution;
+                    
+                    textureX *= viewportSize;
+                    textureY *= viewportSize;
+                    
+                    textureX += startTextureX;
+                    textureY += startTextureY;
+                    
+                    int textureL = (int)textureX - iconOffset;
+                    int textureR = (int)textureX - iconOffset + iconSize;
+                    int textureT = (int)textureY - iconOffset;
+                    int textureB = (int)textureY - iconOffset + iconSize;
+                    
+                    bounds.updateBounds(textureL, textureT, iconSize, iconSize);
+
+                    GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                    this.parent.mc.getTextureManager().bindTexture(STRUCTURE_ICONS.get(structure));
+                    GlStateManager.enableBlend();
+                    
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder bufferBuilder = tessellator.getBuffer();
+                    bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                    bufferBuilder.pos(textureL, textureB, 0.0).tex(0.0, 1.0).endVertex();
+                    bufferBuilder.pos(textureR, textureB, 0.0).tex(1.0, 1.0).endVertex();
+                    bufferBuilder.pos(textureR, textureT, 0.0).tex(1.0, 0.0).endVertex();
+                    bufferBuilder.pos(textureL, textureT, 0.0).tex(0.0, 0.0).endVertex();
+                    tessellator.draw();
+                    
+                    GlStateManager.disableBlend();
+                }
+            }
+        }
+    }
+    
     private void unloadMapTexture(MapTexture mapTexture) {
         if (mapTexture != null) {
             mapTexture.unloadAll();
@@ -492,9 +640,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void updateButtonsEnabled(ProgressState state) {
         boolean enabled = state != ProgressState.STARTED;
-        
-        this.buttonBiomeBlend.enabled = enabled;
+
         this.sliderResolution.enabled = enabled;
+        this.buttonBiomeBlend.enabled = enabled;
+        this.buttonStructures.enabled = enabled;
         this.buttonGenerate.enabled = enabled;
         this.buttonCancel.enabled = true;
     }
@@ -504,6 +653,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(seed, settings);
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(settings.surfaceBuilder).apply(this.chunkSource, settings);
         this.injectionRules = this.chunkSource.createBiomeInjectionRules(this.biomeSource).build();
+        
+        this.structureSims = new Object2ObjectLinkedOpenHashMap<>();
+        if (this.settings.useVillages)
+            this.structureSims.put(ModernBetaStructures.VILLAGE, new StructureSimVillage(seed));
+        if (this.settings.useStrongholds)
+            this.structureSims.put(ModernBetaStructures.STRONGHOLD, new StructureSimStronghold(this.chunkSource));
+        if (this.settings.useMineShafts)
+            this.structureSims.put(ModernBetaStructures.MINESHAFT, new StructureSimMineshaft(seed));
+        if (this.settings.useMonuments)
+            this.structureSims.put(ModernBetaStructures.MONUMENT, new StructureSimMonument(seed));
+        if (this.settings.useMansions)
+            this.structureSims.put(ModernBetaStructures.MANSION, new StructureSimMansion(seed));
+        if (this.settings.useTemples)
+            this.structureSims.put(ModernBetaStructures.TEMPLE, new StructureSimScatteredFeature(seed));
     }
     
     private String getFormattedSeed() {
@@ -523,12 +686,83 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private int getSeedFieldY() {
         int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int fieldY = this.height / 2 + viewportSize / 2;
+        fieldY -= TEXTURE_Y_OFFSET / 2;
         
-        return this.height / 2 + viewportSize / 2;
+        return fieldY;
     }
     
     private int getSeedFieldWidth() {
         return this.fontRenderer.getStringWidth(this.getFormattedSeed());
+    }
+    
+    private void sampleStructures() {
+        this.structureMap.clear();
+        this.structureBounds.clear();
+        
+        int centerChunkX = 0;
+        int centerChunkZ = 0;
+        
+        int chunkWidth = this.selectedResolution >> 4;
+        int chunkLength = this.selectedResolution >> 4;
+        
+        int offsetChunkX = chunkWidth / 2;
+        int offsetChunkZ = chunkLength / 2;
+        
+        for (int localChunkX = 0; localChunkX < chunkWidth; ++localChunkX) {
+            int chunkX = localChunkX - offsetChunkX + centerChunkX;
+            
+            for (int localChunkZ = 0; localChunkZ < chunkLength; ++localChunkZ) {
+                int chunkZ = localChunkZ - offsetChunkZ + centerChunkZ;
+                
+                for (Entry<ResourceLocation, StructureSim> entry : this.structureSims.entrySet()) {
+                    // Match behavior for stronghold gen as in ModernBetaBiomeProvider
+                    BiFunction<Integer, Integer, Biome> biomeFunc = entry.getKey().equals(ModernBetaStructures.STRONGHOLD) ?
+                        this.biomeSource::getBiome :
+                        this::sampleBiome;
+                    
+                    entry.getValue().generatePositions(chunkX, chunkZ, biomeFunc);
+                    this.sampleStructure(chunkX, chunkZ, entry);
+                }
+            }
+        }
+    }
+    
+    private void sampleStructure(int chunkX, int chunkZ, Entry<ResourceLocation, StructureSim> entry) {
+        int range = entry.getValue().getRange();
+        
+        for (int structureChunkX = chunkX - range; structureChunkX <= chunkX + range; structureChunkX++) {
+            for (int structureChunkZ = chunkZ - range; structureChunkZ <= chunkZ + range; structureChunkZ++) {
+                if (entry.getValue().canGenerate(structureChunkX, structureChunkZ)) {
+                    if (this.chunkSource.skipChunk(structureChunkX, structureChunkZ)) {
+                        continue;
+                    }
+                    
+                    this.structureMap.put(ChunkPos.asLong(structureChunkX, structureChunkZ), new StructureInfo(entry.getKey()));
+                    this.structureBounds.put(ChunkPos.asLong(structureChunkX, structureChunkZ), new GuiBoundsChecker());
+                    
+                    return;
+                }
+            }
+        }
+    }
+    
+    private Biome sampleBiome(int x, int z) { 
+        Biome biome = this.biomeSource.getBiome(x, z);
+        BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, this.surfaceBuilder, x, z, biome);
+        
+        Biome injectedBiome = this.injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+        biome = injectedBiome != null ? injectedBiome : biome;
+        context.setBiome(biome);
+        
+        injectedBiome = this.injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
+        biome = injectedBiome != null ? injectedBiome : biome;
+        context.setBiome(biome);
+        
+        injectedBiome = this.injectionRules.test(context, x, z, BiomeInjectionStep.POST_SURFACE);
+        biome = injectedBiome != null ? injectedBiome : biome;
+        
+        return biome;
     }
     
     private static long parseSeed(String seedString) {
@@ -557,7 +791,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @SideOnly(Side.CLIENT)
     private static class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 32;
-        private static final int LIST_PADDING_BOTTOM = 32;
+        private static final int LIST_PADDING_BOTTOM = 54;
         
         public ListPreset(GuiScreenCustomizePreview parent) {
             super(
@@ -670,6 +904,36 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         public void lerpAlpha(float partialTicks, float scale, float target) {
             this.mapAlpha = MathUtil.lerp(partialTicks * scale, this.mapAlpha, target);
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static class StructureInfo {
+        private final ResourceLocation structure;
+        private float iconProgress;
+        
+        public StructureInfo(ResourceLocation structure) {
+            this.structure = structure;
+            this.iconProgress = 1.0f;
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static class PreviewSettings {
+        private int resolution;
+        private boolean useBiomeBlend;
+        private boolean showStructures;
+        
+        public PreviewSettings() {
+            this.resolution = 512;
+            this.useBiomeBlend = true;
+            this.showStructures = false;
+        }
+        
+        public PreviewSettings(int resolution, boolean useBiomeBlend, boolean showStructures) {
+            this.resolution = resolution;
+            this.useBiomeBlend = useBiomeBlend;
+            this.showStructures = showStructures;
         }
     }
 }

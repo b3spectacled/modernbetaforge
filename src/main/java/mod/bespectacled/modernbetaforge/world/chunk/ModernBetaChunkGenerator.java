@@ -237,8 +237,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         if (!this.chunkSource.skipChunk(chunkX, chunkZ)) {
             Biome biome = this.world.getBiome(mutablePos.setPos(startX + 16, 0, startZ + 16));
             this.random.setSeed(this.world.getSeed());
-            long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
-            long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
+            long randomLong0 = this.random.nextLong() / 2L * 2L + 1L;
+            long randomLong1 = this.random.nextLong() / 2L * 2L + 1L;
             this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
 
             ForgeEventFactory.onChunkPopulate(true, this, this.world, this.random, chunkX, chunkZ, false);
@@ -426,6 +426,13 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         Map<ResourceLocation, MapGenStructure> structureMap = new LinkedHashMap<>();
         
         if (mapFeaturesEnabled) {
+            if (settings.useMineShafts) {
+                structureMap.put(
+                    ModernBetaStructures.MINESHAFT,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT)
+                );
+            }
+            
             if (settings.useVillages) {
                 structureMap.put(
                     ModernBetaStructures.VILLAGE,
@@ -440,10 +447,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                 );
             }
             
-            if (settings.useMineShafts) {
+            if (settings.useTemples) {
                 structureMap.put(
-                    ModernBetaStructures.MINESHAFT,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT)
+                    ModernBetaStructures.TEMPLE,
+                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE)
                 );
             }
             
@@ -458,13 +465,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                 structureMap.put(
                     ModernBetaStructures.MANSION,
                     (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(this), EventType.WOODLAND_MANSION)
-                );
-            }
-            
-            if (settings.useTemples) {
-                structureMap.put(
-                    ModernBetaStructures.TEMPLE,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE)
                 );
             }
         }

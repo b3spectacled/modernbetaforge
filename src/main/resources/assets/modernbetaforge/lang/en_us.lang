@@ -36,6 +36,7 @@ createWorld.customize.preview.modernbetaforge.preview=Preview
 createWorld.customize.preview.modernbetaforge.title=Preview World Generation
 createWorld.customize.preview.modernbetaforge.resolution=Resolution
 createWorld.customize.preview.modernbetaforge.biomeBlend=Biome Blend
+createWorld.customize.preview.modernbetaforge.structures=Structures
 createWorld.customize.preview.modernbetaforge.generate=Generate
 createWorld.customize.preview.modernbetaforge.progress=Generating preview..
 createWorld.customize.preview.modernbetaforge.hint=Preview not generated
@@ -44,6 +45,7 @@ createWorld.customize.preview.modernbetaforge.seed=World Seed
 createWorld.customize.preview.modernbetaforge.copy=Copy to clipboard
 createWorld.customize.preview.modernbetaforge.copied=Copied to clipboard!
 createWorld.customize.preview.modernbetaforge.copiedTp=Copied /tp command to clipboard!
+createWorld.customize.preview.modernbetaforge.structuresNote=Note: Positions may be inaccurate if another installed mod modifies structure generation.
 
 # Page Tabs
 createWorld.customize.custom.tab.modernbetaforge.page0=Basic

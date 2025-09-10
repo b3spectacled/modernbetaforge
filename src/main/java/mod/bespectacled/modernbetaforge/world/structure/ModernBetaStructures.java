@@ -2,10 +2,14 @@ package mod.bespectacled.modernbetaforge.world.structure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
@@ -57,6 +61,20 @@ public class ModernBetaStructures {
             addStrongholdBiome(biome);
             addVillageBiome(biome);
         }
+    }
+    
+    public static ChunkPos getFiniteStrongholdPosition(FiniteChunkSource chunkSource) {
+        Random random = new Random(chunkSource.getSeed());
+        
+        int chunkWidth = chunkSource.getLevelWidth() >> 4;
+        int chunkLength = chunkSource.getLevelLength() >> 4;
+        
+        int buffer = Math.min(Math.min(chunkWidth, chunkLength) / 2, 4);
+        
+        int chunkX = MathHelper.clamp(random.nextInt(chunkWidth), buffer, chunkWidth - buffer) - chunkWidth / 2;
+        int chunkZ = MathHelper.clamp(random.nextInt(chunkLength), buffer, chunkWidth - buffer) - chunkLength / 2;
+        
+        return new ChunkPos(chunkX, chunkZ);
     }
     
     private static void addStrongholdBiome(Biome biome) {

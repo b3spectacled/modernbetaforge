@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import javax.annotation.Nullable;
 
@@ -96,34 +97,8 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     
     @Override
     public BlockPos findBiomePosition(int startX, int startZ, int range, List<Biome> allowed, Random random) {
-        int minX = startX - range >> 2;
-        int maxX = startX + range >> 2;
-        
-        int minZ = startZ - range >> 2;
-        int maxZ = startZ + range >> 2;
-        
-        int sizeX = maxX - minX + 1;
-        int sizeZ = maxZ - minZ + 1;
-        
-        BlockPos blockPos = null;
-        int chance = 0;
-        
-        Set<Biome> allowedBiomes = new HashSet<>(allowed);
-        
-        for (int i = 0; i < sizeX * sizeZ; ++i) {
-            int x = minX + i % sizeX << 2;
-            int z = minZ + i / sizeX << 2;
-            
-            // Do not use injector here to speed initial world load
-            Biome biome = this.biomeSource.getBiome(x, z);
-            
-            if (allowedBiomes.contains(biome) && (blockPos == null || random.nextInt(chance + 1) == 0)) {
-                blockPos = new BlockPos(x, 0, z);
-                ++chance;
-            }
-        }
-        
-        return blockPos;
+        // Do not use injector here to speed initial world load
+        return findBiomePosition(startX, startZ, range, allowed, random, this.biomeSource::getBiome);
     }
     
     /*
@@ -131,28 +106,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
      */
     @Override
     public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed) {
-        Set<Biome> allowedBiomes = new HashSet<>(allowed);
-        
-        if (radius == 0) {
-            return allowedBiomes.contains(this.getBiome(x, z));
-        } else {
-            double r2 = radius * radius;
-            
-            for (int dX = x - radius; dX < x + radius; ++dX) {
-                for (int dZ = z - radius; dZ < z + radius; ++dZ) {
-                    double distance = MathUtil.distance(x, z, dX, dZ);
-                    
-                    if (distance < r2) {
-                        Biome biome = this.getBiome(dX, dZ);
-                        
-                        if (!allowedBiomes.contains(biome))
-                            return false;
-                    }
-                }
-            }
-        }
-
-        return true;
+        return areBiomesViable(x, z, radius, allowed, this::getBiome);
     }
     
     public Biome getBaseBiome(int x, int z) {
@@ -237,5 +191,58 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         int chunkZ = z >> 4;
         
         return this.injectedBiomeCache.get(chunkX, chunkZ).sample(x, z);
+    }
+    
+    public static BlockPos findBiomePosition(int startX, int startZ, int range, List<Biome> allowed, Random random, BiFunction<Integer, Integer, Biome> biomeFunc) {
+        int minX = startX - range >> 2;
+        int maxX = startX + range >> 2;
+        
+        int minZ = startZ - range >> 2;
+        int maxZ = startZ + range >> 2;
+        
+        int sizeX = maxX - minX + 1;
+        int sizeZ = maxZ - minZ + 1;
+        
+        BlockPos blockPos = null;
+        int chance = 0;
+        
+        Set<Biome> allowedBiomes = new HashSet<>(allowed);
+        
+        for (int i = 0; i < sizeX * sizeZ; ++i) {
+            int x = minX + i % sizeX << 2;
+            int z = minZ + i / sizeX << 2;
+            
+            Biome biome = biomeFunc.apply(x, z);
+            
+            if (allowedBiomes.contains(biome) && (blockPos == null || random.nextInt(chance + 1) == 0)) {
+                blockPos = new BlockPos(x, 0, z);
+                ++chance;
+            }
+        }
+        
+        return blockPos;
+    }
+    
+    public static boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed, BiFunction<Integer, Integer, Biome> biomeFunc) {
+        Set<Biome> allowedBiomes = new HashSet<>(allowed);
+        
+        if (radius == 0) {
+            return allowedBiomes.contains(biomeFunc.apply(x, z));
+        } else {
+            double r2 = radius * radius;
+            
+            for (int dX = x - radius; dX < x + radius; ++dX) {
+                for (int dZ = z - radius; dZ < z + radius; ++dZ) {
+                    double distance = MathUtil.distance(x, z, dX, dZ);
+                    
+                    if (distance < r2) {
+                        if (!allowedBiomes.contains(biomeFunc.apply(dX, dZ)))
+                            return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

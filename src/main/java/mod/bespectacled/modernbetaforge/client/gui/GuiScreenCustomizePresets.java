@@ -113,9 +113,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int MODAL_ICON_SIZE = 50;
     private static final int SCROLL_TEXTURE_SIZE_W = 13;
     private static final int SCROLL_TEXTURE_SIZE_H = 9;
-    private static final int BUTTON_SMALL_SPACE = 4;
+    private static final int BUTTON_SPACE = 4;
     private static final int BUTTON_SMALL_WIDTH = 80;
-    private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SMALL_SPACE;
+    private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -196,12 +196,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
         int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
         
-        int selectX = centerX + 2;
-        int filterX = centerX + 2;
-        int cancelX = centerX + BUTTON_SMALL_WIDTH + BUTTON_LARGE_WIDTH - BUTTON_SMALL_WIDTH * 2 + 2;
-        int saveX = centerX - BUTTON_LARGE_WIDTH - 2;
-        int editX = centerX - BUTTON_LARGE_WIDTH - 2;
-        int deleteX = centerX - BUTTON_SMALL_WIDTH - 2;
+        int selectX = centerX + BUTTON_SPACE / 2;
+        int filterX = centerX + BUTTON_SPACE / 2;
+        int cancelX = centerX + BUTTON_SMALL_WIDTH + BUTTON_LARGE_WIDTH - BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE / 2;
+        int saveX = centerX - BUTTON_LARGE_WIDTH - BUTTON_SPACE / 2;
+        int editX = centerX - BUTTON_LARGE_WIDTH - BUTTON_SPACE / 2;
+        int deleteX = centerX - BUTTON_SMALL_WIDTH - BUTTON_SPACE / 2;
         
         this.buttonList.clear();
         this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "select")));
