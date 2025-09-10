@@ -370,7 +370,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             y -= this.selectedResolution / 2f;
             
             int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
-            Biome biome = this.sampleBiome(x, y);
+            Biome biome = this.sampleInjectedBiome(x, y);
             
             String coordinateText = String.format("%d, %d, %d", x, height, y);
             String biomeText = biome.getBiomeName();
@@ -728,7 +728,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     // Match behavior for stronghold gen as in ModernBetaBiomeProvider
                     BiFunction<Integer, Integer, Biome> biomeFunc = entry.getKey().equals(ModernBetaStructures.STRONGHOLD) ?
                         this.biomeSource::getBiome :
-                        this::sampleBiome;
+                        this::sampleInjectedBiome;
                     
                     entry.getValue().generatePositions(chunkX, chunkZ, biomeFunc);
                     this.sampleStructure(chunkX, chunkZ, entry);
@@ -756,7 +756,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
-    private Biome sampleBiome(int x, int z) { 
+    private Biome sampleInjectedBiome(int x, int z) { 
         Biome biome = this.biomeSource.getBiome(x, z);
         BiomeInjectionContext context = DrawUtil.createInjectionContext(this.chunkSource, this.surfaceBuilder, x, z, biome);
         
