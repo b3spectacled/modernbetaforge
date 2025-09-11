@@ -358,9 +358,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (this.structureButtonBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand && this.buttonStructures.enabled) {
             this.drawHoveringText(I18n.format(PREFIX + "structuresNote"), mouseX, mouseY);
         }
-        
+
         this.hoveredStructure = false;
-        this.hoveredStructurePos = 0L;
+        this.hoveredStructurePos = Long.MIN_VALUE;
         
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
             int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedResolution);
@@ -374,6 +374,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
             String coordinateText = String.format("%d, %d, %d", x, height, y);
             String biomeText = biome.getBiomeName();
+            
             for (Entry<Long, GuiBoundsChecker> entry : this.structureBounds.entrySet()) {
                 if (entry.getValue().inBounds(mouseX, mouseY)) {
                     this.hoveredStructure = true;
@@ -566,78 +567,99 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         int offsetChunkX = chunkWidth / 2;
         int offsetChunkZ = chunkLength / 2;
-
+        
+        List<ChunkPos> structurePositions = new ArrayList<>();
+        ChunkPos hoveredPosition = null;
+        
         for (int chunkX = -offsetChunkX; chunkX <= offsetChunkX; ++chunkX) {
             for (int chunkZ = -offsetChunkZ; chunkZ <= offsetChunkZ; ++chunkZ) {
                 long chunkPos = ChunkPos.asLong(chunkX, chunkZ);
                 
                 if (this.structureMap.containsKey(chunkPos)) {
-                    GuiBoundsChecker bounds = this.structureBounds.get(chunkPos);
-                    StructureInfo info = this.structureMap.get(chunkPos);
-                    
-                    ResourceLocation structure = info.structure;
-                    float progress = info.iconProgress;
-                    float alpha = info.iconAlpha;
-                    
-                    int iconSize = STRUCTURE_ICON_SIZE;
-                    int iconOffset = STRUCTURE_ICON_SIZE / 2;
-
-                    if (this.hoveredStructurePos == chunkPos) {
-                        progress = (float)MathHelper.clampedLerp(progress, 2.0f, partialTicks);
+                    if (this.hoveredStructure && this.hoveredStructurePos == chunkPos) {
+                        hoveredPosition = new ChunkPos(chunkX, chunkZ);
                     } else {
-                        progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
+                        structurePositions.add(new ChunkPos(chunkX, chunkZ));
                     }
                     
-                    if (this.state == ProgressState.STARTED || !this.previewSettings.showStructures) {
-                        alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
-                    } else {
-                        alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
-                    }
-                    
-                    info.iconProgress = progress;
-                    info.iconAlpha = alpha;
-                    
-                    iconSize = Math.round(iconSize * progress);
-                    iconOffset = Math.round(iconOffset * progress);
-                    
-                    int x = chunkX << 4;
-                    int z = chunkZ << 4;
-                    
-                    float textureX = x + this.selectedResolution / 2f;
-                    float textureY = z + this.selectedResolution / 2f;
-                    
-                    textureX /= this.selectedResolution;
-                    textureY /= this.selectedResolution;
-                    
-                    textureX *= viewportSize;
-                    textureY *= viewportSize;
-                    
-                    textureX += startTextureX;
-                    textureY += startTextureY;
-                    
-                    int textureL = (int)textureX - iconOffset;
-                    int textureR = (int)textureX - iconOffset + iconSize;
-                    int textureT = (int)textureY - iconOffset;
-                    int textureB = (int)textureY - iconOffset + iconSize;
-                    
-                    bounds.updateBounds(textureL, textureT, iconSize, iconSize);
-
-                    GlStateManager.color(1.0F, 1.0F, 1.0F, info.iconAlpha);
-                    this.parent.mc.getTextureManager().bindTexture(STRUCTURE_ICONS.get(structure));
-                    GlStateManager.enableBlend();
-                    
-                    Tessellator tessellator = Tessellator.getInstance();
-                    BufferBuilder bufferBuilder = tessellator.getBuffer();
-                    bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    bufferBuilder.pos(textureL, textureB, 0.0).tex(0.0, 1.0).endVertex();
-                    bufferBuilder.pos(textureR, textureB, 0.0).tex(1.0, 1.0).endVertex();
-                    bufferBuilder.pos(textureR, textureT, 0.0).tex(1.0, 0.0).endVertex();
-                    bufferBuilder.pos(textureL, textureT, 0.0).tex(0.0, 0.0).endVertex();
-                    tessellator.draw();
-                    
-                    GlStateManager.disableBlend();
                 }
             }
+        }
+        
+        if (hoveredPosition != null) {
+            structurePositions.add(hoveredPosition);
+        }
+        
+        for (int i = 0; i < structurePositions.size(); ++i) {
+            ChunkPos position = structurePositions.get(i);
+            int chunkX = position.x;
+            int chunkZ = position.z;
+            long chunkPos = ChunkPos.asLong(chunkX, chunkZ);
+            
+            GuiBoundsChecker bounds = this.structureBounds.get(chunkPos);
+            StructureInfo info = this.structureMap.get(chunkPos);
+            
+            ResourceLocation structure = info.structure;
+            float progress = info.iconProgress;
+            float alpha = info.iconAlpha;
+            
+            int iconSize = STRUCTURE_ICON_SIZE;
+            int iconOffset = STRUCTURE_ICON_SIZE / 2;
+
+            if (this.hoveredStructurePos == chunkPos) {
+                progress = (float)MathHelper.clampedLerp(progress, 2.0f, partialTicks);
+            } else {
+                progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
+            }
+            
+            if (this.state == ProgressState.STARTED || !this.previewSettings.showStructures) {
+                alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
+            } else {
+                alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
+            }
+            
+            info.iconProgress = progress;
+            info.iconAlpha = alpha;
+            
+            iconSize = Math.round(iconSize * progress);
+            iconOffset = Math.round(iconOffset * progress);
+            
+            int x = chunkX << 4;
+            int z = chunkZ << 4;
+            
+            float textureX = x + this.selectedResolution / 2f;
+            float textureY = z + this.selectedResolution / 2f;
+            
+            textureX /= this.selectedResolution;
+            textureY /= this.selectedResolution;
+            
+            textureX *= viewportSize;
+            textureY *= viewportSize;
+            
+            textureX += startTextureX;
+            textureY += startTextureY;
+            
+            int textureL = (int)textureX - iconOffset;
+            int textureR = (int)textureX - iconOffset + iconSize;
+            int textureT = (int)textureY - iconOffset;
+            int textureB = (int)textureY - iconOffset + iconSize;
+            
+            bounds.updateBounds(textureL, textureT, iconSize, iconSize);
+
+            GlStateManager.color(1.0F, 1.0F, 1.0F, info.iconAlpha);
+            this.parent.mc.getTextureManager().bindTexture(STRUCTURE_ICONS.get(structure));
+            GlStateManager.enableBlend();
+            
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+            bufferBuilder.pos(textureL, textureB, 0.0).tex(0.0, 1.0).endVertex();
+            bufferBuilder.pos(textureR, textureB, 0.0).tex(1.0, 1.0).endVertex();
+            bufferBuilder.pos(textureR, textureT, 0.0).tex(1.0, 0.0).endVertex();
+            bufferBuilder.pos(textureL, textureT, 0.0).tex(0.0, 0.0).endVertex();
+            tessellator.draw();
+            
+            GlStateManager.disableBlend();
         }
     }
     
