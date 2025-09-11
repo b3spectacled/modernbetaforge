@@ -81,8 +81,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int STRUCTURE_ICON_SIZE = 10;
     
     private static final int TEXTURE_Y_OFFSET = 20;
-    private static final int HINT_TEXT_OFFSET = 35;
-    private static final int PROGRESS_TEXT_OFFSET = 18;
+    private static final int HINT_TEXT_OFFSET = 30;
+    private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
     private static final int BUTTON_SPACE = 4;
