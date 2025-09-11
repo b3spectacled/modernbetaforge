@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -125,19 +126,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private final Predicate<String> intFilter;
     
     private final ModernBetaGeneratorSettings.Factory defaultSettings;
-    private ModernBetaGeneratorSettings.Factory settings;
     
     private final Random random;
     
     private final GuiBoundsChecker leftKeyBounds;
     private final GuiBoundsChecker rightKeyBounds;
     
+    private final Map<Integer, Boolean> enabledMap;
+    
     protected String title;
     protected String subtitle;
     protected String pageTitle;
     protected String[] pageNames;
     protected Map<Integer, GuiButton> pageTabMap;
-    
+
+    private ModernBetaGeneratorSettings.Factory settings;
     private GuiPageButtonList pageList;
     private GuiButton buttonDone;
     private GuiButton buttonRandomize;
@@ -205,6 +208,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
+        
+        this.enabledMap = new HashMap<>();
         
         this.previewSettings = new PreviewSettings();
         
@@ -2336,13 +2341,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         GuiTextField guiText = (GuiTextField)guiComponent;
         Float guiTextValue = Floats.tryParse(guiText.getText());
+        int guiTextId = guiText.getId();
         
-        if (guiTextValue == null) {
+        if (guiTextValue == null || this.enabledMap.containsKey(guiTextId) && !this.enabledMap.get(guiTextId)) {
             return;
         }
         
         guiTextValue += increment;
-        int guiTextId = guiText.getId();
         String guiTextString = this.getFormattedValue(guiText.getId(), guiTextValue);
         guiText.setText(guiTextString);
         
@@ -2421,6 +2426,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private void setGuiEnabled() {
         ModernBetaGeneratorSettings settings = this.settings.build();
+        this.enabledMap.clear();
         
         // Set default enabled for certain options
         if (this.pageList != null) {
@@ -2431,6 +2437,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 for (int i = 0; i < guiIds.length; ++i) {
                     this.setButtonEnabled(guiIds[i], enabled);
                     this.setFieldEnabled(guiIds[i], enabled);
+                    this.enabledMap.put(guiIds[i], enabled);
                 }
                 
                 if (guiIds.length <= 0) {
@@ -2439,6 +2446,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                         
                         this.setButtonEnabled(customId, enabled);
                         this.setFieldEnabled(customId, enabled);
+                        this.enabledMap.put(customId, enabled);
                     }
                 }
             }
