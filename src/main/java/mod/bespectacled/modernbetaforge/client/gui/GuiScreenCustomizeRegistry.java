@@ -56,6 +56,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private ListPreset list;
     private GuiTextField fieldSearch;
     private GuiButton buttonSelect;
+    private GuiButton buttonSearch;
+    private GuiButton buttonReset;
     private String searchText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
@@ -124,8 +126,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.buttonList.clear();
         this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
         this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
-        this.buttonList.add(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "search")));
-        this.buttonList.add(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "reset")));
+        this.buttonSearch = this.addButton(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "search")));
+        this.buttonReset = this.addButton(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "reset")));
         
         this.searchText = I18n.format(PREFIX_REGISTRY + "search.info");
         
@@ -188,6 +190,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     
     public void updateButtonValidity() {
         this.buttonSelect.enabled = this.hasValidSelection();
+        this.buttonSearch.enabled = !this.fieldSearch.getText().isEmpty();
+        this.buttonReset.enabled = this.buttonSearch.enabled;
     }
     
     @Override
@@ -218,6 +222,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.registryKeys
             ));
         }
+        
+        this.updateButtonValidity();
     }
 
     @Override
