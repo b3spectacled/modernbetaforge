@@ -34,7 +34,8 @@ createWorld.customize.presets.modernbetaforge.overwrite.confirm=Preset already e
 # Preview
 createWorld.customize.preview.modernbetaforge.preview=Preview
 createWorld.customize.preview.modernbetaforge.title=Preview World Generation
-createWorld.customize.preview.modernbetaforge.resolution=Resolution
+createWorld.customize.preview.modernbetaforge.zoom=Zoom
+createWorld.customize.preview.modernbetaforge.blocks=blocks
 createWorld.customize.preview.modernbetaforge.biomeBlend=Biome Blend
 createWorld.customize.preview.modernbetaforge.structures=Structures
 createWorld.customize.preview.modernbetaforge.generate=Generate

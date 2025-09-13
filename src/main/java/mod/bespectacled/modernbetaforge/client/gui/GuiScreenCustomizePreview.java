@@ -99,7 +99,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int ARGB_PROGRESS_BAR = MathUtil.convertARGBComponentsToInt(160, 128, 255, 128);
     
     private static final int GUI_ID_BIOME_COLORS = 0;
-    private static final int GUI_ID_RESOLUTION = 1;
+    private static final int GUI_ID_ZOOM = 1;
     private static final int GUI_ID_GENERATE = 2;
     private static final int GUI_ID_CANCEL = 3;
     private static final int GUI_ID_STRUCTURES = 4;
@@ -125,7 +125,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private BiomeInjectionRules injectionRules;
     private Map<ResourceLocation, StructureSim> structureSims;
 
-    private GuiSlider sliderResolution;
+    private GuiSlider sliderZoom;
     private GuiListButton buttonBiomeBlend;
     private GuiListButton buttonStructures;
     private GuiButton buttonGenerate;
@@ -135,8 +135,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ProgressState prevState;
     private ProgressState state;
     private PreviewSettings previewSettings;
-    private int prevResolution;
-    private int selectedResolution;
+    private int prevZoom;
+    private int selectedZoom;
     private float progress;
     private float prevProgress;
     private MapTexture prevMapTexture;
@@ -166,31 +166,31 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
-        this.previewSettings = new PreviewSettings(previewSettings.resolution, previewSettings.useBiomeBlend, previewSettings.showStructures);
+        this.previewSettings = new PreviewSettings(previewSettings.zoom, previewSettings.useBiomeBlend, previewSettings.showStructures);
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
     }
     
     @Override
     public void initGui() {
-        int resolutionNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.resolution);
+        int zoomNdX = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
         
         int generateX = this.width / 2 - BUTTON_SPACE / 2 - BUTTON_LARGE_WIDTH;
         int cancelX = this.width / 2 + BUTTON_SPACE / 2;
         
-        int resolutionX = generateX;
-        int biomeX = resolutionX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
+        int zoomX = generateX;
+        int biomeX = zoomX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
         int structureX = biomeX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
         
         this.buttonList.clear();
         this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "generate")));
         this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format("gui.cancel")));
 
-        this.sliderResolution = this.addButton(new GuiSlider(this, GUI_ID_RESOLUTION, resolutionX, this.height - 50, PREFIX + "resolution", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, resolutionNdx, this));
+        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, zoomX, this.height - 50, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdX, this));
         this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
         this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
 
-        this.sliderResolution.width = BUTTON_SMALL_WIDTH;
+        this.sliderZoom.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
         this.buttonStructures.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
@@ -273,7 +273,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
-                boolean isSameMap = !this.worldSeed.isEmpty() && this.prevResolution == this.selectedResolution;
+                boolean isSameMap = !this.worldSeed.isEmpty() && this.prevZoom == this.selectedZoom;
                 if (isSameMap) {
                     this.mapTexture.mapAlpha = 1.0f;
                 }
@@ -363,11 +363,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.hoveredStructurePos = Long.MIN_VALUE;
         
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
-            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedResolution);
-            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedResolution);
+            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedZoom);
+            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedZoom);
 
-            x -= this.selectedResolution / 2f;
-            y -= this.selectedResolution / 2f;
+            x -= this.selectedZoom / 2f;
+            y -= this.selectedZoom / 2f;
             
             int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.sampleInjectedBiome(x, y);
@@ -411,8 +411,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     public String getText(int id, String entryString, float entryValue) {
-        if (id == GUI_ID_RESOLUTION) {
-            return String.format("%s: %d", entryString, ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
+        if (id == GUI_ID_ZOOM) {
+            return String.format(
+                "%s: %d %s",
+                entryString,
+                ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue],
+                I18n.format(PREFIX + "blocks")
+            );
         }
         
         return String.format("%d", (int)entryValue);
@@ -429,8 +434,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
 
     @Override
     public void setEntryValue(int id, float value) {
-        if (id == GUI_ID_RESOLUTION) {
-            this.previewSettings.resolution = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
+        if (id == GUI_ID_ZOOM) {
+            this.previewSettings.zoom = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
         }
     }
 
@@ -502,8 +507,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void createTerrainMap() {
         this.prevProgress = 0.0f;
         this.progress = 0.0f;
-        this.prevResolution = this.selectedResolution;
-        this.selectedResolution = this.previewSettings.resolution;
+        this.prevZoom = this.selectedZoom;
+        this.selectedZoom = this.previewSettings.zoom;
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
@@ -520,7 +525,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         Runnable runnable = () -> {
             try {
-                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.selectedResolution));
+                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.selectedZoom));
 
                 // Make sure to reset climate samplers if world was previously loaded.
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
@@ -530,7 +535,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.injectionRules,
-                    this.selectedResolution,
+                    this.selectedZoom,
                     this.previewSettings.useBiomeBlend,
                     progress -> this.progress = progress,
                     () -> this.haltGeneration
@@ -562,8 +567,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
-        int chunkWidth = this.selectedResolution >> 4;
-        int chunkLength = this.selectedResolution >> 4;
+        int chunkWidth = this.selectedZoom >> 4;
+        int chunkLength = this.selectedZoom >> 4;
         
         int offsetChunkX = chunkWidth / 2;
         int offsetChunkZ = chunkLength / 2;
@@ -627,11 +632,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int x = chunkX << 4;
             int z = chunkZ << 4;
             
-            float textureX = x + this.selectedResolution / 2f;
-            float textureY = z + this.selectedResolution / 2f;
+            float textureX = x + this.selectedZoom / 2f;
+            float textureY = z + this.selectedZoom / 2f;
             
-            textureX /= this.selectedResolution;
-            textureY /= this.selectedResolution;
+            textureX /= this.selectedZoom;
+            textureY /= this.selectedZoom;
             
             textureX *= viewportSize;
             textureY *= viewportSize;
@@ -672,7 +677,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void updateButtonsEnabled(ProgressState state) {
         boolean enabled = state != ProgressState.STARTED;
 
-        this.sliderResolution.enabled = enabled;
+        this.sliderZoom.enabled = enabled;
         this.buttonBiomeBlend.enabled = enabled;
         this.buttonStructures.enabled = enabled;
         this.buttonGenerate.enabled = enabled;
@@ -734,8 +739,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int centerChunkX = 0;
         int centerChunkZ = 0;
         
-        int chunkWidth = this.selectedResolution >> 4;
-        int chunkLength = this.selectedResolution >> 4;
+        int chunkWidth = this.selectedZoom >> 4;
+        int chunkLength = this.selectedZoom >> 4;
         
         int offsetChunkX = chunkWidth / 2;
         int offsetChunkZ = chunkLength / 2;
@@ -953,18 +958,18 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @SideOnly(Side.CLIENT)
     public static class PreviewSettings {
-        private int resolution;
+        private int zoom;
         private boolean useBiomeBlend;
         private boolean showStructures;
         
         public PreviewSettings() {
-            this.resolution = 512;
+            this.zoom = 512;
             this.useBiomeBlend = true;
             this.showStructures = false;
         }
         
-        public PreviewSettings(int resolution, boolean useBiomeBlend, boolean showStructures) {
-            this.resolution = resolution;
+        public PreviewSettings(int zoom, boolean useBiomeBlend, boolean showStructures) {
+            this.zoom = zoom;
             this.useBiomeBlend = useBiomeBlend;
             this.showStructures = showStructures;
         }
