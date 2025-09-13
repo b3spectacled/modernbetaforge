@@ -21,6 +21,10 @@ public class ObjectPool<T> {
         this.used = new HashMap<>();
     }
     
+    public ObjectPool(Supplier<T> constructor) {
+        this(constructor, t -> {});
+    }
+    
     public synchronized T get() {
         long now = System.currentTimeMillis();
         

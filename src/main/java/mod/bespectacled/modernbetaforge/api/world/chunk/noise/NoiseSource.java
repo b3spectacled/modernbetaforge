@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.noise;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.util.MathUtil;
+import mod.bespectacled.modernbetaforge.util.ObjectPool;
 
 public final class NoiseSource {
     private final NoiseColumnSampler noiseColumnSampler;
@@ -11,6 +12,8 @@ public final class NoiseSource {
     private final int noiseSizeY;
     private final int noiseSizeZ;
     private final double[] noise;
+    
+    private final ObjectPool<double[]> bufferPool;
 
     private double lowerNW;
     private double lowerSW;
@@ -52,6 +55,8 @@ public final class NoiseSource {
         this.noiseSizeY = noiseSizeY;
         this.noiseSizeZ = noiseSizeZ;
         this.noise = new double[(noiseSizeX + 1) * (noiseSizeY + 1) * (noiseSizeZ + 1)];
+        
+        this.bufferPool = new ObjectPool<>(() -> new double[(this.noiseSizeY + 1)]);
     }
     
     /**
@@ -134,46 +139,76 @@ public final class NoiseSource {
      * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
      */
     private void sampleNoise(int startNoiseX, int startNoiseZ, NoiseSettings noiseSettings, List<NoiseSampler> noiseSamplers) {
-        double[] buffer = new double[(this.noiseSizeY + 1)];
-        
         int ndx = 0;
+        
         for (int localNoiseX = 0; localNoiseX < this.noiseSizeX + 1; ++localNoiseX) {
-            int noiseX = startNoiseX + localNoiseX;
-            
             for (int localNoiseZ = 0; localNoiseZ < this.noiseSizeZ + 1; ++localNoiseZ) {
-                int noiseZ = startNoiseZ + localNoiseZ;
-                this.noiseColumnSampler.sampleNoiseColumn(
-                    buffer,
-                    startNoiseX,
-                    startNoiseZ,
-                    localNoiseX,
-                    localNoiseZ,
+                double[] buffer = this.bufferPool.get();
+                this.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, noiseSettings, noiseSamplers);
+                
+                for (int i = 0; i < buffer.length; ++i) {
+                    this.noise[ndx++] = buffer[i];
+                    
+                    // Clear out buffer before returning to pool
+                    buffer[i] = 0.0;
+                }
+                
+                this.bufferPool.release(buffer);
+            }
+        }
+    }
+    
+    /**
+     * Samples the initial densities for a noise column.
+     * 
+     * @param Buffer array for noise values.
+     * @param startNoiseX x-coordinate in noise coordinates.
+     * @param startNoiseZ z-coordinate in noise coordinates.
+     * @param localNoiseX x-coordinate for current chunk in noise coordinates.
+     * @param localNoiseZ z-coordinate for current chunk in noise coordinates.
+     * @param noiseSettings Noise settings, including slides.
+     * @param noiseSamplers List of {@link NoiseSampler noise samplers}.
+     */
+    private void sampleNoiseColumn(
+        double[] buffer,
+        int startNoiseX,
+        int startNoiseZ,
+        int localNoiseX,
+        int localNoiseZ,
+        NoiseSettings noiseSettings,
+        List<NoiseSampler> noiseSamplers
+    ) {
+        int noiseX = startNoiseX + localNoiseX;
+        int noiseZ = startNoiseZ + localNoiseZ;
+        
+        this.noiseColumnSampler.sampleNoiseColumn(
+            buffer,
+            startNoiseX,
+            startNoiseZ,
+            localNoiseX,
+            localNoiseZ,
+            this.noiseSizeX,
+            this.noiseSizeY,
+            this.noiseSizeZ
+        );
+        
+        for (int noiseY = 0; noiseY < this.noiseSizeY + 1; ++noiseY) {
+            double density = buffer[noiseY];
+            
+            for (int i = 0; i < noiseSamplers.size(); ++i) {
+                density = noiseSamplers.get(i).sample(
+                    density,
+                    noiseX,
+                    noiseY,
+                    noiseZ,
                     this.noiseSizeX,
                     this.noiseSizeY,
                     this.noiseSizeZ
                 );
-                
-                for (int noiseY = 0; noiseY < this.noiseSizeY + 1; ++noiseY) {
-                    double density = buffer[noiseY];
-                    
-                    for (int i = 0; i < noiseSamplers.size(); ++i) {
-                        density = noiseSamplers.get(i).sample(
-                            density,
-                            noiseX,
-                            noiseY,
-                            noiseZ,
-                            this.noiseSizeX,
-                            this.noiseSizeY,
-                            this.noiseSizeZ
-                        );
-                    }
-                    
-                    density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY);
-                    density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
-                    
-                    this.noise[ndx++] = density;
-                }
             }
+            
+            density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY);
+            density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
         }
     }
 }
