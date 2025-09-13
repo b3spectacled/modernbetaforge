@@ -209,6 +209,8 @@ public final class NoiseSource {
             
             density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY);
             density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
+            
+            buffer[noiseY] = density;
         }
     }
 }
