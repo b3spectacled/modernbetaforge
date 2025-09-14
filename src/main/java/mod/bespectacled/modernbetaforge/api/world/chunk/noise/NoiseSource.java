@@ -146,11 +146,11 @@ public final class NoiseSource {
                 double[] buffer = this.bufferPool.get();
                 this.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, noiseSettings, noiseSamplers);
                 
-                for (int i = 0; i < buffer.length; ++i) {
-                    this.noise[ndx++] = buffer[i];
+                for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
+                    this.noise[ndx++] = buffer[noiseY];
                     
                     // Clear out buffer before returning to pool
-                    buffer[i] = 0.0;
+                    buffer[noiseY] = 0.0;
                 }
                 
                 this.bufferPool.release(buffer);
