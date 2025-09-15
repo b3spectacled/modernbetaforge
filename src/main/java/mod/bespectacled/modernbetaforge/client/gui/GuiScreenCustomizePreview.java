@@ -273,11 +273,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
-                boolean isSameMap = !this.worldSeed.isEmpty() && this.selectedPreviewSettings.zoom == this.previewSettings.zoom;
-                if (isSameMap) {
-                    this.mapTexture.mapAlpha = 1.0f;
-                }
-                
                 this.prevMapTexture.lerpAlpha(partialTicks, 0.5f, 0.0f);
                 if (this.mapTexture.mapAlpha < 1.0f) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
