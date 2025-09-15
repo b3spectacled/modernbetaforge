@@ -135,8 +135,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ProgressState prevState;
     private ProgressState state;
     private PreviewSettings previewSettings;
-    private int prevZoom;
-    private int selectedZoom;
+    private PreviewSettings selectedPreviewSettings;
     private float progress;
     private float prevProgress;
     private MapTexture prevMapTexture;
@@ -167,6 +166,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.state = ProgressState.NOT_STARTED;
         this.previewSettings = new PreviewSettings(previewSettings.zoom, previewSettings.useBiomeBlend, previewSettings.showStructures);
+        this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
     }
@@ -273,7 +273,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 // Allow cascading into LOADED case for smooth transition
         
             case LOADED:
-                boolean isSameMap = !this.worldSeed.isEmpty() && this.prevZoom == this.selectedZoom;
+                boolean isSameMap = !this.worldSeed.isEmpty() && this.selectedPreviewSettings.zoom == this.previewSettings.zoom;
                 if (isSameMap) {
                     this.mapTexture.mapAlpha = 1.0f;
                 }
@@ -363,11 +363,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.hoveredStructurePos = Long.MIN_VALUE;
         
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
-            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedZoom);
-            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedZoom);
+            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedPreviewSettings.zoom);
+            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedPreviewSettings.zoom);
 
-            x -= this.selectedZoom / 2f;
-            y -= this.selectedZoom / 2f;
+            x -= this.selectedPreviewSettings.zoom / 2f;
+            y -= this.selectedPreviewSettings.zoom / 2f;
             
             int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
             Biome biome = this.sampleInjectedBiome(x, y);
@@ -505,10 +505,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void createTerrainMap() {
+        BufferedImage previousMap = this.mapTexture.mapImage;
+        
         this.prevProgress = 0.0f;
         this.progress = 0.0f;
-        this.prevZoom = this.selectedZoom;
-        this.selectedZoom = this.previewSettings.zoom;
+        boolean sameBiomeBlend = this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
+        this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
         long time = System.currentTimeMillis();
@@ -525,7 +527,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         Runnable runnable = () -> {
             try {
-                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.selectedZoom));
+                ModernBeta.log(Level.DEBUG, String.format("Drawing terrain map of size %s", this.previewSettings.zoom));
 
                 // Make sure to reset climate samplers if world was previously loaded.
                 BetaColorSampler.INSTANCE.resetClimateSamplers();
@@ -535,10 +537,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.biomeSource,
                     this.surfaceBuilder,
                     this.injectionRules,
-                    this.selectedZoom,
+                    this.previewSettings.zoom,
                     this.previewSettings.useBiomeBlend,
                     progress -> this.progress = progress,
-                    () -> this.haltGeneration
+                    () -> this.haltGeneration,
+                    !this.worldSeed.isEmpty() && previousMap != null && sameBiomeBlend ? previousMap : null
                 );
 
                 if (newMapImage == null) {
@@ -567,8 +570,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
-        int chunkWidth = this.selectedZoom >> 4;
-        int chunkLength = this.selectedZoom >> 4;
+        int chunkWidth = this.selectedPreviewSettings.zoom >> 4;
+        int chunkLength = this.selectedPreviewSettings.zoom >> 4;
         
         int offsetChunkX = chunkWidth / 2;
         int offsetChunkZ = chunkLength / 2;
@@ -632,11 +635,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int x = chunkX << 4;
             int z = chunkZ << 4;
             
-            float textureX = x + this.selectedZoom / 2f;
-            float textureY = z + this.selectedZoom / 2f;
+            float textureX = x + this.selectedPreviewSettings.zoom / 2f;
+            float textureY = z + this.selectedPreviewSettings.zoom / 2f;
             
-            textureX /= this.selectedZoom;
-            textureY /= this.selectedZoom;
+            textureX /= this.selectedPreviewSettings.zoom;
+            textureY /= this.selectedPreviewSettings.zoom;
             
             textureX *= viewportSize;
             textureY *= viewportSize;
@@ -739,8 +742,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int centerChunkX = 0;
         int centerChunkZ = 0;
         
-        int chunkWidth = this.selectedZoom >> 4;
-        int chunkLength = this.selectedZoom >> 4;
+        int chunkWidth = this.selectedPreviewSettings.zoom >> 4;
+        int chunkLength = this.selectedPreviewSettings.zoom >> 4;
         
         int offsetChunkX = chunkWidth / 2;
         int offsetChunkZ = chunkLength / 2;
@@ -894,7 +897,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
 
             this.mapImage.getRGB(0, 0, mapWidth, mapHeight, this.mapTexture.getTextureData(), 0, mapWidth);
             this.mapTexture.updateDynamicTexture();
-            this.unloadMapImage();
         }
         
         public void unloadMapImage() {
@@ -966,6 +968,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.zoom = 512;
             this.useBiomeBlend = true;
             this.showStructures = false;
+        }
+        
+        public PreviewSettings(PreviewSettings previewSettings) {
+            this.zoom = previewSettings.zoom;
+            this.useBiomeBlend = previewSettings.useBiomeBlend;
+            this.showStructures = previewSettings.showStructures;
         }
         
         public PreviewSettings(int zoom, boolean useBiomeBlend, boolean showStructures) {

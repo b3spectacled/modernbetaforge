@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.util;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -84,9 +85,23 @@ public class DrawUtil {
         int size,
         boolean useBiomeBlend,
         Consumer<Float> progressCallback,
-        Supplier<Boolean> haltCallback
+        Supplier<Boolean> haltCallback,
+        BufferedImage previousMap
     ) {
-        return createTerrainMap(chunkSource, biomeSource, surfaceBuilder, injectionRules, 0, 0, size, size, useBiomeBlend, progressCallback, haltCallback);
+        return createTerrainMap(
+            chunkSource,
+            biomeSource,
+            surfaceBuilder,
+            injectionRules,
+            0,
+            0,
+            size,
+            size,
+            useBiomeBlend,
+            progressCallback,
+            haltCallback,
+            previousMap
+        );
     }
     
     public static BufferedImage createTerrainMap(
@@ -100,7 +115,8 @@ public class DrawUtil {
         int sizeZ,
         boolean useBiomeBlend,
         Consumer<Float> progressCallback,
-        Supplier<Boolean> haltCallback
+        Supplier<Boolean> haltCallback,
+        BufferedImage previousImage
     ) {
         ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>("biome_draw", (chunkX, chunkZ) -> new BiomeChunk(
             chunkX,
@@ -122,6 +138,10 @@ public class DrawUtil {
         Block defaultFluid = chunkSource.getDefaultFluid().getBlock();
         int snowLineOffset = chunkSource.getGeneratorSettings().snowLineOffset;
         
+        if (previousImage != null) {
+            image = copyImageRegion(previousImage, image);
+        }
+        
         for (int chunkX = 0; chunkX < chunkWidth; ++chunkX) {
             progressCallback.accept(chunkX / (float)chunkWidth);
             int startX = chunkX << 4;
@@ -141,6 +161,11 @@ public class DrawUtil {
                     for (int localZ = 0; localZ < 16; ++localZ) {
                         int z = startZ + localZ - offsetZ + centerZ;
                         int imageY = startZ + localZ;
+
+                        // Default pixel value is 0
+                        if (image.getRGB(imageX, imageY) != 0) {
+                            continue;
+                        }
                         
                         int height = chunkSource.getHeight(x, z, HeightmapChunk.Type.SURFACE);
                         int oceanHeight = chunkSource.getHeight(x, z, HeightmapChunk.Type.OCEAN);
@@ -496,5 +521,26 @@ public class DrawUtil {
         }
         
         return biomes;
+    }
+    
+    private static BufferedImage copyImageRegion(BufferedImage source, BufferedImage destination) {
+        if (source.getWidth() == destination.getWidth() && source.getHeight() == destination.getHeight()) {
+            return source;
+            
+        } else if (source.getWidth() > destination.getWidth() && source.getHeight() > destination.getHeight()) {
+            int startX = (source.getWidth() - destination.getWidth()) / 2;
+            int startY = (source.getHeight() - destination.getHeight()) / 2;
+            
+            return source.getSubimage(startX, startY, destination.getWidth(), destination.getHeight());
+        } else {
+            int startX = (destination.getWidth() - source.getWidth()) / 2;
+            int startY = (destination.getHeight() - source.getHeight()) / 2;
+            
+            Graphics2D graphics = destination.createGraphics();
+            graphics.drawImage(source, startX, startY, null);
+            graphics.dispose();
+        }
+        
+        return destination;
     }
 }
