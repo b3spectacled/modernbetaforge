@@ -136,6 +136,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ProgressState state;
     private PreviewSettings previewSettings;
     private PreviewSettings selectedPreviewSettings;
+    private boolean showStructures;
     private float progress;
     private float prevProgress;
     private MapTexture prevMapTexture;
@@ -165,8 +166,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
-        this.previewSettings = new PreviewSettings(previewSettings.zoom, previewSettings.useBiomeBlend, previewSettings.showStructures);
-        this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
+        this.previewSettings = new PreviewSettings(previewSettings.zoom, previewSettings.useBiomeBlend);
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
     }
@@ -194,7 +194,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
         this.buttonStructures.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
-        this.buttonStructures.setValue(this.previewSettings.showStructures);
+        this.buttonStructures.setValue(this.showStructures);
         
         this.list = new ListPreset(this);
 
@@ -392,7 +392,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 tooltips.add(coordinateText);
                 tooltips.add(biomeText);
                 
-                if (this.hoveredStructure && this.previewSettings.showStructures) {
+                if (this.hoveredStructure && this.showStructures) {
                     String structure = this.structureMap.get(this.hoveredStructurePos).structure.getPath().toLowerCase();
                     structure = structure.substring(0, 1).toUpperCase() + structure.substring(1);
                     
@@ -428,8 +428,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (id == GUI_ID_BIOME_COLORS) {
             this.previewSettings.useBiomeBlend = value;        
         } else if (id == GUI_ID_STRUCTURES) {
-            this.previewSettings.showStructures = value;
+            this.showStructures = value;
         }
+        
+        this.updateButtonsEnabled(this.state);
     }
 
     @Override
@@ -437,6 +439,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (id == GUI_ID_ZOOM) {
             this.previewSettings.zoom = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
         }
+        
+        this.updateButtonsEnabled(this.state);
     }
 
     @Override
@@ -506,10 +510,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void createTerrainMap() {
         BufferedImage previousMap = this.mapTexture.mapImage;
+        boolean sameBiomeBlend = this.selectedPreviewSettings != null &&
+            this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
         
         this.prevProgress = 0.0f;
         this.progress = 0.0f;
-        boolean sameBiomeBlend = this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
@@ -620,7 +625,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
             }
             
-            if (this.state == ProgressState.STARTED || !this.previewSettings.showStructures) {
+            if (this.state == ProgressState.STARTED || !this.showStructures) {
                 alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
             } else {
                 alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
@@ -683,7 +688,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.sliderZoom.enabled = enabled;
         this.buttonBiomeBlend.enabled = enabled;
         this.buttonStructures.enabled = enabled;
-        this.buttonGenerate.enabled = enabled;
+        this.buttonGenerate.enabled = enabled && (!this.previewSettings.equals(this.selectedPreviewSettings) || this.worldSeed.isEmpty());
         this.buttonCancel.enabled = true;
     }
     
@@ -962,24 +967,35 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     public static class PreviewSettings {
         private int zoom;
         private boolean useBiomeBlend;
-        private boolean showStructures;
         
         public PreviewSettings() {
             this.zoom = 512;
             this.useBiomeBlend = true;
-            this.showStructures = false;
         }
         
         public PreviewSettings(PreviewSettings previewSettings) {
             this.zoom = previewSettings.zoom;
             this.useBiomeBlend = previewSettings.useBiomeBlend;
-            this.showStructures = previewSettings.showStructures;
         }
         
-        public PreviewSettings(int zoom, boolean useBiomeBlend, boolean showStructures) {
+        public PreviewSettings(int zoom, boolean useBiomeBlend) {
             this.zoom = zoom;
             this.useBiomeBlend = useBiomeBlend;
-            this.showStructures = showStructures;
+        }
+        
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) {
+                return true;
+            }
+            
+            if (!(o instanceof PreviewSettings)) {
+                return false;
+            }
+            
+            PreviewSettings other = (PreviewSettings)o;
+            
+            return this.zoom == other.zoom && this.useBiomeBlend == other.useBiomeBlend;
         }
     }
 }
