@@ -36,8 +36,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
     modid = ModernBeta.MODID,
     name = ModernBeta.NAME,
     version = ModernBeta.VERSION,
-    acceptedMinecraftVersions = ModernBeta.MCVERSION,
-    updateJSON = ModernBeta.UPDATE_JSON
+    acceptedMinecraftVersions = ModernBeta.MCVERSION
 )
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
