@@ -42,9 +42,9 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.8.3.2";
+    public static final String VERSION = "1.8.4.0";
     public static final String MCVERSION = "1.12.2";
-    public static final String UPDATE_JSON = "https://gist.github.com/b3spectacled/d520cb5e4dc541916b859b8dabb7f652";
+    public static final String UPDATE_JSON = "https://forge.curseupdate.com/805719/modernbetaforge";
     public static final int DATA_VERSION = 1810;
     
     private static final Logger LOGGER = LogManager.getLogger(MODID);

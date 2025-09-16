@@ -151,6 +151,7 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         float biomeScaleOffset = this.settings.biomeScaleOffset;
         float biomeDepthWeight = this.settings.biomeDepthWeight;
         float biomeScaleWeight = this.settings.biomeScaleWeight;
+        boolean useAmplified = this.settings.useAmplified;
         
         double depth = this.depthOctaveNoise.scaledSample(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
@@ -170,6 +171,11 @@ public class ReleaseChunkSource extends NoiseChunkSource {
                 
                 float curBiomeDepth = biomeDepthOffset + curBaseHeight * biomeDepthWeight;
                 float curBiomeScale = biomeScaleOffset + curHeightVariation * biomeScaleWeight;
+                
+                if (useAmplified && curBiomeDepth > 0.0) {
+                    curBiomeDepth = 1.0f + curBiomeDepth * 2.0f;
+                    curBiomeScale = 1.0f + curBiomeScale * 4.0f;
+                }
 
                 float biomeWeight = BIOME_WEIGHTS[localBiomeX + 2 + (localBiomeZ + 2) * 5] / (curBiomeDepth + 2.0f);
 

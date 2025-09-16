@@ -43,12 +43,7 @@ public final class NoiseSource {
      * @param noiseSizeY Number of subchunks in world height.
      * @param noiseSizeZ Number of subchunks in the z-axis of a chunk.
      */
-    public NoiseSource(
-        NoiseColumnSampler noiseColumnSampler,
-        int noiseSizeX, 
-        int noiseSizeY, 
-        int noiseSizeZ
-    ) {
+    public NoiseSource(NoiseColumnSampler noiseColumnSampler, int noiseSizeX, int noiseSizeY, int noiseSizeZ) {
         this.noiseColumnSampler = noiseColumnSampler;
         
         this.noiseSizeX = noiseSizeX;

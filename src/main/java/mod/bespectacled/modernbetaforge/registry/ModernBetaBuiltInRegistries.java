@@ -353,6 +353,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.BIOME_SIZE, GuiPredicates.BIOME_SIZE_TEST);
         registry.register(GuiPredicate.RIVER_SIZE, GuiPredicates.RIVER_SIZE_TEST);
         registry.register(GuiPredicate.USE_BIOME_DEPTH_SCALE, GuiPredicates.USE_BIOME_DEPTH_SCALE_TEST);
+        registry.register(GuiPredicate.USE_AMPLIFIED, GuiPredicates.USE_AMPLIFIED_TEST);
         registry.register(GuiPredicate.LAYER_TYPE, GuiPredicates.LAYER_TYPE_TEST);
         registry.register(GuiPredicate.LAYER_SIZE, GuiPredicates.LAYER_SIZE_TEST);
         registry.register(GuiPredicate.SNOWY_BIOME_CHANCE, GuiPredicates.SNOWY_BIOME_CHANCE_TEST);

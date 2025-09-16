@@ -158,6 +158,7 @@ public class GuiPredicates {
     public static final GuiPredicate BIOME_SCALE_WEIGHT_TEST;
     public static final GuiPredicate BIOME_SCALE_OFFSET_TEST;
     public static final GuiPredicate USE_BIOME_DEPTH_SCALE_TEST;
+    public static final GuiPredicate USE_AMPLIFIED_TEST;
     public static final GuiPredicate END_ISLAND_WEIGHT_TEST;
     public static final GuiPredicate END_ISLAND_OFFSET_TEST;
     public static final GuiPredicate END_OUTER_ISLAND_DISTANCE_TEST;
@@ -419,7 +420,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_B_SCLE_WT,
                 GuiIdentifiers.PG4_S_B_SCLE_OF,
                 
-                GuiIdentifiers.PG4_B_USE_BDS
+                GuiIdentifiers.PG4_B_USE_BDS,
+                GuiIdentifiers.PG4_B_USE_AMP
             )
         );
         
@@ -536,10 +538,7 @@ public class GuiPredicates {
         LEVEL_CAVE_WIDTH_TEST = new GuiPredicate(settings -> isFiniteChunk(settings) && settings.useIndevCaves, GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH);
         USE_INFDEV_WALLS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_WALLS);
         USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
-        RIVER_SIZE_TEST = new GuiPredicate(
-            settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class),
-            GuiIdentifiers.PG1_S_RIVER_SZ
-        );
+        RIVER_SIZE_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class), GuiIdentifiers.PG1_S_RIVER_SZ);
         LAYER_SIZE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test, GuiIdentifiers.PG1_S_LAYER_SZ);
         LAYER_TYPE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test,GuiIdentifiers.PG1_S_LAYER_TYPE);
         
@@ -599,14 +598,8 @@ public class GuiPredicates {
         SPAWN_AMBIENT_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_AMBIENT);
         SPAWN_WOLVES_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WOLVES);
         
-        BIOME_SIZE_TEST = new GuiPredicate(
-            settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
-            GuiIdentifiers.PG2_S_BIOME_SZ
-        );
-        SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(
-            settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE),
-            GuiIdentifiers.PG2_S_SNOWY_CHANCE
-        );
+        BIOME_SIZE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_BIOME_SZ);
+        SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_SNOWY_CHANCE);
         
         CLAY_SIZE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_SIZE);
         CLAY_COUNT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_CNT);
@@ -642,10 +635,8 @@ public class GuiPredicates {
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
         BIOME_SCALE_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_OF), GuiIdentifiers.PG4_S_B_SCLE_OF, GuiIdentifiers.PG5_F_B_SCLE_OF);
-        USE_BIOME_DEPTH_SCALE_TEST = new GuiPredicate(
-            settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class),
-            GuiIdentifiers.PG4_B_USE_BDS
-        );
+        USE_BIOME_DEPTH_SCALE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class), GuiIdentifiers.PG4_B_USE_BDS);
+        USE_AMPLIFIED_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_AMP), GuiIdentifiers.PG4_B_USE_AMP);
         END_ISLAND_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_WT), GuiIdentifiers.PG4_S_END_WT, GuiIdentifiers.PG5_F_END_WT);
         END_ISLAND_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OF), GuiIdentifiers.PG4_S_END_OF, GuiIdentifiers.PG5_F_END_OF);
         USE_END_OUTER_ISLANDS_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_END_OUT), GuiIdentifiers.PG4_B_USE_END_OUT);

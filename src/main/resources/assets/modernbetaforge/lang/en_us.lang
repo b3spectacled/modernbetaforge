@@ -213,6 +213,7 @@ createWorld.customize.custom.modernbetaforge.biomeDepthOffset=Biome Depth Offset
 createWorld.customize.custom.modernbetaforge.biomeScaleWeight=Biome Scale Weight
 createWorld.customize.custom.modernbetaforge.biomeScaleOffset=Biome Scale Offset
 createWorld.customize.custom.modernbetaforge.useBiomeDepthScale=Override Depth/Scale
+createWorld.customize.custom.modernbetaforge.useAmplified=Amplified
 createWorld.customize.custom.modernbetaforge.endIslandOffset=Island Offset
 createWorld.customize.custom.modernbetaforge.endIslandWeight=Island Weight
 createWorld.customize.custom.modernbetaforge.endOuterIslandDistance=Outer Island Distance

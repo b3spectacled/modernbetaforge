@@ -517,7 +517,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
             createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
-            null,
+            createGuiButton(GuiIdentifiers.PG4_B_USE_AMP, NbtTags.USE_AMPLIFIED, this.settings.useAmplified),
             
             createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, RGB_HEADER, "page4", "end"),
             null,
@@ -1338,6 +1338,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_B_USE_END_OUT:
                     this.settings.useEndOuterIslands = entryValue;
+                    break;
+                case GuiIdentifiers.PG4_B_USE_AMP:
+                    this.settings.useAmplified = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG6_B_CLIMATE_FEAT:

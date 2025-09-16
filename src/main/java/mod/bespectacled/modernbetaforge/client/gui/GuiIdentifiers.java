@@ -276,6 +276,7 @@ public class GuiIdentifiers {
     public static final int PG4_SLIDER_END = 549;
     public static final int PG4_B_USE_BDS = 550;
     public static final int PG4_B_USE_END_OUT = 551;
+    public static final int PG4_B_USE_AMP = 552;
     
     // Labels
     public static final int PG4_L_BETA_LABL = 1500;
