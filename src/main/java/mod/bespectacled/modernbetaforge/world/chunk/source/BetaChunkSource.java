@@ -33,7 +33,7 @@ public class BetaChunkSource extends NoiseChunkSource {
             .apply(seed, settings);
         this.climateSampler = biomeSource instanceof ClimateSampler ?
             (ClimateSampler)biomeSource :
-            new BetaBiomeSource(seed, settings);
+            this.createClimateSampler(seed, settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
@@ -120,5 +120,9 @@ public class BetaChunkSource extends NoiseChunkSource {
             offset *= 4.0;
         
         return offset;
+    }
+    
+    protected ClimateSampler createClimateSampler(long seed, ModernBetaGeneratorSettings settings) {
+        return new BetaBiomeSource(seed, settings);
     }
 }
