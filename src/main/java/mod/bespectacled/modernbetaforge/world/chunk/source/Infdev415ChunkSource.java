@@ -32,6 +32,11 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
         this.setForestOctaveNoise(this.forestOctaveNoise);
     }
+    
+    @Override
+    public long getPopulationSeed(int chunkX, int chunkZ) {
+        return (long)chunkX * 318279123L + (long)chunkZ * 919871212L;
+    }
 
     @Override
     protected void sampleNoiseColumn(

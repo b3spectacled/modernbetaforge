@@ -54,6 +54,8 @@ public class NbtTags {
     public static final String USE_INDEV_CAVES = "useIndevCaves";
     public static final String LEVEL_CAVE_WIDTH = "levelCaveWidth";
     
+    public static final String USE_OLD_ORES = "useOldOres";
+    
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     public static final String USE_AMPLIFIED = "useAmplified";
     public static final String BIOME_SIZE = "biomeSize";

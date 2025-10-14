@@ -121,6 +121,7 @@ public class GuiPredicates {
     public static final GuiPredicate BIOME_SIZE_TEST;
     public static final GuiPredicate SNOWY_BIOME_CHANCE_TEST;
 
+    public static final GuiPredicate USE_OLD_ORES_TEST;
     public static final GuiPredicate CLAY_SIZE_TEST;
     public static final GuiPredicate CLAY_COUNT_TEST;
     public static final GuiPredicate CLAY_MIN_HEIGHT_TEST;
@@ -600,7 +601,8 @@ public class GuiPredicates {
         
         BIOME_SIZE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_BIOME_SZ);
         SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_SNOWY_CHANCE);
-        
+
+        USE_OLD_ORES_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_B_USE_OLD_ORES);
         CLAY_SIZE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_SIZE);
         CLAY_COUNT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_CNT);
         CLAY_MIN_HEIGHT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_MIN);

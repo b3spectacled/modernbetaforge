@@ -1,23 +1,41 @@
 package mod.bespectacled.modernbetaforge.world.feature;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 public class WorldGenMinableMutable extends WorldGenMinable {
-    public WorldGenMinableMutable(IBlockState state, int blockCount, Predicate<IBlockState> predicate) {
+    private static final Predicate<IBlockState> STONE_PREDICATE = new Predicate<IBlockState>() {
+        @Override
+        public boolean apply(IBlockState blockState) {
+            if (blockState != null && blockState.getBlock() == Blocks.STONE) {
+                return ((BlockStone.EnumType)blockState.getValue(BlockStone.VARIANT)).isNatural();
+            }
+            
+            return false;
+        }
+    };
+            
+    private final boolean useOldOreGen;
+    
+    public WorldGenMinableMutable(IBlockState state, int blockCount, Predicate<IBlockState> predicate, boolean useOldOreGen) {
         super(state, blockCount, predicate);
+        
+        this.useOldOreGen = useOldOreGen;
     }
     
-    public WorldGenMinableMutable(IBlockState state, int blockCount) {
-        super(state, blockCount);
+    public WorldGenMinableMutable(IBlockState state, int blockCount, boolean useOldAlgorithm) {
+        this(state, blockCount, STONE_PREDICATE, useOldAlgorithm);
     }
     
     @Override
@@ -28,27 +46,27 @@ public class WorldGenMinableMutable extends WorldGenMinable {
         int startY = blockPos.getY();
         int startZ = blockPos.getZ();
         
-        float theta = random.nextFloat() * (float)Math.PI;
+        float theta = random.nextFloat() * 3.141593f;
         float numBlocks = (float)this.numberOfBlocks;
         
         double maxBX = (double)((float)(startX + 8) + MathHelper.sin(theta) * numBlocks / 8.0f);
         double minBX = (double)((float)(startX + 8) - MathHelper.sin(theta) * numBlocks / 8.0f);
         double maxBZ = (double)((float)(startZ + 8) + MathHelper.cos(theta) * numBlocks / 8.0f);
         double minBZ = (double)((float)(startZ + 8) - MathHelper.cos(theta) * numBlocks / 8.0f);
-        double maxBY = (double)(startY + random.nextInt(3) - 2);
-        double minBY = (double)(startY + random.nextInt(3) - 2);
-
-        for (int b = 0; b < this.numberOfBlocks; ++b) {
-            float progress = (float)b / numBlocks;
+        double maxBY = (double)(startY + random.nextInt(3) + (this.useOldOreGen ? 2 : -2));
+        double minBY = (double)(startY + random.nextInt(3) + (this.useOldOreGen ? 2 : -2));
+        
+        Consumer<Integer> oreGenerator = i -> {
+            float progress = (float)i / numBlocks;
             double bX = maxBX + (minBX - maxBX) * (double)progress;
             double bY = maxBY + (minBY - maxBY) * (double)progress;
             double bZ = maxBZ + (minBZ - maxBZ) * (double)progress;
             
             double f = random.nextDouble() * (double)this.numberOfBlocks / 16.0;
-            theta = (float)Math.PI * progress;
+            float tTheta = 3.141593f * progress;
             
-            double tW = (double)(MathHelper.sin(theta) + 1.0f) * f + 1.0;
-            double tH = (double)(MathHelper.sin(theta) + 1.0f) * f + 1.0;
+            double tW = (double)(MathHelper.sin(tTheta) + 1.0f) * f + 1.0;
+            double tH = (double)(MathHelper.sin(tTheta) + 1.0f) * f + 1.0;
 
             int minX = MathHelper.floor(bX - tW / 2.0);
             int maxX = MathHelper.floor(bX + tW / 2.0);
@@ -58,12 +76,19 @@ public class WorldGenMinableMutable extends WorldGenMinable {
             int maxZ = MathHelper.floor(bZ + tW / 2.0);
 
             for (int x = minX; x <= maxX; ++x) {
+                double dX = ((double)x + 0.5 - bX) / (tW / 2.0);
+                if (dX * dX >= 1.0) {
+                    continue;
+                }
+                
                 for (int y = minY; y <= maxY; ++y) {
+                    double dY = ((double)y + 0.5 - bY) / (tH / 2.0);
+                    if (dX * dX + dY * dY >= 1.0) {
+                        continue;
+                    }
+                    
                     for (int z = minZ; z <= maxZ; ++z) {
-                        double dX = ((double)x + 0.5D - bX) / (tW / 2.0);
-                        double dY = ((double)y + 0.5D - bY) / (tH / 2.0);
-                        double dZ = ((double)z + 0.5D - bZ) / (tW / 2.0);
-                        
+                        double dZ = ((double)z + 0.5 - bZ) / (tW / 2.0);
                         if (dX * dX + dY * dY + dZ * dZ >= 1.0) {
                             continue;
                         }
@@ -76,6 +101,17 @@ public class WorldGenMinableMutable extends WorldGenMinable {
                         }
                     }
                 }
+            }
+        };
+
+        if (this.useOldOreGen) {
+            for (int i = 0; i <= this.numberOfBlocks; ++i) {
+                oreGenerator.accept(i);
+            }
+            
+        } else {
+            for (int i = 0; i < this.numberOfBlocks; ++i) {
+                oreGenerator.accept(i);
             }
         }
 

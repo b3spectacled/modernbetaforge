@@ -385,6 +385,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageOre = {
+            createGuiButton(GuiIdentifiers.PG3_B_USE_OLD_ORES, NbtTags.USE_OLD_ORES, this.settings.useOldOres),
+            null,
+                
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, RGB_HEADER, I18n.format("tile.dirt.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
@@ -1331,6 +1334,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS:
                     this.settings.useInfdevPyramids = entryValue;
+                    break;
+                    
+                case GuiIdentifiers.PG3_B_USE_OLD_ORES:
+                    this.settings.useOldOres = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG4_B_USE_BDS:

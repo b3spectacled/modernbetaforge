@@ -170,6 +170,10 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             plantCount = 3;
         }
         
+        if (biome instanceof BiomeBetaSky) {
+            plantCount = 2;
+        }
+        
         return plantCount;
     }
     

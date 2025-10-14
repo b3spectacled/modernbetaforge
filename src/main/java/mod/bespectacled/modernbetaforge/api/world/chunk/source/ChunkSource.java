@@ -211,6 +211,21 @@ public abstract class ChunkSource {
     public long getSeed() {
         return this.seed;
     }
+    
+    /**
+     * Gets the population seed based on chunk coordinates.
+     * 
+     * @param chunkX x-coordinate in chunk coordinates
+     * @param chunkZ z-coordinate in chunk coordinates
+     * @return The seed to use for feature population.
+     */
+    public long getPopulationSeed(int chunkX, int chunkZ) {
+        Random random = new Random(this.seed);
+        long randomLong0 = (random.nextLong() / 2L) * 2L + 1L;
+        long randomLong1 = (random.nextLong() / 2L) * 2L + 1L;
+
+        return (long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.seed;
+    }
 
     /**
      * Indicate whether the chunk at the given coordinates should be skipped.

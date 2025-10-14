@@ -227,6 +227,8 @@ public class ModernBetaGeneratorSettings {
     public final boolean useIndevCaves;
     public final float levelCaveWidth;
     
+    public final boolean useOldOres;
+    
     public final int claySize;
     public final int clayCount;
     public final int clayMinHeight;
@@ -471,6 +473,8 @@ public class ModernBetaGeneratorSettings {
         this.levelHouse = factory.levelHouse;
         this.useIndevCaves = factory.useIndevCaves;
         this.levelCaveWidth = factory.levelCaveWidth;
+        
+        this.useOldOres = factory.useOldOres;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -766,6 +770,8 @@ public class ModernBetaGeneratorSettings {
         public boolean useIndevCaves;
         public float levelCaveWidth;
         
+        public boolean useOldOres;
+        
         public int claySize;
         public int clayCount;
         public int clayMinHeight;
@@ -1003,6 +1009,8 @@ public class ModernBetaGeneratorSettings {
             this.levelHouse = IndevHouse.OAK.id;
             this.useIndevCaves = true;
             this.levelCaveWidth = 1.0f;
+            
+            this.useOldOres = false;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -1265,6 +1273,8 @@ public class ModernBetaGeneratorSettings {
                 this.useIndevCaves == factory.useIndevCaves &&
                 Float.compare(factory.levelCaveWidth, this.levelCaveWidth) == 0 &&
                 
+                this.useOldOres == factory.useOldOres &&
+                
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
                 this.clayMinHeight == factory.clayMinHeight &&
@@ -1506,6 +1516,8 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.levelHouse.hashCode();
             hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
             hashCode = 31 * hashCode + ((this.levelCaveWidth == 0.0f) ? 0 : Float.floatToIntBits(this.levelCaveWidth));
+
+            hashCode = 31 * hashCode + (this.useOldOres ? 1 : 0);
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1783,6 +1795,8 @@ public class ModernBetaGeneratorSettings {
                 factory.levelHouse = JsonUtils.getString(jsonObject, NbtTags.LEVEL_HOUSE, factory.levelHouse);
                 factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
                 factory.levelCaveWidth = JsonUtils.getFloat(jsonObject, NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
+                
+                factory.useOldOres = JsonUtils.getBoolean(jsonObject, NbtTags.USE_OLD_ORES, factory.useOldOres);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -2221,6 +2235,8 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.LEVEL_HOUSE, factory.levelHouse);
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
             jsonObject.addProperty(NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
+            
+            jsonObject.addProperty(NbtTags.USE_OLD_ORES, factory.useOldOres);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

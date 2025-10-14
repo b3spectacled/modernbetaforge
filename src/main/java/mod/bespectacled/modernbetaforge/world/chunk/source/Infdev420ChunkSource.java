@@ -24,6 +24,11 @@ public class Infdev420ChunkSource extends NoiseChunkSource {
     }
     
     @Override
+    public long getPopulationSeed(int chunkX, int chunkZ) {
+        return (long)chunkX * 318279123L + (long)chunkZ * 919871212L;
+    }
+    
+    @Override
     protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
         return NoiseHeight.ZERO;
     }

@@ -254,11 +254,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
                 }
             }
             
-            // Reset seed for generation accuracy
-            this.random.setSeed(this.world.getSeed());
-            randomLong0 = (this.random.nextLong() / 2L) * 2L + 1L;
-            randomLong1 = (this.random.nextLong() / 2L) * 2L + 1L;
-            this.random.setSeed((long)chunkX * randomLong0 + (long)chunkZ * randomLong1 ^ this.world.getSeed());
+            // Get population seed
+            this.random.setSeed(this.chunkSource.getPopulationSeed(chunkX, chunkZ));
             
             // Generate lakes, dungeons
             

@@ -223,6 +223,8 @@ public class GuiIdentifiers {
     public static final int PG3_S_MGMA_SIZE = 454;
     public static final int PG3_S_MGMA_CNT = 455;
     
+    public static final int PG3_B_USE_OLD_ORES = 460;
+    
     // Labels
     public static final int PG3_L_CLAY_NAME = 1400;
     public static final int PG3_L_DIRT_NAME = 1401;

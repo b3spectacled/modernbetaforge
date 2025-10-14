@@ -315,6 +315,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.SPAWN_WATER_MOBS, GuiPredicates.SPAWN_WATER_MOBS_TEST);
         registry.register(GuiPredicate.SPAWN_AMBIENT_MOBS, GuiPredicates.SPAWN_AMBIENT_MOBS_TEST);
         registry.register(GuiPredicate.SPAWN_WOLVES, GuiPredicates.SPAWN_WOLVES_TEST);
+        registry.register(GuiPredicate.USE_OLD_ORES, GuiPredicates.USE_OLD_ORES_TEST);
         registry.register(GuiPredicate.CLAY_SIZE, GuiPredicates.CLAY_SIZE_TEST);
         registry.register(GuiPredicate.CLAY_COUNT, GuiPredicates.CLAY_COUNT_TEST);
         registry.register(GuiPredicate.CLAY_MIN_HEIGHT, GuiPredicates.CLAY_MIN_HEIGHT_TEST);

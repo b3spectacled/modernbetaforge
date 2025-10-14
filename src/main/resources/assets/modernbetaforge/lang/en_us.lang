@@ -183,6 +183,7 @@ createWorld.customize.custom.modernbetaforge.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.modernbetaforge.spawnWolves=Wolves
 
 # Page 4 - Ores
+createWorld.customize.custom.modernbetaforge.useOldOres=Classic Ores
 createWorld.customize.custom.modernbetaforge.size=Spawn Size
 createWorld.customize.custom.modernbetaforge.count=Spawn Tries
 createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
