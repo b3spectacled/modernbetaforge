@@ -183,7 +183,7 @@ createWorld.customize.custom.modernbetaforge.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.modernbetaforge.spawnWolves=Wolves
 
 # Page 4 - Ores
-createWorld.customize.custom.modernbetaforge.useOldOres=Classic Ores
+createWorld.customize.custom.modernbetaforge.oreType=Ore Type
 createWorld.customize.custom.modernbetaforge.size=Spawn Size
 createWorld.customize.custom.modernbetaforge.count=Spawn Tries
 createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
@@ -318,6 +318,11 @@ createWorld.customize.custom.modernbetaforge.layerType.continental=Continental
 createWorld.customize.custom.modernbetaforge.layerType.islands=Islands
 createWorld.customize.custom.modernbetaforge.layerType.small_islands=Small Islands
 createWorld.customize.custom.modernbetaforge.layerType.pangaea=Pangaea
+
+# Ore Type Names
+createWorld.customize.custom.modernbetaforge.oreType.default=Default
+createWorld.customize.custom.modernbetaforge.oreType.classic=Classic
+createWorld.customize.custom.modernbetaforge.oreType.vanilla=Vanilla
 
 # Registry Customization
 createWorld.customize.registry.modernbetaforge.title=Select

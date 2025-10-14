@@ -70,7 +70,7 @@ public class GuiPredicate {
     public static final ResourceLocation SPAWN_WOLVES = createRegistryKey(NbtTags.SPAWN_WOLVES);
     public static final ResourceLocation BIOME_SIZE = createRegistryKey(NbtTags.BIOME_SIZE);
 
-    public static final ResourceLocation USE_OLD_ORES = createRegistryKey(NbtTags.USE_OLD_ORES);
+    public static final ResourceLocation USE_OLD_ORES = createRegistryKey(NbtTags.ORE_TYPE);
     public static final ResourceLocation CLAY_SIZE = createRegistryKey(NbtTags.CLAY_SIZE);
     public static final ResourceLocation CLAY_COUNT = createRegistryKey(NbtTags.CLAY_COUNT);
     public static final ResourceLocation CLAY_MIN_HEIGHT = createRegistryKey(NbtTags.CLAY_MIN_HEIGHT);

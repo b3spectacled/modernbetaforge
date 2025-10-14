@@ -41,6 +41,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -227,7 +228,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useIndevCaves;
     public final float levelCaveWidth;
     
-    public final boolean useOldOres;
+    public final String oreType;
     
     public final int claySize;
     public final int clayCount;
@@ -474,7 +475,7 @@ public class ModernBetaGeneratorSettings {
         this.useIndevCaves = factory.useIndevCaves;
         this.levelCaveWidth = factory.levelCaveWidth;
         
-        this.useOldOres = factory.useOldOres;
+        this.oreType = factory.oreType;
         
         this.claySize = factory.claySize;
         this.clayCount = factory.clayCount;
@@ -770,7 +771,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useIndevCaves;
         public float levelCaveWidth;
         
-        public boolean useOldOres;
+        public String oreType;
         
         public int claySize;
         public int clayCount;
@@ -1010,7 +1011,7 @@ public class ModernBetaGeneratorSettings {
             this.useIndevCaves = true;
             this.levelCaveWidth = 1.0f;
             
-            this.useOldOres = false;
+            this.oreType = OreType.DEFAULT.id;
             
             this.claySize = 33;
             this.clayCount = 10;
@@ -1273,7 +1274,7 @@ public class ModernBetaGeneratorSettings {
                 this.useIndevCaves == factory.useIndevCaves &&
                 Float.compare(factory.levelCaveWidth, this.levelCaveWidth) == 0 &&
                 
-                this.useOldOres == factory.useOldOres &&
+                this.oreType.equals(factory.oreType) &&
                 
                 this.claySize == factory.claySize &&
                 this.clayCount == factory.clayCount &&
@@ -1517,7 +1518,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useIndevCaves ? 1 : 0);
             hashCode = 31 * hashCode + ((this.levelCaveWidth == 0.0f) ? 0 : Float.floatToIntBits(this.levelCaveWidth));
 
-            hashCode = 31 * hashCode + (this.useOldOres ? 1 : 0);
+            hashCode = 31 * hashCode + this.oreType.hashCode();
             
             hashCode = 31 * hashCode + this.claySize;
             hashCode = 31 * hashCode + this.clayCount;
@@ -1796,7 +1797,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useIndevCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
                 factory.levelCaveWidth = JsonUtils.getFloat(jsonObject, NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
                 
-                factory.useOldOres = JsonUtils.getBoolean(jsonObject, NbtTags.USE_OLD_ORES, factory.useOldOres);
+                factory.oreType = JsonUtils.getString(jsonObject, NbtTags.ORE_TYPE, factory.oreType);
                 
                 factory.claySize = JsonUtils.getInt(jsonObject, NbtTags.CLAY_SIZE, factory.claySize);
                 factory.clayCount = JsonUtils.getInt(jsonObject, NbtTags.CLAY_COUNT, factory.clayCount);
@@ -2078,6 +2079,7 @@ public class ModernBetaGeneratorSettings {
                 factory.levelTheme = IndevTheme.fromIdOrElse(factory.levelTheme, IndevTheme.fromId(defaults.levelTheme)).id;
                 factory.levelType = IndevType.fromIdOrElse(factory.levelType, IndevType.fromId(defaults.levelType)).id;
                 factory.levelHouse = IndevHouse.fromIdOrElse(factory.levelHouse, IndevHouse.fromId(defaults.levelHouse)).id;
+                factory.oreType = OreType.fromIdOrElse(factory.oreType, OreType.fromId(defaults.oreType)).id;
                 
                 factory.desertBiomeBase = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.desertBiomeBase), defaults.desertBiomeBase, ForgeRegistries.BIOMES).toString();
                 factory.desertBiomeOcean = ForgeRegistryUtil.validateOrElse(new ResourceLocation(factory.desertBiomeOcean), defaults.desertBiomeOcean, ForgeRegistries.BIOMES).toString();
@@ -2236,7 +2238,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
             jsonObject.addProperty(NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
             
-            jsonObject.addProperty(NbtTags.USE_OLD_ORES, factory.useOldOres);
+            jsonObject.addProperty(NbtTags.ORE_TYPE, factory.oreType);
             
             jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
             jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);

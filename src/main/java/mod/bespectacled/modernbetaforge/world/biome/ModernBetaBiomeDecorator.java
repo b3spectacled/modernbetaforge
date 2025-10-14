@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
@@ -15,6 +16,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -39,6 +41,7 @@ import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
@@ -83,7 +86,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     
     protected void populateOres(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
-        boolean useOldOres = settings.useOldOres;
+        OreType oreType = OreType.fromId(settings.oreType);
         
         int startX = startPos.getX();
         int startZ = startPos.getZ();
@@ -91,20 +94,20 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         
         // Ore generators
         this.oreClay = new WorldGenClay(settings.claySize);
-        this.oreDirt = new WorldGenMinableMutable(BlockStates.DIRT, settings.dirtSize, useOldOres);
-        this.oreGravel = new WorldGenMinableMutable(BlockStates.GRAVEL, settings.gravelSize, useOldOres);
-        this.oreCoal = new WorldGenMinableMutable(BlockStates.COAL_ORE, settings.coalSize, useOldOres);
-        this.oreIron = new WorldGenMinableMutable(BlockStates.IRON_ORE, settings.ironSize, useOldOres);
-        this.oreGold = new WorldGenMinableMutable(BlockStates.GOLD_ORE, settings.goldSize, useOldOres);
-        this.oreRedstone = new WorldGenMinableMutable(BlockStates.REDSTONE_ORE, settings.redstoneSize, useOldOres);
-        this.oreDiamond = new WorldGenMinableMutable(BlockStates.DIAMOND_ORE, settings.diamondSize, useOldOres);
-        this.oreLapis = new WorldGenMinableMutable(BlockStates.LAPIS_ORE, settings.lapisSize, useOldOres);
+        this.oreDirt = createMinable(BlockStates.DIRT, settings.dirtSize, oreType);
+        this.oreGravel = createMinable(BlockStates.GRAVEL, settings.gravelSize, oreType);
+        this.oreCoal = createMinable(BlockStates.COAL_ORE, settings.coalSize, oreType);
+        this.oreIron = createMinable(BlockStates.IRON_ORE, settings.ironSize, oreType);
+        this.oreGold = createMinable(BlockStates.GOLD_ORE, settings.goldSize, oreType);
+        this.oreRedstone = createMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize, oreType);
+        this.oreDiamond = createMinable(BlockStates.DIAMOND_ORE, settings.diamondSize, oreType);
+        this.oreLapis = createMinable(BlockStates.LAPIS_ORE, settings.lapisSize, oreType);
         
         // New mineable generators
-        this.oreGranite = new WorldGenMinableMutable(BlockStates.GRANITE, settings.graniteSize, useOldOres);
-        this.oreDiorite = new WorldGenMinableMutable(BlockStates.DIORITE, settings.dioriteSize, useOldOres);
-        this.oreAndesite = new WorldGenMinableMutable(BlockStates.ANDESITE, settings.andesiteSize, useOldOres);
-        this.oreEmerald = new WorldGenMinableMutable(BlockStates.EMERALD_ORE, settings.emeraldSize, useOldOres);
+        this.oreGranite = createMinable(BlockStates.GRANITE, settings.graniteSize, oreType);
+        this.oreDiorite = createMinable(BlockStates.DIORITE, settings.dioriteSize, oreType);
+        this.oreAndesite = createMinable(BlockStates.ANDESITE, settings.andesiteSize, oreType);
+        this.oreEmerald = createMinable(BlockStates.EMERALD_ORE, settings.emeraldSize, oreType);
         
         if (TerrainGen.generateOre(world, random, this.oreClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
             populateOreStandard(world, random, startPos, this.oreClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
@@ -431,6 +434,18 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
                 if (canSetSnow) world.setBlockState(mutablePos, Blocks.SNOW_LAYER.getDefaultState(), 2);
             }
         }
+    }
+    
+    public static WorldGenerator createMinable(IBlockState blockState, int size, OreType oreType) {
+        return createMinable(blockState, size, WorldGenMinableMutable.STONE_PREDICATE, oreType);
+    }
+    
+    public static WorldGenerator createMinable(IBlockState blockState, int size, Predicate<IBlockState> predicate, OreType oreType) {
+        if (oreType == OreType.VANILLA) {
+            return new WorldGenMinable(blockState, size, predicate);
+        }
+        
+        return new WorldGenMinableMutable(blockState, size, predicate, oreType);
     }
 
     private static int getOreHeight(Random random, int minHeight, int maxHeight) {

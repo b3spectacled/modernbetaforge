@@ -24,7 +24,7 @@ public enum GenLayerType {
             }
         }
         
-        throw new IllegalArgumentException("[Modern Beta] No Layer Type matching id: " + id);
+        throw new IllegalArgumentException("[Modern Beta] No GenLayerType matching id: " + id);
     }
 
     public static GenLayerType fromIdOrElse(String id, GenLayerType alternate) {

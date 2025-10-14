@@ -10,7 +10,9 @@ import javax.annotation.Nullable;
 import com.google.common.base.Predicate;
 
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
+import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -74,13 +76,13 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         this.world = world;
         this.mapFeaturesEnabled = mapFeaturesEnabled;
         
-        boolean useOldOres = this.settings.useOldOres;
+        OreType oreType = OreType.fromId(this.settings.oreType);
         
         this.fireFeature = new WorldGenFire();
         this.glowstoneFeature1 = new WorldGenGlowStone1();
         this.glowstoneFeature2 = new WorldGenGlowStone2();
-        this.quartzOreFeature = new WorldGenMinableMutable(BlockStates.QUARTZ_ORE, settings.quartzSize, NETHERRACK_PREDICATE, useOldOres);
-        this.magmaOreFeature = new WorldGenMinableMutable(BlockStates.MAGMA, settings.magmaSize, NETHERRACK_PREDICATE, useOldOres);
+        this.quartzOreFeature = ModernBetaBiomeDecorator.createMinable(BlockStates.QUARTZ_ORE, settings.quartzSize, NETHERRACK_PREDICATE, oreType);
+        this.magmaOreFeature = ModernBetaBiomeDecorator.createMinable(BlockStates.MAGMA, settings.magmaSize, NETHERRACK_PREDICATE, oreType);
         this.lavaPocketFeature = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.lavaSpringFeature = new WorldGenHellSpring(Blocks.FLOWING_LAVA);
         this.brownMushroomFeature = new WorldGenBush(Blocks.BROWN_MUSHROOM);

@@ -59,6 +59,7 @@ import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevTheme;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
+import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.Gui;
@@ -241,6 +242,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         int layerTypeId = GenLayerType.fromId(this.settings.layerType).ordinal();
         
+        int oreTypeId = OreType.fromId(this.settings.oreType).ordinal();
+        
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
         StringBuilder loadedModsList = new StringBuilder();
         
@@ -385,7 +388,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageOre = {
-            createGuiButton(GuiIdentifiers.PG3_B_USE_OLD_ORES, NbtTags.USE_OLD_ORES, this.settings.useOldOres),
+            createGuiSlider(GuiIdentifiers.PG3_S_ORE_TYPE, NbtTags.ORE_TYPE, 0f, OreType.values().length - 1, oreTypeId, this),
             null,
                 
             createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, RGB_HEADER, I18n.format("tile.dirt.name")),
@@ -1336,10 +1339,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.useInfdevPyramids = entryValue;
                     break;
                     
-                case GuiIdentifiers.PG3_B_USE_OLD_ORES:
-                    this.settings.useOldOres = entryValue;
-                    break;
-                    
                 case GuiIdentifiers.PG4_B_USE_BDS:
                     this.settings.useBiomeDepthScale = entryValue;
                     break;
@@ -1533,6 +1532,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.snowyBiomeChance = (int)entryValue;
                     break;
     
+                case GuiIdentifiers.PG3_S_ORE_TYPE:
+                    this.settings.oreType = OreType.values()[(int)entryValue].id;
+                    break;
                 case GuiIdentifiers.PG3_S_CLAY_SIZE:
                     this.settings.claySize = (int)entryValue;
                     break;
@@ -2257,6 +2259,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 
                 return I18n.format(PREFIX + "layerType." + key);
             }
+            case GuiIdentifiers.PG3_S_ORE_TYPE: {
+                String key = OreType.values()[(int)entryValue].id;
+                
+                return I18n.format(PREFIX + "oreType." + key);
+            }
             
             case GuiIdentifiers.PG1_S_LEVEL_WIDTH: return String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
             case GuiIdentifiers.PG1_S_LEVEL_LENGTH: return String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
@@ -2422,6 +2429,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_HOUSE));
         
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LAYER_TYPE));
+        
+        set.add(this.pageList.getComponent(GuiIdentifiers.PG3_S_ORE_TYPE));
         
         return set;
     }

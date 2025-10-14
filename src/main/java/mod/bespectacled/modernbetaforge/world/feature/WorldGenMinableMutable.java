@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 public class WorldGenMinableMutable extends WorldGenMinable {
-    private static final Predicate<IBlockState> STONE_PREDICATE = new Predicate<IBlockState>() {
+    public static final Predicate<IBlockState> STONE_PREDICATE = new Predicate<IBlockState>() {
         @Override
         public boolean apply(IBlockState blockState) {
             if (blockState != null && blockState.getBlock() == Blocks.STONE) {
@@ -26,21 +26,22 @@ public class WorldGenMinableMutable extends WorldGenMinable {
         }
     };
             
-    private final boolean useOldOreGen;
+    private final OreType oreType;
     
-    public WorldGenMinableMutable(IBlockState state, int blockCount, Predicate<IBlockState> predicate, boolean useOldOreGen) {
+    public WorldGenMinableMutable(IBlockState state, int blockCount, Predicate<IBlockState> predicate, OreType oreType) {
         super(state, blockCount, predicate);
         
-        this.useOldOreGen = useOldOreGen;
+        this.oreType = oreType;
     }
     
-    public WorldGenMinableMutable(IBlockState state, int blockCount, boolean useOldAlgorithm) {
-        this(state, blockCount, STONE_PREDICATE, useOldAlgorithm);
+    public WorldGenMinableMutable(IBlockState state, int blockCount, OreType oreType) {
+        this(state, blockCount, STONE_PREDICATE, oreType);
     }
     
     @Override
     public boolean generate(World world, Random random, BlockPos blockPos) {
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        boolean useOldOre = this.oreType == OreType.CLASSIC;
         
         int startX = blockPos.getX();
         int startY = blockPos.getY();
@@ -53,8 +54,8 @@ public class WorldGenMinableMutable extends WorldGenMinable {
         double minBX = (double)((float)(startX + 8) - MathHelper.sin(theta) * numBlocks / 8.0f);
         double maxBZ = (double)((float)(startZ + 8) + MathHelper.cos(theta) * numBlocks / 8.0f);
         double minBZ = (double)((float)(startZ + 8) - MathHelper.cos(theta) * numBlocks / 8.0f);
-        double maxBY = (double)(startY + random.nextInt(3) + (this.useOldOreGen ? 2 : -2));
-        double minBY = (double)(startY + random.nextInt(3) + (this.useOldOreGen ? 2 : -2));
+        double maxBY = (double)(startY + random.nextInt(3) + (useOldOre  ? 2 : -2));
+        double minBY = (double)(startY + random.nextInt(3) + (useOldOre ? 2 : -2));
         
         Consumer<Integer> oreGenerator = i -> {
             float progress = (float)i / numBlocks;
@@ -104,7 +105,7 @@ public class WorldGenMinableMutable extends WorldGenMinable {
             }
         };
 
-        if (this.useOldOreGen) {
+        if (useOldOre) {
             for (int i = 0; i <= this.numberOfBlocks; ++i) {
                 oreGenerator.accept(i);
             }
