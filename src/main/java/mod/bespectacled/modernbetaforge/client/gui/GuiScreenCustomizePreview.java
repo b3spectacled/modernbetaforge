@@ -959,7 +959,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     @SideOnly(Side.CLIENT)
-    public static class PreviewSettings {
+    static class PreviewSettings {
         private int zoom;
         private boolean useBiomeBlend;
         

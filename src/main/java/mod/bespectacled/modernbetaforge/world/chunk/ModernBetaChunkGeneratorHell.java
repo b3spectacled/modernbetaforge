@@ -7,11 +7,15 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
+
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
+import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -33,7 +37,6 @@ import net.minecraft.world.gen.feature.WorldGenFire;
 import net.minecraft.world.gen.feature.WorldGenGlowStone1;
 import net.minecraft.world.gen.feature.WorldGenGlowStone2;
 import net.minecraft.world.gen.feature.WorldGenHellLava;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenNetherBridge;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,6 +48,8 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
+    private static final Predicate<IBlockState> NETHERRACK_PREDICATE = BlockMatcher.forBlock(Blocks.NETHERRACK);
+    
     private final ModernBetaGeneratorSettings settings;
     private final World world;
     private final boolean mapFeaturesEnabled;
@@ -59,8 +64,8 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
     private final WorldGenBush brownMushroomFeature;
     private final WorldGenBush redMushroomFeature;
    
-    private MapGenNetherBridge netherFortressGenerator;
-    private MapGenBase netherCaveCarver;
+    private final MapGenNetherBridge netherFortressGenerator;
+    private final MapGenBase netherCaveCarver;
     
     public ModernBetaChunkGeneratorHell(World world, boolean mapFeaturesEnabled, long seed, String generatorOptions) {
         super(world, mapFeaturesEnabled, seed);
@@ -72,8 +77,8 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
         this.fireFeature = new WorldGenFire();
         this.glowstoneFeature1 = new WorldGenGlowStone1();
         this.glowstoneFeature2 = new WorldGenGlowStone2();
-        this.quartzOreFeature = new WorldGenMinable(BlockStates.QUARTZ_ORE, settings.quartzSize, BlockMatcher.forBlock(Blocks.NETHERRACK));
-        this.magmaOreFeature = new WorldGenMinable(BlockStates.MAGMA, settings.magmaSize, BlockMatcher.forBlock(Blocks.NETHERRACK));
+        this.quartzOreFeature = new WorldGenMinableMutable(BlockStates.QUARTZ_ORE, settings.quartzSize, NETHERRACK_PREDICATE);
+        this.magmaOreFeature = new WorldGenMinableMutable(BlockStates.MAGMA, settings.magmaSize, NETHERRACK_PREDICATE);
         this.lavaPocketFeature = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.lavaSpringFeature = new WorldGenHellSpring(Blocks.FLOWING_LAVA);
         this.brownMushroomFeature = new WorldGenBush(Blocks.BROWN_MUSHROOM);

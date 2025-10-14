@@ -221,6 +221,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
     @Override
     public void populate(int chunkX, int chunkZ) {
+        DebugUtil.startDebug(DebugUtil.SECTION_POP_CHUNK);
+        
         // Prune outer chunks for finite worlds
         this.chunkSource.pruneChunk(this.world, chunkX, chunkZ);
         
@@ -292,6 +294,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         ForgeEventFactory.onChunkPopulate(false, this, this.world, this.random, chunkX, chunkZ, false);
         
         BlockFalling.fallInstantly = false;
+        DebugUtil.endDebug(DebugUtil.SECTION_POP_CHUNK);
     }
     
     /*

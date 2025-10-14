@@ -12,11 +12,11 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenClay extends WorldGenerator {
     private final Block block;
-    private final int numberOfBlocks;
+    private final int numBlocks;
     
     public WorldGenClay(int numberOfBlocks) {
         this.block = Blocks.CLAY;
-        this.numberOfBlocks = numberOfBlocks;
+        this.numBlocks = numberOfBlocks;
     }
 
     @Override
@@ -27,51 +27,57 @@ public class WorldGenClay extends WorldGenerator {
         
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
-        int originX = blockPos.getX();
-        int originY = blockPos.getY();
-        int originZ = blockPos.getZ();
+        int startX = blockPos.getX();
+        int startY = blockPos.getY();
+        int startZ = blockPos.getZ();
         
-        float radius = random.nextFloat() * 3.141593F;
+        // Ranges from [0, 1]
+        float theta = random.nextFloat() * 3.141593f;
+        float numBlocks = (float)this.numBlocks;
         
-        double x0 = (float)(originX + 8) + (MathHelper.sin(radius) * (float)numberOfBlocks) / 8F;
-        double x1 = (float)(originX + 8) - (MathHelper.sin(radius) * (float)numberOfBlocks) / 8F;
-        double z0 = (float)(originZ + 8) + (MathHelper.cos(radius) * (float)numberOfBlocks) / 8F;
-        double z1 = (float)(originZ + 8) - (MathHelper.cos(radius) * (float)numberOfBlocks) / 8F;
+        // Calculate minimum and maximum extents of ore blob
+        // Example: If ore size is 33, then range for value added to start coord is [0, 4.125] 
+        double maxBX = (float)(startX + 8) + (MathHelper.sin(theta) * numBlocks) / 8f;
+        double minBX = (float)(startX + 8) - (MathHelper.sin(theta) * numBlocks) / 8f;
+        double maxBZ = (float)(startZ + 8) + (MathHelper.cos(theta) * numBlocks) / 8f;
+        double minBZ = (float)(startZ + 8) - (MathHelper.cos(theta) * numBlocks) / 8f;
+        double maxBY = startY + random.nextInt(3) + 2;
+        double minBY = startY + random.nextInt(3) + 2;
         
-        double y0 = originY + random.nextInt(3) + 2;
-        double y1 = originY + random.nextInt(3) + 2;
-        
-        for(int block = 0; block <= this.numberOfBlocks; block++) {
-            double d6 = x0 + ((x1 - x0) * (double)block) / (double)numberOfBlocks;
-            double d7 = y0 + ((y1 - y0) * (double)block) / (double)numberOfBlocks;
-            double d8 = z0 + ((z1 - z0) * (double)block) / (double)numberOfBlocks;
+        for(int b = 0; b <= this.numBlocks; b++) {
+            // Get initial coordinates for placement,
+            // ranging between min and max as a function of block / numBlocks
+            double bX = maxBX + ((minBX - maxBX) * (double)b) / numBlocks;
+            double bY = maxBY + ((minBY - maxBY) * (double)b) / numBlocks;
+            double bZ = maxBZ + ((minBZ - maxBZ) * (double)b) / numBlocks;
             
-            double d9 = (random.nextDouble() * (double)numberOfBlocks) / 16D;
+            double f = (random.nextDouble() * (double)numBlocks) / 16.0;
+            theta = ((float)b * 3.141593f) / numBlocks;
             
-            double d10 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0;
-            double d11 = (double)(MathHelper.sin(((float)block * 3.141593F) / (float)numberOfBlocks) + 1.0F) * d9 + 1.0;
+            double tW = (double)(MathHelper.sin(theta) + 1.0f) * f + 1.0;
+            double tH = (double)(MathHelper.sin(theta) + 1.0f) * f + 1.0;
             
-            int minX = MathHelper.floor(d6 - d10 / 2.0);
-            int maxX = MathHelper.floor(d6 + d10 / 2.0);
-            int minY = MathHelper.floor(d7 - d11 / 2.0);
-            int maxY = MathHelper.floor(d7 + d11 / 2.0);
-            int minZ = MathHelper.floor(d8 - d10 / 2.0);
-            int maxZ = MathHelper.floor(d8 + d10 / 2.0);
+            int minX = MathHelper.floor(bX - tW / 2.0);
+            int maxX = MathHelper.floor(bX + tW / 2.0);
+            int minY = MathHelper.floor(bY - tH / 2.0);
+            int maxY = MathHelper.floor(bY + tH / 2.0);
+            int minZ = MathHelper.floor(bZ - tW / 2.0);
+            int maxZ = MathHelper.floor(bZ + tW / 2.0);
             
             for(int x = minX; x <= maxX; x++) {
                 for(int y = minY; y <= maxY; y++) {
                     for(int z = minZ; z <= maxZ; z++) {
-                        double dX = (((double)x + 0.5D) - d6) / (d10 / 2.0);
-                        double dY = (((double)y + 0.5D) - d7) / (d11 / 2.0);
-                        double dZ = (((double)z + 0.5D) - d8) / (d10 / 2.0);
+                        double dX = (((double)x + 0.5) - bX) / (tW / 2.0);
+                        double dY = (((double)y + 0.5) - bY) / (tH / 2.0);
+                        double dZ = (((double)z + 0.5) - bZ) / (tW / 2.0);
                         
                         if (dX * dX + dY * dY + dZ * dZ >= 1.0) {
                             continue;
                         }
                         
-                        Block curBlock = world.getBlockState(mutablePos.setPos(x, y, z)).getBlock();
+                        Block block = world.getBlockState(mutablePos.setPos(x, y, z)).getBlock();
                         
-                        if(curBlock == Blocks.SAND) {
+                        if (block == Blocks.SAND) {
                             world.setBlockState(mutablePos, this.block.getDefaultState());
                         }
                     }
@@ -81,5 +87,4 @@ public class WorldGenClay extends WorldGenerator {
 
         return true;
     }
-
 }

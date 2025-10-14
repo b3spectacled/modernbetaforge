@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -151,25 +150,9 @@ public class DebugInfoEventHandler {
                 addDebugText(event, "");
             }
             
-            String averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK);
-            String iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK);
-            
-            if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
-            if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
-
-            averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GET_BASE_BIOMES);
-            iterations = DebugUtil.getIterations(DebugUtil.SECTION_GET_BASE_BIOMES);
-
-            if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
-            if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
-            
-            if (chunkGenerator.getClass() == ChunkGeneratorOverworld.class) {
-                averageTime = DebugUtil.getAverageTime(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
-                iterations = DebugUtil.getIterations(DebugUtil.SECTION_GEN_CHUNK_VANILLA);
-                
-                if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
-                if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
-            }
+            addGenDebugText(event, DebugUtil.SECTION_GEN_CHUNK);
+            addGenDebugText(event, DebugUtil.SECTION_POP_CHUNK);
+            addGenDebugText(event, DebugUtil.SECTION_GET_BASE_BIOMES);
         }
     }
     
@@ -177,5 +160,13 @@ public class DebugInfoEventHandler {
         if (ModernBetaConfig.debugOptions.displayDebugInfo) {
             event.getLeft().add(text);
         }
+    }
+    
+    private static void addGenDebugText(RenderGameOverlayEvent.Text event, String section) {
+        String averageTime = DebugUtil.getAverageTime(section);
+        String iterations = DebugUtil.getIterations(section);
+        
+        if (!averageTime.isEmpty()) addDebugText(event, "[Modern Beta] " + averageTime);
+        if (!iterations.isEmpty()) addDebugText(event, "[Modern Beta] " + iterations);
     }
 }

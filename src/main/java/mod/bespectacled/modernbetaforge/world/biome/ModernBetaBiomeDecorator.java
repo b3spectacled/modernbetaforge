@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
+import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
@@ -38,7 +39,6 @@ import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
@@ -90,20 +90,20 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         
         // Ore generators
         this.oreClay = new WorldGenClay(settings.claySize);
-        this.oreDirt = new WorldGenMinable(BlockStates.DIRT, settings.dirtSize);
-        this.oreGravel = new WorldGenMinable(BlockStates.GRAVEL, settings.gravelSize);
-        this.oreCoal = new WorldGenMinable(BlockStates.COAL_ORE, settings.coalSize);
-        this.oreIron = new WorldGenMinable(BlockStates.IRON_ORE, settings.ironSize);
-        this.oreGold = new WorldGenMinable(BlockStates.GOLD_ORE, settings.goldSize);
-        this.oreRedstone = new WorldGenMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize);
-        this.oreDiamond = new WorldGenMinable(BlockStates.DIAMOND_ORE, settings.diamondSize);
-        this.oreLapis = new WorldGenMinable(BlockStates.LAPIS_ORE, settings.lapisSize);
+        this.oreDirt = new WorldGenMinableMutable(BlockStates.DIRT, settings.dirtSize);
+        this.oreGravel = new WorldGenMinableMutable(BlockStates.GRAVEL, settings.gravelSize);
+        this.oreCoal = new WorldGenMinableMutable(BlockStates.COAL_ORE, settings.coalSize);
+        this.oreIron = new WorldGenMinableMutable(BlockStates.IRON_ORE, settings.ironSize);
+        this.oreGold = new WorldGenMinableMutable(BlockStates.GOLD_ORE, settings.goldSize);
+        this.oreRedstone = new WorldGenMinableMutable(BlockStates.REDSTONE_ORE, settings.redstoneSize);
+        this.oreDiamond = new WorldGenMinableMutable(BlockStates.DIAMOND_ORE, settings.diamondSize);
+        this.oreLapis = new WorldGenMinableMutable(BlockStates.LAPIS_ORE, settings.lapisSize);
         
         // New mineable generators
-        this.oreGranite = new WorldGenMinable(BlockStates.GRANITE, settings.graniteSize);
-        this.oreDiorite = new WorldGenMinable(BlockStates.DIORITE, settings.dioriteSize);
-        this.oreAndesite = new WorldGenMinable(BlockStates.ANDESITE, settings.andesiteSize);
-        this.oreEmerald = new WorldGenMinable(BlockStates.EMERALD_ORE, settings.emeraldSize);
+        this.oreGranite = new WorldGenMinableMutable(BlockStates.GRANITE, settings.graniteSize);
+        this.oreDiorite = new WorldGenMinableMutable(BlockStates.DIORITE, settings.dioriteSize);
+        this.oreAndesite = new WorldGenMinableMutable(BlockStates.ANDESITE, settings.andesiteSize);
+        this.oreEmerald = new WorldGenMinableMutable(BlockStates.EMERALD_ORE, settings.emeraldSize);
         
         if (TerrainGen.generateOre(world, random, this.oreClay, startPos, OreGenEvent.GenerateMinable.EventType.CUSTOM)) {
             populateOreStandard(world, random, startPos, this.oreClay, mutablePos, settings.clayCount, settings.clayMinHeight, settings.clayMaxHeight);
