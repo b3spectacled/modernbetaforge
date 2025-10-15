@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class DebugUtil {
     // Significant amount of world gen time (~0.002s is dedicated just to Stronghold placement)
-    public static final String SECTION_GEN_CHUNK = "modernbeta.generateChunk";        // ~0.005s per chunk (as of 1.3.3.0)
-    public static final String SECTION_GEN_CHUNK_VANILLA = "minecraft.generateChunk"; // ~0.0026s per chunk
-    public static final String SECTION_POP_CHUNK = "modernbeta.populateChunk";
+    public static final String SECTION_GEN_CHUNK = "generateChunk";         // ~0.005s per chunk (as of 1.3.3.0)
+    public static final String SECTION_GEN_CHUNK_VANILLA = "generateChunk"; // ~0.0026s per chunk
+    public static final String SECTION_POP_CHUNK = "populate";
     
-    public static final String SECTION_GET_BASE_BIOMES = "modernbeta.getBaseBiomes";
+    public static final String SECTION_GET_BASE_BIOMES = "getBaseBiomes";
     
     public static final Map<String, Long> TOTAL_TIME = new HashMap<>();
     public static final Map<String, Long> CURRENT_TIME = new HashMap<>();
