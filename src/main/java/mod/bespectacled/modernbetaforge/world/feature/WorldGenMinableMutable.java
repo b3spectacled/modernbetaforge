@@ -50,21 +50,21 @@ public class WorldGenMinableMutable extends WorldGenMinable {
         float theta = random.nextFloat() * 3.141593f;
         float numBlocks = (float)this.numberOfBlocks;
         
-        double maxBX = (double)((float)(startX + 8) + MathHelper.sin(theta) * numBlocks / 8.0f);
-        double minBX = (double)((float)(startX + 8) - MathHelper.sin(theta) * numBlocks / 8.0f);
-        double maxBZ = (double)((float)(startZ + 8) + MathHelper.cos(theta) * numBlocks / 8.0f);
-        double minBZ = (double)((float)(startZ + 8) - MathHelper.cos(theta) * numBlocks / 8.0f);
-        double maxBY = (double)(startY + random.nextInt(3) + (useOldOre  ? 2 : -2));
-        double minBY = (double)(startY + random.nextInt(3) + (useOldOre ? 2 : -2));
+        double maxBX = (float)(startX + 8) + MathHelper.sin(theta) * numBlocks / 8.0f;
+        double minBX = (float)(startX + 8) - MathHelper.sin(theta) * numBlocks / 8.0f;
+        double maxBZ = (float)(startZ + 8) + MathHelper.cos(theta) * numBlocks / 8.0f;
+        double minBZ = (float)(startZ + 8) - MathHelper.cos(theta) * numBlocks / 8.0f;
+        double maxBY = startY + random.nextInt(3) + (useOldOre ? 2 : -2);
+        double minBY = startY + random.nextInt(3) + (useOldOre ? 2 : -2);
         
         Consumer<Integer> oreGenerator = i -> {
-            float progress = (float)i / numBlocks;
-            double bX = maxBX + (minBX - maxBX) * (double)progress;
-            double bY = maxBY + (minBY - maxBY) * (double)progress;
-            double bZ = maxBZ + (minBZ - maxBZ) * (double)progress;
+            double progress = (double)i / numBlocks;
+            double bX = maxBX + (minBX - maxBX) * progress;
+            double bY = maxBY + (minBY - maxBY) * progress;
+            double bZ = maxBZ + (minBZ - maxBZ) * progress;
             
             double f = random.nextDouble() * (double)this.numberOfBlocks / 16.0;
-            float tTheta = 3.141593f * progress;
+            float tTheta = 3.141593f * (float)progress;
             
             double tW = (double)(MathHelper.sin(tTheta) + 1.0f) * f + 1.0;
             double tH = (double)(MathHelper.sin(tTheta) + 1.0f) * f + 1.0;

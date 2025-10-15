@@ -14,7 +14,6 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenHellSpring;
-import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
