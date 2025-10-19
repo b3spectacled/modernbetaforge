@@ -5,6 +5,7 @@ import java.util.Random;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -31,8 +32,8 @@ public class Classic23aChunkSource extends FiniteChunkSource {
     
     private final int seaLevel;
 
-    public Classic23aChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public Classic23aChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.lowOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);
         this.highOctaveNoise = new PerlinOctaveNoiseCombined(this.random, 8, false);

@@ -150,7 +150,7 @@ public class ModernBetaRegistries {
     
     @FunctionalInterface
     public static interface ChunkSourceCreator {
-        ChunkSource apply(long seed, ModernBetaGeneratorSettings settings);
+        ChunkSource apply(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource);
     }
     
     @FunctionalInterface

@@ -59,15 +59,15 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     
     private static final int INITIAL_CHUNK_CAPACITY = 256;
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;
+
+    private final ModernBetaBiomeProvider biomeProvider;
+    private final BiomeInjector biomeInjector;
     
     private final World world;
     private final Random random;
     private final ChunkSource chunkSource;
     private final ModernBetaGeneratorSettings settings;
     private final ObjectPool<ChunkPrimer> primerPool;
-
-    private final ModernBetaBiomeProvider biomeProvider;
-    private final BiomeInjector biomeInjector;
     
     private final ChunkCache<ChunkPrimerContainer> initialChunkCache;
     private final ChunkCache<ComponentChunk> componentCache;
@@ -81,17 +81,17 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         ModernBetaGeneratorSettings settings = generatorOptions != null ?
             ModernBetaGeneratorSettings.build(generatorOptions) :
             ModernBetaGeneratorSettings.build();
+
+        this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
+        this.biomeProvider.setChunkGenerator(this);
         
         this.world = world;
         this.random = new Random(world.getSeed());
         this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE
             .get(settings.chunkSource)
-            .apply(world.getSeed(), settings);
+            .apply(world.getSeed(), settings, this.biomeProvider.getBiomeSource());
         this.settings = settings;
         this.primerPool = new ObjectPool<>(ChunkPrimer::new, chunkPrimer -> {});
-
-        this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
-        this.biomeProvider.setChunkGenerator(this);
         
         this.biomeInjector = new BiomeInjector(
             this.chunkSource.createBiomeInjectionRules(this.biomeProvider.getBiomeSource()).build()

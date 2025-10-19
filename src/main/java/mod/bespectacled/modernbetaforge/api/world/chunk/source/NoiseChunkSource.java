@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeightSampler;
@@ -72,9 +73,10 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * 
      * @param seed The world seed.
      * @param settings The generator settings.
+     * @param biomeSource The biome source.
      */
-    public NoiseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public NoiseChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         NoiseSettings noiseSettings = ModernBetaRegistries.NOISE_SETTING.get(settings.chunkSource);
         

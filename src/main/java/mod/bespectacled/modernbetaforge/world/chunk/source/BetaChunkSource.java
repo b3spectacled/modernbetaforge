@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
+@SuppressWarnings("unused")
 public class BetaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
@@ -19,18 +20,15 @@ public class BetaChunkSource extends NoiseChunkSource {
     
     private final ClimateSampler climateSampler;
 
-    public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-       
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(settings.biomeSource)
-            .apply(seed, settings);
+
         this.climateSampler = biomeSource instanceof ClimateSampler ?
             (ClimateSampler)biomeSource :
             this.createClimateSampler(seed, settings);

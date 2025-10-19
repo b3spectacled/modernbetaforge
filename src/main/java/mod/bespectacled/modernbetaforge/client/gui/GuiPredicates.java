@@ -173,7 +173,8 @@ public class GuiPredicates {
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
     public static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
         return clazz.isAssignableFrom(chunkSource.getClass());
     }
@@ -205,7 +206,8 @@ public class GuiPredicates {
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
         return chunkSource instanceof FiniteChunkSource;
     }
@@ -255,7 +257,8 @@ public class GuiPredicates {
     
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
         ResourceLocation registryKey = settings.chunkSource;
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings, biomeSource);
         
         if (!(chunkSource instanceof NoiseChunkSource)) {
             return false;
