@@ -2044,7 +2044,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             String namespace = registryKey.getNamespace();
             
             // Add additional entries if mod property has info
-            if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".info")) {
+            if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".gui.info")) {
                 numEntries += 2;
             }
             
@@ -2087,8 +2087,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(localizationKey) + ":");
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
                 
-                if (I18n.hasKey(localizationKey + ".info")) {
-                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(localizationKey + ".info"));
+                if (I18n.hasKey(localizationKey + ".gui.info")) {
+                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(localizationKey + ".gui.info"));
                     pageList[ndx++] = null;
                 }
                 
