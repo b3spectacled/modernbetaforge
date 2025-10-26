@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
@@ -15,7 +17,6 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
-import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -207,7 +208,6 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
         registry.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistryUtil.getFluidBlockRegistryNames().contains(key)));
         registry.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
-        registry.register(ModernBeta.createRegistryKey("screenProp"), new ScreenProperty(GuiPropertyScreenTest::new));
     }
     
     public static void registerModDataFixes() {
@@ -369,5 +369,12 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.END_OUTER_ISLAND_DISTANCE, GuiPredicates.END_OUTER_ISLAND_DISTANCE_TEST);
         registry.register(GuiPredicate.END_OUTER_ISLAND_OFFSET, GuiPredicates.END_OUTER_ISLAND_OFFSET_TEST);
         registry.register(GuiPredicate.USE_END_OUTER_ISLANDS, GuiPredicates.USE_END_OUTER_ISLANDS_TEST);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static void registerGuiProperties() {
+        ModernBetaRegistry<GuiProperty<?>> registry = ModernBetaClientRegistries.GUI_PROPERTY;
+        
+        registry.register(ModernBeta.createRegistryKey("screenProp"), new ScreenProperty(GuiPropertyScreenTest::new));
     }
 }

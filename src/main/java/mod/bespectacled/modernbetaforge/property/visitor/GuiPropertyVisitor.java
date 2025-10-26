@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.property.visitor;
 
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -7,7 +8,6 @@ import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
-import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.client.gui.GuiPageButtonList;
 

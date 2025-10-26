@@ -30,6 +30,8 @@ import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -39,7 +41,6 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
-import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -81,6 +82,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -164,6 +166,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private int customId;
     private BiMap<Integer, ResourceLocation> propertyMap;
+    private BiMap<Integer, ResourceLocation> guiPropertyMap;
     private Set<Integer> unlabeledSliders;
     
     private int tabStartX;
@@ -222,6 +225,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void createPagedList() {
         this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
         this.propertyMap = HashBiMap.create();
+        this.guiPropertyMap = HashBiMap.create();
         this.unlabeledSliders = new HashSet<>();
         
         int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
@@ -914,7 +918,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public String getText(int entry, String entryString, float entryValue) {
         // Do not append colon for custom property entries
-        if (this.propertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
+        if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
         
@@ -929,6 +933,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
+         
         } else {
             float entryValue = 0.0f;
             
@@ -1061,11 +1071,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.propertyMap.containsKey(entry)) {
             ResourceLocation registryKey = this.propertyMap.get(entry);
             
-            Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
-                ModernBetaRegistries.PROPERTY.get(registryKey) :
-                this.settings.customProperties.get(registryKey);
+            Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
+        
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG0_B_CHUNK:
@@ -1372,6 +1386,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
+        
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG4_S_MAIN_NS_X:
@@ -1955,9 +1975,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     protected void setPropertyText() {
         for (Entry<Integer, ResourceLocation> entry : this.propertyMap.entrySet()) {
             ResourceLocation registryKey = entry.getValue();
-            Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
-                ModernBetaRegistries.PROPERTY.get(registryKey) :
-                this.settings.customProperties.get(registryKey);
+            Property<?> property = this.settings.customProperties.get(registryKey);
+            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
+            
+            if (formattedName != null && !formattedName.isEmpty()) {
+                this.setTextButton(entry.getKey(), formattedName);
+            }
+        }
+        
+        for (Entry<Integer, ResourceLocation> entry : this.guiPropertyMap.entrySet()) {
+            ResourceLocation registryKey = entry.getValue();
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
             String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
             
             if (formattedName != null && !formattedName.isEmpty()) {
@@ -1969,10 +1997,31 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiPageButtonList.GuiListEntry[] createCustomPropertyPage() {
         // Get total number of page list entries,
         // and add an additional entry for float/int/string properties to accommodate label entry
-        int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size() * 2;
-        
+        List<ResourceLocation> propertyKeys = new ArrayList<>();
+        propertyKeys.addAll(ModernBetaRegistries.PROPERTY.getKeys());
+        propertyKeys.addAll(ModernBetaClientRegistries.GUI_PROPERTY.getKeys());
+        int numEntries = propertyKeys.size() * 2;
+
         // Build map based on mod ID
-        Map<String, List<ResourceLocation>> modRegistryKeys = new LinkedHashMap<>();
+        Map<String, Tuple<List<ResourceLocation>, List<ResourceLocation>>> modRegistryKeys = new LinkedHashMap<>();
+        
+        // Populate initial map
+        for (ResourceLocation registryKey : propertyKeys) {
+            String namespace = registryKey.getNamespace();
+            
+            // Add new entry list if encountering new namespace (unique mod)
+            if (!modRegistryKeys.containsKey(namespace)) {
+                modRegistryKeys.put(namespace, new Tuple<>(new LinkedList<>(), new LinkedList<>()));
+                numEntries += 2;
+                
+                // Add additional entries if namespace has info
+                if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
+                    numEntries += 2;
+                }
+            }
+        }
+        
+        // Populate setting keys
         for (ResourceLocation registryKey : ModernBetaRegistries.PROPERTY.getKeys()) {
             // Ignore entries that should be hidden
             if (!ModernBetaRegistries.PROPERTY.get(registryKey).getDisplay()) {
@@ -1982,38 +2031,39 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             String namespace = registryKey.getNamespace();
             
-            // Add new entry list if encountering new namespace (unique mod)
-            if (!modRegistryKeys.containsKey(namespace)) {
-                modRegistryKeys.put(namespace, new LinkedList<>());
+            // Add additional entries if mod property has info
+            if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".info")) {
                 numEntries += 2;
-                
-                // Add additional entries if namespace has info
-                if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
-                    numEntries += 2;
-                }
             }
+            
+            modRegistryKeys.get(namespace).getFirst().add(registryKey);
+        }
+        
+        // Populate GUI keys
+        for (ResourceLocation registryKey : ModernBetaClientRegistries.GUI_PROPERTY.getKeys()) {
+            String namespace = registryKey.getNamespace();
             
             // Add additional entries if mod property has info
             if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".info")) {
                 numEntries += 2;
             }
             
-            modRegistryKeys.get(namespace).add(registryKey);
+            modRegistryKeys.get(namespace).getSecond().add(registryKey);
         }
         
         GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
         
         int ndx = 0;
         for (String namespace : modRegistryKeys.keySet()) {
-            List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace);
+            List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace).getFirst();
+            List<ResourceLocation> guiRegistryKeys = modRegistryKeys.get(namespace).getSecond();
             
             pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_HEADER, I18n.format(PREFIX_ADDON + namespace));
             pageList[ndx++] = null;
             
+            // Create GUI elements for main settings
             for (ResourceLocation registryKey : registryKeys) {
-                Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
-                    ModernBetaRegistries.PROPERTY.get(registryKey) :
-                    this.settings.customProperties.get(registryKey);
+                Property<?> property = this.settings.customProperties.get(registryKey);
                 String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
                 int propertyId;
 
@@ -2028,6 +2078,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.propertyMap.put(propertyId, registryKey);
             }
             
+            // Create GUI elements for GUI settings
+            for (ResourceLocation registryKey : guiRegistryKeys) {
+                GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+                String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
+                int propertyId;
+
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(localizationKey) + ":");
+                pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
+                
+                if (I18n.hasKey(localizationKey + ".info")) {
+                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(localizationKey + ".info"));
+                    pageList[ndx++] = null;
+                }
+                
+                this.guiPropertyMap.put(propertyId, registryKey);
+            }
+            
+            // Add general mod info string if there is one
             if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
                 pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(PREFIX_ADDON + namespace + ".info"));
                 pageList[ndx++] = null;
@@ -2143,17 +2211,23 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.propertyMap.containsKey(entry)) {
             Property<?> property = this.settings.customProperties.get(this.propertyMap.get(entry));
             
-            if (property instanceof FloatProperty) {
-                return String.format(((FloatProperty)property).getFormatter(), entryValue);
-            
-            } else if (property instanceof IntProperty) {
-                return String.format("%d", (int)entryValue);
-                
-            } else if (property instanceof ListProperty) {
+            if (property instanceof ListProperty) {
                 ListProperty listProperty = (ListProperty)property;
-                
+
                 return listProperty.getValues()[(int)entryValue];
+            } else if (property instanceof IntProperty) {
+                IntProperty intProperty = (IntProperty)property;
+                
+                return String.format(intProperty.getFormatter(), (int)entryValue);
+            } else {
+                return String.format(property.getFormatter(), entryValue);
             }
+        }
+        
+        if (this.guiPropertyMap.containsKey(entry)) {
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(this.guiPropertyMap.get(entry));
+
+            return String.format(property.getFormatter(), entryValue);
         }
         
         switch (entry) {
@@ -2464,22 +2538,28 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 boolean enabled = entry.getValue().test(settings);
                 
                 for (int i = 0; i < guiIds.length; ++i) {
-                    this.setButtonEnabled(guiIds[i], enabled);
-                    this.setFieldEnabled(guiIds[i], enabled);
-                    this.enabledMap.put(guiIds[i], enabled);
+                    this.setGuiEnabled(guiIds[i], enabled);
                 }
                 
                 if (guiIds.length <= 0) {
                     if (this.propertyMap.containsValue(entry.getKey())) {
                         int customId = this.propertyMap.inverse().get(entry.getKey());
-                        
-                        this.setButtonEnabled(customId, enabled);
-                        this.setFieldEnabled(customId, enabled);
-                        this.enabledMap.put(customId, enabled);
+                        this.setGuiEnabled(customId, enabled);
+                    }
+                    
+                    if (this.guiPropertyMap.containsValue(entry.getKey())) {
+                        int customId = this.guiPropertyMap.inverse().get(entry.getKey());
+                        this.setGuiEnabled(customId, enabled);
                     }
                 }
             }
         }
+    }
+    
+    private void setGuiEnabled(int id, boolean enabled) {
+        this.setButtonEnabled(id, enabled);
+        this.setFieldEnabled(id, enabled);
+        this.enabledMap.put(id, enabled);
     }
     
     private void setButtonEnabled(int entry, boolean enabled) {

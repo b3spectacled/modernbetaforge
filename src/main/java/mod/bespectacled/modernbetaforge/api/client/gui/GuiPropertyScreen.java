@@ -2,14 +2,17 @@ package mod.bespectacled.modernbetaforge.api.client.gui;
 
 import java.io.IOException;
 
-import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiPropertyScreen extends GuiScreen {
     private static final String PREFIX = "createWorld.customize.custom.";
     

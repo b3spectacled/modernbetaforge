@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge;
 
 import mod.bespectacled.modernbetaforge.compat.ClientModCompat;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.event.BlockColorsEventHandler;
 import mod.bespectacled.modernbetaforge.event.DebugInfoEventHandler;
 import mod.bespectacled.modernbetaforge.event.InitGuiEventHandler;
@@ -20,6 +21,10 @@ public class ModernBetaClientProxy implements ModernBetaProxy {
         
         ModernBetaBuiltInRegistries.registerPresets();
         ModernBetaBuiltInRegistries.registerPredicates();
+
+        if (ModernBetaConfig.debugOptions.registerDebugProperties) {
+            ModernBetaBuiltInRegistries.registerGuiProperties();
+        }
 
         ClientModCompat.loadCompat();
     }

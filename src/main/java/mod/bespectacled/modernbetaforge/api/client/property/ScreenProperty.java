@@ -1,19 +1,18 @@
-package mod.bespectacled.modernbetaforge.api.property;
-
-import com.google.gson.JsonObject;
+package mod.bespectacled.modernbetaforge.api.client.property;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPropertyScreen;
-import mod.bespectacled.modernbetaforge.api.property.ScreenProperty.PropertyScreenCreator;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty.PropertyScreenCreator;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
-import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings.Factory;
 import net.minecraft.client.gui.GuiPageButtonList.GuiListEntry;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ScreenProperty extends Property<PropertyScreenCreator> {
+@SideOnly(Side.CLIENT)
+public class ScreenProperty extends GuiProperty<PropertyScreenCreator> {
     /**
      * Constructs a new ScreenProperty.
      * 
@@ -26,11 +25,6 @@ public class ScreenProperty extends Property<PropertyScreenCreator> {
     @Override
     public String getType() {
         return "screen";
-    }
-
-    @Override
-    public void visitFactory(FactoryPropertyVisitor visitor, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
-        visitor.visit(this, factory, registryKey, jsonObject);
     }
 
     @Override

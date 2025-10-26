@@ -9,7 +9,6 @@ import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
-@SuppressWarnings("unused")
 public class BetaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise beachOctaveNoise;
     private final PerlinOctaveNoise surfaceOctaveNoise;
