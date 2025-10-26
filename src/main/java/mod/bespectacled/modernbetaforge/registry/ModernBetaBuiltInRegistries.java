@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -28,6 +29,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
+import mod.bespectacled.modernbetaforge.client.gui.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
@@ -205,6 +207,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
         registry.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistryUtil.getFluidBlockRegistryNames().contains(key)));
         registry.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
+        registry.register(ModernBeta.createRegistryKey("screenProp"), new ScreenProperty(GuiPropertyScreenTest::new));
     }
     
     public static void registerModDataFixes() {

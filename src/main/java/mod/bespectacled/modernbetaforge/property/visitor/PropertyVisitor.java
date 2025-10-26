@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 
 public interface PropertyVisitor {
@@ -25,4 +26,6 @@ public interface PropertyVisitor {
     String visit(BlockProperty property);
     
     String visit(EntityEntryProperty property);
+    
+    String visit(ScreenProperty property);
 }

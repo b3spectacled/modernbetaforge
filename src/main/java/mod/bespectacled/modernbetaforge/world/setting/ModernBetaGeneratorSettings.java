@@ -28,6 +28,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
@@ -2481,6 +2482,9 @@ public class ModernBetaGeneratorSettings {
             factory.customProperties.put(registryKey, new EntityEntryProperty(resourceLocation, predicate));
         }
 
+        @Override
+        public void visit(ScreenProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) { }
+
     }
     
     private static class ReadFactoryPropertyVisitor implements FactoryPropertyVisitor {
@@ -2553,6 +2557,9 @@ public class ModernBetaGeneratorSettings {
             factory.customProperties.put(registryKey, new EntityEntryProperty(resourceLocation, predicate));
         }
 
+        @Override
+        public void visit(ScreenProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) { }
+
     }
     
     private static class WriteFactoryPropertyVisitor implements FactoryPropertyVisitor {
@@ -2595,5 +2602,9 @@ public class ModernBetaGeneratorSettings {
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             jsonObject.addProperty(registryKey.toString(), property.getValue());
         }
+
+        @Override
+        public void visit(ScreenProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) { }
+        
     }
 }

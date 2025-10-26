@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,4 +27,6 @@ public interface EntryValuePropertyVisitor {
     void visit(BlockProperty property, int guiIdentifier, ResourceLocation registryKey);
     
     void visit(EntityEntryProperty property, int guiIdentifier, ResourceLocation registryKey);
+    
+    void visit(ScreenProperty property, int guiIdentifier, ResourceLocation registryKey);
 }

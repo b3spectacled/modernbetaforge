@@ -1,6 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
-import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;

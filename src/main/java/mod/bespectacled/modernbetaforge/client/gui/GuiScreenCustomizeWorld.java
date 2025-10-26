@@ -39,6 +39,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -855,7 +856,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonRandomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
         this.buttonPreview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
         this.buttonPresets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
+        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
         this.buttonDefaults.enabled = this.settingsModified;
         
@@ -1060,7 +1061,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.propertyMap.containsKey(entry)) {
             ResourceLocation registryKey = this.propertyMap.get(entry);
             
-            Property<?> property = this.settings.customProperties.get(registryKey);
+            Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
+                ModernBetaRegistries.PROPERTY.get(registryKey) :
+                this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
         } else {
@@ -1951,7 +1954,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     protected void setPropertyText() {
         for (Entry<Integer, ResourceLocation> entry : this.propertyMap.entrySet()) {
-            Property<?> property = this.settings.customProperties.get(entry.getValue());
+            ResourceLocation registryKey = entry.getValue();
+            Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
+                ModernBetaRegistries.PROPERTY.get(registryKey) :
+                this.settings.customProperties.get(registryKey);
             String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
             
             if (formattedName != null && !formattedName.isEmpty()) {
@@ -2005,10 +2011,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageList[ndx++] = null;
             
             for (ResourceLocation registryKey : registryKeys) {
-                Property<?> property = this.settings.customProperties.get(registryKey);
+                Property<?> property = ModernBetaRegistries.PROPERTY.get(registryKey) instanceof ScreenProperty ?
+                    ModernBetaRegistries.PROPERTY.get(registryKey) :
+                    this.settings.customProperties.get(registryKey);
                 String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
                 int propertyId;
-                
+
                 pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(localizationKey) + ":");
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
                 
@@ -2752,6 +2760,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public GuiListEntry visit(EntityEntryProperty property, int guiIdentifier) {
             return createGuiButton(guiIdentifier, "enabled", true);
         }
+
+        @Override
+        public GuiListEntry visit(ScreenProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", true);
+        }
         
     }
     
@@ -2852,6 +2865,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 property.getValue(),
                 property.getFilter()::test
             );
+        }
+
+        @Override
+        public void visit(ScreenProperty property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreen screen = property.getValue().apply(GuiScreenCustomizeWorld.this, registryKey);
+            GuiScreenCustomizeWorld.this.mc.displayGuiScreen(screen);
         };
         
     }
@@ -2905,6 +2924,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
             return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
+
+        @Override
+        public String visit(ScreenProperty property) {
+            return I18n.format(PREFIX + "propertyScreen");
         }
     }
 }
