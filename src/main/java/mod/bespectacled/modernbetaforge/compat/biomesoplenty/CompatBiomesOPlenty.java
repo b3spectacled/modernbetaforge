@@ -41,13 +41,9 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     public static final String MOD_ID = "biomesoplenty";
     public static final String ADDON_ID = "compat" + MOD_ID;
     
-    public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
-    
-    public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = new ResourceLocation(ADDON_ID, "resolverCoralReef");
-    public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = new ResourceLocation(ADDON_ID, "resolverKelpForest");
-    
-    @SuppressWarnings("unchecked")
-    private List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
+    public static final ResourceLocation KEY_USE_COMPAT = createKey("useCompat");
+    public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = createKey("resolverCoralReef");
+    public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = createKey("resolverKelpForest");
     
     @Override
     public void load() {
@@ -56,82 +52,6 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);
-        
-        for (BiomeType type : BiomeType.values()) {
-            this.biomeEntries[type.ordinal()] = new ArrayList<BiomeEntry>();
-        }
-        
-        // In multiple climate zones:
-        // * grassland
-        
-        // Add DESERT
-        int ndx = BiomeType.DESERT.ordinal();
-        this.addBiomeEntry(ndx, BOPBiomes.brushland, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.chaparral, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.lush_desert, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.outback, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.steppe, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.wasteland, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.xeric_shrubland, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.oasis, 5);
-        
-        // Add WARM
-        ndx = BiomeType.WARM.ordinal();
-        this.addBiomeEntry(ndx, BOPBiomes.bamboo_forest, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.bayou, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.eucalyptus_forest, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.flower_field, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.grassland, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.lavender_fields, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.lush_swamp, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.mangrove, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.marsh, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.mystic_grove, 1);
-        this.addBiomeEntry(ndx, BOPBiomes.orchard, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.overgrown_cliffs, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.prairie, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.rainforest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.sacred_springs, 1);
-        this.addBiomeEntry(ndx, BOPBiomes.shrubland, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.temperate_rainforest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.tropical_rainforest, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.woodland, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.pasture, 5);
-        
-        // Add COOL
-        ndx = BiomeType.COOL.ordinal();
-        this.addBiomeEntry(ndx, BOPBiomes.bog, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.boreal_forest, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.cherry_blossom_grove, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.coniferous_forest, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.crag, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.dead_forest, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.dead_swamp, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.fen, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.grassland, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.grove, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.highland, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.land_of_lakes, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.maple_woods, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.meadow, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.moor, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.mountain, 3);
-        this.addBiomeEntry(ndx, BOPBiomes.ominous_woods, 1);
-        this.addBiomeEntry(ndx, BOPBiomes.quagmire, 2);
-        this.addBiomeEntry(ndx, BOPBiomes.redwood_forest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.seasonal_forest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.shield, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.tundra, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.wetland, 5);
-        
-        // Add ICY
-        ndx = BiomeType.ICY.ordinal();
-        this.addBiomeEntry(ndx, BOPBiomes.alps, 5);
-        this.addBiomeEntry(ndx, BOPBiomes.cold_desert, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.snowy_coniferous_forest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.snowy_forest, 7);
-        this.addBiomeEntry(ndx, BOPBiomes.snowy_tundra, 10);
-        this.addBiomeEntry(ndx, BOPBiomes.glacier, 5);
     }
     
     @Override
@@ -148,7 +68,91 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
 
     @Override
     public List<BiomeEntry>[] getBiomeEntries() {
-        return this.biomeEntries;
+        @SuppressWarnings("unchecked")
+        List<BiomeEntry>[] biomeEntries = new ArrayList[BiomeType.values().length];
+        
+        for (BiomeType type : BiomeType.values()) {
+            biomeEntries[type.ordinal()] = new ArrayList<BiomeEntry>();
+        }
+        
+        // In multiple climate zones:
+        // * grassland
+        
+        // Add DESERT
+        int ndx = BiomeType.DESERT.ordinal();
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.brushland, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.chaparral, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.lush_desert, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.outback, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.steppe, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.wasteland, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.xeric_shrubland, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.oasis, 5);
+        
+        // Add WARM
+        ndx = BiomeType.WARM.ordinal();
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.bamboo_forest, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.bayou, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.eucalyptus_forest, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.flower_field, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.grassland, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.lavender_fields, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.lush_swamp, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.mangrove, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.marsh, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.mystic_grove, 1);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.orchard, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.overgrown_cliffs, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.prairie, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.rainforest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.sacred_springs, 1);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.shrubland, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.temperate_rainforest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.tropical_rainforest, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.woodland, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.pasture, 5);
+        
+        // Add COOL
+        ndx = BiomeType.COOL.ordinal();
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.bog, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.boreal_forest, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.cherry_blossom_grove, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.coniferous_forest, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.crag, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.dead_forest, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.dead_swamp, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.fen, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.grassland, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.grove, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.highland, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.land_of_lakes, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.maple_woods, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.meadow, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.moor, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.mountain, 3);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.ominous_woods, 1);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.quagmire, 2);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.redwood_forest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.seasonal_forest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.shield, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.tundra, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.wetland, 5);
+        
+        // Add ICY
+        ndx = BiomeType.ICY.ordinal();
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.alps, 5);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.cold_desert, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.snowy_coniferous_forest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.snowy_forest, 7);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.snowy_tundra, 10);
+        this.addBiomeEntry(biomeEntries, ndx, BOPBiomes.glacier, 5);
+        
+        return biomeEntries;
+    }
+
+    @Override
+    public List<BiomeEntry>[] getBiomeEntries(ModernBetaGeneratorSettings settings) {
+        return this.getBiomeEntries();
     }
     
     @Override
@@ -195,9 +199,9 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         return builder.build();
     }
     
-    private void addBiomeEntry(int ndx, Optional<Biome> biome, int weight) {
+    private void addBiomeEntry(List<BiomeEntry>[] biomeEntries, int ndx, Optional<Biome> biome, int weight) {
         if (biome != null && biome.isPresent()) {
-            this.biomeEntries[ndx].add(new BiomeEntry(biome.get(), weight));
+            biomeEntries[ndx].add(new BiomeEntry(biome.get(), weight));
         }
     }
     
@@ -211,5 +215,9 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         if (block != null) {
             builder.add(block);
         }
+    }
+    
+    private static ResourceLocation createKey(String path) {
+        return new ResourceLocation(ADDON_ID, path);
     }
 }
