@@ -6,7 +6,12 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 
 public interface BiomeCompat {
+    @Deprecated
     List<BiomeEntry>[] getBiomeEntries();
+    
+    default List<BiomeEntry>[] getBiomeEntries(ModernBetaGeneratorSettings settings) {
+        return this.getBiomeEntries();
+    }
     
     boolean shouldGetBiomeEntries(ModernBetaGeneratorSettings settings);
 }

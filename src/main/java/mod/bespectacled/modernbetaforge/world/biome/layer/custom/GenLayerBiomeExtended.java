@@ -90,7 +90,7 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
                 if (biomeCompat.shouldGetBiomeEntries(settings)) {
                     for (BiomeType type : BiomeType.values()) {
                         int ndx = type.ordinal();
-                        biomes[ndx].addAll(biomeCompat.getBiomeEntries()[ndx]);
+                        biomes[ndx].addAll(biomeCompat.getBiomeEntries(settings)[ndx]);
                     }
                     
                 }
