@@ -10,9 +10,6 @@ public class GuiPropertyScreenTest extends GuiPropertyScreen {
     public GuiPropertyScreenTest(GuiScreenCustomizeWorld parent, ResourceLocation registryKey) {
         super(parent, registryKey);
     }
-
-    @Override
-    public void finalizeSettings() { }
     
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -21,5 +18,8 @@ public class GuiPropertyScreenTest extends GuiPropertyScreen {
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, this.screenTitleHeight, this.screenTitleColor);
     }
+
+    @Override
+    protected void finalizeSettings() { }
 
 }
