@@ -23,6 +23,7 @@ public abstract class GuiPropertyScreen extends GuiScreen {
     protected static final String GUI_LABEL_CANCEL = I18n.format("gui.cancel");
     
     protected final GuiScreenCustomizeWorld parent;
+    protected final ResourceLocation registryKey;
     protected final ModernBetaGeneratorSettings.Factory settings;
     protected final String title;
     
@@ -39,6 +40,7 @@ public abstract class GuiPropertyScreen extends GuiScreen {
      */
     public GuiPropertyScreen(GuiScreenCustomizeWorld parent, ResourceLocation registryKey) {
         this.parent = parent;
+        this.registryKey = registryKey;
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.title = I18n.format(PREFIX + registryKey.getNamespace() + "." + registryKey.getPath());
         
