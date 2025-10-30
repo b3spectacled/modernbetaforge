@@ -20,7 +20,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
-import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
+import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -445,7 +445,7 @@ public class DataFixers {
             biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())
         ) {
             ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(jsonObject.toString());
-            hasVanillaBiome = new ClimateMap(factory.build()).containsNonModernBetaBiomes();
+            hasVanillaBiome = new BetaClimateMap(factory.build()).containsNonModernBetaBiomes();
             
         } else if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
             String singleBiomeStr = JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, DEFAULTS.singleBiome.toString());

@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.biome.climate;
 
-public enum ClimateType {
+public enum BetaClimateType {
     BASE,
     OCEAN,
     BEACH
