@@ -45,6 +45,12 @@ public abstract class GuiPropertyScreen extends GuiScreen {
         this.screenTitleHeight = 14;
         this.screenTitleColor = 16777215;
     }
+    
+    /**
+     * Save any and all information modified in this screen to the {@link ModernBetaGeneratorSettings.Factory generator settings} at once.
+     * This is called when the user selects the Confirm button.
+     */
+    public abstract void finalizeSettings();
 
     @Override
     public void initGui() {
@@ -58,6 +64,7 @@ public abstract class GuiPropertyScreen extends GuiScreen {
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
             case GUI_ID_CONFIRM:
+                this.finalizeSettings();
                 this.parent.loadValues(this.settings.toString());
                 this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
                 this.mc.displayGuiScreen(this.parent);
