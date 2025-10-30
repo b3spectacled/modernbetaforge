@@ -376,16 +376,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         @Override
         protected void elementClicked(int selected, boolean doubleClicked, int mouseX, int mouseY) {
             this.selected = selected;
-            
             this.parent.updateButtonValidity();
-            this.parent.consumer.accept(
-                this.parent.entries.get(this.parent.list.selected).registryName,
-                this.parent.settings
-            );
             
             if (doubleClicked) {
                 SoundUtil.playClickSound(this.mc.getSoundHandler());
-                
+
+                this.parent.consumer.accept(this.parent.entries.get(this.parent.list.selected).registryName, this.parent.settings);
                 this.parent.parent.loadValues(this.parent.settings.toString());
                 this.parent.parent.setSettingsModified(!this.parent.settings.equals(this.parent.parent.getDefaultSettings()));
                 this.parent.mc.displayGuiScreen(this.parent.parent);

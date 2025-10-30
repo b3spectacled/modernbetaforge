@@ -55,14 +55,6 @@ public abstract class GuiPropertyScreen extends GuiScreen {
     }
     
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, this.screenTitleHeight, this.screenTitleColor);
-    }
-    
-    @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
             case GUI_ID_CONFIRM:

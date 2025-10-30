@@ -10,5 +10,13 @@ public class GuiPropertyScreenTest extends GuiPropertyScreen {
     public GuiPropertyScreenTest(GuiScreenCustomizeWorld parent, ResourceLocation registryKey) {
         super(parent, registryKey);
     }
+    
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, this.screenTitleHeight, this.screenTitleColor);
+    }
 
 }
