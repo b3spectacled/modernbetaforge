@@ -213,7 +213,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.nameFormatter,
                 this.slotHeight,
                 this.displayIcons,
-                this.initialEntry,
+                this.entries.get(this.list.selected).registryName,
                 this.fieldSearch.getText(),
                 true,
                 this.langName,
