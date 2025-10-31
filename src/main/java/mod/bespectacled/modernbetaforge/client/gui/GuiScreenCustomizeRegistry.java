@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 import org.lwjgl.input.Keyboard;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -44,6 +43,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private final int slotHeight;
     private final boolean displayIcons;
     private final String initialEntry;
+    private final String originalEntry;
     private final boolean startSearchFocused;
     
     private final String langName;
@@ -75,7 +75,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys, 0);
+        this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, initialEntry, "", false, langName, registryKeys, 0);
     }
     
     public GuiScreenCustomizeRegistry(
@@ -85,6 +85,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         int slotHeight,
         boolean displayIcons,
         String initialEntry,
+        String originalEntry,
         String searchEntry,
         boolean startSearchFocused,
         String langName,
@@ -102,6 +103,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.slotHeight = slotHeight;
         this.displayIcons = displayIcons;
         this.initialEntry = initialEntry;
+        this.originalEntry = originalEntry;
         this.searchEntry = searchEntry;
         this.startSearchFocused = startSearchFocused;
         
@@ -132,10 +134,13 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         int slotSelected = this.list.selected;
         int slotsDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / slotHeight;
 
-        if (this.initialOpen && slotSelected > slotsDisplayed - 1) {
-            this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
+        if (this.initialOpen) {
+            if (slotSelected > slotsDisplayed - 1) {
+                this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
+            }
             this.amountScrolled = this.list.getAmountScrolled();
             this.initialOpen = false;
+            
         } else {
             this.list.scrollBy(this.amountScrolled);
         }
@@ -203,7 +208,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
         int selected = this.list.selected;
-        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : "";
+        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : this.originalEntry;
         
         if (!this.fieldSearch.textboxKeyTyped(character, keyCode)) {
             super.keyTyped(character, keyCode);
@@ -217,6 +222,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.nameFormatter,
                 this.slotHeight,
                 this.displayIcons,
+                initialEntry,
                 initialEntry,
                 this.fieldSearch.getText(),
                 true,
@@ -233,7 +239,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         int selected = this.list.selected;
-        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : "";
+        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : this.originalEntry;
         
         switch (guiButton.id) {
             case GUI_ID_SELECT:
@@ -253,6 +259,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.slotHeight,
                     this.displayIcons,
                     initialEntry,
+                    initialEntry,
                     this.fieldSearch.getText(),
                     this.fieldSearch.isFocused() && !this.fieldSearch.getText().isEmpty(),
                     this.langName,
@@ -267,6 +274,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.nameFormatter,
                     this.slotHeight,
                     this.displayIcons,
+                    initialEntry,
                     initialEntry,
                     "",
                     false,
