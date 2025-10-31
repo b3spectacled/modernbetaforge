@@ -63,18 +63,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     @SuppressWarnings("unused") private long hoveredTime;
     private int prevMouseX;
     private int prevMouseY;
-    
-    public GuiScreenCustomizeRegistry(
-        GuiScreenCustomizeWorld parent,
-        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
-        Function<ResourceLocation, String> nameFormatter,
-        int slotHeight,
-        String initialEntry,
-        String langName,
-        List<ResourceLocation> registryKeys
-    ) {
-        this(parent, consumer, nameFormatter, slotHeight, false, initialEntry, "", false, langName, registryKeys);
-    }
+    private int amountScrolled;
+    private boolean initialOpen;
     
     public GuiScreenCustomizeRegistry(
         GuiScreenCustomizeWorld parent,
@@ -84,7 +74,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         String langName,
         List<ResourceLocation> registryKeys
     ) {
-        this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys);
+        this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, "", false, langName, registryKeys, 0);
     }
     
     public GuiScreenCustomizeRegistry(
@@ -97,7 +87,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         String searchEntry,
         boolean startSearchFocused,
         String langName,
-        List<ResourceLocation> registryKeys
+        List<ResourceLocation> registryKeys,
+        int amountScrolled
     ) {
         this.title = String.format(
             "%s %s",
@@ -117,6 +108,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.registryKeys = registryKeys;
         this.entries = this.loadEntries();
         this.hoveredElement = -1;
+        this.amountScrolled = amountScrolled;
+        this.initialOpen = true;
     }
     
     @Override
@@ -138,8 +131,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         int slotSelected = this.list.selected;
         int slotsDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / slotHeight;
 
-        if (slotSelected > slotsDisplayed - 1) {
+        if (this.initialOpen && slotSelected > slotsDisplayed - 1) {
             this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
+            this.amountScrolled = this.list.getAmountScrolled();
+            this.initialOpen = false;
+        } else {
+            this.list.scrollBy(this.amountScrolled);
         }
         
         this.fieldSearch = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
@@ -154,6 +151,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         this.list.handleMouseInput();
+        this.amountScrolled = this.list.getAmountScrolled();
     }
     
     @Override
@@ -219,7 +217,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.fieldSearch.getText(),
                 true,
                 this.langName,
-                this.registryKeys
+                this.registryKeys,
+                0
             ));
         }
         
@@ -246,11 +245,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.nameFormatter,
                     this.slotHeight,
                     this.displayIcons,
-                    this.initialEntry,
+                    this.entries.get(this.list.selected).registryName,
                     this.fieldSearch.getText(),
                     this.fieldSearch.isFocused() && !this.fieldSearch.getText().isEmpty(),
                     this.langName,
-                    this.registryKeys
+                    this.registryKeys,
+                    0
                 ));
                 break;
             case GUI_ID_RESET:
@@ -260,11 +260,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.nameFormatter,
                     this.slotHeight,
                     this.displayIcons,
-                    this.initialEntry,
+                    this.entries.get(this.list.selected).registryName,
                     "",
                     false,
                     this.langName,
-                    this.registryKeys
+                    this.registryKeys,
+                    0
                 ));
                 break;
         }

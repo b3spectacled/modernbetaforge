@@ -163,12 +163,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @SuppressWarnings("unused") private long hoveredTime;
     private ModalState modalState;
     private long confirmExitTime;
+    private int amountScrolled;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
-        this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1);
+        this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1, 0);
     }
     
-    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType, int initialPreset) {
+    public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent, FilterType filterType, int initialPreset, int amountScrolled) {
         this.title = I18n.format(PREFIX + "title");
         this.parent = parent;
         this.filterType = filterType;
@@ -179,6 +180,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         this.hoveredElement = -1;
         this.modalState = ModalState.NONE;
+        this.amountScrolled = amountScrolled;
     }
     
     @Override
@@ -213,14 +215,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
-        
-        int slotHeight = SLOT_HEIGHT + SLOT_PADDING;
-        int slotSelected = this.list.selected;
-        int slotsDisplayed = (this.list.height - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM) / slotHeight;
-
-        if (slotSelected > slotsDisplayed - 1) {
-            this.list.scrollBy(slotHeight * (slotSelected - slotsDisplayed) + slotHeight * slotsDisplayed);
-        }
+        this.list.scrollBy(this.amountScrolled);
         
         String initialExportText = this.getInitialExportText();
         String initialModalNameText = this.fieldModalName != null ? this.fieldModalName.getText() : "";
@@ -249,6 +244,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         if (this.canInteract() && this.modalState == ModalState.NONE) {
             this.list.handleMouseInput();
+            this.amountScrolled = this.list.getAmountScrolled();
         }
         
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
@@ -416,7 +412,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 if (index < 0) index = values.length - 1;
                 FilterType filterType = values[index % values.length];
                 
-                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType, -1));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, filterType, -1, 0));
                 break;
             case GUI_ID_SELECT:
                 this.parent.loadValues(this.fieldExport.getText());
@@ -451,23 +447,23 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                         } else {
                             this.dataHandler.addPreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
                             this.dataHandler.writePresets();
-                            this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size()));
+                            this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size(), this.amountScrolled));
                         }
                         break;
                     case DELETE:
                         this.dataHandler.removePreset(selectedPreset.name);
                         this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1));
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1, this.amountScrolled));
                         break;
                     case EDIT:
                         this.dataHandler.replacePreset(this.selectedIcon, selectedPreset.name, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
                         this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected));
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected, this.amountScrolled));
                         break;
                     case OVERWRITE:
                         int ndx = this.dataHandler.replacePreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
                         this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx));
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx, this.amountScrolled));
                         break;
                     default:
                 }
