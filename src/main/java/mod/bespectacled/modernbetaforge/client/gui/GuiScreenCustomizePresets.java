@@ -356,65 +356,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         super.updateScreen();
     }
     
-    public void updateButtonValidity() {
-        boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
-        
-        this.buttonSave.enabled = false;
-        this.buttonEdit.enabled = false;
-        this.buttonDelete.enabled = false;
-        this.buttonSelect.enabled = false;
-        this.buttonFilter.enabled = false;
-        this.buttonCancel.enabled = false;
-        this.buttonModalConfirm.visible = false;
-        this.buttonModalCancel.visible = false;
-        this.buttonModalPrev.visible = false;
-        this.buttonModalNext.visible = false;
-        this.buttonModalConfirm.enabled = false;
-        this.buttonModalCancel.enabled = false;
-        this.buttonModalPrev.enabled = false;
-        this.buttonModalNext.enabled = false;
-        this.fieldModalName.setVisible(false);
-        this.fieldModalDesc.setVisible(false);
-        this.fieldModalSettings.setVisible(false);
-        
-        switch (this.modalState) {
-            case NONE:
-                this.buttonSave.enabled = true;
-                this.buttonEdit.enabled = editable;
-                this.buttonDelete.enabled = editable;
-                this.buttonSelect.enabled = this.hasValidSelection();
-                this.buttonFilter.enabled = true;
-                this.buttonCancel.enabled = true;
-                break;
-            case OVERWRITE:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalConfirm.enabled =  true;
-                this.buttonModalCancel.enabled = true;
-                break;
-            case SAVE:
-            case EDIT:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalPrev.visible = true;
-                this.buttonModalNext.visible = true;
-                this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
-                this.buttonModalCancel.enabled = true;
-                this.buttonModalPrev.enabled = this.selectedIcon > 0;
-                this.buttonModalNext.enabled = this.selectedIcon < ICON_TEXTURES.length - 1;
-                this.fieldModalName.setVisible(true);
-                this.fieldModalDesc.setVisible(true);
-                this.fieldModalSettings.setVisible(true);
-                break;
-            case DELETE:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalConfirm.enabled =  true;
-                this.buttonModalCancel.enabled = true;
-                break;
-        }
-    }
-    
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
         super.mouseClicked(mouseX, mouseY, clicked);
@@ -746,6 +687,65 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalName.x = fieldModalX;
         this.fieldModalDesc.x = fieldModalX;
         this.fieldModalSettings.x = fieldModalX;
+    }
+
+    private void updateButtonValidity() {
+        boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
+        
+        this.buttonSave.enabled = false;
+        this.buttonEdit.enabled = false;
+        this.buttonDelete.enabled = false;
+        this.buttonSelect.enabled = false;
+        this.buttonFilter.enabled = false;
+        this.buttonCancel.enabled = false;
+        this.buttonModalConfirm.visible = false;
+        this.buttonModalCancel.visible = false;
+        this.buttonModalPrev.visible = false;
+        this.buttonModalNext.visible = false;
+        this.buttonModalConfirm.enabled = false;
+        this.buttonModalCancel.enabled = false;
+        this.buttonModalPrev.enabled = false;
+        this.buttonModalNext.enabled = false;
+        this.fieldModalName.setVisible(false);
+        this.fieldModalDesc.setVisible(false);
+        this.fieldModalSettings.setVisible(false);
+        
+        switch (this.modalState) {
+            case NONE:
+                this.buttonSave.enabled = true;
+                this.buttonEdit.enabled = editable;
+                this.buttonDelete.enabled = editable;
+                this.buttonSelect.enabled = this.hasValidSelection();
+                this.buttonFilter.enabled = true;
+                this.buttonCancel.enabled = true;
+                break;
+            case OVERWRITE:
+                this.buttonModalConfirm.visible = true;
+                this.buttonModalCancel.visible = true;
+                this.buttonModalConfirm.enabled =  true;
+                this.buttonModalCancel.enabled = true;
+                break;
+            case SAVE:
+            case EDIT:
+                this.buttonModalConfirm.visible = true;
+                this.buttonModalCancel.visible = true;
+                this.buttonModalPrev.visible = true;
+                this.buttonModalNext.visible = true;
+                this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
+                this.buttonModalCancel.enabled = true;
+                this.buttonModalPrev.enabled = this.selectedIcon > 0;
+                this.buttonModalNext.enabled = this.selectedIcon < ICON_TEXTURES.length - 1;
+                this.fieldModalName.setVisible(true);
+                this.fieldModalDesc.setVisible(true);
+                this.fieldModalSettings.setVisible(true);
+                break;
+            case DELETE:
+                this.buttonModalConfirm.visible = true;
+                this.buttonModalCancel.visible = true;
+                this.buttonModalConfirm.enabled =  true;
+                this.buttonModalCancel.enabled = true;
+                break;
+        }
     }
 
     private boolean hasValidSelection() {
