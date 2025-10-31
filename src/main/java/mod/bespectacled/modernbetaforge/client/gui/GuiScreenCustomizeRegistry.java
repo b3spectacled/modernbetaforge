@@ -43,7 +43,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private final int slotHeight;
     private final boolean displayIcons;
     private final String initialEntry;
-    private final String searchEntry;
     private final boolean startSearchFocused;
     
     private final String langName;
@@ -59,6 +58,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private GuiButton buttonSearch;
     private GuiButton buttonReset;
     private String searchText;
+    private String searchEntry;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
     private int prevMouseX;
@@ -191,7 +191,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public void updateButtonValidity() {
         this.buttonSelect.enabled = this.hasValidSelection();
         this.buttonSearch.enabled = !this.fieldSearch.getText().isEmpty();
-        this.buttonReset.enabled = this.buttonSearch.enabled;
+        this.buttonReset.enabled = true;
     }
     
     @Override
@@ -207,7 +207,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             super.keyTyped(character, keyCode);
         }
         
-        if (this.fieldSearch.isFocused() && keyCode == 28 || keyCode == 156) {
+        if (this.fieldSearch.isFocused() && (keyCode == 28 || keyCode == 156) && !this.fieldSearch.getText().isEmpty()) {
             SoundUtil.playClickSound(this.mc.getSoundHandler());
             this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(
                 this.parent,
@@ -223,6 +223,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             ));
         }
         
+        this.searchEntry = this.fieldSearch.getText();
         this.updateButtonValidity();
     }
 
