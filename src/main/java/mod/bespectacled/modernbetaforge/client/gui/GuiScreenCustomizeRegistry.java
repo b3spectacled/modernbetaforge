@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.lwjgl.input.Keyboard;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -201,6 +202,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
 
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
+        int selected = this.list.selected;
+        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : "";
+        
         if (!this.fieldSearch.textboxKeyTyped(character, keyCode)) {
             super.keyTyped(character, keyCode);
         }
@@ -213,7 +217,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 this.nameFormatter,
                 this.slotHeight,
                 this.displayIcons,
-                this.entries.get(this.list.selected).registryName,
+                initialEntry,
                 this.fieldSearch.getText(),
                 true,
                 this.langName,
@@ -228,6 +232,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
+        int selected = this.list.selected;
+        String initialEntry = selected > -1 ? this.entries.get(this.list.selected).registryName : "";
+        
         switch (guiButton.id) {
             case GUI_ID_SELECT:
                 this.consumer.accept(this.entries.get(this.list.selected).registryName, this.settings);
@@ -245,7 +252,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.nameFormatter,
                     this.slotHeight,
                     this.displayIcons,
-                    this.entries.get(this.list.selected).registryName,
+                    initialEntry,
                     this.fieldSearch.getText(),
                     this.fieldSearch.isFocused() && !this.fieldSearch.getText().isEmpty(),
                     this.langName,
@@ -260,7 +267,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     this.nameFormatter,
                     this.slotHeight,
                     this.displayIcons,
-                    this.entries.get(this.list.selected).registryName,
+                    initialEntry,
                     "",
                     false,
                     this.langName,
