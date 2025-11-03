@@ -508,6 +508,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void createTerrainMap() {
+        long time = System.currentTimeMillis();
         BufferedImage previousMap = this.mapTexture.mapImage;
         boolean sameBiomeBlend = this.selectedPreviewSettings != null &&
             this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
@@ -517,7 +518,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
-        long time = System.currentTimeMillis();
         this.unloadMapTexture(this.prevMapTexture);
         
         this.prevMapTexture = new MapTexture(this, this.mapTexture.mapIdentifier, this.mapTexture.mapImage, this.mapTexture.mapTexture, 1.0f);
@@ -931,6 +931,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
         
         public void drawMapTexture(int textureX, int textureY, int viewportSize) {
+            this.drawMapTexture(textureX, textureY, viewportSize, viewportSize);
+        }
+        
+        public void drawMapTexture(int textureX, int textureY, int viewportSizeX, int viewportSizeY) {
             if (this.mapTexture != null) {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
                 this.parent.mc.getTextureManager().bindTexture(this.mapIdentifier);
@@ -940,10 +944,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     textureY,
                     0.0f,
                     0.0f,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize
+                    viewportSizeX,
+                    viewportSizeY,
+                    viewportSizeX,
+                    viewportSizeY
                 );
                 GlStateManager.disableBlend();
             }
