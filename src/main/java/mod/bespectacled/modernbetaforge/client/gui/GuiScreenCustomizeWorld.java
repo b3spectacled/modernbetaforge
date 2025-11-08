@@ -848,13 +848,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.buttonList.clear();
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+    
+        int modalHeight = 50;
         
         int buttonY = this.height - 27;
-        int defaultsX = this.width / 2 - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
-        int randomizeX = this.width / 2 - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
-        int previewX = this.width / 2 - BUTTON_WIDTH / 2;
-        int presetsX = this.width / 2 + BUTTON_WIDTH / 2 + 3;
-        int doneX = this.width / 2 + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
+        int defaultsX = centerX - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
+        int randomizeX = centerX - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
+        int previewX = centerX - BUTTON_WIDTH / 2;
+        int presetsX = centerX + BUTTON_WIDTH / 2 + 3;
+        int doneX = centerX + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
 
         this.buttonDefaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
         this.buttonRandomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
@@ -864,10 +869,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.buttonDefaults.enabled = this.settingsModified;
         
-        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, this.width / 2 - 55, 160, 50, 20, I18n.format("gui.yes"));
+        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm"));
         this.buttonConfirm.visible = false;
         
-        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, this.width / 2 + 5, 160, 50, 20, I18n.format("gui.no"));
+        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "cancel"));
         this.buttonCancel.visible = false;
 
         this.buttonList.add(this.buttonConfirm);
@@ -1773,10 +1778,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.confirmMode != 0) {
             Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
             
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 99, -2039584);
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 185, -6250336);
-            this.drawVerticalLine(this.width / 2 - 91, 99, 185, -2039584);
-            this.drawVerticalLine(this.width / 2 + 90, 99, 185, -6250336);
+            int centerX = this.width / 2;
+            int centerY = this.height / 2;
+            
+            int modalWidth = 100;
+            int modalHeight = 50;
+            
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
+            this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
+            this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
             
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
@@ -1788,16 +1799,19 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(this.width / 2 - 90, 185.0, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 185.0, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 100.0, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 - 90, 100.0, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
             
             tessellator.draw();
+
+            int modalTitleY = centerY - modalHeight + 10;
+            int modalTextY = centerY - 14;
             
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, 105, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, modalTitleY, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, modalTextY, 10526880);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, modalTextY + this.fontRenderer.FONT_HEIGHT + 4, 10526880);
             
             this.buttonConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
             this.buttonCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);

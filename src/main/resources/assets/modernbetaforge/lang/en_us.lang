@@ -83,6 +83,7 @@ createWorld.customize.custom.modernbetaforge.randomize=Randomize
 createWorld.customize.custom.modernbetaforge.preview=Preview
 createWorld.customize.custom.modernbetaforge.presets=Presets
 createWorld.customize.custom.modernbetaforge.confirm=Confirm
+createWorld.customize.custom.modernbetaforge.cancel=Cancel
 
 # Page Confirm
 createWorld.customize.custom.modernbetaforge.confirmTitle=Warning!
