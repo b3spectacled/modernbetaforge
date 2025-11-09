@@ -1818,6 +1818,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        
+        Gui guiComponent = this.pageList.getFocusedControl();
+        if (guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
+            ((GuiTextField)guiComponent).updateCursorCounter();
+        }
+    }
+    
     public ModernBetaGeneratorSettings.Factory getDefaultSettings() {
         return ModernBetaGeneratorSettings.Factory.jsonToFactory(this.defaultSettings.toString());
     }

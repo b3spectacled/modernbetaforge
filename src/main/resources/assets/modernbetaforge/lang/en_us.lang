@@ -244,7 +244,7 @@ createWorld.customize.custom.modernbetaforge.oceanBiome=Ocean Biome
 createWorld.customize.custom.modernbetaforge.beachBiome=Beach Biome
 
 ## Page 8 - Addons
-createWorld.customize.custom.modernbetaforge.propertyScreen=Open Settings
+createWorld.customize.custom.modernbetaforge.propertyScreen=Open
 
 createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
