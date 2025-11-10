@@ -687,6 +687,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
     private void updateButtonValidity() {
         boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
+        boolean exportFocused = this.fieldExport.isFocused();
         
         this.buttonSave.enabled = false;
         this.buttonEdit.enabled = false;
@@ -705,6 +706,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldModalName.setVisible(false);
         this.fieldModalDesc.setVisible(false);
         this.fieldModalSettings.setVisible(false);
+        this.fieldExport.setEnabled(false);
+        this.fieldExport.setFocused(false);
         
         switch (this.modalState) {
             case NONE:
@@ -714,6 +717,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.buttonSelect.enabled = this.hasValidSelection();
                 this.buttonFilter.enabled = true;
                 this.buttonCancel.enabled = true;
+                this.fieldExport.setEnabled(true);
+                this.fieldExport.setFocused(exportFocused);
+                this.fieldModalName.setFocused(false);
+                this.fieldModalDesc.setFocused(false);
+                this.fieldModalSettings.setFocused(false);
                 break;
             case OVERWRITE:
                 this.buttonModalConfirm.visible = true;
