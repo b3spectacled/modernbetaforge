@@ -249,6 +249,12 @@ public class GuiPredicates {
             isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.PE);
     }
     
+    private static boolean isClimateSampler(ModernBetaGeneratorSettings settings) {
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        
+        return biomeSource instanceof ClimateSampler;
+    }
+    
     private static boolean isClimateSamplerAndUsesFeatures(ModernBetaGeneratorSettings settings) {
         BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
         
@@ -696,8 +702,8 @@ public class GuiPredicates {
             GuiIdentifiers.PG6_TAIG_BEACH,
             GuiIdentifiers.PG6_TUND_BEACH
         );
+        USE_CLIMATE_FEATURES_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_B_CLIMATE_FEAT);
         SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSamplerAndUsesFeatures(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
-        USE_CLIMATE_FEATURES_TEST = new GuiPredicate(settings -> isClimateSamplerAndUsesFeatures(settings), GuiIdentifiers.PG6_B_CLIMATE_FEAT);
         
         DEV_BIOME_PROP_TEST = new GuiPredicate(settings -> {
             ResourceLocation registryKey = ModernBeta.createRegistryKey("booleanProp");
