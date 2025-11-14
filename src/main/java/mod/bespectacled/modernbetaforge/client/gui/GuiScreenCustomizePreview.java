@@ -139,7 +139,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private PreviewSettings selectedPreviewSettings;
     private boolean showStructures;
     private float progress;
-    private float prevProgress;
+    private double progressLen;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
     private boolean copiedSeedField;
@@ -247,14 +247,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int boxB = this.height / 2 - PROGRESS_TEXT_OFFSET + 18;
         
         int progressHeight = this.height / 2 - PROGRESS_TEXT_OFFSET;
-        int progressBarLength = boxR - boxL - 20;
+        int progressBarLen = boxR - boxL - 20;
         int progressBarL = boxL + 10;
-        int progressBarR = progressBarL + progressBarLength;
+        int progressBarR = progressBarL + progressBarLen;
 
-        this.prevProgress = MathUtil.lerp(partialTicks, this.prevProgress, this.progress);
-        int progressLength = (int)(progressBarLength * this.prevProgress);
-        progressLength = MathHelper.clamp(progressLength, 0, progressBarLength);
-
+        double progressLen = progressBarLen * this.progress;
+        progressLen = MathHelper.clampedLerp(this.progressLen, progressLen, partialTicks * 0.25);
+        progressLen = MathHelper.clamp(progressLen, 0.0, progressBarLen);
+        this.progressLen = progressLen;
+        
         drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, ARGB_PREVIEW_BOX);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, ARGB_BORDER_LIGHT);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, ARGB_BORDER_DARK);
@@ -300,7 +301,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.drawCenteredString(this.fontRenderer, levelProgressText + "..", this.width / 2, progressHeight, RGB_WHITE);
                     }
                 } else {
-                    drawRect(progressBarL, progressHeight + 9, progressBarL + progressLength, progressHeight - 2, ARGB_PROGRESS_BAR);
+                    DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, ARGB_PROGRESS_BAR);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, ARGB_BORDER_LIGHT);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, ARGB_BORDER_DARK);
                     this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, ARGB_BORDER_LIGHT);
@@ -513,7 +514,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         boolean sameBiomeBlend = this.selectedPreviewSettings != null &&
             this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
         
-        this.prevProgress = 0.0f;
+        this.progressLen = 0.0;
         this.progress = 0.0f;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);

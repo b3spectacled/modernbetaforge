@@ -24,6 +24,10 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -542,5 +546,38 @@ public class DrawUtil {
         }
         
         return destination;
+    }
+    
+    public static void drawRect(double left, double top, double right, double bottom, int color) {
+        if (left < right) {
+            double prev = left;
+            left = right;
+            right = prev;
+        }
+
+        if (top < bottom) {
+            double prev = top;
+            top = bottom;
+            bottom = prev;
+        }
+
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(r, g, b, a);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(left, bottom, 0.0).endVertex();
+        bufferbuilder.pos(right, bottom, 0.0).endVertex();
+        bufferbuilder.pos(right, top, 0.0).endVertex();
+        bufferbuilder.pos(left, top, 0.0).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 }
