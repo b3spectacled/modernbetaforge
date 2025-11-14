@@ -461,3 +461,8 @@ createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
 createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop
 createWorld.customize.custom.modernbetaforge.screenprop=Screen Prop
+
+## Keybinds
+key.modernbetaforge.categories.ui=Modern Beta GUI
+key.modernbetaforge.leftNav=World Customization Left Nav
+key.modernbetaforge.rightNav=World Customization Right Nav
