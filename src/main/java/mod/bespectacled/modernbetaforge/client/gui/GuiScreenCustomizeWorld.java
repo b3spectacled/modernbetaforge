@@ -2230,12 +2230,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private String getFormattedValue(int entry, float entryValue) {
         if (this.propertyMap.containsKey(entry)) {
-            Property<?> property = this.settings.customProperties.get(this.propertyMap.get(entry));
+            ResourceLocation registryKey = this.propertyMap.get(entry);
+            Property<?> property = this.settings.customProperties.get(registryKey);
             
             if (property instanceof ListProperty) {
                 ListProperty listProperty = (ListProperty)property;
+                String entryText = String.format("createWorld.customize.custom.%s.%s.", registryKey.getNamespace(), registryKey.getPath());
 
-                return listProperty.getValues()[(int)entryValue];
+                return I18n.format(entryText + listProperty.getValues()[(int)entryValue]);
             } else if (property instanceof IntProperty) {
                 IntProperty intProperty = (IntProperty)property;
                 
