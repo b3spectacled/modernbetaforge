@@ -266,6 +266,7 @@ public class DrawUtil {
         TerrainType terrainType = TerrainType.GRASS;
         TerrainType defaultBlock = getTerrainTypeByStone(chunkSource);
         TerrainType defaultFluid = getTerrainTypeByFluid(chunkSource);
+        Set<Type> types = BiomeDictionary.getTypes(biome);
         
         if (chunkSource instanceof FiniteChunkSource) {
             FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
@@ -280,10 +281,13 @@ public class DrawUtil {
                 Block block = finiteChunkSource.getLevelBlock(x, height, z);
                 Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
                 
-                if (block == Blocks.SAND) {
-                    terrainType = TerrainType.SAND;
-                } else if (block == Blocks.GRAVEL || block == Blocks.STONE) {
-                    terrainType = TerrainType.STONE;
+                if (block == Blocks.SAND && types.contains(Type.NETHER)) {
+                    block = Blocks.SOUL_SAND;
+                }
+                
+                TerrainType terrainTypeBlock = getTerrainTypeByBlock(block);
+                if (terrainTypeBlock != TerrainType.VOID) {
+                    terrainType = terrainTypeBlock;
                 }
                 
                 if (blockAbove == chunkSource.getDefaultFluid().getBlock()) {
@@ -296,7 +300,6 @@ public class DrawUtil {
             
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
-            Set<Type> types = BiomeDictionary.getTypes(biome);
             
             boolean isPrimaryBeach = noiseSurfaceBuilder.isPrimaryBeach(x, z, random);
             boolean isSecondaryBeach = noiseSurfaceBuilder.isSecondaryBeach(x, z, random);
