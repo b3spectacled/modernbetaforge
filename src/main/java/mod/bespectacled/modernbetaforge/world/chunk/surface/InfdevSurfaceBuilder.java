@@ -12,14 +12,14 @@ public class InfdevSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean isBeach(int x, int z, Random random) {
+    public boolean isPrimaryBeach(int x, int z, Random random) {
         double noise = this.getBeachOctaveNoise().sample(x * 0.03125, z * 0.03125, 0.0);
         
         return noise + this.getSurfaceVariation(random) * 0.2 > 0.0;
     }
     
     @Override
-    public boolean isGravelBeach(int x, int z, Random random) {
+    public boolean isSecondaryBeach(int x, int z, Random random) {
         double noise = this.getBeachOctaveNoise().sample(z * 0.03125, 109.0134, x * 0.03125);
         
         return noise + this.getSurfaceVariation(random) * 0.2 > 3.0;

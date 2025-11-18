@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.surface;
 
 import java.util.Random;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
@@ -60,14 +61,14 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
             int x = startX + localX;
             int z = startZ + localZ;
             
-            boolean isBeach = this.isBeach(x, z, random);
-            boolean isGravelBeach = this.isGravelBeach(x, z, random);
+            boolean isPrimaryBeach = this.isPrimaryBeach(x, z, random);
+            boolean isSecondaryBeach = this.isSecondaryBeach(x, z, random);
             
             int surfaceDepth = this.sampleSurfaceDepth(x, z, random);
             int runDepth = -1;
             
             Biome biome = biomes[localX + localZ * 16];
-            boolean isNether = this.isNether(biome);
+            Set<Type> types = BiomeDictionary.getTypes(biome);
 
             IBlockState topBlock = biome.topBlock;
             IBlockState fillerBlock = biome.fillerBlock;
@@ -103,16 +104,14 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                         topBlock = biome.topBlock;
                         fillerBlock = biome.fillerBlock;
 
-                        if (isGravelBeach) {
-                            topBlock = this.getGravelBeachTopBlock(biome, isNether);
-                            fillerBlock = this.getGravelBeachFillerBlock(biome, isNether);
+                        if (isSecondaryBeach) {
+                            topBlock = this.getSecondaryBeachTopBlock(types);
+                            fillerBlock = this.getSecondaryBeachFillerBlock(types);
                         }
 
-                        if (isBeach) {
-                            IBlockState beachBlock = this.getBeachBlock(biome, isNether);
-                            
-                            topBlock = beachBlock;
-                            fillerBlock = beachBlock;
+                        if (isPrimaryBeach) {
+                            topBlock = this.getPrimaryBeachTopBlock(types);
+                            fillerBlock = this.getSecondaryBeachFillerBlock(types);
                         }
                     }
 
@@ -166,24 +165,24 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
     }
 
     /**
-     * Determines whether beaches should generate at the given coordinates.
+     * Determines whether primary beaches should generate at the given coordinates.
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param random The random used to vary surface transition. Can be null if transitions aren't implemented.
-     * @return Whether beaches should generate at the given coordinates.
+     * @return Whether primary beaches should generate at the given coordinates.
      */
-    public abstract boolean isBeach(int x, int z, @Nullable Random random);
+    public abstract boolean isPrimaryBeach(int x, int z, @Nullable Random random);
 
     /**
-     * Determines whether gravel beaches should generate at the given coordinates.
+     * Determines whether secondary beaches should generate at the given coordinates.
      * 
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param random The random used to vary surface transition. Can be null if transitions aren't implemented.
-     * @return Whether gravel beaches should generate at the given coordinates.
+     * @return Whether secondary beaches should generate at the given coordinates.
      */
-    public abstract boolean isGravelBeach(int x, int z, @Nullable Random random);
+    public abstract boolean isSecondaryBeach(int x, int z, @Nullable Random random);
     
     /**
      * Samples the surface depth at the given coordinates.
@@ -214,6 +213,62 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
     }
     
     /**
+     * Gets the top blockstate for primary beach generation.
+     * 
+     * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
+     * @return The blockstate for primary beach generation.
+     */
+    public IBlockState getPrimaryBeachTopBlock(Set<Type> types) {
+        if (types.contains(Type.NETHER)) {
+            return Blocks.SOUL_SAND.getDefaultState();
+        }
+        
+        return BlockStates.SAND;
+    }
+
+    /**
+     * Gets the filler blockstate for primary beach generation.
+     * 
+     * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
+     * @return The blockstate for primary beach generation.
+     */
+    public IBlockState getPrimaryBeachFillerBlock(Set<Type> types) {
+        if (types.contains(Type.NETHER)) {
+            return Blocks.SOUL_SAND.getDefaultState();
+        }
+        
+        return BlockStates.SAND;
+    }
+
+    /**
+     * Gets the top blockstate for secondary beach generation.
+     * 
+     * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
+     * @return The top block for secondary beach generation.
+     */
+    public IBlockState getSecondaryBeachTopBlock(Set<Type> types) {
+        if (types.contains(Type.NETHER)) {
+            return BlockStates.GRAVEL;
+        }
+        
+        return BlockStates.AIR;
+    }
+
+    /**
+     * Gets the filler blockstate for secondary beach generation.
+     * 
+     * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
+     * @return The filler blockstate for secondary beach generation.
+     */
+    public IBlockState getSecondaryBeachFillerBlock(Set<Type> types) {
+        if (types.contains(Type.NETHER)) {
+            return this.defaultBlock;
+        }
+        
+        return BlockStates.GRAVEL;
+    }
+
+    /**
      * Gets the PerlinOctaveNoise sampler used for beach generation.
      * Will try to use the sampler from {@link ChunkSource#getBeachOctaveNoise() getBeachOctaveNoise} if possible, otherwise a default sampler.
      * 
@@ -241,60 +296,5 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      */
     protected double getSurfaceVariation(@Nullable Random random) {
         return random != null ? random.nextDouble() : 0.0;
-    }
-    
-    /**
-     * Gets the top blockstate for gravel beach generation.
-     * 
-     * @param biome The biome to check for selecting the blockstate.
-     * @param isNether Whether the biome is a Nether biome.
-     * @return The top block for gravel beach generation.
-     */
-    private IBlockState getGravelBeachTopBlock(Biome biome, boolean isNether) {
-        if (isNether) {
-            return BlockStates.GRAVEL;
-        }
-        
-        return BlockStates.AIR;
-    }
-    
-    /**
-     * Gets the filler blockstate for gravel beach generation.
-     * 
-     * @param biome The biome to check for selecting the blockstate.
-     * @param isNether Whether the biome is a Nether biome.
-     * @return The filler blockstate for gravel beach generation.
-     */
-    private IBlockState getGravelBeachFillerBlock(Biome biome, boolean isNether) {
-        if (isNether) {
-            return this.defaultBlock;
-        }
-        
-        return BlockStates.GRAVEL;
-    }
-
-    /**
-     * Gets the blockstate for beach generation.
-     * 
-     * @param biome The biome to check for selecting the blockstate.
-     * @param isNether Whether the biome is a Nether biome.
-     * @return The blockstate for beach generation.
-     */
-    private IBlockState getBeachBlock(Biome biome, boolean isNether) {
-        if (isNether) {
-            return Blocks.SOUL_SAND.getDefaultState();
-        }
-        
-        return BlockStates.SAND;
-    }
-    
-    /*
-     * Gets whether the biome should be treated as the Nether for purpose of beach generation.
-     * 
-     * @param biome The biome to check.
-     * @return Whether to treat the current region as the Nether.
-     */
-    private boolean isNether(Biome biome) {
-        return BiomeDictionary.hasType(biome, Type.NETHER);
     }
 }
