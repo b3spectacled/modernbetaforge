@@ -276,11 +276,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 }
                 
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
-                this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - MAP_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - MAP_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
-                
+                this.drawCardinalDirections(viewportSize);
                 this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                 
                 break;
@@ -288,6 +284,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             case STARTED:
                 if (this.prevMapTexture.mapTexture != null) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                    this.drawCardinalDirections(viewportSize);
                     this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                     drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
                 }
@@ -572,6 +569,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         };
         
         this.executor.queueRunnable(runnable);
+    }
+    
+    private void drawCardinalDirections(int viewportSize) {
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
