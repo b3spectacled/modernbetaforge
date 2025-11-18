@@ -111,7 +111,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
 
                         if (isPrimaryBeach) {
                             topBlock = this.getPrimaryBeachTopBlock(types);
-                            fillerBlock = this.getSecondaryBeachFillerBlock(types);
+                            fillerBlock = this.getPrimaryBeachFillerBlock(types);
                         }
                     }
 
@@ -216,7 +216,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * Gets the top blockstate for primary beach generation.
      * 
      * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
-     * @return The blockstate for primary beach generation.
+     * @return The top blockstate for primary beach generation.
      */
     public IBlockState getPrimaryBeachTopBlock(Set<Type> types) {
         if (types.contains(Type.NETHER)) {
@@ -230,7 +230,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
      * Gets the filler blockstate for primary beach generation.
      * 
      * @param types The set of {@link BiomeDictionary.Type biome types} that the biome may belong to.
-     * @return The blockstate for primary beach generation.
+     * @return The filler blockstate for primary beach generation.
      */
     public IBlockState getPrimaryBeachFillerBlock(Set<Type> types) {
         if (types.contains(Type.NETHER)) {
