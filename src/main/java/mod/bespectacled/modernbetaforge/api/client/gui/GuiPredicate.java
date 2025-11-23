@@ -7,7 +7,10 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiPredicate {
     public static final ResourceLocation SURFACE_BUILDER = createRegistryKey(NbtTags.SURFACE_BUILDER);
     public static final ResourceLocation SPAWN_LOCATOR = createRegistryKey(NbtTags.WORLD_SPAWNER);

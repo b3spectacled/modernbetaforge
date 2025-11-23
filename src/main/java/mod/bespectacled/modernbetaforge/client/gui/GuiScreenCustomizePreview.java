@@ -80,7 +80,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         .build();
     private static final int STRUCTURE_ICON_SIZE = 10;
     
-    private static final int TEXTURE_Y_OFFSET = 20;
+    private static final int MAP_PADDING = 32;
+    private static final int MAP_Y_OFFSET = 20;
     private static final int HINT_TEXT_OFFSET = 30;
     private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
@@ -130,7 +131,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiListButton buttonStructures;
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
-    private ListPreset list;
+    private EmptyListPreset list;
     @SuppressWarnings("unused")
     private ProgressState prevState;
     private ProgressState state;
@@ -138,7 +139,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private PreviewSettings selectedPreviewSettings;
     private boolean showStructures;
     private float progress;
-    private float prevProgress;
+    private double progressLen;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
     private boolean copiedSeedField;
@@ -196,12 +197,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
         this.buttonStructures.setValue(this.showStructures);
         
-        this.list = new ListPreset(this);
+        this.list = new EmptyListPreset(this);
 
-        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int viewportSize = this.getViewportSize();
         int textureX = this.width / 2 - viewportSize / 2;
-        int textureY = this.height / 2 - viewportSize / 2;
-        textureY -= TEXTURE_Y_OFFSET;
+        int textureY = this.height / 2 - viewportSize / 2 - MAP_Y_OFFSET;
         
         this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
@@ -222,11 +222,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
-    }
-    
-    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
@@ -242,10 +237,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.copiedTpCommand = false;
         }
 
-        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int viewportSize = this.getViewportSize();
         int textureX = this.width / 2 - viewportSize / 2;
-        int textureY = this.height / 2 - viewportSize / 2;
-        textureY -= TEXTURE_Y_OFFSET;
+        int textureY = this.height / 2 - viewportSize / 2 - MAP_Y_OFFSET;
 
         int boxL = this.width / 2 - 56;
         int boxR = this.width / 2 + 56;
@@ -253,13 +247,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int boxB = this.height / 2 - PROGRESS_TEXT_OFFSET + 18;
         
         int progressHeight = this.height / 2 - PROGRESS_TEXT_OFFSET;
-        int progressBarLength = boxR - boxL - 20;
+        int progressBarLen = boxR - boxL - 20;
         int progressBarL = boxL + 10;
-        int progressBarR = progressBarL + progressBarLength;
+        int progressBarR = progressBarL + progressBarLen;
 
-        this.prevProgress = MathUtil.lerp(partialTicks, this.prevProgress, this.progress);
-        int progressLength = (int)(progressBarLength * this.prevProgress);
-
+        double progressLen = progressBarLen * this.progress;
+        progressLen = MathHelper.clampedLerp(this.progressLen, progressLen, partialTicks * 0.25);
+        progressLen = MathHelper.clamp(progressLen, 0.0, progressBarLen);
+        this.progressLen = progressLen;
+        
         drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, ARGB_PREVIEW_BOX);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, ARGB_BORDER_LIGHT);
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, ARGB_BORDER_DARK);
@@ -280,6 +276,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 }
                 
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                this.drawCardinalDirections(viewportSize);
                 this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                 
                 break;
@@ -287,6 +284,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             case STARTED:
                 if (this.prevMapTexture.mapTexture != null) {
                     this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+                    this.drawCardinalDirections(viewportSize);
                     this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
                     drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
                 }
@@ -300,7 +298,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.drawCenteredString(this.fontRenderer, levelProgressText + "..", this.width / 2, progressHeight, RGB_WHITE);
                     }
                 } else {
-                    drawRect(progressBarL, progressHeight + 9, progressBarL + progressLength, progressHeight - 2, ARGB_PROGRESS_BAR);
+                    DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, ARGB_PROGRESS_BAR);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, ARGB_BORDER_LIGHT);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, ARGB_BORDER_DARK);
                     this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, ARGB_BORDER_LIGHT);
@@ -498,22 +496,26 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
+    private int getViewportSize() {
+        return Math.min(this.list.height, this.list.width) - EmptyListPreset.LIST_PADDING_TOP - EmptyListPreset.LIST_PADDING_BOTTOM - MAP_PADDING;
+    }
+    
     private void updateState(ProgressState state) {
         this.prevState = this.state;
         this.state = state;
     }
     
     private void createTerrainMap() {
+        long time = System.currentTimeMillis();
         BufferedImage previousMap = this.mapTexture.mapImage;
         boolean sameBiomeBlend = this.selectedPreviewSettings != null &&
             this.previewSettings.useBiomeBlend == this.selectedPreviewSettings.useBiomeBlend;
         
-        this.prevProgress = 0.0f;
+        this.progressLen = 0.0;
         this.progress = 0.0f;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);
         this.updateButtonsEnabled(this.state);
-        long time = System.currentTimeMillis();
         this.unloadMapTexture(this.prevMapTexture);
         
         this.prevMapTexture = new MapTexture(this, this.mapTexture.mapIdentifier, this.mapTexture.mapImage, this.mapTexture.mapTexture, 1.0f);
@@ -567,6 +569,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         };
         
         this.executor.queueRunnable(runnable);
+    }
+    
+    private void drawCardinalDirections(int viewportSize) {
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
@@ -688,8 +697,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
-        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(seed, settings);
         this.biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(seed, settings);
+        this.chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(seed, settings, this.biomeSource);
         this.surfaceBuilder = ModernBetaRegistries.SURFACE_BUILDER.get(settings.surfaceBuilder).apply(this.chunkSource, settings);
         this.injectionRules = this.chunkSource.createBiomeInjectionRules(this.biomeSource).build();
         
@@ -724,9 +733,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private int getSeedFieldY() {
-        int viewportSize = Math.min(this.list.height, this.list.width) - ListPreset.LIST_PADDING_TOP - ListPreset.LIST_PADDING_BOTTOM - 32;
+        int viewportSize = this.getViewportSize();
         int fieldY = this.height / 2 + viewportSize / 2;
-        fieldY -= TEXTURE_Y_OFFSET / 2;
+        fieldY -= MAP_Y_OFFSET / 2;
         
         return fieldY;
     }
@@ -828,19 +837,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
 
     @SideOnly(Side.CLIENT)
-    private static class ListPreset extends GuiSlot {
+    public static class EmptyListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 32;
         private static final int LIST_PADDING_BOTTOM = 54;
         
-        public ListPreset(GuiScreenCustomizePreview parent) {
-            super(
-                parent.mc,
-                parent.width,
-                parent.height,
-                LIST_PADDING_TOP,
-                parent.height - LIST_PADDING_BOTTOM,
-                1
-            );
+        public EmptyListPreset(GuiScreen parent, int paddingTop, int paddingBottom) {
+            super(parent.mc, parent.width, parent.height, paddingTop, parent.height - paddingBottom, 1);
+        }
+        
+        public EmptyListPreset(GuiScreen parent) {
+            this(parent, LIST_PADDING_TOP, LIST_PADDING_BOTTOM);
         }
 
         @Override
@@ -865,23 +871,39 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     @SideOnly(Side.CLIENT)
-    private static class MapTexture {
-        private final GuiScreenCustomizePreview parent;
+    public static class MapTexture {
+        private final GuiScreen parent;
         private final ResourceLocation mapIdentifier;
         private BufferedImage mapImage;
         private DynamicTexture mapTexture;
         private float mapAlpha;
         
-        public MapTexture(GuiScreenCustomizePreview parent, ResourceLocation mapIdentifier) {
+        public MapTexture(GuiScreen parent, ResourceLocation mapIdentifier) {
             this(parent, mapIdentifier, null, null, 0.0f);
         }
         
-        public MapTexture(GuiScreenCustomizePreview parent, ResourceLocation mapIdentifier, BufferedImage mapImage, DynamicTexture mapTexture, float mapAlpha) {
+        public MapTexture(GuiScreen parent, ResourceLocation mapIdentifier, BufferedImage mapImage, DynamicTexture mapTexture, float mapAlpha) {
             this.parent = parent;
             this.mapIdentifier = mapIdentifier;
             this.mapImage = mapImage;
             this.mapTexture = mapTexture;
             this.mapAlpha = mapAlpha;
+        }
+        
+        public ResourceLocation getMapIdentifier() {
+            return this.mapIdentifier;
+        }
+        
+        public BufferedImage getMapImage() {
+            return this.mapImage;
+        }
+        
+        public DynamicTexture getMapTexture() {
+            return this.mapTexture;
+        }
+        
+        public float getMapAlpha() {
+            return this.mapAlpha;
         }
         
         public void loadMapImage(BufferedImage mapImage) {
@@ -914,9 +936,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
         
         public void drawMapTexture(int textureX, int textureY, int viewportSize) {
-            int width = this.parent.width;
-            int height = this.parent.height;
-            
+            this.drawMapTexture(textureX, textureY, viewportSize, viewportSize);
+        }
+        
+        public void drawMapTexture(int textureX, int textureY, int viewportSizeX, int viewportSizeY) {
             if (this.mapTexture != null) {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, this.mapAlpha);
                 this.parent.mc.getTextureManager().bindTexture(this.mapIdentifier);
@@ -926,17 +949,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     textureY,
                     0.0f,
                     0.0f,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize,
-                    viewportSize
+                    viewportSizeX,
+                    viewportSizeY,
+                    viewportSizeX,
+                    viewportSizeY
                 );
                 GlStateManager.disableBlend();
-                
-                this.parent.drawCenteredString(this.parent.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - TEXTURE_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - TEXTURE_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_YELLOW);
-                this.parent.drawCenteredString(this.parent.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - TEXTURE_Y_OFFSET, RGB_YELLOW);
             }
         }
         

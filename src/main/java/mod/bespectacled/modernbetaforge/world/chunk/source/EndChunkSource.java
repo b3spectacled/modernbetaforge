@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.chunk.source;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -12,8 +13,8 @@ public class EndChunkSource extends SkylandsChunkSource {
     private final PerlinOctaveNoise scaleOctaveNoise;
     private final NoiseGeneratorSimplex islandNoise;
     
-    public EndChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public EndChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         Random random = new Random(seed);
         new PerlinOctaveNoise(random, 16, true);

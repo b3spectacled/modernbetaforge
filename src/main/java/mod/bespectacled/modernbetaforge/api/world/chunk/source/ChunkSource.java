@@ -38,6 +38,7 @@ public abstract class ChunkSource {
     
     protected final long seed;
     protected final ModernBetaGeneratorSettings settings;
+    protected final BiomeSource biomeSource;
     protected final Random random;
     
     protected final IBlockState defaultBlock;
@@ -57,10 +58,12 @@ public abstract class ChunkSource {
      * 
      * @param seed The world seed.
      * @param settings The generator settings.
+     * @param biomeSource The biome source.
      */
-    public ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
+    public ChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
         this.seed = seed;
         this.settings = settings;
+        this.biomeSource = biomeSource;
         this.random = this.createRandom(seed);
         
         this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(settings.defaultBlock).get().getDefaultState();

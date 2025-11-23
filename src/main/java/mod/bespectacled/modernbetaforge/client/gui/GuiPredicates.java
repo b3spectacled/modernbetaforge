@@ -173,7 +173,8 @@ public class GuiPredicates {
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
     public static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
         return clazz.isAssignableFrom(chunkSource.getClass());
     }
@@ -205,7 +206,8 @@ public class GuiPredicates {
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
         return chunkSource instanceof FiniteChunkSource;
     }
@@ -253,9 +255,22 @@ public class GuiPredicates {
         return biomeSource instanceof ClimateSampler;
     }
     
+    private static boolean isClimateSamplerAndUsesFeatures(ModernBetaGeneratorSettings settings) {
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        
+        if (biomeSource instanceof ClimateSampler) {
+            ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+            
+            return climateSampler.sampleForFeatureGeneration();
+        }
+        
+        return false;
+    }
+    
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
         ResourceLocation registryKey = settings.chunkSource;
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings, biomeSource);
         
         if (!(chunkSource instanceof NoiseChunkSource)) {
             return false;
@@ -687,8 +702,8 @@ public class GuiPredicates {
             GuiIdentifiers.PG6_TAIG_BEACH,
             GuiIdentifiers.PG6_TUND_BEACH
         );
-        SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
         USE_CLIMATE_FEATURES_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_B_CLIMATE_FEAT);
+        SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSamplerAndUsesFeatures(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
         
         DEV_BIOME_PROP_TEST = new GuiPredicate(settings -> {
             ResourceLocation registryKey = ModernBeta.createRegistryKey("booleanProp");

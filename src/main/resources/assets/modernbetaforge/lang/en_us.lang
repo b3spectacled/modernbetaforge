@@ -15,8 +15,8 @@ createWorld.customize.presets.modernbetaforge.filter.builtin=Built-in
 createWorld.customize.presets.modernbetaforge.filter.addon=Add-on
 createWorld.customize.presets.modernbetaforge.filter.custom=Custom
 createWorld.customize.presets.modernbetaforge.save=Save Preset
-createWorld.customize.presets.modernbetaforge.edit=Edit
-createWorld.customize.presets.modernbetaforge.delete=Delete
+createWorld.customize.presets.modernbetaforge.edit=Edit Preset
+createWorld.customize.presets.modernbetaforge.delete=Delete Preset
 createWorld.customize.presets.modernbetaforge.confirm=Confirm
 createWorld.customize.presets.modernbetaforge.save.title=Save Preset
 createWorld.customize.presets.modernbetaforge.edit.title=Edit Preset
@@ -82,6 +82,8 @@ createWorld.customize.custom.modernbetaforge.defaults=Defaults
 createWorld.customize.custom.modernbetaforge.randomize=Randomize
 createWorld.customize.custom.modernbetaforge.preview=Preview
 createWorld.customize.custom.modernbetaforge.presets=Presets
+createWorld.customize.custom.modernbetaforge.confirm=Confirm
+createWorld.customize.custom.modernbetaforge.cancel=Cancel
 
 # Page Confirm
 createWorld.customize.custom.modernbetaforge.confirmTitle=Warning!
@@ -242,6 +244,8 @@ createWorld.customize.custom.modernbetaforge.oceanBiome=Ocean Biome
 createWorld.customize.custom.modernbetaforge.beachBiome=Beach Biome
 
 ## Page 8 - Addons
+createWorld.customize.custom.modernbetaforge.propertyScreen=Open
+
 createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat.info=Note: Release biome source only.
@@ -452,7 +456,16 @@ createWorld.customize.custom.modernbetaforge.floatprop3=Float Prop 3
 createWorld.customize.custom.modernbetaforge.floatprop4=Float Prop 4
 createWorld.customize.custom.modernbetaforge.stringprop=String Prop
 createWorld.customize.custom.modernbetaforge.listprop=List Prop
+createWorld.customize.custom.modernbetaforge.listprop.test0=Test 0
+createWorld.customize.custom.modernbetaforge.listprop.test1=Test 1
+createWorld.customize.custom.modernbetaforge.listprop.test2=Test 2
 createWorld.customize.custom.modernbetaforge.biomeprop=Biome Prop
 createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
 createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop
+createWorld.customize.custom.modernbetaforge.screenprop=Screen Prop
+
+## Keybinds
+key.modernbetaforge.categories.ui=Modern Beta GUI
+key.modernbetaforge.leftNav=World Customization Left Nav
+key.modernbetaforge.rightNav=World Customization Right Nav

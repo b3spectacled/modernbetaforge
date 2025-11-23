@@ -5,6 +5,7 @@ import java.util.Random;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -41,8 +42,8 @@ public class IndevChunkSource extends FiniteChunkSource {
     private int waterLevel;
     private int groundLevel;
     
-    public IndevChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public IndevChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.levelTheme = IndevTheme.fromId(settings.levelTheme);
         this.levelType = IndevType.fromId(settings.levelType);

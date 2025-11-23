@@ -22,12 +22,10 @@
       "accessor.AccessorMapGenBase"
     ],
     "client": [
-      "client.MixinGuiPageButtonList",
       "client.MixinEntityRenderer",
       "client.MixinGuiCreateWorld",
       "client.MixinWorld",
-      "client.accessor.AccessorEntityRenderer",
-      "client.accessor.AccessorGuiSlot"
+      "client.accessor.AccessorEntityRenderer"
     ],
     "server": []
 }

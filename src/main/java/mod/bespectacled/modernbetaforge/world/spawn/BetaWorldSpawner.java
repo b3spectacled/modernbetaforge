@@ -67,7 +67,7 @@ public class BetaWorldSpawner implements WorldSpawner {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             boolean atBeachDepth = noiseSurfaceBuilder.atBeachDepth(y + 1) && this.aboveSeaLevel(y, seaLevel);
             
-            return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.isBeach(x, z, random) && !noiseSurfaceBuilder.isGravelBeach(x, z, random);
+            return isSandyBiome || atBeachDepth && noiseSurfaceBuilder.isPrimaryBeach(x, z, random) && !noiseSurfaceBuilder.isSecondaryBeach(x, z, random);
         }
         
         return isSandyBiome;

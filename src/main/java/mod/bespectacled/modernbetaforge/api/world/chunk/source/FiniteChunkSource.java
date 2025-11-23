@@ -67,7 +67,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelHeight;
     protected final float levelCaveWidth;
     protected final int[] levelHeightmap;
-    protected final BiomeSource biomeSource;
     private final IndevHouse levelHouse;
     
     protected boolean haltGeneration;
@@ -84,18 +83,16 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      * @param seed The world seed.
      * @param settings The generator settings.
+     * @param biomeSource The biome source.
      */
-    public FiniteChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public FiniteChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.levelWidth = settings.levelWidth >> 4 << 4;
         this.levelLength = settings.levelLength >> 4 << 4;
         this.levelHeight = settings.levelHeight;
         this.levelCaveWidth = settings.levelCaveWidth;
         this.levelHeightmap = new int[this.levelWidth * this.levelLength];
-        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(settings.biomeSource)
-            .apply(seed, settings);
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
     }

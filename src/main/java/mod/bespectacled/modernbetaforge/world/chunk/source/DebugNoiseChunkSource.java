@@ -1,11 +1,12 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class DebugNoiseChunkSource extends BetaChunkSource {
-    public DebugNoiseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public DebugNoiseChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
     }
     
     @Override

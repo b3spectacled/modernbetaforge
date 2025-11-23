@@ -40,12 +40,12 @@ public class SkylandsSurfaceBuilder extends NoiseSurfaceBuilder {
     }
 
     @Override
-    public boolean isBeach(int x, int z, Random random) {
+    public boolean isPrimaryBeach(int x, int z, Random random) {
         return false;
     }
 
     @Override
-    public boolean isGravelBeach(int x, int z, Random random) {
+    public boolean isSecondaryBeach(int x, int z, Random random) {
         return false;
     }
     

@@ -12,13 +12,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class ClimateMap {
+public class BetaClimateMap {
     private final Map<String, ClimateMapping> climateMap;
     private final ClimateMapping[] climateTable;
     private final boolean containsNonBetaBiomes;
     private final boolean containsNonModernBetaBiomes;
     
-    public ClimateMap(ModernBetaGeneratorSettings settings) {
+    public BetaClimateMap(ModernBetaGeneratorSettings settings) {
         this.climateMap = new LinkedHashMap<>();
         this.climateTable = new ClimateMapping[4096];
         
@@ -211,7 +211,7 @@ public class ClimateMap {
                 this.beachBiome instanceof ModernBetaBiome;
         }
         
-        public Biome biomeByClimateType(ClimateType type) {
+        public Biome biomeByClimateType(BetaClimateType type) {
             switch(type) {
                 case BASE: return this.baseBiome;
                 case OCEAN: return this.oceanBiome;

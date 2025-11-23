@@ -19,8 +19,8 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     
     private final SurfaceBuilder surfaceBuilder;
     
-    public SkylandsChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public SkylandsChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);

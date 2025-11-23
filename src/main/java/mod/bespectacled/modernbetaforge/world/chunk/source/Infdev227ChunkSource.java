@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
@@ -32,8 +33,8 @@ public class Infdev227ChunkSource extends ChunkSource {
     private final ChunkCache<int[]> heightmapCache;
     private final SurfaceBuilder surfaceBuilder;
 
-    public Infdev227ChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public Infdev227ChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.heightNoise0 = new PerlinOctaveNoise(this.random, 16, true);
         this.heightNoise1 = new PerlinOctaveNoise(this.random, 16, true);

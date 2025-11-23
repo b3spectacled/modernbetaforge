@@ -3,10 +3,13 @@ package mod.bespectacled.modernbetaforge.util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.lwjgl.util.vector.Vector4f;
+
+import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
@@ -24,6 +27,10 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -36,30 +43,31 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DrawUtil {
     private enum TerrainType {
-        GRASS(COLOR_GRASS, true),
-        SAND(COLOR_SAND, true),
-        SNOW(COLOR_SNOW, true),
-        STONE(COLOR_STONE, true),
-        TERRACOTTA(COLOR_TERRACOTTA, true),
-        MYCELIUM(COLOR_MYCELIUM, true),
-        NETHER(COLOR_NETHER, true),
-        SOUL_SAND(COLOR_SOUL_SAND, true),
-        WATER(COLOR_WATER),
-        FIRE(COLOR_FIRE),
-        ICE(COLOR_ICE),
-        VOID(COLOR_VOID),
-        MARKER(COLOR_CENTER);
+        GRASS(COLOR_GRASS, ImmutableSet.of(Blocks.GRASS, Blocks.TALLGRASS, Blocks.DIRT), true),
+        SAND(COLOR_SAND, ImmutableSet.of(Blocks.SAND, Blocks.SANDSTONE), true),
+        STONE(COLOR_STONE, ImmutableSet.of(Blocks.STONE, Blocks.COBBLESTONE, Blocks.GRAVEL), true),
+        SNOW(COLOR_SNOW, ImmutableSet.of(Blocks.SNOW, Blocks.SNOW_LAYER), true),
+        TERRACOTTA(COLOR_TERRACOTTA, ImmutableSet.of(Blocks.RED_SANDSTONE), true),
+        MYCELIUM(COLOR_MYCELIUM, ImmutableSet.of(Blocks.MYCELIUM), true),
+        NETHER(COLOR_NETHER, ImmutableSet.of(Blocks.NETHER_BRICK, Blocks.NETHERRACK), true),
+        SOUL_SAND(COLOR_SOUL_SAND, ImmutableSet.of(Blocks.SOUL_SAND), true),
+        WATER(COLOR_WATER, ImmutableSet.of(Blocks.WATER, Blocks.FLOWING_WATER)),
+        FIRE(COLOR_FIRE, ImmutableSet.of(Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.FIRE)),
+        ICE(COLOR_ICE, ImmutableSet.of(Blocks.ICE, Blocks.FROSTED_ICE, Blocks.PACKED_ICE)),
+        VOID(COLOR_VOID, ImmutableSet.of());
         
         private final int color;
         private final boolean snowy; 
+        private final Set<Block> blocks;
         
-        private TerrainType(int color) {
-            this(color, false);
+        private TerrainType(int color, Set<Block> blocks) {
+            this(color, blocks, false);
         }
         
-        private TerrainType(int color, boolean snowy) {
+        private TerrainType(int color, Set<Block> blocks, boolean snowy) {
             this.color = color;
             this.snowy = snowy;
+            this.blocks = blocks;
         }
     }
     
@@ -75,7 +83,6 @@ public class DrawUtil {
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_NETHER = MathUtil.convertARGBComponentsToInt(255, 112, 2, 0);
     private static final int COLOR_SOUL_SAND = MathUtil.convertARGBComponentsToInt(255, 102, 76, 51);
-    private static final int COLOR_CENTER = MathUtil.convertARGBComponentsToInt(255, 255, 0, 0);
     
     public static BufferedImage createTerrainMap(
         ChunkSource chunkSource,
@@ -237,7 +244,7 @@ public class DrawUtil {
         if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
-            if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isBeach(x, z, null)) {
+            if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isPrimaryBeach(x, z, null)) {
                 state = BlockStates.SAND;
             }
         }
@@ -259,7 +266,7 @@ public class DrawUtil {
         TerrainType terrainType = TerrainType.GRASS;
         TerrainType defaultBlock = getTerrainTypeByStone(chunkSource);
         TerrainType defaultFluid = getTerrainTypeByFluid(chunkSource);
-        boolean isNether = BiomeDictionary.hasType(biome, Type.NETHER);
+        Set<Type> types = BiomeDictionary.getTypes(biome);
         
         if (chunkSource instanceof FiniteChunkSource) {
             FiniteChunkSource finiteChunkSource = (FiniteChunkSource)chunkSource;
@@ -274,10 +281,13 @@ public class DrawUtil {
                 Block block = finiteChunkSource.getLevelBlock(x, height, z);
                 Block blockAbove = finiteChunkSource.getLevelBlock(x, height + 1, z);
                 
-                if (block == Blocks.SAND) {
-                    terrainType = TerrainType.SAND;
-                } else if (block == Blocks.GRAVEL || block == Blocks.STONE) {
-                    terrainType = TerrainType.STONE;
+                if (block == Blocks.SAND && types.contains(Type.NETHER)) {
+                    block = Blocks.SOUL_SAND;
+                }
+                
+                TerrainType terrainTypeBlock = getTerrainTypeByBlock(block);
+                if (terrainTypeBlock != TerrainType.VOID) {
+                    terrainType = terrainTypeBlock;
                 }
                 
                 if (blockAbove == chunkSource.getDefaultFluid().getBlock()) {
@@ -291,28 +301,40 @@ public class DrawUtil {
         } else if (surfaceBuilder instanceof NoiseSurfaceBuilder && !surfaceBuilder.isCustomSurface(biome)) {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
-            boolean isBeach = noiseSurfaceBuilder.isBeach(x, z, random);
-            boolean isGravelBeach = noiseSurfaceBuilder.isGravelBeach(x, z, random);
+            boolean isPrimaryBeach = noiseSurfaceBuilder.isPrimaryBeach(x, z, random);
+            boolean isSecondaryBeach = noiseSurfaceBuilder.isSecondaryBeach(x, z, random);
             int surfaceDepth = noiseSurfaceBuilder.sampleSurfaceDepth(x, z, random);
             
             if (noiseSurfaceBuilder.isBasin(surfaceDepth)) {
                 terrainType = defaultBlock;
+                height--;
                 
             } else if (noiseSurfaceBuilder.atBeachDepth(height)) {
-                if (isGravelBeach) {
-                    terrainType = TerrainType.STONE;
-                    
-                    if (!isNether) {
-                        height--;
-                    }
+                Block topBlock = null;
+                Block fillerBlock = null;
+                
+                if (isSecondaryBeach) {
+                    topBlock = noiseSurfaceBuilder.getSecondaryBeachTopBlock(types).getBlock();
+                    fillerBlock = noiseSurfaceBuilder.getSecondaryBeachFillerBlock(types).getBlock();
                 }
                 
-                if (isBeach) {
-                    terrainType = isNether ? TerrainType.SOUL_SAND : TerrainType.SAND;
-                    
-                    // Undo above height change if no gravel beaches
-                    if (isGravelBeach && !isNether) {
-                        height++;
+                if (isPrimaryBeach) {
+                    topBlock = noiseSurfaceBuilder.getPrimaryBeachTopBlock(types).getBlock();
+                    fillerBlock = noiseSurfaceBuilder.getPrimaryBeachFillerBlock(types).getBlock();
+                }
+                
+                if (isSecondaryBeach || isPrimaryBeach) {
+                    if (topBlock == Blocks.AIR) {
+                        height--;
+
+                        if (fillerBlock == Blocks.AIR) {
+                            height--;
+                            terrainType = defaultBlock;
+                        } else {
+                            terrainType = getTerrainTypeByBlock(fillerBlock);
+                        }
+                    } else {
+                        terrainType = getTerrainTypeByBlock(topBlock);
                     }
                 }
             }
@@ -332,6 +354,20 @@ public class DrawUtil {
         return terrainType;
     }
     
+    private static TerrainType getTerrainTypeByBlock(Block block) {
+        TerrainType[] types = TerrainType.values();
+        
+        for (int i = 0; i < types.length; ++i) {
+            TerrainType type = types[i];
+            
+            if (type.blocks.contains(block)) {
+                return type;
+            }
+        }
+        
+        return TerrainType.VOID;
+    }
+
     private static TerrainType getTerrainTypeByBiome(Biome biome, TerrainType terrainType) {
         if (terrainType == TerrainType.GRASS) {
             if (BiomeDictionary.hasType(biome, Type.MUSHROOM)) {
@@ -542,5 +578,38 @@ public class DrawUtil {
         }
         
         return destination;
+    }
+    
+    public static void drawRect(double left, double top, double right, double bottom, int color) {
+        if (left < right) {
+            double prev = left;
+            left = right;
+            right = prev;
+        }
+
+        if (top < bottom) {
+            double prev = top;
+            top = bottom;
+            bottom = prev;
+        }
+
+        float a = (float)(color >> 24 & 255) / 255.0F;
+        float r = (float)(color >> 16 & 255) / 255.0F;
+        float g = (float)(color >> 8 & 255) / 255.0F;
+        float b = (float)(color & 255) / 255.0F;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(r, g, b, a);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(left, bottom, 0.0).endVertex();
+        bufferbuilder.pos(right, bottom, 0.0).endVertex();
+        bufferbuilder.pos(right, top, 0.0).endVertex();
+        bufferbuilder.pos(left, top, 0.0).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 }

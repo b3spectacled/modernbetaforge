@@ -58,7 +58,7 @@ public class ModernBetaGeneratorSettings {
     public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
     public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     
-    public static final int MAX_PRESET_LENGTH = 25000;
+    public static final int MAX_PRESET_LENGTH = 50000;
     
     public static final int MIN_HEIGHT = 1;
     public static final int MAX_HEIGHT = 255;
@@ -2595,5 +2595,6 @@ public class ModernBetaGeneratorSettings {
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             jsonObject.addProperty(registryKey.toString(), property.getValue());
         }
+        
     }
 }

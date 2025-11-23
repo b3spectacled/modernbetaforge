@@ -30,6 +30,8 @@ import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -42,9 +44,11 @@ import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview.PreviewSettings;
+import mod.bespectacled.modernbetaforge.client.settings.KeyBindings;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -79,7 +83,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -90,9 +96,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final String PREFIX = "createWorld.customize.custom.modernbetaforge.";
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.modernbetaforge.";
     private static final String PREFIX_LABEL = "createWorld.customize.custom.label.modernbetaforge.";
-
-    private static final int RGB_INFO = 10526880;
-    private static final int RGB_HEADER = 16777215;
     
     private static final int ARGB_KEY_ICON_BACK_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 120, 120, 120);
     private static final int ARGB_KEY_ICON_BORDER_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 160, 160, 160);
@@ -102,7 +105,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int RGB_KEY_ICON_TEXT_INACTIVE = 7895160;
     private static final int RGB_KEY_ICON_TEXT_HOVERED = 13158500;
     
-    private static final int KEY_ICON_WIDTH = 14;
+    private static final int KEY_ICON_SIZE = 14;
+    private static final int KEY_ICON_PADDING = 6;
     
     private static final int PAGE_TITLE_HEIGHT = 6;
     
@@ -122,17 +126,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TAB_BUTTON_HEIGHT = 20;
     
     private final GuiCreateWorld parent;
-    
     private final Predicate<String> floatFilter;
     private final Predicate<String> intFilter;
-    
     private final ModernBetaGeneratorSettings.Factory defaultSettings;
-    
     private final Random random;
-    
     private final GuiBoundsChecker leftKeyBounds;
     private final GuiBoundsChecker rightKeyBounds;
-    
     private final Map<Integer, Boolean> enabledMap;
     
     protected String title;
@@ -150,20 +149,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonCancel;
     private GuiButton buttonPresets;
     private GuiButton buttonPreview;
-    
     private boolean settingsModified;
     private int confirmMode;
     private boolean confirmDismissed;
-    
     private boolean clicked;
     private boolean randomClicked;
     private boolean tabClicked;
     private long lastNavPressed;
-    
     private int customId;
     private BiMap<Integer, ResourceLocation> propertyMap;
+    private BiMap<Integer, ResourceLocation> guiPropertyMap;
     private Set<Integer> unlabeledSliders;
-    
     private int tabStartX;
     private int tabEndX;
     
@@ -183,7 +179,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             I18n.format(PREFIX_TAB + "page6"),
             I18n.format(PREFIX_TAB + "page7")
         };
-        
         this.floatFilter = new Predicate<String>() {
             @Override
             public boolean apply(@Nullable String entryString) {
@@ -192,7 +187,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 return entryString.isEmpty() || (entryValue != null && Floats.isFinite(entryValue));
             }
         };
-        
         this.intFilter = new Predicate<String>() {
             @Override
             public boolean apply(@Nullable String entryString) {
@@ -206,12 +200,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)parent;
-        
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
-        
         this.enabledMap = new HashMap<>();
-        
         this.previewSettings = new PreviewSettings();
         
         this.loadValues(string);
@@ -220,6 +211,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void createPagedList() {
         this.customId = GuiIdentifiers.CUSTOM_INITIAL_ID;
         this.propertyMap = HashBiMap.create();
+        this.guiPropertyMap = HashBiMap.create();
         this.unlabeledSliders = new HashSet<>();
         
         int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
@@ -241,7 +233,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
         
         int layerTypeId = GenLayerType.fromId(this.settings.layerType).ordinal();
-        
         int oreTypeId = OreType.fromId(this.settings.oreType).ordinal();
         
         List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
@@ -284,14 +275,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             carverEntry,
             spawnEntry,
 
-            createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, RGB_HEADER, "page0", "biomeReplacement"),
+            createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "page0", "biomeReplacement"),
             null,
             createGuiButton(GuiIdentifiers.PG0_B_USE_OCEAN, NbtTags.REPLACE_OCEAN_BIOMES, this.settings.replaceOceanBiomes),
             createGuiButton(GuiIdentifiers.PG0_B_USE_BEACH, NbtTags.REPLACE_BEACH_BIOMES, this.settings.replaceBeachBiomes),
             createGuiButton(GuiIdentifiers.PG0_B_USE_RIVER, NbtTags.REPLACE_RIVER_BIOMES, this.settings.replaceRiverBiomes),
             null,
             
-            createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, RGB_HEADER, "page0", "overworld"),
+            createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, "page0", "overworld"),
             null,
             blockEntry,
             fluidEntry,
@@ -318,7 +309,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES, NbtTags.USE_UNDERWATER_CAVES, this.settings.useUnderwaterCaves),
             null,
             
-            createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, RGB_HEADER, "page0", "nether"),
+            createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "page0", "nether"),
             null,
             createGuiButton(GuiIdentifiers.PG0_B_USE_OLD_NETHER, NbtTags.USE_OLD_NETHER, this.settings.useOldNether),
             createGuiButton(GuiIdentifiers.PG0_B_USE_NETHER_CAVES, NbtTags.USE_NETHER_CAVES, this.settings.useNetherCaves),
@@ -327,12 +318,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageChunk = {
-            createGuiLabel(GuiIdentifiers.PG1_L_INFDEV_227_FEATURES, RGB_HEADER, "page1", "infdev227"),
+            createGuiLabel(GuiIdentifiers.PG1_L_INFDEV_227_FEATURES, "page1", "infdev227"),
             null,
             createGuiButton(GuiIdentifiers.PG1_B_USE_INFDEV_WALLS, NbtTags.USE_INFDEV_WALLS, this.settings.useInfdevWalls),
             createGuiButton(GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS, NbtTags.USE_INFDEV_PYRAMIDS, this.settings.useInfdevPyramids),
             
-            createGuiLabel(GuiIdentifiers.PG1_L_INDEV_FEATURES, RGB_HEADER, "page1", "indev"),
+            createGuiLabel(GuiIdentifiers.PG1_L_INDEV_FEATURES, "page1", "indev"),
             null,
             createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_THEME, NbtTags.LEVEL_THEME, 0f, IndevTheme.values().length - 1, levelThemeId, this),
             createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_TYPE, NbtTags.LEVEL_TYPE, 0f, IndevType.values().length - 1, levelTypeId, this),
@@ -345,7 +336,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, NbtTags.LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH, this.settings.levelCaveWidth, this),
             null,
             
-            createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, RGB_HEADER, "page1", "release"),
+            createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, "page1", "release"),
             null,
             createGuiSlider(GuiIdentifiers.PG1_S_LAYER_SZ, NbtTags.LAYER_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.layerSize, this),
             createGuiSlider(GuiIdentifiers.PG1_S_RIVER_SZ, "riverRarity", ModernBetaGeneratorSettings.MIN_RIVER_SIZE, ModernBetaGeneratorSettings.MAX_RIVER_SIZE, this.settings.riverSize, this),
@@ -353,7 +344,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiPageButtonList.GuiListEntry[] pageBiome = {
-            createGuiLabel(GuiIdentifiers.PG2_L_BETA, RGB_HEADER, "page2", "beta"),
+            createGuiLabel(GuiIdentifiers.PG2_L_BETA, "page2", "beta"),
             null,
             createGuiButton(GuiIdentifiers.PG2_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
             createGuiButton(GuiIdentifiers.PG2_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
@@ -372,12 +363,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
             
-            createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, RGB_HEADER, "page2", "release"),
+            createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
             createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.biomeSize, this),
             createGuiSlider(GuiIdentifiers.PG2_S_SNOWY_CHANCE, NbtTags.SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MIN_SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MAX_SNOWY_BIOME_CHANCE, this.settings.snowyBiomeChance, this),
         
-            createGuiLabel(GuiIdentifiers.PG2_L_MOBS, RGB_HEADER, "page2", "mobSpawn"),
+            createGuiLabel(GuiIdentifiers.PG2_L_MOBS, "page2", "mobSpawn"),
             null,
             createGuiButton(GuiIdentifiers.PG2_B_SPAWN_CREATURE, NbtTags.SPAWN_NEW_CREATURE_MOBS, this.settings.spawnNewCreatureMobs),
             createGuiButton(GuiIdentifiers.PG2_B_SPAWN_MONSTER, NbtTags.SPAWN_NEW_MONSTER_MOBS, this.settings.spawnNewMonsterMobs),
@@ -391,103 +382,103 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG3_S_ORE_TYPE, NbtTags.ORE_TYPE, 0f, OreType.values().length - 1, oreTypeId, this),
             null,
                 
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, RGB_HEADER, I18n.format("tile.dirt.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, I18n.format("tile.dirt.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIRT_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dirtCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dirtMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dirtMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAV_NAME, RGB_HEADER, I18n.format("tile.gravel.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAV_NAME, I18n.format("tile.gravel.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_GRAV_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.gravelSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAV_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.gravelCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.gravelMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.gravelMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAN_NAME, RGB_HEADER, I18n.format("tile.stone.granite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAN_NAME, I18n.format("tile.stone.granite.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_GRAN_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.graniteSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAN_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.graniteCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.graniteMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.graniteMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIOR_NAME, RGB_HEADER, I18n.format("tile.stone.diorite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIOR_NAME, I18n.format("tile.stone.diorite.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_DIOR_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dioriteSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIOR_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dioriteCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dioriteMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.dioriteMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_ANDE_NAME, RGB_HEADER, I18n.format("tile.stone.andesite.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_ANDE_NAME, I18n.format("tile.stone.andesite.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_ANDE_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.andesiteSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_ANDE_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.andesiteCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.andesiteMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.andesiteMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_COAL_NAME, RGB_HEADER, I18n.format("tile.oreCoal.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_COAL_NAME, I18n.format("tile.oreCoal.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_COAL_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.coalSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_COAL_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.coalCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_COAL_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.coalMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_COAL_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.coalMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_IRON_NAME, RGB_HEADER, I18n.format("tile.oreIron.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_IRON_NAME, I18n.format("tile.oreIron.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_IRON_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.ironSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_IRON_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.ironCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_IRON_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.ironMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_IRON_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.ironMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GOLD_NAME, RGB_HEADER, I18n.format("tile.oreGold.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GOLD_NAME, I18n.format("tile.oreGold.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_GOLD_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.goldSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GOLD_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.goldCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.goldMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.goldMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_REDS_NAME, RGB_HEADER, I18n.format("tile.oreRedstone.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_REDS_NAME, I18n.format("tile.oreRedstone.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_REDS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.redstoneSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_REDS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.redstoneCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_REDS_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.redstoneMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_REDS_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.redstoneMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIAM_NAME, RGB_HEADER, I18n.format("tile.oreDiamond.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIAM_NAME, I18n.format("tile.oreDiamond.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_DIAM_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.diamondSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIAM_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.diamondCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.diamondMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.diamondMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_LAPS_NAME, RGB_HEADER, I18n.format("tile.oreLapis.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_LAPS_NAME, I18n.format("tile.oreLapis.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.lapisSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.lapisCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CTR, "center", ModernBetaGeneratorSettings.MIN_ORE_CENTER, ModernBetaGeneratorSettings.MAX_ORE_CENTER, (float)this.settings.lapisCenterHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SPR, "spread", ModernBetaGeneratorSettings.MIN_ORE_SPREAD, ModernBetaGeneratorSettings.MAX_ORE_SPREAD, (float)this.settings.lapisSpread, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, RGB_HEADER, I18n.format("tile.oreEmerald.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, I18n.format("tile.oreEmerald.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.emeraldSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.emeraldMaxHeight, this),
 
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, RGB_HEADER, I18n.format("tile.clay.name")),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, I18n.format("tile.clay.name")),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, RGB_HEADER, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.quartzSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.quartzCount, this),
 
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, RGB_HEADER, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_MGMA_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.magmaSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
@@ -509,14 +500,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_LOWER_LIM, NbtTags.LOWER_LIMIT_SCALE, ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, ModernBetaGeneratorSettings.MAX_LIMIT_SCALE, this.settings.lowerLimitScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_LIM, NbtTags.HEIGHT, ModernBetaGeneratorSettings.MIN_HEIGHT, ModernBetaGeneratorSettings.MAX_HEIGHT, this.settings.height, this),
             
-            createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, RGB_HEADER, "page4", "beta"),
+            createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page4", "beta"),
             null,
             createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
             null,
             
-            createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page4", "release"),
+            createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page4", "release"),
             null,
             createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_WT, NbtTags.BIOME_DEPTH_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
@@ -525,7 +516,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
             createGuiButton(GuiIdentifiers.PG4_B_USE_AMP, NbtTags.USE_AMPLIFIED, this.settings.useAmplified),
             
-            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, RGB_HEADER, "page4", "end"),
+            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page4", "end"),
             null,
             createGuiSlider(GuiIdentifiers.PG4_S_END_WT, NbtTags.END_ISLAND_WEIGHT, ModernBetaGeneratorSettings.MIN_END_WEIGHT, ModernBetaGeneratorSettings.MAX_END_WEIGHT, this.settings.endIslandWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_END_OF, NbtTags.END_ISLAND_OFFSET, ModernBetaGeneratorSettings.MIN_END_OFFSET, ModernBetaGeneratorSettings.MAX_END_OFFSET, this.settings.endIslandOffset, this),
@@ -565,7 +556,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_LIM, I18n.format(PREFIX + NbtTags.HEIGHT) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
 
-            createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, RGB_HEADER, "page5", "beta"),
+            createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page5", "beta"),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_TEMP_SCL, I18n.format(PREFIX + NbtTags.TEMP_NOISE_SCALE) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
@@ -574,7 +565,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DETL_SCL, I18n.format(PREFIX + NbtTags.DETAIL_NOISE_SCALE) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
 
-            createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, RGB_HEADER, "page5", "release"),
+            createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page5", "release"),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_DPTH_WT, I18n.format(PREFIX + NbtTags.BIOME_DEPTH_WEIGHT) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
@@ -585,7 +576,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_OF, I18n.format(PREFIX + NbtTags.BIOME_SCALE_OFFSET) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_B_SCLE_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
             
-            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, RGB_HEADER, "page5", "end"),
+            createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page5", "end"),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_WT, I18n.format(PREFIX + NbtTags.END_ISLAND_WEIGHT) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_END_WT, String.format("%2.3f", this.settings.endIslandWeight), this.floatFilter),
@@ -601,7 +592,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG6_B_CLIMATE_FEAT, NbtTags.USE_CLIMATE_FEATURES, this.settings.useClimateFeatures),
             createGuiSlider(GuiIdentifiers.PG6_S_SNOW_OFFSET, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, this.settings.snowLineOffset, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, I18n.format(PREFIX + NbtTags.DESERT_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_DSRT_LAND, "", true),
@@ -610,7 +601,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_DSRT_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_FRST_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.FOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_FRST_LABL, I18n.format(PREFIX + NbtTags.FOREST_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_FRST_LAND, "", true),
@@ -619,7 +610,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_FRST_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_ICED_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_ICED_LABL, I18n.format(PREFIX + NbtTags.ICE_DESERT_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_ICED_LAND, "", true),
@@ -628,7 +619,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_ICED_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_PLNS_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_PLNS_LABL, I18n.format(PREFIX + NbtTags.PLAINS_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_PLNS_LAND, "", true),
@@ -637,7 +628,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_PLNS_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_RAIN_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_RAIN_LABL, I18n.format(PREFIX + NbtTags.RAINFOREST_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_RAIN_LAND, "", true),
@@ -646,7 +637,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_RAIN_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SAVA_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SAVA_LABL, I18n.format(PREFIX + NbtTags.SAVANNA_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SAVA_LAND, "", true),
@@ -655,7 +646,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SAVA_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SHRB_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SHRB_LABL, I18n.format(PREFIX + NbtTags.SHRUBLAND_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SHRB_LAND, "", true),
@@ -664,7 +655,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SHRB_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SEAS_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SEAS_LABL, I18n.format(PREFIX + NbtTags.SEASONAL_FOREST_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SEAS_LAND, "", true),
@@ -673,7 +664,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SEAS_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SWMP_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_SWMP_LABL, I18n.format(PREFIX + NbtTags.SWAMPLAND_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SWMP_LAND, "", true),
@@ -682,7 +673,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_SWMP_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_TAIG_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_TAIG_LABL, I18n.format(PREFIX + NbtTags.TAIGA_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_TAIG_LAND, "", true),
@@ -691,7 +682,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, I18n.format(PREFIX + NbtTags.BEACH_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_TAIG_BEACH, "", true),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG6_TUND_LABL, RGB_HEADER, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES)),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG6_TUND_LABL, I18n.format(PREFIX + NbtTags.TUNDRA_BIOMES)),
             null,
             createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, I18n.format(PREFIX + NbtTags.BASE_BIOME) + ":"),
             createGuiButton(GuiIdentifiers.PG6_TUND_LAND, "", true),
@@ -705,13 +696,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (!ModCompat.isNetherCompatible()) {
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
-            pageBasic[pageBasic.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, RGB_INFO, "page0", "netherIncompatible");
+            pageBasic[pageBasic.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, TextFormatting.GRAY, "page0", "netherIncompatible");
             pageBasic[pageBasic.length - 1] = null;
         }
         
         if (ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID) && CompatDynamicTrees.isEnabled()) {
             pageBiome = Arrays.copyOf(pageBiome, pageBiome.length + 2);
-            pageBiome[pageBiome.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_TREES, RGB_INFO, "page2", "treesIncompatible");
+            pageBiome[pageBiome.length - 2] = createGuiLabel(GuiIdentifiers.PG0_L_TREES, TextFormatting.GRAY, "page2", "treesIncompatible");
             pageBiome[pageBiome.length - 1] = null;
         }
         
@@ -842,26 +833,31 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.buttonList.clear();
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+    
+        int modalHeight = 50;
         
         int buttonY = this.height - 27;
-        int defaultsX = this.width / 2 - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
-        int randomizeX = this.width / 2 - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
-        int previewX = this.width / 2 - BUTTON_WIDTH / 2;
-        int presetsX = this.width / 2 + BUTTON_WIDTH / 2 + 3;
-        int doneX = this.width / 2 + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
+        int defaultsX = centerX - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
+        int randomizeX = centerX - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
+        int previewX = centerX - BUTTON_WIDTH / 2;
+        int presetsX = centerX + BUTTON_WIDTH / 2 + 3;
+        int doneX = centerX + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
 
         this.buttonDefaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
         this.buttonRandomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
         this.buttonPreview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
         this.buttonPresets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format("gui.done")));
+        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
         this.buttonDefaults.enabled = this.settingsModified;
         
-        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, this.width / 2 - 55, 160, 50, 20, I18n.format("gui.yes"));
+        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm"));
         this.buttonConfirm.visible = false;
         
-        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, this.width / 2 + 5, 160, 50, 20, I18n.format("gui.no"));
+        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "cancel"));
         this.buttonCancel.visible = false;
 
         this.buttonList.add(this.buttonConfirm);
@@ -890,8 +886,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.setConfirmationControls(true);
         }
         
-        this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, KEY_ICON_WIDTH, KEY_ICON_WIDTH);
-        this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, KEY_ICON_WIDTH, KEY_ICON_WIDTH);
+        this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
+        this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
     }
     
     @Override
@@ -912,7 +908,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public String getText(int entry, String entryString, float entryValue) {
         // Do not append colon for custom property entries
-        if (this.propertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
+        if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
         
@@ -927,6 +923,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryString, registryKey);
+         
         } else {
             float entryValue = 0.0f;
             
@@ -1062,6 +1064,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
+        
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG0_B_CHUNK:
@@ -1368,6 +1376,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Property<?> property = this.settings.customProperties.get(registryKey);
             property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
             
+        } else if (this.guiPropertyMap.containsKey(entry)) {
+            ResourceLocation registryKey = this.guiPropertyMap.get(entry);
+            
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+            property.visitEntryValue(new SetEntryValuePropertyVisitor(), entry, entryValue, registryKey);
+        
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG4_S_MAIN_NS_X:
@@ -1737,22 +1751,40 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         boolean leftKeyActive = this.pageList.getPage() > 0;
         boolean rightKeyActive = this.pageList.getPage() < this.pageList.getPageCount() - 1;
         
+        String leftKey = KeyBindings.LEFT_NAV_KEY.getDisplayName();
+        String rightKey = KeyBindings.RIGHT_NAV_KEY.getDisplayName();
+        
+        int leftKeyWidth = this.fontRenderer.getStringWidth(leftKey);
+        int rightKeyWidth = this.fontRenderer.getStringWidth(rightKey);
+        
+        leftKeyWidth = Math.max(leftKeyWidth, KEY_ICON_SIZE);
+        rightKeyWidth = Math.max(rightKeyWidth, KEY_ICON_SIZE);
+        
+        leftKeyWidth += leftKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
+        rightKeyWidth += rightKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
+        
         this.drawDefaultBackground();
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, 16777215);
-        this.drawKeyIcon("A", this.tabStartX - KEY_ICON_WIDTH - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, leftKeyActive, this.leftKeyBounds.isHovered());
-        this.drawKeyIcon("D", this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_WIDTH / 4, rightKeyActive, this.rightKeyBounds.isHovered());
+        this.drawKeyIcon(leftKey, this.tabStartX - leftKeyWidth - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
+        this.drawKeyIcon(rightKey, this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
         
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         if (this.confirmMode != 0) {
             Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
             
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 99, -2039584);
-            this.drawHorizontalLine(this.width / 2 - 91, this.width / 2 + 90, 185, -6250336);
-            this.drawVerticalLine(this.width / 2 - 91, 99, 185, -2039584);
-            this.drawVerticalLine(this.width / 2 + 90, 99, 185, -6250336);
+            int centerX = this.width / 2;
+            int centerY = this.height / 2;
+            
+            int modalWidth = 100;
+            int modalHeight = 50;
+            
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
+            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
+            this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
+            this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
             
             GlStateManager.disableLighting();
             GlStateManager.disableFog();
@@ -1764,19 +1796,32 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(this.width / 2 - 90, 185.0, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 185.0, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 + 90, 100.0, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(this.width / 2 - 90, 100.0, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
             
             tessellator.draw();
+
+            int modalTitleY = centerY - modalHeight + 10;
+            int modalTextY = centerY - 14;
             
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, 105, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, 125, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, 135, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, modalTitleY, 16777215);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, modalTextY, 10526880);
+            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, modalTextY + this.fontRenderer.FONT_HEIGHT + 4, 10526880);
             
             this.buttonConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
             this.buttonCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
+        }
+    }
+    
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        
+        Gui guiComponent = this.pageList.getFocusedControl();
+        if (guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
+            ((GuiTextField)guiComponent).updateCursorCounter();
         }
     }
     
@@ -1893,14 +1938,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.modifyFocusValue(1.0f);
                 usedSpecialKey = true;
                 break;
-            case Keyboard.KEY_A:
-                usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? -1 : 0);
-                this.lastNavPressed = System.currentTimeMillis();
-                break;
-            case Keyboard.KEY_D:
-                usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? 1 : 0);
-                this.lastNavPressed = System.currentTimeMillis();
-                break;
+        }
+        
+        if (KeyBindings.LEFT_NAV_KEY.isActiveAndMatches(keyCode)) {
+            usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? -1 : 0);
+            this.lastNavPressed = System.currentTimeMillis();
+        } else if (KeyBindings.RIGHT_NAV_KEY.isActiveAndMatches(keyCode)) {
+            usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? 1 : 0);
+            this.lastNavPressed = System.currentTimeMillis();
         }
         
         if (!usedSpecialKey) {
@@ -1950,7 +1995,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     protected void setPropertyText() {
         for (Entry<Integer, ResourceLocation> entry : this.propertyMap.entrySet()) {
-            Property<?> property = this.settings.customProperties.get(entry.getValue());
+            ResourceLocation registryKey = entry.getValue();
+            Property<?> property = this.settings.customProperties.get(registryKey);
+            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
+            
+            if (formattedName != null && !formattedName.isEmpty()) {
+                this.setTextButton(entry.getKey(), formattedName);
+            }
+        }
+        
+        for (Entry<Integer, ResourceLocation> entry : this.guiPropertyMap.entrySet()) {
+            ResourceLocation registryKey = entry.getValue();
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
             String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
             
             if (formattedName != null && !formattedName.isEmpty()) {
@@ -1962,10 +2018,31 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiPageButtonList.GuiListEntry[] createCustomPropertyPage() {
         // Get total number of page list entries,
         // and add an additional entry for float/int/string properties to accommodate label entry
-        int numEntries = ModernBetaRegistries.PROPERTY.getKeys().size() * 2;
-        
+        List<ResourceLocation> propertyKeys = new ArrayList<>();
+        propertyKeys.addAll(ModernBetaRegistries.PROPERTY.getKeys());
+        propertyKeys.addAll(ModernBetaClientRegistries.GUI_PROPERTY.getKeys());
+        int numEntries = propertyKeys.size() * 2;
+
         // Build map based on mod ID
-        Map<String, List<ResourceLocation>> modRegistryKeys = new LinkedHashMap<>();
+        Map<String, Tuple<List<ResourceLocation>, List<ResourceLocation>>> modRegistryKeys = new LinkedHashMap<>();
+        
+        // Populate initial map
+        for (ResourceLocation registryKey : propertyKeys) {
+            String namespace = registryKey.getNamespace();
+            
+            // Add new entry list if encountering new namespace (unique mod)
+            if (!modRegistryKeys.containsKey(namespace)) {
+                modRegistryKeys.put(namespace, new Tuple<>(new LinkedList<>(), new LinkedList<>()));
+                numEntries += 2;
+                
+                // Add additional entries if namespace has info
+                if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
+                    numEntries += 2;
+                }
+            }
+        }
+        
+        // Populate setting keys
         for (ResourceLocation registryKey : ModernBetaRegistries.PROPERTY.getKeys()) {
             // Ignore entries that should be hidden
             if (!ModernBetaRegistries.PROPERTY.get(registryKey).getDisplay()) {
@@ -1975,52 +2052,73 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             String namespace = registryKey.getNamespace();
             
-            // Add new entry list if encountering new namespace (unique mod)
-            if (!modRegistryKeys.containsKey(namespace)) {
-                modRegistryKeys.put(namespace, new LinkedList<>());
-                numEntries += 2;
-                
-                // Add additional entries if namespace has info
-                if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
-                    numEntries += 2;
-                }
-            }
-            
             // Add additional entries if mod property has info
             if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".info")) {
                 numEntries += 2;
             }
             
-            modRegistryKeys.get(namespace).add(registryKey);
+            modRegistryKeys.get(namespace).getFirst().add(registryKey);
+        }
+        
+        // Populate GUI keys
+        for (ResourceLocation registryKey : ModernBetaClientRegistries.GUI_PROPERTY.getKeys()) {
+            String namespace = registryKey.getNamespace();
+            
+            // Add additional entries if mod property has info
+            if (I18n.hasKey(PREFIX_ADDON + getFormattedRegistryString(registryKey) + ".gui.info")) {
+                numEntries += 2;
+            }
+            
+            modRegistryKeys.get(namespace).getSecond().add(registryKey);
         }
         
         GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
         
         int ndx = 0;
         for (String namespace : modRegistryKeys.keySet()) {
-            List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace);
+            List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace).getFirst();
+            List<ResourceLocation> guiRegistryKeys = modRegistryKeys.get(namespace).getSecond();
             
-            pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_HEADER, I18n.format(PREFIX_ADDON + namespace));
+            pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(PREFIX_ADDON + namespace));
             pageList[ndx++] = null;
             
+            // Create GUI elements for main settings
             for (ResourceLocation registryKey : registryKeys) {
                 Property<?> property = this.settings.customProperties.get(registryKey);
                 String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
                 int propertyId;
-                
+
                 pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(localizationKey) + ":");
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
                 
                 if (I18n.hasKey(localizationKey + ".info")) {
-                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(localizationKey + ".info"));
+                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, TextFormatting.GRAY, I18n.format(localizationKey + ".info"));
                     pageList[ndx++] = null;
                 }
                 
                 this.propertyMap.put(propertyId, registryKey);
             }
             
+            // Create GUI elements for GUI settings
+            for (ResourceLocation registryKey : guiRegistryKeys) {
+                GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
+                String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
+                int propertyId;
+
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, I18n.format(localizationKey) + ":");
+                pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
+                
+                if (I18n.hasKey(localizationKey + ".gui.info")) {
+                    pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, TextFormatting.GRAY, I18n.format(localizationKey + ".gui.info"));
+                    pageList[ndx++] = null;
+                }
+                
+                this.guiPropertyMap.put(propertyId, registryKey);
+            }
+            
+            // Add general mod info string if there is one
             if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
-                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, RGB_INFO, I18n.format(PREFIX_ADDON + namespace + ".info"));
+                pageList[ndx++] = createGuiLabelNoPrefix(this.customId++, TextFormatting.GRAY, I18n.format(PREFIX_ADDON + namespace + ".info"));
                 pageList[ndx++] = null;
             }
         }
@@ -2132,19 +2230,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private String getFormattedValue(int entry, float entryValue) {
         if (this.propertyMap.containsKey(entry)) {
-            Property<?> property = this.settings.customProperties.get(this.propertyMap.get(entry));
+            ResourceLocation registryKey = this.propertyMap.get(entry);
+            Property<?> property = this.settings.customProperties.get(registryKey);
             
-            if (property instanceof FloatProperty) {
-                return String.format(((FloatProperty)property).getFormatter(), entryValue);
-            
-            } else if (property instanceof IntProperty) {
-                return String.format("%d", (int)entryValue);
-                
-            } else if (property instanceof ListProperty) {
+            if (property instanceof ListProperty) {
                 ListProperty listProperty = (ListProperty)property;
+                String entryText = String.format("createWorld.customize.custom.%s.%s.", registryKey.getNamespace(), registryKey.getPath());
+
+                return I18n.format(entryText + listProperty.getValues()[(int)entryValue]);
+            } else if (property instanceof IntProperty) {
+                IntProperty intProperty = (IntProperty)property;
                 
-                return listProperty.getValues()[(int)entryValue];
+                return String.format(intProperty.getFormatter(), (int)entryValue);
+            } else {
+                return String.format(property.getFormatter(), entryValue);
             }
+        }
+        
+        if (this.guiPropertyMap.containsKey(entry)) {
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(this.guiPropertyMap.get(entry));
+
+            return String.format(property.getFormatter(), entryValue);
         }
         
         switch (entry) {
@@ -2398,7 +2504,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private int getLevelSeaLevel() {
         ModernBetaGeneratorSettings settings = this.settings.build();
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings);
+        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
         int levelSeaLevel = -1;
         if (chunkSource instanceof FiniteChunkSource) {
@@ -2454,22 +2561,28 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 boolean enabled = entry.getValue().test(settings);
                 
                 for (int i = 0; i < guiIds.length; ++i) {
-                    this.setButtonEnabled(guiIds[i], enabled);
-                    this.setFieldEnabled(guiIds[i], enabled);
-                    this.enabledMap.put(guiIds[i], enabled);
+                    this.setGuiEnabled(guiIds[i], enabled);
                 }
                 
                 if (guiIds.length <= 0) {
                     if (this.propertyMap.containsValue(entry.getKey())) {
                         int customId = this.propertyMap.inverse().get(entry.getKey());
-                        
-                        this.setButtonEnabled(customId, enabled);
-                        this.setFieldEnabled(customId, enabled);
-                        this.enabledMap.put(customId, enabled);
+                        this.setGuiEnabled(customId, enabled);
+                    }
+                    
+                    if (this.guiPropertyMap.containsValue(entry.getKey())) {
+                        int customId = this.guiPropertyMap.inverse().get(entry.getKey());
+                        this.setGuiEnabled(customId, enabled);
                     }
                 }
             }
         }
+    }
+    
+    private void setGuiEnabled(int id, boolean enabled) {
+        this.setButtonEnabled(id, enabled);
+        this.setFieldEnabled(id, enabled);
+        this.enabledMap.put(id, enabled);
     }
     
     private void setButtonEnabled(int entry, boolean enabled) {
@@ -2498,17 +2611,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return false;
     }
     
-    private void drawKeyIcon(String key, int x, int y, boolean active, boolean hovered) {
+    private void drawKeyIcon(String key, int x, int y, int width, boolean active, boolean hovered) {
         int colorBorder = active ? ARGB_KEY_ICON_BORDER_ACTIVE : ARGB_KEY_ICON_BORDER_INACTIVE;
         int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
         int colorText = active ? hovered ? RGB_KEY_ICON_TEXT_HOVERED : RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
-        
-        drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y - 1, colorBorder);
-        drawHorizontalLine(x, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH, colorBorder);
-        drawVerticalLine(x - 1, y - 1, y + KEY_ICON_WIDTH, colorBorder);
-        drawVerticalLine(x + KEY_ICON_WIDTH, y - 1, y + KEY_ICON_WIDTH, colorBorder);
-        drawRect(x + 1, y + 1, x + KEY_ICON_WIDTH - 1, y + KEY_ICON_WIDTH - 1, colorBack);
-        this.drawCenteredString(this.fontRenderer, key, x + KEY_ICON_WIDTH / 2, y + KEY_ICON_WIDTH / 4, colorText);
+
+        drawHorizontalLine(x, x + width - 1, y - 1, colorBorder);
+        drawHorizontalLine(x, x + width - 1, y + KEY_ICON_SIZE, colorBorder);
+        drawVerticalLine(x - 1, y - 1, y + KEY_ICON_SIZE, colorBorder);
+        drawVerticalLine(x + width, y - 1, y + KEY_ICON_SIZE, colorBorder);
+        drawRect(x + 1, y + 1, x + width - 1, y + KEY_ICON_SIZE - 1, colorBack);
+        this.drawCenteredString(this.fontRenderer, key, x + width / 2 + 1, y + KEY_ICON_SIZE / 4, colorText);
     }
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {
@@ -2555,21 +2668,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return registryKey.getNamespace() + "." + registryKey.getPath();
     }
     
-    @SuppressWarnings("unused")
     private static GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, String... tags) {
-        return new GuiPageButtonList.GuiLabelEntry(id, I18n.format(PREFIX_LABEL + String.join(".", tags)), true);
+        return createGuiLabel(id, TextFormatting.RESET, tags);
     }
     
-    private static GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, int color, String... tags) {
-        return new GuiColoredLabelEntry(id, I18n.format(PREFIX_LABEL + String.join(".", tags)), true, color);
+    private static GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, TextFormatting formatting, String... tags) {
+        return new GuiPageButtonList.GuiLabelEntry(id, formatting + I18n.format(PREFIX_LABEL + String.join(".", tags)), true);
     }
     
     private static GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, String... tags) {
-        return new GuiPageButtonList.GuiLabelEntry(id, String.join(".", tags), true);
+        return createGuiLabelNoPrefix(id, TextFormatting.RESET, tags);
     }
     
-    private static GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, int color, String... tags) {
-        return new GuiColoredLabelEntry(id, String.join(".", tags), true, color);
+    private static GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, TextFormatting formatting, String... tags) {
+        return new GuiPageButtonList.GuiLabelEntry(id, formatting + String.join(".", tags), true);
     }
     
     private static GuiPageButtonList.GuiSlideEntry createGuiSlider(int id, String tag, float minValue, float maxValue, float initialValue, FormatHelper formatHelper) {
@@ -2750,6 +2862,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public GuiListEntry visit(EntityEntryProperty property, int guiIdentifier) {
             return createGuiButton(guiIdentifier, "enabled", true);
         }
+
+        @Override
+        public GuiListEntry visit(ScreenProperty property, int guiIdentifier) {
+            return createGuiButton(guiIdentifier, "enabled", true);
+        }
         
     }
     
@@ -2850,6 +2967,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 property.getValue(),
                 property.getFilter()::test
             );
+        }
+
+        @Override
+        public void visit(ScreenProperty property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreen screen = property.getValue().apply(GuiScreenCustomizeWorld.this, registryKey);
+            GuiScreenCustomizeWorld.this.mc.displayGuiScreen(screen);
         };
         
     }
@@ -2903,6 +3026,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
             return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
+
+        @Override
+        public String visit(ScreenProperty property) {
+            return I18n.format(PREFIX + "propertyScreen");
         }
     }
 }

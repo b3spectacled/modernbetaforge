@@ -7,15 +7,15 @@ import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.SkyClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateMap;
-import mod.bespectacled.modernbetaforge.world.biome.climate.ClimateType;
+import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
+import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateType;
 import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.climate.beta.BetaSkyClimateSampler;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.biome.Biome;
 
 public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyClimateSampler, BiomeResolverOcean, BiomeResolverBeach {
-    private final ClimateMap climateMap;
+    private final BetaClimateMap climateMap;
     private final BetaClimateSampler climateSampler;
     private final BetaSkyClimateSampler skyClimateSampler;
     private final boolean useClimateFeatures;
@@ -23,7 +23,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     public BetaBiomeSource(long seed, ModernBetaGeneratorSettings settings) {
         super(seed, settings);
 
-        this.climateMap = new ClimateMap(settings);
+        this.climateMap = new BetaClimateMap(settings);
         this.climateSampler = new BetaClimateSampler(seed, settings);
         this.skyClimateSampler = new BetaSkyClimateSampler(seed, settings);
         this.useClimateFeatures = settings.useClimateFeatures;
@@ -31,17 +31,17 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
 
     @Override
     public Biome getBiome(int x, int z) {
-        return this.getBiomeByType(x, z, ClimateType.BASE);
+        return this.getBiomeByType(x, z, BetaClimateType.BASE);
     }
 
     @Override
     public Biome getOceanBiome(int x, int z) {
-        return this.getBiomeByType(x, z, ClimateType.OCEAN);
+        return this.getBiomeByType(x, z, BetaClimateType.OCEAN);
     }
 
     @Override
     public Biome getBeachBiome(int x, int z) {
-        return this.getBiomeByType(x, z, ClimateType.BEACH);
+        return this.getBiomeByType(x, z, BetaClimateType.BEACH);
     }
 
     @Override
@@ -56,12 +56,12 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
     
     @Override
     public boolean sampleSkyColor() {
-        return ModernBetaConfig.visualOptions.useBetaSkyColors && !this.climateMap.containsNonBetaBiomes();
+        return ModernBetaConfig.visualOptions.useBetaSkyColors;
     }
     
     @Override
     public boolean sampleBiomeColor() {
-        return ModernBetaConfig.visualOptions.useBetaBiomeColors && !this.climateMap.containsNonBetaBiomes();
+        return ModernBetaConfig.visualOptions.useBetaBiomeColors;
     }
     
     @Override
@@ -69,7 +69,7 @@ public class BetaBiomeSource extends BiomeSource implements ClimateSampler, SkyC
         return this.useClimateFeatures && !this.climateMap.containsNonBetaBiomes();
     }
     
-    private Biome getBiomeByType(int x, int z, ClimateType type) {
+    private Biome getBiomeByType(int x, int z, BetaClimateType type) {
         Clime clime = this.climateSampler.sampleClime(x, z);
         double temp = clime.temp();
         double rain = clime.rain();

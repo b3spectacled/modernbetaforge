@@ -48,20 +48,16 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
     
-    private final BiomeSource biomeSource;
     private final NoiseBiomeSource noiseBiomeSource;
 
-    public ReleaseChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public ReleaseChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
 
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
-        this.biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(settings.biomeSource)
-            .apply(seed, settings);
         this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource ?
             (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(seed, settings);
 

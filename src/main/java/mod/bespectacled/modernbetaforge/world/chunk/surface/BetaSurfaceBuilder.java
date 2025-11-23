@@ -22,7 +22,7 @@ public class BetaSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean isBeach(int x, int z, Random random) {
+    public boolean isPrimaryBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];
@@ -31,7 +31,7 @@ public class BetaSurfaceBuilder extends NoiseSurfaceBuilder {
     }
     
     @Override
-    public boolean isGravelBeach(int x, int z, Random random) {
+    public boolean isSecondaryBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
         double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(z & 0xF) + (x & 0xF) * 16];

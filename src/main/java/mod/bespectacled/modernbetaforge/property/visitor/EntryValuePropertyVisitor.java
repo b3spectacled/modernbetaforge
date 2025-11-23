@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.property.visitor;
 
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -26,4 +27,6 @@ public interface EntryValuePropertyVisitor {
     void visit(BlockProperty property, int guiIdentifier, ResourceLocation registryKey);
     
     void visit(EntityEntryProperty property, int guiIdentifier, ResourceLocation registryKey);
+    
+    void visit(ScreenProperty property, int guiIdentifier, ResourceLocation registryKey);
 }

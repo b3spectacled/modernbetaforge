@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
+import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
+import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.api.datafix.ModDataFix;
 import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
@@ -28,6 +30,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
+import mod.bespectacled.modernbetaforge.client.gui.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
@@ -366,5 +369,12 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.END_OUTER_ISLAND_DISTANCE, GuiPredicates.END_OUTER_ISLAND_DISTANCE_TEST);
         registry.register(GuiPredicate.END_OUTER_ISLAND_OFFSET, GuiPredicates.END_OUTER_ISLAND_OFFSET_TEST);
         registry.register(GuiPredicate.USE_END_OUTER_ISLANDS, GuiPredicates.USE_END_OUTER_ISLANDS_TEST);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static void registerGuiProperties() {
+        ModernBetaRegistry<GuiProperty<?>> registry = ModernBetaClientRegistries.GUI_PROPERTY;
+        
+        registry.register(ModernBeta.createRegistryKey("screenProp"), new ScreenProperty(GuiPropertyScreenTest::new));
     }
 }

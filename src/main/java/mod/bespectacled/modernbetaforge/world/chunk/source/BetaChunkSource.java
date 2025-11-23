@@ -1,6 +1,5 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
-import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -19,18 +18,15 @@ public class BetaChunkSource extends NoiseChunkSource {
     
     private final ClimateSampler climateSampler;
 
-    public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        super(seed, settings);
+    public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        super(seed, settings, biomeSource);
         
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.scaleOctaveNoise = new PerlinOctaveNoise(this.random, 10, true);
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
-       
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE
-            .get(settings.biomeSource)
-            .apply(seed, settings);
+
         this.climateSampler = biomeSource instanceof ClimateSampler ?
             (ClimateSampler)biomeSource :
             this.createClimateSampler(seed, settings);

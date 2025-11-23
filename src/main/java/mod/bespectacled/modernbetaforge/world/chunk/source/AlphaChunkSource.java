@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.world.chunk.source;
 
+import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseHeight;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
@@ -14,12 +15,12 @@ public class AlphaChunkSource extends NoiseChunkSource {
     
     private final boolean isInfdev611;
     
-    public AlphaChunkSource(long seed, ModernBetaGeneratorSettings settings) {
-        this(seed, settings, false);
+    public AlphaChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
+        this(seed, settings, biomeSource, false);
     }
     
-    public AlphaChunkSource(long seed, ModernBetaGeneratorSettings settings, boolean isInfdev611) {
-        super(seed, settings);
+    public AlphaChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource, boolean isInfdev611) {
+        super(seed, settings, biomeSource);
         
         this.beachOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
         this.surfaceOctaveNoise = new PerlinOctaveNoise(this.random, 4, true);
