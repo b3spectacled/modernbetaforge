@@ -824,6 +824,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     @Override
     public void initGui() {
+        Keyboard.enableRepeatEvents(true);
+        
         int curPage = 0;
         int curScroll = 0;
         
@@ -1826,6 +1828,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (guiComponent instanceof GuiTextField && ((GuiTextField)guiComponent).isFocused()) {
             ((GuiTextField)guiComponent).updateCursorCounter();
         }
+    }
+    
+    @Override
+    public void onGuiClosed() {
+        Keyboard.enableRepeatEvents(false);
     }
     
     public ModernBetaGeneratorSettings.Factory getDefaultSettings() {
