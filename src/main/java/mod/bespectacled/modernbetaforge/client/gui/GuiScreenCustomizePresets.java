@@ -287,6 +287,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int modalWidth = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
             int modalHeight = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
             
+            double texU = modalWidth * 0.0625;
+            double texV = modalHeight * 0.0625;
+            
             this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
             this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
             this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
@@ -302,9 +305,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
             bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(5.625, 2.65625).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(5.625, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, texV).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(texU, texV).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(texU, 0.0).color(64, 64, 64, 64).endVertex();
             bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
             
             tessellator.draw();
