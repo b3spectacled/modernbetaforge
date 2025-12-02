@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview.PreviewSettings;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirm;
 import mod.bespectacled.modernbetaforge.client.settings.KeyBindings;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
@@ -77,10 +79,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiSlider.FormatHelper;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -145,16 +143,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonDone;
     private GuiButton buttonRandomize;
     private GuiButton buttonDefaults;
-    private GuiButton buttonConfirm;
-    private GuiButton buttonCancel;
     private GuiButton buttonPresets;
     private GuiButton buttonPreview;
     private boolean settingsModified;
-    private int confirmMode;
-    private boolean confirmDismissed;
     private boolean clicked;
     private boolean randomClicked;
-    private boolean tabClicked;
     private long lastNavPressed;
     private int customId;
     private BiMap<Integer, ResourceLocation> propertyMap;
@@ -162,7 +155,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private Set<Integer> unlabeledSliders;
     private int tabStartX;
     private int tabEndX;
-    
+    private boolean isFocused;
     private PreviewSettings previewSettings;
     
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
@@ -204,6 +197,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.rightKeyBounds = new GuiBoundsChecker();
         this.enabledMap = new HashMap<>();
         this.previewSettings = new PreviewSettings();
+        this.isFocused = true;
         
         this.loadValues(string);
     }
@@ -837,9 +831,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonList.clear();
 
         int centerX = this.width / 2;
-        int centerY = this.height / 2;
-    
-        int modalHeight = 50;
         
         int buttonY = this.height - 27;
         int defaultsX = centerX - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
@@ -854,22 +845,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonPresets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
         this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
-        this.buttonDefaults.enabled = this.settingsModified;
-        
-        this.buttonConfirm = new GuiButton(GuiIdentifiers.FUNC_CONF, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm"));
-        this.buttonConfirm.visible = false;
-        
-        this.buttonCancel = new GuiButton(GuiIdentifiers.FUNC_CNCL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "cancel"));
-        this.buttonCancel.visible = false;
-
-        this.buttonList.add(this.buttonConfirm);
-        this.buttonList.add(this.buttonCancel);
-        
-        if (this.confirmMode != 0) {
-            this.buttonConfirm.visible = true;
-            this.buttonCancel.visible = true;
-        }
-        
         GuiIdentifiers.assertOffsets();
         
         this.createPagedList();
@@ -882,11 +857,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setGuiEnabled();
         this.updatePageControls();
         this.isSettingsModified();
-        
-        // Set buttons disabled if in confirmation dialog
-        if (this.confirmMode == GuiIdentifiers.FUNC_DFLT) {
-            this.setConfirmationControls(true);
-        }
+        this.setConfirmationControls(!this.isFocused);
         
         this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
         this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
@@ -895,10 +866,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
-        
-        if (!this.tabClicked && this.confirmMode != GuiIdentifiers.FUNC_DFLT) {
-            this.pageList.handleMouseInput();
-        }
+        this.pageList.handleMouseInput();
         
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
@@ -1773,51 +1741,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.drawKeyIcon(rightKey, this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
         
         super.drawScreen(mouseX, mouseY, partialTicks);
-        
-        if (this.confirmMode != 0) {
-            Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
-            
-            int centerX = this.width / 2;
-            int centerY = this.height / 2;
-            
-            int modalWidth = 100;
-            int modalHeight = 50;
-            
-            double texU = modalWidth * 0.0625;
-            double texV = modalHeight * 0.0625;
-            
-            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
-            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
-            this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
-            this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
-            
-            GlStateManager.disableLighting();
-            GlStateManager.disableFog();
-            
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferBuilder = tessellator.getBuffer();
-            
-            this.mc.getTextureManager().bindTexture(GuiScreenCustomizeWorld.OPTIONS_BACKGROUND);
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, texV).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(texU, texV).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(texU, 0.0).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
-            
-            tessellator.draw();
-
-            int modalTitleY = centerY - modalHeight + 10;
-            int modalTextY = centerY - 14;
-            
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirmTitle"), this.width / 2, modalTitleY, 16777215);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm1"), this.width / 2, modalTextY, 10526880);
-            this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "confirm2"), this.width / 2, modalTextY + this.fontRenderer.FONT_HEIGHT + 4, 10526880);
-            
-            this.buttonConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.buttonCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
-        }
     }
     
     @Override
@@ -1898,20 +1821,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                              
                 break;
             case GuiIdentifiers.FUNC_DFLT:
-                if (!this.settingsModified) {
-                    break;
+                if (this.settingsModified) {
+                    Consumer<GuiModalConfirm> onConfirm = modal -> {
+                        this.restoreDefaults();
+                        this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
+                        this.isFocused = true;
+                    };
+
+                    String title = I18n.format(PREFIX + "confirmTitle");
+                    List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm1"), I18n.format(PREFIX + "confirm2"));
+
+                    this.isFocused = false;
+                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 100, 50, onConfirm, modal -> this.isFocused = true, textList, 10526880));
                 }
-                this.enterConfirmation(GuiIdentifiers.FUNC_DFLT);
                 break;
             case GuiIdentifiers.FUNC_PRST:
                 this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this));
-                break;
-            case GuiIdentifiers.FUNC_CONF:
-                this.exitConfirmation();
-                break;
-            case GuiIdentifiers.FUNC_CNCL:
-                this.confirmMode = 0;
-                this.exitConfirmation();
                 break;
             case GuiIdentifiers.FUNC_PRVW:
                 this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build(), this.previewSettings));
@@ -1926,16 +1851,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (this.confirmMode == GuiIdentifiers.FUNC_DFLT && keyCode == Keyboard.KEY_ESCAPE) {
-            this.confirmMode = 0;
-            this.exitConfirmation();
-        } else {
-            super.keyTyped(typedChar, keyCode);
-        }
-        
-        if (this.confirmMode != 0) {
-            return;
-        }
+        super.keyTyped(typedChar, keyCode);
         
         boolean usedSpecialKey = false;
         
@@ -1976,31 +1892,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.clicked = true;
-        
-        if (this.isMouseOverPageTab(mouseX, mouseY)) {
-            this.tabClicked = true;
-        }
-        
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        if (this.confirmMode != 0 || this.confirmDismissed) {
-            return;
-        }
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         this.pageList.mouseReleased(mouseX, mouseY, mouseButton);
-        this.clicked = false;
-        this.tabClicked = false;
         
+        this.clicked = false;
         super.mouseReleased(mouseX, mouseY, mouseButton);
-        if (this.confirmDismissed) {
-            this.confirmDismissed = false;
-            return;
-        }
-        if (this.confirmMode != 0) {
-            return;
-        }
     }
     
     protected void setPropertyText() {
@@ -2397,30 +2297,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setSettingsModified(false);
     }
     
-    private void enterConfirmation(int id) {
-        this.confirmMode = id;
-        this.setConfirmationControls(true);
-    }
-    
-    private void exitConfirmation() throws IOException {
-        switch (this.confirmMode) {
-            case GuiIdentifiers.FUNC_DONE:
-                this.actionPerformed((GuiButton)this.pageList.getComponent(GuiIdentifiers.FUNC_DONE));
-                break;
-            case GuiIdentifiers.FUNC_DFLT:
-                this.restoreDefaults();
-                this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
-                break;
-        }
-        
-        this.confirmMode = 0;
-        this.confirmDismissed = true;
-        this.setConfirmationControls(false);
-    }
-    
     private void setConfirmationControls(boolean setConfirm) {
-        this.buttonConfirm.visible = setConfirm;
-        this.buttonCancel.visible = setConfirm;
         this.buttonRandomize.enabled = !setConfirm;
         this.buttonDone.enabled = !setConfirm;
         this.buttonDefaults.enabled = (this.settingsModified && !setConfirm);
@@ -2607,18 +2484,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (gui != null && gui instanceof GuiTextField) {
             ((GuiTextField)gui).setEnabled(enabled);
         }
-    }
-    
-    private boolean isMouseOverPageTab(int mouseX, int mouseY) {
-        if (this.pageTabMap != null) {
-            for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
-                if (pageTab.getValue().isMouseOver()) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
     }
     
     private void drawKeyIcon(String key, int x, int y, int width, boolean active, boolean hovered) {
