@@ -854,10 +854,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.scrollBy(curScroll);
         
         // Set default enabled for certain options
-        this.setGuiEnabled();
-        this.updatePageControls();
         this.isSettingsModified();
         this.setConfirmationControls(!this.isFocused);
+        this.setGuiEnabled();
+        this.updatePageControls();
         
         this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
         this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
@@ -2320,7 +2320,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + page) {
                 pageTab.getValue().enabled = false;
             } else {
-                pageTab.getValue().enabled = true;
+                pageTab.getValue().enabled = this.isFocused;
             }
         }
     }
@@ -2445,7 +2445,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.pageList != null) {
             for (Entry<ResourceLocation, GuiPredicate> entry : ModernBetaClientRegistries.GUI_PREDICATE.getEntrySet()) {
                 int[] guiIds = entry.getValue().getIds();
-                boolean enabled = entry.getValue().test(settings);
+                boolean enabled = entry.getValue().test(settings) && this.isFocused;
                 
                 for (int i = 0; i < guiIds.length; ++i) {
                     this.setGuiEnabled(guiIds[i], enabled);

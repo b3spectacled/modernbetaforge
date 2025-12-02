@@ -2,20 +2,24 @@ package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler.PresetData;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.IconTexture;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.State;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPresetConfirm;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -37,61 +41,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         ALL, BUILTIN, ADDON, CUSTOM
     }
     
-    private enum ModalState {
-        NONE, SAVE, EDIT, DELETE, OVERWRITE
-    }
-    
-    private static final ResourceLocation SCROLL_UP = ModernBeta.createRegistryKey("textures/gui/scroll_up.png");
-    private static final ResourceLocation SCROLL_DOWN = ModernBeta.createRegistryKey("textures/gui/scroll_down.png");
-    private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
     private static final ResourceLocation UNKNOWN_PACK = new ResourceLocation("textures/misc/unknown_pack.png");
-    private static final IconTexture[] ICON_TEXTURES = {
-        new IconTexture(UNKNOWN_PACK),
-        new IconTexture(ModernBeta.createRegistryKey("textures/gui/presets/pack.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/grass_side.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/dirt.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/sand.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/gravel.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/stone.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/cobblestone.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/log_oak.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/planks_oak.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/coal_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/iron_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/gold_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/redstone_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/diamond_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/lapis_ore.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/obsidian.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/netherrack.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/glowstone.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/end_stone.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/sponge.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/tnt_side.png")),
-        new IconTexture(new ResourceLocation("textures/blocks/pumpkin_face_off.png")),
-        new IconTexture(new ResourceLocation("textures/entity/steve.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/alex.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/zombie/zombie.png"), 1.0 / 8.0, 1.0 / 8.0, 1.0 / 8.0),
-        new IconTexture(new ResourceLocation("textures/entity/skeleton/skeleton.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
-        new IconTexture(new ResourceLocation("textures/entity/creeper/creeper.png"), 1.0 / 8.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 4.0),
-        new IconTexture(KZ, 0.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 1.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 2.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 3.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 4.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 5.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 6.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 0.0 / 16.0, 0.0 / 16.0, 1.0 / 16.0),
-        new IconTexture(KZ, 0.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 2.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 4.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 6.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 8.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 10.0 / 16.0, 8.0 / 16.0, 2.0 / 16.0),
-        new IconTexture(KZ, 0.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
-        new IconTexture(KZ, 4.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0),
-        new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
-    };
     
     private static final String PREFIX = "createWorld.customize.presets.modernbetaforge.";
     private static final String PREFIX_FILTER = "createWorld.customize.presets.modernbetaforge.filter";
@@ -99,20 +49,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
-    private static final int MAX_PRESET_NAME_LENGTH = 30;
-    private static final int MAX_PRESET_DESC_LENGTH = 60;
-    private static final int MODAL_WIDTH = 320 / 2;
-    private static final int MODAL_HEIGHT = 200 / 2;
-    private static final int MODAL_WIDTH_SMALL = 225 / 2;
-    private static final int MODAL_HEIGHT_SMALL = 125 / 2;
-    private static final int MODAL_NAME_FIELD_LENGTH = 220;
-    private static final int MODAL_DESC_FIELD_LENGTH = 220;
-    private static final int MODAL_SETTINGS_FIELD_LENGTH = 300;
-    private static final int MODAL_ICON_PADDING_R = 20;
-    private static final int MODAL_ICON_PADDING_T = 36;
-    private static final int MODAL_ICON_SIZE = 50;
-    private static final int SCROLL_TEXTURE_SIZE_W = 13;
-    private static final int SCROLL_TEXTURE_SIZE_H = 9;
     private static final int BUTTON_SPACE = 4;
     private static final int BUTTON_SMALL_WIDTH = 80;
     private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE;
@@ -125,45 +61,27 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int GUI_ID_DELETE = 5;
     private static final int GUI_ID_EXPORT = 6;
     
-    private static final int GUI_ID_MODAL_CONFIRM = 10;
-    private static final int GUI_ID_MODAL_CANCEL = 11;
-    private static final int GUI_ID_MODAL_NAME = 12;
-    private static final int GUI_ID_MODAL_DESC = 13;
-    private static final int GUI_ID_MODAL_SETTINGS = 14;
-    private static final int GUI_ID_MODAL_NEXT = 15;
-    private static final int GUI_ID_MODAL_PREV = 16;
-    
     private final GuiScreenCustomizeWorld parent;
     private final FilterType filterType;
     private final GuiCustomizePresetsDataHandler dataHandler;
     private final List<Info> presets;
     private final int initialPreset;
-    private final GuiBoundsChecker iconBounds;
     
     protected String title;
     
     private ListPreset list;
     private GuiTextField fieldExport;
-    private GuiTextField fieldModalName;
-    private GuiTextField fieldModalDesc;
-    private GuiTextField fieldModalSettings;
     private GuiButton buttonSave;
     private GuiButton buttonEdit;
     private GuiButton buttonDelete;
     private GuiButton buttonFilter;
     private GuiButton buttonSelect;
     private GuiButton buttonCancel;
-    private GuiButton buttonModalConfirm;
-    private GuiButton buttonModalCancel;
-    private GuiButton buttonModalPrev;
-    private GuiButton buttonModalNext;
-    private int selectedIcon;
     private String shareText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
-    private ModalState modalState;
-    private long confirmExitTime;
     private int amountScrolled;
+    private boolean isFocused;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
         this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1, 0);
@@ -176,11 +94,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.dataHandler = new GuiCustomizePresetsDataHandler();
         this.presets = this.loadPresets(filterType, this.dataHandler);
         this.initialPreset = initialPreset;
-        this.iconBounds = new GuiBoundsChecker();
         
         this.hoveredElement = -1;
-        this.modalState = ModalState.NONE;
         this.amountScrolled = amountScrolled;
+        this.isFocused = true;
     }
     
     @Override
@@ -188,15 +105,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         int centerX = this.width / 2;
-        int centerY = this.height / 2;
-        
-        int modalWidth = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
-        int modalHeight = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
-        
-        int boxL = centerX + modalWidth - MODAL_ICON_SIZE - 1 - MODAL_ICON_PADDING_R;
-        int boxR = centerX + modalWidth - 0 - MODAL_ICON_PADDING_R;
-        int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
-        int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
         
         int selectX = centerX + BUTTON_SPACE / 2;
         int filterX = centerX + BUTTON_SPACE / 2;
@@ -217,23 +125,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
         this.list.scrollBy(this.amountScrolled);
         
-        String initialExportText = this.getInitialExportText();
-        String initialModalNameText = this.fieldModalName != null ? this.fieldModalName.getText() : "";
-        String initialModalDescText = this.fieldModalDesc != null ? this.fieldModalDesc.getText() : "";
-        String intialModalSettingsText = this.fieldModalSettings != null ? this.fieldModalSettings.getText() : initialExportText;
-
+        String initialExportText = this.getInitialSettings();
         this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, 50, 40, this.width - 100, 20, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
-        
-        this.buttonModalConfirm = this.addButton(new GuiButton(GUI_ID_MODAL_CONFIRM, centerX - 62, centerY + modalHeight - 25, 60, 20, I18n.format(PREFIX + "confirm")));
-        this.buttonModalCancel = this.addButton(new GuiButton(GUI_ID_MODAL_CANCEL, centerX + 2, centerY + modalHeight - 25, 60, 20, I18n.format("gui.cancel")));
-        this.buttonModalPrev = this.addButton(new GuiButton(GUI_ID_MODAL_PREV, boxL + 5, boxB + 5, 20, 20, I18n.format(PREFIX + "prev")));
-        this.buttonModalNext = this.addButton(new GuiButton(GUI_ID_MODAL_NEXT, boxR - 23, boxB + 5, 20, 20, I18n.format(PREFIX + "next")));
-        
-        this.fieldModalName = this.createInitialField(this.fieldModalName, GUI_ID_MODAL_NAME, centerX - modalWidth + 10, centerY - 50, MODAL_NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
-        this.fieldModalDesc = this.createInitialField(this.fieldModalDesc, GUI_ID_MODAL_DESC, centerX - modalWidth + 10, centerY - 10, MODAL_DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
-        this.fieldModalSettings = this.createInitialField(this.fieldModalSettings, GUI_ID_MODAL_SETTINGS, centerX - modalWidth + 10, centerY + 30, MODAL_SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
-        
-        this.iconBounds.updateBounds(boxL + 1, boxT + 1, MODAL_ICON_SIZE, MODAL_ICON_SIZE);
         
         this.updateButtonValidity();
     }
@@ -242,22 +135,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         
-        if (this.canInteract() && this.modalState == ModalState.NONE) {
-            this.list.handleMouseInput();
-            this.amountScrolled = this.list.getAmountScrolled();
-        }
-        
-        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        
-        if (this.iconBounds.inBounds(mouseX, mouseY) && Mouse.hasWheel()) {
-            int dWheel = Mouse.getEventDWheel();
-            
-            if (dWheel != 0) {
-                this.incrementSelectedIcon(dWheel < 0 ? -1 : 1);
-                this.updateButtonValidity();
-            }
-        }
+        this.list.handleMouseInput();
+        this.amountScrolled = this.list.getAmountScrolled();
     }
     
     @Override
@@ -275,129 +154,50 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldExport.drawTextBox();
         
         super.drawScreen(mouseX, mouseY, partialTicks);
-        
-        if (this.modalState != ModalState.NONE) {
-            Info selectedPreset = this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
-            
-            Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
-            
-            int centerX = this.width / 2;
-            int centerY = this.height / 2;
-            
-            int modalWidth = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
-            int modalHeight = this.modalState == ModalState.DELETE || this.modalState == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
-            
-            double texU = modalWidth * 0.0625;
-            double texV = modalHeight * 0.0625;
-            
-            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
-            this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
-            this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
-            this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
-            
-            GlStateManager.disableLighting();
-            GlStateManager.disableFog();
-            
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder bufferBuilder = tessellator.getBuffer();
-            
-            this.mc.getTextureManager().bindTexture(GuiScreenCustomizeWorld.OPTIONS_BACKGROUND);
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            bufferBuilder.pos(centerX - modalWidth, centerY + modalHeight, 0.0).tex(0.0, texV).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY + modalHeight, 0.0).tex(texU, texV).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX + modalWidth, centerY - modalHeight, 0.0).tex(texU, 0.0).color(64, 64, 64, 64).endVertex();
-            bufferBuilder.pos(centerX - modalWidth, centerY - modalHeight, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
-            
-            tessellator.draw();
-            
-            String confirmTitle = "";
-            
-            switch (this.modalState) {
-                case SAVE:
-                    confirmTitle = I18n.format(PREFIX + "save.title");
-                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight, mouseX, mouseY);
-                    break;
-                case EDIT:
-                    confirmTitle = I18n.format(PREFIX + "edit.title");
-                    this.drawSaveScreen(centerX, centerY, modalWidth, modalHeight, mouseX, mouseY);
-                    break;
-                case DELETE:
-                    confirmTitle = I18n.format(PREFIX + "delete.title");
-                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "delete.confirm"), centerX, centerY - 16, 16752800);
-                    this.drawCenteredString(this.fontRenderer, selectedPreset.name, centerX, centerY + 2, 16777215);
-                    break;
-                case OVERWRITE:
-                    confirmTitle = I18n.format(PREFIX + "overwrite.title");
-                    this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "overwrite.confirm"), centerX, centerY - 16, 16752800);
-                    this.drawCenteredString(this.fontRenderer, this.fieldModalName.getText(), centerX, centerY + 2, 16777215);
-                    break;
-                case NONE:
-                    break;
-            }
-
-            this.drawCenteredString(this.fontRenderer, confirmTitle, centerX, centerY - modalHeight + 10, 16777215);
-            
-            this.buttonModalConfirm.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.buttonModalCancel.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.buttonModalPrev.drawButton(this.mc, mouseX, mouseY, partialTicks);
-            this.buttonModalNext.drawButton(this.mc, mouseX, mouseY, partialTicks);
-        }
     }
     
     @Override
     public void updateScreen() {
         this.fieldExport.updateCursorCounter();
-        this.fieldModalName.updateCursorCounter();
-        this.fieldModalDesc.updateCursorCounter();
-        this.fieldModalSettings.updateCursorCounter();
         super.updateScreen();
+    }
+
+    public String getSelectedPresetName() {
+        return this.getSelectedPreset().name;
+    }
+    
+    public String getSelectedPresetDesc() {
+        return this.getSelectedPreset().desc;
+    }
+    
+    public String getSelectedPresetSettings() {
+        return this.getSelectedPreset().settings.toString();
+    }
+    
+    public int getSelectedPresetIcon() {
+        return this.dataHandler.getPreset(this.getSelectedPreset().name).icon;
+    }
+
+    public String getInitialSettings() {
+        return this.fieldExport != null ?
+            this.fieldExport.getText() :
+            this.list != null && this.list.selected > -1 ?
+                this.presets.get(this.list.selected).settings.toString() :
+                this.parent.getSettingsString();
     }
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
         super.mouseClicked(mouseX, mouseY, clicked);
         
-        switch (this.modalState) {
-            case NONE:
-                this.fieldExport.mouseClicked(mouseX, mouseY, clicked);
-                break;
-            case SAVE:
-            case EDIT:
-                this.fieldModalName.mouseClicked(mouseX, mouseY, clicked);
-                this.fieldModalDesc.mouseClicked(mouseX, mouseY, clicked);
-                this.fieldModalSettings.mouseClicked(mouseX, mouseY, clicked);
-                break;
-            default:
-        }
-        
+        this.fieldExport.mouseClicked(mouseX, mouseY, clicked);
         this.updateButtonValidity();
     }
 
     @Override
     protected void keyTyped(char character, int keyCode) throws IOException {
-        boolean fieldTyped = 
-            this.fieldExport.textboxKeyTyped(character, keyCode) ||
-            this.fieldModalName.textboxKeyTyped(character, keyCode) ||
-            this.fieldModalDesc.textboxKeyTyped(character, keyCode) ||
-            this.fieldModalSettings.textboxKeyTyped(character, keyCode);
-        
-        if (!fieldTyped) {
-            switch (this.modalState) {
-                case SAVE:
-                case DELETE:
-                case EDIT:
-                case OVERWRITE:
-                    if (keyCode == Keyboard.KEY_ESCAPE) {
-                        this.updateModalState(ModalState.NONE);
-                        this.updateModalButtons(ModalState.NONE);
-                        break;
-                    }
-                default:
-                    super.keyTyped(character, keyCode);
-            }
-        }
+        super.keyTyped(character, keyCode);
+        this.fieldExport.textboxKeyTyped(character, keyCode);
         
         this.updateButtonValidity();
     }
@@ -405,7 +205,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         Info selectedPreset = this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
-        int amount = GuiScreen.isShiftKeyDown() ? 5 : 1;
         
         switch (guiButton.id) {
             case GUI_ID_FILTER:
@@ -426,154 +225,58 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_SAVE:
-                this.fieldModalName.setText("");
-                this.fieldModalDesc.setText("");
-                this.fieldModalSettings.setText(this.getInitialExportText());
-                this.selectedIcon = 0;
-                this.updateModalState(ModalState.SAVE);
+                Consumer<GuiModalPreset> onConfirmSave = modal -> {
+                    if (this.dataHandler.containsPreset(modal.getNameText())) {
+                        Consumer<GuiModalPresetConfirm> onConfirmOverwrite = modalOverwrite -> {
+                            int ndx = this.dataHandler.replacePreset(modal.getIcon(), modal.getNameText(), modal.getNameText(), modal.getDescText(), modal.getSettingsText());
+                            this.dataHandler.writePresets();
+                            this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx, this.amountScrolled));
+                        };
+                        List<String> textList = Arrays.asList(I18n.format(PREFIX + "overwrite.confirm"), modal.getNameText());
+                        List<Integer> textColors = Arrays.asList(16752800, 16777215);
+                        
+                        this.mc.displayGuiScreen(new GuiModalPresetConfirm(this, I18n.format(PREFIX + "overwrite.title"), onConfirmOverwrite, modalOverwrite -> this.isFocused = true, textList, textColors));
+                    } else {
+                        this.dataHandler.addPreset(modal.getIcon(), modal.getNameText(), modal.getDescText(), modal.getSettingsText());
+                        this.dataHandler.writePresets();
+                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size(), this.amountScrolled));
+                    }
+                    
+                    this.isFocused = true;
+                };
+                
+                this.isFocused = false;
+                this.mc.displayGuiScreen(new GuiModalPreset(this, onConfirmSave, modal -> this.isFocused = true, State.SAVE));
                 break;
             case GUI_ID_EDIT:
-                this.fieldModalName.setText(selectedPreset.name);
-                this.fieldModalDesc.setText(selectedPreset.desc);
-                this.fieldModalSettings.setText(selectedPreset.settings.toString());
-                this.selectedIcon = MathHelper.clamp(this.dataHandler.getPreset(selectedPreset.name).icon, 0, ICON_TEXTURES.length - 1);
-                this.updateModalState(ModalState.EDIT);
+                Consumer<GuiModalPreset> onConfirmEdit = modal -> {
+                    this.dataHandler.replacePreset(modal.getIcon(), selectedPreset.name, modal.getNameText(), modal.getDescText(), modal.getSettingsText());
+                    this.dataHandler.writePresets();
+                    this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected, this.amountScrolled));
+                    
+                    this.isFocused = true;
+                };
+                
+                this.isFocused = false;
+                this.mc.displayGuiScreen(new GuiModalPreset(this, onConfirmEdit, modal -> isFocused = true, State.EDIT));
                 break;
             case GUI_ID_DELETE:
-                this.updateModalState(ModalState.DELETE);
-                break;
-            case GUI_ID_MODAL_CONFIRM:
-                switch (this.modalState) {
-                    case SAVE:
-                        if (this.dataHandler.containsPreset(this.fieldModalName.getText())) {
-                            this.updateModalState(ModalState.OVERWRITE);
-                        } else {
-                            this.dataHandler.addPreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
-                            this.dataHandler.writePresets();
-                            this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size(), this.amountScrolled));
-                        }
-                        break;
-                    case DELETE:
-                        this.dataHandler.removePreset(selectedPreset.name);
-                        this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1, this.amountScrolled));
-                        break;
-                    case EDIT:
-                        this.dataHandler.replacePreset(this.selectedIcon, selectedPreset.name, this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
-                        this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected, this.amountScrolled));
-                        break;
-                    case OVERWRITE:
-                        int ndx = this.dataHandler.replacePreset(this.selectedIcon, this.fieldModalName.getText(), this.fieldModalName.getText(), this.fieldModalDesc.getText(), this.fieldModalSettings.getText());
-                        this.dataHandler.writePresets();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx, this.amountScrolled));
-                        break;
-                    default:
-                }
-                break;
-            case GUI_ID_MODAL_PREV:
-                this.incrementSelectedIcon(-amount);
-                break;
-            case GUI_ID_MODAL_NEXT:
-                this.incrementSelectedIcon(amount);
-                break;
-            case GUI_ID_MODAL_CANCEL:
-                this.updateModalState(ModalState.NONE);
-                break;
-        }
-        
-        this.updateModalButtons(this.modalState);
-        this.updateButtonValidity();
-    }
-    
-    private void drawSaveScreen(int centerX, int centerY, int modalWidth, int modalHeight, int mouseX, int mouseY) {
-        IconTexture icon = ICON_TEXTURES[this.selectedIcon];
-        int textStartX = centerX - modalWidth + 10;
-        
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, 10526880);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, 10526880);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), textStartX, centerY + 20, 10526880);
-        this.fieldModalName.drawTextBox();
-        this.fieldModalDesc.drawTextBox();
-        this.fieldModalSettings.drawTextBox();
-
-        String nameNumChars = String.format("%d", MAX_PRESET_NAME_LENGTH - this.fieldModalName.getText().length());
-        String descNumChars = String.format("%d", MAX_PRESET_DESC_LENGTH - this.fieldModalDesc.getText().length());
-        String settingsNumChars = String.format("%d", ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldModalSettings.getText().length());
-        
-        int nameNumCharsLen = this.fontRenderer.getStringWidth(nameNumChars);
-        int descNumCharsLen = this.fontRenderer.getStringWidth(descNumChars);
-        int settingsNumCharsLen = this.fontRenderer.getStringWidth(settingsNumChars);
-        
-        int nameNumCharsCol = MAX_PRESET_NAME_LENGTH - this.fieldModalName.getText().length() > 4 ? 10526880 : 16752800;
-        int descNumCharsCol = MAX_PRESET_DESC_LENGTH - this.fieldModalDesc.getText().length() > 4 ? 10526880 : 16752800;
-        int settingsNumCharsCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldModalSettings.getText().length() > 100 ? 10526880 : 16752800;
-        
-        this.drawString(this.fontRenderer, nameNumChars, textStartX + MODAL_NAME_FIELD_LENGTH - nameNumCharsLen, centerY - 60, nameNumCharsCol);
-        this.drawString(this.fontRenderer, descNumChars, textStartX + MODAL_DESC_FIELD_LENGTH - descNumCharsLen, centerY - 20, descNumCharsCol);
-        this.drawString(this.fontRenderer, settingsNumChars, textStartX + MODAL_SETTINGS_FIELD_LENGTH - settingsNumCharsLen, centerY + 20, settingsNumCharsCol);
-        
-        int boxL = centerX + modalWidth - MODAL_ICON_SIZE - 1 - MODAL_ICON_PADDING_R;
-        int boxR = centerX + modalWidth - 0 - MODAL_ICON_PADDING_R;
-        int boxT = centerY - modalHeight - 0 + MODAL_ICON_PADDING_T;
-        int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
-
-        String iconText = String.format("%d/%d", this.selectedIcon + 1, ICON_TEXTURES.length);
-        
-        this.drawCenteredString(this.fontRenderer, iconText, boxL + MODAL_ICON_SIZE / 2 + 1, boxT - 10, 10526880);
-        this.drawHorizontalLine(boxL, boxR, boxT, -2039584);
-        this.drawHorizontalLine(boxL, boxR, boxB, -6250336);
-        this.drawVerticalLine(boxL, boxT, boxB, -2039584);
-        this.drawVerticalLine(boxR, boxT, boxB, -6250336);
-        
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.mc.getTextureManager().bindTexture(icon.identifier);
-        
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        
-        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(boxL + 1, boxB, 0.0).tex(icon.u, icon.v + icon.h).endVertex();
-        bufferBuilder.pos(boxR, boxB, 0.0).tex(icon.u + icon.w, icon.v + icon.h).endVertex();
-        bufferBuilder.pos(boxR, boxT + 1, 0.0).tex(icon.u + icon.w, icon.v).endVertex();
-        bufferBuilder.pos(boxL + 1, boxT + 1, 0.0).tex(icon.u, icon.v).endVertex();
-        
-        tessellator.draw();
-        
-        if (this.iconBounds.inBounds(mouseX, mouseY) && Mouse.hasWheel()) {
-            int offsetX = 6;
-            int offsetY = 12;
-            
-            int scrollL = mouseX + offsetX;
-            int scrollR = mouseX + (int)(SCROLL_TEXTURE_SIZE_W / 1.0) + offsetX;
-            int scrollT = mouseY - offsetY;
-            int scrollB = mouseY + (int)(SCROLL_TEXTURE_SIZE_H / 1.0) - offsetY;
-            
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            
-            if (this.selectedIcon < ICON_TEXTURES.length - 1) {
-                this.mc.getTextureManager().bindTexture(SCROLL_UP);
-                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-                bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
-                bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
-                bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
-                bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
-                tessellator.draw();
-            }
-            
-            if (this.selectedIcon > 0) {
-                scrollT += SCROLL_TEXTURE_SIZE_H + 1;
-                scrollB += SCROLL_TEXTURE_SIZE_H + 1;
+                Consumer<GuiModalPresetConfirm> onConfirmDelete = modal -> {
+                    this.dataHandler.removePreset(selectedPreset.name);
+                    this.dataHandler.writePresets();
+                    this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1, this.amountScrolled));
                 
-                this.mc.getTextureManager().bindTexture(SCROLL_DOWN);
-                bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-                bufferBuilder.pos(scrollL, scrollB, 0.0).tex(0.0, 1.0).endVertex();
-                bufferBuilder.pos(scrollR, scrollB, 0.0).tex(1.0, 1.0).endVertex();
-                bufferBuilder.pos(scrollR, scrollT, 0.0).tex(1.0, 0.0).endVertex();
-                bufferBuilder.pos(scrollL, scrollT, 0.0).tex(0.0, 0.0).endVertex();
-                tessellator.draw();
-            }
+                    this.isFocused = true;
+                };
+                List<String> textList = Arrays.asList(I18n.format(PREFIX + "delete.confirm"), selectedPreset.name);
+                List<Integer> textColors = Arrays.asList(16752800, 16777215);
+                
+                this.isFocused = false;
+                this.mc.displayGuiScreen(new GuiModalPresetConfirm(this, I18n.format(PREFIX + "delete.title"), onConfirmDelete, modal -> this.isFocused = true, textList, textColors));
+                break;
         }
+        
+        this.updateButtonValidity();
     }
 
     private List<Info> loadPresets(FilterType filterType, GuiCustomizePresetsDataHandler dataHandler) {
@@ -617,7 +320,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             for (PresetData presetData : dataHandler.getPresets()) {
                 name = presetData.name;
                 desc = presetData.desc;
-                texture = ICON_TEXTURES[MathHelper.clamp(presetData.icon, 0, ICON_TEXTURES.length - 1)];
+                texture = GuiModalPreset.getIconTexture(presetData.icon);
                 factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(presetData.settings);
                 
                 presets.add(new Info(name, desc, texture, factory, true));
@@ -642,129 +345,29 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         return newTextField;
     }
 
-    private String getInitialExportText() {
-        return this.fieldExport != null ?
-            this.fieldExport.getText() :
-            this.list != null && this.list.selected > -1 ?
-                this.presets.get(this.list.selected).settings.toString() :
-                this.parent.getSettingsString();
-    }
-
     private String getFilterText() {
         return I18n.format(PREFIX_FILTER) + ": " + I18n.format(PREFIX_FILTER + "." + this.filterType.name().toLowerCase());
     }
 
-    private void updateModalState(ModalState state) {
-        if (this.modalState != state) {
-            this.confirmExitTime = System.currentTimeMillis();
-        }
-        
-        this.modalState = state;
-    }
-    
-    private void updateModalButtons(ModalState state) {
-        int centerX = this.width / 2;
-        int centerY = this.height / 2;
-        
-        int modalWidth = state == ModalState.DELETE || state == ModalState.OVERWRITE ? MODAL_WIDTH_SMALL : MODAL_WIDTH;
-        int modalHeight = state == ModalState.DELETE || state == ModalState.OVERWRITE ? MODAL_HEIGHT_SMALL : MODAL_HEIGHT;
-        
-        int buttonModalY = centerY + modalHeight - 25;
-        int fieldModalX = centerX - modalWidth + 10;
-        
-        int boxL = centerX + modalWidth - MODAL_ICON_SIZE - 1 - MODAL_ICON_PADDING_R;
-        int boxR = centerX + modalWidth - 0 - MODAL_ICON_PADDING_R;
-        int boxB = centerY - modalHeight + MODAL_ICON_SIZE + 1 + MODAL_ICON_PADDING_T;
-        
-        this.buttonModalConfirm.y = buttonModalY;
-        this.buttonModalCancel.y = buttonModalY;
-        this.buttonModalPrev.x = boxL + 5;
-        this.buttonModalPrev.y = boxB + 5;
-        this.buttonModalNext.x = boxR - 23;
-        this.buttonModalNext.y = boxB + 5;
-        
-        this.fieldModalName.x = fieldModalX;
-        this.fieldModalDesc.x = fieldModalX;
-        this.fieldModalSettings.x = fieldModalX;
-    }
-
     private void updateButtonValidity() {
         boolean editable = this.list.selected > -1 && this.presets.get(this.list.selected).custom;
-        boolean exportFocused = this.fieldExport.isFocused();
         
-        this.buttonSave.enabled = false;
-        this.buttonEdit.enabled = false;
-        this.buttonDelete.enabled = false;
-        this.buttonSelect.enabled = false;
-        this.buttonFilter.enabled = false;
-        this.buttonCancel.enabled = false;
-        this.buttonModalConfirm.visible = false;
-        this.buttonModalCancel.visible = false;
-        this.buttonModalPrev.visible = false;
-        this.buttonModalNext.visible = false;
-        this.buttonModalConfirm.enabled = false;
-        this.buttonModalCancel.enabled = false;
-        this.buttonModalPrev.enabled = false;
-        this.buttonModalNext.enabled = false;
-        this.fieldModalName.setVisible(false);
-        this.fieldModalDesc.setVisible(false);
-        this.fieldModalSettings.setVisible(false);
-        this.fieldExport.setEnabled(false);
-        this.fieldExport.setFocused(false);
-        
-        switch (this.modalState) {
-            case NONE:
-                this.buttonSave.enabled = true;
-                this.buttonEdit.enabled = editable;
-                this.buttonDelete.enabled = editable;
-                this.buttonSelect.enabled = this.hasValidSelection();
-                this.buttonFilter.enabled = true;
-                this.buttonCancel.enabled = true;
-                this.fieldExport.setEnabled(true);
-                this.fieldExport.setFocused(exportFocused);
-                this.fieldModalName.setFocused(false);
-                this.fieldModalDesc.setFocused(false);
-                this.fieldModalSettings.setFocused(false);
-                break;
-            case OVERWRITE:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalConfirm.enabled =  true;
-                this.buttonModalCancel.enabled = true;
-                break;
-            case SAVE:
-            case EDIT:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalPrev.visible = true;
-                this.buttonModalNext.visible = true;
-                this.buttonModalConfirm.enabled = !this.fieldModalName.getText().isEmpty();
-                this.buttonModalCancel.enabled = true;
-                this.buttonModalPrev.enabled = this.selectedIcon > 0;
-                this.buttonModalNext.enabled = this.selectedIcon < ICON_TEXTURES.length - 1;
-                this.fieldModalName.setVisible(true);
-                this.fieldModalDesc.setVisible(true);
-                this.fieldModalSettings.setVisible(true);
-                break;
-            case DELETE:
-                this.buttonModalConfirm.visible = true;
-                this.buttonModalCancel.visible = true;
-                this.buttonModalConfirm.enabled =  true;
-                this.buttonModalCancel.enabled = true;
-                break;
-        }
+        this.buttonSave.enabled = this.isFocused;
+        this.buttonEdit.enabled = this.isFocused && editable;
+        this.buttonDelete.enabled = this.isFocused && editable;
+        this.buttonSelect.enabled = this.isFocused && this.hasValidSelection();
+        this.buttonFilter.enabled = this.isFocused;
+        this.buttonCancel.enabled = this.isFocused;
+        this.fieldExport.setEnabled(this.isFocused);
+        this.fieldExport.setFocused(this.fieldExport.isFocused());
     }
 
     private boolean hasValidSelection() {
         return (this.list.selected > -1 && this.list.selected < this.presets.size()) || this.fieldExport.getText().length() > 1;
     }
     
-    private boolean canInteract() {
-        return System.currentTimeMillis() - this.confirmExitTime > 100L;
-    }
-    
-    private void incrementSelectedIcon(int amount) {
-        this.selectedIcon = MathHelper.clamp(this.selectedIcon + amount, 0, ICON_TEXTURES.length - 1);
+    private Info getSelectedPreset() {
+        return this.presets.size() > 0 ? this.presets.get(this.list.selected > -1 ? this.list.selected : 0) : new Info();
     }
     
     @SideOnly(Side.CLIENT)
@@ -981,32 +584,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 return this.icon;
             }
             
-            return ICON_TEXTURES[0];
-        }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    private static class IconTexture {
-        public ResourceLocation identifier;
-        public final double u;
-        public final double v;
-        public final double w;
-        public final double h;
-        
-        public IconTexture(ResourceLocation identifier) {
-            this(identifier, 0.0, 0.0, 1.0, 1.0);
-        }
-        
-        public IconTexture(ResourceLocation identifier, double u, double v, double w) {
-            this(identifier, u, v, w, w);
-        }
-        
-        public IconTexture(ResourceLocation identifier, double u, double v, double w, double h) {
-            this.identifier = identifier;
-            this.u = u;
-            this.v = v;
-            this.w = w;
-            this.h = h;
+            return GuiModalPreset.getIconTexture(0);
         }
     }
 }

@@ -13,7 +13,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
     private static final String PREFIX = String.format("createWorld.customize.custom.%s.", ModernBeta.MODID);
     

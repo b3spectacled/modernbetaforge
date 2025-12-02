@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiModalConfirm extends GuiModal<GuiModalConfirm> {
     private final List<String> textList;
     private final int textColor;
@@ -25,7 +28,7 @@ public class GuiModalConfirm extends GuiModal<GuiModalConfirm> {
         int textY = this.height / 2 - textListHeight / 2;
         
         for (int i = 0; i < this.textList.size(); ++i) {
-            this.drawCenteredString(this.fontRenderer, this.textList.get(i), this.width / 2, textY, textColor);
+            this.drawCenteredString(this.fontRenderer, this.textList.get(i), this.width / 2, textY, this.textColor);
             textY += this.fontRenderer.FONT_HEIGHT + TEXT_PADDING;
         }
     }
