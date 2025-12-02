@@ -2314,7 +2314,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int page = this.pageList.getPage();
         
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
-        this.buttonRandomize.enabled = page < 5 || page == 6;
+        this.buttonRandomize.enabled = (page < 5 || page == 6) && this.isFocused;
         
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
             if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + page) {
