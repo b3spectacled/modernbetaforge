@@ -241,8 +241,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                         this.dataHandler.writePresets();
                         this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size(), this.amountScrolled));
                     }
-                    
-                    this.isFocused = true;
                 };
                 
                 this.isFocused = false;
@@ -253,8 +251,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     this.dataHandler.replacePreset(modal.getIcon(), selectedPreset.name, modal.getNameText(), modal.getDescText(), modal.getSettingsText());
                     this.dataHandler.writePresets();
                     this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected, this.amountScrolled));
-                    
-                    this.isFocused = true;
                 };
                 
                 this.isFocused = false;
@@ -265,8 +261,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     this.dataHandler.removePreset(selectedPreset.name);
                     this.dataHandler.writePresets();
                     this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1, this.amountScrolled));
-                
-                    this.isFocused = true;
                 };
                 List<String> textList = Arrays.asList(I18n.format(PREFIX + "delete.confirm"), selectedPreset.name);
                 List<Integer> textColors = Arrays.asList(16752800, 16777215);
