@@ -47,6 +47,12 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean useMenusForBasicSettings = true;
+        
+        @Comment({
+            "Display navigation buttons in the world customization menu."
+        })
+        @RequiresWorldRestart
+        public boolean displayNavButtons = true;
     }
     
     public static class CategoryGenerator {

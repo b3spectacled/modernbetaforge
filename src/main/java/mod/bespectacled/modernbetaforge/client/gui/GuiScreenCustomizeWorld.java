@@ -156,6 +156,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private int tabStartX;
     private int tabEndX;
     private boolean isFocused;
+    private boolean displayNavButtons;
     private PreviewSettings previewSettings;
     
     public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
@@ -198,6 +199,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.enabledMap = new HashMap<>();
         this.previewSettings = new PreviewSettings();
         this.isFocused = true;
+        this.displayNavButtons = ModernBetaConfig.guiOptions.displayNavButtons;
         
         this.loadValues(string);
     }
@@ -1737,8 +1739,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, 16777215);
-        this.drawKeyIcon(leftKey, this.tabStartX - leftKeyWidth - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
-        this.drawKeyIcon(rightKey, this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
+        
+        if (this.displayNavButtons) {
+            this.drawKeyIcon(leftKey, this.tabStartX - leftKeyWidth - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
+            this.drawKeyIcon(rightKey, this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
+        }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -1866,10 +1871,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 break;
         }
         
-        if (KeyBindings.LEFT_NAV_KEY.isActiveAndMatches(keyCode)) {
+        if (this.displayNavButtons && KeyBindings.LEFT_NAV_KEY.isActiveAndMatches(keyCode)) {
             usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? -1 : 0);
             this.lastNavPressed = System.currentTimeMillis();
-        } else if (KeyBindings.RIGHT_NAV_KEY.isActiveAndMatches(keyCode)) {
+        } else if (this.displayNavButtons && KeyBindings.RIGHT_NAV_KEY.isActiveAndMatches(keyCode)) {
             usedSpecialKey = this.modifyPageValue(System.currentTimeMillis() - this.lastNavPressed > 50L ? 1 : 0);
             this.lastNavPressed = System.currentTimeMillis();
         }
@@ -1883,11 +1888,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
         
-        if (this.leftKeyBounds.isHovered()) {
+        if (this.displayNavButtons && this.leftKeyBounds.isHovered()) {
             this.modifyPageValue(-1);
         }
         
-        if (this.rightKeyBounds.isHovered()) {
+        if (this.displayNavButtons && this.rightKeyBounds.isHovered()) {
             this.modifyPageValue(1);
         }
         
