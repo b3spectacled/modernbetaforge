@@ -533,12 +533,16 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             
-            SimpleTexture iconTexture = new SimpleTexture(icon.identifier);
-            if (!this.mc.getTextureManager().loadTexture(icon.identifier, iconTexture)) {
-                icon.identifier = UNKNOWN_PACK;
+            if (!icon.wasChecked()) {
+                SimpleTexture iconTexture = new SimpleTexture(icon.getIdentifier());
+                if (!this.mc.getTextureManager().loadTexture(icon.getIdentifier(), iconTexture)) {
+                    icon.setIdentifier(UNKNOWN_PACK);
+                }
+                
+                icon.setChecked();
             }
             
-            this.mc.getTextureManager().bindTexture(icon.identifier);
+            this.mc.getTextureManager().bindTexture(icon.getIdentifier());
             
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();

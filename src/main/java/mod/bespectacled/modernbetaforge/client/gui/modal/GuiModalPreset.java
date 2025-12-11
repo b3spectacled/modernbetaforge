@@ -373,11 +373,13 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
 
     @SideOnly(Side.CLIENT)
     public static class IconTexture {
-        public ResourceLocation identifier;
         public final double u;
         public final double v;
         public final double w;
         public final double h;
+        
+        private ResourceLocation identifier;
+        private boolean checked;
         
         public IconTexture(ResourceLocation identifier) {
             this(identifier, 0.0, 0.0, 1.0, 1.0);
@@ -393,6 +395,22 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
             this.v = v;
             this.w = w;
             this.h = h;
+        }
+        
+        public ResourceLocation getIdentifier() {
+            return this.identifier;
+        }
+        
+        public boolean wasChecked() {
+            return this.checked;
+        }
+        
+        public void setIdentifier(ResourceLocation identifier) {
+            this.identifier = identifier;
+        }
+        
+        public void setChecked() {
+            this.checked = true;
         }
     }
 }
