@@ -19,7 +19,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     private static final int MODAL_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
-    private static final int MODAL_HEIGHT_PADDING = 100;
     private static final int PAGE_LIST_PADDING_TOP = 24;
     private static final int PAGE_LIST_PADDING_BOTTOM = 27;
     private static final int PAGE_LIST_SLOT_HEIGHT = 25;
@@ -29,39 +28,39 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     private GuiListExtendedNoOverlay changeList;
 
-	public GuiModalConfirmSettings(GuiScreen parent, String title, Consumer<GuiModalConfirmSettings> onConfirm, Consumer<GuiModalConfirmSettings> onCancel, Consumer<GuiModalConfirmSettings> onDiscard) {
-		super(parent, title, MODAL_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
+    public GuiModalConfirmSettings(GuiScreen parent, String title, Consumer<GuiModalConfirmSettings> onConfirm, Consumer<GuiModalConfirmSettings> onCancel, Consumer<GuiModalConfirmSettings> onDiscard) {
+        super(parent, title, MODAL_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
 
-		this.onDiscard = onDiscard;
-	}
+        this.onDiscard = onDiscard;
+    }
 	
     @Override
     public void initGui() {
-    	super.initGui();
-    	
+        super.initGui();
+        
         int curScroll = 0;
         if (this.changeList != null) {
             curScroll = this.changeList.getAmountScrolled();
         }
-    	
-    	this.createChangeList();
-    	this.changeList.scrollBy(curScroll);
-    	
-    	int centerY = this.height / 2;
-    	
-    	int confirmX = this.width / 2 - BUTTON_S_WIDTH / 2 - BUTTON_S_WIDTH - BUTTON_PADDING;
-    	int cancelX = this.width / 2 + BUTTON_S_WIDTH / 2 + BUTTON_PADDING;
-    	
-    	int discardX = this.width / 2 - BUTTON_S_WIDTH / 2;
-    	int discardY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
-    	
-    	this.buttonConfirm.x = confirmX;
-    	this.buttonConfirm.y = discardY;
-    	
-    	this.buttonCancel.x = cancelX;
-    	this.buttonCancel.y = discardY;
-    	
-    	this.addButton(new GuiButton(GUI_ID_DISCARD, discardX, discardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
+        
+        this.createChangeList();
+        this.changeList.scrollBy(curScroll);
+        
+        int centerY = this.height / 2;
+        
+        int confirmX = this.width / 2 - BUTTON_S_WIDTH / 2 - BUTTON_S_WIDTH - BUTTON_PADDING;
+        int cancelX = this.width / 2 + BUTTON_S_WIDTH / 2 + BUTTON_PADDING;
+        
+        int discardX = this.width / 2 - BUTTON_S_WIDTH / 2;
+        int discardY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
+        
+        this.buttonConfirm.x = confirmX;
+        this.buttonConfirm.y = discardY;
+        
+        this.buttonCancel.x = cancelX;
+        this.buttonCancel.y = discardY;
+        
+        this.addButton(new GuiButton(GUI_ID_DISCARD, discardX, discardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
     }
 
     
@@ -73,13 +72,13 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-    	this.parent.drawScreen(mouseX, mouseY, partialTicks);
+        this.parent.drawScreen(mouseX, mouseY, partialTicks);
         this.drawModal(mouseX, mouseY, partialTicks);
-    	this.changeList.drawScreen(mouseX, mouseY, partialTicks);
-    	for (int i = 0; i < this.buttonList.size(); ++i) {
-    		this.buttonList.get(i).drawButton(this.mc, mouseX, mouseY, partialTicks);
-    	}
-        
+        this.changeList.drawScreen(mouseX, mouseY, partialTicks);
+        for (int i = 0; i < this.buttonList.size(); ++i) {
+            this.buttonList.get(i).drawButton(this.mc, mouseX, mouseY, partialTicks);
+        }
+       
         int titleX = this.width / 2;
         int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
         this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, 16777215);
@@ -88,13 +87,13 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
-	        case GUI_ID_CONFIRM:
-	            this.onConfirm.accept(this);
-	            break;
-	        case GUI_ID_CANCEL:
-	            this.onCancel.accept(this);
-	            this.mc.displayGuiScreen(this.parent);
-	            break;
+            case GUI_ID_CONFIRM:
+                this.onConfirm.accept(this);
+                break;
+	    case GUI_ID_CANCEL:
+	        this.onCancel.accept(this);
+	        this.mc.displayGuiScreen(this.parent);
+	        break;
             case GUI_ID_DISCARD:
                 this.onDiscard.accept(this);
                 break;
@@ -103,7 +102,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-    	super.mouseClicked(mouseX, mouseY, mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
         this.changeList.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -114,17 +113,17 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     }
     
     private void createChangeList() {
-    	int centerX = this.width / 2;
-    	int centerY = this.height / 2;
-    	
-    	this.modalHeight = this.height - MODAL_HEIGHT_PADDING;
-
-    	int modalLeft = centerX - this.modalWidth / 2;
-    	int modalRight = centerX + this.modalWidth / 2;
-    	int modalTop = centerY - this.modalHeight / 2 + PAGE_LIST_PADDING_TOP;
-    	int modalBottom = centerY + this.modalHeight / 2 - PAGE_LIST_PADDING_BOTTOM;
-    	
-    	this.changeList = new GuiListExtendedNoOverlay(
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        
+        this.modalHeight = (int)(this.height * 0.8);
+        
+        int modalLeft = centerX - this.modalWidth / 2;
+        int modalRight = centerX + this.modalWidth / 2;
+        int modalTop = centerY - this.modalHeight / 2 + PAGE_LIST_PADDING_TOP;
+        int modalBottom = centerY + this.modalHeight / 2 - PAGE_LIST_PADDING_BOTTOM;
+        
+        this.changeList = new GuiListExtendedNoOverlay(
             this.mc,
             this.modalWidth,
             this.modalHeight,
@@ -132,29 +131,29 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             modalBottom,
             PAGE_LIST_SLOT_HEIGHT
         );
-    	
-    	this.changeList.left = modalLeft;
-    	this.changeList.right = modalRight;
-    	this.changeList.top = modalTop;
+        
+        this.changeList.left = modalLeft;
+        this.changeList.right = modalRight;
+        this.changeList.top = modalTop;
     }
     
     @SideOnly(Side.CLIENT)
     private static class GuiListExtendedNoOverlay extends GuiListExtended {
-		public GuiListExtendedNoOverlay(Minecraft mc, int width, int height, int top, int bottom, int slotHeight) {
-			super(mc, width, height, top, bottom, slotHeight);
-		}
+        public GuiListExtendedNoOverlay(Minecraft mc, int width, int height, int top, int bottom, int slotHeight) {
+            super(mc, width, height, top, bottom, slotHeight);
+        }
 		
-		@Override
-		protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) { }
+        @Override
+        protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) { }
 
-		@Override
-		public IGuiListEntry getListEntry(int index) {
-			return null;
-		}
+        @Override
+        public IGuiListEntry getListEntry(int index) {
+            return null;
+        }
 
-		@Override
-		protected int getSize() {
-			return 0;
-		}
+        @Override
+        protected int getSize() {
+            return 0;
+        }
     }
 }
