@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -30,6 +31,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
 import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
@@ -50,6 +52,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview.PreviewSettings;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirm;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirmSettings;
 import mod.bespectacled.modernbetaforge.client.settings.KeyBindings;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
@@ -1798,14 +1801,33 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
+    	String title;
+    	
         if (!guiButton.enabled) {
             return;
         }
         
         switch (guiButton.id) {
             case GuiIdentifiers.FUNC_DONE:
-                this.parent.chunkProviderSettingsJson = this.settings.toString();
-                this.mc.displayGuiScreen(this.parent);
+            	if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
+            		ModernBeta.log(Level.DEBUG, "No changes were made..");
+            		this.mc.displayGuiScreen(this.parent);
+            	} else {
+            		Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
+                		this.parent.chunkProviderSettingsJson = this.settings.toString();
+                		this.mc.displayGuiScreen(this.parent);
+                	};
+                	Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
+                		this.mc.displayGuiScreen(this.parent);
+                	};
+                	
+                	title = I18n.format(PREFIX + "confirmSettingsTitle");
+                	
+                	this.isFocused = false;
+                	this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+            	}
+            	
+            	
                 break;
             case GuiIdentifiers.FUNC_RAND: // Randomize
                 Set<Gui> biomeButtonComponents = this.getBiomeButtonComponents();
@@ -1829,11 +1851,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 if (this.settingsModified) {
                     Consumer<GuiModalConfirm> onConfirm = modal -> {
                         this.restoreDefaults();
-                        this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
                         this.isFocused = true;
                     };
 
-                    String title = I18n.format(PREFIX + "confirmTitle");
+                    title = I18n.format(PREFIX + "confirmTitle");
                     List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm1"), I18n.format(PREFIX + "confirm2"));
 
                     this.isFocused = false;

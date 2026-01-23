@@ -40,11 +40,11 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
     
     protected final GuiScreen parent;
     protected final String title;
-    protected final int modalWidth;
-    protected final int modalHeight;
     protected final Consumer<T> onConfirm;
     protected final Consumer<T> onCancel;
-    
+
+    protected int modalWidth;
+    protected int modalHeight;
     protected GuiButton buttonConfirm;
     protected GuiButton buttonCancel;
     
@@ -67,7 +67,7 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         int centerY = this.height / 2;
         
         int confirmX = centerX - 62;
-        int confirmY = centerY + this.modalHeight - BUTTON_HEIGHT - GUI_PADDING;
+        int confirmY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
         
         int cancelX = centerX + 2;
         int cancelY = confirmY;
@@ -83,7 +83,7 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         int titleX = this.width / 2;
-        int titleY = this.height / 2 - this.modalHeight + this.fontRenderer.FONT_HEIGHT;
+        int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
         this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, 16777215);
     }
     
@@ -102,14 +102,14 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         }
     }
     
-    private void drawModal(int mouseX, int mouseY, float partialTicks) {
+    protected void drawModal(int mouseX, int mouseY, float partialTicks) {
         Gui.drawRect(0, 0, this.width, this.height, Integer.MIN_VALUE);
         
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         
-        int modalWidth = this.modalWidth;
-        int modalHeight = this.modalHeight;
+        int modalWidth = this.modalWidth / 2;
+        int modalHeight = this.modalHeight / 2;
         
         double texU = modalWidth * 0.0625;
         double texV = modalHeight * 0.0625;

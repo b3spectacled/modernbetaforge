@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiModalPresetConfirm extends GuiModal<GuiModalPresetConfirm> {
-    private static final int MODAL_WIDTH = 110;
-    private static final int MODAL_HEIGHT = 60;
+    private static final int MODAL_WIDTH = 220;
+    private static final int MODAL_HEIGHT = 120;
     
     private final List<String> textList;
     private final List<Integer> textColors;
@@ -43,6 +43,7 @@ public class GuiModalPresetConfirm extends GuiModal<GuiModalPresetConfirm> {
         switch (guiButton.id) {
             case GUI_ID_CONFIRM:
                 this.onConfirm.accept(this);
+                this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_CANCEL:
                 this.onCancel.accept(this);

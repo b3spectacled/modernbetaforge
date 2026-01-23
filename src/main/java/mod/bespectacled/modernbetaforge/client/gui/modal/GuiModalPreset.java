@@ -82,8 +82,8 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
-    private static final int MODAL_WIDTH = 160;
-    private static final int MODAL_HEIGHT = 100;
+    private static final int MODAL_WIDTH = 320;
+    private static final int MODAL_HEIGHT = 200;
     private static final int NAME_FIELD_LENGTH = 220;
     private static final int DESC_FIELD_LENGTH = 220;
     private static final int SETTINGS_FIELD_LENGTH = 300;

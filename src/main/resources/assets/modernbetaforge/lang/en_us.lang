@@ -84,11 +84,13 @@ createWorld.customize.custom.modernbetaforge.preview=Preview
 createWorld.customize.custom.modernbetaforge.presets=Presets
 createWorld.customize.custom.modernbetaforge.confirm=Confirm
 createWorld.customize.custom.modernbetaforge.cancel=Cancel
+createWorld.customize.custom.modernbetaforge.discard=Discard
 
 # Page Confirm
 createWorld.customize.custom.modernbetaforge.confirmTitle=Warning!
 createWorld.customize.custom.modernbetaforge.confirm1=This will overwrite your current
 createWorld.customize.custom.modernbetaforge.confirm2=settings and cannot be undone.
+createWorld.customize.custom.modernbetaforge.confirmSettingsTitle=Confirm Changes
 
 # Page 1 - Main Settings
 createWorld.customize.custom.modernbetaforge.chunkSource=Chunk Source
