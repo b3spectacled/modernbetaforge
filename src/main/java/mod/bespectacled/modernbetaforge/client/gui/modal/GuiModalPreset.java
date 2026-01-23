@@ -134,10 +134,10 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         
-        int boxL = centerX + modalWidth - ICON_SIZE - 1 - ICON_PADDING_R;
-        int boxR = centerX + modalWidth - 0 - ICON_PADDING_R;
-        int boxT = centerY - modalHeight - 0 + ICON_PADDING_T;
-        int boxB = centerY - modalHeight + ICON_SIZE + 1 + ICON_PADDING_T;
+        int boxL = centerX + this.modalWidth / 2 - ICON_SIZE - 1 - ICON_PADDING_R;
+        int boxR = centerX + this.modalWidth / 2 - 0 - ICON_PADDING_R;
+        int boxT = centerY - this.modalHeight / 2 - 0 + ICON_PADDING_T;
+        int boxB = centerY - this.modalHeight / 2 + ICON_SIZE + 1 + ICON_PADDING_T;
         
         String initialModalNameText = this.fieldName != null ? this.fieldName.getText() : this.initialNameText;
         String initialModalDescText = this.fieldDesc != null ? this.fieldDesc.getText() : this.initialDescText;
@@ -146,9 +146,9 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.buttonPrev = this.addButton(new GuiButton(GUI_ID_PREV, boxL + 5, boxB + 5, 20, 20, I18n.format(PREFIX + "prev")));
         this.buttonNext = this.addButton(new GuiButton(GUI_ID_NEXT, boxR - 23, boxB + 5, 20, 20, I18n.format(PREFIX + "next")));
         
-        this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, centerX - modalWidth + 10, centerY - 50, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
-        this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, centerX - modalWidth + 10, centerY - 10, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
-        this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, centerX - modalWidth + 10, centerY + 30, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, centerX - this.modalWidth / 2 + 10, centerY - 50, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
+        this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, centerX - this.modalWidth / 2 + 10, centerY - 10, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
+        this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, centerX - this.modalWidth / 2 + 10, centerY + 30, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
         this.iconBounds.updateBounds(boxL + 1, boxT + 1, ICON_SIZE, ICON_SIZE);
         this.updateButtonValidity();
@@ -258,7 +258,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
 
     private void drawSaveScreen(int centerX, int centerY, int mouseX, int mouseY) {
         IconTexture icon = ICON_TEXTURES[this.selectedIcon];
-        int textStartX = centerX - modalWidth + 10;
+        int textStartX = centerX - this.modalWidth / 2 + 10;
         
         this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, 10526880);
         this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, 10526880);
@@ -283,10 +283,10 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.drawString(this.fontRenderer, descNumChars, textStartX + DESC_FIELD_LENGTH - descNumCharsLen, centerY - 20, descNumCharsCol);
         this.drawString(this.fontRenderer, settingsNumChars, textStartX + SETTINGS_FIELD_LENGTH - settingsNumCharsLen, centerY + 20, settingsNumCharsCol);
         
-        int boxL = centerX + this.modalWidth - ICON_SIZE - 1 - ICON_PADDING_R;
-        int boxR = centerX + this.modalWidth - 0 - ICON_PADDING_R;
-        int boxT = centerY - this.modalHeight - 0 + ICON_PADDING_T;
-        int boxB = centerY - this.modalHeight + ICON_SIZE + 1 + ICON_PADDING_T;
+        int boxL = centerX + this.modalWidth / 2 - ICON_SIZE - 1 - ICON_PADDING_R;
+        int boxR = centerX + this.modalWidth / 2 - 0 - ICON_PADDING_R;
+        int boxT = centerY - this.modalHeight / 2 - 0 + ICON_PADDING_T;
+        int boxB = centerY - this.modalHeight / 2 + ICON_SIZE + 1 + ICON_PADDING_T;
 
         String iconText = String.format("%d/%d", this.selectedIcon + 1, ICON_TEXTURES.length);
         

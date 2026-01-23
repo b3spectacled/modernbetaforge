@@ -1773,6 +1773,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public String getSettingsString() {
         return this.settings.toString().replace("\n", "");
     }
+    
+    public String getPreviousSettingsString() {
+        return this.parent.chunkProviderSettingsJson.isEmpty() ?
+            this.defaultSettings.toString() :
+            this.parent.chunkProviderSettingsJson;
+    }
 
     public void loadValues(String string) {
         if (string != null && !string.isEmpty()) {
@@ -1801,7 +1807,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
-    	String title;
+        String title;
     	
         if (!guiButton.enabled) {
             return;
@@ -1809,25 +1815,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         switch (guiButton.id) {
             case GuiIdentifiers.FUNC_DONE:
-            	if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
-            		ModernBeta.log(Level.DEBUG, "No changes were made..");
-            		this.mc.displayGuiScreen(this.parent);
-            	} else {
-            		Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
-                		this.parent.chunkProviderSettingsJson = this.settings.toString();
-                		this.mc.displayGuiScreen(this.parent);
-                	};
-                	Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
-                		this.mc.displayGuiScreen(this.parent);
-                	};
-                	
-                	title = I18n.format(PREFIX + "confirmSettingsTitle");
-                	
-                	this.isFocused = false;
-                	this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
-            	}
-            	
-            	
+                if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
+                    ModernBeta.log(Level.DEBUG, "No changes were made..");
+                    this.mc.displayGuiScreen(this.parent);
+                } else {
+                    Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
+                        this.parent.chunkProviderSettingsJson = this.settings.toString();
+                        this.mc.displayGuiScreen(this.parent);
+                    };
+                    Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
+                        this.mc.displayGuiScreen(this.parent);
+                    };
+                    
+                    title = I18n.format(PREFIX + "confirmSettingsTitle");
+                    
+                    this.isFocused = false;
+                    this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+                }
+               
                 break;
             case GuiIdentifiers.FUNC_RAND: // Randomize
                 Set<Gui> biomeButtonComponents = this.getBiomeButtonComponents();
@@ -1858,7 +1863,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm1"), I18n.format(PREFIX + "confirm2"));
 
                     this.isFocused = false;
-                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 100, 50, onConfirm, modal -> this.isFocused = true, textList, 10526880));
+                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, textList, 10526880));
                 }
                 break;
             case GuiIdentifiers.FUNC_PRST:
