@@ -179,10 +179,13 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     private List<String> getModIds(Map<String, Tuple<JsonElement, JsonElement>> changeMap) {
         List<String> modIds = new ArrayList<>();
-        modIds.add(ModernBeta.MODID);
         
         for (String key : changeMap.keySet()) {
-            if (isResourceFormat(key)) {
+            if (!isResourceFormat(key)) {
+                if (!modIds.contains(ModernBeta.MODID)) {
+                    modIds.add(ModernBeta.MODID);
+                }
+            } else {
                 String namespace = key.split(":")[0];
                 
                 if (!modIds.contains(namespace)) {

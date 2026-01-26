@@ -1819,7 +1819,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.parent.chunkProviderSettingsJson = this.settings.toString();
                     this.mc.displayGuiScreen(this.parent);
                 } else {
-                    if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
+                    boolean isEqualToPrev = this.parent.chunkProviderSettingsJson.equals(this.settings.toString());
+                    boolean isEqualToDefault = this.defaultSettings.toString().equals(this.settings.toString());
+                    
+                    if (isEqualToPrev || isEqualToDefault) {
                         ModernBeta.log(Level.DEBUG, "No changes were made..");
                         this.mc.displayGuiScreen(this.parent);
                     } else {
