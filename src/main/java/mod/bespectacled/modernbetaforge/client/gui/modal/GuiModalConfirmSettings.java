@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -128,6 +126,11 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             String changesTrimmed = this.fontRenderer.trimStringToWidth(changes, this.changeList.getListWidth());
             if (!changes.equals(changesTrimmed)) {
                 shouldDraw = true;
+
+                changesTrimmed = this.fontRenderer.trimStringToWidth(changes, 2500);
+                if (!changes.equals(changesTrimmed)) {
+                    changes = changesTrimmed + TextFormatting.RESET + "...";
+                }
             }
             
             if (shouldDraw) {
@@ -167,7 +170,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             JsonElement nextSetting = next.get(key);
             
             if (!prevSetting.equals(nextSetting)) {
-                ModernBeta.log(Level.DEBUG, "SETTING CHANGED: " + key);
                 changeMap.put(key, new Tuple<>(prevSetting, nextSetting));
             }
         }
@@ -348,7 +350,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 
                 String changesTrimmed = this.parent.fontRenderer.trimStringToWidth(changes, this.getListWidth());
                 if (!changes.equals(changesTrimmed)) {
-                    changesTrimmed = changesTrimmed + TextFormatting.RESET + "...";
+                    changesTrimmed += TextFormatting.RESET + "...";
                 }
                 
                 int changeX = settingX;
