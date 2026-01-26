@@ -247,7 +247,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         
         @Override
         public int getListWidth() {
-            return super.getListWidth() + 30;
+            return super.getListWidth() + 60;
         }
         
         @Override
@@ -291,6 +291,11 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         @Override
         protected int getSize() {
             return this.parent.changeMap.size() + this.parent.modIds.size();
+        }
+        
+        @Override
+        protected int getScrollBarX() {
+            return this.width / 2 + this.parent.modalWidth / 2 - 7;
         }
 
         @Override
