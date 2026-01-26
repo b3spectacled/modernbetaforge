@@ -249,7 +249,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         
         @Override
         public int getListWidth() {
-            return super.getListWidth() + 60;
+            return super.getListWidth() + 50;
         }
         
         @Override
