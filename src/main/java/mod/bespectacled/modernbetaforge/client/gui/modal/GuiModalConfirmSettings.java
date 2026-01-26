@@ -107,6 +107,37 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         int titleX = this.width / 2;
         int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
         this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, 16777215);
+        
+        if (this.changeList.hoveredSlot >= 0) {
+            ChangeListEntry listEntry = this.changeList.changeList.get(this.changeList.hoveredSlot);
+            boolean shouldDraw = false;
+            
+            String key = listEntry.entry.getKey();
+            String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
+            String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
+            
+            String setting = I18n.format(PREFIX_ADDON + String.format("%s.%s", modId, modSetting)) + ":";
+            setting = setting.trim();
+            
+            String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
+            String change0 = TextFormatting.RED + listEntry.entry.getValue().getFirst().getAsString();
+            String change1 = TextFormatting.GREEN + listEntry.entry.getValue().getSecond().getAsString();
+            String changes = change0 + arrow + change1;
+            changes = changes.trim();
+            
+            String changesTrimmed = this.fontRenderer.trimStringToWidth(changes, this.changeList.getListWidth());
+            if (!changes.equals(changesTrimmed)) {
+                shouldDraw = true;
+            }
+            
+            if (shouldDraw) {
+                List<String> hoverTexts = new ArrayList<>();
+                hoverTexts.add(setting);
+                hoverTexts.add(changes);
+                
+                this.parent.drawHoveringText(hoverTexts, mouseX, mouseY);
+            }
+        }
     }
 
     @Override
@@ -186,25 +217,47 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         private final GuiModalConfirmSettings parent;
         private final List<ChangeListEntry> changeList;
         
+        private int hoveredSlot;
+        
         public ChangeList(GuiModalConfirmSettings parent, int top, int bottom, int slotHeight) {
             super(parent.mc, parent.width, parent.height, top, bottom, slotHeight);
             
             this.parent = parent;
             this.changeList = this.createChangeList();
+            this.hoveredSlot = -1;
         }
         
         @Override
         public void handleMouseInput() {
             super.handleMouseInput();
             
+            this.hoveredSlot = -1;
             if (this.isMouseYWithinSlotBounds(this.mouseY)) {
-                //int slotIndex = this.getSlotIndexFromScreenCoords(this.mouseX, this.mouseY);
+                int slotIndex = this.getSlotIndexFromScreenCoords(this.mouseX, this.mouseY);
+                
+                if (slotIndex >= 0 && slotIndex < this.changeList.size()) {
+                    ChangeListEntry listEntry = this.changeList.get(slotIndex);
+                    
+                    if (!listEntry.isTitle) {
+                        this.hoveredSlot = slotIndex;
+                    }
+                }
             }
         }
         
         @Override
         public int getListWidth() {
             return super.getListWidth() + 30;
+        }
+        
+        @Override
+        public int getSlotIndexFromScreenCoords(int posX, int posY) {
+            int l = this.left;
+            int r = this.right;
+            int y = posY - this.top - this.headerPadding + (int)this.amountScrolled + 5;
+            int slotIndex = y / this.slotHeight;
+            
+            return posX < this.getScrollBarX() && posX >= l && posX <= r && slotIndex >= 0 && y >= 0 && slotIndex < this.getSize() ? slotIndex : -1;
         }
 		
         @Override
@@ -258,19 +311,19 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 return;
             }
             
-            ChangeListEntry entry = this.changeList.get(slotIndex);
+            ChangeListEntry listEntry = this.changeList.get(slotIndex);
             
-            if (entry.isTitle) {
-                String title = entry.title;
+            if (listEntry.isTitle) {
+                String title = listEntry.title;
                 int titleX = this.width / 2;
                 
                 this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX_ADDON + title), titleX, textY, 16777215);
                 
             } else {
-                String key = entry.entry.getKey();
+                String key = listEntry.entry.getKey();
                 String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
                 String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
-                 
+                
                 String setting = I18n.format(PREFIX_ADDON + String.format("%s.%s", modId, modSetting)) + ":";
                 setting = setting.trim();
                 
@@ -283,8 +336,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 int settingY = y - 5;
                 
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = TextFormatting.RED + entry.entry.getValue().getFirst().getAsString();
-                String change1 = TextFormatting.GREEN + entry.entry.getValue().getSecond().getAsString();
+                String change0 = TextFormatting.RED + listEntry.entry.getValue().getFirst().getAsString();
+                String change1 = TextFormatting.GREEN + listEntry.entry.getValue().getSecond().getAsString();
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
@@ -317,24 +370,24 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             
             return changeList;
         }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private static class ChangeListEntry {
+        private final boolean isTitle;
+        private final String title;
+        private final Entry<String, Tuple<JsonElement, JsonElement>> entry;
         
-        @SideOnly(Side.CLIENT)
-        private static class ChangeListEntry {
-            private final boolean isTitle;
-            private final String title;
-            private final Entry<String, Tuple<JsonElement, JsonElement>> entry;
-            
-            public ChangeListEntry(String title) {
-                this.isTitle = true;
-                this.title = title;
-                this.entry = null;
-            }
-            
-            public ChangeListEntry(Entry<String, Tuple<JsonElement, JsonElement>> entry) {
-                this.isTitle = false;
-                this.title = null;
-                this.entry = entry;
-            }
+        public ChangeListEntry(String title) {
+            this.isTitle = true;
+            this.title = title;
+            this.entry = null;
+        }
+        
+        public ChangeListEntry(Entry<String, Tuple<JsonElement, JsonElement>> entry) {
+            this.isTitle = false;
+            this.title = null;
+            this.entry = entry;
         }
     }
 }
