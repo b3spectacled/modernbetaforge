@@ -53,6 +53,12 @@ public class ModernBetaConfig {
         })
         @RequiresWorldRestart
         public boolean displayNavButtons = true;
+        
+        @Comment({
+            "Display settings confirmation screen in the world customization menu."
+        })
+        @RequiresWorldRestart
+        public boolean displaySettingsConfirmation = true;
     }
     
     public static class CategoryGenerator {

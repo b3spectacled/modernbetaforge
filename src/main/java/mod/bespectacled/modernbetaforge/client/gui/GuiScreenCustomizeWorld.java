@@ -1815,22 +1815,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         switch (guiButton.id) {
             case GuiIdentifiers.FUNC_DONE:
-                if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
-                    ModernBeta.log(Level.DEBUG, "No changes were made..");
+                if (!ModernBetaConfig.guiOptions.displaySettingsConfirmation) {
+                    this.parent.chunkProviderSettingsJson = this.settings.toString();
                     this.mc.displayGuiScreen(this.parent);
                 } else {
-                    Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
-                        this.parent.chunkProviderSettingsJson = this.settings.toString();
+                    if (this.parent.chunkProviderSettingsJson.equals(this.settings.toString())) {
+                        ModernBeta.log(Level.DEBUG, "No changes were made..");
                         this.mc.displayGuiScreen(this.parent);
-                    };
-                    Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
-                        this.mc.displayGuiScreen(this.parent);
-                    };
-                    
-                    title = I18n.format(PREFIX + "confirmSettingsTitle");
-                    
-                    this.isFocused = false;
-                    this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+                    } else {
+                        Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
+                            this.parent.chunkProviderSettingsJson = this.settings.toString();
+                            this.mc.displayGuiScreen(this.parent);
+                        };
+                        Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
+                            this.mc.displayGuiScreen(this.parent);
+                        };
+                        
+                        title = I18n.format(PREFIX + "confirmSettingsTitle");
+                        
+                        this.isFocused = false;
+                        this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+                    }
                 }
                
                 break;
