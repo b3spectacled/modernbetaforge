@@ -98,7 +98,8 @@ createWorld.customize.custom.modernbetaforge.biomeSource=Biome Source
 createWorld.customize.custom.modernbetaforge.surfaceBuilder=Surface Builder
 createWorld.customize.custom.modernbetaforge.caveCarver=Cave Carver
 createWorld.customize.custom.modernbetaforge.worldSpawner=World Spawner
-createWorld.customize.custom.modernbetaforge.fixedBiome=Biome
+createWorld.customize.custom.modernbetaforge.fixedBiome=Single Biome
+createWorld.customize.custom.modernbetaforge.singleBiome=Single Biome
 createWorld.customize.custom.modernbetaforge.biome=Biome
 createWorld.customize.custom.modernbetaforge.block=Block
 createWorld.customize.custom.modernbetaforge.entity=Entity
@@ -194,6 +195,91 @@ createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
 createWorld.customize.custom.modernbetaforge.maxHeight=Max. Height
 createWorld.customize.custom.modernbetaforge.center=Center Height
 createWorld.customize.custom.modernbetaforge.spread=Spread Height
+
+createWorld.customize.custom.modernbetaforge.dirtSize=Dirt Size
+createWorld.customize.custom.modernbetaforge.dirtCount=Dirt Count
+createWorld.customize.custom.modernbetaforge.dirtMinHeight=Dirt Min Height
+createWorld.customize.custom.modernbetaforge.dirtMaxHeight=Dirt Max Height
+
+createWorld.customize.custom.modernbetaforge.dirtSize=Dirt Size
+createWorld.customize.custom.modernbetaforge.dirtCount=Dirt Count
+createWorld.customize.custom.modernbetaforge.dirtMinHeight=Dirt Min Height
+createWorld.customize.custom.modernbetaforge.dirtMaxHeight=Dirt Max Height
+
+createWorld.customize.custom.modernbetaforge.gravelSize=Gravel Size
+createWorld.customize.custom.modernbetaforge.gravelCount=Gravel Count
+createWorld.customize.custom.modernbetaforge.gravelMinHeight=Gravel Min Height
+createWorld.customize.custom.modernbetaforge.gravelMaxHeight=Gravel Max Height
+
+createWorld.customize.custom.modernbetaforge.graniteSize=Granite Size
+createWorld.customize.custom.modernbetaforge.graniteCount=Granite Count
+createWorld.customize.custom.modernbetaforge.graniteMinHeight=Granite Min Height
+createWorld.customize.custom.modernbetaforge.graniteMaxHeight=Granite Max Height
+
+createWorld.customize.custom.modernbetaforge.dioriteSize=Diorite Size
+createWorld.customize.custom.modernbetaforge.dioriteCount=Diorite Count
+createWorld.customize.custom.modernbetaforge.dioriteMinHeight=Diorite Min Height
+createWorld.customize.custom.modernbetaforge.dioriteMaxHeight=Diorite Max Height
+
+createWorld.customize.custom.modernbetaforge.andesiteSize=Andesite Size
+createWorld.customize.custom.modernbetaforge.andesiteCount=Andesite Count
+createWorld.customize.custom.modernbetaforge.andesiteMinHeight=Andesite Min Height
+createWorld.customize.custom.modernbetaforge.andesiteMaxHeight=Andesite Max Height
+
+createWorld.customize.custom.modernbetaforge.coalSize=Coal Size
+createWorld.customize.custom.modernbetaforge.coalCount=Coal Count
+createWorld.customize.custom.modernbetaforge.coalMinHeight=Coal Min Height
+createWorld.customize.custom.modernbetaforge.coalMaxHeight=Coal Max Height
+
+createWorld.customize.custom.modernbetaforge.ironSize=Iron Size
+createWorld.customize.custom.modernbetaforge.ironCount=Iron Count
+createWorld.customize.custom.modernbetaforge.ironMinHeight=Iron Min Height
+createWorld.customize.custom.modernbetaforge.ironMaxHeight=Iron Max Height
+
+createWorld.customize.custom.modernbetaforge.goldSize=Gold Size
+createWorld.customize.custom.modernbetaforge.goldCount=Gold Count
+createWorld.customize.custom.modernbetaforge.goldMinHeight=Gold Min Height
+createWorld.customize.custom.modernbetaforge.goldMaxHeight=Gold Max Height
+
+createWorld.customize.custom.modernbetaforge.redstoneSize=Redstone Size
+createWorld.customize.custom.modernbetaforge.redstoneCount=Redstone Count
+createWorld.customize.custom.modernbetaforge.redstoneMinHeight=Redstone Min Height
+createWorld.customize.custom.modernbetaforge.redstoneMaxHeight=Redstone Max Height
+
+createWorld.customize.custom.modernbetaforge.diamondSize=Diamond Size
+createWorld.customize.custom.modernbetaforge.diamondCount=Diamond Count
+createWorld.customize.custom.modernbetaforge.diamondMinHeight=Diamond Min Height
+createWorld.customize.custom.modernbetaforge.diamondMaxHeight=Diamond Max Height
+
+createWorld.customize.custom.modernbetaforge.lapisSize=Lapis Size
+createWorld.customize.custom.modernbetaforge.lapisCount=Lapis Count
+createWorld.customize.custom.modernbetaforge.lapisCenterHeight=Lapis Center Height
+createWorld.customize.custom.modernbetaforge.lapisSpread=Lapis Height Spread
+
+createWorld.customize.custom.modernbetaforge.emeraldSize=Emerald Size
+createWorld.customize.custom.modernbetaforge.emeraldCount=Emerald Count
+createWorld.customize.custom.modernbetaforge.emeraldMinHeight=Emerald Min Height
+createWorld.customize.custom.modernbetaforge.emeraldMaxHeight=Emerald Max Height
+
+createWorld.customize.custom.modernbetaforge.claySize=Clay Size
+createWorld.customize.custom.modernbetaforge.clayCount=Clay Count
+createWorld.customize.custom.modernbetaforge.clayMinHeight=Clay Min Height
+createWorld.customize.custom.modernbetaforge.clayMaxHeight=Clay Max Height
+
+createWorld.customize.custom.modernbetaforge.emeraldSize=Emerald Size
+createWorld.customize.custom.modernbetaforge.emeraldCount=Emerald Count
+createWorld.customize.custom.modernbetaforge.emeraldMinHeight=Emerald Min Height
+createWorld.customize.custom.modernbetaforge.emeraldMaxHeight=Emerald Max Height
+
+createWorld.customize.custom.modernbetaforge.quartzSize=Quartz Size
+createWorld.customize.custom.modernbetaforge.quartzCount=Quartz Count
+createWorld.customize.custom.modernbetaforge.quartzMinHeight=Quartz Min Height
+createWorld.customize.custom.modernbetaforge.quartzMaxHeight=Quartz Max Height
+
+createWorld.customize.custom.modernbetaforge.magmaSize=Magma Size
+createWorld.customize.custom.modernbetaforge.magmaCount=Magma Count
+createWorld.customize.custom.modernbetaforge.magmaMinHeight=Magma Min Height
+createWorld.customize.custom.modernbetaforge.magmaMaxHeight=Magma Max Height
 
 # Page 5/6
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleX=Main Noise Scale X

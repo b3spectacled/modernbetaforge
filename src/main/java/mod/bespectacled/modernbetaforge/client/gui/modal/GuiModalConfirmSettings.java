@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final Gson GSON = new Gson();
     
+    private static final String PREFIX_ADDON = "createWorld.customize.custom.";
     private static final String PREFIX = String.format("createWorld.customize.custom.%s.", ModernBeta.MODID);
     private static final String GUI_LABEL_DISCARD = I18n.format(PREFIX + "discard");
     
@@ -40,7 +42,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final int MODAL_HEIGHT = 200;
     private static final int LIST_PADDING_TOP = 24;
     private static final int LIST_PADDING_BOTTOM = 27;
-    private static final int LIST_SLOT_HEIGHT = 25;
+    private static final int LIST_SLOT_HEIGHT = 32;
     private static final int GUI_ID_DISCARD = 2;
     
     private final Consumer<GuiModalConfirmSettings> onDiscard;
@@ -173,7 +175,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         this.changeList = new ChangeList(this, modalT, modalB, LIST_SLOT_HEIGHT);
         this.changeList.left = modalL;
         this.changeList.right = modalR;
-        this.changeList.top = modalT;
     }
     
     private static boolean isResourceFormat(String resourceString) {
@@ -186,21 +187,28 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         private final List<ChangeListEntry> changeList;
         
         public ChangeList(GuiModalConfirmSettings parent, int top, int bottom, int slotHeight) {
-            super(parent.mc, parent.width, parent.modalHeight, top, bottom, slotHeight);
+            super(parent.mc, parent.width, parent.height, top, bottom, slotHeight);
             
             this.parent = parent;
             this.changeList = this.createChangeList();
         }
         
         @Override
+        public void handleMouseInput() {
+            super.handleMouseInput();
+            
+            if (this.isMouseYWithinSlotBounds(this.mouseY)) {
+                //int slotIndex = this.getSlotIndexFromScreenCoords(this.mouseX, this.mouseY);
+            }
+        }
+        
+        @Override
         public int getListWidth() {
-            return this.parent.width;
+            return super.getListWidth() + 30;
         }
 		
         @Override
         protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) { 
-            //super.overlayBackground(startY, endY, startAlpha, endAlpha);
-            
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             this.mc.getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
@@ -210,8 +218,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             double f = 32.0;
             double l = this.left;
             double r = this.left + this.parent.modalWidth;
-            double t = startY == 0 ? centerY - this.parent.modalHeight / 2 + LIST_PADDING_TOP : startY;
-            double b = endY;
+            double t = startY == 0 ? centerY - this.parent.modalHeight / 2 : startY;
+            double b = endY == this.height ? centerY + this.parent.modalHeight / 2 : endY;
             
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             bufferbuilder.pos(l, b, 0.0).tex(0.0, b / f).color(64, 64, 64, endAlpha).endVertex();
@@ -239,19 +247,57 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
 
         @Override
         protected void drawSlot(int slotIndex, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
-            int startY = y;
-            int slotY = slotIndex * LIST_SLOT_HEIGHT;
+            int centerY = this.parent.height / 2;
+            int topY = centerY - this.parent.modalHeight / 2 + LIST_PADDING_TOP;
+            int bottomY = centerY + this.parent.modalHeight / 2 - LIST_PADDING_BOTTOM;
+            int fontHeight = this.parent.fontRenderer.FONT_HEIGHT;
+            
+            int textY = y + this.slotHeight / 2 - fontHeight;
+            
+            if (textY + fontHeight < topY || textY - fontHeight > bottomY) {
+                return;
+            }
+            
             ChangeListEntry entry = this.changeList.get(slotIndex);
             
             if (entry.isTitle) {
                 String title = entry.title;
-                int titleX = this.width / 2 - this.parent.fontRenderer.getStringWidth(title);
-                int titleY = startY + slotY + LIST_SLOT_HEIGHT / 2;
+                int titleX = this.width / 2;
                 
-                this.parent.drawString(this.parent.fontRenderer, I18n.format(PREFIX + title), titleX, titleY, 16777215);
+                this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX_ADDON + title), titleX, textY, 16777215);
                 
             } else {
+                String key = entry.entry.getKey();
+                String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
+                String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
+                 
+                String setting = I18n.format(PREFIX_ADDON + String.format("%s.%s", modId, modSetting)) + ":";
+                setting = setting.trim();
                 
+                String settingTrimmed = this.parent.fontRenderer.trimStringToWidth(setting, this.getListWidth());
+                if (!setting.equals(settingTrimmed)) {
+                    settingTrimmed = settingTrimmed + TextFormatting.RESET + "...";
+                }
+                
+                int settingX = this.width / 2 - this.parent.modalWidth / 2 + 10;
+                int settingY = y - 5;
+                
+                String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
+                String change0 = TextFormatting.RED + entry.entry.getValue().getFirst().getAsString();
+                String change1 = TextFormatting.GREEN + entry.entry.getValue().getSecond().getAsString();
+                String changes = change0 + arrow + change1;
+                changes = changes.trim();
+                
+                String changesTrimmed = this.parent.fontRenderer.trimStringToWidth(changes, this.getListWidth());
+                if (!changes.equals(changesTrimmed)) {
+                    changesTrimmed = changesTrimmed + TextFormatting.RESET + "...";
+                }
+                
+                int changeX = settingX;
+                int changeY = y + 10;
+                
+                this.parent.drawString(this.parent.fontRenderer, settingTrimmed, settingX, settingY, 16777215);
+                this.parent.drawString(this.parent.fontRenderer, changesTrimmed, changeX, changeY, 16777215);
             }
         }
         
