@@ -43,7 +43,6 @@ public class GuiModalPresetConfirm extends GuiModal<GuiModalPresetConfirm> {
         switch (guiButton.id) {
             case GUI_ID_CONFIRM:
                 this.onConfirm.accept(this);
-                this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_CANCEL:
                 this.onCancel.accept(this);
