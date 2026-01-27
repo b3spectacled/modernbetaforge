@@ -1819,8 +1819,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.parent.chunkProviderSettingsJson = this.settings.toString();
                     this.mc.displayGuiScreen(this.parent);
                 } else {
-                    boolean isEqualToPrev = this.parent.chunkProviderSettingsJson.equals(this.settings.toString());
-                    boolean isEqualToDefault = this.defaultSettings.toString().equals(this.settings.toString());
+                    String generatorOptions = this.parent.chunkProviderSettingsJson;
+                    boolean isEqualToPrev = generatorOptions.equals(this.settings.toString());
+                    boolean isEqualToDefault = generatorOptions.isEmpty() && this.defaultSettings.toString().equals(this.settings.toString());
                     
                     if (isEqualToPrev || isEqualToDefault) {
                         ModernBeta.log(Level.DEBUG, "No changes were made..");
@@ -1865,6 +1866,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     Consumer<GuiModalConfirm> onConfirm = modal -> {
                         this.restoreDefaults();
                         this.isFocused = true;
+                        this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
                     };
 
                     title = I18n.format(PREFIX + "confirmTitle");

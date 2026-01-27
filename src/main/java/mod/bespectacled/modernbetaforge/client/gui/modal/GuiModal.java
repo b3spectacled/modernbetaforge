@@ -93,7 +93,6 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         switch (guiButton.id) {
             case GUI_ID_CONFIRM:
                 this.onConfirm.accept((T)this);
-                this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_CANCEL:
                 this.onCancel.accept((T)this);
