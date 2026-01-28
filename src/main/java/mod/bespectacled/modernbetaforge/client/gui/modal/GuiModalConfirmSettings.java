@@ -36,6 +36,9 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final String PREFIX = String.format("createWorld.customize.custom.%s.", ModernBeta.MODID);
     private static final String GUI_LABEL_DISCARD = I18n.format(PREFIX + "discard");
     
+    private static final TextFormatting FORMATTING_PREV = TextFormatting.DARK_RED;
+    private static final TextFormatting FORMATTING_NEXT = TextFormatting.DARK_GREEN;
+    
     private static final int MODAL_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
     private static final int LIST_PADDING_TOP = 24;
@@ -118,8 +121,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             setting = setting.trim();
             
             String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-            String change0 = TextFormatting.RED + listEntry.entry.getValue().getFirst().getAsString();
-            String change1 = TextFormatting.GREEN + listEntry.entry.getValue().getSecond().getAsString();
+            String change0 = FORMATTING_PREV + listEntry.entry.getValue().getFirst().getAsString();
+            String change1 = FORMATTING_NEXT + listEntry.entry.getValue().getSecond().getAsString();
             String changes = change0 + arrow + change1;
             changes = changes.trim();
             
@@ -346,8 +349,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 int settingY = y - 5;
                 
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = TextFormatting.RED + listEntry.entry.getValue().getFirst().getAsString();
-                String change1 = TextFormatting.GREEN + listEntry.entry.getValue().getSecond().getAsString();
+                String change0 = FORMATTING_PREV + listEntry.entry.getValue().getFirst().getAsString();
+                String change1 = FORMATTING_NEXT + listEntry.entry.getValue().getSecond().getAsString();
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
