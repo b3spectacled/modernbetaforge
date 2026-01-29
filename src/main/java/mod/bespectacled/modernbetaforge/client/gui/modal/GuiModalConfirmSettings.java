@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -39,11 +40,13 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final TextFormatting FORMATTING_PREV = TextFormatting.DARK_RED;
     private static final TextFormatting FORMATTING_NEXT = TextFormatting.DARK_GREEN;
     
-    private static final int MODAL_WIDTH = 300;
+    private static final int MODAL_MAX_WIDTH = 500;
+    private static final int MODAL_MIN_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
     private static final int LIST_PADDING_TOP = 24;
     private static final int LIST_PADDING_BOTTOM = 27;
     private static final int LIST_SLOT_HEIGHT = 32;
+    private static final int LIST_WIDTH_OFFSET = 25;
     private static final int GUI_ID_DISCARD = 2;
     
     private final Consumer<GuiModalConfirmSettings> onDiscard;
@@ -53,7 +56,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private ChangeList changeList;
 
     public GuiModalConfirmSettings(GuiScreenCustomizeWorld parent, String title, Consumer<GuiModalConfirmSettings> onConfirm, Consumer<GuiModalConfirmSettings> onCancel, Consumer<GuiModalConfirmSettings> onDiscard) {
-        super(parent, title, MODAL_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
+        super(parent, title, MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
 
         this.onDiscard = onDiscard;
         this.changeMap = this.createChangeMap(parent.getPreviousSettingsString(), parent.getSettingsString());
@@ -63,6 +66,9 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     @Override
     public void initGui() {
         super.initGui();
+        
+        this.modalWidth = MathHelper.clamp((int)(this.width * 0.8), MODAL_MIN_WIDTH, MODAL_MAX_WIDTH);
+        this.modalHeight = (int)(this.height * 0.8);
         
         int curScroll = 0;
         if (this.changeList != null) {
@@ -204,8 +210,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         
-        this.modalHeight = (int)(this.height * 0.8);
-        
         int modalL = centerX - this.modalWidth / 2;
         int modalR = centerX + this.modalWidth / 2;
         int modalT = centerY - this.modalHeight / 2 + LIST_PADDING_TOP;
@@ -255,7 +259,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         
         @Override
         public int getListWidth() {
-            return super.getListWidth() + 50;
+            return this.parent.modalWidth - LIST_WIDTH_OFFSET;
         }
         
         @Override
@@ -278,7 +282,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             int centerY = this.parent.height / 2;
             double f = 32.0;
             double l = this.left;
-            double r = this.left + this.parent.modalWidth;
+            double r = this.left + this.parent.modalWidth - 1; // Offset by one to prevent edge overlap with unusual widths
             double t = startY == 0 ? centerY - this.parent.modalHeight / 2 : startY;
             double b = endY == this.height ? centerY + this.parent.modalHeight / 2 : endY;
             
