@@ -62,7 +62,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         this.changeMap = this.createChangeMap(parent.getPreviousSettingsString(), parent.getSettingsString());
         this.modIds = this.getModIds(this.changeMap);
     }
-	
+        
     @Override
     public void initGui() {
         super.initGui();
@@ -158,10 +158,10 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             case GUI_ID_CONFIRM:
                 this.onConfirm.accept(this);
                 break;
-	    case GUI_ID_CANCEL:
-	        this.onCancel.accept(this);
-	        this.mc.displayGuiScreen(this.parent);
-	        break;
+            case GUI_ID_CANCEL:
+                this.onCancel.accept(this);
+                this.mc.displayGuiScreen(this.parent);
+                break;
             case GUI_ID_DISCARD:
                 this.onDiscard.accept(this);
                 break;
@@ -271,7 +271,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             
             return posX < this.getScrollBarX() && posX >= l && posX <= r && slotIndex >= 0 && y >= 0 && slotIndex < this.getSize() ? slotIndex : -1;
         }
-		
+                
         @Override
         protected void overlayBackground(int startY, int endY, int startAlpha, int endAlpha) { 
             Tessellator tessellator = Tessellator.getInstance();
@@ -352,9 +352,10 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 int settingX = this.width / 2 - this.parent.modalWidth / 2 + 10;
                 int settingY = y - 5;
                 
+                Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = FORMATTING_PREV + listEntry.entry.getValue().getFirst().getAsString();
-                String change1 = FORMATTING_NEXT + listEntry.entry.getValue().getSecond().getAsString();
+                String change0 = FORMATTING_PREV + this.formatValue(modId, modSetting, entryValue.getFirst());
+                String change1 = FORMATTING_NEXT + this.formatValue(modId, modSetting, entryValue.getSecond());
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
@@ -386,6 +387,14 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             }
             
             return changeList;
+        }
+        
+        private String formatValue(String modId, String modSetting, JsonElement element) {
+            if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean()) {
+                return element.getAsJsonPrimitive().getAsBoolean() ? I18n.format("gui.yes") : I18n.format("gui.no");
+            }
+            
+            return element.getAsString();
         }
     }
     
