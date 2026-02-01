@@ -331,49 +331,49 @@ createWorld.customize.custom.modernbetaforge.baseBiome=Base Biome
 createWorld.customize.custom.modernbetaforge.oceanBiome=Ocean Biome
 createWorld.customize.custom.modernbetaforge.beachBiome=Beach Biome
 
-createWorld.customize.custom.modernbetaforge.desertBiomeBase=Base Desert Biome
-createWorld.customize.custom.modernbetaforge.desertBiomeBeach=Beach Desert Biome
-createWorld.customize.custom.modernbetaforge.desertBiomeOcean=Ocean Desert Biome
+createWorld.customize.custom.modernbetaforge.desertBiomeBase=Desert Base Biome
+createWorld.customize.custom.modernbetaforge.desertBiomeBeach=Desert Beach Biome
+createWorld.customize.custom.modernbetaforge.desertBiomeOcean=Desert Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.forestBiomeBase=Base Forest Biome
-createWorld.customize.custom.modernbetaforge.forestBiomeBeach=Beach Forest Biome
-createWorld.customize.custom.modernbetaforge.forestBiomeOcean=Ocean Forest Biome
+createWorld.customize.custom.modernbetaforge.forestBiomeBase=Forest Base Biome
+createWorld.customize.custom.modernbetaforge.forestBiomeBeach=Forest Beach Biome
+createWorld.customize.custom.modernbetaforge.forestBiomeOcean=Forest Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.iceDesertBiomeBase=Base Ice Desert Biome
-createWorld.customize.custom.modernbetaforge.iceDesertBiomeBeach=Beach Ice Desert Biome
-createWorld.customize.custom.modernbetaforge.iceDesertBiomeOcean=Ocean Ice Desert Biome
+createWorld.customize.custom.modernbetaforge.iceDesertBiomeBase=Ice Desert Base Biome
+createWorld.customize.custom.modernbetaforge.iceDesertBiomeBeach=Ice Desert Beach Biome
+createWorld.customize.custom.modernbetaforge.iceDesertBiomeOcean=Ice Desert Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.plainsBiomeBase=Base Plains Biome
-createWorld.customize.custom.modernbetaforge.plainsBiomeBeach=Beach Plains Biome
-createWorld.customize.custom.modernbetaforge.plainsBiomeOcean=Ocean Plains Biome
+createWorld.customize.custom.modernbetaforge.plainsBiomeBase=Plains Base Biome
+createWorld.customize.custom.modernbetaforge.plainsBiomeBeach=Plains Beach Biome
+createWorld.customize.custom.modernbetaforge.plainsBiomeOcean=Plains Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.rainforestBiomeBase=Base Rainforest Biome
-createWorld.customize.custom.modernbetaforge.rainforestBiomeBeach=Beach Rainforest Biome
-createWorld.customize.custom.modernbetaforge.rainforestBiomeOcean=Ocean Rainforest Biome
+createWorld.customize.custom.modernbetaforge.rainforestBiomeBase=Rainforest Base Biome
+createWorld.customize.custom.modernbetaforge.rainforestBiomeBeach=Rainforest Beach Biome
+createWorld.customize.custom.modernbetaforge.rainforestBiomeOcean=Rainforest Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.savannaBiomeBase=Base Savanna Biome
-createWorld.customize.custom.modernbetaforge.savannaBiomeBeach=Beach Savanna Biome
-createWorld.customize.custom.modernbetaforge.savannaBiomeOcean=Ocean Savanna Biome
+createWorld.customize.custom.modernbetaforge.savannaBiomeBase=Savanna Base Biome
+createWorld.customize.custom.modernbetaforge.savannaBiomeBeach=Savanna Beach Biome
+createWorld.customize.custom.modernbetaforge.savannaBiomeOcean=Savanna Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.shrublandBiomeBase=Base Shrubland Biome
-createWorld.customize.custom.modernbetaforge.shrublandBiomeBeach=Beach Shrubland Biome
-createWorld.customize.custom.modernbetaforge.shrublandBiomeOcean=Ocean Shrubland Biome
+createWorld.customize.custom.modernbetaforge.shrublandBiomeBase=Shrubland Base Biome
+createWorld.customize.custom.modernbetaforge.shrublandBiomeBeach=Shrubland Beach Biome
+createWorld.customize.custom.modernbetaforge.shrublandBiomeOcean=Shrubland Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.seasonalForestBiomeBase=Base Seasonal Forest Biome
-createWorld.customize.custom.modernbetaforge.seasonalForestBiomeBeach=Beach Seasonal Forest Biome
-createWorld.customize.custom.modernbetaforge.seasonalForestBiomeOcean=Ocean Seasonal Forest Biome
+createWorld.customize.custom.modernbetaforge.seasonalForestBiomeBase=Seasonal Forest Base Biome
+createWorld.customize.custom.modernbetaforge.seasonalForestBiomeBeach=Seasonal Forest Beach Biome
+createWorld.customize.custom.modernbetaforge.seasonalForestBiomeOcean=Seasonal Forest Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.swamplandBiomeBase=Base Swampland Biome
-createWorld.customize.custom.modernbetaforge.swamplandBiomeBeach=Beach Swampland Biome
-createWorld.customize.custom.modernbetaforge.swamplandBiomeOcean=Ocean Swampland Biome
+createWorld.customize.custom.modernbetaforge.swamplandBiomeBase=Swampland Base Biome
+createWorld.customize.custom.modernbetaforge.swamplandBiomeBeach=Swampland Beach Biome
+createWorld.customize.custom.modernbetaforge.swamplandBiomeOcean=Swampland Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.taigaBiomeBase=Base Taiga Biome
-createWorld.customize.custom.modernbetaforge.taigaBiomeBeach=Beach Taiga Biome
-createWorld.customize.custom.modernbetaforge.taigaBiomeOcean=Ocean Taiga Biome
+createWorld.customize.custom.modernbetaforge.taigaBiomeBase=Taiga Base Biome
+createWorld.customize.custom.modernbetaforge.taigaBiomeBeach=Taiga Beach Biome
+createWorld.customize.custom.modernbetaforge.taigaBiomeOcean=Taiga Ocean Biome
 
-createWorld.customize.custom.modernbetaforge.tundraBiomeBase=Base Tundra Biome
-createWorld.customize.custom.modernbetaforge.tundraBiomeBeach=Beach Tundra Biome
-createWorld.customize.custom.modernbetaforge.tundraBiomeOcean=Ocean Tundra Biome
+createWorld.customize.custom.modernbetaforge.tundraBiomeBase=Tundra Base Biome
+createWorld.customize.custom.modernbetaforge.tundraBiomeBeach=Tundra Beach Biome
+createWorld.customize.custom.modernbetaforge.tundraBiomeOcean=Tundra Ocean Biome
 
 ## Page 8 - Addons
 createWorld.customize.custom.modernbetaforge.propertyScreen=Open
