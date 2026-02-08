@@ -7,17 +7,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Consumer;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
+import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
+import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
+import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSlot;
@@ -26,35 +32,22 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final Gson GSON = new Gson();
-    @SuppressWarnings("unused")
-    private static final Set<String> BASE_SETTINGS = Sets.newHashSet(
-        NbtTags.CHUNK_SOURCE,
-        NbtTags.BIOME_SOURCE,
-        NbtTags.SURFACE_BUILDER,
-        NbtTags.CAVE_CARVER,
-        NbtTags.WORLD_SPAWNER
-    );
-    @SuppressWarnings("unused")
-    private static final Set<String> MISC_SETTINGS = Sets.newHashSet(
-        NbtTags.LEVEL_THEME,
-        NbtTags.LEVEL_TYPE,
-        NbtTags.LEVEL_HOUSE,
-        NbtTags.LAYER_TYPE,
-        NbtTags.ORE_TYPE
-    );
+    private static final Map<String, Formatter> FORMATTERS;
+    private static final Map<String, Formatter> PROPERTY_FORMATTERS;
     
-    private static final String PREFIX_ADDON = "createWorld.customize.custom.";
-    private static final String PREFIX = String.format("createWorld.customize.custom.%s.", ModernBeta.MODID);
-    private static final String GUI_LABEL_DISCARD = I18n.format(PREFIX + "discard");
+    private static final String PREFIX = "createWorld.customize.custom";
+    private static final String GUI_LABEL_DISCARD = I18n.format(String.format("%s.%s.%s", PREFIX, ModernBeta.MODID, "discard"));
     
     private static final TextFormatting FORMATTING_PREV = TextFormatting.DARK_RED;
     private static final TextFormatting FORMATTING_NEXT = TextFormatting.DARK_GREEN;
@@ -142,7 +135,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
             String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
             
-            String setting = I18n.format(PREFIX_ADDON + String.format("%s.%s", modId, modSetting)) + ":";
+            String setting = I18n.format(String.format("%s.%s.%s", PREFIX, modId, modSetting)) + ":";
             setting = setting.trim();
 
             Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
@@ -251,20 +244,55 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     }
     
     private String formatString(String modId, String modSetting, String value) {
+        GuiScreenCustomizeWorld worldScreen = (GuiScreenCustomizeWorld)this.parent;
+        ResourceLocation registryKey = new ResourceLocation(modId, modSetting);
+        
+        if (modId.equals(ModernBeta.MODID) && FORMATTERS.containsKey(modSetting)) {
+            return FORMATTERS.get(modSetting).apply(modId, modSetting, value);
+        } else if (worldScreen.getProperty(registryKey) != null) {
+            Property<?> property = worldScreen.getProperty(registryKey);
+            if (PROPERTY_FORMATTERS.containsKey(property.getType())) {
+                return PROPERTY_FORMATTERS.get(property.getType()).apply(modId, modSetting, value);
+            }
+        }
+        
         return value;
     }
 
-    @SuppressWarnings("unused")
-    private static String getFormattedRegistryString(String setting, String value) {
+    private static String getFormattedRegistryString(String modId, String modSetting, String value) {
         String valueNamespace = value.split(":")[0];
         String valuePath = value.split(":")[1];
         
-        return I18n.format(String.format("%s%s.%s.%s", PREFIX, setting, valueNamespace, valuePath));
+        return I18n.format(String.format("%s.%s.%s.%s.%s", PREFIX, modId, modSetting, valueNamespace, valuePath));
     }
     
-    @SuppressWarnings("unused")
-    private static String getFormattedMiscString(String setting, String value) {
-        return I18n.format(String.format("%s%s.%s", PREFIX, setting, value));
+    private static String getFormattedMiscString(String modId, String modSetting, String value) {
+        return I18n.format(String.format("%s.%s.%s.%s", PREFIX, modId, modSetting, value));
+    }
+    
+    private static String getFormattedForgeBiomeString(String modId, String modSetting, String value) {
+        return ForgeRegistries.BIOMES.getValue(new ResourceLocation(value)).getBiomeName();
+    }
+    
+    private static String getFormattedForgeBlockString(String modId, String modSetting, String value) {
+        return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(value)).getLocalizedName();
+    }
+    
+    private static String getFormattedForgeFluidString(String modId, String modSetting, String value) {
+        return ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(value));
+    }
+    
+    private static String getFormattedForgeBlockOrFluidString(String modId, String modSetting, String value) {
+        ResourceLocation registryKey = new ResourceLocation(value);
+        Block block = ForgeRegistries.BLOCKS.getValue(registryKey);
+        
+        return ForgeRegistryUtil.isForgeFluid(block) ?
+            ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(value)) :
+            ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
+    }
+    
+    private static String getFormattedForgeEntityString(String modId, String modSetting, String value) {
+        return ForgeRegistries.ENTITIES.getValue(new ResourceLocation(value)).getName();
     }
     
     private static boolean isResourceFormat(String resourceString) {
@@ -381,14 +409,14 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 String title = listEntry.title;
                 int titleX = this.width / 2;
                 
-                this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX_ADDON + title), titleX, textY, 16777215);
+                this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX + "." + title), titleX, textY, 16777215);
                 
             } else {
                 String key = listEntry.entry.getKey();
                 String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
                 String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
-                
-                String setting = I18n.format(PREFIX_ADDON + String.format("%s.%s", modId, modSetting)) + ":";
+
+                String setting = I18n.format(String.format("%s.%s.%s", PREFIX, modId, modSetting)) + ":";
                 setting = setting.trim();
                 
                 String settingTrimmed = this.parent.fontRenderer.trimStringToWidth(setting, this.getListWidth());
@@ -454,5 +482,68 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             this.title = null;
             this.entry = entry;
         }
+    }
+    
+    @FunctionalInterface
+    public static interface Formatter {
+        String apply(String modId, String modSetting, String value);
+    }
+    
+    static {
+        FORMATTERS = ImmutableMap.<String, Formatter>builder()
+            .put(NbtTags.CHUNK_SOURCE, GuiModalConfirmSettings::getFormattedRegistryString)
+            .put(NbtTags.BIOME_SOURCE, GuiModalConfirmSettings::getFormattedRegistryString)
+            .put(NbtTags.SURFACE_BUILDER, GuiModalConfirmSettings::getFormattedRegistryString)
+            .put(NbtTags.CAVE_CARVER, GuiModalConfirmSettings::getFormattedRegistryString)
+            .put(NbtTags.WORLD_SPAWNER, GuiModalConfirmSettings::getFormattedRegistryString)
+            .put(NbtTags.LEVEL_THEME, GuiModalConfirmSettings::getFormattedMiscString)
+            .put(NbtTags.LEVEL_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
+            .put(NbtTags.LEVEL_HOUSE, GuiModalConfirmSettings::getFormattedMiscString)
+            .put(NbtTags.LAYER_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
+            .put(NbtTags.ORE_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
+            .put(NbtTags.SINGLE_BIOME, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.DEFAULT_BLOCK, GuiModalConfirmSettings::getFormattedForgeBlockString)
+            .put(NbtTags.DEFAULT_FLUID, GuiModalConfirmSettings::getFormattedForgeFluidString)
+            .put(NbtTags.DESERT_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.DESERT_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.DESERT_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .build();
+        
+        PROPERTY_FORMATTERS = ImmutableMap.<String, Formatter>builder()
+            .put(new BiomeProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(new BlockProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeBlockOrFluidString)
+            .put(new EntityEntryProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeEntityString)
+            .put(new ListProperty("", new String[] { "" }).getType(), GuiModalConfirmSettings::getFormattedMiscString)
+            .build();
     }
 }

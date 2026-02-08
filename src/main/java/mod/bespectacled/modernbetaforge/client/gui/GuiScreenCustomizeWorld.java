@@ -1779,6 +1779,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.defaultSettings.toString() :
             this.parent.chunkProviderSettingsJson;
     }
+    
+    public Property<?> getProperty(ResourceLocation registryKey) {
+        return this.settings.customProperties.get(registryKey);
+    }
 
     public void loadValues(String string) {
         if (string != null && !string.isEmpty()) {
