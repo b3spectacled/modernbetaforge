@@ -25,7 +25,7 @@ public class ModernBetaConfig {
     
     public static class CategoryGui {
         @Comment({
-            "Default Modern Beta world preset."
+            "Default Modern Beta world preset. Copy and paste generator string from world presets screen here."
         })
         @RequiresWorldRestart
         public String defaultPreset = "";

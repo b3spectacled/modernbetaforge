@@ -7,14 +7,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Consumer;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSlot;
@@ -32,6 +35,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final Gson GSON = new Gson();
+    @SuppressWarnings("unused")
+    private static final Set<String> BASE_SETTINGS = Sets.newHashSet(
+        NbtTags.CHUNK_SOURCE,
+        NbtTags.BIOME_SOURCE,
+        NbtTags.SURFACE_BUILDER,
+        NbtTags.CAVE_CARVER,
+        NbtTags.WORLD_SPAWNER
+    );
+    @SuppressWarnings("unused")
+    private static final Set<String> MISC_SETTINGS = Sets.newHashSet(
+        NbtTags.LEVEL_THEME,
+        NbtTags.LEVEL_TYPE,
+        NbtTags.LEVEL_HOUSE,
+        NbtTags.LAYER_TYPE,
+        NbtTags.ORE_TYPE
+    );
     
     private static final String PREFIX_ADDON = "createWorld.customize.custom.";
     private static final String PREFIX = String.format("createWorld.customize.custom.%s.", ModernBeta.MODID);
@@ -224,9 +243,28 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private String formatValue(String modId, String modSetting, JsonElement element) {
         if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean()) {
             return element.getAsJsonPrimitive().getAsBoolean() ? I18n.format("gui.yes") : I18n.format("gui.no");
+        } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            return this.formatString(modId, modSetting, element.getAsString());
         }
         
         return element.getAsString();
+    }
+    
+    private String formatString(String modId, String modSetting, String value) {
+        return value;
+    }
+
+    @SuppressWarnings("unused")
+    private static String getFormattedRegistryString(String setting, String value) {
+        String valueNamespace = value.split(":")[0];
+        String valuePath = value.split(":")[1];
+        
+        return I18n.format(String.format("%s%s.%s.%s", PREFIX, setting, valueNamespace, valuePath));
+    }
+    
+    @SuppressWarnings("unused")
+    private static String getFormattedMiscString(String setting, String value) {
+        return I18n.format(String.format("%s%s.%s", PREFIX, setting, value));
     }
     
     private static boolean isResourceFormat(String resourceString) {
