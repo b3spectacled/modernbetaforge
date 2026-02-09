@@ -63,6 +63,7 @@ import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.util.PresetUtil;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -193,7 +194,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
+        String defaultPreset = PresetUtil.getDefaultPreset();
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)parent;
@@ -1829,7 +1830,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 } else {
                     String generatorOptions = this.parent.chunkProviderSettingsJson;
                     boolean isEqualToPrev = generatorOptions.equals(this.settings.toString());
-                    boolean isEqualToDefault = generatorOptions.isEmpty() && this.defaultSettings.toString().equals(this.settings.toString());
+                    boolean isEqualToDefault = this.defaultSettings.equals(this.settings);
                     
                     if (isEqualToPrev || isEqualToDefault) {
                         ModernBeta.log(Level.DEBUG, "No changes were made..");
@@ -2339,7 +2340,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private void restoreDefaults() {
-        String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset;
+        String defaultPreset = PresetUtil.getDefaultPreset();
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         
         this.createPagedList();
