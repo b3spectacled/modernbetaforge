@@ -52,6 +52,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int BUTTON_SPACE = 4;
     private static final int BUTTON_SMALL_WIDTH = 80;
     private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE;
+    private static final int TEXTBOX_PADDING = 100;
     
     private static final int GUI_ID_FILTER = 0;
     private static final int GUI_ID_SELECT = 1;
@@ -60,12 +61,18 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int GUI_ID_EDIT = 4;
     private static final int GUI_ID_DELETE = 5;
     private static final int GUI_ID_EXPORT = 6;
+    private static final int GUI_ID_COPY = 7;
+    private static final int GUI_ID_PASTE = 8;
+    
+    private static final long BUTTON_WAIT_TIME = 150L;
     
     private final GuiScreenCustomizeWorld parent;
     private final FilterType filterType;
     private final GuiCustomizePresetsDataHandler dataHandler;
     private final List<Info> presets;
     private final int initialPreset;
+    private final GuiBoundsChecker copyBounds;
+    private final GuiBoundsChecker pasteBounds;
     
     protected String title;
     
@@ -77,11 +84,15 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private GuiButton buttonFilter;
     private GuiButton buttonSelect;
     private GuiButton buttonCancel;
+    private GuiButton buttonCopy;
+    private GuiButton buttonPaste;
     private String shareText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
     private int amountScrolled;
     private boolean isFocused;
+    private long copiedTime;
+    private long pastedTime;
     
     public GuiScreenCustomizePresets(GuiScreenCustomizeWorld parent) {
         this(parent, ModernBetaConfig.guiOptions.defaultPresetFilter, -1, 0);
@@ -94,6 +105,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.dataHandler = new GuiCustomizePresetsDataHandler();
         this.presets = this.loadPresets(filterType, this.dataHandler);
         this.initialPreset = initialPreset;
+        this.copyBounds = new GuiBoundsChecker();
+        this.pasteBounds = new GuiBoundsChecker();
         
         this.hoveredElement = -1;
         this.amountScrolled = amountScrolled;
@@ -126,7 +139,24 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list.scrollBy(this.amountScrolled);
         
         String initialExportText = this.getInitialSettings();
-        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, 50, 40, this.width - 100, 20, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
+        int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
+        int fieldExportY = 40;
+        int fieldExportW = this.width - fieldExportPadding;
+        int fieldExportH = 20;
+        
+        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, fieldExportX, fieldExportY, fieldExportW, fieldExportH, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        
+        int copyX = this.fieldExport.x + this.fieldExport.width + BUTTON_SPACE;
+        int copyY = fieldExportY;
+        int pasteX = copyX + 20 + BUTTON_SPACE / 2;
+        int pasteY = copyY;
+        
+        this.buttonCopy = this.addButton(new GuiButton(GUI_ID_COPY, copyX, copyY, 20, 20, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButton(GUI_ID_PASTE, pasteX, pasteY, 20, 20, "\u29C8"));
+        
+        this.copyBounds.updateBounds(copyX, copyY, 20, 20);
+        this.pasteBounds.updateBounds(pasteX, pasteY, 20, 20);
         
         this.updateButtonValidity();
     }
@@ -147,19 +177,34 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-
         this.list.drawScreen(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
-        this.drawString(this.fontRenderer, this.shareText, 50, 30, 10526880);
+        this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, 10526880);
         this.fieldExport.drawTextBox();
         
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        if (this.isFocused && this.copyBounds.inBounds(mouseX, mouseY)) {
+            this.drawHoveringText("Copy Preset", mouseX, mouseY);
+        }
+        
+        if (this.isFocused && this.pasteBounds.inBounds(mouseX, mouseY)) {
+            this.drawHoveringText("Paste Preset", mouseX, mouseY);
+        }
     }
     
     @Override
     public void updateScreen() {
-        this.fieldExport.updateCursorCounter();
         super.updateScreen();
+        this.fieldExport.updateCursorCounter();
+        
+        if (!this.buttonCopy.enabled && this.getButtonValidity(this.copiedTime)) {
+            this.buttonCopy.enabled = this.isFocused;
+        }
+        
+        if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
+            this.buttonPaste.enabled = this.isFocused;
+        }
     }
 
     public String getSelectedPresetName() {
@@ -268,6 +313,17 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 this.isFocused = false;
                 this.mc.displayGuiScreen(new GuiModalPresetConfirm(this, I18n.format(PREFIX + "delete.title"), onConfirmDelete, modal -> this.isFocused = true, textList, textColors));
                 break;
+            case GUI_ID_COPY:
+                this.buttonCopy.enabled = false;
+                this.copiedTime = System.currentTimeMillis();
+                GuiScreen.setClipboardString(this.fieldExport.getText());
+                break;
+            case GUI_ID_PASTE:
+                this.buttonPaste.enabled = false;
+                this.pastedTime = System.currentTimeMillis();
+                this.fieldExport.setText(GuiScreen.getClipboardString());
+                this.list.selected = -1;
+                break;
         }
         
         this.updateButtonValidity();
@@ -352,8 +408,14 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.buttonSelect.enabled = this.isFocused && this.hasValidSelection();
         this.buttonFilter.enabled = this.isFocused;
         this.buttonCancel.enabled = this.isFocused;
+        this.buttonCopy.enabled = this.isFocused && this.getButtonValidity(this.copiedTime);
+        this.buttonPaste.enabled = this.isFocused && this.getButtonValidity(this.pastedTime);
         this.fieldExport.setEnabled(this.isFocused);
         this.fieldExport.setFocused(this.fieldExport.isFocused());
+    }
+    
+    private boolean getButtonValidity(long time) {
+        return System.currentTimeMillis() - time > BUTTON_WAIT_TIME;
     }
 
     private boolean hasValidSelection() {

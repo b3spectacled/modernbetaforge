@@ -7,7 +7,7 @@ createWorld.customize.custom.modernbetaforge.title=Modern Beta
 
 # Presets
 createWorld.customize.presets.modernbetaforge.title=World Presets
-createWorld.customize.presets.modernbetaforge.share=Use the below box to copy and paste your presets for sharing.
+createWorld.customize.presets.modernbetaforge.share=Use the box below to share your presets.
 createWorld.customize.presets.modernbetaforge.select=Use Preset
 createWorld.customize.presets.modernbetaforge.filter=Filter
 createWorld.customize.presets.modernbetaforge.filter.all=All
