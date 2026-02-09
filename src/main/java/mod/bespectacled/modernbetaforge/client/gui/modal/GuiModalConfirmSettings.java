@@ -188,8 +188,14 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         Map<String, Tuple<JsonElement, JsonElement>> changeMap = new LinkedHashMap<>();
         for (Entry<String, JsonElement> entry : prev.entrySet()) {
             String key = entry.getKey();
+            ResourceLocation registryKey = new ResourceLocation(key);
             JsonElement prevSetting = prev.get(key);
             JsonElement nextSetting = next.get(key);
+            
+            GuiScreenCustomizeWorld worldScreen = (GuiScreenCustomizeWorld)this.parent;
+            if (worldScreen.containsProperty(registryKey) && !worldScreen.getProperty(registryKey).getDisplay()) {
+                continue;
+            }
             
             if (!prevSetting.equals(nextSetting)) {
                 changeMap.put(key, new Tuple<>(prevSetting, nextSetting));
@@ -249,7 +255,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         
         if (modId.equals(ModernBeta.MODID) && FORMATTERS.containsKey(modSetting)) {
             return FORMATTERS.get(modSetting).apply(modId, modSetting, value);
-        } else if (worldScreen.getProperty(registryKey) != null) {
+        } else if (worldScreen.containsProperty(registryKey)) {
             Property<?> property = worldScreen.getProperty(registryKey);
             if (PROPERTY_FORMATTERS.containsKey(property.getType())) {
                 return PROPERTY_FORMATTERS.get(property.getType()).apply(modId, modSetting, value);

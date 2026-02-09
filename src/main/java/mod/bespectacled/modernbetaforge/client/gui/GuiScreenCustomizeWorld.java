@@ -1783,6 +1783,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public Property<?> getProperty(ResourceLocation registryKey) {
         return this.settings.customProperties.get(registryKey);
     }
+    
+    public boolean containsProperty(ResourceLocation registryKey) {
+        return this.settings.customProperties.containsKey(registryKey);
+    }
 
     public void loadValues(String string) {
         if (string != null && !string.isEmpty()) {
