@@ -119,6 +119,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         int centerX = this.width / 2;
         
+        String initialExportText = this.getInitialSettings();
+        int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
+        int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
+        int fieldExportY = 40;
+        int fieldExportW = this.width - fieldExportPadding;
+        int fieldExportH = 20;
+        
         int selectX = centerX + BUTTON_SPACE / 2;
         int filterX = centerX + BUTTON_SPACE / 2;
         int cancelX = centerX + BUTTON_SMALL_WIDTH + BUTTON_LARGE_WIDTH - BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE / 2;
@@ -137,13 +144,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
         this.list.scrollBy(this.amountScrolled);
-        
-        String initialExportText = this.getInitialSettings();
-        int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
-        int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
-        int fieldExportY = 40;
-        int fieldExportW = this.width - fieldExportPadding;
-        int fieldExportH = 20;
         
         this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, fieldExportX, fieldExportY, fieldExportW, fieldExportH, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
@@ -185,11 +185,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.fieldExport.drawTextBox();
         
         if (this.isFocused && this.copyBounds.inBounds(mouseX, mouseY)) {
-            this.drawHoveringText("Copy Preset", mouseX, mouseY);
+            this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
         }
         
         if (this.isFocused && this.pasteBounds.inBounds(mouseX, mouseY)) {
-            this.drawHoveringText("Paste Preset", mouseX, mouseY);
+            this.drawHoveringText(I18n.format(PREFIX + "paste"), mouseX, mouseY);
         }
     }
     

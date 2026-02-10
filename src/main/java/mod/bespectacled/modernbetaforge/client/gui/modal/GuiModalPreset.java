@@ -82,11 +82,12 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
+    private static final int BUTTON_SPACE = 4;
     private static final int MODAL_WIDTH = 320;
     private static final int MODAL_HEIGHT = 200;
     private static final int NAME_FIELD_LENGTH = 220;
     private static final int DESC_FIELD_LENGTH = 220;
-    private static final int SETTINGS_FIELD_LENGTH = 300;
+    private static final int SETTINGS_FIELD_LENGTH = 250;
     private static final int ICON_PADDING_R = 20;
     private static final int ICON_PADDING_T = 36;
     private static final int ICON_SIZE = 50;
@@ -101,19 +102,29 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     private static final int GUI_ID_SETTINGS = 14;
     private static final int GUI_ID_NEXT = 15;
     private static final int GUI_ID_PREV = 16;
+    private static final int GUI_ID_COPY = 17;
+    private static final int GUI_ID_PASTE = 18;
+    
+    private static final long BUTTON_WAIT_TIME = 150L;
 
     private final GuiBoundsChecker iconBounds;
     private final String initialNameText;
     private final String initialDescText;
     private final String initialExportText;
+    private final GuiBoundsChecker copyBounds;
+    private final GuiBoundsChecker pasteBounds;
     
     private GuiTextField fieldName;
     private GuiTextField fieldDesc;
     private GuiTextField fieldSettings;
     private GuiButton buttonPrev;
     private GuiButton buttonNext;
+    private GuiButton buttonCopy;
+    private GuiButton buttonPaste;
     
     private int selectedIcon;
+    private long copiedTime;
+    private long pastedTime;
 
     public GuiModalPreset(GuiScreenCustomizePresets parent, Consumer<GuiModalPreset> onConfirm, Consumer<GuiModalPreset> onCancel, State state) {
         super(parent, state == State.SAVE ? I18n.format(PREFIX + "save.title") : I18n.format(PREFIX + "edit.title"), MODAL_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
@@ -123,6 +134,8 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.initialDescText = state == State.SAVE ? "" : parent.getSelectedPresetDesc();
         this.initialExportText = state == State.SAVE ? parent.getInitialSettings() : parent.getSelectedPresetSettings();
         this.selectedIcon = state == State.SAVE ? 0 : MathHelper.clamp(parent.getSelectedPresetIcon(), 0, ICON_TEXTURES.length - 1);
+        this.copyBounds = new GuiBoundsChecker();
+        this.pasteBounds = new GuiBoundsChecker();
     }
     
     @Override
@@ -135,22 +148,40 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         int centerY = this.height / 2;
         
         int boxL = centerX + this.modalWidth / 2 - ICON_SIZE - 1 - ICON_PADDING_R;
-        int boxR = centerX + this.modalWidth / 2 - 0 - ICON_PADDING_R;
         int boxT = centerY - this.modalHeight / 2 - 0 + ICON_PADDING_T;
         int boxB = centerY - this.modalHeight / 2 + ICON_SIZE + 1 + ICON_PADDING_T;
+        int boxC = boxL + ICON_SIZE / 2;
         
+        int prevX = boxC - 20;
+        int nextX = boxC + BUTTON_PADDING;
+        
+        int fieldX = centerX - this.modalWidth / 2 + 10;
+        int fieldNameY = centerY - 50;
+        int fieldDescY = centerY - 10;
+        int fieldSettingsY = centerY + 30;
         String initialModalNameText = this.fieldName != null ? this.fieldName.getText() : this.initialNameText;
         String initialModalDescText = this.fieldDesc != null ? this.fieldDesc.getText() : this.initialDescText;
         String intialModalSettingsText = this.fieldSettings != null ? this.fieldSettings.getText() : this.initialExportText;
         
-        this.buttonPrev = this.addButton(new GuiButton(GUI_ID_PREV, boxL + 5, boxB + 5, 20, 20, I18n.format(PREFIX + "prev")));
-        this.buttonNext = this.addButton(new GuiButton(GUI_ID_NEXT, boxR - 23, boxB + 5, 20, 20, I18n.format(PREFIX + "next")));
+        this.buttonPrev = this.addButton(new GuiButton(GUI_ID_PREV, prevX, boxB + 4, 20, 20, I18n.format(PREFIX + "prev")));
+        this.buttonNext = this.addButton(new GuiButton(GUI_ID_NEXT, nextX, boxB + 4, 20, 20, I18n.format(PREFIX + "next")));
         
-        this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, centerX - this.modalWidth / 2 + 10, centerY - 50, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
-        this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, centerX - this.modalWidth / 2 + 10, centerY - 10, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
-        this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, centerX - this.modalWidth / 2 + 10, centerY + 30, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, fieldX, fieldNameY, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
+        this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, fieldX, fieldDescY, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
+        this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, fieldX, fieldSettingsY, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        
+        int copyX = this.fieldSettings.x + this.fieldSettings.width + BUTTON_SPACE;
+        int copyY = fieldSettingsY;
+        int pasteX = copyX + 20 + BUTTON_SPACE / 2;
+        int pasteY = copyY;
+        
+        this.buttonCopy = this.addButton(new GuiButton(GUI_ID_COPY, copyX, copyY, 20, 20, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButton(GUI_ID_PASTE, pasteX, pasteY, 20, 20, "\u29C8"));
         
         this.iconBounds.updateBounds(boxL + 1, boxT + 1, ICON_SIZE, ICON_SIZE);
+        this.copyBounds.updateBounds(copyX, copyY, 20, 20);
+        this.pasteBounds.updateBounds(pasteX, pasteY, 20, 20);
+        
         this.updateButtonValidity();
     }
 
@@ -158,6 +189,14 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawSaveScreen(this.width / 2, this.height / 2, mouseX, mouseY);
+        
+        if (this.copyBounds.inBounds(mouseX, mouseY)) {
+            this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
+        }
+        
+        if (this.pasteBounds.inBounds(mouseX, mouseY)) {
+            this.drawHoveringText(I18n.format(PREFIX + "paste"), mouseX, mouseY);
+        }
     }
     
     @Override
@@ -165,6 +204,14 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.fieldName.updateCursorCounter();
         this.fieldDesc.updateCursorCounter();
         this.fieldSettings.updateCursorCounter();
+        
+        if (!this.buttonCopy.enabled && this.getButtonValidity(this.copiedTime)) {
+            this.buttonCopy.enabled = true;
+        }
+        
+        if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
+            this.buttonPaste.enabled = true;
+        }
     }
     
     @Override
@@ -223,6 +270,16 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
             case GUI_ID_NEXT:
                 this.incrementSelectedIcon(amount);
                 break;
+            case GUI_ID_COPY:
+                this.buttonCopy.enabled = false;
+                this.copiedTime = System.currentTimeMillis();
+                GuiScreen.setClipboardString(this.fieldSettings.getText());
+                break;
+            case GUI_ID_PASTE:
+                this.buttonPaste.enabled = false;
+                this.pastedTime = System.currentTimeMillis();
+                this.fieldSettings.setText(GuiScreen.getClipboardString());
+                break;
         }
         
         this.updateButtonValidity();
@@ -254,6 +311,12 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.buttonConfirm.enabled = !this.fieldName.getText().isEmpty();
         this.buttonPrev.enabled = this.selectedIcon > 0;
         this.buttonNext.enabled = this.selectedIcon < ICON_TEXTURES.length - 1;
+        this.buttonCopy.enabled = this.getButtonValidity(this.copiedTime);
+        this.buttonPaste.enabled = this.getButtonValidity(this.pastedTime);
+    }
+
+    private boolean getButtonValidity(long time) {
+        return System.currentTimeMillis() - time > BUTTON_WAIT_TIME;
     }
 
     private void drawSaveScreen(int centerX, int centerY, int mouseX, int mouseY) {

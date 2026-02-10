@@ -30,6 +30,8 @@ createWorld.customize.presets.modernbetaforge.prev=<
 createWorld.customize.presets.modernbetaforge.icon=Icon
 createWorld.customize.presets.modernbetaforge.delete.confirm=Delete this preset?
 createWorld.customize.presets.modernbetaforge.overwrite.confirm=Preset already exists. Overwrite?
+createWorld.customize.presets.modernbetaforge.copy=Copy Preset
+createWorld.customize.presets.modernbetaforge.paste=Paste Preset
 
 # Preview
 createWorld.customize.preview.modernbetaforge.preview=Preview
