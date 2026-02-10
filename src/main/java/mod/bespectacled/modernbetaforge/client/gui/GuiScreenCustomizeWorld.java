@@ -2910,22 +2910,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
         @Override
         public String visit(FloatProperty property) {
-            return null;
+            return String.format(property.getFormatter(), property.getValue());
         }
 
         @Override
         public String visit(IntProperty property) {
-            return null;
+            return String.format(property.getFormatter(), property.getValue());
         }
 
         @Override
         public String visit(StringProperty property) {
-            return null;
+            return property.getValue();
         }
 
         @Override
         public String visit(ListProperty property) {
-            return null;
+            return property.getValue();
         }
 
         @Override

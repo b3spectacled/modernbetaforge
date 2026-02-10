@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final Gson GSON = new Gson();
     private static final Map<String, Formatter> FORMATTERS;
-    private static final Map<String, Formatter> PROPERTY_FORMATTERS;
+    private static final Map<String, Formatter> PROPERTY_FORMATTERS; // TODO: Replace with visitor at some point 
     
     private static final String PREFIX = "createWorld.customize.custom";
     private static final String GUI_LABEL_DISCARD = I18n.format(String.format("%s.%s.%s", PREFIX, ModernBeta.MODID, "discard"));
