@@ -59,7 +59,7 @@ import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -1780,14 +1780,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.defaultSettings.toString() :
             this.parent.chunkProviderSettingsJson;
     }
-    
-    public Property<?> getProperty(ResourceLocation registryKey) {
-        return this.settings.customProperties.get(registryKey);
-    }
-    
-    public boolean containsProperty(ResourceLocation registryKey) {
-        return this.settings.customProperties.containsKey(registryKey);
-    }
 
     public void loadValues(String string) {
         if (string != null && !string.isEmpty()) {
@@ -1957,7 +1949,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         for (Entry<Integer, ResourceLocation> entry : this.propertyMap.entrySet()) {
             ResourceLocation registryKey = entry.getValue();
             Property<?> property = this.settings.customProperties.get(registryKey);
-            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
+            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor(), registryKey);
             
             if (formattedName != null && !formattedName.isEmpty()) {
                 this.setTextButton(entry.getKey(), formattedName);
@@ -1967,7 +1959,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         for (Entry<Integer, ResourceLocation> entry : this.guiPropertyMap.entrySet()) {
             ResourceLocation registryKey = entry.getValue();
             GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
-            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor());
+            String formattedName = property.visitNameFormatter(new NameFormatterPropertyVisitor(), registryKey);
             
             if (formattedName != null && !formattedName.isEmpty()) {
                 this.setTextButton(entry.getKey(), formattedName);
@@ -2208,7 +2200,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         if (this.guiPropertyMap.containsKey(entry)) {
-            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(this.guiPropertyMap.get(entry));
+            ResourceLocation registryKey = this.propertyMap.get(entry);
+            GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
 
             return String.format(property.getFormatter(), entryValue);
         }
@@ -2434,7 +2427,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private void setTextButton(int id, String value) {
         Gui guiComponent = this.pageList.getComponent(id);
-        if (guiComponent != null) {
+        if (guiComponent != null && guiComponent instanceof GuiButton) {
             ((GuiButton)guiComponent).displayString = value;
         }
     }
@@ -2704,6 +2697,67 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return bigDecimal.floatValue();
     }
 
+    public static class NameFormatterPropertyVisitor implements FormattedPropertyVisitor {
+        @Override
+        public String visit(BooleanProperty property, ResourceLocation registryKey) {
+            return I18n.format(property.getValue() ? "gui.yes" : "gui.no");
+        }
+    
+        @Override
+        public String visit(FloatProperty property, ResourceLocation registryKey) {
+            return String.format(property.getFormatter(), property.getValue());
+        }
+    
+        @Override
+        public String visit(IntProperty property, ResourceLocation registryKey) {
+            return String.format(property.getFormatter(), property.getValue());
+        }
+    
+        @Override
+        public String visit(StringProperty property, ResourceLocation registryKey) {
+            return property.getValue();
+        }
+    
+        @Override
+        public String visit(ListProperty property, ResourceLocation registryKey) {
+            String namespace = registryKey.getNamespace();
+            String path = registryKey.getPath();
+            String entryText = String.format("createWorld.customize.custom.%s.%s.", namespace, path);
+
+            return I18n.format(entryText + property.getValue());
+        }
+    
+        @Override
+        public String visit(BiomeProperty property, ResourceLocation registryKey) {
+            return getFormattedBiomeName(property.getValue());
+        }
+    
+        @Override
+        public String visit(BlockProperty property, ResourceLocation registryKey) {
+            ResourceLocation blockKey = new ResourceLocation(property.getValue());
+            Block block = ForgeRegistries.BLOCKS.getValue(blockKey);
+            
+            Function<String, String> nameFormatter = key -> ForgeRegistryUtil.isForgeFluid(block) ? 
+                ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
+                ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
+                
+            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
+    
+        @Override
+        public String visit(EntityEntryProperty property, ResourceLocation registryKey) {
+            Function<String, String> nameFormatter = key ->
+                ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
+            
+            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+        }
+    
+        @Override
+        public String visit(ScreenProperty property, ResourceLocation registryKey) {
+            return I18n.format(PREFIX + "propertyScreen");
+        }
+    }
+
     private class CreateGuiPropertyVisitor implements GuiPropertyVisitor {
         @Override
         public GuiPageButtonList.GuiListEntry visit(BooleanProperty property, int guiIdentifier) {
@@ -2900,62 +2954,5 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             GuiScreenCustomizeWorld.this.mc.displayGuiScreen(screen);
         };
         
-    }
-    
-    private class NameFormatterPropertyVisitor implements PropertyVisitor {
-        @Override
-        public String visit(BooleanProperty property) {
-            return I18n.format(property.getValue() ? "gui.yes" : "gui.no");
-        }
-
-        @Override
-        public String visit(FloatProperty property) {
-            return String.format(property.getFormatter(), property.getValue());
-        }
-
-        @Override
-        public String visit(IntProperty property) {
-            return String.format(property.getFormatter(), property.getValue());
-        }
-
-        @Override
-        public String visit(StringProperty property) {
-            return property.getValue();
-        }
-
-        @Override
-        public String visit(ListProperty property) {
-            return property.getValue();
-        }
-
-        @Override
-        public String visit(BiomeProperty property) {
-            return getFormattedBiomeName(property.getValue());
-        }
-
-        @Override
-        public String visit(BlockProperty property) {
-            ResourceLocation registryKey = new ResourceLocation(property.getValue());
-            Block block = ForgeRegistries.BLOCKS.getValue(registryKey);
-            
-            Function<String, String> nameFormatter = key -> ForgeRegistryUtil.isForgeFluid(block) ? 
-                ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
-                ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
-                
-            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
-        }
-
-        @Override
-        public String visit(EntityEntryProperty property) {
-            Function<String, String> nameFormatter = key ->
-                ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
-            
-            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
-        }
-
-        @Override
-        public String visit(ScreenProperty property) {
-            return I18n.format(PREFIX + "propertyScreen");
-        }
     }
 }

@@ -5,7 +5,7 @@ import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty.Prope
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList.GuiListEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,8 +38,8 @@ public class ScreenProperty extends GuiProperty<PropertyScreenCreator> {
     }
 
     @Override
-    public String visitNameFormatter(PropertyVisitor visitor) {
-        return visitor.visit(this);
+    public String visitNameFormatter(FormattedPropertyVisitor visitor, ResourceLocation registryKey) {
+        return visitor.visit(this, registryKey);
     }
 
     @Override

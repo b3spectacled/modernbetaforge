@@ -6,7 +6,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
@@ -66,9 +66,10 @@ public abstract class Property<T> {
      * Accept a name formatter visitor for the property.
      * 
      * @param visitor The property visitor.
+     * @param registryKey The registry key associated with this property.
      * @return The formatted name for the property.
      */
-    public abstract String visitNameFormatter(PropertyVisitor visitor);
+    public abstract String visitNameFormatter(FormattedPropertyVisitor visitor, ResourceLocation registryKey);
     
     /**
      * Gets the format string for use with the customization GUI.

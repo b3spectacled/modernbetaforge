@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.PropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
@@ -60,8 +60,8 @@ public final class ListProperty extends StringProperty {
     }
 
     @Override
-    public String visitNameFormatter(PropertyVisitor visitor) {
-        return visitor.visit(this);
+    public String visitNameFormatter(FormattedPropertyVisitor visitor, ResourceLocation registryKey) {
+        return visitor.visit(this, registryKey);
     }
     
     /**

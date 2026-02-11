@@ -15,15 +15,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.api.property.BiomeProperty;
-import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
-import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
-import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
-import net.minecraft.block.Block;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSlot;
@@ -44,7 +41,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final Gson GSON = new Gson();
     private static final Map<String, Formatter> FORMATTERS;
-    private static final Map<String, Formatter> PROPERTY_FORMATTERS; // TODO: Replace with visitor at some point 
     
     private static final String PREFIX = "createWorld.customize.custom";
     private static final String GUI_LABEL_DISCARD = I18n.format(String.format("%s.%s.%s", PREFIX, ModernBeta.MODID, "discard"));
@@ -61,6 +57,9 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private static final int LIST_WIDTH_OFFSET = 25;
     private static final int GUI_ID_DISCARD = 2;
     
+    private final Map<ResourceLocation, Property<?>> prevProperties;
+    private final Map<ResourceLocation, Property<?>> nextProperties;
+    
     private final Consumer<GuiModalConfirmSettings> onDiscard;
     private final Map<String, Tuple<JsonElement, JsonElement>> changeMap;
     private final List<String> modIds;
@@ -69,9 +68,15 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
 
     public GuiModalConfirmSettings(GuiScreenCustomizeWorld parent, String title, Consumer<GuiModalConfirmSettings> onConfirm, Consumer<GuiModalConfirmSettings> onCancel, Consumer<GuiModalConfirmSettings> onDiscard) {
         super(parent, title, MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
+        
+        String prevString = parent.getPreviousSettingsString();
+        String nextString = parent.getSettingsString();
+        
+        this.prevProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevString).customProperties;
+        this.nextProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(nextString).customProperties;
 
         this.onDiscard = onDiscard;
-        this.changeMap = this.createChangeMap(parent.getPreviousSettingsString(), parent.getSettingsString());
+        this.changeMap = this.createChangeMap(prevString, nextString);
         this.modIds = this.getModIds(this.changeMap);
     }
         
@@ -140,8 +145,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
 
             Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
             String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-            String change0 = FORMATTING_PREV + this.formatValue(modId, modSetting, entryValue.getFirst());
-            String change1 = FORMATTING_NEXT + this.formatValue(modId, modSetting, entryValue.getSecond());
+            String change0 = FORMATTING_PREV + this.formatValue(modId, modSetting, entryValue.getFirst(), this.prevProperties);
+            String change1 = FORMATTING_NEXT + this.formatValue(modId, modSetting, entryValue.getSecond(), this.nextProperties);
             String changes = change0 + arrow + change1;
             changes = changes.trim();
             
@@ -184,6 +189,7 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private Map<String, Tuple<JsonElement, JsonElement>> createChangeMap(String prevStr, String nextStr) {
         JsonObject prev = GSON.fromJson(prevStr, JsonObject.class);
         JsonObject next = GSON.fromJson(nextStr, JsonObject.class);
+        ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevStr);
         
         Map<String, Tuple<JsonElement, JsonElement>> changeMap = new LinkedHashMap<>();
         for (Entry<String, JsonElement> entry : prev.entrySet()) {
@@ -191,9 +197,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             ResourceLocation registryKey = new ResourceLocation(key);
             JsonElement prevSetting = prev.get(key);
             JsonElement nextSetting = next.get(key);
-            
-            GuiScreenCustomizeWorld worldScreen = (GuiScreenCustomizeWorld)this.parent;
-            if (worldScreen.containsProperty(registryKey) && !worldScreen.getProperty(registryKey).getDisplay()) {
+
+            if (factory.customProperties.containsKey(registryKey) && !factory.customProperties.get(registryKey).getDisplay()) {
                 continue;
             }
             
@@ -239,27 +244,24 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         this.changeList.right = modalR;
     }
     
-    private String formatValue(String modId, String modSetting, JsonElement element) {
+    private String formatValue(String modId, String modSetting, JsonElement element, Map<ResourceLocation, Property<?>> properties) {
         if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean()) {
             return element.getAsJsonPrimitive().getAsBoolean() ? I18n.format("gui.yes") : I18n.format("gui.no");
         } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-            return this.formatString(modId, modSetting, element.getAsString());
+            return this.formatString(modId, modSetting, element.getAsString(), properties);
         }
         
         return element.getAsString();
     }
     
-    private String formatString(String modId, String modSetting, String value) {
-        GuiScreenCustomizeWorld worldScreen = (GuiScreenCustomizeWorld)this.parent;
+    private String formatString(String modId, String modSetting, String value, Map<ResourceLocation, Property<?>> properties) {
         ResourceLocation registryKey = new ResourceLocation(modId, modSetting);
         
         if (modId.equals(ModernBeta.MODID) && FORMATTERS.containsKey(modSetting)) {
             return FORMATTERS.get(modSetting).apply(modId, modSetting, value);
-        } else if (worldScreen.containsProperty(registryKey)) {
-            Property<?> property = worldScreen.getProperty(registryKey);
-            if (PROPERTY_FORMATTERS.containsKey(property.getType())) {
-                return PROPERTY_FORMATTERS.get(property.getType()).apply(modId, modSetting, value);
-            }
+        } else if (properties.containsKey(registryKey)) {
+            Property<?> property = properties.get(registryKey);
+            return property.visitNameFormatter(new NameFormatterPropertyVisitor(), registryKey);
         }
         
         return value;
@@ -286,19 +288,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     private static String getFormattedForgeFluidString(String modId, String modSetting, String value) {
         return ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(value));
-    }
-    
-    private static String getFormattedForgeBlockOrFluidString(String modId, String modSetting, String value) {
-        ResourceLocation registryKey = new ResourceLocation(value);
-        Block block = ForgeRegistries.BLOCKS.getValue(registryKey);
-        
-        return ForgeRegistryUtil.isForgeFluid(block) ?
-            ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(value)) :
-            ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
-    }
-    
-    private static String getFormattedForgeEntityString(String modId, String modSetting, String value) {
-        return ForgeRegistries.ENTITIES.getValue(new ResourceLocation(value)).getName();
     }
     
     private static boolean isResourceFormat(String resourceString) {
@@ -435,8 +424,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
                 
                 Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = FORMATTING_PREV + this.parent.formatValue(modId, modSetting, entryValue.getFirst());
-                String change1 = FORMATTING_NEXT + this.parent.formatValue(modId, modSetting, entryValue.getSecond());
+                String change0 = FORMATTING_PREV + this.parent.formatValue(modId, modSetting, entryValue.getFirst(), this.parent.prevProperties);
+                String change1 = FORMATTING_NEXT + this.parent.formatValue(modId, modSetting, entryValue.getSecond(), this.parent.nextProperties);
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
@@ -473,9 +462,9 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     @SideOnly(Side.CLIENT)
     private static class ChangeListEntry {
-        private final boolean isTitle;
-        private final String title;
-        private final Entry<String, Tuple<JsonElement, JsonElement>> entry;
+        public final boolean isTitle;
+        public final String title;
+        public final Entry<String, Tuple<JsonElement, JsonElement>> entry;
         
         public ChangeListEntry(String title) {
             this.isTitle = true;
@@ -489,9 +478,10 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             this.entry = entry;
         }
     }
-    
+
+    @SideOnly(Side.CLIENT)
     @FunctionalInterface
-    public static interface Formatter {
+    private static interface Formatter {
         String apply(String modId, String modSetting, String value);
     }
     
@@ -543,13 +533,6 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
             .put(NbtTags.TUNDRA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
             .put(NbtTags.TUNDRA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
             .put(NbtTags.TUNDRA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .build();
-        
-        PROPERTY_FORMATTERS = ImmutableMap.<String, Formatter>builder()
-            .put(new BiomeProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(new BlockProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeBlockOrFluidString)
-            .put(new EntityEntryProperty(new ResourceLocation("")).getType(), GuiModalConfirmSettings::getFormattedForgeEntityString)
-            .put(new ListProperty("", new String[] { "" }).getType(), GuiModalConfirmSettings::getFormattedMiscString)
             .build();
     }
 }
