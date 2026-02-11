@@ -16,7 +16,7 @@ public class BiomesOPlentyCoralReefResolver extends BiomeResolverAddSingleBiome 
     private final boolean useCompat;
 
     public BiomesOPlentyCoralReefResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BOPBiomes.coral_reef.get(), chunkSource.getSeed(), 2027L, 26183L, 0.1f);
+        super(BOPBiomes.coral_reef.get(), chunkSource.getSeed(), 2027L, 26183L, settings.getFloatProperty(CompatBiomesOPlenty.KEY_CORAL_REEF_CHANCE));
         
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);

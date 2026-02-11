@@ -143,8 +143,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
         this.list.scrollBy(this.amountScrolled);
 
-        String initialExportText = this.getInitialSettings();
-        this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, fieldExportX, fieldExportY, fieldExportW, fieldExportH, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
+        this.fieldExport = this.createInitialField(fieldExportX, fieldExportY, fieldExportW, fieldExportH);
         
         int copyX = this.fieldExport.x + this.fieldExport.width + BUTTON_SPACE;
         int copyY = fieldExportY;
@@ -377,6 +376,12 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
         
         return presets;
+    }
+    
+    private GuiTextField createInitialField(int x, int y, int width, int height) {
+        String initialExportText = this.getInitialSettings();
+        
+        return this.createInitialField(this.fieldExport, GUI_ID_EXPORT, x, y, width, height, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
     }
 
     private GuiTextField createInitialField(GuiTextField textField, int id, int x, int y, int width, int height, String initialText, int maxLength) {

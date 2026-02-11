@@ -13,6 +13,8 @@ import biomesoplenty.api.block.BOPBlocks;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
+import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
@@ -42,6 +44,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     public static final String ADDON_ID = "compat" + MOD_ID;
     
     public static final ResourceLocation KEY_USE_COMPAT = createKey("useCompat");
+    public static final ResourceLocation KEY_CORAL_REEF_CHANCE = createKey("coralReefChance");
+    public static final ResourceLocation KEY_KELP_FOREST_CHANCE = createKey("kelpForestChance");
     public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = createKey("resolverCoralReef");
     public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = createKey("resolverKelpForest");
     
@@ -50,6 +54,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBeta.log(Level.WARN, "Biomes O' Plenty has been detected, classic Nether settings will be disabled due to incompatibilties!");
         
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
+        ModernBetaRegistries.PROPERTY.register(KEY_CORAL_REEF_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_KELP_FOREST_CHANCE, new FloatProperty(0.25f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);
     }
@@ -63,6 +69,12 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     public void loadClient() {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
             GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class)
+        ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_CORAL_REEF_CHANCE, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+        ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_KELP_FOREST_CHANCE, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
     }
 

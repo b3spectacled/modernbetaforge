@@ -16,7 +16,7 @@ public class BiomesOPlentyKelpForestResolver extends BiomeResolverAddSingleBiome
     private final boolean useCompat;
 
     public BiomesOPlentyKelpForestResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BOPBiomes.kelp_forest.get(), chunkSource.getSeed(), 3469L, 55579L, 0.25f);
+        super(BOPBiomes.kelp_forest.get(), chunkSource.getSeed(), 3469L, 55579L, settings.getFloatProperty(CompatBiomesOPlenty.KEY_KELP_FOREST_CHANCE));
         
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);
