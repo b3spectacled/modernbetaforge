@@ -118,8 +118,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         int centerX = this.width / 2;
-        
-        String initialExportText = this.getInitialSettings();
         int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
         int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
         int fieldExportY = 40;
@@ -144,7 +142,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
         this.list.scrollBy(this.amountScrolled);
-        
+
+        String initialExportText = this.getInitialSettings();
         this.fieldExport = this.createInitialField(this.fieldExport, GUI_ID_EXPORT, fieldExportX, fieldExportY, fieldExportW, fieldExportH, initialExportText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
         int copyX = this.fieldExport.x + this.fieldExport.width + BUTTON_SPACE;
