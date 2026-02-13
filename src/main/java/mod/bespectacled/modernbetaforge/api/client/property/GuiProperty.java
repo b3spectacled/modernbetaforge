@@ -2,8 +2,8 @@ package mod.bespectacled.modernbetaforge.api.client.property;
 
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;

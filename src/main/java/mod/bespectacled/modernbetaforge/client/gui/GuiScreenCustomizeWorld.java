@@ -58,8 +58,8 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
-import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
+import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -194,7 +194,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        String defaultPreset = PresetUtil.getDefaultPreset();
+        String defaultPreset = PresetUtil.readPreset(ModernBetaConfig.guiOptions.defaultPreset);
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)parent;
@@ -2333,7 +2333,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private void restoreDefaults() {
-        String defaultPreset = PresetUtil.getDefaultPreset();
+        String defaultPreset = PresetUtil.readPreset(ModernBetaConfig.guiOptions.defaultPreset);
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         
         this.createPagedList();

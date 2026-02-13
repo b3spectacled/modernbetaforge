@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
+import mod.bespectacled.modernbetaforge.util.PresetUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -187,8 +188,8 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     }
     
     private Map<String, Tuple<JsonElement, JsonElement>> createChangeMap(String prevStr, String nextStr) {
-        JsonObject prev = GSON.fromJson(prevStr, JsonObject.class);
-        JsonObject next = GSON.fromJson(nextStr, JsonObject.class);
+        JsonObject prev = PresetUtil.readPresetAsJson(prevStr);
+        JsonObject next = PresetUtil.readPresetAsJson(nextStr);
         ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevStr);
         
         Map<String, Tuple<JsonElement, JsonElement>> changeMap = new LinkedHashMap<>();

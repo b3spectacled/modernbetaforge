@@ -25,9 +25,10 @@ public class InitGuiEventHandler {
             
             if (guiCreateWorld.selectedIndex == WorldType.DEFAULT.getId()) {
                 guiCreateWorld.selectedIndex = ModernBetaWorldType.INSTANCE.getId();
+                String defaultPreset = PresetUtil.readPreset(ModernBetaConfig.guiOptions.defaultPreset);
                
-                if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && PresetUtil.hasChangedDefaultPreset()) {
-                    guiCreateWorld.chunkProviderSettingsJson = PresetUtil.getDefaultPreset();
+                if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && !PresetUtil.isPresetEmpty(defaultPreset)) {
+                    guiCreateWorld.chunkProviderSettingsJson = PresetUtil.readPreset(defaultPreset);
                 }
             }
         }
