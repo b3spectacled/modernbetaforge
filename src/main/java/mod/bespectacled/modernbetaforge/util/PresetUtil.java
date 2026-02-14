@@ -12,21 +12,21 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 public class PresetUtil {
     private static final Gson GSON = new Gson();
     
-    public static boolean isPresetEmpty(String preset) {
-        return ModernBetaConfig.guiOptions.defaultPreset.isEmpty();
+    public static boolean isDefaultPresetModified() {
+        return !ModernBetaConfig.guiOptions.defaultPreset.isEmpty();
     }
     
-    public static String readPreset(String preset) {
-        preset = preset.trim();
+    public static String getDefaultPreset() {
+        String defaultPreset = ModernBetaConfig.guiOptions.defaultPreset.trim();
         
         try {
-            GSON.fromJson(preset, JsonObject.class);
+            GSON.fromJson(defaultPreset, JsonObject.class);
         } catch (JsonSyntaxException e) {
             ModernBeta.log(Level.ERROR, "Default preset is malformed, defaulting to empty string..");
-            preset = "";
+            defaultPreset = "";
         }
         
-        return preset;
+        return defaultPreset;
     }
     
     public static JsonObject readPresetAsJson(String preset) {

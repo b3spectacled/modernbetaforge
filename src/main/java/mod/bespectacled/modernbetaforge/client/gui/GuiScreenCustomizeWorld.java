@@ -194,7 +194,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         };
         
-        String defaultPreset = PresetUtil.readPreset(ModernBetaConfig.guiOptions.defaultPreset);
+        String defaultPreset = PresetUtil.getDefaultPreset();
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = (GuiCreateWorld)parent;
@@ -1820,9 +1820,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.parent.chunkProviderSettingsJson = this.settings.toString();
                     this.mc.displayGuiScreen(this.parent);
                 } else {
-                    String generatorOptions = this.parent.chunkProviderSettingsJson;
+                    String generatorOptions = this.parent.chunkProviderSettingsJson.trim();
                     boolean isEqualToPrev = generatorOptions.equals(this.settings.toString());
-                    boolean isEqualToDefault = this.defaultSettings.equals(this.settings);
+                    boolean isEqualToDefault = generatorOptions.isEmpty() && this.defaultSettings.equals(this.settings);
                     
                     if (isEqualToPrev || isEqualToDefault) {
                         ModernBeta.log(Level.DEBUG, "No changes were made..");
@@ -2333,7 +2333,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private void restoreDefaults() {
-        String defaultPreset = PresetUtil.readPreset(ModernBetaConfig.guiOptions.defaultPreset);
+        String defaultPreset = PresetUtil.getDefaultPreset();
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         
         this.createPagedList();
