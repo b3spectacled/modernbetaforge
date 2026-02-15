@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
@@ -28,6 +29,7 @@ public class ModCompat {
         loadCompat(new CompatDynamicTrees());
         loadCompat(new CompatBuildCraftEnergy());
         loadCompat(new CompatThaumcraft());
+        loadCompat(new CompatBetterMineshafts());
     }
     
     public static boolean isModLoaded(String modId) {

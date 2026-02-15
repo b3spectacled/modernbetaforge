@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -40,7 +39,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
-    private static final Gson GSON = new Gson();
     private static final Map<String, Formatter> FORMATTERS;
     
     private static final String PREFIX = "createWorld.customize.custom";

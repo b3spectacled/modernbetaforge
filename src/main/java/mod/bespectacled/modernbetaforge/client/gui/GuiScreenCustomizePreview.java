@@ -26,6 +26,8 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -36,6 +38,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSim;
+import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimBetterMineshafts;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMansion;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMineshaft;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMonument;
@@ -708,7 +711,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (this.settings.useStrongholds)
             this.structureSims.put(ModernBetaStructures.STRONGHOLD, new StructureSimStronghold(this.chunkSource));
         if (this.settings.useMineShafts)
-            this.structureSims.put(ModernBetaStructures.MINESHAFT, new StructureSimMineshaft(seed));
+            this.structureSims.put(ModernBetaStructures.MINESHAFT, ModCompat.isModLoaded(CompatBetterMineshafts.MOD_ID) ? new StructureSimBetterMineshafts(seed) : new StructureSimMineshaft(seed));
         if (this.settings.useMonuments)
             this.structureSims.put(ModernBetaStructures.MONUMENT, new StructureSimMonument(seed));
         if (this.settings.useMansions)
