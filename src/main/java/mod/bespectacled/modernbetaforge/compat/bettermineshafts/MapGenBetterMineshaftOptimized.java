@@ -22,7 +22,7 @@ public class MapGenBetterMineshaftOptimized extends MapGenBetterMineshaft {
             return false;
         }
 
-        Biome biome = biomeFunc.apply((chunkX << 4) + 8, (chunkZ << 4) + 8);
+        Biome biome = biomeFunc.apply(chunkX, chunkZ);
         boolean isOcean = BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN);
         boolean isBeach = BiomeDictionary.hasType(biome, BiomeDictionary.Type.BEACH);
         
