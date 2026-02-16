@@ -9,6 +9,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.source.ReleaseChunkSource;
@@ -37,8 +38,8 @@ public class DebugInfoEventHandler {
             WorldServer worldServer = (WorldServer)minecraftServer.getEntityWorld();
             EntityPlayerSP player = Minecraft.getMinecraft().player;
             
-            // Do not render if not in Overworld
-            if (player.dimension != DimensionType.OVERWORLD.getId()) {
+            // Do not render if not in Overworld or in a Modern Beta world
+            if (player.dimension != DimensionType.OVERWORLD.getId() || !(worldServer.getWorldType() instanceof ModernBetaWorldType)) {
                 return;
             }
             
