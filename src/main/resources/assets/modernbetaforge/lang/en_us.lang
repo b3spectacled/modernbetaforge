@@ -552,6 +552,7 @@ modernbetaforge.general.spawnoptions=Spawn Settings
 modernbetaforge.general.visualoptions=Visual Settings
 modernbetaforge.general.serveroptions=Server Settings
 modernbetaforge.general.debugoptions=Debug Settings
+modernbetaforge.general.experimentaloptions=Experimental Settings
 
 modernbetaforge.general.guioptions.defaultpreset=Default World Preset
 modernbetaforge.general.guioptions.defaultpresetfilter=Default World Preset Filter
@@ -582,6 +583,8 @@ modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Prop
 modernbetaforge.general.debugoptions.registerdebugnoisechunksource=Register Debug Noise Chunk Source
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
 modernbetaforge.general.debugoptions.debugindevlevelsaves=Debug Indev Level Saves
+
+modernbetaforge.general.experimentaloptions.enableexperimentalfeatures=Enable Experimental Features
 
 ## Test Properties (For Debug Only!)
 createWorld.customize.custom.modernbetaforge=Modern Beta Forge

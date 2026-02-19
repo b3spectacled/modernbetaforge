@@ -42,7 +42,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     }
     
     private static final ResourceLocation UNKNOWN_PACK = new ResourceLocation("textures/misc/unknown_pack.png");
-    
     private static final String PREFIX = "createWorld.customize.presets.modernbetaforge.";
     private static final String PREFIX_FILTER = "createWorld.customize.presets.modernbetaforge.filter";
     
@@ -313,13 +312,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 break;
             case GUI_ID_COPY:
                 this.buttonCopy.enabled = false;
-                this.copiedTime = System.currentTimeMillis();
                 GuiScreen.setClipboardString(this.fieldExport.getText());
+                this.copiedTime = System.currentTimeMillis();
                 break;
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
-                this.pastedTime = System.currentTimeMillis();
                 this.fieldExport.setText(GuiScreen.getClipboardString());
+                this.pastedTime = System.currentTimeMillis();
                 this.list.selected = -1;
                 break;
         }

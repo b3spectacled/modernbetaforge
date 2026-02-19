@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.event.PlayerEventHandler;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandler;
+import mod.bespectacled.modernbetaforge.experimental.ModernBetaExperimental;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
@@ -101,6 +102,10 @@ public class ModernBeta {
         
         if (ModernBetaConfig.debugOptions.registerDebugProperties) {
             ModernBetaBuiltInRegistries.registerProperties();
+        }
+        
+        if (ModernBetaConfig.experimentalOptions.enableExperimentalFeatures) {
+            ModernBetaExperimental.register();
         }
         
         ModCompat.loadCompat();

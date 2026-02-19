@@ -30,7 +30,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     }
     
     private static final String PREFIX = "createWorld.customize.presets.modernbetaforge.";
-
+    
     private static final ResourceLocation SCROLL_UP = ModernBeta.createRegistryKey("textures/gui/scroll_up.png");
     private static final ResourceLocation SCROLL_DOWN = ModernBeta.createRegistryKey("textures/gui/scroll_down.png");
     private static final ResourceLocation KZ = new ResourceLocation("textures/painting/paintings_kristoffer_zetterstrand.png");
