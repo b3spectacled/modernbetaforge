@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.client.gui.modal;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.function.Consumer;
 
 import org.lwjgl.input.Keyboard;
@@ -113,6 +115,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     private final String initialExportText;
     private final GuiBoundsChecker copyBounds;
     private final GuiBoundsChecker pasteBounds;
+    private final Queue<Runnable> actions;
     
     private GuiTextField fieldName;
     private GuiTextField fieldDesc;
@@ -136,6 +139,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.selectedIcon = state == State.SAVE ? 0 : MathHelper.clamp(parent.getSelectedPresetIcon(), 0, ICON_TEXTURES.length - 1);
         this.copyBounds = new GuiBoundsChecker();
         this.pasteBounds = new GuiBoundsChecker();
+        this.actions = new ArrayDeque<>();
     }
     
     @Override
@@ -212,6 +216,10 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
             this.buttonPaste.enabled = true;
         }
+        
+        if (!this.actions.isEmpty()) {
+            this.actions.poll().run();
+        }
     }
     
     @Override
@@ -273,12 +281,12 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
             case GUI_ID_COPY:
                 this.buttonCopy.enabled = false;
                 this.copiedTime = System.currentTimeMillis();
-                GuiScreen.setClipboardString(this.fieldSettings.getText());
+                this.actions.add(() -> GuiScreen.setClipboardString(this.fieldSettings.getText()));
                 break;
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
                 this.pastedTime = System.currentTimeMillis();
-                this.fieldSettings.setText(GuiScreen.getClipboardString());
+                this.actions.add(() -> this.fieldSettings.setText(GuiScreen.getClipboardString()));
                 break;
         }
         

@@ -1,9 +1,11 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -72,6 +74,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final int initialPreset;
     private final GuiBoundsChecker copyBounds;
     private final GuiBoundsChecker pasteBounds;
+    private final Queue<Runnable> actions;
     
     protected String title;
     
@@ -106,6 +109,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.initialPreset = initialPreset;
         this.copyBounds = new GuiBoundsChecker();
         this.pasteBounds = new GuiBoundsChecker();
+        this.actions = new ArrayDeque<>();
         
         this.hoveredElement = -1;
         this.amountScrolled = amountScrolled;
@@ -201,6 +205,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
             this.buttonPaste.enabled = this.isFocused;
+        }
+        
+        if (!this.actions.isEmpty()) {
+            this.actions.poll().run();
         }
     }
 
@@ -312,14 +320,14 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 break;
             case GUI_ID_COPY:
                 this.buttonCopy.enabled = false;
-                GuiScreen.setClipboardString(this.fieldExport.getText());
                 this.copiedTime = System.currentTimeMillis();
+                this.actions.add(() -> GuiScreen.setClipboardString(this.fieldExport.getText()));
                 break;
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
-                this.fieldExport.setText(GuiScreen.getClipboardString());
-                this.pastedTime = System.currentTimeMillis();
                 this.list.selected = -1;
+                this.pastedTime = System.currentTimeMillis();
+                this.actions.add(() -> this.fieldExport.setText(GuiScreen.getClipboardString()));
                 break;
         }
         

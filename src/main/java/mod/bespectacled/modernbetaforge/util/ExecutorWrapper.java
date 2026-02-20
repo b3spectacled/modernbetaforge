@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 
-public class ExecutorWrapper {
+public class ExecutorWrapper implements AutoCloseable {
     private static final int INITIAL_SHUTDOWN_WAIT_TIME_MS = 1000;
     private static final int DELAYED_SHUTDOWN_WAIT_TIME_MS = 10000;
     
@@ -42,6 +42,21 @@ public class ExecutorWrapper {
             ModernBeta.log(Level.DEBUG, String.format("Executor service '%s' shutdown was interrupted!", this.name));
             this.executor.shutdownNow();
             Thread.currentThread().interrupt();
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        this.shutdown();
+    }
+    
+    public static void tryQueueRunnables(int threads, String name, Runnable... runnables) {
+        try (ExecutorWrapper executor = new ExecutorWrapper(threads, name)) {
+            for (int i = 0; i < runnables.length; ++i) {
+                executor.queueRunnable(runnables[i]);
+            }
+        } catch (Exception e) {
+            ModernBeta.log(Level.DEBUG, String.format("Executor service '%s' did not close properly!", name));
         }
     }
 }
