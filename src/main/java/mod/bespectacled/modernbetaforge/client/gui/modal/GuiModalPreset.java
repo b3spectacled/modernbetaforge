@@ -282,7 +282,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
                 this.pastedTime = System.currentTimeMillis();
-                this.executor.queueRunnable(() -> GuiScreen.getClipboardString());
+                this.executor.queueRunnable(() -> this.fieldSettings.setText(GuiScreen.getClipboardString()));
                 break;
         }
         
