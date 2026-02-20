@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.util;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Level;
@@ -13,7 +14,7 @@ public class ExecutorWrapper implements AutoCloseable {
     private static final int DELAYED_SHUTDOWN_WAIT_TIME_MS = 10000;
     
     protected final ExecutorService executor;
-    private final String name;
+    protected final String name;
     
     public ExecutorWrapper(int threads, String name) {
         this.executor = Executors.newFixedThreadPool(threads);
@@ -23,7 +24,11 @@ public class ExecutorWrapper implements AutoCloseable {
     }
     
     public void queueRunnable(Runnable runnable) {
-        this.executor.execute(runnable);
+        try {
+            this.executor.execute(runnable);
+        } catch (RejectedExecutionException e) {
+            ModernBeta.log(Level.DEBUG, String.format("Executor service '%s' is busy!", this.name));
+        }
     }
     
     public void shutdown() {
