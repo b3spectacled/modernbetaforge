@@ -1,8 +1,6 @@
 package mod.bespectacled.modernbetaforge.client.gui.modal;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.function.Consumer;
 
 import org.lwjgl.input.Keyboard;
@@ -11,6 +9,7 @@ import org.lwjgl.input.Mouse;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets;
+import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -115,7 +114,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     private final String initialExportText;
     private final GuiBoundsChecker copyBounds;
     private final GuiBoundsChecker pasteBounds;
-    private final Queue<Runnable> actions;
+    private final ExecutorWrapper executor;
     
     private GuiTextField fieldName;
     private GuiTextField fieldDesc;
@@ -139,7 +138,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.selectedIcon = state == State.SAVE ? 0 : MathHelper.clamp(parent.getSelectedPresetIcon(), 0, ICON_TEXTURES.length - 1);
         this.copyBounds = new GuiBoundsChecker();
         this.pasteBounds = new GuiBoundsChecker();
-        this.actions = new ArrayDeque<>();
+        this.executor = new ExecutorWrapper(1, "clipboard_modal");
     }
     
     @Override
@@ -216,10 +215,6 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
             this.buttonPaste.enabled = true;
         }
-        
-        if (!this.actions.isEmpty()) {
-            this.actions.poll().run();
-        }
     }
     
     @Override
@@ -242,6 +237,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
+        this.executor.shutdown();
     }
     
     public String getNameText() {
@@ -281,12 +277,12 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
             case GUI_ID_COPY:
                 this.buttonCopy.enabled = false;
                 this.copiedTime = System.currentTimeMillis();
-                this.actions.add(() -> GuiScreen.setClipboardString(this.fieldSettings.getText()));
+                this.executor.queueRunnable(() -> GuiScreen.setClipboardString(this.fieldSettings.getText()));
                 break;
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
                 this.pastedTime = System.currentTimeMillis();
-                this.actions.add(() -> this.fieldSettings.setText(GuiScreen.getClipboardString()));
+                this.executor.queueRunnable(() -> GuiScreen.getClipboardString());
                 break;
         }
         

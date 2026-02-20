@@ -1,11 +1,9 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -20,6 +18,7 @@ import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.IconText
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.State;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPresetConfirm;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -74,7 +73,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final int initialPreset;
     private final GuiBoundsChecker copyBounds;
     private final GuiBoundsChecker pasteBounds;
-    private final Queue<Runnable> actions;
+    private final ExecutorWrapper executor;
     
     protected String title;
     
@@ -109,7 +108,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.initialPreset = initialPreset;
         this.copyBounds = new GuiBoundsChecker();
         this.pasteBounds = new GuiBoundsChecker();
-        this.actions = new ArrayDeque<>();
+        this.executor = new ExecutorWrapper(1, "clipboard");
         
         this.hoveredElement = -1;
         this.amountScrolled = amountScrolled;
@@ -173,6 +172,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
+        this.executor.shutdown();
     }
     
     @Override
@@ -205,10 +205,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         if (!this.buttonPaste.enabled && this.getButtonValidity(this.pastedTime)) {
             this.buttonPaste.enabled = this.isFocused;
-        }
-        
-        if (!this.actions.isEmpty()) {
-            this.actions.poll().run();
         }
     }
 
@@ -321,13 +317,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             case GUI_ID_COPY:
                 this.buttonCopy.enabled = false;
                 this.copiedTime = System.currentTimeMillis();
-                this.actions.add(() -> GuiScreen.setClipboardString(this.fieldExport.getText()));
+                this.executor.queueRunnable(() -> GuiScreen.setClipboardString(this.fieldExport.getText()));
                 break;
             case GUI_ID_PASTE:
                 this.buttonPaste.enabled = false;
                 this.list.selected = -1;
                 this.pastedTime = System.currentTimeMillis();
-                this.actions.add(() -> this.fieldExport.setText(GuiScreen.getClipboardString()));
+                this.executor.queueRunnable(() -> this.fieldExport.setText(GuiScreen.getClipboardString()));
                 break;
         }
         
