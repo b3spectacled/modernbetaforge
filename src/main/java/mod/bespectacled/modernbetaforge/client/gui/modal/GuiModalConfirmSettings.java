@@ -81,6 +81,11 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
         
     @Override
     public void initGui() {
+        // Short circuit if change map is empty (should only happen if only hidden items were changed)
+        if (this.changeMap.size() == 0) {
+            this.onDiscard.accept(this);
+        }
+        
         super.initGui();
         
         this.modalWidth = MathHelper.clamp((int)(this.width * 0.8), MODAL_MIN_WIDTH, MODAL_MAX_WIDTH);

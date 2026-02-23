@@ -208,6 +208,9 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBeta.createRegistryKey("blockProp"), new BlockProperty(Blocks.GRASS.getRegistryName()));
         registry.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistryUtil.getFluidBlockRegistryNames().contains(key)));
         registry.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
+        registry.register(ModernBeta.createRegistryKey("hiddenProp"), new IntProperty(0, 0, 10, PropertyGuiType.SLIDER));
+        
+        registry.get(ModernBeta.createRegistryKey("hiddenProp")).setDisplay(false);
     }
     
     public static void registerModDataFixes() {
@@ -318,7 +321,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.SPAWN_WATER_MOBS, GuiPredicates.SPAWN_WATER_MOBS_TEST);
         registry.register(GuiPredicate.SPAWN_AMBIENT_MOBS, GuiPredicates.SPAWN_AMBIENT_MOBS_TEST);
         registry.register(GuiPredicate.SPAWN_WOLVES, GuiPredicates.SPAWN_WOLVES_TEST);
-        registry.register(GuiPredicate.USE_OLD_ORES, GuiPredicates.USE_OLD_ORES_TEST);
+        registry.register(GuiPredicate.ORE_TYPE, GuiPredicates.ORE_TYPE_TEST);
         registry.register(GuiPredicate.CLAY_SIZE, GuiPredicates.CLAY_SIZE_TEST);
         registry.register(GuiPredicate.CLAY_COUNT, GuiPredicates.CLAY_COUNT_TEST);
         registry.register(GuiPredicate.CLAY_MIN_HEIGHT, GuiPredicates.CLAY_MIN_HEIGHT_TEST);
