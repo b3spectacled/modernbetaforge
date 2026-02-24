@@ -605,7 +605,7 @@ createWorld.customize.custom.modernbetaforge.blockprop=Block Prop
 createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop
 createWorld.customize.custom.modernbetaforge.screenprop=Screen Prop
-createWorld.customize.custom.modernbetaforge.hidden=Hidden Prop
+createWorld.customize.custom.modernbetaforge.hiddenprop=Hidden Prop
 
 ## Keybinds
 key.modernbetaforge.categories.ui=Modern Beta GUI
