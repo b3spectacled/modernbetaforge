@@ -51,8 +51,8 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview.PreviewSettings;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalChangelist;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirm;
-import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirmSettings;
 import mod.bespectacled.modernbetaforge.client.settings.KeyBindings;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
@@ -1828,18 +1828,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                         ModernBeta.log(Level.DEBUG, "No changes were made..");
                         this.mc.displayGuiScreen(this.parent);
                     } else {
-                        Consumer<GuiModalConfirmSettings> onConfirmSettings = modal -> {
+                        Consumer<GuiModalChangelist> onConfirmSettings = modal -> {
                             this.parent.chunkProviderSettingsJson = this.settings.toString();
                             this.mc.displayGuiScreen(this.parent);
                         };
-                        Consumer<GuiModalConfirmSettings> onDiscardSettings = modal -> {
+                        Consumer<GuiModalChangelist> onDiscardSettings = modal -> {
                             this.mc.displayGuiScreen(this.parent);
                         };
                         
                         title = I18n.format(PREFIX + "confirmSettingsTitle");
                         
                         this.isFocused = false;
-                        this.mc.displayGuiScreen(new GuiModalConfirmSettings(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+                        this.mc.displayGuiScreen(new GuiModalChangelist(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
                     }
                 }
                

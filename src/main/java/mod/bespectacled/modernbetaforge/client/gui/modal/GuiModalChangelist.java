@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
+public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     private static final Map<String, Formatter> FORMATTERS;
     
     private static final String PREFIX = "createWorld.customize.custom";
@@ -59,13 +59,13 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private final Map<ResourceLocation, Property<?>> prevProperties;
     private final Map<ResourceLocation, Property<?>> nextProperties;
     
-    private final Consumer<GuiModalConfirmSettings> onDiscard;
+    private final Consumer<GuiModalChangelist> onDiscard;
     private final Map<String, Tuple<JsonElement, JsonElement>> changeMap;
     private final List<String> modIds;
     
     private ChangeList changeList;
 
-    public GuiModalConfirmSettings(GuiScreenCustomizeWorld parent, String title, Consumer<GuiModalConfirmSettings> onConfirm, Consumer<GuiModalConfirmSettings> onCancel, Consumer<GuiModalConfirmSettings> onDiscard) {
+    public GuiModalChangelist(GuiScreenCustomizeWorld parent, String title, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard) {
         super(parent, title, MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
         
         String prevString = parent.getPreviousSettingsString();
@@ -193,18 +193,12 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     private Map<String, Tuple<JsonElement, JsonElement>> createChangeMap(String prevStr, String nextStr) {
         JsonObject prev = PresetUtil.readPresetAsJson(prevStr);
         JsonObject next = PresetUtil.readPresetAsJson(nextStr);
-        ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevStr);
         
         Map<String, Tuple<JsonElement, JsonElement>> changeMap = new LinkedHashMap<>();
         for (Entry<String, JsonElement> entry : prev.entrySet()) {
             String key = entry.getKey();
-            ResourceLocation registryKey = new ResourceLocation(key);
             JsonElement prevSetting = prev.get(key);
             JsonElement nextSetting = next.get(key);
-
-            if (factory.customProperties.containsKey(registryKey) && !factory.customProperties.get(registryKey).getDisplay()) {
-                continue;
-            }
             
             if (!prevSetting.equals(nextSetting)) {
                 changeMap.put(key, new Tuple<>(prevSetting, nextSetting));
@@ -300,12 +294,12 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     @SideOnly(Side.CLIENT)
     private static class ChangeList extends GuiSlot {
-        private final GuiModalConfirmSettings parent;
+        private final GuiModalChangelist parent;
         private final List<ChangeListEntry> changeList;
         
         private int hoveredSlot;
         
-        public ChangeList(GuiModalConfirmSettings parent, int top, int bottom, int slotHeight) {
+        public ChangeList(GuiModalChangelist parent, int top, int bottom, int slotHeight) {
             super(parent.mc, parent.width, parent.height, top, bottom, slotHeight);
             
             this.parent = parent;
@@ -491,52 +485,52 @@ public class GuiModalConfirmSettings extends GuiModal<GuiModalConfirmSettings> {
     
     static {
         FORMATTERS = ImmutableMap.<String, Formatter>builder()
-            .put(NbtTags.CHUNK_SOURCE, GuiModalConfirmSettings::getFormattedRegistryString)
-            .put(NbtTags.BIOME_SOURCE, GuiModalConfirmSettings::getFormattedRegistryString)
-            .put(NbtTags.SURFACE_BUILDER, GuiModalConfirmSettings::getFormattedRegistryString)
-            .put(NbtTags.CAVE_CARVER, GuiModalConfirmSettings::getFormattedRegistryString)
-            .put(NbtTags.WORLD_SPAWNER, GuiModalConfirmSettings::getFormattedRegistryString)
-            .put(NbtTags.LEVEL_THEME, GuiModalConfirmSettings::getFormattedMiscString)
-            .put(NbtTags.LEVEL_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
-            .put(NbtTags.LEVEL_HOUSE, GuiModalConfirmSettings::getFormattedMiscString)
-            .put(NbtTags.LAYER_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
-            .put(NbtTags.ORE_TYPE, GuiModalConfirmSettings::getFormattedMiscString)
-            .put(NbtTags.SINGLE_BIOME, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.DEFAULT_BLOCK, GuiModalConfirmSettings::getFormattedForgeBlockString)
-            .put(NbtTags.DEFAULT_FLUID, GuiModalConfirmSettings::getFormattedForgeFluidString)
-            .put(NbtTags.DESERT_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.DESERT_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.DESERT_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.FOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.FOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.FOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.ICE_DESERT_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.ICE_DESERT_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.ICE_DESERT_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.PLAINS_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.PLAINS_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.PLAINS_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.RAINFOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.RAINFOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.RAINFOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SAVANNA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SAVANNA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SAVANNA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SHRUBLAND_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SHRUBLAND_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SHRUBLAND_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SEASONAL_FOREST_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SEASONAL_FOREST_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SWAMPLAND_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SWAMPLAND_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.SWAMPLAND_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TAIGA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TAIGA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TAIGA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TUNDRA_BIOME_BASE, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TUNDRA_BIOME_OCEAN, GuiModalConfirmSettings::getFormattedForgeBiomeString)
-            .put(NbtTags.TUNDRA_BIOME_BEACH, GuiModalConfirmSettings::getFormattedForgeBiomeString)
+            .put(NbtTags.CHUNK_SOURCE, GuiModalChangelist::getFormattedRegistryString)
+            .put(NbtTags.BIOME_SOURCE, GuiModalChangelist::getFormattedRegistryString)
+            .put(NbtTags.SURFACE_BUILDER, GuiModalChangelist::getFormattedRegistryString)
+            .put(NbtTags.CAVE_CARVER, GuiModalChangelist::getFormattedRegistryString)
+            .put(NbtTags.WORLD_SPAWNER, GuiModalChangelist::getFormattedRegistryString)
+            .put(NbtTags.LEVEL_THEME, GuiModalChangelist::getFormattedMiscString)
+            .put(NbtTags.LEVEL_TYPE, GuiModalChangelist::getFormattedMiscString)
+            .put(NbtTags.LEVEL_HOUSE, GuiModalChangelist::getFormattedMiscString)
+            .put(NbtTags.LAYER_TYPE, GuiModalChangelist::getFormattedMiscString)
+            .put(NbtTags.ORE_TYPE, GuiModalChangelist::getFormattedMiscString)
+            .put(NbtTags.SINGLE_BIOME, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.DEFAULT_BLOCK, GuiModalChangelist::getFormattedForgeBlockString)
+            .put(NbtTags.DEFAULT_FLUID, GuiModalChangelist::getFormattedForgeFluidString)
+            .put(NbtTags.DESERT_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.DESERT_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.DESERT_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.FOREST_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.ICE_DESERT_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.PLAINS_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.RAINFOREST_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SAVANNA_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SHRUBLAND_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SEASONAL_FOREST_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.SWAMPLAND_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TAIGA_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_BASE, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_OCEAN, GuiModalChangelist::getFormattedForgeBiomeString)
+            .put(NbtTags.TUNDRA_BIOME_BEACH, GuiModalChangelist::getFormattedForgeBiomeString)
             .build();
     }
 }
