@@ -22,7 +22,7 @@ public class ModernBetaConfig {
     public static CategorySpawn spawnOptions = new CategorySpawn();
     public static CategoryServer serverOptions = new CategoryServer();
     public static CategoryDebug debugOptions = new CategoryDebug();
-    public static CategoryExperimental experimentalOptions = new CategoryExperimental();
+    // public static CategoryExperimental experimentalOptions = new CategoryExperimental();
     
     public static class CategoryGui {
         @Comment({
@@ -179,6 +179,7 @@ public class ModernBetaConfig {
         public boolean debugIndevLevelSaves = false;
     }
     
+    /*
     public static class CategoryExperimental {
         @Comment({
             "Register and enable experimental features at mod start-up."
@@ -186,6 +187,7 @@ public class ModernBetaConfig {
         @RequiresMcRestart
         public boolean enableExperimentalFeatures = false;
     }
+    */
     
     @Mod.EventBusSubscriber(modid = ModernBeta.MODID)
     private static class EventHandler {
