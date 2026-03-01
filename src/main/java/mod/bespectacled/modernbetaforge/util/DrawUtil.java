@@ -127,11 +127,11 @@ public class DrawUtil {
         Supplier<Boolean> haltCallback,
         BufferedImage previousImage
     ) {
-        ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>("biome_draw", (chunkX, chunkZ) -> new BiomeChunk(
-            chunkX,
-            chunkZ,
-            (x, z) -> getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules)
-        ));
+        ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>(
+            "biome_draw",
+            512, 
+            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, (x, z) -> getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules))
+        );
         
         BufferedImage image = new BufferedImage(sizeX, sizeZ, BufferedImage.TYPE_INT_ARGB);
         MutableBlockPos mutablePos = new MutableBlockPos();
