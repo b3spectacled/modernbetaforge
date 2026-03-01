@@ -21,10 +21,12 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
+import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -466,25 +468,15 @@ public class DrawUtil {
         int color = terrainType.color;
         int x = blockPos.getX();
         int z = blockPos.getZ();
-
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
-        
         biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
         
         if (terrainType == TerrainType.GRASS) {
-            color = biome.getGrassColorAtPos(blockPos);
-            
-            if (useBiomeBlend) {
-                if (biomeSource instanceof ClimateSampler && ((ClimateSampler)biomeSource).sampleBiomeColor()) {
-                    ClimateSampler climateSampler = (ClimateSampler)biomeSource;
-                    Clime clime = climateSampler.sample(blockPos.getX(), blockPos.getZ());
-                    color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
-                    
-                } else {
-                    color = blendBiomeColor(blockPos, biomeCache);
-                    
-                }
+            if (useBiomeBlend && !(biomeSource instanceof SingleBiomeSource)) {
+                color = getBlendedBiomeColor(blockPos, biomeSource, biomeCache);
+            } else {
+                color = biome.getGrassColorAtPos(blockPos);
             }
             
             color = MathUtil.convertRGBtoARGB(color);
@@ -504,27 +496,36 @@ public class DrawUtil {
         return color;
     }
     
-    private static int blendBiomeColor(BlockPos blockPos, ChunkCache<BiomeChunk> biomeCache) {
-        Vec3d color = Vec3d.ZERO;
-        int centerX = blockPos.getX();
-        int centerZ = blockPos.getZ();
-        int blendDist = 2;
+    private static int getBlendedBiomeColor(BlockPos centerPos, BiomeSource biomeSource, ChunkCache<BiomeChunk> biomeCache) {
         MutableBlockPos mutablePos = new MutableBlockPos();
-        
+        Vec3d colorVec = Vec3d.ZERO;
+        int centerX = centerPos.getX();
+        int centerZ = centerPos.getZ();
+        int blendDist = 1;
         int blocks = 0;
+        
         for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
             for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
-                
                 Biome biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
+                int colorInt = biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z));
+            
+                if (biomeSource instanceof ClimateSampler) {
+                    ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                    
+                    if (climateSampler.sampleBiomeColor() && biome instanceof BiomeBeta) {
+                        Clime clime = climateSampler.sample(x, z);
+                        colorInt = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+                    }
+                }
                 
-                color = color.add(MathUtil.convertRGBIntToVec3d(biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z))));
+                colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorInt));
                 blocks++;
             }
         }
         
-        return MathUtil.convertRGBVec3dToInt(color.scale(1.0 / blocks));
+        return MathUtil.convertRGBVec3dToInt(colorVec.scale(1.0 / blocks));
     }
     
     private static Biome[] getInjectedBiome(
