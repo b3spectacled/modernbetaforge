@@ -18,9 +18,9 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
-import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
+import mod.bespectacled.modernbetaforge.util.chunk.IntChunk;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -127,10 +127,14 @@ public class DrawUtil {
         Supplier<Boolean> haltCallback,
         BufferedImage previousImage
     ) {
-        ChunkCache<BiomeChunk> biomeCache = new ChunkCache<>(
-            "biome_draw",
-            512, 
-            (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, (x, z) -> getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules))
+        ChunkCache<IntChunk> colorCache = new ChunkCache<>(
+            "color_ints",
+            512,
+            (chunkX, chunkZ) -> new IntChunk(
+                chunkX,
+                chunkZ,
+                (x, z) -> getBiomeColors(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules)
+            )
         );
         
         BufferedImage image = new BufferedImage(sizeX, sizeZ, BufferedImage.TYPE_INT_ARGB);
@@ -194,7 +198,7 @@ public class DrawUtil {
                         terrainType = getTerrainTypeByBiome(biome, terrainType);
                         terrainType = getTerrainTypeBySnowiness(mutablePos, biome, biomeSource, defaultFluid, terrainType, snowLineOffset);
 
-                        int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, biomeCache, useBiomeBlend, terrainType);
+                        int color = getTerrainTypeColor(mutablePos, biome, chunkSource, biomeSource, colorCache, useBiomeBlend, terrainType);
                         Vector4f colorVec = MathUtil.convertARGBIntToVector4f(color);
                         
                         if (terrainType == TerrainType.GRASS) {
@@ -461,7 +465,7 @@ public class DrawUtil {
         Biome biome,
         ChunkSource chunkSource,
         BiomeSource biomeSource,
-        ChunkCache<BiomeChunk> biomeCache,
+        ChunkCache<IntChunk> colorCache,
         boolean useBiomeBlend,
         TerrainType terrainType
     ) {
@@ -470,13 +474,12 @@ public class DrawUtil {
         int z = blockPos.getZ();
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
-        biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
         
         if (terrainType == TerrainType.GRASS) {
             if (useBiomeBlend && !(biomeSource instanceof SingleBiomeSource)) {
-                color = getBlendedBiomeColor(blockPos, biomeSource, biomeCache);
+                color = getBlendedBiomeColor(blockPos, biomeSource, colorCache);
             } else {
-                color = biome.getGrassColorAtPos(blockPos);
+                color = colorCache.get(chunkX, chunkZ).sample(x, z);
             }
             
             color = MathUtil.convertRGBtoARGB(color);
@@ -496,8 +499,7 @@ public class DrawUtil {
         return color;
     }
     
-    private static int getBlendedBiomeColor(BlockPos centerPos, BiomeSource biomeSource, ChunkCache<BiomeChunk> biomeCache) {
-        MutableBlockPos mutablePos = new MutableBlockPos();
+    private static int getBlendedBiomeColor(BlockPos centerPos, BiomeSource biomeSource, ChunkCache<IntChunk> colorCache) {
         Vec3d colorVec = Vec3d.ZERO;
         int centerX = centerPos.getX();
         int centerZ = centerPos.getZ();
@@ -508,19 +510,8 @@ public class DrawUtil {
             for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
-                Biome biome = biomeCache.get(chunkX, chunkZ).sample(x, z);
-                int colorInt = biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z));
-            
-                if (biomeSource instanceof ClimateSampler) {
-                    ClimateSampler climateSampler = (ClimateSampler)biomeSource;
-                    
-                    if (climateSampler.sampleBiomeColor() && biome instanceof BiomeBeta) {
-                        Clime clime = climateSampler.sample(x, z);
-                        colorInt = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
-                    }
-                }
                 
-                colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorInt));
+                colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorCache.get(chunkX, chunkZ).sample(x, z)));
                 blocks++;
             }
         }
@@ -528,7 +519,30 @@ public class DrawUtil {
         return MathUtil.convertRGBVec3dToInt(colorVec.scale(1.0 / blocks));
     }
     
-    private static Biome[] getInjectedBiome(
+    private static Biome getInjectedBiome(
+        int x,
+        int z,
+        ChunkSource chunkSource,
+        BiomeSource biomeSource,
+        SurfaceBuilder surfaceBuilder,
+        BiomeInjectionRules injectionRules
+    ) {
+        Biome biome = biomeSource.getBiome(x, z);
+        BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+        
+        Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
+        biome = injectedBiome != null ? injectedBiome : biome;
+        context.setBiome(biome);
+        
+        injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
+        biome = injectedBiome != null ? injectedBiome : biome;
+        context.setBiome(biome);
+        
+        injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.POST_SURFACE);
+        return injectedBiome != null ? injectedBiome : biome;
+    }
+    
+    private static int[] getBiomeColors(
         int startX,
         int startZ,
         ChunkSource chunkSource,
@@ -536,28 +550,29 @@ public class DrawUtil {
         SurfaceBuilder surfaceBuilder,
         BiomeInjectionRules injectionRules
     ) {
-        Biome[] biomes = new Biome[256];
+        int[] colors = new int[256];
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
         int ndx = 0;
         for (int z = startZ; z < startZ + 16; ++z) {
             for (int x = startX; x < startX + 16; ++x) {
-                Biome biome = biomeSource.getBiome(x, z);
-                BiomeInjectionContext context = createInjectionContext(chunkSource, surfaceBuilder, x, z, biome);
+                Biome biome = getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules);
+                int color = biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z));
+            
+                if (biomeSource instanceof ClimateSampler) {
+                    ClimateSampler climateSampler = (ClimateSampler)biomeSource;
+                    
+                    if (climateSampler.sampleBiomeColor() && biome instanceof BiomeBeta) {
+                        Clime clime = climateSampler.sample(x, z);
+                        color = ColorizerGrass.getGrassColor(clime.temp(), clime.rain());
+                    }
+                }
                 
-                Biome injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.PRE_SURFACE);
-                biome = injectedBiome != null ? injectedBiome : biome;
-                context.setBiome(biome);
-                
-                injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.CUSTOM);
-                biome = injectedBiome != null ? injectedBiome : biome;
-                context.setBiome(biome);
-                
-                injectedBiome = injectionRules.test(context, x, z, BiomeInjectionStep.POST_SURFACE);
-                biomes[ndx++] = injectedBiome != null ? injectedBiome : biome;
+                colors[ndx++] = color;
             }
         }
         
-        return biomes;
+        return colors;
     }
     
     private static BufferedImage copyImageRegion(BufferedImage source, BufferedImage destination) {
