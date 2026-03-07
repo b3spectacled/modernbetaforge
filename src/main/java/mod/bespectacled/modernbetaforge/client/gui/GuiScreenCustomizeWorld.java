@@ -802,7 +802,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.pageTabMap = new LinkedHashMap<>();
         for (int i = 0; i < this.pageList.getPageCount(); ++i) {
-            GuiTabButton guiButton = new GuiTabButton(
+            GuiButton guiButton = new GuiButton(
                 GuiIdentifiers.FUNC_INITIAL_TAB + i,
                 x,
                 TAB_HEIGHT,
