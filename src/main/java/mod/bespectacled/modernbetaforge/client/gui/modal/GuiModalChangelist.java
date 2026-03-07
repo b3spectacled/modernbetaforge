@@ -78,7 +78,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         this.changeMap = this.createChangeMap(prevString, nextString);
         this.modIds = this.getModIds(this.changeMap);
     }
-        
+    
     @Override
     public void initGui() {
         // Short circuit if change map is empty (should only happen if only hidden items were changed)
@@ -115,7 +115,6 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         
         this.addButton(new GuiButton(GUI_ID_DISCARD, discardX, discardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
     }
-
     
     @Override
     public void handleMouseInput() throws IOException {

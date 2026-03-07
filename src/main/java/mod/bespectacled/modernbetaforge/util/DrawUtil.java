@@ -20,7 +20,6 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuil
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
-import mod.bespectacled.modernbetaforge.util.chunk.IntChunk;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -127,14 +126,15 @@ public class DrawUtil {
         Supplier<Boolean> haltCallback,
         BufferedImage previousImage
     ) {
-        ChunkCache<IntChunk> colorCache = new ChunkCache<>(
+        ChunkCache<int[]> colorCache = new ChunkCache<>(
             "color_ints",
             512,
-            (chunkX, chunkZ) -> new IntChunk(
-                chunkX,
-                chunkZ,
-                (x, z) -> getBiomeColors(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules)
-            )
+            (chunkX, chunkZ) -> {
+                int startX = chunkX << 4;
+                int startZ = chunkZ << 4;
+
+                return getBiomeColors(startX, startZ, chunkSource, biomeSource, surfaceBuilder, injectionRules);
+            }
         );
         
         BufferedImage image = new BufferedImage(sizeX, sizeZ, BufferedImage.TYPE_INT_ARGB);
@@ -465,7 +465,7 @@ public class DrawUtil {
         Biome biome,
         ChunkSource chunkSource,
         BiomeSource biomeSource,
-        ChunkCache<IntChunk> colorCache,
+        ChunkCache<int[]> colorCache,
         boolean useBiomeBlend,
         TerrainType terrainType
     ) {
@@ -479,7 +479,8 @@ public class DrawUtil {
             if (useBiomeBlend && !(biomeSource instanceof SingleBiomeSource)) {
                 color = getBlendedBiomeColor(blockPos, biomeSource, colorCache);
             } else {
-                color = colorCache.get(chunkX, chunkZ).sample(x, z);
+                int ndx = (x & 0xF) + (z & 0xF) * 16;
+                color = colorCache.get(chunkX, chunkZ)[ndx];
             }
             
             color = MathUtil.convertRGBtoARGB(color);
@@ -499,7 +500,7 @@ public class DrawUtil {
         return color;
     }
     
-    private static int getBlendedBiomeColor(BlockPos centerPos, BiomeSource biomeSource, ChunkCache<IntChunk> colorCache) {
+    private static int getBlendedBiomeColor(BlockPos centerPos, BiomeSource biomeSource, ChunkCache<int[]> colorCache) {
         Vec3d colorVec = Vec3d.ZERO;
         int centerX = centerPos.getX();
         int centerZ = centerPos.getZ();
@@ -510,8 +511,9 @@ public class DrawUtil {
             for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
+                int ndx = (x & 0xF) + (z & 0xF) * 16;
                 
-                colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorCache.get(chunkX, chunkZ).sample(x, z)));
+                colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorCache.get(chunkX, chunkZ)[ndx]));
                 blocks++;
             }
         }
