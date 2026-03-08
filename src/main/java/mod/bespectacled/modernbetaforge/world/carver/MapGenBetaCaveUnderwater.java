@@ -9,6 +9,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -52,12 +53,16 @@ public class MapGenBetaCaveUnderwater extends MapGenBeta18Cave {
     }
 
     @Override
-    protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (this.carvables.contains(block) && localY - 1 == LAVA_LEVEL - 1) {
+    protected void carveAtPoint(ChunkPrimer chunkPrimer, BlockPos blockPos, Block block, boolean isGrassBlock) {
+        int localX = blockPos.getX() & 0xF;
+        int localY = blockPos.getY();
+        int localZ = blockPos.getZ() & 0xF;
+        
+        if (this.isPositionCarvable(blockPos, block) && localY - 1 == LAVA_LEVEL - 1) {
             chunkPrimer.setBlockState(localX, localY, localZ, BlockStates.OBSIDIAN);
             
         } else {
-            super.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
+            super.carveAtPoint(chunkPrimer, blockPos, block, isGrassBlock);
             
         }
     }

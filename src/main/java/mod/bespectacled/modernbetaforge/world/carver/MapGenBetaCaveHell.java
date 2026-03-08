@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class MapGenBetaCaveHell extends MapGenBetaCave {
@@ -34,8 +35,12 @@ public class MapGenBetaCaveHell extends MapGenBetaCave {
     }
     
     @Override
-    protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (this.carvables.contains(block)) {
+    protected void carveAtPoint(ChunkPrimer chunkPrimer, BlockPos blockPos, Block block, boolean isGrassBlock) {
+        int localX = blockPos.getX() & 0xF;
+        int localY = blockPos.getY();
+        int localZ = blockPos.getZ() & 0xF;
+        
+        if (this.isPositionCarvable(blockPos, block)) {
             chunkPrimer.setBlockState(localX, localY, localZ, Blocks.AIR.getDefaultState());
         }
     }

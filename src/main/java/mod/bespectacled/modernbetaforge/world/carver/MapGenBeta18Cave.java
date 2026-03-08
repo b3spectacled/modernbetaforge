@@ -140,7 +140,7 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
                 continue;
             }
 
-            if (!this.canCarveBranch(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
+            if (!this.isBranchCarvable(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
                 return;
             }
             

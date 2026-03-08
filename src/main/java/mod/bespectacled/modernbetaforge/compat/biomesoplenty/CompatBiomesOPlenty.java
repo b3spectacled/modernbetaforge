@@ -9,7 +9,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
-import biomesoplenty.api.block.BOPBlocks;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -19,14 +18,12 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
-import mod.bespectacled.modernbetaforge.compat.CarverCompat;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.NetherCompat;
 import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
-import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
@@ -39,7 +36,7 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * For biome climates, see: https://github.com/Glitchfiend/BiomesOPlenty/blob/BOP-1.12.x-7.0.x/src/main/java/biomesoplenty/api/enums/BOPClimates.java
  * 
  */
-public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat, CarverCompat, NetherCompat {
+public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat, NetherCompat {
     public static final String MOD_ID = "biomesoplenty";
     public static final String ADDON_ID = "compat" + MOD_ID;
     
@@ -201,16 +198,6 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         return builder.build();
     }
     
-    @Override
-    public List<Block> getCarvables() {
-        ImmutableList.Builder<Block> builder = new ImmutableList.Builder<>();
-        
-        this.addCarverBlock(builder, BOPBlocks.grass);
-        this.addCarverBlock(builder, BOPBlocks.dirt);
-        
-        return builder.build();
-    }
-    
     private void addBiomeEntry(List<BiomeEntry>[] biomeEntries, int ndx, Optional<Biome> biome, int weight) {
         if (biome != null && biome.isPresent()) {
             biomeEntries[ndx].add(new BiomeEntry(biome.get(), weight));
@@ -220,12 +207,6 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     private void addBiomeSurface(ImmutableList.Builder<Biome> builder, Optional<Biome> biome) {
         if (biome != null && biome.isPresent()) {
             builder.add(biome.get());
-        }
-    }
-    
-    private void addCarverBlock(ImmutableList.Builder<Block> builder, Block block) {
-        if (block != null) {
-            builder.add(block);
         }
     }
     

@@ -24,7 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -134,39 +134,26 @@ public class MapGenBetaCave extends MapGenBase {
         }
     }
     
-    protected boolean canCarveBranch(int mainChunkX, int mainChunkZ, double x, double z, int branch, int branchCount, float baseWidth) {
-        double ctrX = mainChunkX * 16 + 8;
-        double ctrZ = mainChunkZ * 16 + 8;
-    
-        double d1 = x - ctrX;
-        double d2 = z - ctrZ;
-        double d3 = branchCount - branch;
-        double d4 = baseWidth + 2.0F + 16F;
-    
-        if ((d1 * d1 + d2 * d2) - d3 * d3 > d4 * d4) {
-            return false;
-        }
-    
-        return true;
-    }
-
     protected boolean carveRegion(ChunkPrimer chunkPrimer, long seed, int seaLevel, int chunkX, int chunkZ, double x, double y, double z, double yaw, double pitch) {
-        double ctrX = chunkX * 16 + 8;
-        double ctrZ = chunkZ * 16 + 8;
+        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
+        int startX = chunkX << 4;
+        int startZ = chunkZ << 4;
+        double ctrX = startX + 8;
+        double ctrZ = startZ + 8;
     
         if ( // Check for valid tunnel starts, I guess? Or to prevent overlap?
         x < ctrX - 16.0 - yaw * 2.0 || z < ctrZ - 16.0 - yaw * 2.0 || x > ctrX + 16.0 + yaw * 2.0 || z > ctrZ + 16.0 + yaw * 2.0) {
             return false;
         }
     
-        int minX = MathHelper.floor(x - yaw) - chunkX * 16 - 1; // Get min and max extents of tunnel, relative to chunk coords
-        int maxX = (MathHelper.floor(x + yaw) - chunkX * 16) + 1;
+        int minX = MathHelper.floor(x - yaw) - startX - 1; // Get min and max extents of tunnel, relative to chunk coords
+        int maxX = MathHelper.floor(x + yaw) - startX + 1;
     
         int minY = MathHelper.floor(y - pitch) - 1;
         int maxY = MathHelper.floor(y + pitch) + 1;
     
-        int minZ = MathHelper.floor(z - yaw) - chunkZ * 16 - 1;
-        int maxZ = (MathHelper.floor(z + yaw) - chunkZ * 16) + 1;
+        int minZ = MathHelper.floor(z - yaw) - startZ - 1;
+        int maxZ = MathHelper.floor(z + yaw) - startZ + 1;
     
         if (minX < 0) {
             minX = 0;
@@ -194,14 +181,14 @@ public class MapGenBetaCave extends MapGenBase {
         }
     
         for (int localX = minX; localX < maxX; localX++) {
-            double scaledLocalX = (((double) (localX + chunkX * 16) + 0.5) - x) / yaw;
+            double scaledLocalX = (((double)localX + startX + 0.5) - x) / yaw;
     
             for (int localZ = minZ; localZ < maxZ; localZ++) {
-                double scaledLocalZ = (((double) (localZ + chunkZ * 16) + 0.5) - z) / yaw;
+                double scaledLocalZ = (((double)localZ + startZ + 0.5) - z) / yaw;
                 boolean isGrassBlock = false;
                 
                 for (int localY = maxY; localY >= minY; localY--) {
-                    double scaledLocalY = (((double) localY - 1 + 0.5) - y) / pitch;
+                    double scaledLocalY = (((double)localY - 1 + 0.5) - y) / pitch;
     
                     if (this.isPositionExcluded(scaledLocalX, scaledLocalY, scaledLocalZ)) {
                         Block block = chunkPrimer.getBlockState(localX, localY, localZ).getBlock();
@@ -210,7 +197,8 @@ public class MapGenBetaCave extends MapGenBase {
                             isGrassBlock = true;
                         }
     
-                        this.carveAtPoint(chunkPrimer, localX, localY, localZ, block, isGrassBlock);
+                        blockPos.setPos(localX + startX, localY, localZ + startZ);
+                        this.carveAtPoint(chunkPrimer, blockPos, block, isGrassBlock);
                     }
                 }
             }
@@ -219,8 +207,12 @@ public class MapGenBetaCave extends MapGenBase {
         return true;
     }
 
-    protected void carveAtPoint(ChunkPrimer chunkPrimer, int localX, int localY, int localZ, Block block, boolean isGrassBlock) {
-        if (this.carvables.contains(block)) {
+    protected void carveAtPoint(ChunkPrimer chunkPrimer, BlockPos blockPos, Block block, boolean isGrassBlock) {
+        int localX = blockPos.getX() & 0xF;
+        int localY = blockPos.getY();
+        int localZ = blockPos.getZ() & 0xF;
+        
+        if (this.isPositionCarvable(blockPos, block)) {
             if (localY - 1 < LAVA_LEVEL) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
@@ -246,18 +238,28 @@ public class MapGenBetaCave extends MapGenBase {
         return 1.0;
     }
     
-    protected final float getTunnelWidthMultiplier(Random random) {
-        return MathUtil.getRandomFloatInRange(ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, this.caveWidth, random);
+    protected boolean isBranchCarvable(int mainChunkX, int mainChunkZ, double x, double z, int branch, int branchCount, float baseWidth) {
+        double ctrX = mainChunkX * 16 + 8;
+        double ctrZ = mainChunkZ * 16 + 8;
+    
+        double d1 = x - ctrX;
+        double d2 = z - ctrZ;
+        double d3 = branchCount - branch;
+        double d4 = baseWidth + 2.0F + 16F;
+    
+        if ((d1 * d1 + d2 * d2) - d3 * d3 > d4 * d4) {
+            return false;
+        }
+    
+        return true;
     }
 
-    protected final float getBaseTunnelSystemWidth(Random random) {
-        return random.nextFloat() * 2.0f + random.nextFloat();
-    }
-    
-    protected final void setRandoms(long chunkSeed) {
-        this.rand.setSeed(chunkSeed);
-        this.tunnelRandom.setSeed(chunkSeed);
-        this.featureRandom.setSeed(chunkSeed);
+    protected boolean isPositionCarvable(BlockPos blockPos, Block block) {
+        Biome biome = this.world.getBiome(blockPos);
+        Block topBlock = biome.topBlock.getBlock();
+        Block fillerBlock = biome.fillerBlock.getBlock();
+        
+        return (this.carvables.contains(block) || topBlock == block || fillerBlock == block) && block != Blocks.SAND;
     }
 
     protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
@@ -266,10 +268,9 @@ public class MapGenBetaCave extends MapGenBase {
         // Add default blocks
         carvables.add(defaultBlock)
             .add(Blocks.STONE)
-            .add(Blocks.GRASS)
-            .add(Blocks.DIRT)
             .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE);
+            .add(Blocks.IRON_ORE)
+            ;
         
         // Add modded blocks
         for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
@@ -282,6 +283,20 @@ public class MapGenBetaCave extends MapGenBase {
         }
         
         return carvables;
+    }
+
+    protected final float getTunnelWidthMultiplier(Random random) {
+        return MathUtil.getRandomFloatInRange(ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, this.caveWidth, random);
+    }
+
+    protected final float getBaseTunnelSystemWidth(Random random) {
+        return random.nextFloat() * 2.0f + random.nextFloat();
+    }
+    
+    protected final void setRandoms(long chunkSeed) {
+        this.rand.setSeed(chunkSeed);
+        this.tunnelRandom.setSeed(chunkSeed);
+        this.featureRandom.setSeed(chunkSeed);
     }
 
     private void carveCave(ChunkPrimer chunkPrimer, int chunkX, int chunkZ, double x, double y, double z) {
@@ -340,7 +355,7 @@ public class MapGenBetaCave extends MapGenBase {
                 continue;
             }
 
-            if (!this.canCarveBranch(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
+            if (!this.isBranchCarvable(chunkX, chunkZ, x, z, branch, branchCount, tunnelSysWidth)) {
                 return;
             }
             
@@ -356,7 +371,6 @@ public class MapGenBetaCave extends MapGenBase {
         int startX = mainChunkX << 4;
         int startZ = mainChunkZ << 4;
         
-        MutableBlockPos mutablePos = new MutableBlockPos();
         IChunkGenerator chunkGenerator = ((WorldServer)this.world).getChunkProvider().chunkGenerator;
         boolean isModernBetaChunkGenerator = chunkGenerator instanceof ModernBetaChunkGenerator;
         
@@ -372,8 +386,6 @@ public class MapGenBetaCave extends MapGenBase {
                 }
                 
                 for (int y = maxY + 1; y >= minY - 1; y--) {
-                    mutablePos.setPos(x, y, z);
-                    
                     if (y < 0 || y >= this.caveHeight) {
                         continue;
                     }
@@ -402,7 +414,6 @@ public class MapGenBetaCave extends MapGenBase {
                         y = minY;
                     }
                 }
-
             }
         }
 
