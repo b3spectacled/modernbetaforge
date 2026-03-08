@@ -38,7 +38,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class MapGenBetaCave extends MapGenBase {
     private static final int STRUCTURE_PADDING_XZ = 4;
     private static final int STRUCTURE_PADDING_Y = 8;
-    
+
     protected static final int LAVA_LEVEL = 10;
     
     protected final Block defaultBlock;
@@ -46,6 +46,7 @@ public class MapGenBetaCave extends MapGenBase {
     protected final Block defaultFill;
     
     protected final Set<Block> carvables;
+    protected final Set<Block> uncarvables;
     protected final Random tunnelRandom;
     protected final Random featureRandom;
     
@@ -72,6 +73,7 @@ public class MapGenBetaCave extends MapGenBase {
         this.defaultFill = defaultFill.getBlock();
         
         this.carvables = this.initializeCarvables(defaultBlock.getBlock()).build();
+        this.uncarvables = this.initializeUncarvables().build();
         
         this.caveWidth = caveWidth;
         this.caveHeight = caveHeight;
@@ -259,7 +261,7 @@ public class MapGenBetaCave extends MapGenBase {
         Block topBlock = biome.topBlock.getBlock();
         Block fillerBlock = biome.fillerBlock.getBlock();
         
-        return (this.carvables.contains(block) || topBlock == block || fillerBlock == block) && block != Blocks.SAND;
+        return (this.carvables.contains(block) || topBlock == block || fillerBlock == block) && !this.uncarvables.contains(block);
     }
 
     protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
@@ -283,6 +285,13 @@ public class MapGenBetaCave extends MapGenBase {
         }
         
         return carvables;
+    }
+    
+    protected ImmutableSet.Builder<Block> initializeUncarvables() {
+        ImmutableSet.Builder<Block> uncarvables = new ImmutableSet.Builder<>();
+        uncarvables.add(Blocks.SAND);
+
+        return uncarvables;
     }
 
     protected final float getTunnelWidthMultiplier(Random random) {
