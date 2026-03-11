@@ -25,7 +25,6 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaSky;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
-import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -71,7 +70,7 @@ public class DrawUtil {
             this.blocks = blocks;
         }
     }
-    
+
     private static final int COLOR_GRASS = MathUtil.convertARGBComponentsToInt(255, 127, 178, 56);
     private static final int COLOR_SAND = MathUtil.convertARGBComponentsToInt(255, 247, 233, 163);
     private static final int COLOR_SNOW = MathUtil.convertARGBComponentsToInt(255, 255, 255, 255);
@@ -84,6 +83,10 @@ public class DrawUtil {
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_NETHER = MathUtil.convertARGBComponentsToInt(255, 112, 2, 0);
     private static final int COLOR_SOUL_SAND = MathUtil.convertARGBComponentsToInt(255, 102, 76, 51);
+    
+    private static final int BLEND_DIST = 2;
+    private static final int COLOR_RES = 2;
+    private static final int COLOR_SIZE = 16 / COLOR_RES;
     
     public static BufferedImage createTerrainMap(
         ChunkSource chunkSource,
@@ -476,10 +479,10 @@ public class DrawUtil {
         int chunkZ = z >> 4;
         
         if (terrainType == TerrainType.GRASS) {
-            if (useBiomeBlend && !(biomeSource instanceof SingleBiomeSource)) {
+            if (useBiomeBlend) {
                 color = getBlendedBiomeColor(blockPos, biomeSource, colorCache);
             } else {
-                int ndx = (x & 0xF) + (z & 0xF) * 16;
+                int ndx = ((x & 0xF) / COLOR_RES) + ((z & 0xF) / COLOR_RES) * COLOR_SIZE;
                 color = colorCache.get(chunkX, chunkZ)[ndx];
             }
             
@@ -504,14 +507,13 @@ public class DrawUtil {
         Vec3d colorVec = Vec3d.ZERO;
         int centerX = centerPos.getX();
         int centerZ = centerPos.getZ();
-        int blendDist = 1;
         int blocks = 0;
         
-        for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
-            for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
+        for (int x = centerX - BLEND_DIST; x <= centerX + BLEND_DIST; ++x) {
+            for (int z = centerZ - BLEND_DIST; z <= centerZ + BLEND_DIST; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
-                int ndx = (x & 0xF) + (z & 0xF) * 16;
+                int ndx = ((x & 0xF) / COLOR_RES) + ((z & 0xF) / COLOR_RES) * COLOR_SIZE;
                 
                 colorVec = colorVec.add(MathUtil.convertRGBIntToVec3d(colorCache.get(chunkX, chunkZ)[ndx]));
                 blocks++;
@@ -552,12 +554,12 @@ public class DrawUtil {
         SurfaceBuilder surfaceBuilder,
         BiomeInjectionRules injectionRules
     ) {
-        int[] colors = new int[256];
+        int[] colors = new int[COLOR_SIZE * COLOR_SIZE];
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         
         int ndx = 0;
-        for (int z = startZ; z < startZ + 16; ++z) {
-            for (int x = startX; x < startX + 16; ++x) {
+        for (int z = startZ; z < startZ + 16; z += COLOR_RES) {
+            for (int x = startX; x < startX + 16; x += COLOR_RES) {
                 Biome biome = getInjectedBiome(x, z, chunkSource, biomeSource, surfaceBuilder, injectionRules);
                 int color = biome.getGrassColorAtPos(mutablePos.setPos(x, 0, z));
             
