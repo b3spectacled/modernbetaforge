@@ -192,12 +192,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         super.updateScreen();
     }
     
-    public void updateButtonValidity() {
-        this.buttonSelect.enabled = this.hasValidSelection();
-        this.buttonSearch.enabled = !this.fieldSearch.getText().isEmpty();
-        this.buttonReset.enabled = true;
-    }
-    
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int clicked) throws IOException {
         this.fieldSearch.mouseClicked(mouseX, mouseY, clicked);
@@ -284,6 +278,12 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 ));
                 break;
         }
+    }
+
+    private void updateButtonValidity() {
+        this.buttonSelect.enabled = this.hasValidSelection();
+        this.buttonSearch.enabled = !this.fieldSearch.getText().isEmpty();
+        this.buttonReset.enabled = true;
     }
 
     private boolean hasValidSelection() {

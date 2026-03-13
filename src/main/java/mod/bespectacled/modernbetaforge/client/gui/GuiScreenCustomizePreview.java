@@ -209,7 +209,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
         this.structureButtonBounds.updateBounds(structureX, this.height - 50, BUTTON_SMALL_WIDTH, 20);
-        this.updateButtonsEnabled(this.state);
+        this.updateButtonValidity();
     }
     
     @Override
@@ -427,7 +427,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.showStructures = value;
         }
         
-        this.updateButtonsEnabled(this.state);
+        this.updateButtonValidity();
     }
 
     @Override
@@ -436,7 +436,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.previewSettings.zoom = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
         }
         
-        this.updateButtonsEnabled(this.state);
+        this.updateButtonValidity();
     }
 
     @Override
@@ -518,7 +518,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progress = 0.0f;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.updateState(ProgressState.STARTED);
-        this.updateButtonsEnabled(this.state);
+        this.updateButtonValidity();
         this.unloadMapTexture(this.prevMapTexture);
         
         this.prevMapTexture = new MapTexture(this, this.mapTexture.mapIdentifier, this.mapTexture.mapImage, this.mapTexture.mapTexture, 1.0f);
@@ -566,7 +566,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.updateState(ProgressState.FAILED);
                 
             } finally {
-                this.updateButtonsEnabled(this.state);
+                this.updateButtonValidity();
                 
             }
         };
@@ -689,8 +689,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
-    private void updateButtonsEnabled(ProgressState state) {
-        boolean enabled = state != ProgressState.STARTED;
+    private void updateButtonValidity() {
+        boolean enabled = this.state != ProgressState.STARTED;
 
         this.sliderZoom.enabled = enabled;
         this.buttonBiomeBlend.enabled = enabled;
