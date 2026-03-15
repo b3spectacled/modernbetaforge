@@ -986,7 +986,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         public PreviewSettings() {
             this.zoom = 512;
-            this.useBiomeBlend = true;
+            this.useBiomeBlend = false;
         }
         
         public PreviewSettings(PreviewSettings previewSettings) {
