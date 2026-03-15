@@ -506,8 +506,8 @@ public class DrawUtil {
         int blendDist = 1;
         int blocks = 0;
         
-        for (int x = centerX - blendDist; x <= centerX + blendDist; ++x) {
-            for (int z = centerZ - blendDist; z <= centerZ + blendDist; ++z) {
+        for (int x = centerX - blendDist; x < centerX + blendDist; ++x) {
+            for (int z = centerZ - blendDist; z < centerZ + blendDist; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
                 int ndx = (x & 0xF) + (z & 0xF) * 16;
