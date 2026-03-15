@@ -503,11 +503,11 @@ public class DrawUtil {
         Vec3d colorVec = Vec3d.ZERO;
         int centerX = centerPos.getX();
         int centerZ = centerPos.getZ();
-        int blendDist = 1;
+        int blendDist = 2;
         int blocks = 0;
         
-        for (int x = centerX - blendDist; x < centerX + blendDist; ++x) {
-            for (int z = centerZ - blendDist; z < centerZ + blendDist; ++z) {
+        for (int x = centerX - blendDist; x <= centerX; ++x) {
+            for (int z = centerZ - blendDist; z <= centerZ; ++z) {
                 int chunkX = x >> 4;
                 int chunkZ = z >> 4;
                 int ndx = (x & 0xF) + (z & 0xF) * 16;
