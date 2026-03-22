@@ -365,13 +365,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int seedColor = this.seedFieldBounds.isHovered() ?
             clicked ? RGB_GREY : RGB_YELLOW :
             RGB_WHITE;
-        TextFormatting useSeedFormatting = this.useSeedLabelBounds.isHovered() ?
-            clicked ? TextFormatting.DARK_GREEN : TextFormatting.GREEN :
-            TextFormatting.GREEN;
+        int useSeedColor = this.useSeedLabelBounds.isHovered() ?
+            clicked ? RGB_GREY : RGB_YELLOW :
+            RGB_WHITE;
         
         this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, RGB_WHITE);
         this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
-        this.drawString(this.fontRenderer, useSeedFormatting + useSeedLabel, useSeedLabelX, useSeedLableY, RGB_WHITE);
+        this.drawString(this.fontRenderer, useSeedLabel, useSeedLabelX, useSeedLableY, useSeedColor);
         
         int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
         int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
