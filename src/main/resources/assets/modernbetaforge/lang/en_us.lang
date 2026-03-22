@@ -46,8 +46,11 @@ createWorld.customize.preview.modernbetaforge.hint=Preview not generated
 createWorld.customize.preview.modernbetaforge.failure=Failed to generate!
 createWorld.customize.preview.modernbetaforge.canceling=Canceling preview..
 createWorld.customize.preview.modernbetaforge.seed=World Seed
-createWorld.customize.preview.modernbetaforge.copy=Copy to clipboard
-createWorld.customize.preview.modernbetaforge.copied=Copied to clipboard!
+createWorld.customize.preview.modernbetaforge.useSeed=Use Seed
+createWorld.customize.preview.modernbetaforge.copySeed=Copy to clipboard
+createWorld.customize.preview.modernbetaforge.copiedSeed=Copied to clipboard!
+createWorld.customize.preview.modernbetaforge.copyUseSeed=Copy to world seed field
+createWorld.customize.preview.modernbetaforge.copiedUseSeed=Copied to world seed field!
 createWorld.customize.preview.modernbetaforge.copiedTp=Copied /tp command to clipboard!
 createWorld.customize.preview.modernbetaforge.structuresNote=Vanilla structures only. Positions may be inaccurate if another installed mod changes structure placement.
 

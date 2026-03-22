@@ -62,6 +62,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -70,6 +71,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder, FormatHelper {
     private enum ProgressState {
         NOT_STARTED, STARTED, FAILED, SUCCEEDED, LOADED, CANCELED, CANCELING;
+    }
+    
+    private enum CopyState {
+        HOVERING, SEED, USE_SEED, TELEPORT
     }
     
     private static final String PREFIX = "createWorld.customize.preview.modernbetaforge.";
@@ -95,7 +100,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int RGB_WHITE = 16777215;
     private static final int RGB_YELLOW = 16777120;
     private static final int RGB_GREY = 10526880;
-    private static final int RGB_RED = 16711680;
     
     private static final int ARGB_BORDER_LIGHT = -2039584;
     private static final int ARGB_BORDER_DARK = -6250336;
@@ -118,6 +122,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final ExecutorWrapper executor;
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
+    private final GuiBoundsChecker useSeedLabelBounds;
     private final GuiBoundsChecker structureButtonBounds;
     private final Map<Long, StructureInfo> structureMap;
     private final Map<Long, GuiBoundsChecker> structureBounds;
@@ -147,10 +152,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private double progressLen;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
-    private boolean copiedSeedField;
-    private boolean copiedTpCommand;
-    private long copiedSeedFieldTime;
-    private long copiedTpCommandTime;
+    private CopyState copyState;
+    private long copiedTime;
     private Supplier<String> tpCallback;
     private boolean haltGeneration;
     private long hoveredStructurePos;
@@ -164,6 +167,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor = new ExecutorWrapper(1, "map_preview");
         this.mapBounds = new GuiBoundsChecker();
         this.seedFieldBounds = new GuiBoundsChecker();
+        this.useSeedLabelBounds = new GuiBoundsChecker();
         this.structureButtonBounds = new GuiBoundsChecker();
         this.structureMap = new Long2ObjectOpenHashMap<>();
         this.structureBounds = new Long2ObjectOpenHashMap<>();
@@ -210,6 +214,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
+        this.useSeedLabelBounds.updateBounds(this.getUseSeedLabelX(), this.getUseSeedLabelY(), this.getUseSeedLabelWidth(), this.fontRenderer.FONT_HEIGHT);
         this.structureButtonBounds.updateBounds(structureX, this.height - 50, BUTTON_SMALL_WIDTH, 20);
         this.updateButtonValidity();
     }
@@ -223,6 +228,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.structureButtonBounds.updateHovered(mouseX, mouseY);
         this.seedFieldBounds.updateHovered(mouseX, mouseY);
+        this.useSeedLabelBounds.updateHovered(mouseX, mouseY);
         this.mapBounds.updateHovered(mouseX, mouseY);
     }
     
@@ -234,12 +240,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, RGB_WHITE);
         
-        if (System.currentTimeMillis() - this.copiedSeedFieldTime > COPIED_SEED_WAIT_TIME) {
-            this.copiedSeedField = false;
-        }
-        
-        if (System.currentTimeMillis() - this.copiedTpCommandTime > COPIED_SEED_WAIT_TIME) {
-            this.copiedTpCommand = false;
+        if (System.currentTimeMillis() - this.copiedTime > COPIED_SEED_WAIT_TIME) {
+            this.copyState = CopyState.HOVERING;
         }
         
         int centerX = this.width / 2;
@@ -319,12 +321,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 break;
                 
             case FAILED:
-                text = I18n.format(PREFIX + "failure");
+                text = TextFormatting.RED + I18n.format(PREFIX + "failure");
                 textLen = this.fontRenderer.getStringWidth(text);
                 centeredBoxL = centerX - textLen / 2 - 8;
                 centeredBoxR = centerX + textLen / 2 + 8;
                 
-                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_RED);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
                 break;
             
             case CANCELING:
@@ -350,14 +352,26 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
         String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
         String seedField = this.getFormattedSeed();
-        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
-        int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
-        int seedColor = this.seedFieldBounds.isHovered() ? System.currentTimeMillis() - this.copiedSeedFieldTime < 100L ? RGB_GREY : RGB_YELLOW : RGB_WHITE;
-        int seedFieldX = this.width / 2 + seedTextLen / 2 - seedFieldLen;
+        String useSeedLabel = this.getFormattedUseSeedLabel();
+        
+        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField + useSeedLabel);
+        int seedFieldLen = this.getSeedFieldWidth();
+        int seedFieldX = this.getSeedFieldX();
         int seedFieldHeight = this.getSeedFieldY();
+        int useSeedLabelX = this.getUseSeedLabelX();
+        int useSeedLableY = this.getUseSeedLabelY();
+        
+        boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
+        int seedColor = this.seedFieldBounds.isHovered() ?
+            clicked ? RGB_GREY : RGB_YELLOW :
+            RGB_WHITE;
+        TextFormatting useSeedFormatting = this.useSeedLabelBounds.isHovered() ?
+            clicked ? TextFormatting.DARK_GREEN : TextFormatting.GREEN :
+            TextFormatting.GREEN;
         
         this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, RGB_WHITE);
         this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
+        this.drawString(this.fontRenderer, useSeedFormatting + useSeedLabel, useSeedLabelX, useSeedLableY, RGB_WHITE);
         
         int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
         int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
@@ -367,18 +381,28 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen - 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
         }
         
-        if (this.seedFieldBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand) {
-            this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
-            
-        } else if (this.copiedSeedField) {
-            this.drawHoveringText(I18n.format(PREFIX + "copied"), mouseX, mouseY);
-            
-        } else if (this.copiedTpCommand) {
-            this.drawHoveringText(I18n.format(PREFIX + "copiedTp"), mouseX, mouseY);
-            
+        if (this.seedFieldBounds.isHovered() && this.copyState == CopyState.HOVERING) {
+            this.drawHoveringText(I18n.format(PREFIX + "copySeed"), mouseX, mouseY);
         }
         
-        if (this.structureButtonBounds.isHovered() && !this.copiedSeedField && !this.copiedTpCommand && this.buttonStructures.enabled) {
+        if (this.useSeedLabelBounds.isHovered() && this.copyState == CopyState.HOVERING) {
+            this.drawHoveringText(I18n.format(PREFIX + "copyUseSeed"), mouseX, mouseY);
+        }
+        
+        switch (this.copyState) {
+            case SEED:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedSeed"), mouseX, mouseY);
+                break;
+            case USE_SEED:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedUseSeed"), mouseX, mouseY);
+                break;
+            case TELEPORT:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedTp"), mouseX, mouseY);
+                break;
+            default:
+        }
+        
+        if (this.structureButtonBounds.isHovered() && this.copyState == CopyState.HOVERING && this.buttonStructures.enabled) {
             this.drawHoveringText(I18n.format(PREFIX + "structuresNote"), mouseX, mouseY);
         }
 
@@ -410,7 +434,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height + 1;
             this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
             
-            if (!this.copiedSeedField && !this.copiedTpCommand) {
+            if (this.copyState == CopyState.HOVERING) {
                 List<String> tooltips = new ArrayList<>();
                 tooltips.add(coordinateText);
                 tooltips.add(biomeText);
@@ -484,26 +508,31 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == 0 && this.seedFieldBounds.isHovered()) {
-            GuiScreen.setClipboardString(this.getFormattedSeed());
-            ModernBeta.log(I18n.format(PREFIX + "copied"));
-            
-            this.copiedSeedField = true;
-            this.copiedSeedFieldTime = System.currentTimeMillis();
-            
-            this.copiedTpCommand = false;
-        }
-        
-        if (mouseButton == 0 && this.mapBounds.isHovered() && this.state == ProgressState.LOADED) {
-            if (this.tpCallback != null) {
-                GuiScreen.setClipboardString(this.tpCallback.get());
+        if (mouseButton == 0) {
+            if (this.seedFieldBounds.isHovered()) {
+                GuiScreen.setClipboardString(this.getFormattedSeed());
+                ModernBeta.log(I18n.format(PREFIX + "copied"));
+
+                this.copyState = CopyState.SEED;
+                this.copiedTime = System.currentTimeMillis();
+                
+            } else if (this.useSeedLabelBounds.isHovered()) {
+                this.parent.setWorldSeed(this.getFormattedSeed());
+                ModernBeta.log(I18n.format(PREFIX + "copiedField"));
+                
+                this.copyState = CopyState.USE_SEED;
+                this.copiedTime = System.currentTimeMillis();
+                
+            } else if (this.mapBounds.isHovered() && this.state == ProgressState.LOADED) {
+                if (this.tpCallback != null) {
+                    GuiScreen.setClipboardString(this.tpCallback.get());
+                }
+                ModernBeta.log(I18n.format(PREFIX + "copiedTp"));
+                
+                this.copyState = CopyState.TELEPORT;
+                this.copiedTime = System.currentTimeMillis();
+                
             }
-            ModernBeta.log(I18n.format(PREFIX + "copiedTp"));
-            
-            this.copiedTpCommand = true;
-            this.copiedTpCommandTime = System.currentTimeMillis();
-            
-            this.copiedSeedField = false;
         }
         
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -562,6 +591,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.seed = new Random().nextLong();
             this.initSources(this.seed, this.settings);
             this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
+            this.useSeedLabelBounds.updateBounds(this.getUseSeedLabelX(), this.getUseSeedLabelY(), this.getUseSeedLabelWidth(), this.fontRenderer.FONT_HEIGHT);
         }
         
         Runnable runnable = () -> {
@@ -787,11 +817,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
         String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
         String seedField = this.getFormattedSeed();
+        String useSeedLabel = this.getFormattedUseSeedLabel();
         
-        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField);
-        int seedFieldLen = this.fontRenderer.getStringWidth(seedField);
+        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField + useSeedLabel);
+        int seedFieldLen = this.getSeedFieldWidth();
+        int useSeedLabelLen = this.getUseSeedLabelWidth();
         
-        return this.width / 2 + seedTextLen / 2 - seedFieldLen;
+        return this.width / 2 + seedTextLen / 2 - seedFieldLen - useSeedLabelLen;
     }
     
     private int getSeedFieldY() {
@@ -804,6 +836,22 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private int getSeedFieldWidth() {
         return this.fontRenderer.getStringWidth(this.getFormattedSeed());
+    }
+    
+    private String getFormattedUseSeedLabel() {
+        return !this.worldSeed.isEmpty() || this.state == ProgressState.NOT_STARTED ? "" : String.format("[%s]", I18n.format(PREFIX + "useSeed"));
+    }
+    
+    private int getUseSeedLabelX() {
+        return this.getSeedFieldX() + this.getSeedFieldWidth() + this.fontRenderer.getStringWidth(" ");
+    }
+    
+    private int getUseSeedLabelY() {
+        return this.getSeedFieldY();
+    }
+    
+    private int getUseSeedLabelWidth() {
+        return this.fontRenderer.getStringWidth(this.getFormattedUseSeedLabel());
     }
     
     private void sampleStructures() {
