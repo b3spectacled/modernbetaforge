@@ -95,6 +95,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int RGB_WHITE = 16777215;
     private static final int RGB_YELLOW = 16777120;
     private static final int RGB_GREY = 10526880;
+    private static final int RGB_RED = 16711680;
     
     private static final int ARGB_BORDER_LIGHT = -2039584;
     private static final int ARGB_BORDER_DARK = -6250336;
@@ -323,9 +324,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 centeredBoxL = centerX - textLen / 2 - 8;
                 centeredBoxR = centerX + textLen / 2 + 8;
                 
-                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
-                this.drawProgressBox(centeredBoxL, centeredBoxR, centeredBoxT, centeredBoxB);
-                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_RED);
                 break;
             
             case CANCELING:

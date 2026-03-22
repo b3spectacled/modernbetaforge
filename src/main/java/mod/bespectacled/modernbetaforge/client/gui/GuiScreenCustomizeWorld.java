@@ -163,7 +163,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private boolean displayNavButtons;
     private PreviewSettings previewSettings;
     
-    public GuiScreenCustomizeWorld(GuiScreen parent, String string) {
+    public GuiScreenCustomizeWorld(GuiCreateWorld parent, String string) {
         this.title = I18n.format("options.customizeTitle");
         this.subtitle = "Page 1 of 6";
         this.pageTitle = "Basic Settings";
@@ -197,7 +197,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         String defaultPreset = PresetUtil.getDefaultPreset();
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
-        this.parent = (GuiCreateWorld)parent;
+        this.parent = parent;
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
         this.enabledMap = new HashMap<>();
