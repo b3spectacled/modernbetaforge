@@ -44,6 +44,7 @@ createWorld.customize.preview.modernbetaforge.generate=Generate
 createWorld.customize.preview.modernbetaforge.progress=Generating preview..
 createWorld.customize.preview.modernbetaforge.hint=Preview not generated
 createWorld.customize.preview.modernbetaforge.failure=Failed to generate!
+createWorld.customize.preview.modernbetaforge.canceling=Canceling preview..
 createWorld.customize.preview.modernbetaforge.seed=World Seed
 createWorld.customize.preview.modernbetaforge.copy=Copy to clipboard
 createWorld.customize.preview.modernbetaforge.copied=Copied to clipboard!

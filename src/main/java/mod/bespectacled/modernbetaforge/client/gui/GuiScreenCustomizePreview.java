@@ -69,7 +69,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder, FormatHelper {
     private enum ProgressState {
-        NOT_STARTED, STARTED, FAILED, SUCCEEDED, LOADED;
+        NOT_STARTED, STARTED, FAILED, SUCCEEDED, LOADED, CANCELED, CANCELING;
     }
     
     private static final String PREFIX = "createWorld.customize.preview.modernbetaforge.";
@@ -86,6 +86,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int MAP_PADDING = 32;
     private static final int MAP_Y_OFFSET = 20;
     private static final int HINT_TEXT_OFFSET = 30;
+    private static final int CENTERED_HINT_TEXT_OFFSET = 22;
     private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
@@ -239,17 +240,25 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (System.currentTimeMillis() - this.copiedTpCommandTime > COPIED_SEED_WAIT_TIME) {
             this.copiedTpCommand = false;
         }
+        
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
 
         int viewportSize = this.getViewportSize();
-        int textureX = this.width / 2 - viewportSize / 2;
-        int textureY = this.height / 2 - viewportSize / 2 - MAP_Y_OFFSET;
+        int textureX = centerX - viewportSize / 2;
+        int textureY = centerY - viewportSize / 2 - MAP_Y_OFFSET;
 
-        int boxL = this.width / 2 - 56;
-        int boxR = this.width / 2 + 56;
-        int boxT = this.height / 2 - HINT_TEXT_OFFSET - 6;
-        int boxB = this.height / 2 - PROGRESS_TEXT_OFFSET + 18;
+        int boxL = centerX - 56;
+        int boxR = centerX + 56;
+        int boxT = centerY - HINT_TEXT_OFFSET - 8;
+        int boxB = centerY - PROGRESS_TEXT_OFFSET + 18;
         
-        int progressHeight = this.height / 2 - PROGRESS_TEXT_OFFSET;
+        int centeredBoxL;
+        int centeredBoxR;
+        int centeredBoxT = centerY - CENTERED_HINT_TEXT_OFFSET - 8;
+        int centeredBoxB = centerY - CENTERED_HINT_TEXT_OFFSET + this.fontRenderer.FONT_HEIGHT + 8;
+        
+        int progressHeight = centerY - PROGRESS_TEXT_OFFSET;
         int progressBarLen = boxR - boxL - 20;
         int progressBarL = boxL + 10;
         int progressBarR = progressBarL + progressBarLen;
@@ -264,6 +273,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, ARGB_BORDER_DARK);
         this.drawVerticalLine(textureX - 1, textureY - 1, textureY + viewportSize, ARGB_BORDER_LIGHT);
         this.drawVerticalLine(textureX + viewportSize, textureY - 1, textureY + viewportSize, ARGB_BORDER_DARK);
+        
+        String text;
+        int textLen;
         
         switch(this.state) {
             case SUCCEEDED:
@@ -281,24 +293,18 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
                 this.drawCardinalDirections(viewportSize);
                 this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
-                
                 break;
                 
             case STARTED:
-                if (this.prevMapTexture.mapTexture != null) {
-                    this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
-                    this.drawCardinalDirections(viewportSize);
-                    this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
-                    drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
-                }
-                
-                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
+                this.drawProgressBox(boxL, boxR, boxT, boxB);
+                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), centerX, centerY - HINT_TEXT_OFFSET, RGB_WHITE);
                 
                 if (this.chunkSource instanceof FiniteChunkSource && !((FiniteChunkSource)this.chunkSource).hasPregenerated()) {
                     String levelProgressText = ((FiniteChunkSource)this.chunkSource).getPhase();
                     
                     if (levelProgressText != null) {
-                        this.drawCenteredString(this.fontRenderer, levelProgressText + "..", this.width / 2, progressHeight, RGB_WHITE);
+                        this.drawCenteredString(this.fontRenderer, levelProgressText + "..", centerX, progressHeight, RGB_WHITE);
                     }
                 } else {
                     DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, ARGB_PROGRESS_BAR);
@@ -307,17 +313,39 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, ARGB_BORDER_LIGHT);
                     this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, ARGB_BORDER_DARK);
                     
-                    this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), this.width / 2, progressHeight, RGB_WHITE);
+                    this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, RGB_WHITE);
                 }
-                
                 break;
                 
             case FAILED:
-                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "failure"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, RGB_WHITE);
+                text = I18n.format(PREFIX + "failure");
+                textLen = this.fontRenderer.getStringWidth(text);
+                centeredBoxL = centerX - textLen / 2 - 8;
+                centeredBoxR = centerX + textLen / 2 + 8;
+                
+                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
+                this.drawProgressBox(centeredBoxL, centeredBoxR, centeredBoxT, centeredBoxB);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                break;
+            
+            case CANCELING:
+                text = I18n.format(PREFIX + "canceling");
+                textLen = this.fontRenderer.getStringWidth(text);
+                centeredBoxL = centerX - textLen / 2 - 8;
+                centeredBoxR = centerX + textLen / 2 + 8;
+                
+                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
+                this.drawProgressBox(centeredBoxL, centeredBoxR, centeredBoxT, centeredBoxB);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                break;
+                
+            case CANCELED:
+                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
                 break;
                 
             default:
-                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "hint"), this.width / 2, this.height / 2 - HINT_TEXT_OFFSET, RGB_WHITE);
+                text = I18n.format(PREFIX + "hint");
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
         }
 
         String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
@@ -403,6 +431,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void updateScreen() {
         super.updateScreen();
+        
+        if (this.state == ProgressState.CANCELED) {
+            this.exit();
+        }
     }
     
     @Override
@@ -490,13 +522,16 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     ((FiniteChunkSource)this.chunkSource).haltGeneration();
                 }
                 
-                this.executor.shutdown();
-                this.unloadMapTexture(this.mapTexture);
-                this.unloadMapTexture(this.prevMapTexture);
-                this.parent.setPreviewSettings(this.previewSettings);
-                this.mc.displayGuiScreen(this.parent);
+                if (this.state != ProgressState.STARTED) {
+                    this.updateState(ProgressState.CANCELED);
+                } else {
+                    this.updateState(ProgressState.CANCELING);
+                }
+                
                 break;
         }
+        
+        this.updateButtonValidity();
     }
     
     private int getViewportSize() {
@@ -552,13 +587,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 if (newMapImage == null) {
                     ModernBeta.log(Level.DEBUG, "Terrain map drawing was canceled!");
                     this.mapTexture.loadMapImage(this.prevMapTexture.mapImage);
+                    this.updateState(ProgressState.CANCELED);
                 } else {
                     ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
                     this.mapTexture.loadMapImage(newMapImage);
+                    this.sampleStructures();
+                    this.updateState(ProgressState.SUCCEEDED);
                 }
-                
-                this.sampleStructures();
-                this.updateState(ProgressState.SUCCEEDED);
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, "Failed to draw terrain map!");
@@ -683,20 +718,45 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
+    private void drawProgressBox(int boxL, int boxR, int boxT, int boxB) {
+        if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
+            drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
+        }
+    }
+    
+    private void drawPreviousTerrainMap(int textureX, int textureY, float partialTicks) {
+        int viewportSize = this.getViewportSize();
+
+        if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
+            this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
+            this.drawCardinalDirections(viewportSize);
+            this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
+        }
+    }
+
     private void unloadMapTexture(MapTexture mapTexture) {
         if (mapTexture != null) {
             mapTexture.unloadAll();
         }
     }
     
+    private void exit() {
+        this.executor.shutdown();
+        this.unloadMapTexture(this.mapTexture);
+        this.unloadMapTexture(this.prevMapTexture);
+        this.parent.setPreviewSettings(this.previewSettings);
+        this.mc.displayGuiScreen(this.parent);
+    }
+    
     private void updateButtonValidity() {
-        boolean enabled = this.state != ProgressState.STARTED;
+        boolean notCanceled = this.state != ProgressState.CANCELING && this.state != ProgressState.CANCELED;
+        boolean enabled = this.state != ProgressState.STARTED && notCanceled;
 
         this.sliderZoom.enabled = enabled;
         this.buttonBiomeBlend.enabled = enabled;
         this.buttonStructures.enabled = enabled;
         this.buttonGenerate.enabled = enabled && (!this.previewSettings.equals(this.selectedPreviewSettings) || this.worldSeed.isEmpty());
-        this.buttonCancel.enabled = true;
+        this.buttonCancel.enabled = notCanceled;
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
