@@ -473,12 +473,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMinHeight, this),
             createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, ModernBetaGeneratorSettings.MAX_ORE_HEIGHT, (float)this.settings.clayMaxHeight, this),
             
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, String.format("%s (%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, String.format("%s " + TextFormatting.GRAY + "(%s)", I18n.format("tile.netherquartz.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.quartzSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.quartzCount, this),
 
-            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, String.format("%s (%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, String.format("%s " + TextFormatting.GRAY + "(%s)", I18n.format("tile.magma.name"), I18n.format(PREFIX + "useOldNether"))),
             null,
             createGuiSlider(GuiIdentifiers.PG3_S_MGMA_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.magmaSize, this),
             createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
