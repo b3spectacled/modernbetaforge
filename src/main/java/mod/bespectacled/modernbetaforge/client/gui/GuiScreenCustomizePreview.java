@@ -340,7 +340,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 break;
                 
             case CANCELED:
-                this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
                 break;
                 
             default:
@@ -620,7 +619,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
                     this.mapTexture.loadMapImage(newMapImage);
                     this.sampleStructures();
-                    this.updateState(ProgressState.SUCCEEDED);
+                    
+                    // Check if cancellation occurred at the same time as map preview generation completed,
+                    // and prevent the race condition.
+                    this.updateState(this.state == ProgressState.CANCELING ? ProgressState.CANCELED : ProgressState.SUCCEEDED);
                 }
                 
             } catch (Exception e) {
