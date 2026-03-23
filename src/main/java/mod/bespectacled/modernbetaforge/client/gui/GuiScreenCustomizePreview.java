@@ -638,10 +638,37 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void drawCardinalDirections(int viewportSize) {
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", width / 2 + 2, height / 2 - viewportSize / 2 + 2 - MAP_Y_OFFSET, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", width / 2 + 2, height / 2 + viewportSize / 2 - 9 - MAP_Y_OFFSET, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", width / 2 + viewportSize / 2 - 4, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", width / 2 - viewportSize / 2 + 5, height / 2 - 3 - MAP_Y_OFFSET, RGB_YELLOW);
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+        int centerV = viewportSize / 2;
+        boolean drawBoxes = false;
+        
+        int fontHeight = this.fontRenderer.FONT_HEIGHT;
+        int nWidth = this.fontRenderer.getStringWidth("N");
+        int sWidth = this.fontRenderer.getStringWidth("S");
+        int eWidth = this.fontRenderer.getStringWidth("E");
+        int wWidth = this.fontRenderer.getStringWidth("W");
+        
+        int nX = centerX + 2;
+        int nY = centerY - centerV + 3 - MAP_Y_OFFSET;
+        int sX = centerX + 2;
+        int sY = centerY + centerV - 10 - MAP_Y_OFFSET;
+        int eX = centerX + centerV - 5;
+        int eY = centerY - 3 - MAP_Y_OFFSET;
+        int wX = centerX - centerV + 6;
+        int wY = centerY - 3 - MAP_Y_OFFSET;
+        
+        if (drawBoxes) {
+            drawRect(nX - nWidth / 2 - 2, nY - 1, nX + nWidth / 2 + 1, nY + fontHeight, ARGB_PROGRESS_BOX);
+            drawRect(sX - sWidth / 2 - 2, sY - 1, sX + sWidth / 2 + 1, sY + fontHeight, ARGB_PROGRESS_BOX);
+            drawRect(eX - eWidth / 2 - 2, eY - 1, eX + eWidth / 2 + 1, eY + fontHeight, ARGB_PROGRESS_BOX);
+            drawRect(wX - wWidth / 2 - 2, wY - 1, wX + wWidth / 2 + 1, wY + fontHeight, ARGB_PROGRESS_BOX);
+        }
+        
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", nX, nY, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", sX, sY, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", eX, eY, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", wX, wY, RGB_YELLOW);
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
