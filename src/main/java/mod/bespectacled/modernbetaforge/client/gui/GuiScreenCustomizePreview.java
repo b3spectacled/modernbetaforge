@@ -147,7 +147,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private ProgressState state;
     private PreviewSettings previewSettings;
     private PreviewSettings selectedPreviewSettings;
-    private boolean showStructures;
     private float progress;
     private double progressLen;
     private MapTexture prevMapTexture;
@@ -176,7 +175,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.initSources(this.seed, settings);
         
         this.state = ProgressState.NOT_STARTED;
-        this.previewSettings = new PreviewSettings(previewSettings.zoom, previewSettings.useBiomeBlend);
+        this.previewSettings = new PreviewSettings(previewSettings);
         this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
     }
@@ -204,7 +203,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
         this.buttonStructures.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
-        this.buttonStructures.setValue(this.showStructures);
+        this.buttonStructures.setValue(this.previewSettings.useStructures);
         
         this.list = new EmptyListPreset(this);
 
@@ -439,7 +438,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 tooltips.add(coordinateText);
                 tooltips.add(biomeText);
                 
-                if (this.hoveredStructure && this.showStructures) {
+                if (this.hoveredStructure && this.previewSettings.useStructures) {
                     String structure = this.structureMap.get(this.hoveredStructurePos).structure.getPath().toLowerCase();
                     structure = structure.substring(0, 1).toUpperCase() + structure.substring(1);
                     
@@ -479,7 +478,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (id == GUI_ID_BIOME_COLORS) {
             this.previewSettings.useBiomeBlend = value;        
         } else if (id == GUI_ID_STRUCTURES) {
-            this.showStructures = value;
+            this.previewSettings.useStructures = value;
         }
         
         this.updateButtonValidity();
@@ -696,7 +695,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
             }
             
-            if (this.state == ProgressState.STARTED || !this.showStructures) {
+            if (this.state == ProgressState.STARTED || !this.previewSettings.useStructures) {
                 alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
             } else {
                 alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
@@ -1090,20 +1089,20 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     static class PreviewSettings {
         private int zoom;
         private boolean useBiomeBlend;
+        private boolean useStructures;
         
         public PreviewSettings() {
-            this.zoom = 512;
-            this.useBiomeBlend = true;
+            this(512, true, false);
         }
         
         public PreviewSettings(PreviewSettings previewSettings) {
-            this.zoom = previewSettings.zoom;
-            this.useBiomeBlend = previewSettings.useBiomeBlend;
+            this(previewSettings.zoom, previewSettings.useBiomeBlend, previewSettings.useStructures);
         }
         
-        public PreviewSettings(int zoom, boolean useBiomeBlend) {
+        public PreviewSettings(int zoom, boolean useBiomeBlend, boolean useStructures) {
             this.zoom = zoom;
             this.useBiomeBlend = useBiomeBlend;
+            this.useStructures = useStructures;
         }
         
         @Override
@@ -1118,6 +1117,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             
             PreviewSettings other = (PreviewSettings)o;
             
+            // Do not include useStructures for comparison
             return this.zoom == other.zoom && this.useBiomeBlend == other.useBiomeBlend;
         }
     }
