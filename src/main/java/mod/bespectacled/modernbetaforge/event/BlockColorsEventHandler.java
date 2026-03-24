@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +33,9 @@ public class BlockColorsEventHandler {
                         return BiomeColorHelper.getGrassColorAtPos(blockAccess, blockPos);
                     }
                     
-                    return (blockState.<BlockTallGrass.EnumType>getValue(BlockTallGrass.TYPE) == BlockTallGrass.EnumType.DEAD_BUSH) ? 16777215 : ColorizerGrass.getGrassColor(0.5, 1.0);
+                    return (blockState.<BlockTallGrass.EnumType>getValue(BlockTallGrass.TYPE) == BlockTallGrass.EnumType.DEAD_BUSH) ?
+                        ModernBetaBiomeColors.WHITE :
+                        ColorizerGrass.getGrassColor(0.5, 1.0);
                 }
             }, Blocks.TALLGRASS
         );
@@ -43,7 +46,7 @@ public class BlockColorsEventHandler {
                 public int colorMultiplier(IBlockState blockState, @Nullable IBlockAccess blockAccess, @Nullable BlockPos blockPos, int tintNdx) {
                     if (blockAccess != null && blockPos != null) {
                         if (blockAccess.getBiome(blockPos) instanceof ModernBetaBiome && ModernBetaConfig.visualOptions.useOldSugarCaneColor) {
-                            return 16777215;
+                            return ModernBetaBiomeColors.WHITE;
                         }
                         
                         return BiomeColorHelper.getGrassColorAtPos(blockAccess, blockPos);

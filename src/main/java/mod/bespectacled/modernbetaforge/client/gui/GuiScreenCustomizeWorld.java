@@ -1742,7 +1742,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.drawDefaultBackground();
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, GuiColors.RGB_WHITE);
         
         if (this.displayNavButtons) {
             this.drawKeyIcon(leftKey, this.tabStartX - leftKeyWidth - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
@@ -1874,7 +1874,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm1"), I18n.format(PREFIX + "confirm2"));
 
                     this.isFocused = false;
-                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, textList, 10526880));
+                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, textList, GuiColors.RGB_GRAY));
                 }
                 break;
             case GuiIdentifiers.FUNC_PRST:

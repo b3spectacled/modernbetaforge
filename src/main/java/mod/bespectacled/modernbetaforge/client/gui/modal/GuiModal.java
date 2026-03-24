@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -84,7 +85,7 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         
         int titleX = this.width / 2;
         int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
-        this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, GuiColors.RGB_WHITE);
     }
     
     @SuppressWarnings("unchecked")
@@ -113,10 +114,10 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         double texU = modalWidth * 0.0625;
         double texV = modalHeight * 0.0625;
         
-        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, -2039584);
-        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, -6250336);
-        this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, -2039584);
-        this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, -6250336);
+        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, GuiColors.ARGB_BORDER_DARK);
+        this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_BORDER_DARK);
         
         GlStateManager.disableLighting();
         GlStateManager.disableFog();

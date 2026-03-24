@@ -8,6 +8,7 @@ import org.lwjgl.input.Mouse;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -327,28 +328,28 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         IconTexture icon = ICON_TEXTURES[this.selectedIcon];
         int textStartX = centerX - this.modalWidth / 2 + 10;
         
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, 10526880);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, 10526880);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), textStartX, centerY + 20, 10526880);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, GuiColors.RGB_GRAY);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, GuiColors.RGB_GRAY);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), textStartX, centerY + 20, GuiColors.RGB_GRAY);
         this.fieldName.drawTextBox();
         this.fieldDesc.drawTextBox();
         this.fieldSettings.drawTextBox();
 
-        String nameNumChars = String.format("%d", MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length());
-        String descNumChars = String.format("%d", MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length());
-        String settingsNumChars = String.format("%d", ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length());
+        String nameLen = String.format("%d", MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length());
+        String descLen = String.format("%d", MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length());
+        String settingsLen = String.format("%d", ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length());
         
-        int nameNumCharsLen = this.fontRenderer.getStringWidth(nameNumChars);
-        int descNumCharsLen = this.fontRenderer.getStringWidth(descNumChars);
-        int settingsNumCharsLen = this.fontRenderer.getStringWidth(settingsNumChars);
+        int nameLenWidth = this.fontRenderer.getStringWidth(nameLen);
+        int descLenWidth = this.fontRenderer.getStringWidth(descLen);
+        int settingsLenWidth = this.fontRenderer.getStringWidth(settingsLen);
         
-        int nameNumCharsCol = MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length() > 4 ? 10526880 : 16752800;
-        int descNumCharsCol = MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length() > 4 ? 10526880 : 16752800;
-        int settingsNumCharsCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length() > 100 ? 10526880 : 16752800;
+        int nameLenCol = MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length() > 4 ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_RED;
+        int descLenCol = MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length() > 4 ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_RED;
+        int settingsLenCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length() > 100 ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_RED;
         
-        this.drawString(this.fontRenderer, nameNumChars, textStartX + NAME_FIELD_LENGTH - nameNumCharsLen, centerY - 60, nameNumCharsCol);
-        this.drawString(this.fontRenderer, descNumChars, textStartX + DESC_FIELD_LENGTH - descNumCharsLen, centerY - 20, descNumCharsCol);
-        this.drawString(this.fontRenderer, settingsNumChars, textStartX + SETTINGS_FIELD_LENGTH - settingsNumCharsLen, centerY + 20, settingsNumCharsCol);
+        this.drawString(this.fontRenderer, nameLen, textStartX + NAME_FIELD_LENGTH - nameLenWidth, centerY - 60, nameLenCol);
+        this.drawString(this.fontRenderer, descLen, textStartX + DESC_FIELD_LENGTH - descLenWidth, centerY - 20, descLenCol);
+        this.drawString(this.fontRenderer, settingsLen, textStartX + SETTINGS_FIELD_LENGTH - settingsLenWidth, centerY + 20, settingsLenCol);
         
         int boxL = centerX + this.modalWidth / 2 - ICON_SIZE - 1 - ICON_PADDING_R;
         int boxR = centerX + this.modalWidth / 2 - 0 - ICON_PADDING_R;
@@ -357,11 +358,11 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
 
         String iconText = String.format("%d/%d", this.selectedIcon + 1, ICON_TEXTURES.length);
         
-        this.drawCenteredString(this.fontRenderer, iconText, boxL + ICON_SIZE / 2 + 1, boxT - 10, 10526880);
-        this.drawHorizontalLine(boxL, boxR, boxT, -2039584);
-        this.drawHorizontalLine(boxL, boxR, boxB, -6250336);
-        this.drawVerticalLine(boxL, boxT, boxB, -2039584);
-        this.drawVerticalLine(boxR, boxT, boxB, -6250336);
+        this.drawCenteredString(this.fontRenderer, iconText, boxL + ICON_SIZE / 2 + 1, boxT - 10, GuiColors.RGB_GRAY);
+        this.drawHorizontalLine(boxL, boxR, boxT, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawHorizontalLine(boxL, boxR, boxB, GuiColors.ARGB_BORDER_DARK);
+        this.drawVerticalLine(boxL, boxT, boxB, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawVerticalLine(boxR, boxT, boxB, GuiColors.ARGB_BORDER_DARK);
         
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         this.mc.getTextureManager().bindTexture(icon.identifier);

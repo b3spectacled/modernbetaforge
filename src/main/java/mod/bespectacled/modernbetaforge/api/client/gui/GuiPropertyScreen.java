@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.client.gui;
 import java.io.IOException;
 
 import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -45,7 +46,7 @@ public abstract class GuiPropertyScreen extends GuiScreen {
         this.title = I18n.format(PREFIX + registryKey.getNamespace() + "." + registryKey.getPath());
         
         this.screenTitleHeight = 14;
-        this.screenTitleColor = 16777215;
+        this.screenTitleColor = GuiColors.RGB_WHITE;
     }
 
     @Override

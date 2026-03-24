@@ -181,8 +181,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
         
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
-        this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, 10526880);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, GuiColors.RGB_WHITE);
+        this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, GuiColors.RGB_GRAY);
         this.fieldExport.drawTextBox();
         
         if (this.isFocused && this.copyBounds.inBounds(mouseX, mouseY)) {
@@ -279,7 +279,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                             this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.presets.size() - this.dataHandler.getPresets().size() + ndx, this.amountScrolled));
                         };
                         List<String> textList = Arrays.asList(I18n.format(PREFIX + "overwrite.confirm"), modal.getNameText());
-                        List<Integer> textColors = Arrays.asList(16752800, 16777215);
+                        List<Integer> textColors = Arrays.asList(GuiColors.RGB_LIGHT_RED, GuiColors.RGB_WHITE);
                         
                         this.mc.displayGuiScreen(new GuiModalPresetConfirm(this, I18n.format(PREFIX + "overwrite.title"), onConfirmOverwrite, modalOverwrite -> this.isFocused = true, textList, textColors));
                     } else {
@@ -309,7 +309,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this.parent, this.filterType, this.list.selected - 1, this.amountScrolled));
                 };
                 List<String> textList = Arrays.asList(I18n.format(PREFIX + "delete.confirm"), selectedPreset.name);
-                List<Integer> textColors = Arrays.asList(16752800, 16777215);
+                List<Integer> textColors = Arrays.asList(GuiColors.RGB_LIGHT_RED, GuiColors.RGB_WHITE);
                 
                 this.isFocused = false;
                 this.mc.displayGuiScreen(new GuiModalPresetConfirm(this, I18n.format(PREFIX + "delete.title"), onConfirmDelete, modal -> this.isFocused = true, textList, textColors));
@@ -564,8 +564,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             int paddingY = 2;
             
             boolean hovered = this.parent.hoveredElement == preset;
-            int nameColor = hovered ? 16777120 : 16777215;
-            int descColor = hovered ? 10526785 : 10526880;
+            int nameColor = hovered ? GuiColors.RGB_LIGHT_YELLOW : GuiColors.RGB_WHITE;
+            int descColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GRAY;
             
             int iX = x + 5;
             int iY = y + paddingY;
@@ -595,10 +595,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
 
         private void blitIcon(int x, int y, IconTexture icon) {
-            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y - 1, -2039584);
-            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y + SLOT_HEIGHT, -6250336);
-            this.parent.drawVerticalLine(x - 1, y - 1, y + SLOT_HEIGHT, -2039584);
-            this.parent.drawVerticalLine(x + SLOT_HEIGHT, y - 1, y + SLOT_HEIGHT, -6250336);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y - 1, GuiColors.ARGB_BORDER_LIGHT);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y + SLOT_HEIGHT, GuiColors.ARGB_BORDER_DARK);
+            this.parent.drawVerticalLine(x - 1, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_BORDER_LIGHT);
+            this.parent.drawVerticalLine(x + SLOT_HEIGHT, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_BORDER_DARK);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             

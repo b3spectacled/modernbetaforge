@@ -172,8 +172,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.fieldSearch.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
         
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, 16777215);
-        this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, 10526880);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, GuiColors.RGB_WHITE);
+        this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, GuiColors.RGB_GRAY);
     
         /*
         if (this.hoveredElement != -1) {
@@ -466,8 +466,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             int paddingY = 3;
             
             boolean hovered = this.parent.hoveredElement == entry;
-            int nameColor = hovered ? 16777120 : 16777215;
-            int registryNameColor = hovered ? 10526785 : 10526880;
+            int nameColor = hovered ? GuiColors.RGB_LIGHT_YELLOW : GuiColors.RGB_WHITE;
+            int registryNameColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GRAY;
             
             // Render name
             this.parent.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, nameColor);

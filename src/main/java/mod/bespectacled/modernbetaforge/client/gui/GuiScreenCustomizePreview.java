@@ -64,7 +64,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -98,13 +97,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
     private static final int BUTTON_SPACE = 4;
-    
-    private static final int RGB_WHITE = 16777215;
-    private static final int RGB_YELLOW = 16777120;
-    private static final int RGB_GREY = 10526880;
-    
-    private static final int ARGB_BORDER_LIGHT = -2039584;
-    private static final int ARGB_BORDER_DARK = -6250336;
     
     private static final int ARGB_PREVIEW_BOX = MathUtil.convertARGBComponentsToInt(50, 0, 0, 0);
     private static final int ARGB_PROGRESS_BOX = MathUtil.convertARGBComponentsToInt(200, 0, 0, 0);
@@ -239,7 +231,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
         
-        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, RGB_WHITE);
+        this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, GuiColors.RGB_WHITE);
         
         if (System.currentTimeMillis() - this.copiedTime > COPIED_SEED_WAIT_TIME) {
             this.copyState = CopyState.HOVERING;
@@ -273,10 +265,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progressLen = progressLen;
         
         drawRect(textureX, textureY, textureX + viewportSize, textureY + viewportSize, ARGB_PREVIEW_BOX);
-        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, ARGB_BORDER_LIGHT);
-        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, ARGB_BORDER_DARK);
-        this.drawVerticalLine(textureX - 1, textureY - 1, textureY + viewportSize, ARGB_BORDER_LIGHT);
-        this.drawVerticalLine(textureX + viewportSize, textureY - 1, textureY + viewportSize, ARGB_BORDER_DARK);
+        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY - 1, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawHorizontalLine(textureX - 1, textureX + viewportSize, textureY + viewportSize, GuiColors.ARGB_BORDER_DARK);
+        this.drawVerticalLine(textureX - 1, textureY - 1, textureY + viewportSize, GuiColors.ARGB_BORDER_LIGHT);
+        this.drawVerticalLine(textureX + viewportSize, textureY - 1, textureY + viewportSize, GuiColors.ARGB_BORDER_DARK);
         
         String text;
         int textLen;
@@ -302,32 +294,32 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             case STARTED:
                 this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
                 this.drawProgressBox(boxL, boxR, boxT, boxB);
-                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), centerX, centerY - HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), centerX, centerY - HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
                 
                 if (this.chunkSource instanceof FiniteChunkSource && !((FiniteChunkSource)this.chunkSource).hasPregenerated()) {
                     String levelProgressText = ((FiniteChunkSource)this.chunkSource).getPhase();
                     
                     if (levelProgressText != null) {
-                        this.drawCenteredString(this.fontRenderer, levelProgressText + "..", centerX, progressHeight, RGB_WHITE);
+                        this.drawCenteredString(this.fontRenderer, levelProgressText + "..", centerX, progressHeight, GuiColors.RGB_WHITE);
                     }
                 } else {
                     DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, ARGB_PROGRESS_BAR);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, ARGB_BORDER_LIGHT);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, ARGB_BORDER_DARK);
-                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, ARGB_BORDER_LIGHT);
-                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, ARGB_BORDER_DARK);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_BORDER_LIGHT);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_BORDER_DARK);
+                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_BORDER_LIGHT);
+                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_BORDER_DARK);
                     
-                    this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, RGB_WHITE);
+                    this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, GuiColors.RGB_WHITE);
                 }
                 break;
                 
             case FAILED:
-                text = TextFormatting.RED + I18n.format(PREFIX + "failure");
+                text = I18n.format(PREFIX + "failure");
                 textLen = this.fontRenderer.getStringWidth(text);
                 centeredBoxL = centerX - textLen / 2 - 8;
                 centeredBoxR = centerX + textLen / 2 + 8;
                 
-                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, GuiColors.RGB_LIGHT_RED);
                 break;
             
             case CANCELING:
@@ -338,7 +330,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 
                 this.drawPreviousTerrainMap(textureX, textureY, partialTicks);
                 this.drawProgressBox(centeredBoxL, centeredBoxR, centeredBoxT, centeredBoxB);
-                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
                 break;
                 
             case CANCELED:
@@ -347,7 +339,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 
             default:
                 text = I18n.format(PREFIX + "hint");
-                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, RGB_WHITE);
+                this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
         }
 
         String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
@@ -364,13 +356,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
         int seedColor = this.seedFieldBounds.isHovered() ?
-            clicked ? RGB_GREY : RGB_YELLOW :
-            RGB_WHITE;
+            clicked ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_YELLOW :
+            GuiColors.RGB_WHITE;
         int useSeedColor = this.useSeedLabelBounds.isHovered() ?
-            clicked ? RGB_GREY : RGB_YELLOW :
-            RGB_WHITE;
+            clicked ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_YELLOW :
+            GuiColors.RGB_WHITE;
         
-        this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, RGB_WHITE);
+        this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, GuiColors.RGB_WHITE);
         this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
         this.drawString(this.fontRenderer, useSeedLabel, useSeedLabelX, useSeedLableY, useSeedColor);
         
@@ -670,10 +662,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             drawRect(wX - wWidth / 2 - 2, wY - 1, wX + wWidth / 2 + 1, wY + fontHeight, ARGB_PROGRESS_BOX);
         }
         
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", nX, nY, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", sX, sY, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", eX, eY, RGB_YELLOW);
-        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", wX, wY, RGB_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "N", nX, nY, GuiColors.RGB_LIGHT_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "S", sX, sY, GuiColors.RGB_LIGHT_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "E", eX, eY, GuiColors.RGB_LIGHT_YELLOW);
+        this.parent.drawCenteredString(this.parent.mc.fontRenderer, "W", wX, wY, GuiColors.RGB_LIGHT_YELLOW);
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {

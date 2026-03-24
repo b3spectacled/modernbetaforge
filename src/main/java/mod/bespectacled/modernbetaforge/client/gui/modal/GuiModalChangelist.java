@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.property.Property;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
@@ -133,7 +134,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
        
         int titleX = this.width / 2;
         int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
-        this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, 16777215);
+        this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, GuiColors.RGB_WHITE);
         
         if (this.changeList.hoveredSlot >= 0) {
             ChangeListEntry listEntry = this.changeList.changeList.get(this.changeList.hoveredSlot);
@@ -401,7 +402,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 String title = listEntry.title;
                 int titleX = this.width / 2;
                 
-                this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX + "." + title), titleX, textY, 16777215);
+                this.parent.drawCenteredString(this.parent.fontRenderer, I18n.format(PREFIX + "." + title), titleX, textY, GuiColors.RGB_WHITE);
                 
             } else {
                 String key = listEntry.entry.getKey();
@@ -434,8 +435,8 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 int changeX = settingX;
                 int changeY = y + 10;
                 
-                this.parent.drawString(this.parent.fontRenderer, settingTrimmed, settingX, settingY, 16777215);
-                this.parent.drawString(this.parent.fontRenderer, changesTrimmed, changeX, changeY, 16777215);
+                this.parent.drawString(this.parent.fontRenderer, settingTrimmed, settingX, settingY, GuiColors.RGB_WHITE);
+                this.parent.drawString(this.parent.fontRenderer, changesTrimmed, changeX, changeY, GuiColors.RGB_WHITE);
             }
         }
         
