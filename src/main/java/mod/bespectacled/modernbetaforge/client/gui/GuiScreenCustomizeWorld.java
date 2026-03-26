@@ -60,6 +60,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
+import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
@@ -134,6 +135,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private final GuiBoundsChecker leftKeyBounds;
     private final GuiBoundsChecker rightKeyBounds;
     private final Map<Integer, Boolean> enabledMap;
+    private final ExecutorWrapper executor;
     
     protected String title;
     protected String[] pageNames;
@@ -197,6 +199,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.leftKeyBounds = new GuiBoundsChecker();
         this.rightKeyBounds = new GuiBoundsChecker();
         this.enabledMap = new HashMap<>();
+        this.executor = new ExecutorWrapper(1, "customization");
         
         this.previewSettings = new PreviewSettings();
         this.isFocused = true;
@@ -1792,7 +1795,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.buttonDefaults.enabled = settingsModified && this.isFocused;
+        this.buttonDefaults.enabled = settingsModified && this.isFocused && !this.clickedRandom;
     }
     
     public void setPreviewSettings(PreviewSettings previewSettings) {
@@ -1841,23 +1844,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiIdentifiers.FUNC_RAND:
                 this.clickedRandom = true;
-                
-                Set<Gui> biomeButtons = this.getBiomeButtons();
-                Set<Gui> baseSliders = this.getBaseSliders();
-                Set<Gui> baseButtons = this.getBaseButtons();
-                
-                GuiListEntry[] entries = this.pageArray[this.pageList.getPage()];
-                for (int i = 0; i < entries.length; ++i) {
-                    GuiListEntry entry = entries[i];
-                    
-                    if (entry != null) {
-                        this.randomizeGuiComponent(entry.getId(), biomeButtons, baseSliders, baseButtons);
-                    }
-                }
-                
-                this.clickedRandom = false;
-                this.setSettingsModified(this.isSettingsModified());
                 this.updateButtonValidity();
+                
+                this.executor.queueRunnable(() -> {
+                    Set<Gui> biomeButtons = this.getBiomeButtons();
+                    Set<Gui> baseSliders = this.getBaseSliders();
+                    Set<Gui> baseButtons = this.getBaseButtons();
+                    
+                    GuiListEntry[] entries = this.pageArray[this.pageList.getPage()];
+                    for (int i = 0; i < entries.length; ++i) {
+                        GuiListEntry entry = entries[i];
+                        
+                        if (entry != null) {
+                            this.randomizeGuiComponent(entry.getId(), biomeButtons, baseSliders, baseButtons);
+                        }
+                    }
+                    
+                    this.clickedRandom = false;
+                    this.setSettingsModified(this.isSettingsModified());
+                    this.updateButtonValidity();
+                });
+                
                 break;
             case GuiIdentifiers.FUNC_DFLT:
                 if (this.settingsModified) {
@@ -2340,14 +2347,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void updateButtonValidity() {
+        boolean isInteractable = this.isFocused && !this.clickedRandom;
         int page = this.pageList.getPage();
         
         // Primary buttons
-        this.buttonRandomize.enabled = this.isFocused && (page < 5 || page == 6);
-        this.buttonDone.enabled = this.isFocused;
-        this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
-        this.buttonPresets.enabled = this.isFocused;
-        this.buttonPreview.enabled = this.isFocused;
+        this.buttonRandomize.enabled = isInteractable && (page < 5 || page == 6);
+        this.buttonDone.enabled = isInteractable;
+        this.buttonDefaults.enabled = isInteractable && this.settingsModified;
+        this.buttonPresets.enabled = isInteractable;
+        this.buttonPreview.enabled = isInteractable;
         
         // Tab buttons
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
@@ -2472,6 +2480,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void exit() {
+        this.executor.shutdown();
         this.mc.displayGuiScreen(this.parent);
     }
     
