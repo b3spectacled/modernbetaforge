@@ -138,8 +138,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private final ExecutorWrapper executor;
     
     protected String title;
-    protected String subtitle;
-    protected String pageTitle;
     protected String[] pageNames;
     protected Map<Integer, GuiButton> pageTabMap;
 
@@ -152,7 +150,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonPreview;
     private boolean settingsModified;
     private boolean clicked;
-    private boolean randomClicked;
+    private boolean isRandomizing;
     private long lastNavPressed;
     private int customId;
     private BiMap<Integer, ResourceLocation> propertyMap;
@@ -163,12 +161,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private boolean isFocused;
     private boolean displayNavButtons;
     private PreviewSettings previewSettings;
-    private boolean isRandomizing;
     
     public GuiScreenCustomizeWorld(GuiCreateWorld parent, String string) {
         this.title = I18n.format("options.customizeTitle");
-        this.subtitle = "Page 1 of 6";
-        this.pageTitle = "Basic Settings";
         this.pageNames = new String[]{
             I18n.format(PREFIX_TAB + "page0"),
             I18n.format(PREFIX_TAB + "page1"),
@@ -866,7 +861,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         // Set default enabled for certain options
         this.initButtonValidity();
         this.updateSettingValidity();
-        this.updatePageButtonValidity();
         this.setSettingsModified(this.isSettingsModified());
         
         this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
@@ -1799,7 +1793,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.updatePrimaryButtonValidity();
+        this.updateButtonValidity();
     }
     
     public void setPreviewSettings(PreviewSettings previewSettings) {
@@ -1848,26 +1842,22 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 break;
             case GuiIdentifiers.FUNC_RAND:
                 this.isRandomizing = true;
-                this.updatePrimaryButtonValidity();
+                this.updateButtonValidity();
                 
                 this.executor.queueRunnable(() -> {
                     Set<Gui> biomeButtonComponents = this.getBiomeButtonComponents();
                     Set<Gui> baseSliderComponents = this.getBaseSliderComponents();
                     Set<Gui> baseButtonComponents = this.getBaseButtonComponents();
                     
-                    for (int page = 0; page < this.pageList.getSize(); ++page) {
-                        this.randomClicked = true;
-
-                        GuiPageButtonList.GuiEntry guiEntry = this.pageList.getListEntry(page);
+                    for (int entry = 0; entry < this.pageList.getSize(); ++entry) {
+                        GuiPageButtonList.GuiEntry guiEntry = this.pageList.getListEntry(entry);
                         this.randomizeGuiComponent(guiEntry.getComponent1(), biomeButtonComponents, baseSliderComponents, baseButtonComponents);
                         this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseSliderComponents, baseButtonComponents);
 
-                        this.randomClicked = false;
                         this.updateSettingValidity();
                     }
                     
                     this.isRandomizing = false;
-                    this.updatePrimaryButtonValidity();
                     this.setSettingsModified(this.isSettingsModified());
                 });
                 break;
@@ -1896,7 +1886,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.pageTabMap.containsKey(guiButton.id)) {
             this.pageList.setPage(guiButton.id - GuiIdentifiers.FUNC_INITIAL_TAB);
-            this.updatePageButtonValidity();
+            this.updateButtonValidity();
         }
     }
 
@@ -2350,36 +2340,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void initButtonValidity() {
-        // Primary buttons
-        this.updatePrimaryButtonValidity();
+        // Primary, Tab buttons
+        this.updateButtonValidity();
         
         // List buttons
         this.pageList.setActive(this.isFocused);
-        
-        // Tab buttons
-        for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
-            pageTab.getValue().enabled = this.isFocused;
-        }
     }
     
-    private void updatePrimaryButtonValidity() {
+    private void updateButtonValidity() {
         boolean isInteractable = this.isFocused && !this.isRandomizing;
+        int page = this.pageList.getPage();
         
-        this.buttonRandomize.enabled = isInteractable;
+        // Primary buttons
+        this.buttonRandomize.enabled = isInteractable && (page < 5 || page == 6);
         this.buttonDone.enabled = isInteractable;
         this.buttonDefaults.enabled = isInteractable && this.settingsModified;
         this.buttonPresets.enabled = isInteractable;
         this.buttonPreview.enabled = isInteractable;
-    }
-    
-    private void updatePageButtonValidity() {
-        int page = this.pageList.getPage();
         
-        this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
-        this.buttonRandomize.enabled = (page < 5 || page == 6) && this.isFocused;
-        
+        // Tab buttons
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
-            if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + page) {
+            if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage()) {
                 pageTab.getValue().enabled = false;
             } else {
                 pageTab.getValue().enabled = this.isFocused;
@@ -2466,7 +2447,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (pageNext >= 0 && pageNext < pageCount) {
             this.pageList.setPage(pageNext);
-            this.updatePageButtonValidity();
+            this.updateButtonValidity();
             this.playSound();
         }
         
@@ -2494,7 +2475,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void playSound() {
-        if (!this.clicked && !this.randomClicked) {
+        if (!this.clicked && !this.isRandomizing) {
             SoundUtil.playClickSound(this.mc.getSoundHandler());
         }
     }
@@ -2506,6 +2487,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private Set<Gui> getBaseSliderComponents() {
         Set<Gui> set = new HashSet<>();
+        
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_CHUNK));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_BIOME));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_SURFACE));
@@ -2513,13 +2495,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_SPAWN));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_BLOCK));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_FLUID));
-
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_THEME));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_TYPE));
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_HOUSE));
-        
         set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LAYER_TYPE));
-        
         set.add(this.pageList.getComponent(GuiIdentifiers.PG3_S_ORE_TYPE));
         
         return set;
