@@ -1793,7 +1793,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.updateButtonValidity();
+        this.buttonDefaults.enabled = settingsModified && this.isFocused && !this.isRandomizing;
     }
     
     public void setPreviewSettings(PreviewSettings previewSettings) {
@@ -1859,6 +1859,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                     this.isRandomizing = false;
                     this.setSettingsModified(this.isSettingsModified());
+                    this.updateButtonValidity();
                 });
                 break;
             case GuiIdentifiers.FUNC_DFLT:
