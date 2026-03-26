@@ -115,8 +115,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
     private static final int PAGELIST_SCROLLBAR_PADDING = 24;
-    private static final int BIOME_TRUNCATE_LEN = 18;
-    private static final int DEFAULT_BLOCK_TRUNCATE_LEN = 10;
+    private static final int DEFAULT_NAME_TRUNCATE_LEN = 12;
 
     private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
@@ -742,11 +741,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, -1));
         
         // Set text for default block options
-        this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_BLOCK_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedFluidName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, DEFAULT_BLOCK_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedFluidName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, DEFAULT_NAME_TRUNCATE_LEN));
         
         // Set biome text for Single Biome button
-        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, "fixedBiome", BIOME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, NbtTags.SINGLE_BIOME, DEFAULT_NAME_TRUNCATE_LEN));
         
         // Set biome text for Beta Biome buttons
         this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase));
@@ -860,10 +859,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.scrollBy(curScroll);
         
         // Set default enabled for certain options
-        this.isSettingsModified();
-        this.setConfirmationControls(!this.isFocused);
-        this.setGuiEnabled();
-        this.updatePageControls();
+        this.initButtonValidity();
+        this.updateSettingValidity();
+        this.updatePageButtonValidity();
+        this.setSettingsModified(this.isSettingsModified());
         
         this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
         this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
@@ -1029,7 +1028,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
         
-        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+        this.setSettingsModified(this.isSettingsModified());
     }
 
     @Override
@@ -1339,8 +1338,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
 
-        this.setGuiEnabled();
-        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+        this.updateSettingValidity();
+        this.setSettingsModified(this.isSettingsModified());
         this.playSound();
     }
 
@@ -1717,8 +1716,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
 
-        this.setGuiEnabled();
-        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+        this.updateSettingValidity();
+        this.setSettingsModified(this.isSettingsModified());
         this.playSound();
     }
 
@@ -1789,13 +1788,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
-    public void isSettingsModified() {
-        this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+    public boolean isSettingsModified() {
+        return !this.settings.equals(this.defaultSettings);
     }
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.buttonDefaults.enabled = settingsModified;
+        this.buttonDefaults.enabled = this.isFocused && settingsModified;
     }
     
     public void setPreviewSettings(PreviewSettings previewSettings) {
@@ -1857,8 +1856,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.randomizeGuiComponent(guiEntry.getComponent2(), biomeButtonComponents, baseSliderComponents, baseButtonComponents);
 
                     this.randomClicked = false;
-                    this.setGuiEnabled();
-                    this.setSettingsModified(!this.settings.equals(this.defaultSettings));
+                    this.updateSettingValidity();
+                    this.setSettingsModified(this.isSettingsModified());
                 }
                              
                 break;
@@ -1887,7 +1886,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (this.pageTabMap.containsKey(guiButton.id)) {
             this.pageList.setPage(guiButton.id - GuiIdentifiers.FUNC_INITIAL_TAB);
-            this.updatePageControls();
+            this.updatePageButtonValidity();
         }
     }
 
@@ -2128,9 +2127,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     if (randomKey != null && langName != null) {
                         String registryName = randomKey.toString();
                         String formattedName = buttonId == GuiIdentifiers.PG0_B_BLOCK ?
-                            getFormattedBlockName(registryName, langName, DEFAULT_BLOCK_TRUNCATE_LEN) :
+                            getFormattedBlockName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
                             buttonId == GuiIdentifiers.PG0_B_FLUID ? 
-                                getFormattedFluidName(registryName, langName, DEFAULT_BLOCK_TRUNCATE_LEN) :
+                                getFormattedFluidName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
                                 getFormattedRegistryName(registryName, langName, -1);
                         
                         GuiIdentifiers.BASE_SETTINGS.get(buttonId).accept(registryName, this.settings);
@@ -2157,8 +2156,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 
                 if (guiButtonComponent instanceof GuiListButton && buttonId != -1) {
                     String registryName = ForgeRegistryUtil.getRandom(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
-                    String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? "fixedBiome" : "";
-                    int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? BIOME_TRUNCATE_LEN : -1;
+                    String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
+                    int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? DEFAULT_NAME_TRUNCATE_LEN : -1;
                     
                     GuiIdentifiers.BIOME_SETTINGS.get(buttonId).accept(registryName,  this.settings);
                     this.setTextButton(buttonId, getFormattedBiomeName(registryName, langName, truncateLen));
@@ -2340,20 +2339,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setSettingsModified(false);
     }
     
-    private void setConfirmationControls(boolean setConfirm) {
-        this.buttonRandomize.enabled = !setConfirm;
-        this.buttonDone.enabled = !setConfirm;
-        this.buttonDefaults.enabled = (this.settingsModified && !setConfirm);
-        this.buttonPresets.enabled = !setConfirm;
-        this.buttonPreview.enabled = !setConfirm;
-        this.pageList.setActive(!setConfirm);
+    private void initButtonValidity() {
+        // Primary buttons
+        this.buttonRandomize.enabled = this.isFocused;
+        this.buttonDone.enabled = this.isFocused;
+        this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
+        this.buttonPresets.enabled = this.isFocused;
+        this.buttonPreview.enabled = this.isFocused;
         
+        // List buttons
+        this.pageList.setActive(this.isFocused);
+        
+        // Tab buttons
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
-            pageTab.getValue().enabled = !setConfirm;
+            pageTab.getValue().enabled = this.isFocused;
         }
     }
     
-    private void updatePageControls() {
+    private void updatePageButtonValidity() {
         int page = this.pageList.getPage();
         
         this.subtitle = I18n.format("book.pageIndicator", page + 1, this.pageList.getPageCount());
@@ -2368,6 +2371,35 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
+    private void updateSettingValidity() {
+        ModernBetaGeneratorSettings settings = this.settings.build();
+        this.enabledMap.clear();
+        
+        // Set default enabled for certain options
+        if (this.pageList != null) {
+            for (Entry<ResourceLocation, GuiPredicate> entry : ModernBetaClientRegistries.GUI_PREDICATE.getEntrySet()) {
+                int[] guiIds = entry.getValue().getIds();
+                boolean enabled = entry.getValue().test(settings) && this.isFocused;
+                
+                for (int i = 0; i < guiIds.length; ++i) {
+                    this.setGuiEnabled(guiIds[i], enabled);
+                }
+                
+                if (guiIds.length <= 0) {
+                    if (this.propertyMap.containsValue(entry.getKey())) {
+                        int customId = this.propertyMap.inverse().get(entry.getKey());
+                        this.setGuiEnabled(customId, enabled);
+                    }
+                    
+                    if (this.guiPropertyMap.containsValue(entry.getKey())) {
+                        int customId = this.guiPropertyMap.inverse().get(entry.getKey());
+                        this.setGuiEnabled(customId, enabled);
+                    }
+                }
+            }
+        }
+    }
+
     private void modifyFocusValue(float amount) {
         Gui guiComponent = this.pageList.getFocusedControl();
         if (!(guiComponent instanceof GuiTextField)) {
@@ -2418,7 +2450,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (pageNext >= 0 && pageNext < pageCount) {
             this.pageList.setPage(pageNext);
-            this.updatePageControls();
+            this.updatePageButtonValidity();
             this.playSound();
         }
         
@@ -2478,35 +2510,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private Set<Gui> getBaseButtonComponents() {
         return GuiIdentifiers.BASE_SETTINGS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
-    }
-    
-    private void setGuiEnabled() {
-        ModernBetaGeneratorSettings settings = this.settings.build();
-        this.enabledMap.clear();
-        
-        // Set default enabled for certain options
-        if (this.pageList != null) {
-            for (Entry<ResourceLocation, GuiPredicate> entry : ModernBetaClientRegistries.GUI_PREDICATE.getEntrySet()) {
-                int[] guiIds = entry.getValue().getIds();
-                boolean enabled = entry.getValue().test(settings) && this.isFocused;
-                
-                for (int i = 0; i < guiIds.length; ++i) {
-                    this.setGuiEnabled(guiIds[i], enabled);
-                }
-                
-                if (guiIds.length <= 0) {
-                    if (this.propertyMap.containsValue(entry.getKey())) {
-                        int customId = this.propertyMap.inverse().get(entry.getKey());
-                        this.setGuiEnabled(customId, enabled);
-                    }
-                    
-                    if (this.guiPropertyMap.containsValue(entry.getKey())) {
-                        int customId = this.guiPropertyMap.inverse().get(entry.getKey());
-                        this.setGuiEnabled(customId, enabled);
-                    }
-                }
-            }
-        }
     }
     
     private void setGuiEnabled(int id, boolean enabled) {

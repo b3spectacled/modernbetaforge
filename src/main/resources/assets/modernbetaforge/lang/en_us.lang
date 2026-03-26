@@ -104,7 +104,6 @@ createWorld.customize.custom.modernbetaforge.biomeSource=Biome Source
 createWorld.customize.custom.modernbetaforge.surfaceBuilder=Surface Builder
 createWorld.customize.custom.modernbetaforge.caveCarver=Cave Carver
 createWorld.customize.custom.modernbetaforge.worldSpawner=World Spawner
-createWorld.customize.custom.modernbetaforge.fixedBiome=Single Biome
 createWorld.customize.custom.modernbetaforge.singleBiome=Single Biome
 createWorld.customize.custom.modernbetaforge.biome=Biome
 createWorld.customize.custom.modernbetaforge.block=Block
