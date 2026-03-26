@@ -2084,14 +2084,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             GuiButton guiButton = (GuiButton)gui;
             
             if (baseButtons.contains(guiButton)) {
-                int buttonId = GuiIdentifiers.BASE_SETTINGS
-                    .keySet()
-                    .stream()
-                    .filter(id -> this.pageList.getComponent(id) == guiButton)
-                    .findFirst()
-                    .orElse(-1);
+                int buttonId = guiButton.id;
                 
-                if (guiButton instanceof GuiListButton && buttonId != -1) {
+                if (guiButton instanceof GuiListButton) {
                     ResourceLocation randomKey = null;
                     String langName = null;
                     
@@ -2149,14 +2144,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 }
             
             } else if (biomeButtons.contains(guiButton)) {
-                int buttonId = GuiIdentifiers.BIOME_SETTINGS
-                    .keySet()
-                    .stream()
-                    .filter(id -> this.pageList.getComponent(id) == guiButton)
-                    .findFirst()
-                    .orElse(-1);
+                int buttonId = guiButton.id;
                 
-                if (guiButton instanceof GuiListButton && buttonId != -1) {
+                if (guiButton instanceof GuiListButton) {
                     String registryName = ForgeRegistryUtil.getRandom(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
                     String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
                     int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? DEFAULT_NAME_TRUNCATE_LEN : -1;
