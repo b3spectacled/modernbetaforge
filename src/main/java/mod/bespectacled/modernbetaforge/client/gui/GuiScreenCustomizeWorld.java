@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -1847,16 +1846,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.updateButtonValidity();
                 
                 this.executor.queueRunnable(() -> {
-                    Set<Gui> biomeButtons = this.getBiomeButtons();
-                    Set<Gui> baseSliders = this.getBaseSliders();
-                    Set<Gui> baseButtons = this.getBaseButtons();
-                    
                     GuiListEntry[] entries = this.pageArray[this.pageList.getPage()];
                     for (int i = 0; i < entries.length; ++i) {
                         GuiListEntry entry = entries[i];
                         
                         if (entry != null) {
-                            this.randomizeGuiComponent(entry.getId(), biomeButtons, baseSliders, baseButtons);
+                            this.randomizeGuiComponent(entry.getId());
                         }
                     }
                     
@@ -2082,22 +2077,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return pageList;
     }
     
-    private void randomizeGuiComponent(int id, Set<Gui> biomeButtons, Set<Gui> baseSliders, Set<Gui> baseButtons) {
-        this.randomizeGuiComponent(this.pageList.getComponent(id), biomeButtons, baseSliders, baseButtons);
-    }
-    
-    private void randomizeGuiComponent(Gui gui, Set<Gui> biomeButtons, Set<Gui> baseSliders, Set<Gui> baseButtons) {
+    private void randomizeGuiComponent(int id) {
+        Gui gui = this.pageList.getComponent(id);
+        
         if (gui instanceof GuiButton && ((GuiButton)gui).enabled) {
             GuiButton guiButton = (GuiButton)gui;
             
-            if (baseButtons.contains(guiButton)) {
-                int buttonId = guiButton.id;
-                
+            if (GuiIdentifiers.BASE_BUTTON_SETTINGS.containsKey(id)) {
                 if (guiButton instanceof GuiListButton) {
                     ResourceLocation randomKey = null;
                     String langName = null;
                     
-                    switch (buttonId) {
+                    switch (id) {
                         case GuiIdentifiers.PG0_B_CHUNK:
                             randomKey = ModernBetaRegistries.CHUNK_SOURCE.getRandomEntry(this.random).getKey();
                             langName = NbtTags.CHUNK_SOURCE;
@@ -2130,18 +2121,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                     if (randomKey != null && langName != null) {
                         String registryName = randomKey.toString();
-                        String formattedName = buttonId == GuiIdentifiers.PG0_B_BLOCK ?
+                        String formattedName = id == GuiIdentifiers.PG0_B_BLOCK ?
                             getFormattedBlockName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
-                            buttonId == GuiIdentifiers.PG0_B_FLUID ? 
+                                id == GuiIdentifiers.PG0_B_FLUID ? 
                                 getFormattedFluidName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
                                 getFormattedRegistryName(registryName, langName, -1);
                         
-                        GuiIdentifiers.BASE_SETTINGS.get(buttonId).accept(registryName, this.settings);
-                        this.setTextButton(buttonId, formattedName);
+                        GuiIdentifiers.BASE_BUTTON_SETTINGS.get(id).accept(registryName, this.settings);
+                        this.setTextButton(id, formattedName);
                     }
                 }
                 
-            } else if (baseSliders.contains(guiButton)) {
+            } else if (GuiIdentifiers.BASE_SLIDER_SETTINGS.contains(id)) {
                 if (guiButton instanceof GuiSlider) {
                     GuiSlider guiSlider = (GuiSlider)guiButton;
                     
@@ -2150,16 +2141,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                 }
             
-            } else if (biomeButtons.contains(guiButton)) {
-                int buttonId = guiButton.id;
-                
+            } else if (GuiIdentifiers.BIOME_SETTINGS.containsKey(id)) {
                 if (guiButton instanceof GuiListButton) {
                     String registryName = ForgeRegistryUtil.getRandom(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
-                    String langName = buttonId == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
-                    int truncateLen = buttonId == GuiIdentifiers.PG0_B_FIXED ? DEFAULT_NAME_TRUNCATE_LEN : -1;
+                    String langName = id == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
+                    int truncateLen = id == GuiIdentifiers.PG0_B_FIXED ? DEFAULT_NAME_TRUNCATE_LEN : -1;
                     
-                    GuiIdentifiers.BIOME_SETTINGS.get(buttonId).accept(registryName,  this.settings);
-                    this.setTextButton(buttonId, getFormattedBiomeName(registryName, langName, truncateLen));
+                    GuiIdentifiers.BIOME_SETTINGS.get(id).accept(registryName,  this.settings);
+                    this.setTextButton(id, getFormattedBiomeName(registryName, langName, truncateLen));
                 }
                 
             } else {
@@ -2174,7 +2163,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     
                 }
             }
-            
         }
     }
 
@@ -2482,33 +2470,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void exit() {
         this.executor.shutdown();
         this.mc.displayGuiScreen(this.parent);
-    }
-    
-    private Set<Gui> getBaseSliders() {
-        Set<Gui> set = new HashSet<>();
-        
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_CHUNK));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_BIOME));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_SURFACE));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_CARVER));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_SPAWN));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_BLOCK));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG0_S_FLUID));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_THEME));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_TYPE));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LEVEL_HOUSE));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG1_S_LAYER_TYPE));
-        set.add(this.pageList.getComponent(GuiIdentifiers.PG3_S_ORE_TYPE));
-        
-        return set;
-    }
-    
-    private Set<Gui> getBiomeButtons() {
-        return GuiIdentifiers.BIOME_SETTINGS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
-    }
-    
-    private Set<Gui> getBaseButtons() {
-        return GuiIdentifiers.BASE_SETTINGS.keySet().stream().map(id -> this.pageList.getComponent(id)).collect(Collectors.toSet());
     }
     
     private void setGuiEnabled(int id, boolean enabled) {

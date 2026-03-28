@@ -1,8 +1,11 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,8 +13,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiIdentifiers {
-    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BIOME_SETTINGS = new HashMap<>();
-    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BASE_SETTINGS = new HashMap<>();
+    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BIOME_SETTINGS;
+    public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BASE_BUTTON_SETTINGS;
+    public static final Set<Integer> BASE_SLIDER_SETTINGS;
     
     /* Function Buttons */
     public static final int FUNC_INITIAL_TAB = 30;
@@ -473,58 +477,66 @@ public class GuiIdentifiers {
     }
     
     static {
-        BIOME_SETTINGS.put(GuiIdentifiers.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str);
+        BIOME_SETTINGS = ImmutableMap.<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>>builder()
+            .put(GuiIdentifiers.PG0_B_FIXED, (str, factory) -> factory.singleBiome = str)
+            .put(GuiIdentifiers.PG6_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str)
+            .put(GuiIdentifiers.PG6_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str)
+            .put(GuiIdentifiers.PG6_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str)
+            .put(GuiIdentifiers.PG6_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str)
+            .put(GuiIdentifiers.PG6_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str)
+            .put(GuiIdentifiers.PG6_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str)
+            .put(GuiIdentifiers.PG6_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str)
+            .put(GuiIdentifiers.PG6_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str)
+            .put(GuiIdentifiers.PG6_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str)
+            .put(GuiIdentifiers.PG6_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str)
+            .put(GuiIdentifiers.PG6_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str)
+            .put(GuiIdentifiers.PG6_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str)
+            .put(GuiIdentifiers.PG6_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str)
+            .put(GuiIdentifiers.PG6_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str)
+            .build();
         
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_DSRT_LAND, (str, factory) -> factory.desertBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_DSRT_OCEAN, (str, factory) -> factory.desertBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_DSRT_BEACH, (str, factory) -> factory.desertBiomeBeach = str);
+        BASE_BUTTON_SETTINGS = ImmutableMap.<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>>builder()
+            .put(GuiIdentifiers.PG0_B_CHUNK, (str, factory) -> factory.chunkSource = str)
+            .put(GuiIdentifiers.PG0_B_BIOME, (str, factory) -> factory.biomeSource = str)
+            .put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str)
+            .put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str)
+            .put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.worldSpawner = str)
+            .put(GuiIdentifiers.PG0_B_BLOCK, (str, factory) -> factory.defaultBlock = str)
+            .put(GuiIdentifiers.PG0_B_FLUID, (str, factory) -> factory.defaultFluid = str)
+            .build();
         
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_FRST_LAND, (str, factory) -> factory.forestBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_FRST_OCEAN, (str, factory) -> factory.forestBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_FRST_BEACH, (str, factory) -> factory.forestBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_ICED_LAND, (str, factory) -> factory.iceDesertBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_ICED_OCEAN, (str, factory) -> factory.iceDesertBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_ICED_BEACH, (str, factory) -> factory.iceDesertBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_PLNS_LAND, (str, factory) -> factory.plainsBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_PLNS_OCEAN, (str, factory) -> factory.plainsBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_PLNS_BEACH, (str, factory) -> factory.plainsBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_RAIN_LAND, (str, factory) -> factory.rainforestBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_RAIN_OCEAN, (str, factory) -> factory.rainforestBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_RAIN_BEACH, (str, factory) -> factory.rainforestBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SAVA_LAND, (str, factory) -> factory.savannaBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SAVA_OCEAN, (str, factory) -> factory.savannaBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SAVA_BEACH, (str, factory) -> factory.savannaBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SHRB_LAND, (str, factory) -> factory.shrublandBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SHRB_OCEAN, (str, factory) -> factory.shrublandBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SHRB_BEACH, (str, factory) -> factory.shrublandBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SEAS_LAND, (str, factory) -> factory.seasonalForestBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SEAS_OCEAN, (str, factory) -> factory.seasonalForestBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SEAS_BEACH, (str, factory) -> factory.seasonalForestBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SWMP_LAND, (str, factory) -> factory.swamplandBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SWMP_OCEAN, (str, factory) -> factory.swamplandBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_SWMP_BEACH, (str, factory) -> factory.swamplandBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TAIG_LAND, (str, factory) -> factory.taigaBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TAIG_OCEAN, (str, factory) -> factory.taigaBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TAIG_BEACH, (str, factory) -> factory.taigaBiomeBeach = str);
-        
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TUND_LAND, (str, factory) -> factory.tundraBiomeBase = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TUND_OCEAN, (str, factory) -> factory.tundraBiomeOcean = str);
-        BIOME_SETTINGS.put(GuiIdentifiers.PG6_TUND_BEACH, (str, factory) -> factory.tundraBiomeBeach = str);
-        
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CHUNK, (str, factory) -> factory.chunkSource = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BIOME, (str, factory) -> factory.biomeSource = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SURFACE, (str, factory) -> factory.surfaceBuilder = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_CARVER, (str, factory) -> factory.caveCarver = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_SPAWN, (str, factory) -> factory.worldSpawner = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_BLOCK, (str, factory) -> factory.defaultBlock = str);
-        BASE_SETTINGS.put(GuiIdentifiers.PG0_B_FLUID, (str, factory) -> factory.defaultFluid = str);
+        BASE_SLIDER_SETTINGS = ImmutableSet.<Integer>builder()
+            .add(GuiIdentifiers.PG0_S_CHUNK)
+            .add(GuiIdentifiers.PG0_S_BIOME)
+            .add(GuiIdentifiers.PG0_S_SURFACE)
+            .add(GuiIdentifiers.PG0_S_CARVER)
+            .add(GuiIdentifiers.PG0_S_SPAWN)
+            .add(GuiIdentifiers.PG0_S_BLOCK)
+            .add(GuiIdentifiers.PG0_S_FLUID)
+            .add(GuiIdentifiers.PG1_S_LEVEL_THEME)
+            .add(GuiIdentifiers.PG1_S_LEVEL_TYPE)
+            .add(GuiIdentifiers.PG1_S_LEVEL_HOUSE)
+            .add(GuiIdentifiers.PG1_S_LAYER_TYPE)
+            .add(GuiIdentifiers.PG3_S_ORE_TYPE)
+            .build();
     }
 }
