@@ -2,6 +2,9 @@ package mod.bespectacled.modernbetaforge.command;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
@@ -17,6 +20,7 @@ import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -32,17 +36,14 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 
 public class CommandDrawMap extends ModernBetaCommand {
+    private static final File SCREENSHOT_DIR = new File(Minecraft.getMinecraft().gameDir, "screenshots");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
     private static final String NAME = "drawmap";
-    private static final String PATH = "map.png";
-    
-    private final String path;
     
     private int percentage = 0;
     
     public CommandDrawMap() {
         super(NAME);
-        
-        this.path = PATH;
     }
     
     public BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
@@ -95,7 +96,7 @@ public class CommandDrawMap extends ModernBetaCommand {
         center = new BlockPos(center.getX() >> 4 << 4, center.getY(), center.getZ() >> 4 << 4);
 
         try { 
-            File file = new File(worldServer.getSaveHandler().getWorldDirectory(), this.path);
+            File file = getTimestampedPNGFileForDirectory(SCREENSHOT_DIR);
             file = file.getCanonicalFile(); // Fixes '/./' being inserted in path
 
             notifyCommandListener(sender, this, this.getLangString("start"), new Object[] { width, length, center.getX(), center.getZ() });
@@ -126,5 +127,20 @@ public class CommandDrawMap extends ModernBetaCommand {
         }
         
         this.percentage = percentage;
+    }
+    
+    private static File getTimestampedPNGFileForDirectory(File dir) {
+        String date = DATE_FORMAT.format(new Date()).toString();
+        int i = 1;
+
+        while (true) {
+            File file = new File(dir, date + (i == 1 ? "" : "_" + i) + ".png");
+
+            if (!file.exists()) {
+                return file;
+            }
+
+            ++i;
+        }
     }
 }

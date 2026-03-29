@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
+
+import javax.imageio.ImageIO;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -47,6 +50,7 @@ import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimMonument
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimScatteredFeature;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimStronghold;
 import mod.bespectacled.modernbetaforge.world.structure.sim.StructureSimVillage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListButton;
@@ -78,6 +82,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         HOVERING, SEED, USE_SEED, TELEPORT
     }
     
+    private static final File SCREENSHOT_DIR = new File(Minecraft.getMinecraft().gameDir, "screenshots");
     private static final String PREFIX = "createWorld.customize.preview.modernbetaforge.";
     private static final Map<ResourceLocation, ResourceLocation> STRUCTURE_ICONS = ImmutableMap.<ResourceLocation, ResourceLocation>builder()
         .put(ModernBetaStructures.VILLAGE, ModernBeta.createRegistryKey("textures/gui/preview/village.png"))
@@ -107,6 +112,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_GENERATE = 2;
     private static final int GUI_ID_CANCEL = 3;
     private static final int GUI_ID_STRUCTURES = 4;
+    private static final int GUI_ID_SCREENSHOT = 5;
     
     private static final long COPIED_SEED_WAIT_TIME = 1000L;
     
@@ -135,6 +141,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiListButton buttonStructures;
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
+    private GuiButtonBounded buttonScreenshot;
     private EmptyListPreset list;
     @SuppressWarnings("unused")
     private ProgressState prevState;
@@ -151,6 +158,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private boolean haltGeneration;
     private long hoveredStructurePos;
     private boolean hoveredStructure;
+    private boolean savingScreenshot;
     
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, PreviewSettings previewSettings) {
         this.title = I18n.format(PREFIX + "title");
@@ -176,34 +184,42 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     @Override
     public void initGui() {
+        this.list = new EmptyListPreset(this);
+        
         int zoomNdX = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
         
-        int generateX = this.width / 2 - BUTTON_SPACE / 2 - BUTTON_LARGE_WIDTH;
-        int cancelX = this.width / 2 + BUTTON_SPACE / 2;
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+
+        int viewportSize = this.getViewportSize();
+        int textureX = centerX - viewportSize / 2;
+        int textureY = centerY - viewportSize / 2 - MAP_Y_OFFSET;
+        
+        int generateX = centerX - BUTTON_SPACE / 2 - BUTTON_LARGE_WIDTH;
+        int cancelX = centerX + BUTTON_SPACE / 2;
         
         int zoomX = generateX;
         int biomeX = zoomX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
         int structureX = biomeX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
         
+        int screenshotX = textureX + viewportSize + BUTTON_SPACE / 2;
+        int screenshotY = textureY - BUTTON_SPACE / 2;
+        
         this.buttonList.clear();
         this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "generate")));
         this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format("gui.cancel")));
-
+        
         this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, zoomX, this.height - 50, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdX, this));
         this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
         this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
+        
+        this.buttonScreenshot = this.addButton(new GuiButtonBounded(GUI_ID_SCREENSHOT, screenshotX, screenshotY, 20, 20, "\u2399"));
 
         this.sliderZoom.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
         this.buttonStructures.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
         this.buttonStructures.setValue(this.previewSettings.useStructures);
-        
-        this.list = new EmptyListPreset(this);
-
-        int viewportSize = this.getViewportSize();
-        int textureX = this.width / 2 - viewportSize / 2;
-        int textureY = this.height / 2 - viewportSize / 2 - MAP_Y_OFFSET;
         
         this.mapBounds.updateBounds(textureX, textureY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
@@ -276,6 +292,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         switch(this.state) {
             case SUCCEEDED:
                 this.mapTexture.loadMapTexture();
+                this.buttonScreenshot.enabled = true;
                 this.updateState(ProgressState.LOADED);
                 // Allow cascading into LOADED case for smooth transition
         
@@ -289,6 +306,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
                 this.drawCardinalDirections(viewportSize);
                 this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
+                this.drawScreenshotTooltip(this.buttonScreenshot, mouseX, mouseY);
                 break;
                 
             case STARTED:
@@ -550,8 +568,33 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 }
                 
                 break;
+            case GUI_ID_SCREENSHOT:
+                if (this.state != ProgressState.LOADED) {
+                    break;
+                }
+
+                this.savingScreenshot = true;
+                this.executor.queueRunnable(() -> {
+                    try {
+                        int zoom = this.selectedPreviewSettings.zoom;
+                        String screenshotPath = String.format("%s_%d.png", this.getFormattedSeed(), zoom);
+                        File screenshotFile = new File(SCREENSHOT_DIR, screenshotPath);
+                        screenshotFile = screenshotFile.getCanonicalFile();
+                        
+                        ImageIO.write(this.mapTexture.getMapImage(), "png", screenshotFile);
+                        ModernBeta.log(Level.DEBUG, String.format("Saved preview screenshot to %s..", screenshotFile));
+                        
+                        this.savingScreenshot = false;
+                        this.updateButtonValidity();
+                    } catch (IOException e) {
+                        ModernBeta.log(Level.ERROR, "Couldn't save preview image!");
+                        ModernBeta.log(Level.ERROR, e.getLocalizedMessage());
+                    }
+                });
+
+                break;
         }
-        
+
         this.updateButtonValidity();
     }
     
@@ -712,8 +755,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             float progress = info.iconProgress;
             float alpha = info.iconAlpha;
             
-            int iconSize = STRUCTURE_ICON_SIZE;
-            int iconOffset = STRUCTURE_ICON_SIZE / 2;
+            float iconSize = STRUCTURE_ICON_SIZE;
+            float iconOffset = iconSize / 2.0f;
 
             if (this.hoveredStructurePos == chunkPos) {
                 progress = (float)MathHelper.clampedLerp(progress, 2.0f, partialTicks);
@@ -748,12 +791,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             textureX += startTextureX;
             textureY += startTextureY;
             
-            int textureL = (int)textureX - iconOffset;
-            int textureR = (int)textureX - iconOffset + iconSize;
-            int textureT = (int)textureY - iconOffset;
-            int textureB = (int)textureY - iconOffset + iconSize;
+            float textureL = textureX - iconOffset;
+            float textureR = textureX - iconOffset + iconSize;
+            float textureT = textureY - iconOffset;
+            float textureB = textureY - iconOffset + iconSize;
             
-            bounds.updateBounds(textureL, textureT, iconSize, iconSize);
+            bounds.updateBounds((int)textureL, (int)textureT, (int)iconSize, (int)iconSize);
 
             GlStateManager.color(1.0F, 1.0F, 1.0F, info.iconAlpha);
             this.parent.mc.getTextureManager().bindTexture(STRUCTURE_ICONS.get(structure));
@@ -788,6 +831,24 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
 
+    private void drawScreenshotTooltip(GuiButtonBounded guiButton, int mouseX, int mouseY) {
+        if (guiButton.visible && guiButton.isHovered(mouseX, mouseY)) {
+            String text = I18n.format(PREFIX + "screenshot");
+            int textWidth = this.fontRenderer.getStringWidth(text);
+            
+            int rectX = guiButton.x - textWidth - BUTTON_SPACE * 2 - 2;
+            int rectY = guiButton.y + 2;
+            int rectW = rectX + textWidth + BUTTON_SPACE * 2;
+            int rectH = rectY + guiButton.height - 4;
+            
+            int textX = rectX + BUTTON_SPACE;
+            int textY = guiButton.y + guiButton.height / 2 - this.fontRenderer.FONT_HEIGHT / 2;
+            
+            drawRect(rectX, rectY, rectW, rectH, ARGB_PROGRESS_BOX);
+            this.fontRenderer.drawStringWithShadow(text, textX, textY, GuiColors.RGB_WHITE);
+        }
+    }
+
     private void unloadMapTexture(MapTexture mapTexture) {
         if (mapTexture != null) {
             mapTexture.unloadAll();
@@ -811,6 +872,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonStructures.enabled = enabled;
         this.buttonGenerate.enabled = enabled && (!this.previewSettings.equals(this.selectedPreviewSettings) || this.worldSeed.isEmpty());
         this.buttonCancel.enabled = notCanceled;
+        this.buttonScreenshot.enabled = !this.savingScreenshot && this.state == ProgressState.LOADED;
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
