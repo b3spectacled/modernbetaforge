@@ -141,6 +141,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     protected Map<Integer, GuiButton> pageTabMap;
 
     private ModernBetaGeneratorSettings.Factory settings;
+    private ModernBetaGeneratorSettings.Factory prevSettings;
+    private ModernBetaGeneratorSettings builtSettings;
     private GuiPageButtonList pageList;
     private GuiPageButtonList.GuiListEntry[][] pageArray;
     private GuiButton buttonDone;
@@ -1880,7 +1882,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 this.mc.displayGuiScreen(new GuiScreenCustomizePresets(this));
                 break;
             case GuiIdentifiers.FUNC_PRVW:
-                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.settings.build(), this.previewSettings));
+                this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.getBuiltSettings(), this.previewSettings));
                 break;
         }
         
@@ -2318,6 +2320,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
 
+    private ModernBetaGeneratorSettings getBuiltSettings() {
+        if (!this.settings.equals(this.prevSettings)) {
+            this.builtSettings = this.settings.build();
+            this.prevSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.settings.toString());
+        }
+        
+        return this.builtSettings;
+    }
+
     private void restoreDefaults() {
         String defaultPreset = PresetUtil.getDefaultPreset();
         this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
@@ -2356,7 +2367,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void updateSettingValidity() {
-        ModernBetaGeneratorSettings settings = this.settings.build();
+        ModernBetaGeneratorSettings settings = this.getBuiltSettings();
         this.enabledMap.clear();
         
         // Set default enabled for certain options
@@ -2383,7 +2394,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             }
         }
     }
-
+    
     private void modifyFocusValue(float amount) {
         Gui guiComponent = this.pageList.getFocusedControl();
         if (!(guiComponent instanceof GuiTextField)) {
@@ -2449,7 +2460,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private int getLevelSeaLevel() {
-        ModernBetaGeneratorSettings settings = this.settings.build();
+        ModernBetaGeneratorSettings settings = this.getBuiltSettings();
         BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
         ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
         
