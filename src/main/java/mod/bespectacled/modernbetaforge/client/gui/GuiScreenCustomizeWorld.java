@@ -236,15 +236,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int layerTypeId = GenLayerType.fromId(this.settings.layerType).ordinal();
         int oreTypeId = OreType.fromId(this.settings.oreType).ordinal();
         
-        List<String> loadedMods = new ArrayList<>(ModCompat.LOADED_MODS.keySet());
-        StringBuilder loadedModsList = new StringBuilder();
-        
-        if (loadedMods.isEmpty()) { 
-            loadedModsList.append("n/a");
-        } else if (loadedMods.size() > 0) {
-            loadedModsList.append(loadedMods.get(0));
-        }
-        
         boolean useMenu = ModernBetaConfig.guiOptions.useMenusForBasicSettings;
         GuiPageButtonList.GuiListEntry chunkEntry = useMenu ? 
             createGuiButton(GuiIdentifiers.PG0_B_CHUNK, NbtTags.CHUNK_SOURCE, true) :
@@ -2376,10 +2367,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 int[] guiIds = entry.getValue().getIds();
                 boolean enabled = entry.getValue().test(settings) && this.isFocused;
                 
-                for (int i = 0; i < guiIds.length; ++i) {
-                    this.setGuiEnabled(guiIds[i], enabled);
-                }
-                
                 if (guiIds.length <= 0) {
                     if (this.propertyMap.containsValue(entry.getKey())) {
                         int customId = this.propertyMap.inverse().get(entry.getKey());
@@ -2389,6 +2376,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     if (this.guiPropertyMap.containsValue(entry.getKey())) {
                         int customId = this.guiPropertyMap.inverse().get(entry.getKey());
                         this.setGuiEnabled(customId, enabled);
+                    }
+                } else {
+                    for (int i = 0; i < guiIds.length; ++i) {
+                        this.setGuiEnabled(guiIds[i], enabled);
                     }
                 }
             }
