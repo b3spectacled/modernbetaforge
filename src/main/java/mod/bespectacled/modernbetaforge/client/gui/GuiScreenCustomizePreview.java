@@ -522,14 +522,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (mouseButton == 0) {
             if (this.seedFieldBounds.isHovered()) {
                 GuiScreen.setClipboardString(this.getFormattedSeed());
-                ModernBeta.log(I18n.format(PREFIX + "copied"));
+                ModernBeta.log(Level.DEBUG, I18n.format(PREFIX + "copiedSeed"));
 
                 this.copyState = CopyState.SEED;
                 this.copiedTime = System.currentTimeMillis();
                 
             } else if (this.useSeedLabelBounds.isHovered()) {
                 this.parent.setWorldSeed(this.getFormattedSeed());
-                ModernBeta.log(I18n.format(PREFIX + "copiedField"));
+                ModernBeta.log(Level.DEBUG, I18n.format(PREFIX + "copiedUseSeed"));
                 
                 this.copyState = CopyState.USE_SEED;
                 this.copiedTime = System.currentTimeMillis();
@@ -538,7 +538,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 if (this.tpCallback != null) {
                     GuiScreen.setClipboardString(this.tpCallback.get());
                 }
-                ModernBeta.log(I18n.format(PREFIX + "copiedTp"));
+                ModernBeta.log(Level.DEBUG, I18n.format(PREFIX + "copiedTp"));
                 
                 this.copyState = CopyState.TELEPORT;
                 this.copiedTime = System.currentTimeMillis();
