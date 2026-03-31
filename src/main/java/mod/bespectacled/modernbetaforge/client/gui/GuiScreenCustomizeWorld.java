@@ -1787,7 +1787,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     public void setSettingsModified(boolean settingsModified) {
         this.settingsModified = settingsModified;
-        this.buttonDefaults.enabled = settingsModified && this.isFocused && !this.clickedRandom;
+        this.buttonDefaults.enabled = settingsModified && this.isFocused;
     }
     
     public void setPreviewSettings(PreviewSettings previewSettings) {
@@ -2337,15 +2337,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void updateButtonValidity() {
-        boolean isInteractable = this.isFocused && !this.clickedRandom;
         int page = this.pageList.getPage();
         
         // Primary buttons
-        this.buttonRandomize.enabled = isInteractable && (page < 5 || page == 6);
-        this.buttonDone.enabled = isInteractable;
-        this.buttonDefaults.enabled = isInteractable && this.settingsModified;
-        this.buttonPresets.enabled = isInteractable;
-        this.buttonPreview.enabled = isInteractable;
+        this.buttonRandomize.enabled =  this.isFocused && !this.clickedRandom && (page < 5 || page == 6);
+        this.buttonDone.enabled = this.isFocused;
+        this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
+        this.buttonPresets.enabled = this.isFocused;
+        this.buttonPreview.enabled = this.isFocused;
         
         // Tab buttons
         for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
