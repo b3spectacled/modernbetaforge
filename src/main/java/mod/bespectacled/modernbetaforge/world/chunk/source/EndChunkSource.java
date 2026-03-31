@@ -10,7 +10,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 
 public class EndChunkSource extends SkylandsChunkSource {
-    private final PerlinOctaveNoise scaleOctaveNoise;
     private final NoiseGeneratorSimplex islandNoise;
     
     public EndChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
@@ -20,26 +19,14 @@ public class EndChunkSource extends SkylandsChunkSource {
         new PerlinOctaveNoise(random, 16, true);
         new PerlinOctaveNoise(random, 16, true);
         new PerlinOctaveNoise(random, 8, true);
-        this.scaleOctaveNoise = new PerlinOctaveNoise(random, 10, true);
+        new PerlinOctaveNoise(random, 10, true);
         new PerlinOctaveNoise(random, 16, true);
         this.islandNoise = new NoiseGeneratorSimplex(random);
     }
     
     @Override
     protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
-        int noiseX = startNoiseX + localNoiseX;
-        int noiseZ = startNoiseZ + localNoiseZ;
-
-        double scaleNoiseScaleX = this.settings.scaleNoiseScaleX;
-        double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;
-
-        double scale = this.scaleOctaveNoise.scaledSample(noiseX, noiseZ, scaleNoiseScaleX, scaleNoiseScaleZ);
-        double depth = this.getIslandDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ);
-
-        scale = MathHelper.clamp(scale, 0.0, 1.0);
-        scale += 0.5;
-        
-        return new NoiseHeight(scale, depth);
+        return new NoiseHeight(0.0, this.getIslandDepth(startNoiseX, startNoiseZ, localNoiseX, localNoiseZ));
     }
 
     @Override

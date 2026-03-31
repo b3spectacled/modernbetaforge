@@ -447,8 +447,6 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_MAIN_NS_X,
                 GuiIdentifiers.PG4_S_MAIN_NS_Y,
                 GuiIdentifiers.PG4_S_MAIN_NS_Z,
-                GuiIdentifiers.PG4_S_SCLE_NS_X,
-                GuiIdentifiers.PG4_S_SCLE_NS_Z,
                 GuiIdentifiers.PG4_S_COORD_SCL,
                 GuiIdentifiers.PG4_S_HEIGH_SCL,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
