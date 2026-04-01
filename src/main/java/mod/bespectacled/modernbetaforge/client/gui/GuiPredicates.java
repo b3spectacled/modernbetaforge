@@ -26,6 +26,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlpha;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
+import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
@@ -53,6 +54,7 @@ public class GuiPredicates {
         GuiIdentifiers.PG4_S_HEIGH_LIM
     );
     
+    private static final BiomeSource DUMMY_BIOME_SOURCE = new SingleBiomeSource(0L, ModernBetaGeneratorSettings.build());
     private static final MapGenStronghold STRONGHOLD = new MapGenStronghold();
     
     public static final GuiPredicate SURFACE_BUILDER_TEST;
@@ -173,8 +175,7 @@ public class GuiPredicates {
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
     public static boolean isChunkInstanceOf(ModernBetaGeneratorSettings settings, Class<?> clazz) {
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, DUMMY_BIOME_SOURCE);
         
         return clazz.isAssignableFrom(chunkSource.getClass());
     }
@@ -206,10 +207,7 @@ public class GuiPredicates {
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, biomeSource);
-        
-        return chunkSource instanceof FiniteChunkSource;
+        return isChunkInstanceOf(settings, FiniteChunkSource.class);
     }
     
     private static boolean isSingleBiome(ModernBetaGeneratorSettings settings) {
@@ -269,8 +267,7 @@ public class GuiPredicates {
     
     private static boolean containsNoiseSetting(ModernBetaGeneratorSettings settings, int guiId) {
         ResourceLocation registryKey = settings.chunkSource;
-        BiomeSource biomeSource = ModernBetaRegistries.BIOME_SOURCE.get(settings.biomeSource).apply(0L, settings);
-        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings, biomeSource);
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings, DUMMY_BIOME_SOURCE);
         
         if (!(chunkSource instanceof NoiseChunkSource)) {
             return false;
