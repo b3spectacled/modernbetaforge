@@ -132,6 +132,7 @@ public class NbtTags {
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";
     public static final String DETAIL_NOISE_SCALE = "detailNoiseScale";
+    public static final String USE_TERRAIN_COORD_FIX = "useTerrainCoordFix";
     
     public static final String BIOME_DEPTH_WEIGHT = "biomeDepthWeight";
     public static final String BIOME_DEPTH_OFFSET = "biomeDepthOffset";

@@ -165,6 +165,7 @@ public class ModernBetaGeneratorSettings {
     public final float tempNoiseScale;
     public final float rainNoiseScale;
     public final float detailNoiseScale;
+    public final boolean useTerrainCoordFix;
     public final int snowLineOffset;
     public final boolean useClimateFeatures;
     
@@ -405,6 +406,7 @@ public class ModernBetaGeneratorSettings {
         this.tempNoiseScale = factory.tempNoiseScale;
         this.rainNoiseScale = factory.rainNoiseScale;
         this.detailNoiseScale = factory.detailNoiseScale;
+        this.useTerrainCoordFix = factory.useTerrainCoordFix;
         this.snowLineOffset = factory.snowLineOffset;
         this.useClimateFeatures = factory.useClimateFeatures;
         
@@ -708,6 +710,7 @@ public class ModernBetaGeneratorSettings {
         public float tempNoiseScale;
         public float rainNoiseScale;
         public float detailNoiseScale;
+        public boolean useTerrainCoordFix;
         public int snowLineOffset;
         public boolean useClimateFeatures;
         
@@ -948,6 +951,7 @@ public class ModernBetaGeneratorSettings {
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
             this.detailNoiseScale = 1.0f;
+            this.useTerrainCoordFix = false;
             this.snowLineOffset = 64;
             this.useClimateFeatures = true;
             
@@ -1211,6 +1215,7 @@ public class ModernBetaGeneratorSettings {
                 Float.compare(factory.tempNoiseScale, this.tempNoiseScale) == 0 &&
                 Float.compare(factory.rainNoiseScale, this.rainNoiseScale) == 0 &&
                 Float.compare(factory.detailNoiseScale, this.detailNoiseScale) == 0 &&
+                this.useTerrainCoordFix == factory.useTerrainCoordFix &&
                 this.snowLineOffset == factory.snowLineOffset &&
                 this.useClimateFeatures == factory.useClimateFeatures &&
                 
@@ -1455,6 +1460,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
             hashCode = 31 * hashCode + ((this.detailNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.detailNoiseScale));
+            hashCode = 31 * hashCode + (this.useTerrainCoordFix ? 1 : 0);
             hashCode = 31 * hashCode + this.snowLineOffset;
             hashCode = 31 * hashCode + (this.useClimateFeatures ? 1 : 0);
             
@@ -1734,6 +1740,7 @@ public class ModernBetaGeneratorSettings {
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
                 factory.detailNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
+                factory.useTerrainCoordFix = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TERRAIN_COORD_FIX, factory.useTerrainCoordFix);
                 factory.snowLineOffset = JsonUtils.getInt(jsonObject, NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
                 factory.useClimateFeatures = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
                 
@@ -2175,6 +2182,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
             jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
+            jsonObject.addProperty(NbtTags.USE_TERRAIN_COORD_FIX, factory.useTerrainCoordFix);
             jsonObject.addProperty(NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
             jsonObject.addProperty(NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
 

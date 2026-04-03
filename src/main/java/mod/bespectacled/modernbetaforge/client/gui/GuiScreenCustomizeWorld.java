@@ -497,7 +497,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
             createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
-            null,
+            createGuiButton(GuiIdentifiers.PG4_B_TERR_FIX, NbtTags.USE_TERRAIN_COORD_FIX, this.settings.useTerrainCoordFix),
             
             createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page4", "release"),
             null,
@@ -1315,6 +1315,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.useInfdevPyramids = entryValue;
                     break;
                     
+                case GuiIdentifiers.PG4_B_TERR_FIX:
+                    this.settings.useTerrainCoordFix = entryValue;
+                    break;
                 case GuiIdentifiers.PG4_B_USE_BDS:
                     this.settings.useBiomeDepthScale = entryValue;
                     break;

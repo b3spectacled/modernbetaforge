@@ -17,6 +17,7 @@ public class BetaChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise forestOctaveNoise;
     
     private final ClimateSampler climateSampler;
+    private final boolean useTerrainCoordFix;
 
     public BetaChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
         super(seed, settings, biomeSource);
@@ -30,6 +31,7 @@ public class BetaChunkSource extends NoiseChunkSource {
         this.climateSampler = biomeSource instanceof ClimateSampler ?
             (ClimateSampler)biomeSource :
             this.createClimateSampler(seed, settings);
+        this.useTerrainCoordFix = settings.useTerrainCoordFix;
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
@@ -38,12 +40,14 @@ public class BetaChunkSource extends NoiseChunkSource {
 
     @Override
     protected NoiseHeight sampleNoiseHeight(int startNoiseX, int startNoiseZ, int localNoiseX, int localNoiseZ) {
-        int horizNoiseResolution = 16 / (this.noiseSizeX + 1);
-        int x = (startNoiseX / this.noiseSizeX * 16) + localNoiseX * horizNoiseResolution + horizNoiseResolution / 2;
-        int z = (startNoiseZ / this.noiseSizeZ * 16) + localNoiseZ * horizNoiseResolution + horizNoiseResolution / 2;
+        int horizNoiseResolutionX = 16 / (this.noiseSizeX + 1);
+        int horizNoiseResolutionZ = 16 / (this.noiseSizeZ + 1);
         
         int noiseX = startNoiseX + localNoiseX;
         int noiseZ = startNoiseZ + localNoiseZ;
+        
+        int x = this.useTerrainCoordFix ? noiseX << 2 : startNoiseX / this.noiseSizeX * 16 + localNoiseX * horizNoiseResolutionX + horizNoiseResolutionX / 2;
+        int z = this.useTerrainCoordFix ? noiseZ << 2 : startNoiseZ / this.noiseSizeZ * 16 + localNoiseZ * horizNoiseResolutionZ + horizNoiseResolutionZ / 2;
         
         double scaleNoiseScaleX = this.settings.scaleNoiseScaleX;
         double scaleNoiseScaleZ = this.settings.scaleNoiseScaleZ;

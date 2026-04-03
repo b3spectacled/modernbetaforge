@@ -287,7 +287,7 @@ createWorld.customize.custom.modernbetaforge.magmaCount=Magma Count
 createWorld.customize.custom.modernbetaforge.magmaMinHeight=Magma Min Height
 createWorld.customize.custom.modernbetaforge.magmaMaxHeight=Magma Max Height
 
-# Page 5/6
+# Page 5/6 - Noise
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleX=Main Noise Scale X
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleY=Main Noise Scale Y
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleZ=Main Noise Scale Z
@@ -305,6 +305,7 @@ createWorld.customize.custom.modernbetaforge.height=World Height
 createWorld.customize.custom.modernbetaforge.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.modernbetaforge.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.modernbetaforge.detailNoiseScale=Detail Noise Scale
+createWorld.customize.custom.modernbetaforge.useTerrainCoordFix=Terrain Coordinate Fix
 createWorld.customize.custom.modernbetaforge.biomeDepthWeight=Biome Depth Weight
 createWorld.customize.custom.modernbetaforge.biomeDepthOffset=Biome Depth Offset
 createWorld.customize.custom.modernbetaforge.biomeScaleWeight=Biome Scale Weight

@@ -270,6 +270,7 @@ public class GuiIdentifiers {
     public static final int PG4_S_TEMP_SCL = 520;
     public static final int PG4_S_RAIN_SCL = 521;
     public static final int PG4_S_DETL_SCL = 522;
+    public static final int PG4_B_TERR_FIX = 523;
     
     public static final int PG4_S_SCLE_NS_X = 524;
     public static final int PG4_S_SCLE_NS_Z = 525;
