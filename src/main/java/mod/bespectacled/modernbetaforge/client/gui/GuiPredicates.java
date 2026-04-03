@@ -300,7 +300,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_STRETCH_Y,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_B_TERR_FIX
             )
         );
         
@@ -397,22 +398,7 @@ public class GuiPredicates {
 
         NOISE_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.PE.getRegistryKey(),
-            ImmutableList.of(
-                GuiIdentifiers.PG4_S_MAIN_NS_X,
-                GuiIdentifiers.PG4_S_MAIN_NS_Y,
-                GuiIdentifiers.PG4_S_MAIN_NS_Z,
-                GuiIdentifiers.PG4_S_SCLE_NS_X,
-                GuiIdentifiers.PG4_S_SCLE_NS_Z,
-                GuiIdentifiers.PG4_S_DPTH_NS_X,
-                GuiIdentifiers.PG4_S_DPTH_NS_Z,
-                GuiIdentifiers.PG4_S_BASE_SIZE,
-                GuiIdentifiers.PG4_S_COORD_SCL,
-                GuiIdentifiers.PG4_S_HEIGH_SCL,
-                GuiIdentifiers.PG4_S_STRETCH_Y,
-                GuiIdentifiers.PG4_S_UPPER_LIM,
-                GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
-            )
+            NOISE_SETTINGS.get(ModernBetaBuiltInTypes.Chunk.BETA.getRegistryKey())
         );
         
         NOISE_SETTINGS.put(
@@ -646,7 +632,7 @@ public class GuiPredicates {
         TEMP_NOISE_SCALE_TEST = new GuiPredicate(settings -> isBetaOrPESource(settings), GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
         RAIN_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
         DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);
-        USE_TERRAIN_COORD_FIX_TEST = new GuiPredicate(settings -> isBetaOrPEChunkSource(settings), GuiIdentifiers.PG4_B_TERR_FIX);
+        USE_TERRAIN_COORD_FIX_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_TERR_FIX), GuiIdentifiers.PG4_B_TERR_FIX);
         BIOME_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_WT), GuiIdentifiers.PG4_S_B_DPTH_WT, GuiIdentifiers.PG5_F_B_DPTH_WT);
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
