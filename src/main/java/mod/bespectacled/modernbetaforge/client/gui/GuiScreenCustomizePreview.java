@@ -98,6 +98,12 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int MAP_Y_OFFSET = 20;
     private static final int HINT_TEXT_OFFSET = 30;
     private static final int CENTERED_HINT_TEXT_OFFSET = 22;
+    private static final int BOX_W_PADDING = 56;
+    private static final int BOX_T_PADDING = 8;
+    private static final int BOX_B_PADDING = 18;
+    private static final int CENTERED_BOX_T_PADDING = 8;
+    private static final int CENTERED_BOX_B_PADDING = 8;
+    private static final int PROGRESS_BAR_W_PADDING = 10;
     private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
@@ -260,19 +266,19 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textureX = centerX - viewportSize / 2;
         int textureY = centerY - viewportSize / 2 - MAP_Y_OFFSET;
 
-        int boxL = centerX - 56;
-        int boxR = centerX + 56;
-        int boxT = centerY - HINT_TEXT_OFFSET - 8;
-        int boxB = centerY - PROGRESS_TEXT_OFFSET + 18;
+        int boxL = centerX - BOX_W_PADDING;
+        int boxR = centerX + BOX_W_PADDING;
+        int boxT = centerY - HINT_TEXT_OFFSET - BOX_T_PADDING;
+        int boxB = centerY - PROGRESS_TEXT_OFFSET + BOX_B_PADDING;
         
         int centeredBoxL;
         int centeredBoxR;
-        int centeredBoxT = centerY - CENTERED_HINT_TEXT_OFFSET - 8;
-        int centeredBoxB = centerY - CENTERED_HINT_TEXT_OFFSET + this.fontRenderer.FONT_HEIGHT + 8;
+        int centeredBoxT = centerY - CENTERED_HINT_TEXT_OFFSET - CENTERED_BOX_T_PADDING;
+        int centeredBoxB = centerY - CENTERED_HINT_TEXT_OFFSET + this.fontRenderer.FONT_HEIGHT + CENTERED_BOX_B_PADDING;
         
         int progressHeight = centerY - PROGRESS_TEXT_OFFSET;
-        int progressBarLen = boxR - boxL - 20;
-        int progressBarL = boxL + 10;
+        int progressBarLen = boxR - boxL - PROGRESS_BAR_W_PADDING * 2;
+        int progressBarL = boxL + PROGRESS_BAR_W_PADDING;
         int progressBarR = progressBarL + progressBarLen;
 
         double progressLen = progressBarLen * this.progress;
