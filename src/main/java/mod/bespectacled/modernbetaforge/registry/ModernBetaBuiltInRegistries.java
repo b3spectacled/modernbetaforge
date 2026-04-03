@@ -351,6 +351,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.TEMP_NOISE_SCALE, GuiPredicates.TEMP_NOISE_SCALE_TEST);
         registry.register(GuiPredicate.RAIN_NOISE_SCALE, GuiPredicates.RAIN_NOISE_SCALE_TEST);
         registry.register(GuiPredicate.DETAIL_NOISE_SCALE, GuiPredicates.DETAIL_NOISE_SCALE_TEST);
+        registry.register(GuiPredicate.USE_TERRAIN_COORD_FIX, GuiPredicates.USE_TERRAIN_COORD_FIX_TEST);
         registry.register(GuiPredicate.SNOW_LINE_OFFSET, GuiPredicates.SNOW_LINE_OFFSET_TEST);
         registry.register(GuiPredicate.USE_CLIMATE_FEATURES, GuiPredicates.USE_CLIMATE_FEATURES_TEST);
         registry.register(GuiPredicate.BIOME_DEPTH_WEIGHT, GuiPredicates.BIOME_DEPTH_WEIGHT_TEST);
