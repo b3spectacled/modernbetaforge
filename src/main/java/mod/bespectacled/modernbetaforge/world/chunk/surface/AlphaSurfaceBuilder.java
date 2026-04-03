@@ -5,13 +5,12 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
-import mod.bespectacled.modernbetaforge.util.chunk.SurfaceNoiseChunk;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 
 public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
-    private final ChunkCache<SurfaceNoiseChunk> sandCache;
-    private final ChunkCache<SurfaceNoiseChunk> gravelCache;
-    private final ChunkCache<SurfaceNoiseChunk> surfaceCache;
+    private final ChunkCache<double[]> sandCache;
+    private final ChunkCache<double[]> gravelCache;
+    private final ChunkCache<double[]> surfaceCache;
     
     public AlphaSurfaceBuilder(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(chunkSource, settings, false, true, true);
@@ -30,7 +29,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     public boolean isPrimaryBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
-        double noise = this.sandCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
+        double noise = this.sandCache.get(chunkX, chunkZ)[(x & 0xF) + (z & 0xF) * 16];
         
         return noise + this.getSurfaceVariation(random) * 0.2 > 0.0;
     }
@@ -39,7 +38,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     public boolean isSecondaryBeach(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
-        double noise = this.gravelCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
+        double noise = this.gravelCache.get(chunkX, chunkZ)[(x & 0xF) + (z & 0xF) * 16];
         
         return noise + this.getSurfaceVariation(random) * 0.2 > 3.0;
     }
@@ -48,7 +47,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     public int sampleSurfaceDepth(int x, int z, Random random) {
         int chunkX = x >> 4;
         int chunkZ = z >> 4;
-        double noise = this.surfaceCache.get(chunkX, chunkZ).getNoise()[(x & 0xF) + (z & 0xF) * 16];
+        double noise = this.surfaceCache.get(chunkX, chunkZ)[(x & 0xF) + (z & 0xF) * 16];
         
         return (int)(noise / 3.0 + 3.0 + this.getSurfaceVariation(random) * 0.25);
     }
@@ -58,33 +57,27 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
         return surfaceDepth <= 0;
     }
     
-    private SurfaceNoiseChunk sampleSandNoise(int chunkX, int chunkZ) {
-        return new SurfaceNoiseChunk(
-            this.getBeachOctaveNoise().sampleAlpha(
-                chunkX << 4, chunkZ << 4, 0.0,
-                16, 16, 1,
-                0.03125, 0.03125, 1.0
-            )
+    private double[] sampleSandNoise(int chunkX, int chunkZ) {
+        return this.getBeachOctaveNoise().sampleAlpha(
+            chunkX << 4, chunkZ << 4, 0.0,
+            16, 16, 1,
+            0.03125, 0.03125, 1.0
         );
     }
     
-    private SurfaceNoiseChunk sampleGravelNoise(int chunkX, int chunkZ) {
-        return new SurfaceNoiseChunk(
-            this.getBeachOctaveNoise().sampleAlpha(
-                chunkZ << 4, 109.0134, chunkX << 4,
-                16, 1, 16,
-                0.03125, 1.0, 0.03125
-            )
+    private double[] sampleGravelNoise(int chunkX, int chunkZ) {
+        return this.getBeachOctaveNoise().sampleAlpha(
+            chunkZ << 4, 109.0134, chunkX << 4,
+            16, 1, 16,
+            0.03125, 1.0, 0.03125
         );
     }
     
-    private SurfaceNoiseChunk sampleSurfaceNoise(int chunkX, int chunkZ) {
-        return new SurfaceNoiseChunk(
-            this.getSurfaceOctaveNoise().sampleAlpha(
-                chunkX << 4, chunkZ << 4, 0.0,
-                16, 16, 1,
-                0.03125 * 2.0, 0.03125 * 2.0, 0.03125 * 2.0
-            )
+    private double[] sampleSurfaceNoise(int chunkX, int chunkZ) {
+        return this.getSurfaceOctaveNoise().sampleAlpha(
+            chunkX << 4, chunkZ << 4, 0.0,
+            16, 16, 1,
+            0.03125 * 2.0, 0.03125 * 2.0, 0.03125 * 2.0
         );
     }
 }

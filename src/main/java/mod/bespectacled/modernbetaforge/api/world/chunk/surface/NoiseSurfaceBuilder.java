@@ -205,7 +205,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
     /**
      * Determines whether the y-value is the correct height for generating beaches.
      * 
-     * @param y x-coordinate in block coordinates.
+     * @param y y-coordinate in block coordinates.
      * @return Whether beaches should generate at the given y-value.
      */
     public boolean atBeachDepth(int y) {
