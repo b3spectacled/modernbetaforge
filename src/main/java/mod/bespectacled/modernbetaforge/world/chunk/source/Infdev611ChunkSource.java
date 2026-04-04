@@ -5,7 +5,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 
 public class Infdev611ChunkSource extends AlphaChunkSource {
     public Infdev611ChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
-        super(seed, settings, biomeSource);
+        super(seed, settings, biomeSource, true);
     }
     
     @Override
