@@ -27,10 +27,12 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
@@ -187,6 +189,13 @@ public class GuiPredicates {
         return clazz.isAssignableFrom(biomeSource.getClass());
     }
     
+    public static boolean isCarverInstanceof(ModernBetaGeneratorSettings settings, Class<?> clazz) {
+        ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(settings.chunkSource).apply(0L, settings, DUMMY_BIOME_SOURCE);
+        MapGenBase caveCarver = ModernBetaRegistries.CAVE_CARVER.get(settings.caveCarver).apply(chunkSource, settings);
+        
+        return clazz.isAssignableFrom(caveCarver.getClass());
+    }
+    
     private static boolean isChunkEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Chunk type) {
         return settings.chunkSource.equals(type.getRegistryKey());
     }
@@ -197,14 +206,6 @@ public class GuiPredicates {
     
     private static boolean isSurfaceEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Surface type) {
         return settings.surfaceBuilder.equals(type.getRegistryKey());
-    }
-    
-    private static boolean isCarverEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Carver type) {
-        return settings.caveCarver.equals(type.getRegistryKey());
-    }
-    
-    private static boolean isCarverEnabled(ModernBetaGeneratorSettings settings) {
-        return !settings.caveCarver.equals(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey());
     }
     
     private static boolean isFiniteChunk(ModernBetaGeneratorSettings settings) {
@@ -460,7 +461,7 @@ public class GuiPredicates {
         REPLACE_BEACH_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverBeach.class), GuiIdentifiers.PG0_B_USE_BEACH);
         REPLACE_RIVER_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverRiver.class), GuiIdentifiers.PG0_B_USE_RIVER);
         SEA_LEVEL_TEST = new GuiPredicate(SURFACE_BUILDER_TEST::test, GuiIdentifiers.PG0_S_SEA_LEVEL);
-        CAVE_WIDTH_TEST = new GuiPredicate(settings -> !isCarverEqualTo(settings, ModernBetaBuiltInTypes.Carver.RELEASE) && isCarverEnabled(settings), GuiIdentifiers.PG0_S_CAVE_WIDTH);
+        CAVE_WIDTH_TEST = new GuiPredicate(settings -> isCarverInstanceof(settings, MapGenBetaCave.class), GuiIdentifiers.PG0_S_CAVE_WIDTH);
         CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
         CAVE_COUNT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_COUNT);
         CAVE_CHANCE_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
