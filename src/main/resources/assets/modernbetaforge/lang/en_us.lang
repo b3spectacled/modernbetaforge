@@ -535,6 +535,7 @@ commands.modernbetaforge.drawmap.progress=Map drawing %s%% completed
 commands.modernbetaforge.drawmap.success=Saved terrain map as %s
 commands.modernbetaforge.drawmap.failure=Could not draw terrain map
 commands.modernbetaforge.drawmap.generator=This command can only be used in a Modern Beta dimension
+commands.modernbetaforge.drawmap.sp=This command can only be used in a single-player world
 
 commands.modernbetaforge.setgeneratorsetting.usage=/modernbetaforge:setgeneratorsetting <setting> <value>
 commands.modernbetaforge.setgeneratorsetting.failure=Could not set %s, it may be invalid or not exist
