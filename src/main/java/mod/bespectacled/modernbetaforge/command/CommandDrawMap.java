@@ -91,7 +91,7 @@ public class CommandDrawMap extends ModernBetaCommand {
         }
     }
 
-    public BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
+    private BufferedImage drawMap(WorldServer worldServer, BlockPos center, int width, int length, Consumer<Float> progressTracker) throws IllegalStateException {
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         BiomeProvider biomeProvider = worldServer.getBiomeProvider();
         

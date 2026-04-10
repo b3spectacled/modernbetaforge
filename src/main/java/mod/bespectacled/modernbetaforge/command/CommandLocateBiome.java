@@ -23,6 +23,14 @@ public class CommandLocateBiome extends CommandLocate {
         super("locatebiome", CommandLocateBiome::locate);
     }
 
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        List<Biome> biomes = ForgeRegistryUtil.getValues(ForgeRegistries.BIOMES);
+        String[] biomeNames = biomes.stream().map(biome -> biome.getRegistryName().toString()).toArray(String[]::new);
+        
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, biomeNames) : Collections.emptyList();
+    }
+
     private static BlockPos locate(MinecraftServer server, ICommandSender sender, String[] args) {
         int senderX = sender.getPosition().getX();
         int senderZ = sender.getPosition().getZ();
@@ -32,13 +40,5 @@ public class CommandLocateBiome extends CommandLocate {
         
         ModernBetaBiomeProvider biomeProvider = (ModernBetaBiomeProvider)sender.getEntityWorld().getBiomeProvider();
         return biomeProvider.locateBiome(senderX, senderZ, RANGE, STEPS, biome, random);
-    }
-    
-    @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        List<Biome> biomes = ForgeRegistryUtil.getValues(ForgeRegistries.BIOMES);
-        String[] biomeNames = biomes.stream().map(biome -> biome.getRegistryName().toString()).toArray(String[]::new);
-        
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, biomeNames) : Collections.emptyList();
     }
 }
