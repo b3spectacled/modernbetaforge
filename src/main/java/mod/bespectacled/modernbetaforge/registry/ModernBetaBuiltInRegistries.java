@@ -31,6 +31,8 @@ import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPropertyScreenTest;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
@@ -255,6 +257,10 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiCustomizePresets.BETA_REALISTIC, GuiCustomizePresets.PRESET_BETA_REALISTIC);
         registry.register(GuiCustomizePresets.BETA_PLUS, GuiCustomizePresets.PRESET_BETA_PLUS);
         registry.register(GuiCustomizePresets.BETA_RELEASE, GuiCustomizePresets.PRESET_BETA_RELEASE);
+        
+        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
+            registry.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
+        }
         
         if (ModernBetaConfig.debugOptions.registerDebugNoiseChunkSource) {
             registry.register(GuiCustomizePresets.DEBUG_NOISE, GuiCustomizePresets.PRESET_DEBUG_NOISE);

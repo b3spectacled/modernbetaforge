@@ -522,6 +522,7 @@ createWorld.customize.custom.preset.modernbetaforge.beta_plus=Modern Beta Plus
 createWorld.customize.custom.preset.modernbetaforge.beta_pe=Modern Beta Pocket Edition
 createWorld.customize.custom.preset.modernbetaforge.beta_release=Modern Beta Release 1.12.2
 createWorld.customize.custom.preset.modernbetaforge.debug_noise=Debug Noise
+createWorld.customize.custom.preset.modernbetaforge.bop=Biomes O' Plenty
 
 createWorld.customize.custom.preset.info.modernbetaforge.classic_beta=Based on Minecraft Beta 1.7.3
 createWorld.customize.custom.preset.info.modernbetaforge.classic_alpha_1_2=Based on Minecraft Alpha 1.2.6
@@ -540,6 +541,7 @@ createWorld.customize.custom.preset.info.modernbetaforge.beta_realistic=Beta gen
 createWorld.customize.custom.preset.info.modernbetaforge.beta_plus=Beta generation with modern biomes
 createWorld.customize.custom.preset.info.modernbetaforge.beta_pe=Based on Minecraft PE v0.6.0 with Beta biomes
 createWorld.customize.custom.preset.info.modernbetaforge.beta_release=Release 1.12.2 generation with Beta biomes
+createWorld.customize.custom.preset.info.modernbetaforge.bop=Biomes O' Plenty world type generation
 
 ## Commands
 commands.modernbetaforge.locate.usage=/modernbetaforge:locate <structure>
