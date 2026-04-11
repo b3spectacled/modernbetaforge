@@ -398,19 +398,19 @@ createWorld.customize.custom.compatbiomesoplenty.biomesize.medium=Medium
 createWorld.customize.custom.compatbiomesoplenty.biomesize.large=Large
 createWorld.customize.custom.compatbiomesoplenty.biomesize.huge=Huge
 
-createWorld.customize.custom.compatbiomesoplenty.landscheme=Land Mass Scheme
+createWorld.customize.custom.compatbiomesoplenty.landscheme=Landmass
 createWorld.customize.custom.compatbiomesoplenty.landscheme.vanilla=Vanilla
 createWorld.customize.custom.compatbiomesoplenty.landscheme.continents=Continents
 createWorld.customize.custom.compatbiomesoplenty.landscheme.archipelago=Archipelago
 
-createWorld.customize.custom.compatbiomesoplenty.tempscheme=Temp Variation Scheme
+createWorld.customize.custom.compatbiomesoplenty.tempscheme=Temperature
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.latitude=Latitude
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.small_zones=Small Zones
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.medium_zones=Medium Zones
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.large_zones=Large Zones
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.random=Random
 
-createWorld.customize.custom.compatbiomesoplenty.rainscheme=Rain Variation Scheme
+createWorld.customize.custom.compatbiomesoplenty.rainscheme=Rainfall
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.small_zones=Small Zones
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.medium_zones=Medium Zones
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.large_zones=Large Zones
