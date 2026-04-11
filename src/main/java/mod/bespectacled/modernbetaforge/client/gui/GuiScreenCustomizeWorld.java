@@ -728,11 +728,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.width += PAGELIST_SCROLLBAR_PADDING;
         
         // Set text for primary options
-        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, -1));
-        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, -1));
-        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, -1));
-        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, -1));
-        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, -1));
+        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, DEFAULT_NAME_TRUNCATE_LEN));
         
         // Set text for default block options
         this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_NAME_TRUNCATE_LEN));
@@ -879,7 +879,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
-        
+
         return entryString + ": " + this.getFormattedValue(entry, entryValue);
     }
 
@@ -2589,13 +2589,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private static String getFormattedRegistryName(String registryName, String langName, int truncateLen) {
         ResourceLocation registryKey = new ResourceLocation(registryName);
-        String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
-        
-        // Truncate if registry name is too long to fit in button
-        if (truncateLen > 0 && formattedName.length() > truncateLen) {
-            formattedName = formattedName.substring(0, truncateLen) + "...";
-        }
-        
+        String formattedName = getTruncatedString(I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath())), truncateLen);
+
         return String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
     }
     
@@ -2631,14 +2626,17 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private static String getFormattedForgeRegistryName(String registryName, String langName, int truncateLen, Function<String, String> nameFormatter) {
-        String formattedName = nameFormatter.apply(registryName);
-        
-        // Truncate if biome name is too long to fit in button
-        if (truncateLen > 0 && formattedName.length() > truncateLen) {
-            formattedName = formattedName.substring(0, truncateLen) + "...";
-        }
+        String formattedName = getTruncatedString(nameFormatter.apply(registryName), truncateLen);
         
         return !langName.isEmpty() ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
+    }
+    
+    private static String getTruncatedString(String string, int truncateLen) {
+        if (truncateLen > 0 && string.length() > truncateLen) {
+            string = string.substring(0, truncateLen) + "...";
+        }
+        
+        return string;
     }
 
     private static int getNdx(int[] arr, int val) {

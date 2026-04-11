@@ -389,7 +389,33 @@ createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbiomesoplenty.coralreefchance=Coral Reef Chance
 createWorld.customize.custom.compatbiomesoplenty.kelpforestchance=Kelp Forest Chance
-createWorld.customize.custom.compatbiomesoplenty.info=Note: Release biome source only.
+createWorld.customize.custom.compatbiomesoplenty.kelpforestchance.info=Release biome source only.
+
+createWorld.customize.custom.compatbiomesoplenty.biomesize=Biome Size
+createWorld.customize.custom.compatbiomesoplenty.biomesize.tiny=Tiny
+createWorld.customize.custom.compatbiomesoplenty.biomesize.small=Small
+createWorld.customize.custom.compatbiomesoplenty.biomesize.medium=Medium
+createWorld.customize.custom.compatbiomesoplenty.biomesize.large=Large
+createWorld.customize.custom.compatbiomesoplenty.biomesize.huge=Huge
+
+createWorld.customize.custom.compatbiomesoplenty.landscheme=Land Mass Scheme
+createWorld.customize.custom.compatbiomesoplenty.landscheme.vanilla=Vanilla
+createWorld.customize.custom.compatbiomesoplenty.landscheme.continents=Continents
+createWorld.customize.custom.compatbiomesoplenty.landscheme.archipelago=Archipelago
+
+createWorld.customize.custom.compatbiomesoplenty.tempscheme=Temp Variation Scheme
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.latitude=Latitude
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.small_zones=Small Zones
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.medium_zones=Medium Zones
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.large_zones=Large Zones
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.random=Random
+
+createWorld.customize.custom.compatbiomesoplenty.rainscheme=Rain Variation Scheme
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.small_zones=Small Zones
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.medium_zones=Medium Zones
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.large_zones=Large Zones
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.random=Random
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.info=Biomes O' Plenty biome source only.
 
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.info=Note: Required for non-release biome sources only.
@@ -410,7 +436,7 @@ createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_420=Infdev 420
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_415=Infdev 415
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.infdev_611=Infdev 611
-createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.pe=Pocket Edition
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.release=Release
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.end=The End
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.indev=Indev
@@ -419,8 +445,9 @@ createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.debug_n
 
 createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.beta=Beta
 createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.single=Single Biome
-createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.pe=Pocket Ed.
+createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.pe=Pocket Edition
 createWorld.customize.custom.modernbetaforge.biomeSource.modernbetaforge.release=Release
+createWorld.customize.custom.modernbetaforge.biomeSource.compatbiomesoplenty.bop=Biomes O' Plenty
 
 createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.beta=Beta
 createWorld.customize.custom.modernbetaforge.surfaceBuilder.modernbetaforge.alpha=Alpha

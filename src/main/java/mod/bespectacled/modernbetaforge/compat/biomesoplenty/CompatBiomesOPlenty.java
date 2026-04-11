@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.compat.biomesoplenty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.Level;
 
@@ -9,10 +10,12 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
+import biomesoplenty.common.world.BOPWorldSettings;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
+import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -45,16 +48,32 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     public static final ResourceLocation KEY_KELP_FOREST_CHANCE = createKey("kelpForestChance");
     public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = createKey("resolverCoralReef");
     public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = createKey("resolverKelpForest");
+
+    public static final ResourceLocation KEY_BIOME_SOURCE = createKey("bop");
+    public static final ResourceLocation KEY_BIOME_SIZE = createKey("biomeSize");
+    public static final ResourceLocation KEY_LAND_SCHEME = createKey("landScheme");
+    public static final ResourceLocation KEY_TEMP_SCHEME = createKey("tempScheme");
+    public static final ResourceLocation KEY_RAIN_SCHEME = createKey("rainScheme");
     
     @Override
     public void load() {
         ModernBeta.log(Level.WARN, "Biomes O' Plenty has been detected, classic Nether settings will be disabled due to incompatibilties!");
+        String[] biomeSizes = Stream.of(BOPWorldSettings.BiomeSize.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
+        String[] landMassSchemes = Stream.of(BOPWorldSettings.LandMassScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
+        String[] tempVarySchemes = Stream.of(BOPWorldSettings.TemperatureVariationScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
+        String[] rainVarySchemes = Stream.of(BOPWorldSettings.RainfallVariationScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
         
-        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(true));
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_CORAL_REEF_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.PROPERTY.register(KEY_KELP_FOREST_CHANCE, new FloatProperty(0.25f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);
+        
+        ModernBetaRegistries.BIOME_SOURCE.register(KEY_BIOME_SOURCE, BiomesOPlentyBiomeSource::new);
+        ModernBetaRegistries.PROPERTY.register(KEY_BIOME_SIZE, new ListProperty(BOPWorldSettings.BiomeSize.MEDIUM.name().toLowerCase(), biomeSizes));
+        ModernBetaRegistries.PROPERTY.register(KEY_LAND_SCHEME, new ListProperty(BOPWorldSettings.LandMassScheme.VANILLA.name().toLowerCase(), landMassSchemes));
+        ModernBetaRegistries.PROPERTY.register(KEY_TEMP_SCHEME, new ListProperty(BOPWorldSettings.TemperatureVariationScheme.MEDIUM_ZONES.name().toLowerCase(), tempVarySchemes));
+        ModernBetaRegistries.PROPERTY.register(KEY_RAIN_SCHEME, new ListProperty(BOPWorldSettings.RainfallVariationScheme.MEDIUM_ZONES.name().toLowerCase(), rainVarySchemes));
     }
     
     @Override
@@ -72,6 +91,19 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_KELP_FOREST_CHANCE, new GuiPredicate(settings ->
             GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+        ));
+        
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_BIOME_SIZE, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
+        ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_LAND_SCHEME, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
+        ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_TEMP_SCHEME, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
+        ));
+            ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_RAIN_SCHEME, new GuiPredicate(settings ->
+            GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
         ));
     }
 
