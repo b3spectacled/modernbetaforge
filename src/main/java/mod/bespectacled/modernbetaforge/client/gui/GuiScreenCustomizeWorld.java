@@ -72,6 +72,8 @@ import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevType;
 import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
@@ -115,7 +117,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
     private static final int PAGELIST_SCROLLBAR_PADDING = 24;
-    private static final int DEFAULT_NAME_TRUNCATE_LEN = 12;
+    private static final int DEFAULT_NAME_TRUNCATE_LEN = 130;
 
     private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
@@ -742,49 +744,49 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, NbtTags.SINGLE_BIOME, DEFAULT_NAME_TRUNCATE_LEN));
         
         // Set biome text for Beta Biome buttons
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
-        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
         
         this.setPropertyText();
     }
@@ -2589,13 +2591,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private static String getFormattedRegistryName(String registryName, String langName, int truncateLen) {
         ResourceLocation registryKey = new ResourceLocation(registryName);
-        String formattedName = getTruncatedString(I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath())), truncateLen);
+        String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
+        String formattedText = String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
 
-        return String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
+        return getTruncatedString(formattedText, truncateLen);
     }
     
     private static String getFormattedBiomeName(String registryName) {
         return getFormattedBiomeName(registryName, "", -1);
+    }
+    
+    private static String getFormattedBiomeName(String registryName, int truncateLen) {
+        return getFormattedBiomeName(registryName, "", truncateLen);
     }
     
     private static String getFormattedBiomeName(String registryName, String langName, int truncateLen) {
@@ -2626,14 +2633,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private static String getFormattedForgeRegistryName(String registryName, String langName, int truncateLen, Function<String, String> nameFormatter) {
-        String formattedName = getTruncatedString(nameFormatter.apply(registryName), truncateLen);
+        String formattedName = nameFormatter.apply(registryName);
+        String formattedText = !langName.isEmpty() ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
         
-        return !langName.isEmpty() ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
+        return getTruncatedString(formattedText, truncateLen);
     }
     
     private static String getTruncatedString(String string, int truncateLen) {
-        if (truncateLen > 0 && string.length() > truncateLen) {
-            string = string.substring(0, truncateLen) + "...";
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        int stringWidth = fontRenderer.getStringWidth(string);
+        
+        if (truncateLen > 0 && stringWidth > truncateLen) {
+            string = fontRenderer.trimStringToWidth(string, truncateLen) + "...";
         }
         
         return string;
