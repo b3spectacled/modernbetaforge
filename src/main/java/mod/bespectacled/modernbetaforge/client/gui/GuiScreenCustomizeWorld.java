@@ -2249,38 +2249,59 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             case GuiIdentifiers.PG0_S_CHUNK: {
                 ResourceLocation registryKey = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue);
+                String registryName = I18n.format(PREFIX + NbtTags.CHUNK_SOURCE);
+                String registryEntry = I18n.format(PREFIX + NbtTags.CHUNK_SOURCE + "." + getFormattedRegistryString(registryKey));
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
                 
-                return I18n.format(PREFIX + "chunkSource." + getFormattedRegistryString(registryKey));
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_BIOME: {
                 ResourceLocation registryKey = ModernBetaRegistries.BIOME_SOURCE.getKeys().get((int)entryValue);
+                String registryName = I18n.format(PREFIX + NbtTags.BIOME_SOURCE);
+                String registryEntry = I18n.format(PREFIX + NbtTags.BIOME_SOURCE + "." + getFormattedRegistryString(registryKey));
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
                 
-                return I18n.format(PREFIX + "biomeSource." + getFormattedRegistryString(registryKey));
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_SURFACE: {
                 ResourceLocation registryKey = ModernBetaRegistries.SURFACE_BUILDER.getKeys().get((int)entryValue);
+                String registryName = I18n.format(PREFIX + NbtTags.SURFACE_BUILDER);
+                String registryEntry = I18n.format(PREFIX + NbtTags.SURFACE_BUILDER + "." + getFormattedRegistryString(registryKey));
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
                 
-                return I18n.format(PREFIX + "surfaceBuilder." + getFormattedRegistryString(registryKey));
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_CARVER: {
                 ResourceLocation registryKey = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue);
+                String registryName = I18n.format(PREFIX + NbtTags.CAVE_CARVER);
+                String registryEntry = I18n.format(PREFIX + NbtTags.CAVE_CARVER + "." + getFormattedRegistryString(registryKey));
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
                 
-                return I18n.format(PREFIX + "caveCarver." + getFormattedRegistryString(registryKey));
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_SPAWN: {
                 ResourceLocation registryKey = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue);
+                String registryName = I18n.format(PREFIX + NbtTags.WORLD_SPAWNER);
+                String registryEntry = I18n.format(PREFIX + NbtTags.WORLD_SPAWNER + "." + getFormattedRegistryString(registryKey));
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
                 
-                return I18n.format(PREFIX + "worldSpawner." + getFormattedRegistryString(registryKey));
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_BLOCK: {
                 ResourceLocation registryKey = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().get((int)entryValue);
-
-                return ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
+                String registryName = I18n.format(PREFIX + NbtTags.DEFAULT_BLOCK);
+                String registryEntry = ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
+                
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG0_S_FLUID: {
                 ResourceLocation registryKey = ForgeRegistryUtil.getFluidBlockRegistryNames().get((int)entryValue);
-                
-                return ForgeRegistryUtil.getFluidLocalizedName(registryKey);
+                String registryName = I18n.format(PREFIX + NbtTags.DEFAULT_FLUID);
+                String registryEntry = ForgeRegistryUtil.getFluidLocalizedName(registryKey);
+                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
+
+                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
             }
             case GuiIdentifiers.PG1_S_LEVEL_THEME: {
                 String key = IndevTheme.values()[(int)entryValue].id;
