@@ -47,7 +47,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     private final PerlinOctaveNoise surfaceOctaveNoise;
     private final PerlinOctaveNoise depthOctaveNoise;
     private final PerlinOctaveNoise forestOctaveNoise;
-    
+
+    private final boolean useNoiseBiomeSource;
     private final NoiseBiomeSource noiseBiomeSource;
 
     public ReleaseChunkSource(long seed, ModernBetaGeneratorSettings settings, BiomeSource biomeSource) {
@@ -58,8 +59,8 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         this.depthOctaveNoise = new PerlinOctaveNoise(this.random, 16, true);
         this.forestOctaveNoise = new PerlinOctaveNoise(this.random, 8, true);
 
-        this.noiseBiomeSource = biomeSource instanceof NoiseBiomeSource ?
-            (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(seed, settings);
+        this.useNoiseBiomeSource = biomeSource instanceof NoiseBiomeSource;
+        this.noiseBiomeSource = this.useNoiseBiomeSource ? (NoiseBiomeSource)biomeSource : new ReleaseNoiseBiomeSource(seed, settings);
 
         this.setBeachOctaveNoise(this.beachOctaveNoise);
         this.setSurfaceOctaveNoise(this.surfaceOctaveNoise);
@@ -162,8 +163,9 @@ public class ReleaseChunkSource extends NoiseChunkSource {
                 int bX = (noiseX + localBiomeX) << 2;
                 int bZ = (noiseZ + localBiomeZ) << 2;
                 
-                float curBaseHeight = this.sampleBiome(bX, bZ).getBaseHeight();
-                float curHeightVariation = this.sampleBiome(bX, bZ).getHeightVariation();
+                Biome localBiome = this.sampleBiome(bX, bZ);
+                float curBaseHeight = localBiome.getBaseHeight();
+                float curHeightVariation = localBiome.getHeightVariation();
                 
                 float curBiomeDepth = biomeDepthOffset + curBaseHeight * biomeDepthWeight;
                 float curBiomeScale = biomeScaleOffset + curHeightVariation * biomeScaleWeight;
@@ -236,14 +238,15 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     private Biome sampleBiome(int x, int z) {
         Biome biome = this.noiseBiomeSource.getBiome(x, z);
         
-        if (this.settings.useBiomeDepthScale &&
-            !BiomeDictionary.hasType(biome, Type.OCEAN) &&
-            !BiomeDictionary.hasType(biome, Type.RIVER)
-        ) {
+        if (this.settings.useBiomeDepthScale && !this.useNoiseBiomeSource && !isWater(biome)) {
             biome = this.biomeSource.getBiome(x, z);
         }
         
         return biome;
+    }
+    
+    private static boolean isWater(Biome biome) {
+        return BiomeDictionary.hasType(biome, Type.WATER);
     }
     
     static {
