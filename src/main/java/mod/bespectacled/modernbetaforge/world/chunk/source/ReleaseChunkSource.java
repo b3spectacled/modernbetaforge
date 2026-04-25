@@ -150,6 +150,9 @@ public class ReleaseChunkSource extends NoiseChunkSource {
         float biomeScaleWeight = this.settings.biomeScaleWeight;
         boolean useAmplified = this.settings.useAmplified;
         
+        float riverDepthWeight = this.settings.riverDepthWeight;
+        boolean deepenRivers = this.settings.deepenRivers;
+        
         double depth = this.depthOctaveNoise.scaledSample(noiseX, noiseZ, depthNoiseScaleX, depthNoiseScaleZ);
         
         double biomeScale = 0.0;
@@ -169,6 +172,10 @@ public class ReleaseChunkSource extends NoiseChunkSource {
                 
                 float curBiomeDepth = biomeDepthOffset + curBaseHeight * biomeDepthWeight;
                 float curBiomeScale = biomeScaleOffset + curHeightVariation * biomeScaleWeight;
+                
+                if (deepenRivers && isRiver(localBiome)) {
+                    curBiomeDepth *= riverDepthWeight;
+                }
                 
                 if (useAmplified && curBiomeDepth > 0.0) {
                     curBiomeDepth = 1.0f + curBiomeDepth * 2.0f;
@@ -247,6 +254,10 @@ public class ReleaseChunkSource extends NoiseChunkSource {
     
     private static boolean isWater(Biome biome) {
         return BiomeDictionary.hasType(biome, Type.WATER);
+    }
+    
+    private static boolean isRiver(Biome biome) {
+        return BiomeDictionary.hasType(biome, Type.RIVER);
     }
     
     static {

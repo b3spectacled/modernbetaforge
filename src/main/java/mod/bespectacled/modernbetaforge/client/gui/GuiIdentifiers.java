@@ -279,11 +279,14 @@ public class GuiIdentifiers {
     public static final int PG4_S_END_WT = 527;
     public static final int PG4_S_END_OUT_OF = 528;
     public static final int PG4_S_END_OUT_DT = 529;
+    
+    public static final int PG4_S_R_DPTH_WT = 530;
 
     public static final int PG4_SLIDER_END = 549;
     public static final int PG4_B_USE_BDS = 550;
     public static final int PG4_B_USE_END_OUT = 551;
     public static final int PG4_B_USE_AMP = 552;
+    public static final int PG4_B_DEEP_RIV = 553;
     
     // Labels
     public static final int PG4_L_BETA_LABL = 1500;
@@ -323,6 +326,8 @@ public class GuiIdentifiers {
     public static final int PG5_F_END_OUT_OF = 628;
     public static final int PG5_F_END_OUT_DT = 629;
     
+    public static final int PG5_F_R_DPTH_WT = 630;
+    
     public static final int PG5_FIELD_END = 649;
     
     // Labels
@@ -357,6 +362,8 @@ public class GuiIdentifiers {
     public static final int PG5_L_END_WT = 1626;
     public static final int PG5_L_END_OUT_OF = 1627;
     public static final int PG5_L_END_OUT_DT = 1628;
+    
+    public static final int PG5_L_R_DPTH_WT = 1629;
     
     /* Page 7 */
     
@@ -459,6 +466,7 @@ public class GuiIdentifiers {
         assertOffset(PG4_S_B_DPTH_OF, PG5_F_B_DPTH_OF);
         assertOffset(PG4_S_B_SCLE_WT, PG5_F_B_SCLE_WT);
         assertOffset(PG4_S_B_SCLE_OF, PG5_F_B_SCLE_OF);
+        assertOffset(PG4_S_R_DPTH_WT, PG5_F_R_DPTH_WT);
         
         assertOffset(PG4_S_SCLE_NS_X, PG5_F_SCLE_NS_X);
         assertOffset(PG4_S_SCLE_NS_Z, PG5_F_SCLE_NS_Z);

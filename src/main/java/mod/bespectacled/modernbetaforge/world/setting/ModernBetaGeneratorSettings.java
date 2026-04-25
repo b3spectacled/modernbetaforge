@@ -125,6 +125,8 @@ public class ModernBetaGeneratorSettings {
     public static final float MAX_BIOME_WEIGHT = 20.0f;
     public static final float MIN_BIOME_OFFSET = 0.0f;
     public static final float MAX_BIOME_OFFSET = 20.0f;
+    public static final float MIN_RIVER_WEIGHT = 1.0f;
+    public static final float MAX_RIVER_WEIGHT = 2.0f;
     public static final float MIN_END_OFFSET = 0.0f;
     public static final float MAX_END_OFFSET = 2000.0f;
     public static final float MIN_END_WEIGHT = 1.0f;
@@ -173,8 +175,10 @@ public class ModernBetaGeneratorSettings {
     public final float biomeDepthOffset;
     public final float biomeScaleWeight;
     public final float biomeScaleOffset;
+    public final float riverDepthWeight;
     public final boolean useBiomeDepthScale;
     public final boolean useAmplified;
+    public final boolean deepenRivers;
     public final int biomeSize;
     public final int riverSize;
     public final String layerType;
@@ -414,8 +418,10 @@ public class ModernBetaGeneratorSettings {
         this.biomeDepthOffset = factory.biomeDepthOffset;
         this.biomeScaleWeight = factory.biomeScaleWeight;
         this.biomeScaleOffset = factory.biomeScaleOffset;
+        this.riverDepthWeight = factory.riverDepthWeight;
         this.useBiomeDepthScale = factory.useBiomeDepthScale;
         this.useAmplified = factory.useAmplified;
+        this.deepenRivers = factory.deepenRivers;
         this.biomeSize = factory.biomeSize;
         this.riverSize = factory.riverSize;
         this.layerType = factory.layerType;
@@ -718,8 +724,10 @@ public class ModernBetaGeneratorSettings {
         public float biomeDepthOffset;
         public float biomeScaleWeight;
         public float biomeScaleOffset;
+        public float riverDepthWeight;
         public boolean useBiomeDepthScale;
         public boolean useAmplified;
+        public boolean deepenRivers;
         public int biomeSize;
         public int riverSize;
         public String layerType;
@@ -959,8 +967,10 @@ public class ModernBetaGeneratorSettings {
             this.biomeDepthOffset = 0.0f;
             this.biomeScaleWeight = 1.0f;
             this.biomeScaleOffset = 0.0f;
+            this.riverDepthWeight = 1.0f;
             this.useBiomeDepthScale = true;
             this.useAmplified = false;
+            this.deepenRivers = false;
             this.biomeSize = 4;
             this.riverSize = 4;
             this.layerType = GenLayerType.VANILLA.id;
@@ -1223,8 +1233,10 @@ public class ModernBetaGeneratorSettings {
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
                 Float.compare(factory.biomeScaleWeight, this.biomeScaleWeight) == 0 &&
                 Float.compare(factory.biomeScaleOffset, this.biomeScaleOffset) == 0 &&
+                Float.compare(factory.riverDepthWeight, this.riverDepthWeight) == 0 &&
                 this.useBiomeDepthScale == factory.useBiomeDepthScale &&
                 this.useAmplified == factory.useAmplified &&
+                this.deepenRivers == factory.deepenRivers &&
                 this.biomeSize == factory.biomeSize &&
                 this.riverSize == factory.riverSize &&
                 this.layerType.equals(factory.layerType) &&
@@ -1468,8 +1480,10 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
             hashCode = 31 * hashCode + ((this.biomeScaleWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeScaleWeight));
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
+            hashCode = 31 * hashCode + ((this.riverDepthWeight == 0.0f) ? 0 : Float.floatToIntBits(this.riverDepthWeight));
             hashCode = 31 * hashCode + (this.useBiomeDepthScale ? 1 : 0);
             hashCode = 31 * hashCode + (this.useAmplified ? 1 : 0);
+            hashCode = 31 * hashCode + (this.deepenRivers ? 1 : 0);
             hashCode = 31 * hashCode + this.biomeSize;
             hashCode = 31 * hashCode + this.riverSize;
             hashCode = 31 * hashCode + this.layerType.hashCode();
@@ -1748,8 +1762,10 @@ public class ModernBetaGeneratorSettings {
                 factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
                 factory.biomeScaleWeight = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
                 factory.biomeScaleOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
+                factory.riverDepthWeight = JsonUtils.getFloat(jsonObject, NbtTags.RIVER_DEPTH_WEIGHT, factory.riverDepthWeight);
                 factory.useBiomeDepthScale = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
                 factory.useAmplified = JsonUtils.getBoolean(jsonObject, NbtTags.USE_AMPLIFIED, factory.useAmplified);
+                factory.deepenRivers = JsonUtils.getBoolean(jsonObject, NbtTags.DEEPEN_RIVERS, factory.deepenRivers);
                 factory.biomeSize = JsonUtils.getInt(jsonObject, NbtTags.BIOME_SIZE, factory.biomeSize);
                 factory.riverSize = JsonUtils.getInt(jsonObject, NbtTags.RIVER_SIZE, factory.riverSize);
                 factory.layerType = JsonUtils.getString(jsonObject, NbtTags.LAYER_TYPE, factory.layerType);
@@ -1975,6 +1991,7 @@ public class ModernBetaGeneratorSettings {
                 factory.biomeDepthOffset = MathHelper.clamp(factory.biomeDepthOffset, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
                 factory.biomeScaleWeight = MathHelper.clamp(factory.biomeScaleWeight, MIN_BIOME_WEIGHT, MAX_BIOME_WEIGHT);
                 factory.biomeScaleOffset = MathHelper.clamp(factory.biomeScaleOffset, MIN_BIOME_OFFSET, MAX_BIOME_OFFSET);
+                factory.riverDepthWeight = MathHelper.clamp(factory.riverDepthWeight, MIN_RIVER_WEIGHT, MAX_RIVER_WEIGHT);
 
                 factory.biomeSize = MathHelper.clamp(factory.biomeSize, MIN_BIOME_SIZE, MAX_BIOME_SIZE);
                 factory.riverSize = MathHelper.clamp(factory.riverSize, MIN_RIVER_SIZE, MAX_RIVER_SIZE);
@@ -2190,8 +2207,10 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
             jsonObject.addProperty(NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
             jsonObject.addProperty(NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
+            jsonObject.addProperty(NbtTags.RIVER_DEPTH_WEIGHT, factory.riverDepthWeight);
             jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
             jsonObject.addProperty(NbtTags.USE_AMPLIFIED, factory.useAmplified);
+            jsonObject.addProperty(NbtTags.DEEPEN_RIVERS, factory.deepenRivers);
             jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
             jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
             jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);

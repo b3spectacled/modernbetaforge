@@ -507,6 +507,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
+            createGuiButton(GuiIdentifiers.PG4_B_DEEP_RIV, NbtTags.DEEPEN_RIVERS, this.settings.deepenRivers),
+            createGuiSlider(GuiIdentifiers.PG4_S_R_DPTH_WT, NbtTags.RIVER_DEPTH_WEIGHT, ModernBetaGeneratorSettings.MIN_RIVER_WEIGHT, ModernBetaGeneratorSettings.MAX_RIVER_WEIGHT, this.settings.riverDepthWeight, this),
             createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
             createGuiButton(GuiIdentifiers.PG4_B_USE_AMP, NbtTags.USE_AMPLIFIED, this.settings.useAmplified),
             
@@ -569,6 +571,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiField(GuiIdentifiers.PG5_F_B_SCLE_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
             createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_OF, I18n.format(PREFIX + NbtTags.BIOME_SCALE_OFFSET) + ":"),
             createGuiField(GuiIdentifiers.PG5_F_B_SCLE_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
+            createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_R_DPTH_WT, I18n.format(PREFIX + NbtTags.RIVER_DEPTH_WEIGHT) + ":"),
+            createGuiField(GuiIdentifiers.PG5_F_R_DPTH_WT, String.format("%2.3f", this.settings.riverDepthWeight), this.floatFilter),
             
             createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page5", "end"),
             null,
@@ -993,6 +997,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.biomeScaleOffset = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET);
                     newEntryValue = this.settings.biomeScaleOffset;
                     break;
+                case GuiIdentifiers.PG5_F_R_DPTH_WT:
+                    this.settings.riverDepthWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_RIVER_WEIGHT, ModernBetaGeneratorSettings.MAX_RIVER_WEIGHT);
+                    newEntryValue = this.settings.riverDepthWeight;
+                    break;
                 case GuiIdentifiers.PG5_F_END_WT:
                     this.settings.endIslandWeight = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_END_WEIGHT, ModernBetaGeneratorSettings.MAX_END_WEIGHT);
                     newEntryValue = this.settings.endIslandWeight;
@@ -1329,6 +1337,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG4_B_USE_AMP:
                     this.settings.useAmplified = entryValue;
                     break;
+                case GuiIdentifiers.PG4_B_DEEP_RIV:
+                    this.settings.deepenRivers = entryValue;
+                    break;
                     
                 case GuiIdentifiers.PG6_B_CLIMATE_FEAT:
                     this.settings.useClimateFeatures = entryValue;
@@ -1419,6 +1430,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_S_B_SCLE_OF:
                     this.settings.biomeScaleOffset = roundToThreeDec(entryValue);
+                    break;
+                case GuiIdentifiers.PG4_S_R_DPTH_WT:
+                    this.settings.riverDepthWeight = roundToThreeDec(entryValue);
                     break;
                 case GuiIdentifiers.PG4_S_END_OF:
                     this.settings.endIslandOffset = roundToThreeDec(entryValue);
@@ -2225,6 +2239,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG4_S_B_DPTH_OF:
             case GuiIdentifiers.PG4_S_B_SCLE_WT:
             case GuiIdentifiers.PG4_S_B_SCLE_OF:
+            case GuiIdentifiers.PG4_S_R_DPTH_WT:
             case GuiIdentifiers.PG4_S_END_WT:
             case GuiIdentifiers.PG4_S_END_OF:
             case GuiIdentifiers.PG4_S_END_OUT_OF:
@@ -2238,6 +2253,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.PG5_F_B_DPTH_OF:
             case GuiIdentifiers.PG5_F_B_SCLE_WT:
             case GuiIdentifiers.PG5_F_B_SCLE_OF:
+            case GuiIdentifiers.PG5_F_R_DPTH_WT:
             case GuiIdentifiers.PG5_F_END_WT:
             case GuiIdentifiers.PG5_F_END_OF:
             case GuiIdentifiers.PG5_F_END_OUT_OF:
