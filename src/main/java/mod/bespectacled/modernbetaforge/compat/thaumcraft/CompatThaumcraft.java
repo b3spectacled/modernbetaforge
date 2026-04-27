@@ -44,7 +44,9 @@ public class CompatThaumcraft implements Compat, ClientCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_MAGICAL_FOREST_CHANCE, new GuiPredicate(settings -> 
             !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
-        
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_MAGICAL_FOREST_NOISE_SCALE, new GuiPredicate(settings -> 
+            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+        ));
     }
 
 }

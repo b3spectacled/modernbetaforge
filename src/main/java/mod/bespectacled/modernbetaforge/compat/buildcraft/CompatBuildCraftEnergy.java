@@ -53,6 +53,12 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_OCEAN_CHANCE, new GuiPredicate(settings ->
             !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_DESERT_NOISE_SCALE, new GuiPredicate(settings ->
+            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+        ));
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_OCEAN_NOISE_SCALE, new GuiPredicate(settings ->
+            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+        ));
     }
 
 }
