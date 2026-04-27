@@ -166,7 +166,6 @@ public class GuiPredicates {
     public static final GuiPredicate RIVER_DEPTH_WEIGHT_TEST;
     public static final GuiPredicate USE_BIOME_DEPTH_SCALE_TEST;
     public static final GuiPredicate USE_AMPLIFIED_TEST;
-    public static final GuiPredicate DEEPEN_RIVERS_TEST;
     public static final GuiPredicate END_ISLAND_WEIGHT_TEST;
     public static final GuiPredicate END_ISLAND_OFFSET_TEST;
     public static final GuiPredicate END_OUTER_ISLAND_DISTANCE_TEST;
@@ -427,8 +426,7 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_R_DPTH_WT,
                 
                 GuiIdentifiers.PG4_B_USE_BDS,
-                GuiIdentifiers.PG4_B_USE_AMP,
-                GuiIdentifiers.PG4_B_DEEP_RIV
+                GuiIdentifiers.PG4_B_USE_AMP
             )
         );
         
@@ -642,10 +640,9 @@ public class GuiPredicates {
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);
         BIOME_SCALE_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_WT), GuiIdentifiers.PG4_S_B_SCLE_WT, GuiIdentifiers.PG5_F_B_SCLE_WT);
         BIOME_SCALE_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_SCLE_OF), GuiIdentifiers.PG4_S_B_SCLE_OF, GuiIdentifiers.PG5_F_B_SCLE_OF);
-        RIVER_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_R_DPTH_WT) && settings.deepenRivers, GuiIdentifiers.PG4_S_R_DPTH_WT, GuiIdentifiers.PG5_F_R_DPTH_WT);
+        RIVER_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_R_DPTH_WT), GuiIdentifiers.PG4_S_R_DPTH_WT, GuiIdentifiers.PG5_F_R_DPTH_WT);
         USE_BIOME_DEPTH_SCALE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_BDS) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class), GuiIdentifiers.PG4_B_USE_BDS);
         USE_AMPLIFIED_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_AMP), GuiIdentifiers.PG4_B_USE_AMP);
-        DEEPEN_RIVERS_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_DEEP_RIV), GuiIdentifiers.PG4_B_DEEP_RIV);
         END_ISLAND_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_WT), GuiIdentifiers.PG4_S_END_WT, GuiIdentifiers.PG5_F_END_WT);
         END_ISLAND_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OF), GuiIdentifiers.PG4_S_END_OF, GuiIdentifiers.PG5_F_END_OF);
         USE_END_OUTER_ISLANDS_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_USE_END_OUT), GuiIdentifiers.PG4_B_USE_END_OUT);

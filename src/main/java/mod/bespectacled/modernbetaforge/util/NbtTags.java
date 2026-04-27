@@ -136,10 +136,9 @@ public class NbtTags {
     public static final String BIOME_DEPTH_OFFSET = "biomeDepthOffset";
     public static final String BIOME_SCALE_WEIGHT = "biomeScaleWeight";
     public static final String BIOME_SCALE_OFFSET = "biomeScaleOffset";
+    public static final String RIVER_DEPTH_WEIGHT = "riverDepthWeight";
     public static final String USE_BIOME_DEPTH_SCALE = "useBiomeDepthScale";
     public static final String USE_AMPLIFIED = "useAmplified";
-    public static final String DEEPEN_RIVERS = "deepenRivers";
-    public static final String RIVER_DEPTH_WEIGHT = "riverDepthWeight";
     
     public static final String DESERT_BIOME_BASE = "desertBiomeBase";
     public static final String DESERT_BIOME_OCEAN = "desertBiomeOcean";

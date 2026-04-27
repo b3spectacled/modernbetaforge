@@ -507,10 +507,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_WT, NbtTags.BIOME_SCALE_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeScaleWeight, this),
             createGuiSlider(GuiIdentifiers.PG4_S_B_SCLE_OF, NbtTags.BIOME_SCALE_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeScaleOffset, this),
-            createGuiButton(GuiIdentifiers.PG4_B_DEEP_RIV, NbtTags.DEEPEN_RIVERS, this.settings.deepenRivers),
             createGuiSlider(GuiIdentifiers.PG4_S_R_DPTH_WT, NbtTags.RIVER_DEPTH_WEIGHT, ModernBetaGeneratorSettings.MIN_RIVER_WEIGHT, ModernBetaGeneratorSettings.MAX_RIVER_WEIGHT, this.settings.riverDepthWeight, this),
             createGuiButton(GuiIdentifiers.PG4_B_USE_BDS, NbtTags.USE_BIOME_DEPTH_SCALE, this.settings.useBiomeDepthScale),
             createGuiButton(GuiIdentifiers.PG4_B_USE_AMP, NbtTags.USE_AMPLIFIED, this.settings.useAmplified),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page4", "end"),
             null,
@@ -1336,9 +1336,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_B_USE_AMP:
                     this.settings.useAmplified = entryValue;
-                    break;
-                case GuiIdentifiers.PG4_B_DEEP_RIV:
-                    this.settings.deepenRivers = entryValue;
                     break;
                     
                 case GuiIdentifiers.PG6_B_CLIMATE_FEAT:
