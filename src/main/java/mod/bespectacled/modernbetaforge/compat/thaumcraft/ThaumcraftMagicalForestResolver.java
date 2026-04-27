@@ -18,7 +18,14 @@ public class ThaumcraftMagicalForestResolver extends BiomeResolverAddSingleBiome
     private final boolean useCompat;
     
     public ThaumcraftMagicalForestResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BIOME_ID, chunkSource.getSeed(), 8363L, 21061L, settings.getFloatProperty(CompatThaumcraft.KEY_MAGICAL_FOREST_CHANCE));
+        super(
+            BIOME_ID,
+            chunkSource.getSeed(),
+            8363L,
+            21061L,
+            settings.getFloatProperty(CompatThaumcraft.KEY_MAGICAL_FOREST_CHANCE),
+            settings.getFloatProperty(CompatThaumcraft.KEY_MAGICAL_FOREST_NOISE_SCALE)
+        );
 
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatThaumcraft.KEY_USE_COMPAT);

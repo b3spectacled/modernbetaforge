@@ -18,18 +18,15 @@ public class CompatThaumcraft implements Compat, ClientCompat {
     
     public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     public static final ResourceLocation KEY_MAGICAL_FOREST_CHANCE = new ResourceLocation(ADDON_ID, "magicalForestChance");
+    public static final ResourceLocation KEY_MAGICAL_FOREST_NOISE_SCALE = new ResourceLocation(ADDON_ID, "magicalForestNoiseScale");
     
     public static final ResourceLocation KEY_MAGICAL_FOREST_RESOLVER = new ResourceLocation(ADDON_ID, "resolverMagicalForest");
 
     @Override
     public void load() {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
-        ModernBetaRegistries.PROPERTY.register(KEY_MAGICAL_FOREST_CHANCE, new FloatProperty(
-            0.01f,
-            0.0f,
-            1.0f,
-            PropertyGuiType.SLIDER
-        ));
+        ModernBetaRegistries.PROPERTY.register(KEY_MAGICAL_FOREST_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_MAGICAL_FOREST_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
         
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_MAGICAL_FOREST_RESOLVER, ThaumcraftMagicalForestResolver::new);
     }

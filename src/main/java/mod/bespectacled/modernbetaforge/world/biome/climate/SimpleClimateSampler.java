@@ -23,7 +23,7 @@ public class SimpleClimateSampler {
         this.detailScale = 0.050;
     }
     
-    public double sample(int x, int z) {
+    public double sample(double x, double z) {
         double climate = this.climateOctaveNoise.sample(x, z, this.climateScale, this.climateScale, 0.25);
         double detail = this.detailOctaveNoise.sample(x, z, this.detailScale, this.detailScale, 0.33333333333333331);
 

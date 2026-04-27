@@ -19,6 +19,8 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
     public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     public static final ResourceLocation KEY_OIL_DESERT_CHANCE = new ResourceLocation(ADDON_ID, "oilDesertChance");
     public static final ResourceLocation KEY_OIL_OCEAN_CHANCE = new ResourceLocation(ADDON_ID, "oilOceanChance");
+    public static final ResourceLocation KEY_OIL_DESERT_NOISE_SCALE = new ResourceLocation(ADDON_ID, "oilDesertNoiseScale");
+    public static final ResourceLocation KEY_OIL_OCEAN_NOISE_SCALE = new ResourceLocation(ADDON_ID, "oilOceanNoiseScale");
     
     public static final ResourceLocation KEY_OIL_DESERT_RESOLVER = new ResourceLocation(ADDON_ID, "resolverOilDesert");
     public static final ResourceLocation KEY_OIL_OCEAN_RESOLVER = new ResourceLocation(ADDON_ID, "resolverOilOcean");
@@ -26,18 +28,10 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
     @Override
     public void load() {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
-        ModernBetaRegistries.PROPERTY.register(KEY_OIL_DESERT_CHANCE, new FloatProperty(
-            0.1f,
-            0.0f,
-            1.0f,
-            PropertyGuiType.SLIDER
-        ));
-        ModernBetaRegistries.PROPERTY.register(KEY_OIL_OCEAN_CHANCE, new FloatProperty(
-            0.1f,
-            0.0f,
-            1.0f,
-            PropertyGuiType.SLIDER
-        ));
+        ModernBetaRegistries.PROPERTY.register(KEY_OIL_DESERT_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_OIL_OCEAN_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_OIL_DESERT_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_OIL_OCEAN_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
         
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_OIL_DESERT_RESOLVER, BuildCraftOilDesertResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_OIL_OCEAN_RESOLVER, BuildCraftOilOceanResolver::new);

@@ -18,7 +18,14 @@ public class BuildCraftOilOceanResolver extends BiomeResolverAddSingleBiome {
     private final boolean useCompat;
     
     public BuildCraftOilOceanResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BIOME_ID, chunkSource.getSeed(), 5521L, 73379L, settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_OCEAN_CHANCE));
+        super(
+            BIOME_ID,
+            chunkSource.getSeed(),
+            5521L,
+            73379L,
+            settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_OCEAN_CHANCE),
+            settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_OCEAN_NOISE_SCALE)
+        );
 
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBuildCraftEnergy.KEY_USE_COMPAT);

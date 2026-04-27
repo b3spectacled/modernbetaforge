@@ -21,7 +21,14 @@ public class BuildCraftOilDesertResolver extends BiomeResolverAddSingleBiome {
     private final boolean useCompat;
     
     public BuildCraftOilDesertResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(BIOME_ID, chunkSource.getSeed(), 1847L, 74531L, settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_DESERT_CHANCE));
+        super(
+            BIOME_ID,
+            chunkSource.getSeed(),
+            1847L,
+            74531L,
+            settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_DESERT_CHANCE),
+            settings.getFloatProperty(CompatBuildCraftEnergy.KEY_OIL_DESERT_NOISE_SCALE)
+        );
 
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
         this.useCompat = settings.getBooleanProperty(CompatBuildCraftEnergy.KEY_USE_COMPAT);

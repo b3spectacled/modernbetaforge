@@ -390,7 +390,9 @@ createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbiomesoplenty.coralreefchance=Coral Reef Chance
 createWorld.customize.custom.compatbiomesoplenty.kelpforestchance=Kelp Forest Chance
-createWorld.customize.custom.compatbiomesoplenty.kelpforestchance.info=Release biome source only.
+createWorld.customize.custom.compatbiomesoplenty.coralreefnoisescale=Coral Reef Noise Scale
+createWorld.customize.custom.compatbiomesoplenty.kelpforestnoisescale=Kelp Forest Noise Scale
+createWorld.customize.custom.compatbiomesoplenty.kelpforestnoisescale.info=Release biome source only.
 
 createWorld.customize.custom.compatbiomesoplenty.biomesize=Biome Size
 createWorld.customize.custom.compatbiomesoplenty.biomesize.tiny=Tiny
@@ -419,15 +421,18 @@ createWorld.customize.custom.compatbiomesoplenty.rainscheme.random=Random
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.info=Biomes O' Plenty biome source only.
 
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
-createWorld.customize.custom.compatbuildcraftenergy.info=Note: Required for non-release biome sources only.
+createWorld.customize.custom.compatbuildcraftenergy.info=Required for non-release biome sources only.
 createWorld.customize.custom.compatbuildcraftenergy.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.oildesertchance=Oil Desert Chance
 createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance=Oil Ocean Chance
+createWorld.customize.custom.compatbuildcraftenergy.oildesertnoisescale=Oil Desert Noise Scale
+createWorld.customize.custom.compatbuildcraftenergy.oiloceannoisescale=Oil Ocean Noise Scale
 
 createWorld.customize.custom.compatthaumcraft=Thaumcraft Compatibility
-createWorld.customize.custom.compatthaumcraft.info=Note: Required for non-release biome sources only.
+createWorld.customize.custom.compatthaumcraft.info=Required for non-release biome sources only.
 createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
 createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
+createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale=Magical Forest Noise Scale
 
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
