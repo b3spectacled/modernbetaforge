@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.google.common.collect.ImmutableSet;
 
+import biomesoplenty.api.biome.BOPBiomes;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.Clime;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
@@ -18,6 +19,8 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.NoiseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
@@ -31,6 +34,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -391,8 +395,22 @@ public class DrawUtil {
                 terrainType = TerrainType.SAND;
                 
             }
+            
+            terrainType = getTerrainTypeByBiomeOverride(biome, terrainType);
         }
 
+        return terrainType;
+    }
+    
+    private static TerrainType getTerrainTypeByBiomeOverride(Biome biome, TerrainType terrainType) {
+        if (biome == Biomes.STONE_BEACH) {
+            terrainType = TerrainType.STONE;
+        } else if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
+            if (BOPBiomes.gravel_beach.isPresent() && biome == BOPBiomes.gravel_beach.get()) {
+                terrainType = TerrainType.STONE;
+            }
+        }
+        
         return terrainType;
     }
     

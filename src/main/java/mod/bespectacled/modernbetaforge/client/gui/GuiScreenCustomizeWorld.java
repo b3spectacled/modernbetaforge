@@ -1842,10 +1842,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                         };
                         Consumer<GuiModalChangelist> onDiscardSettings = modal -> this.exit();
                         
-                        title = I18n.format(PREFIX + "confirmSettingsTitle");
-                        
                         this.isFocused = false;
-                        this.mc.displayGuiScreen(new GuiModalChangelist(this, title, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
+                        this.mc.displayGuiScreen(new GuiModalChangelist(this, onConfirmSettings, modal -> this.isFocused = true, onDiscardSettings));
                     }
                 }
                
@@ -1878,8 +1876,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                         this.mc.displayGuiScreen(new GuiScreenCustomizeWorld(this.parent, this.settings.toString()));
                     };
 
-                    title = I18n.format(PREFIX + "confirmTitle");
-                    List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm1"), I18n.format(PREFIX + "confirm2"));
+                    title = I18n.format(PREFIX + "confirm.title");
+                    List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm.info0"), I18n.format(PREFIX + "confirm.info1"));
 
                     this.isFocused = false;
                     this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, textList, GuiColors.RGB_GRAY));

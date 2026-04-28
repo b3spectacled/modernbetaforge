@@ -43,6 +43,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     private static final Map<String, Formatter> FORMATTERS;
     
     private static final String PREFIX = "createWorld.customize.custom";
+    private static final String PREFIX_CONFIRM = String.format("%s.%s.confirmSettings.", PREFIX, ModernBeta.MODID);
     private static final String GUI_LABEL_DISCARD = I18n.format(String.format("%s.%s.%s", PREFIX, ModernBeta.MODID, "discard"));
     
     private static final TextFormatting FORMATTING_PREV = TextFormatting.DARK_RED;
@@ -66,8 +67,8 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     
     private ChangeList changeList;
 
-    public GuiModalChangelist(GuiScreenCustomizeWorld parent, String title, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard) {
-        super(parent, title, MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
+    public GuiModalChangelist(GuiScreenCustomizeWorld parent, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard) {
+        super(parent, I18n.format(PREFIX_CONFIRM + "title"), MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
         
         String prevString = parent.getPreviousSettingsString();
         String nextString = parent.getSettingsString();
@@ -149,8 +150,8 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
 
             Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
             String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-            String change0 = FORMATTING_PREV + this.formatValue(modId, modSetting, entryValue.getFirst(), this.prevProperties);
-            String change1 = FORMATTING_NEXT + this.formatValue(modId, modSetting, entryValue.getSecond(), this.nextProperties);
+            String change0 = FORMATTING_PREV + this.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.prevProperties);
+            String change1 = FORMATTING_NEXT + this.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.nextProperties);
             String changes = change0 + arrow + change1;
             changes = changes.trim();
             
@@ -240,6 +241,16 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         this.changeList = new ChangeList(this, modalT, modalB, LIST_SLOT_HEIGHT);
         this.changeList.left = modalL;
         this.changeList.right = modalR;
+    }
+    
+    private String tryFormatValue(String modId, String modSetting, JsonElement element, Map<ResourceLocation, Property<?>> properties) {
+        String formattedValue = I18n.format(PREFIX_CONFIRM + "missing");
+        
+        try {
+            formattedValue = formatValue(modId, modSetting, element, properties);
+        } catch (Exception e) { }
+        
+        return formattedValue;
     }
     
     private String formatValue(String modId, String modSetting, JsonElement element, Map<ResourceLocation, Property<?>> properties) {
@@ -422,8 +433,8 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 
                 Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = FORMATTING_PREV + this.parent.formatValue(modId, modSetting, entryValue.getFirst(), this.parent.prevProperties);
-                String change1 = FORMATTING_NEXT + this.parent.formatValue(modId, modSetting, entryValue.getSecond(), this.parent.nextProperties);
+                String change0 = FORMATTING_PREV + this.parent.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.parent.prevProperties);
+                String change1 = FORMATTING_NEXT + this.parent.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.parent.nextProperties);
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
