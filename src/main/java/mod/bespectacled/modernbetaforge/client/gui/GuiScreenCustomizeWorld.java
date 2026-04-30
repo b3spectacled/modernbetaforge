@@ -1877,10 +1877,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     };
 
                     title = I18n.format(PREFIX + "confirm.title");
-                    List<String> textList = Arrays.asList(I18n.format(PREFIX + "confirm.info0"), I18n.format(PREFIX + "confirm.info1"));
+                    String text = I18n.format(PREFIX + "confirm.info");
 
                     this.isFocused = false;
-                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, textList, GuiColors.RGB_GRAY));
+                    this.mc.displayGuiScreen(new GuiModalConfirm(this, title, 200, 100, onConfirm, modal -> this.isFocused = true, text, GuiColors.RGB_LIGHT_RED));
                 }
                 break;
             case GuiIdentifiers.FUNC_PRST:

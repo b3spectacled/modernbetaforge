@@ -95,8 +95,7 @@ createWorld.customize.custom.modernbetaforge.discard=Discard
 
 # Page Confirm
 createWorld.customize.custom.modernbetaforge.confirm.title=Warning!
-createWorld.customize.custom.modernbetaforge.confirm.info0=This will overwrite your current
-createWorld.customize.custom.modernbetaforge.confirm.info1=settings and cannot be undone.
+createWorld.customize.custom.modernbetaforge.confirm.info=This will overwrite your current settings and cannot be undone.
 
 # Page Changelist
 createWorld.customize.custom.modernbetaforge.confirmSettings.title=Confirm Changes
