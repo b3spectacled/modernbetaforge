@@ -142,11 +142,11 @@ public abstract class FiniteChunkSource extends ChunkSource {
             return this.getBorderHeight(x, z, type);
         }
 
-        synchronized(this) {
-            this.levelDataContainer = this.levelDataContainer == null || !this.levelDataContainer.generated ?
-                new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength) :
-                this.levelDataContainer;
-            
+        synchronized (this) {
+            if (this.levelDataContainer == null || !this.levelDataContainer.generated) {
+                this.levelDataContainer = new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
+            }
+
             this.pregenerateLevelOrWait(this.levelDataContainer);
         }
         
@@ -264,7 +264,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
      */
     public void loadOrCreateLevelDataContainer(World world) {
         if (this.levelDataContainer == null) {
-            this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels ?
+            this.levelDataContainer = ModernBetaConfig.generatorOptions.saveIndevLevels && world != null ?
                 this.tryLoadLevel(world) :
                 new LevelDataContainer(this.levelWidth, this.levelHeight, this.levelLength);
         }
