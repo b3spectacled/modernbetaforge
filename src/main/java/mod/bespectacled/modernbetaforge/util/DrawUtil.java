@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.util;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -55,6 +57,7 @@ public class DrawUtil {
         MYCELIUM(COLOR_MYCELIUM, ImmutableSet.of(Blocks.MYCELIUM), true),
         NETHER(COLOR_NETHER, ImmutableSet.of(Blocks.NETHER_BRICK, Blocks.NETHERRACK), true),
         SOUL_SAND(COLOR_SOUL_SAND, ImmutableSet.of(Blocks.SOUL_SAND), true),
+        COAL(COLOR_COAL, ImmutableSet.of(Blocks.COAL_BLOCK), true),
         WATER(COLOR_WATER, ImmutableSet.of(Blocks.WATER, Blocks.FLOWING_WATER)),
         FIRE(COLOR_FIRE, ImmutableSet.of(Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.FIRE)),
         ICE(COLOR_ICE, ImmutableSet.of(Blocks.ICE, Blocks.FROSTED_ICE, Blocks.PACKED_ICE)),
@@ -87,6 +90,9 @@ public class DrawUtil {
     private static final int COLOR_MYCELIUM = MathUtil.convertARGBComponentsToInt(255, 127, 63, 178);
     private static final int COLOR_NETHER = MathUtil.convertARGBComponentsToInt(255, 112, 2, 0);
     private static final int COLOR_SOUL_SAND = MathUtil.convertARGBComponentsToInt(255, 102, 76, 51);
+    private static final int COLOR_COAL = MathUtil.convertARGBComponentsToInt(255, 25, 25, 25);
+    
+    private static final Map<Biome, TerrainType> BIOME_OVERRIDES; 
     
     public static BufferedImage createTerrainMap(
         ChunkSource chunkSource,
@@ -153,6 +159,7 @@ public class DrawUtil {
         
         Block defaultFluid = chunkSource.getDefaultFluid().getBlock();
         int snowLineOffset = chunkSource.getGeneratorSettings().snowLineOffset;
+        int seaLevel = chunkSource.getSeaLevel();
         
         if (previousImage != null) {
             image = copyImageRegion(previousImage, image);
@@ -211,7 +218,7 @@ public class DrawUtil {
                         Vector4f mapColor = scale(colorVec, 0.86f);
                         
                         int elevationDiff = chunkSource.getHeight(x, z + 1, HeightmapChunk.Type.SURFACE) - height;
-                        if (terrainType == TerrainType.ICE) {
+                        if (terrainType == TerrainType.ICE && height < seaLevel) {
                             elevationDiff = 0;
                         }
                         
@@ -403,14 +410,10 @@ public class DrawUtil {
     }
     
     private static TerrainType getTerrainTypeByBiomeOverride(Biome biome, TerrainType terrainType) {
-        if (biome == Biomes.STONE_BEACH) {
-            terrainType = TerrainType.STONE;
-        } else if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
-            if (BOPBiomes.gravel_beach.isPresent() && biome == BOPBiomes.gravel_beach.get()) {
-                terrainType = TerrainType.STONE;
-            }
+        if (BIOME_OVERRIDES.containsKey(biome)) {
+            terrainType = BIOME_OVERRIDES.get(biome);
         }
-        
+
         return terrainType;
     }
     
@@ -504,7 +507,7 @@ public class DrawUtil {
             
         } else if (terrainType == TerrainType.WATER) {
             ResourceLocation defaultFluid = chunkSource.getGeneratorSettings().defaultFluid;
-            
+
             if (!defaultFluid.equals(Blocks.WATER.getRegistryName())) {
                 int fluidColor = ForgeRegistryUtil.getFluid(defaultFluid).getColor();
                 
@@ -646,5 +649,22 @@ public class DrawUtil {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+    }
+    
+    static {
+        BIOME_OVERRIDES = new HashMap<>();
+        BIOME_OVERRIDES.put(Biomes.STONE_BEACH, TerrainType.STONE);
+        
+        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
+            if (BOPBiomes.volcanic_island.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.volcanic_island.get(), TerrainType.COAL);
+            if (BOPBiomes.gravel_beach.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.gravel_beach.get(), TerrainType.STONE);
+            if (BOPBiomes.cold_desert.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.cold_desert.get(), TerrainType.STONE);
+            if (BOPBiomes.crag.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.crag.get(), TerrainType.STONE);
+            if (BOPBiomes.steppe.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.steppe.get(), TerrainType.GRASS);
+            if (BOPBiomes.glacier.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.glacier.get(), TerrainType.ICE);
+            if (BOPBiomes.lush_desert.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.lush_desert.get(), TerrainType.TERRACOTTA);
+            if (BOPBiomes.outback.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.outback.get(), TerrainType.TERRACOTTA);
+            if (BOPBiomes.white_beach.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.white_beach.get(), TerrainType.SNOW);
+        }
     }
 }

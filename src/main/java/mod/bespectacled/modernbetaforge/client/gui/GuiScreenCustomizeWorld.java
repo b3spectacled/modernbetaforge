@@ -117,7 +117,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
     private static final int PAGELIST_SCROLLBAR_PADDING = 24;
-    private static final int DEFAULT_NAME_TRUNCATE_LEN = 130;
+    private static final int DEFAULT_NAME_TRUNCATE_LEN = 132;
 
     private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
