@@ -93,6 +93,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         .put(ModernBetaStructures.TEMPLE, ModernBeta.createRegistryKey("textures/gui/preview/temple.png"))
         .build();
     private static final int STRUCTURE_ICON_SIZE = 10;
+    private static final int STRUCTURE_NOTE_ROW_LEN = 200;
     
     private static final int MAP_PADDING = 32;
     private static final int MAP_Y_OFFSET = 20;
@@ -420,7 +421,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
         
         if (this.structureButtonBounds.isHovered() && this.copyState == CopyState.HOVERING && this.buttonStructures.enabled) {
-            this.drawHoveringText(I18n.format(PREFIX + "structuresNote"), mouseX, mouseY);
+            String structureNote = I18n.format(PREFIX + "structuresNote");
+            
+            this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(structureNote, STRUCTURE_NOTE_ROW_LEN), mouseX, mouseY);
         }
 
         this.hoveredStructure = false;
