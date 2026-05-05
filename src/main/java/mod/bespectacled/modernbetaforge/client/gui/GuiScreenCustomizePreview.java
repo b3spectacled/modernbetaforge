@@ -782,8 +782,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             info.iconProgress = progress;
             info.iconAlpha = alpha;
             
-            iconSize = Math.round(iconSize * progress);
-            iconOffset = Math.round(iconOffset * progress);
+            iconSize = iconSize * progress;
+            iconOffset = iconOffset * progress;
             
             int x = chunkX << 4;
             int z = chunkZ << 4;
