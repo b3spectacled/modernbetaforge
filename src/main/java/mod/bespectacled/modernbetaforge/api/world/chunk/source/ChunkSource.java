@@ -84,7 +84,7 @@ public abstract class ChunkSource {
         this.forestOctaveNoise = Optional.ofNullable(new PerlinOctaveNoise(random, 8, true));
         
         // Set default cloud height
-        this.setCloudHeight(this.worldHeight - 20);
+        this.setCloudHeight(108);
     }
     
     /**
