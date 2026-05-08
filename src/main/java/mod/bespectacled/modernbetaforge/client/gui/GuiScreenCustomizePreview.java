@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -19,7 +18,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Longs;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -721,8 +719,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void drawStructureIcons(int startTextureX, int startTextureY, int viewportSize, float partialTicks) {
-        Set<ProgressState> invalidStates = ImmutableSet.of(ProgressState.STARTED, ProgressState.CANCELING, ProgressState.CANCELED);
-        
         int chunkWidth = this.selectedPreviewSettings.zoom >> 4;
         int chunkLength = this.selectedPreviewSettings.zoom >> 4;
         
@@ -773,9 +769,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 progress = MathUtil.clampedLerp(progress, 1.0f, partialTicks);
             }
             
-            if (invalidStates.contains(this.state)) {
-                alpha = 0.0f;
-            } else if (!this.previewSettings.useStructures) { 
+            if (!this.previewSettings.useStructures) { 
                 alpha = MathUtil.clampedLerp(alpha, 0.0f, partialTicks);
             } else {
                 alpha = MathUtil.clampedLerp(alpha, 1.0f, partialTicks);
@@ -838,7 +832,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
             this.prevMapTexture.drawMapTexture(textureX, textureY, viewportSize);
             this.drawCardinalDirections(viewportSize);
-            this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
         }
     }
 
