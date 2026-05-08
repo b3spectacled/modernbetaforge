@@ -768,15 +768,17 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             float iconOffset = iconSize / 2.0f;
 
             if (this.hoveredStructurePos == chunkPos) {
-                progress = (float)MathHelper.clampedLerp(progress, 2.0f, partialTicks);
+                progress = MathUtil.clampedLerp(progress, 2.0f, partialTicks);
             } else {
-                progress = (float)MathHelper.clampedLerp(progress, 1.0f, partialTicks);
+                progress = MathUtil.clampedLerp(progress, 1.0f, partialTicks);
             }
             
-            if (invalidStates.contains(this.state) || !this.previewSettings.useStructures) {
-                alpha = (float)MathHelper.clampedLerp(alpha, 0.0f, partialTicks);
+            if (invalidStates.contains(this.state)) {
+                alpha = 0.0f;
+            } else if (!this.previewSettings.useStructures) { 
+                alpha = MathUtil.clampedLerp(alpha, 0.0f, partialTicks);
             } else {
-                alpha = (float)MathHelper.clampedLerp(alpha, 1.0f, partialTicks);
+                alpha = MathUtil.clampedLerp(alpha, 1.0f, partialTicks);
             }
             
             info.iconProgress = progress;

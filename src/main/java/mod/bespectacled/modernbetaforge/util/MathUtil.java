@@ -27,6 +27,18 @@ public class MathUtil {
         return lerp(delta, start, end);
     }
     
+    public static float clampedLerp(float start, float end, float delta) {
+        if (delta < 0.0) {
+            return start;
+        }
+        
+        if (delta > 1.0) {
+            return end;
+        }
+        
+        return lerp(delta, start, end);
+    }
+    
     public static double distance(int x, int z, int pX, int pZ) {
         return Math.sqrt((pX - x) * (pX - x) + (pZ - z) * (pZ - z));
     }
