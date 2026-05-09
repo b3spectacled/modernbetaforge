@@ -66,6 +66,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -107,6 +108,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
     private static final int BUTTON_SPACE = 4;
+    private static final int TEXT_BOX_PADDING = 4;
     
     private static final int ARGB_PREVIEW_BOX = MathUtil.convertARGBComponentsToInt(50, 0, 0, 0);
     private static final int ARGB_PROGRESS_BOX = MathUtil.convertARGBComponentsToInt(200, 0, 0, 0);
@@ -119,7 +121,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_STRUCTURES = 4;
     private static final int GUI_ID_SCREENSHOT = 5;
     
-    private static final long COPIED_SEED_WAIT_TIME = 1000L;
+    private static final long COPIED_SEED_DISPLAY_TIME = 1000L;
+    private static final long GENERATION_DISPLAY_TIME = 5000L;
     
     private final GuiScreenCustomizeWorld parent;
     private final String worldSeed;
@@ -164,6 +167,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private long hoveredStructurePos;
     private boolean hoveredStructure;
     private boolean savingScreenshot;
+    private float generationTime;
+    private long generationDisplayTime;
     
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, PreviewSettings previewSettings) {
         this.title = I18n.format(PREFIX + "title");
@@ -254,7 +259,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 14, GuiColors.RGB_WHITE);
         
-        if (System.currentTimeMillis() - this.copiedTime > COPIED_SEED_WAIT_TIME) {
+        if (System.currentTimeMillis() - this.copiedTime > COPIED_SEED_DISPLAY_TIME) {
             this.copyState = CopyState.HOVERING;
         }
         
@@ -311,7 +316,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.mapTexture.drawMapTexture(textureX, textureY, viewportSize);
                 this.drawCardinalDirections(viewportSize);
                 this.drawStructureIcons(textureX, textureY, viewportSize, partialTicks);
-                this.drawScreenshotTooltip(this.buttonScreenshot, mouseX, mouseY);
+                this.drawScreenshotTooltip(textureX, textureY, viewportSize, mouseX, mouseY);
+                this.drawGenerationTime(textureX, textureY, viewportSize, partialTicks);
                 break;
                 
             case STARTED:
@@ -661,9 +667,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     this.mapTexture.loadMapImage(this.prevMapTexture.mapImage);
                     this.updateState(ProgressState.CANCELED);
                 } else {
-                    ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", (System.currentTimeMillis() - time) / 1000f));
+                    this.generationTime = (System.currentTimeMillis() - time) / 1000f;
+                    ModernBeta.log(Level.DEBUG, String.format("Finished drawing terrain map in %2.3fs!", this.generationTime));
+                    
+                    // Takes additional time so process after capturing generation time.
                     this.mapTexture.loadMapImage(newMapImage);
                     this.sampleStructures();
+
+                    // Set display timer once everything is done.
+                    this.generationDisplayTime = System.currentTimeMillis();
                     
                     // Check if cancellation occurred at the same time as map preview generation completed,
                     // and prevent the race condition.
@@ -835,22 +847,48 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
 
-    private void drawScreenshotTooltip(GuiButtonBounded guiButton, int mouseX, int mouseY) {
-        if (guiButton.visible && guiButton.isHovered(mouseX, mouseY)) {
+    private void drawScreenshotTooltip(int textureX, int textureY, int viewportSize, int mouseX, int mouseY) {
+        if (this.buttonScreenshot.visible && this.buttonScreenshot.isHovered(mouseX, mouseY)) {
             String text = I18n.format(PREFIX + "screenshot");
             int textWidth = this.fontRenderer.getStringWidth(text);
             
-            int rectX = guiButton.x - textWidth - BUTTON_SPACE * 2 - 2;
-            int rectY = guiButton.y + 2;
-            int rectW = rectX + textWidth + BUTTON_SPACE * 2;
-            int rectH = rectY + guiButton.height - 4;
+            int paddingX = TEXT_BOX_PADDING;
+            int paddingY = TEXT_BOX_PADDING;
             
-            int textX = rectX + BUTTON_SPACE;
-            int textY = guiButton.y + guiButton.height / 2 - this.fontRenderer.FONT_HEIGHT / 2;
+            int rectL = textureX + viewportSize - textWidth - paddingX * 2;
+            int rectT = textureY;
+            int rectR = rectL + textWidth + paddingX * 2;
+            int rectB = rectT + this.fontRenderer.FONT_HEIGHT + paddingY * 2;
             
-            drawRect(rectX, rectY, rectW, rectH, ARGB_PROGRESS_BOX);
+            int textX = rectL + paddingX;
+            int textY = rectT + paddingY + 1;
+            
+            drawRect(rectL, rectT, rectR, rectB, ARGB_PROGRESS_BOX);
             this.fontRenderer.drawStringWithShadow(text, textX, textY, GuiColors.RGB_WHITE);
         }
+    }
+
+    private void drawGenerationTime(int textureX, int textureY, int viewportSize, float partialTicks) {
+        if (System.currentTimeMillis() - this.generationDisplayTime > GENERATION_DISPLAY_TIME) {
+            return;
+        }
+        
+        String text = String.format("%s %.3fs", I18n.format(PREFIX + "generationTime"), this.generationTime);
+        int textWidth = this.fontRenderer.getStringWidth(text);
+        
+        int paddingX = TEXT_BOX_PADDING;
+        int paddingY = TEXT_BOX_PADDING;
+        
+        int rectL = textureX;
+        int rectT = textureY + viewportSize - this.fontRenderer.FONT_HEIGHT - paddingY * 2;
+        int rectR = rectL + textWidth + paddingX * 2;
+        int rectB = rectT + this.fontRenderer.FONT_HEIGHT + paddingY * 2;
+        
+        int textX = rectL + paddingX;
+        int textY = rectT + paddingY + 1;
+
+        drawRect(rectL, rectT, rectR, rectB, ARGB_PROGRESS_BOX);
+        this.drawString(this.fontRenderer, text, textX, textY, GuiColors.RGB_WHITE);
     }
 
     private void unloadMapTexture(MapTexture mapTexture) {

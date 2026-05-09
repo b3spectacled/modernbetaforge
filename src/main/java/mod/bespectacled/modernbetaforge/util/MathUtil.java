@@ -85,4 +85,21 @@ public class MathUtil {
         
         return convertARGBComponentsToInt(255, (int)(rgb.x * 255.0), (int)(rgb.y * 255.0), (int)(rgb.z * 255.0));
     }
+    
+    public static int lerpARGBColor(int color, int target, double delta) {
+        Vector4f colorVec = convertARGBIntToVector4f(color);
+        Vector4f targetVec = convertARGBIntToVector4f(target);
+        Vector4f lerpVec = new Vector4f(
+            1.0f,
+            (float)clampedLerp(colorVec.y, targetVec.y, delta),
+            (float)clampedLerp(colorVec.z, targetVec.z, delta),
+            (float)clampedLerp(colorVec.w, targetVec.w, delta)
+        );
+        
+        return convertARGBVector4fToInt(lerpVec);
+    }
+    
+    public static int lerpRGBColor(int color, int target, double delta) {
+        return lerpARGBColor(convertRGBtoARGB(color), convertRGBtoARGB(target), delta);
+    }
 }
