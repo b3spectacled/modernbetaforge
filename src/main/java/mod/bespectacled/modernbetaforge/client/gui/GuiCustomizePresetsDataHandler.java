@@ -18,7 +18,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiCustomizePresetsDataHandler {
     private static final String CONFIG_FILE_NAME = ModernBeta.MODID + "_presets.json";
     private static final File CONFIG_FILE =  new File(ModernBeta.getConfigDirectory(), CONFIG_FILE_NAME);

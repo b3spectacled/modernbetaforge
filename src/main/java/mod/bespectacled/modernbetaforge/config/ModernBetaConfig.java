@@ -155,6 +155,11 @@ public class ModernBetaConfig {
         public boolean displayDebugInfo = false;
         
         @Comment({
+            "Display generation info in map preview screen."
+        })
+        public boolean displayPreviewGenerationInfo = false;
+        
+        @Comment({
             "Register debug properties at mod start-up."
         })
         @RequiresMcRestart

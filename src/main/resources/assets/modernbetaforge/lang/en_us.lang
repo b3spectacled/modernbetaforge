@@ -54,7 +54,8 @@ createWorld.customize.preview.modernbetaforge.copiedUseSeed=Copied to world seed
 createWorld.customize.preview.modernbetaforge.copiedTp=Copied /tp command to clipboard!
 createWorld.customize.preview.modernbetaforge.structuresNote=Vanilla structures only. Positions may be inaccurate if another installed mod changes structure placement.
 createWorld.customize.preview.modernbetaforge.screenshot=Save Screenshot
-createWorld.customize.preview.modernbetaforge.generationTime=Done in
+createWorld.customize.preview.modernbetaforge.generationTime.info0=Done in
+createWorld.customize.preview.modernbetaforge.generationTime.info1=chunk
 
 # Page Tabs
 createWorld.customize.custom.tab.modernbetaforge.page0=Basic
@@ -623,6 +624,7 @@ modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clien
 modernbetaforge.general.serveroptions.sendworldinfo=Send World Info to Clients
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
+modernbetaforge.general.debugoptions.displaypreviewgenerationinfo=Display Preview Generation Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 modernbetaforge.general.debugoptions.registerdebugnoisechunksource=Register Debug Noise Chunk Source
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources

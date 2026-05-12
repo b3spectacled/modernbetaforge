@@ -31,6 +31,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -315,7 +316,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.drawCardinalDirections(viewportX, viewportY, viewportSize);
                 this.drawStructureIcons(viewportX, viewportY, viewportSize, partialTicks);
                 this.drawScreenshotTooltip(viewportX, viewportY, viewportSize, mouseX, mouseY);
-                // this.drawGenerationTime(textureX, textureY, viewportSize, partialTicks);
+                this.drawGenerationTime(viewportX, viewportY, viewportSize, partialTicks);
                 break;
                 
             case STARTED:
@@ -865,28 +866,40 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
 
-    @SuppressWarnings("unused")
     private void drawGenerationTime(int viewportX, int viewportY, int viewportSize, float partialTicks) {
-        if (System.currentTimeMillis() - this.generationDisplayTime > GENERATION_DISPLAY_TIME) {
+        long elapsed = System.currentTimeMillis() - this.generationDisplayTime;
+        
+        if (elapsed > GENERATION_DISPLAY_TIME || !ModernBetaConfig.debugOptions.displayPreviewGenerationInfo) {
             return;
         }
+
+        int chunkWidth = this.selectedPreviewSettings.zoom >> 4;
+        float generationTimePerChunk = this.generationTime / (chunkWidth * chunkWidth);
+        generationTimePerChunk *= 1000f;
         
-        String text = String.format("%s %.3fs", I18n.format(PREFIX + "generationTime"), this.generationTime);
-        int textWidth = this.fontRenderer.getStringWidth(text);
+        String text0 = String.format("%s %.3fs", I18n.format(PREFIX + "generationTime.info0"), this.generationTime);
+        String text1 = String.format("%.3fms/%s", generationTimePerChunk, I18n.format(PREFIX + "generationTime.info1"));
+        
+        int text0Width = this.fontRenderer.getStringWidth(text0);
+        int text1Width = this.fontRenderer.getStringWidth(text1);
+        
+        int textWidth = Math.max(text0Width, text1Width);
         
         int paddingX = TEXT_BOX_PADDING;
         int paddingY = TEXT_BOX_PADDING;
         
         int rectL = viewportX;
-        int rectT = viewportY + viewportSize - this.fontRenderer.FONT_HEIGHT - paddingY * 2;
+        int rectT = viewportY + viewportSize - this.fontRenderer.FONT_HEIGHT * 2 - paddingY * 2 - 3;
         int rectR = rectL + textWidth + paddingX * 2;
-        int rectB = rectT + this.fontRenderer.FONT_HEIGHT + paddingY * 2;
+        int rectB = rectT + this.fontRenderer.FONT_HEIGHT * 2 + paddingY * 2 + 3;
         
         int textX = rectL + paddingX;
-        int textY = rectT + paddingY + 1;
+        int textY0 = rectT + paddingY + 1;
+        int textY1 = textY0 + this.fontRenderer.FONT_HEIGHT + 3;
 
         drawRect(rectL, rectT, rectR, rectB, ARGB_PROGRESS_BOX);
-        this.drawString(this.fontRenderer, text, textX, textY, GuiColors.RGB_WHITE);
+        this.drawString(this.fontRenderer, text0, textX, textY0, GuiColors.RGB_WHITE);
+        this.drawString(this.fontRenderer, text1, textX, textY1, GuiColors.RGB_WHITE);
     }
 
     private void unloadMapTexture(MapTexture mapTexture) {
