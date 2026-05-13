@@ -516,8 +516,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
             int size = this.getSize();
             int paddingL = 4;
-            int paddingR = 0;
-            int paddingY = 1;
+            int paddingR = 2;
+            int offsetY = 1;
             
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -538,17 +538,17 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     
-                    bufferbuilder.pos((double)l, (double)(y + height + 2 + paddingY), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)r, (double)(y + height + 2 + paddingY), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y + height + 2 + offsetY), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y + height + 2 + offsetY), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)r, (double)(y - 2 + paddingY), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)l, (double)(y - 2 + paddingY), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y - 2 + offsetY), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y - 2 + offsetY), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + paddingY), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + paddingY), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + offsetY), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + offsetY), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + paddingY), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + paddingY), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + offsetY), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + offsetY), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
                     
                     tessellator.draw();
                     GlStateManager.enableTexture2D();

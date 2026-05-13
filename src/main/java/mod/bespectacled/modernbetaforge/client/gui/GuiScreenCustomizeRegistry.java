@@ -313,6 +313,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         private static final int LIST_PADDING_TOP = 66;
         private static final int LIST_PADDING_BOTTOM = 32;
         
+        private static final int MAX_NAME_WIDTH = 217;
+        private static final int TRUNC_NAME_WIDTH = 215;
+        
         private final GuiScreenCustomizeRegistry parent;
         public int selected;
         
@@ -416,8 +419,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         @Override
         protected void drawSelectionBox(int insideLeft, int insideTop, int mouseX, int mouseY, float partialTicks) {
             int paddingL = 4;
-            int paddingR = 0;
-            int paddingY = 1;
+            int paddingR = 8;
+            int offsetY = 1;
             
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -438,17 +441,17 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                     
-                    bufferbuilder.pos((double)l, (double)(y + height + 2 + paddingY), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)r, (double)(y + height + 2 + paddingY), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y + height + 2 + offsetY), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y + height + 2 + offsetY), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)r, (double)(y - 2 + paddingY), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double)l, (double)(y - 2 + paddingY), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)r, (double)(y - 2 + offsetY), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos((double)l, (double)(y - 2 + offsetY), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + paddingY), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + paddingY), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y + height + 1 + offsetY), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y + height + 1 + offsetY), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
                     
-                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + paddingY), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + paddingY), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(r - 1), (double)(y - 1 + offsetY), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos((double)(l + 1), (double)(y - 1 + offsetY), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
                     
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
@@ -470,10 +473,18 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             int registryNameColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GRAY;
             
             // Render name
-            this.parent.fontRenderer.drawString(info.name, x + paddingL, y + paddingY, nameColor);
+            this.parent.fontRenderer.drawString(this.truncateName(info.name), x + paddingL, y + paddingY, nameColor);
             
             // Render registry name
-            this.parent.fontRenderer.drawString(info.registryName, x + paddingL, y + 12 + paddingY, registryNameColor);
+            this.parent.fontRenderer.drawString(this.truncateName(info.registryName), x + paddingL, y + 12 + paddingY, registryNameColor);
+        }
+        
+        private String truncateName(String name) {
+            if (this.parent.fontRenderer.getStringWidth(name) > MAX_NAME_WIDTH) {
+                return this.parent.fontRenderer.trimStringToWidth(name, TRUNC_NAME_WIDTH) + "...";
+            }
+            
+            return name;
         }
     }
     
