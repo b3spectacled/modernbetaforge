@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.property.Property;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
@@ -48,7 +49,11 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     
     private static final TextFormatting FORMATTING_PREV = TextFormatting.DARK_RED;
     private static final TextFormatting FORMATTING_NEXT = TextFormatting.DARK_GREEN;
+    private static final TextFormatting FORMATTING_SETTING_DISABLED = TextFormatting.GRAY;
+    private static final TextFormatting FORMATTING_CHANGE_DISABLED = TextFormatting.DARK_GRAY;
     
+    private static final int HOVER_TEXT_MAX_LEN = 1500;
+    private static final int HOVER_TEXT_MAX_WIDTH = 250;
     private static final int MODAL_MAX_WIDTH = 500;
     private static final int MODAL_MIN_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
@@ -60,6 +65,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     
     private final Map<ResourceLocation, Property<?>> prevProperties;
     private final Map<ResourceLocation, Property<?>> nextProperties;
+    private final ModernBetaGeneratorSettings settings;
     
     private final Consumer<GuiModalChangelist> onDiscard;
     private final Map<String, Tuple<JsonElement, JsonElement>> changeMap;
@@ -75,6 +81,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         
         this.prevProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevString).customProperties;
         this.nextProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(nextString).customProperties;
+        this.settings = ModernBetaGeneratorSettings.build(nextString);
 
         this.onDiscard = onDiscard;
         this.changeMap = this.createChangeMap(prevString, nextString);
@@ -144,14 +151,19 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
             String key = listEntry.entry.getKey();
             String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
             String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
+            boolean enabled = listEntry.enabled;
+            
+            TextFormatting formattingSetting = enabled ? TextFormatting.WHITE : FORMATTING_SETTING_DISABLED;
+            TextFormatting formattingPrev = enabled ? FORMATTING_PREV : FORMATTING_CHANGE_DISABLED;
+            TextFormatting formattingNext = enabled ? FORMATTING_NEXT : FORMATTING_CHANGE_DISABLED;
             
             String setting = I18n.format(String.format("%s.%s.%s", PREFIX, modId, modSetting)) + ":";
-            setting = setting.trim();
+            setting = formattingSetting + setting.trim();
 
             Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
             String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-            String change0 = FORMATTING_PREV + this.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.prevProperties);
-            String change1 = FORMATTING_NEXT + this.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.nextProperties);
+            String change0 = formattingPrev + this.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.prevProperties);
+            String change1 = formattingNext + this.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.nextProperties);
             String changes = change0 + arrow + change1;
             changes = changes.trim();
             
@@ -159,16 +171,15 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
             if (!changes.equals(changesTrimmed)) {
                 shouldDraw = true;
 
-                changesTrimmed = this.fontRenderer.trimStringToWidth(changes, 2500);
+                changesTrimmed = this.fontRenderer.trimStringToWidth(changes, HOVER_TEXT_MAX_LEN);
                 if (!changes.equals(changesTrimmed)) {
                     changes = changesTrimmed + TextFormatting.RESET + "...";
                 }
             }
             
             if (shouldDraw) {
-                List<String> hoverTexts = new ArrayList<>();
-                hoverTexts.add(setting);
-                hoverTexts.add(changes);
+                List<String> hoverTexts = this.fontRenderer.listFormattedStringToWidth(changes, HOVER_TEXT_MAX_WIDTH);
+                hoverTexts.add(0, setting);
                 
                 this.parent.drawHoveringText(hoverTexts, mouseX, mouseY);
             }
@@ -419,6 +430,11 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 String key = listEntry.entry.getKey();
                 String modId = isResourceFormat(key) ? key.split(":")[0] : ModernBeta.MODID;
                 String modSetting = isResourceFormat(key) ? key.split(":")[1] : key;
+                boolean enabled = listEntry.enabled;
+                
+                TextFormatting formattingSetting = enabled ? TextFormatting.WHITE : FORMATTING_SETTING_DISABLED;
+                TextFormatting formattingPrev = enabled ? FORMATTING_PREV : FORMATTING_CHANGE_DISABLED;
+                TextFormatting formattingNext = enabled ? FORMATTING_NEXT : FORMATTING_CHANGE_DISABLED;
 
                 String setting = I18n.format(String.format("%s.%s.%s", PREFIX, modId, modSetting)) + ":";
                 setting = setting.trim();
@@ -427,14 +443,15 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 if (!setting.equals(settingTrimmed)) {
                     settingTrimmed = settingTrimmed + TextFormatting.RESET + "...";
                 }
+                settingTrimmed = formattingSetting + settingTrimmed;
                 
                 int settingX = this.width / 2 - this.parent.modalWidth / 2 + 10;
                 int settingY = y - 5;
                 
                 Tuple<JsonElement, JsonElement> entryValue = listEntry.entry.getValue();
                 String arrow = TextFormatting.RESET + "" + TextFormatting.BOLD + " \u2192 ";
-                String change0 = FORMATTING_PREV + this.parent.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.parent.prevProperties);
-                String change1 = FORMATTING_NEXT + this.parent.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.parent.nextProperties);
+                String change0 = formattingPrev + this.parent.tryFormatValue(modId, modSetting, entryValue.getFirst(), this.parent.prevProperties);
+                String change1 = formattingNext + this.parent.tryFormatValue(modId, modSetting, entryValue.getSecond(), this.parent.nextProperties);
                 String changes = change0 + arrow + change1;
                 changes = changes.trim();
                 
@@ -459,8 +476,15 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 changeList.add(new ChangeListEntry(modId));
                 
                 for (String key : this.parent.changeMap.keySet()) {
-                    if (modId.equals(ModernBeta.MODID) && !isResourceFormat(key) || modId.equals(key.split(":")[0])) {
-                        changeList.add(new ChangeListEntry(new SimpleEntry<>(key, this.parent.changeMap.get(key))));
+                    boolean isModernBeta = modId.equals(ModernBeta.MODID) && !isResourceFormat(key);
+                    
+                    if (isModernBeta || modId.equals(key.split(":")[0])) {
+                        ResourceLocation registryKey = isModernBeta ? ModernBeta.createRegistryKey(key) : new ResourceLocation(key);
+                        boolean enabled = ModernBetaClientRegistries.GUI_PREDICATE.contains(registryKey) ?
+                            ModernBetaClientRegistries.GUI_PREDICATE.get(registryKey).test(this.parent.settings) :
+                            true;
+                        
+                        changeList.add(new ChangeListEntry(new SimpleEntry<>(key, this.parent.changeMap.get(key)), enabled));
                     }
                 }
             }
@@ -473,17 +497,20 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     private static class ChangeListEntry {
         public final boolean isTitle;
         public final String title;
+        public final boolean enabled;
         public final Entry<String, Tuple<JsonElement, JsonElement>> entry;
         
         public ChangeListEntry(String title) {
             this.isTitle = true;
             this.title = title;
+            this.enabled = false;
             this.entry = null;
         }
         
-        public ChangeListEntry(Entry<String, Tuple<JsonElement, JsonElement>> entry) {
+        public ChangeListEntry(Entry<String, Tuple<JsonElement, JsonElement>> entry, boolean enabled) {
             this.isTitle = false;
             this.title = null;
+            this.enabled = enabled;
             this.entry = entry;
         }
     }

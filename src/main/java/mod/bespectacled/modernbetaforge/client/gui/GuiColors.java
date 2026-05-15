@@ -7,6 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiColors {
     public static final int RGB_WHITE = 16777215;
     public static final int RGB_GRAY = 10526880;
+    public static final int RGB_DARK_GREY = 4276545;
     public static final int RGB_LIGHT_RED = 16752800;
     public static final int RGB_LIGHT_YELLOW = 16777120;
     public static final int RGB_DARK_YELLOW = 10526785;
