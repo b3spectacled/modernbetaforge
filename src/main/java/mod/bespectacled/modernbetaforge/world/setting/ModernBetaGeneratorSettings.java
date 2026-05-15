@@ -2159,92 +2159,52 @@ public class ModernBetaGeneratorSettings {
         public JsonElement serialize(Factory factory, Type type, JsonSerializationContext jsonSerializationContext) {
             JsonObject jsonObject = new JsonObject();
             
+            /* Ordered according to Customization screen layout */
+            
+            // Page 1 - Basic
+            
             jsonObject.addProperty(NbtTags.CHUNK_SOURCE, factory.chunkSource);
             jsonObject.addProperty(NbtTags.BIOME_SOURCE, factory.biomeSource);
+            jsonObject.addProperty(NbtTags.SINGLE_BIOME, factory.singleBiome);
             jsonObject.addProperty(NbtTags.SURFACE_BUILDER, factory.surfaceBuilder);
             jsonObject.addProperty(NbtTags.CAVE_CARVER, factory.caveCarver);
             jsonObject.addProperty(NbtTags.WORLD_SPAWNER, factory.worldSpawner);
             
-            jsonObject.addProperty(NbtTags.SINGLE_BIOME, factory.singleBiome);
-            jsonObject.addProperty(NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
-            jsonObject.addProperty(NbtTags.DEFAULT_FLUID, factory.defaultFluid);
-
             jsonObject.addProperty(NbtTags.REPLACE_OCEAN_BIOMES, factory.replaceOceanBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_BEACH_BIOMES, factory.replaceBeachBiomes);
             jsonObject.addProperty(NbtTags.REPLACE_RIVER_BIOMES, factory.replaceRiverBiomes);
             
-            jsonObject.addProperty(NbtTags.COORDINATE_SCALE, factory.coordinateScale);
-            jsonObject.addProperty(NbtTags.HEIGHT_SCALE, factory.heightScale);
-            jsonObject.addProperty(NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
-            jsonObject.addProperty(NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
-            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_X, factory.scaleNoiseScaleX);
-            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_Z, factory.scaleNoiseScaleZ);
-            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
-            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
-            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);
-            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Y, factory.mainNoiseScaleY);
-            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Z, factory.mainNoiseScaleZ);
-            jsonObject.addProperty(NbtTags.BASE_SIZE, factory.baseSize);
-            jsonObject.addProperty(NbtTags.STRETCH_Y, factory.stretchY);
+            jsonObject.addProperty(NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
+            jsonObject.addProperty(NbtTags.DEFAULT_FLUID, factory.defaultFluid);
             jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
-            jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
-            
-            jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
-            jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
-            jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
-            jsonObject.addProperty(NbtTags.USE_TERRAIN_COORD_FIX, factory.useTerrainCoordFix);
-            jsonObject.addProperty(NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
-            jsonObject.addProperty(NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
-
-            jsonObject.addProperty(NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
-            jsonObject.addProperty(NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
-            jsonObject.addProperty(NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
-            jsonObject.addProperty(NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
-            jsonObject.addProperty(NbtTags.RIVER_DEPTH_WEIGHT, factory.riverDepthWeight);
-            jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
-            jsonObject.addProperty(NbtTags.USE_AMPLIFIED, factory.useAmplified);
-            jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
-            jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
-            jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
-            jsonObject.addProperty(NbtTags.LAYER_SIZE, factory.layerSize);
-            jsonObject.addProperty(NbtTags.LAYER_VERSION, factory.layerVersion);
-            jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
-
-            jsonObject.addProperty(NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
-            jsonObject.addProperty(NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);
-            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_OFFSET, factory.endOuterIslandOffset);
-            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_DISTANCE, factory.endOuterIslandDistance);
-            jsonObject.addProperty(NbtTags.USE_END_OUTER_ISLANDS, factory.useEndOuterIslands);
-
+            jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             jsonObject.addProperty(NbtTags.CAVE_WIDTH, factory.caveWidth);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
             jsonObject.addProperty(NbtTags.CAVE_COUNT, factory.caveCount);
             jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
-            jsonObject.addProperty(NbtTags.USE_DUNGEONS, factory.useDungeons);
-            jsonObject.addProperty(NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
-            
-            jsonObject.addProperty(NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
+            jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
+            jsonObject.addProperty(NbtTags.USE_MINESHAFTS, factory.useMineShafts);
             jsonObject.addProperty(NbtTags.USE_VILLAGES, factory.useVillages);
             jsonObject.addProperty(NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
-            jsonObject.addProperty(NbtTags.USE_MINESHAFTS, factory.useMineShafts);
+            jsonObject.addProperty(NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
             jsonObject.addProperty(NbtTags.USE_TEMPLES, factory.useTemples);
             jsonObject.addProperty(NbtTags.USE_MONUMENTS, factory.useMonuments);
             jsonObject.addProperty(NbtTags.USE_MANSIONS, factory.useMansions);
-            jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
-            jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
-            
+            jsonObject.addProperty(NbtTags.USE_DUNGEONS, factory.useDungeons);
+            jsonObject.addProperty(NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
             jsonObject.addProperty(NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
             jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
             jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-            
-            jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
-            
+            jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
+
             jsonObject.addProperty(NbtTags.USE_OLD_NETHER, factory.useOldNether);
             jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
             jsonObject.addProperty(NbtTags.USE_FORTRESSES, factory.useFortresses);
             jsonObject.addProperty(NbtTags.USE_LAVA_POCKETS, factory.useLavaPockets);
             
+            // Page 2 - Chunk
+
             jsonObject.addProperty(NbtTags.USE_INFDEV_WALLS, factory.useInfdevWalls);
             jsonObject.addProperty(NbtTags.USE_INFDEV_PYRAMIDS, factory.useInfdevPyramids);
             
@@ -2257,12 +2217,42 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_INDEV_CAVES, factory.useIndevCaves);
             jsonObject.addProperty(NbtTags.LEVEL_CAVE_WIDTH, factory.levelCaveWidth);
             
-            jsonObject.addProperty(NbtTags.ORE_TYPE, factory.oreType);
+            jsonObject.addProperty(NbtTags.LAYER_SIZE, factory.layerSize);
+            jsonObject.addProperty(NbtTags.RIVER_SIZE, factory.riverSize);
+            jsonObject.addProperty(NbtTags.LAYER_TYPE, factory.layerType);
+            jsonObject.addProperty(NbtTags.LAYER_VERSION, factory.layerVersion);
             
-            jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
-            jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
-            jsonObject.addProperty(NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
-            jsonObject.addProperty(NbtTags.CLAY_MAX_HEIGHT, factory.clayMaxHeight);
+            // Page 3 - Biome
+
+            jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
+            jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
+            jsonObject.addProperty(NbtTags.USE_DOUBLE_PLANTS, factory.useDoublePlants);
+            jsonObject.addProperty(NbtTags.USE_LILY_PADS, factory.useLilyPads);
+            jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
+            jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
+            jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
+            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, factory.useSandDisks);
+            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
+            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
+            jsonObject.addProperty(NbtTags.USE_NEW_FANCY_OAK_TREES, factory.useNewFancyOakTrees);
+            jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
+            jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
+            jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
+            jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
+            jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
+
+            jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
+            jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);
+
+            jsonObject.addProperty(NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
+            jsonObject.addProperty(NbtTags.SPAWN_WOLVES, factory.spawnWolves);
+            
+            // Page 4 - Ores
+            
+            jsonObject.addProperty(NbtTags.ORE_TYPE, factory.oreType);
             
             jsonObject.addProperty("dirtSize", factory.dirtSize);
             jsonObject.addProperty("dirtCount", factory.dirtCount);
@@ -2324,35 +2314,57 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
             jsonObject.addProperty(NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
             
+            jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
+            jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
+            jsonObject.addProperty(NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
+            jsonObject.addProperty(NbtTags.CLAY_MAX_HEIGHT, factory.clayMaxHeight);
+            
             jsonObject.addProperty(NbtTags.QUARTZ_SIZE, factory.quartzSize);
             jsonObject.addProperty(NbtTags.QUARTZ_COUNT, factory.quartzCount);
             
             jsonObject.addProperty(NbtTags.MAGMA_SIZE, factory.magmaSize);
             jsonObject.addProperty(NbtTags.MAGMA_COUNT, factory.magmaCount);
 
-            jsonObject.addProperty(NbtTags.USE_TALL_GRASS, factory.useTallGrass);
-            jsonObject.addProperty(NbtTags.USE_NEW_FLOWERS, factory.useNewFlowers);
-            jsonObject.addProperty(NbtTags.USE_DOUBLE_PLANTS, factory.useDoublePlants);
-            jsonObject.addProperty(NbtTags.USE_LILY_PADS, factory.useLilyPads);
-            jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
-            jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
-            jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
-            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, factory.useSandDisks);
-            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
-            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
+            // Page 5/6 - Noise
 
-            jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
-            jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
-            jsonObject.addProperty(NbtTags.USE_SWAMP_TREES, factory.useSwampTrees);
-            jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
-            jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
-            jsonObject.addProperty(NbtTags.USE_NEW_FANCY_OAK_TREES, factory.useNewFancyOakTrees);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_X, factory.mainNoiseScaleX);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Y, factory.mainNoiseScaleY);
+            jsonObject.addProperty(NbtTags.MAIN_NOISE_SCALE_Z, factory.mainNoiseScaleZ);
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_X, factory.scaleNoiseScaleX);
+            jsonObject.addProperty(NbtTags.SCALE_NOISE_SCALE_Z, factory.scaleNoiseScaleZ);
+            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_X, factory.depthNoiseScaleX);
+            jsonObject.addProperty(NbtTags.DEPTH_NOISE_SCALE_Z, factory.depthNoiseScaleZ);
+            jsonObject.addProperty(NbtTags.BASE_SIZE, factory.baseSize);
+            jsonObject.addProperty(NbtTags.COORDINATE_SCALE, factory.coordinateScale);
+            jsonObject.addProperty(NbtTags.HEIGHT_SCALE, factory.heightScale);
+            jsonObject.addProperty(NbtTags.STRETCH_Y, factory.stretchY);
+            jsonObject.addProperty(NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
+            jsonObject.addProperty(NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
+            jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
+            
+            jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
+            jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
+            jsonObject.addProperty(NbtTags.DETAIL_NOISE_SCALE, factory.detailNoiseScale);
+            jsonObject.addProperty(NbtTags.USE_TERRAIN_COORD_FIX, factory.useTerrainCoordFix);
 
-            jsonObject.addProperty(NbtTags.SPAWN_NEW_CREATURE_MOBS, factory.spawnNewCreatureMobs);
-            jsonObject.addProperty(NbtTags.SPAWN_NEW_MONSTER_MOBS, factory.spawnNewMonsterMobs);
-            jsonObject.addProperty(NbtTags.SPAWN_WATER_MOBS, factory.spawnWaterMobs);
-            jsonObject.addProperty(NbtTags.SPAWN_AMBIENT_MOBS, factory.spawnAmbientMobs);
-            jsonObject.addProperty(NbtTags.SPAWN_WOLVES, factory.spawnWolves);
+            jsonObject.addProperty(NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
+            jsonObject.addProperty(NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
+            jsonObject.addProperty(NbtTags.BIOME_SCALE_WEIGHT, factory.biomeScaleWeight);
+            jsonObject.addProperty(NbtTags.BIOME_SCALE_OFFSET, factory.biomeScaleOffset);
+            jsonObject.addProperty(NbtTags.RIVER_DEPTH_WEIGHT, factory.riverDepthWeight);
+            jsonObject.addProperty(NbtTags.USE_BIOME_DEPTH_SCALE, factory.useBiomeDepthScale);
+            jsonObject.addProperty(NbtTags.USE_AMPLIFIED, factory.useAmplified);
+
+            jsonObject.addProperty(NbtTags.END_ISLAND_WEIGHT, factory.endIslandWeight);
+            jsonObject.addProperty(NbtTags.END_ISLAND_OFFSET, factory.endIslandOffset);
+            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_DISTANCE, factory.endOuterIslandDistance);
+            jsonObject.addProperty(NbtTags.END_OUTER_ISLAND_OFFSET, factory.endOuterIslandOffset);
+            jsonObject.addProperty(NbtTags.USE_END_OUTER_ISLANDS, factory.useEndOuterIslands);
+            
+            // Page 7 - Climate
+
+            jsonObject.addProperty(NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
+            jsonObject.addProperty(NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
 
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);
@@ -2397,6 +2409,8 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BASE, factory.tundraBiomeBase);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_OCEAN, factory.tundraBiomeOcean);
             jsonObject.addProperty(NbtTags.TUNDRA_BIOME_BEACH, factory.tundraBiomeBeach);
+            
+            // Page 8 - Add-ons
             
             factory.customProperties.keySet().forEach(key -> {
                 Property<?> property = factory.customProperties.get(key);

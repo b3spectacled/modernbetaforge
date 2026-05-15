@@ -76,12 +76,15 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     public GuiModalChangelist(GuiScreenCustomizeWorld parent, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard) {
         super(parent, I18n.format(PREFIX_CONFIRM + "title"), MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
         
-        String prevString = parent.getPreviousSettingsString();
-        String nextString = parent.getSettingsString();
+        ModernBetaGeneratorSettings.Factory prevFactory = ModernBetaGeneratorSettings.Factory.jsonToFactory(parent.getPreviousSettingsString());
+        ModernBetaGeneratorSettings.Factory nextFactory = ModernBetaGeneratorSettings.Factory.jsonToFactory(parent.getSettingsString());
         
-        this.prevProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(prevString).customProperties;
-        this.nextProperties = ModernBetaGeneratorSettings.Factory.jsonToFactory(nextString).customProperties;
-        this.settings = ModernBetaGeneratorSettings.build(nextString);
+        String prevString = prevFactory.toString();
+        String nextString = nextFactory.toString();
+        
+        this.prevProperties = prevFactory.customProperties;
+        this.nextProperties = nextFactory.customProperties;
+        this.settings = nextFactory.build();
 
         this.onDiscard = onDiscard;
         this.changeMap = this.createChangeMap(prevString, nextString);
@@ -207,7 +210,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         JsonObject next = PresetUtil.readPresetAsJson(nextStr);
         
         Map<String, Tuple<JsonElement, JsonElement>> changeMap = new LinkedHashMap<>();
-        for (Entry<String, JsonElement> entry : prev.entrySet()) {
+        for (Entry<String, JsonElement> entry : next.entrySet()) {
             String key = entry.getKey();
             JsonElement prevSetting = prev.get(key);
             JsonElement nextSetting = next.get(key);
@@ -472,6 +475,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
             List<ChangeListEntry> changeList = new ArrayList<>();
             
             for (int i = 0; i < this.parent.modIds.size(); ++i) {
+                List<ChangeListEntry> modChangeList = new ArrayList<>();
                 String modId = this.parent.modIds.get(i);
                 changeList.add(new ChangeListEntry(modId));
                 
@@ -484,9 +488,12 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                             ModernBetaClientRegistries.GUI_PREDICATE.get(registryKey).test(this.parent.settings) :
                             true;
                         
-                        changeList.add(new ChangeListEntry(new SimpleEntry<>(key, this.parent.changeMap.get(key)), enabled));
+                        modChangeList.add(new ChangeListEntry(new SimpleEntry<>(key, this.parent.changeMap.get(key)), enabled));
                     }
                 }
+                
+                // Collections.sort(modChangeList);
+                changeList.addAll(modChangeList);
             }
             
             return changeList;
@@ -494,7 +501,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     }
     
     @SideOnly(Side.CLIENT)
-    private static class ChangeListEntry {
+    private static class ChangeListEntry implements Comparable<ChangeListEntry> {
         public final boolean isTitle;
         public final String title;
         public final boolean enabled;
@@ -503,7 +510,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         public ChangeListEntry(String title) {
             this.isTitle = true;
             this.title = title;
-            this.enabled = false;
+            this.enabled = true;
             this.entry = null;
         }
         
@@ -512,6 +519,11 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
             this.title = null;
             this.enabled = enabled;
             this.entry = entry;
+        }
+
+        @Override
+        public int compareTo(ChangeListEntry o) {
+            return Boolean.compare(o.enabled,  this.enabled);
         }
     }
 
