@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -30,5 +31,10 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
                 this.useCustomSurfaceBuilder(world, biome, chunkPrimer, random, x, z, true);
             }
         }
+    }
+    
+    @Override
+    public boolean replacesDefaultBlock() {
+        return this.defaultBlock.equals(BlockStates.STONE);
     }
 }

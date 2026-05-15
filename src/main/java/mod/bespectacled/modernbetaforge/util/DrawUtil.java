@@ -278,10 +278,10 @@ public class DrawUtil {
         return newVector;
     }
     
-    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, SurfaceBuilder surfaceBuilder, int x, int z, int height, Biome biome, Random random) {
-        TerrainType terrainType = TerrainType.GRASS;
+    private static TerrainType getBaseTerrainType(ChunkSource chunkSource, SurfaceBuilder surfaceBuilder, int x, int z, int height, Biome biome, Random random) {        
         TerrainType defaultBlock = getTerrainTypeByStone(chunkSource);
         TerrainType defaultFluid = getTerrainTypeByFluid(chunkSource);
+        TerrainType terrainType = surfaceBuilder.replacesDefaultBlock() ? TerrainType.GRASS : defaultBlock;
         Set<Type> types = BiomeDictionary.getTypes(biome);
         
         if (chunkSource instanceof FiniteChunkSource) {

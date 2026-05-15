@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
@@ -15,6 +16,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
+import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
@@ -115,6 +117,17 @@ public abstract class SurfaceBuilder {
      */
     public boolean isCustomSurface(Biome biome) {
         return this.biomesWithCustomSurfaces.contains(biome);
+    }
+    
+    /**
+     * Indicate whether the surface builder can replace the default block.
+     * Currently used to test whether {@link ReleaseSurfaceBuilder} can replace Stone in {@link GuiScreenCustomizePreview}.
+     * Since vanilla surface builder cannot replace default blocks that are not Stone, it will return false in other cases.
+     * 
+     * @return Whether the surface builder can replace the default block. Default is true, assuming proper implementation.
+     */
+    public boolean replacesDefaultBlock() {
+        return true;
     }
 
     /**
