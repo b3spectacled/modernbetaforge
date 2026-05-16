@@ -110,10 +110,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int BUTTON_SPACE = 4;
     private static final int TEXT_BOX_PADDING = 4;
     
-    private static final int ARGB_PREVIEW_BOX = MathUtil.convertARGBComponentsToInt(50, 0, 0, 0);
-    private static final int ARGB_PROGRESS_BOX = MathUtil.convertARGBComponentsToInt(200, 0, 0, 0);
-    private static final int ARGB_PROGRESS_BAR = MathUtil.convertARGBComponentsToInt(160, 128, 255, 128);
-    
     private static final int GUI_ID_BIOME_COLORS = 0;
     private static final int GUI_ID_ZOOM = 1;
     private static final int GUI_ID_GENERATE = 2;
@@ -149,7 +145,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiListButton buttonStructures;
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
-    private GuiButtonBounded buttonScreenshot;
+    private GuiButton buttonScreenshot;
     private EmptyListPreset list;
     @SuppressWarnings("unused")
     private ProgressState prevState;
@@ -222,7 +218,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
         this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
         
-        this.buttonScreenshot = this.addButton(new GuiButtonBounded(GUI_ID_SCREENSHOT, screenshotX, screenshotY, 20, 20, "\u2399"));
+        this.buttonScreenshot = this.addButton(new GuiButton(GUI_ID_SCREENSHOT, screenshotX, screenshotY, 20, 20, "\u2399"));
 
         this.sliderZoom.width = BUTTON_SMALL_WIDTH;
         this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
@@ -289,11 +285,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         progressLen = MathHelper.clamp(progressLen, 0.0, progressBarLen);
         this.progressLen = progressLen;
         
-        drawRect(viewportX, viewportY, viewportX + viewportSize, viewportY + viewportSize, ARGB_PREVIEW_BOX);
-        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY - 1, GuiColors.ARGB_BORDER_LIGHT);
-        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_BORDER_DARK);
-        this.drawVerticalLine(viewportX - 1, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_BORDER_LIGHT);
-        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_BORDER_DARK);
+        drawRect(viewportX, viewportY, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_TRANS_GREY);
+        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY - 1, GuiColors.ARGB_LIGHT_GREY);
+        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_DARK_GREY);
+        this.drawVerticalLine(viewportX - 1, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_LIGHT_GREY);
+        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_DARK_GREY);
         
         String text;
         int textLen;
@@ -331,11 +327,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.drawCenteredString(this.fontRenderer, levelProgressText + "..", centerX, progressHeight, GuiColors.RGB_WHITE);
                     }
                 } else {
-                    DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, ARGB_PROGRESS_BAR);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_BORDER_LIGHT);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_BORDER_DARK);
-                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_BORDER_LIGHT);
-                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_BORDER_DARK);
+                    DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, GuiColors.ARGB_TRANS_GREEN);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_DARK_GREY);
+                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
+                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_DARK_GREY);
                     
                     this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, GuiColors.RGB_WHITE);
                 }
@@ -832,7 +828,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void drawProgressBox(int boxL, int boxR, int boxT, int boxB) {
         if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
-            drawRect(boxL, boxT, boxR, boxB, ARGB_PROGRESS_BOX);
+            drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_TRANS_DARK_GREY);
         }
     }
     
@@ -846,7 +842,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
 
     private void drawScreenshotTooltip(int viewportX, int viewportY, int viewportSize, int mouseX, int mouseY) {
-        if (this.buttonScreenshot.visible && this.buttonScreenshot.isHovered(mouseX, mouseY)) {
+        if (this.buttonScreenshot.visible && this.buttonScreenshot.isMouseOver()) {
             String text = I18n.format(PREFIX + "screenshot");
             int textWidth = this.fontRenderer.getStringWidth(text);
             
@@ -861,7 +857,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int textX = rectL + paddingX;
             int textY = rectT + paddingY + 1;
             
-            drawRect(rectL, rectT, rectR, rectB, ARGB_PROGRESS_BOX);
+            drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_DARK_GREY);
             this.fontRenderer.drawStringWithShadow(text, textX, textY, GuiColors.RGB_WHITE);
         }
     }
@@ -897,7 +893,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textY0 = rectT + paddingY + 1;
         int textY1 = textY0 + this.fontRenderer.FONT_HEIGHT + 3;
 
-        drawRect(rectL, rectT, rectR, rectB, ARGB_PROGRESS_BOX);
+        drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_DARK_GREY);
         this.drawString(this.fontRenderer, text0, textX, textY0, GuiColors.RGB_WHITE);
         this.drawString(this.fontRenderer, text1, textX, textY1, GuiColors.RGB_WHITE);
     }
