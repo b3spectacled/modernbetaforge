@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.client.gui.modal;
 import java.io.IOException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.google.gson.JsonObject;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCheckbox;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
@@ -61,7 +63,9 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     private static final int LIST_PADDING_BOTTOM = 27;
     private static final int LIST_SLOT_HEIGHT = 32;
     private static final int LIST_WIDTH_OFFSET = 25;
+    
     private static final int GUI_ID_DISCARD = 2;
+    private static final int GUI_ID_SORT = 3;
     
     private final Map<ResourceLocation, Property<?>> prevProperties;
     private final Map<ResourceLocation, Property<?>> nextProperties;
@@ -70,10 +74,17 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
     private final Consumer<GuiModalChangelist> onDiscard;
     private final Map<String, Tuple<JsonElement, JsonElement>> changeMap;
     private final List<String> modIds;
+    private final boolean initialSort;
+    private final int initialScroll;
     
     private ChangeList changeList;
+    private GuiCheckbox sortCheckBox;
 
     public GuiModalChangelist(GuiScreenCustomizeWorld parent, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard) {
+        this(parent, onConfirm, onCancel, onDiscard, false, 0);
+    }
+    
+    public GuiModalChangelist(GuiScreenCustomizeWorld parent, Consumer<GuiModalChangelist> onConfirm, Consumer<GuiModalChangelist> onCancel, Consumer<GuiModalChangelist> onDiscard, boolean initialSort, int initialScroll) {
         super(parent, I18n.format(PREFIX_CONFIRM + "title"), MODAL_MIN_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
         
         ModernBetaGeneratorSettings.Factory prevFactory = ModernBetaGeneratorSettings.Factory.jsonToFactory(parent.getPreviousSettingsString());
@@ -89,6 +100,8 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         this.onDiscard = onDiscard;
         this.changeMap = this.createChangeMap(prevString, nextString);
         this.modIds = this.getModIds(this.changeMap);
+        this.initialSort = initialSort;
+        this.initialScroll = initialScroll;
     }
     
     @Override
@@ -103,7 +116,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         this.modalWidth = MathHelper.clamp((int)(this.width * 0.8), MODAL_MIN_WIDTH, MODAL_MAX_WIDTH);
         this.modalHeight = (int)(this.height * 0.8);
         
-        int curScroll = 0;
+        int curScroll = this.initialScroll;
         if (this.changeList != null) {
             curScroll = this.changeList.getAmountScrolled();
         }
@@ -119,6 +132,12 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         int discardX = this.width / 2 - BUTTON_S_WIDTH / 2;
         int discardY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
         
+        int sortPadding = LIST_PADDING_TOP / 2 - GuiCheckbox.DEFAULT_WIDTH / 2;
+        int sortX = this.width / 2 + this.modalWidth / 2 - GuiCheckbox.DEFAULT_WIDTH - sortPadding;
+        int sortY = this.height / 2 - this.modalHeight / 2 + sortPadding;
+        
+        boolean sortList = this.sortCheckBox == null ? this.initialSort : this.sortCheckBox.getToggled();
+        
         this.buttonConfirm.x = confirmX;
         this.buttonConfirm.y = discardY;
         
@@ -126,6 +145,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         this.buttonCancel.y = discardY;
         
         this.addButton(new GuiButton(GUI_ID_DISCARD, discardX, discardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
+        this.sortCheckBox = this.addButton(new GuiCheckbox(GUI_ID_SORT, sortX, sortY, sortList));
     }
     
     @Override
@@ -146,6 +166,11 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         int titleX = this.width / 2;
         int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
         this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, GuiColors.RGB_WHITE);
+        
+        String sortStr = I18n.format(PREFIX_CONFIRM + "sort");
+        int sortX = this.sortCheckBox.x - this.fontRenderer.getStringWidth(sortStr) - BUTTON_PADDING;
+        int sortY = titleY;
+        this.drawString(this.fontRenderer, sortStr, sortX, sortY, GuiColors.RGB_WHITE);
         
         if (this.changeList.hoveredSlot >= 0) {
             ChangeListEntry listEntry = this.changeList.changeList.get(this.changeList.hoveredSlot);
@@ -201,6 +226,13 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                 break;
             case GUI_ID_DISCARD:
                 this.onDiscard.accept(this);
+                break;
+            case GUI_ID_SORT:
+                GuiScreenCustomizeWorld parent = (GuiScreenCustomizeWorld)this.parent;
+                boolean initialSort = !this.initialSort;
+                int initialScroll = this.changeList.getAmountScrolled();
+                
+                this.mc.displayGuiScreen(new GuiModalChangelist(parent, this.onConfirm, this.onCancel, this.onDiscard, initialSort, initialScroll));
                 break;
         }
     }
@@ -492,7 +524,9 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
                     }
                 }
                 
-                // Collections.sort(modChangeList);
+                if (this.parent.initialSort) {
+                    Collections.sort(modChangeList);
+                }
                 changeList.addAll(modChangeList);
             }
             

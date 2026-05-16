@@ -7,12 +7,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiCheckbox extends GuiButton {
-    private static final int WIDTH = 20;
+    public static final int DEFAULT_WIDTH = 12;
     
     private boolean toggled;
     
     public GuiCheckbox(int buttonId, int x, int y, boolean initial) {
-        super(buttonId, x, y, WIDTH, WIDTH, "");
+        this(buttonId, x, y, DEFAULT_WIDTH, DEFAULT_WIDTH, initial);
+    }
+    
+    public GuiCheckbox(int buttonId, int x, int y, int width, int height, boolean initial) {
+        super(buttonId, x, y, width, height, "");
         
         this.toggled = initial;
     }
@@ -28,11 +32,8 @@ public class GuiCheckbox extends GuiButton {
             this.updateHovered(mouseX, mouseY);
             
             drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_LIGHT_GREY);
-            drawRect(boxL + 1, boxT + 1, boxR - 1, boxB - 1, GuiColors.ARGB_TRANS_GREY);
-            
-            if (this.toggled) {
-                drawRect(boxL + 2, boxT + 2, boxR - 2, boxB - 2, GuiColors.ARGB_TRANS_GREEN);
-            }
+            drawRect(boxL + 1, boxT + 1, boxR - 1, boxB - 1, GuiColors.ARGB_DARKEST_GREY);
+            drawRect(boxL + 2, boxT + 2, boxR - 2, boxB - 2, this.toggled ? GuiColors.ARGB_TRANS_GREEN : GuiColors.ARGB_DARKER_GREY);
         }
     }
     
@@ -49,8 +50,16 @@ public class GuiCheckbox extends GuiButton {
     @Override
     public void setWidth(int width) { }
     
+    public boolean getToggled() {
+        return this.toggled;
+    }
+    
     public void setToggled(boolean toggled) {
         this.toggled = toggled;
+    }
+    
+    public void toggle() {
+        this.setToggled(!this.toggled);
     }
     
     private void updateHovered(int mouseX, int mouseY) {

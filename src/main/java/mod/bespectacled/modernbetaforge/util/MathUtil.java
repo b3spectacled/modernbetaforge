@@ -2,8 +2,10 @@ package mod.bespectacled.modernbetaforge.util;
 
 import java.util.Random;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.util.vector.Vector4f;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import net.minecraft.util.math.Vec3d;
 
 public class MathUtil {
@@ -101,5 +103,25 @@ public class MathUtil {
     
     public static int lerpRGBColor(int color, int target, double delta) {
         return lerpARGBColor(convertRGBtoARGB(color), convertRGBtoARGB(target), delta);
+    }
+    
+    public static void printARGBComponents(int color) {
+        Vector4f colorVec = convertARGBIntToVector4f(color);
+        int a = (int)(colorVec.x * 255.0f);
+        int r = (int)(colorVec.y * 255.0f);
+        int g = (int)(colorVec.z * 255.0f);
+        int b = (int)(colorVec.w * 255.0f);
+        
+        ModernBeta.log(Level.DEBUG, String.format("Color %d: %d/%d/%d/%d", color, a, r, g, b));
+    }
+    
+    public static void printRGBComponents(int color) {
+        Vec3d colorVec = convertRGBIntToVec3d(color);
+        
+        int r = (int)(colorVec.x * 255.0d);
+        int g = (int)(colorVec.y * 255.0d);
+        int b = (int)(colorVec.z * 255.0d);
+        
+        ModernBeta.log(Level.DEBUG, String.format("Color %d: %d/%d/%d", color, r, g, b));
     }
 }

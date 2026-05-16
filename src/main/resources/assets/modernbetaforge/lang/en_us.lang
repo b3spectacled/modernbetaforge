@@ -102,6 +102,7 @@ createWorld.customize.custom.modernbetaforge.confirm.info=This will overwrite yo
 # Page Changelist
 createWorld.customize.custom.modernbetaforge.confirmSettings.title=Confirm Changes
 createWorld.customize.custom.modernbetaforge.confirmSettings.missing=Setting is missing or has been removed.
+createWorld.customize.custom.modernbetaforge.confirmSettings.sort=Sort
 
 # Page 1 - Main Settings
 createWorld.customize.custom.modernbetaforge.chunkSource=Chunk Source

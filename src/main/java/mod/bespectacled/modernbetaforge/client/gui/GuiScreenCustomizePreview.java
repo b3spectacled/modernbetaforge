@@ -380,10 +380,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
         int seedColor = this.seedFieldBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_YELLOW :
+            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
             GuiColors.RGB_WHITE;
         int useSeedColor = this.useSeedLabelBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GRAY : GuiColors.RGB_LIGHT_YELLOW :
+            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
             GuiColors.RGB_WHITE;
         
         this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, GuiColors.RGB_WHITE);
