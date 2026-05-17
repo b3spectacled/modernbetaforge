@@ -360,9 +360,9 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         
         this.drawCenteredString(this.fontRenderer, iconText, boxL + ICON_SIZE / 2 + 1, boxT - 10, GuiColors.RGB_GREY);
         this.drawHorizontalLine(boxL, boxR, boxT, GuiColors.ARGB_LIGHT_GREY);
-        this.drawHorizontalLine(boxL, boxR, boxB, GuiColors.ARGB_DARK_GREY);
+        this.drawHorizontalLine(boxL, boxR, boxB, GuiColors.ARGB_GREY);
         this.drawVerticalLine(boxL, boxT, boxB, GuiColors.ARGB_LIGHT_GREY);
-        this.drawVerticalLine(boxR, boxT, boxB, GuiColors.ARGB_DARK_GREY);
+        this.drawVerticalLine(boxR, boxT, boxB, GuiColors.ARGB_GREY);
         
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         this.mc.getTextureManager().bindTexture(icon.identifier);

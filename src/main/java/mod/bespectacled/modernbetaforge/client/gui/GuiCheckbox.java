@@ -24,16 +24,19 @@ public class GuiCheckbox extends GuiButton {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
+            this.updateHovered(mouseX, mouseY);
+            
             int boxL = this.x;
             int boxT = this.y;
             int boxR = this.x + this.width;
             int boxB = this.y + this.height;
             
-            this.updateHovered(mouseX, mouseY);
+            int colorSelected = this.hovered ? GuiColors.ARGB_LIGHT_GREEN : GuiColors.ARGB_GREEN;
+            int colorDeselected = this.hovered ? GuiColors.ARGB_DARK_GREY : GuiColors.ARGB_DARKER_GREY;
             
             drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_LIGHT_GREY);
             drawRect(boxL + 1, boxT + 1, boxR - 1, boxB - 1, GuiColors.ARGB_DARKEST_GREY);
-            drawRect(boxL + 2, boxT + 2, boxR - 2, boxB - 2, this.toggled ? GuiColors.ARGB_TRANS_GREEN : GuiColors.ARGB_DARKER_GREY);
+            drawRect(boxL + 2, boxT + 2, boxR - 2, boxB - 2, this.toggled ? colorSelected : colorDeselected);
         }
     }
     

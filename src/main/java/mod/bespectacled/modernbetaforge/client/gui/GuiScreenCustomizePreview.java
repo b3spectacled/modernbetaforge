@@ -287,9 +287,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         drawRect(viewportX, viewportY, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_TRANS_GREY);
         this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY - 1, GuiColors.ARGB_LIGHT_GREY);
-        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_DARK_GREY);
+        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_GREY);
         this.drawVerticalLine(viewportX - 1, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_LIGHT_GREY);
-        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_DARK_GREY);
+        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_GREY);
         
         String text;
         int textLen;
@@ -329,9 +329,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 } else {
                     DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, GuiColors.ARGB_TRANS_GREEN);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_DARK_GREY);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_GREY);
                     this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
-                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_DARK_GREY);
+                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_GREY);
                     
                     this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, GuiColors.RGB_WHITE);
                 }
