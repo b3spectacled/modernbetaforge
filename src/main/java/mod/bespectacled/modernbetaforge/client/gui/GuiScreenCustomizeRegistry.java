@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -174,16 +175,23 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, GuiColors.RGB_WHITE);
         this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, GuiColors.RGB_GREY);
-    
-        /*
+
         if (this.hoveredElement != -1) {
-            String tooltip = this.entries.get(this.hoveredElement).tooltip;
+            String name = this.entries.get(this.hoveredElement).name;
+            String registryName = this.entries.get(this.hoveredElement).registryName;
             
-            if (!tooltip.isEmpty() && System.currentTimeMillis() - this.hoveredTime > 500L) {
-                this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(tooltip, 120), mouseX, mouseY);
+            int nameWidth = this.fontRenderer.getStringWidth(name);
+            int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
+            
+            boolean truncated = nameWidth > ListPreset.MAX_NAME_WIDTH || registryNameWidth > ListPreset.MAX_NAME_WIDTH; 
+            if (truncated) {
+                List<String> textList = new ArrayList<>();
+                textList.add(TextFormatting.RESET + name);
+                textList.add(TextFormatting.GRAY + registryName);
+                
+                this.drawHoveringText(textList, mouseX, mouseY);
             }
         }
-        */
     }
     
     @Override
