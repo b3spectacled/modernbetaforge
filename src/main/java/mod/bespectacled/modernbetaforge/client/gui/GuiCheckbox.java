@@ -43,7 +43,7 @@ public class GuiCheckbox extends GuiButton {
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
         if (super.mousePressed(mc, mouseX, mouseY)) {
-            this.toggled = !toggled;
+            this.toggled = !this.toggled;
             return true;
         }
         

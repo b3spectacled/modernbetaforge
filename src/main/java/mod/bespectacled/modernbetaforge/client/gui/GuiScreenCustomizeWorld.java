@@ -138,7 +138,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     protected String title;
     protected String[] pageNames;
-    protected Map<Integer, GuiButton> pageTabMap;
+    protected Map<Integer, GuiButtonTab> pageTabMap;
 
     private ModernBetaGeneratorSettings.Factory settings;
     private ModernBetaGeneratorSettings.Factory prevSettings;
@@ -802,11 +802,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         this.pageTabMap = new LinkedHashMap<>();
         for (int i = 0; i < this.pageList.getPageCount(); ++i) {
-            GuiButton guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, TAB_BUTTON_HEIGHT, I18n.format(this.pageNames[i]));
+            boolean selected = this.pageList.getPage() == i;
+            GuiButtonTab guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, TAB_BUTTON_HEIGHT, I18n.format(this.pageNames[i]), selected);
             
             this.pageTabMap.put(
                 GuiIdentifiers.FUNC_INITIAL_TAB + i,
-                this.<GuiButton>addButton(guiButton)
+                this.<GuiButtonTab>addButton(guiButton)
             );
             
             x += TAB_BUTTON_WIDTH + TAB_SPACE;
@@ -847,10 +848,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         GuiIdentifiers.assertOffsets();
         
         this.createPagedList();
-        this.createPageTabs();
-
         this.pageList.setPage(curPage);
         this.pageList.scrollBy(curScroll);
+        this.createPageTabs();
         
         // Set default enabled for certain options
         this.initButtonValidity();
@@ -2386,7 +2386,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonPreview.enabled = this.isFocused;
         
         // Tab buttons
-        for (Entry<Integer, GuiButton> pageTab : this.pageTabMap.entrySet()) {
+        for (Entry<Integer, GuiButtonTab> pageTab : this.pageTabMap.entrySet()) {
             if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage()) {
                 pageTab.getValue().enabled = false;
             } else {
@@ -2469,11 +2469,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             return false;
         }
         
-        int pageNext = this.pageList.getPage() + amount;
+        int page = this.pageList.getPage();
+        int pageNext = page + amount;
         int pageCount = this.pageList.getPageCount();
         
         if (pageNext >= 0 && pageNext < pageCount) {
             this.pageList.setPage(pageNext);
+            this.pageTabMap.get(GuiIdentifiers.FUNC_INITIAL_TAB + page).setSelected(false);
+            this.pageTabMap.get(GuiIdentifiers.FUNC_INITIAL_TAB + pageNext).setSelected(true);
             this.updateButtonValidity();
             this.playSound();
         }

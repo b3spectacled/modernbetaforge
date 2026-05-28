@@ -20,6 +20,7 @@ public class GuiColors {
     public static final int ARGB_GREEN = -10439584;               // 255, 96, 180, 96
     public static final int ARGB_LIGHT_GREEN = -10431392;         // 255, 96, 212, 96
     
+    public static final int ARGB_TRANSPARENT = 0;
     public static final int ARGB_TRANS_GREY = 838860800;          // 50, 0, 0, 0
     public static final int ARGB_TRANS_DARK_GREY = -939524096;    // 200, 0, 0, 0
     public static final int ARGB_TRANS_LIGHT_GREY = -935313344;   // 200, 64, 64, 64
