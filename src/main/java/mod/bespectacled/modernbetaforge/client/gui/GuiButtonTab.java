@@ -1,0 +1,50 @@
+package mod.bespectacled.modernbetaforge.client.gui;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.util.MathUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+
+public class GuiButtonTab extends GuiButton {
+    public GuiButtonTab(int id, int x, int y, int width, int height, String text) {
+        this(id, x, y, width, height, text, false);
+    }
+    
+    public GuiButtonTab(int id, int x, int y, int width, int height, String text, boolean initial) {
+        super(id, x, y, width, height, text);
+    }
+    
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (this.visible) {
+            this.updateHovered(mouseX, mouseY);
+            
+            int boxL = this.x;
+            int boxT = this.y;
+            int boxR = this.x + this.width;
+            int boxB = this.y + this.height;
+            
+            boolean hoveredOrSelected = this.hovered || !this.enabled;
+            
+            int colorBar = this.hovered ? GuiColors.ARGB_LIGHT_GREEN : GuiColors.ARGB_GREEN;
+            int colorBox = hoveredOrSelected ? GuiColors.ARGB_TRANS_LIGHTER_GREY : GuiColors.ARGB_TRANS_LIGHT_GREY;
+            int colorText = hoveredOrSelected ? GuiColors.RGB_WHITE : GuiColors.RGB_GREY;
+            
+            int textX = boxL + this.width / 2;
+            int textY = boxT + this.height / 2 - mc.fontRenderer.FONT_HEIGHT / 2;
+
+            drawRect(boxL, boxT + 2, boxR, boxB, colorBox);
+            this.drawHorizontalLine(boxL + 1, boxR - 2, boxT + 1, colorBox);
+            this.drawHorizontalLine(boxL + 3, boxR - 4, boxT, colorBox);
+            if (!this.enabled) {
+                this.drawHorizontalLine(boxL, boxR - 1, boxB - 1, colorBar);
+            }
+            this.drawCenteredString(mc.fontRenderer, this.displayString, textX, textY, colorText);
+            
+        }
+    }
+    
+    private void updateHovered(int mouseX, int mouseY) {
+        this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+    }
+}

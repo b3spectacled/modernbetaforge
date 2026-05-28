@@ -124,7 +124,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int BUTTON_SLOT_HEIGHT = 25;
     
     private static final int TAB_SPACE = 2;
-    private static final int TAB_HEIGHT = 18;
     private static final int TAB_BUTTON_WIDTH = 44;
     private static final int TAB_BUTTON_HEIGHT = 20;
     
@@ -797,18 +796,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     private void createPageTabs() {
         this.tabStartX = this.width / 2 - (TAB_BUTTON_WIDTH * this.pageList.getPageCount() / 2) - (TAB_SPACE *  this.pageList.getPageCount() / 2);
+        
+        int id = GuiIdentifiers.FUNC_INITIAL_TAB;
         int x = this.tabStartX;
+        int y = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
         
         this.pageTabMap = new LinkedHashMap<>();
         for (int i = 0; i < this.pageList.getPageCount(); ++i) {
-            GuiButton guiButton = new GuiButton(
-                GuiIdentifiers.FUNC_INITIAL_TAB + i,
-                x,
-                TAB_HEIGHT,
-                TAB_BUTTON_WIDTH,
-                TAB_BUTTON_HEIGHT,
-                I18n.format(this.pageNames[i])
-            );
+            GuiButton guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, TAB_BUTTON_HEIGHT, I18n.format(this.pageNames[i]));
             
             this.pageTabMap.put(
                 GuiIdentifiers.FUNC_INITIAL_TAB + i,
@@ -863,8 +858,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.updateSettingValidity();
         this.setSettingsModified(this.isSettingsModified());
         
-        this.leftKeyBounds.updateBounds(this.tabStartX - KEY_ICON_SIZE - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
-        this.rightKeyBounds.updateBounds(this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
+        int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
+        int leftNavX = this.tabStartX - KEY_ICON_SIZE - 3;
+        int rightNavX = this.tabEndX + 3;
+        
+        this.leftKeyBounds.updateBounds(leftNavX, tabY + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
+        this.rightKeyBounds.updateBounds(rightNavX, tabY + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
     }
     
     @Override
@@ -1747,14 +1746,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         leftKeyWidth += leftKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
         rightKeyWidth += rightKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
         
+        int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
+        int leftNavX = this.tabStartX - KEY_ICON_SIZE - 3;
+        int rightNavX = this.tabEndX + 3;
+        
         this.drawDefaultBackground();
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, GuiColors.RGB_WHITE);
         
         if (this.displayNavButtons) {
-            this.drawKeyIcon(leftKey, this.tabStartX - leftKeyWidth - TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
-            this.drawKeyIcon(rightKey, this.tabEndX + TAB_SPACE * 2, TAB_HEIGHT + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
+            this.drawKeyIcon(leftKey, leftNavX, tabY + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
+            this.drawKeyIcon(rightKey, rightNavX, tabY + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
         }
         
         super.drawScreen(mouseX, mouseY, partialTicks);
