@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 

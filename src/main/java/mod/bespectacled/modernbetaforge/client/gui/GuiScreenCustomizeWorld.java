@@ -107,7 +107,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int ARGB_KEY_ICON_BORDER_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 0, 0, 0);
     private static final int RGB_KEY_ICON_TEXT_ACTIVE = 13158600;
     private static final int RGB_KEY_ICON_TEXT_INACTIVE = 7895160;
-    private static final int RGB_KEY_ICON_TEXT_HOVERED = 13158500;
     
     private static final int KEY_ICON_SIZE = 14;
     private static final int KEY_ICON_PADDING = 6;
@@ -2536,7 +2535,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void drawKeyIcon(String key, int x, int y, int width, boolean active, boolean hovered) {
         int colorBorder = active ? ARGB_KEY_ICON_BORDER_ACTIVE : ARGB_KEY_ICON_BORDER_INACTIVE;
         int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
-        int colorText = active ? hovered ? RGB_KEY_ICON_TEXT_HOVERED : RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
+        int colorText = active ? hovered ? GuiColors.RGB_WHITE : RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
 
         drawHorizontalLine(x, x + width - 1, y - 1, colorBorder);
         drawHorizontalLine(x, x + width - 1, y + KEY_ICON_SIZE, colorBorder);
