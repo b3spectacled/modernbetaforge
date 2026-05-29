@@ -1,10 +1,12 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
+import mod.bespectacled.modernbetaforge.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 public class GuiButtonTab extends GuiButton {
     private boolean selected;
+    private float progress;
     
     public GuiButtonTab(int id, int x, int y, int width, int height, String text) {
         this(id, x, y, width, height, text, false);
@@ -14,6 +16,7 @@ public class GuiButtonTab extends GuiButton {
         super(id, x, y, width, height, text);
         
         this.selected = initial;
+        this.progress = initial ? 1.0f : 0.0f;
     }
     
     @Override
@@ -27,9 +30,11 @@ public class GuiButtonTab extends GuiButton {
             int boxB = this.y + this.height;
             
             boolean hoveredOrSelected = this.hovered || !this.enabled;
-            
-            int colorBox = hoveredOrSelected ? GuiColors.ARGB_TRANS_LIGHTER_GREY : GuiColors.ARGB_TRANS_LIGHT_GREY;
-            int colorText = hoveredOrSelected ? GuiColors.RGB_WHITE : GuiColors.RGB_GREY;
+            float target = hoveredOrSelected ? 0.0f : 1.0f;
+            this.progress = MathUtil.clampedLerp(this.progress, target, partialTicks);
+
+            int colorBox = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_LIGHTER_GREY, GuiColors.ARGB_TRANS_LIGHT_GREY, this.progress);
+            int colorText = MathUtil.lerpRGBColor(GuiColors.RGB_WHITE, GuiColors.RGB_GREY, this.progress);
             int colorBar = this.selected ?
                 !this.enabled ? GuiColors.ARGB_GREEN : GuiColors.ARGB_TRANSPARENT :
                 GuiColors.ARGB_TRANSPARENT;
