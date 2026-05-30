@@ -1819,14 +1819,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setWorldSeed(String seed) {
         this.parent.worldSeed = seed;
     }
-    
-    public boolean isFocused() {
-        return this.isFocused;
-    }
-    
-    public int getCurrentTabId() {
-        return GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage();
-    }
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
@@ -2146,7 +2138,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             getFormattedBlockName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
                                 id == GuiIdentifiers.PG0_B_FLUID ? 
                                 getFormattedFluidName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
-                                getFormattedRegistryName(registryName, langName, -1);
+                                getFormattedRegistryName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN);
                         
                         GuiIdentifiers.BASE_BUTTON_SETTINGS.get(id).accept(registryName, this.settings);
                         this.setTextButton(id, formattedName);
@@ -2166,10 +2158,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 if (guiButton instanceof GuiListButton) {
                     String registryName = ForgeRegistryUtil.getRandom(this.random, ForgeRegistries.BIOMES).getRegistryName().toString();
                     String langName = id == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
-                    int truncateLen = id == GuiIdentifiers.PG0_B_FIXED ? DEFAULT_NAME_TRUNCATE_LEN : -1;
                     
                     GuiIdentifiers.BIOME_SETTINGS.get(id).accept(registryName,  this.settings);
-                    this.setTextButton(id, getFormattedBiomeName(registryName, langName, truncateLen));
+                    this.setTextButton(id, getFormattedBiomeName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN));
                 }
                 
             } else {
