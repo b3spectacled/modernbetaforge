@@ -799,11 +799,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int id = GuiIdentifiers.FUNC_INITIAL_TAB;
         int x = this.tabStartX;
         int y = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
+        int width = TAB_BUTTON_WIDTH;
+        int height = TAB_BUTTON_HEIGHT;
         
         this.pageTabMap = new LinkedHashMap<>();
         for (int i = 0; i < this.pageList.getPageCount(); ++i) {
-            boolean selected = this.pageList.getPage() == i && this.isFocused;
-            GuiButtonTab guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, TAB_BUTTON_HEIGHT, I18n.format(this.pageNames[i]), selected);
+            String text = I18n.format(this.pageNames[i]);
+            boolean selected = this.pageList.getPage() == i;
+            
+            GuiButtonTab guiButton = new GuiButtonTab(id + i, x, y, width, height, text, selected);
             
             this.pageTabMap.put(
                 GuiIdentifiers.FUNC_INITIAL_TAB + i,
@@ -1815,6 +1819,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void setWorldSeed(String seed) {
         this.parent.worldSeed = seed;
     }
+    
+    public boolean isFocused() {
+        return this.isFocused;
+    }
+    
+    public int getCurrentTabId() {
+        return GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage();
+    }
 
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
@@ -2387,10 +2399,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         // Tab buttons
         for (Entry<Integer, GuiButtonTab> pageTab : this.pageTabMap.entrySet()) {
-            if (pageTab.getKey().intValue() == GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage()) {
-                pageTab.getValue().enabled = false;
+            int id = pageTab.getKey().intValue();
+            GuiButtonTab tab = pageTab.getValue();
+            
+            if (id == GuiIdentifiers.FUNC_INITIAL_TAB + this.pageList.getPage()) {
+                tab.enabled = false;
+                tab.setSelected(true);
             } else {
-                pageTab.getValue().enabled = this.isFocused;
+                tab.enabled = this.isFocused;
+                tab.setSelected(false);
             }
         }
     }

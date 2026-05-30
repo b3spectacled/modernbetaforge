@@ -16,7 +16,7 @@ public class GuiButtonTab extends GuiButton {
         super(id, x, y, width, height, text);
         
         this.selected = initial;
-        this.progress = initial ? 1.0f : 0.0f;
+        this.progress = initial ? 0.0f : 1.0f;
     }
     
     @Override
@@ -29,15 +29,13 @@ public class GuiButtonTab extends GuiButton {
             int boxR = this.x + this.width;
             int boxB = this.y + this.height;
             
-            boolean hoveredOrSelected = this.hovered || !this.enabled;
+            boolean hoveredOrSelected = this.hovered && this.enabled || this.selected;
             float target = hoveredOrSelected ? 0.0f : 1.0f;
             this.progress = MathUtil.clampedLerp(this.progress, target, partialTicks);
 
             int colorBox = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_LIGHTER_GREY, GuiColors.ARGB_TRANS_LIGHT_GREY, this.progress);
             int colorText = MathUtil.lerpRGBColor(GuiColors.RGB_WHITE, GuiColors.RGB_GREY, this.progress);
-            int colorBar = this.selected ?
-                !this.enabled ? GuiColors.ARGB_GREEN : GuiColors.ARGB_TRANSPARENT :
-                GuiColors.ARGB_TRANSPARENT;
+            int colorBar = this.selected ? GuiColors.ARGB_GREEN : GuiColors.ARGB_TRANSPARENT;
          
             int textX = boxL + this.width / 2;
             int textY = boxT + this.height / 2 - mc.fontRenderer.FONT_HEIGHT / 2;
@@ -49,15 +47,6 @@ public class GuiButtonTab extends GuiButton {
             this.drawCenteredString(mc.fontRenderer, this.displayString, textX, textY, colorText);
             
         }
-    }
-    
-    @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (super.mousePressed(mc, mouseX, mouseY)) {
-            return this.selected = this.hovered;
-        }
-
-        return false;
     }
     
     public boolean getSelected() {
