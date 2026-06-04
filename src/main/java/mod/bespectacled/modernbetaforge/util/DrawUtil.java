@@ -261,7 +261,7 @@ public class DrawUtil {
             NoiseSurfaceBuilder noiseSurfaceBuilder = (NoiseSurfaceBuilder)surfaceBuilder;
             
             if (noiseSurfaceBuilder.atBeachDepth(height) && noiseSurfaceBuilder.isPrimaryBeach(x, z, null)) {
-                state = BlockStates.SAND;
+                state = noiseSurfaceBuilder.getPrimaryBeachTopBlock(BiomeDictionary.getTypes(biome));
             }
         }
         
