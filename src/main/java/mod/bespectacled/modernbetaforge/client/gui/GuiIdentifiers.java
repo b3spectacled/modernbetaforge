@@ -28,6 +28,9 @@ public class GuiIdentifiers {
     public static final int FUNC_CNCL = 65;
     public static final int FUNC_PRVW = 66;
     
+    public static final int FUNC_LNAV = 80;
+    public static final int FUNC_RNAV = 81;
+    
     /* Page 1 */
     
     // Entries
@@ -546,5 +549,7 @@ public class GuiIdentifiers {
             .add(GuiIdentifiers.PG1_S_LAYER_TYPE)
             .add(GuiIdentifiers.PG3_S_ORE_TYPE)
             .build();
+        
+        assertOffsets();
     }
 }

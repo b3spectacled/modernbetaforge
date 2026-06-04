@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.BiMap;
@@ -61,7 +60,6 @@ import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisito
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
-import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.PresetUtil;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
@@ -101,16 +99,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.modernbetaforge.";
     private static final String PREFIX_LABEL = "createWorld.customize.custom.label.modernbetaforge.";
     
-    private static final int ARGB_KEY_ICON_BACK_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 120, 120, 120);
-    private static final int ARGB_KEY_ICON_BORDER_ACTIVE = MathUtil.convertARGBComponentsToInt(160, 160, 160, 160);
-    private static final int ARGB_KEY_ICON_BACK_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 40, 40, 40);
-    private static final int ARGB_KEY_ICON_BORDER_INACTIVE = MathUtil.convertARGBComponentsToInt(160, 0, 0, 0);
-    private static final int RGB_KEY_ICON_TEXT_ACTIVE = 13158600;
-    private static final int RGB_KEY_ICON_TEXT_INACTIVE = 7895160;
-    
-    private static final int KEY_ICON_SIZE = 14;
-    private static final int KEY_ICON_PADDING = 6;
-    
     private static final int PAGE_TITLE_HEIGHT = 7;
     
     private static final int PAGELIST_PADDING_TOP = 40;
@@ -131,8 +119,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private final Predicate<String> intFilter;
     private final ModernBetaGeneratorSettings.Factory defaultSettings;
     private final Random random;
-    private final GuiBoundsChecker leftKeyBounds;
-    private final GuiBoundsChecker rightKeyBounds;
     private final Map<Integer, Boolean> enabledMap;
     private final ExecutorWrapper executor;
     
@@ -150,6 +136,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonDefaults;
     private GuiButton buttonPresets;
     private GuiButton buttonPreview;
+    private GuiButton buttonNavL;
+    private GuiButton buttonNavR;
     private boolean settingsModified;
     private boolean clicked;
     private boolean clickedRandom;
@@ -197,8 +185,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.defaultSettings = ModernBetaGeneratorSettings.Factory.jsonToFactory(defaultPreset);
         this.random = new Random();
         this.parent = parent;
-        this.leftKeyBounds = new GuiBoundsChecker();
-        this.rightKeyBounds = new GuiBoundsChecker();
         this.enabledMap = new HashMap<>();
         this.executor = new ExecutorWrapper(1, "customization");
         
@@ -843,42 +829,35 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int presetsX = centerX + BUTTON_WIDTH / 2 + 3;
         int doneX = centerX + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
 
-        this.buttonDefaults = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.buttonRandomize = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.buttonPreview = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
-        this.buttonPresets = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.<GuiButton>addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
-        
-        GuiIdentifiers.assertOffsets();
+        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
         this.createPagedList();
         this.pageList.setPage(curPage);
         this.pageList.scrollBy(curScroll);
         this.createPageTabs();
         
+        int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
+        int navY = tabY + (TAB_BUTTON_HEIGHT - GuiButtonNav.BUTTON_SIZE) / 2;
+        int navXL = this.tabStartX - GuiButtonNav.getButtonWidth(this.mc, KeyBindings.LEFT_NAV_KEY.getDisplayName()) - 3;
+        int navXR = this.tabEndX + 3;
+
+        this.buttonNavL = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_LNAV, navXL, navY, KeyBindings.LEFT_NAV_KEY.getDisplayName()));
+        this.buttonNavR = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_RNAV, navXR, navY, KeyBindings.RIGHT_NAV_KEY.getDisplayName()));
+        
         // Set default enabled for certain options
         this.initButtonValidity();
         this.updateSettingValidity();
         this.setSettingsModified(this.isSettingsModified());
-        
-        int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
-        int leftNavX = this.tabStartX - KEY_ICON_SIZE - 3;
-        int rightNavX = this.tabEndX + 3;
-        
-        this.leftKeyBounds.updateBounds(leftNavX, tabY + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
-        this.rightKeyBounds.updateBounds(rightNavX, tabY + KEY_ICON_SIZE / 4, KEY_ICON_SIZE, KEY_ICON_SIZE);
     }
     
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         this.pageList.handleMouseInput();
-        
-        int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        
-        this.leftKeyBounds.updateHovered(mouseX, mouseY);
-        this.rightKeyBounds.updateHovered(mouseX, mouseY);
     }
     
     @Override
@@ -1734,35 +1713,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        boolean leftKeyActive = this.pageList.getPage() > 0;
-        boolean rightKeyActive = this.pageList.getPage() < this.pageList.getPageCount() - 1;
-        
-        String leftKey = KeyBindings.LEFT_NAV_KEY.getDisplayName();
-        String rightKey = KeyBindings.RIGHT_NAV_KEY.getDisplayName();
-        
-        int leftKeyWidth = this.fontRenderer.getStringWidth(leftKey);
-        int rightKeyWidth = this.fontRenderer.getStringWidth(rightKey);
-        
-        leftKeyWidth = Math.max(leftKeyWidth, KEY_ICON_SIZE);
-        rightKeyWidth = Math.max(rightKeyWidth, KEY_ICON_SIZE);
-        
-        leftKeyWidth += leftKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
-        rightKeyWidth += rightKeyWidth > KEY_ICON_SIZE ? KEY_ICON_PADDING : 0;
-        
-        int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
-        int leftNavX = this.tabStartX - KEY_ICON_SIZE - 3;
-        int rightNavX = this.tabEndX + 3;
-        
         this.drawDefaultBackground();
         this.pageList.drawScreen(mouseX, mouseY, partialTicks);
-        
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, PAGE_TITLE_HEIGHT, GuiColors.RGB_WHITE);
-        
-        if (this.displayNavButtons) {
-            this.drawKeyIcon(leftKey, leftNavX, tabY + KEY_ICON_SIZE / 4, leftKeyWidth, leftKeyActive, this.leftKeyBounds.isHovered());
-            this.drawKeyIcon(rightKey, rightNavX, tabY + KEY_ICON_SIZE / 4, rightKeyWidth, rightKeyActive, this.rightKeyBounds.isHovered());
-        }
-        
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
@@ -1895,6 +1849,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             case GuiIdentifiers.FUNC_PRVW:
                 this.mc.displayGuiScreen(new GuiScreenCustomizePreview(this, this.parent.worldSeed, this.getBuiltSettings(), this.previewSettings));
                 break;
+            case GuiIdentifiers.FUNC_LNAV:
+                this.modifyPageValue(-1);
+                break;
+            case GuiIdentifiers.FUNC_RNAV:
+                this.modifyPageValue(1);
+                break;
         }
         
         if (this.pageTabMap.containsKey(guiButton.id)) {
@@ -1936,16 +1896,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
-        
-        if (this.displayNavButtons && this.leftKeyBounds.isHovered()) {
-            this.modifyPageValue(-1);
-        }
-        
-        if (this.displayNavButtons && this.rightKeyBounds.isHovered()) {
-            this.modifyPageValue(1);
-        }
-        
         this.clicked = true;
+        
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
@@ -2388,6 +2340,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonPresets.enabled = this.isFocused;
         this.buttonPreview.enabled = this.isFocused;
         
+        // Nav buttons
+        this.buttonNavL.visible = this.displayNavButtons;
+        this.buttonNavR.visible = this.displayNavButtons;
+        this.buttonNavL.enabled = this.isFocused && this.pageList.getPage() > 0;
+        this.buttonNavR.enabled = this.isFocused && this.pageList.getPage() < this.pageList.getPageCount() - 1;
+        
         // Tab buttons
         for (Entry<Integer, GuiButtonTab> pageTab : this.pageTabMap.entrySet()) {
             int id = pageTab.getKey().intValue();
@@ -2541,19 +2499,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (gui != null && gui instanceof GuiTextField) {
             ((GuiTextField)gui).setEnabled(enabled);
         }
-    }
-    
-    private void drawKeyIcon(String key, int x, int y, int width, boolean active, boolean hovered) {
-        int colorBorder = active ? ARGB_KEY_ICON_BORDER_ACTIVE : ARGB_KEY_ICON_BORDER_INACTIVE;
-        int colorBack = active ? ARGB_KEY_ICON_BACK_ACTIVE : ARGB_KEY_ICON_BACK_INACTIVE;
-        int colorText = active ? hovered ? GuiColors.RGB_WHITE : RGB_KEY_ICON_TEXT_ACTIVE : RGB_KEY_ICON_TEXT_INACTIVE;
-
-        drawHorizontalLine(x, x + width - 1, y - 1, colorBorder);
-        drawHorizontalLine(x, x + width - 1, y + KEY_ICON_SIZE, colorBorder);
-        drawVerticalLine(x - 1, y - 1, y + KEY_ICON_SIZE, colorBorder);
-        drawVerticalLine(x + width, y - 1, y + KEY_ICON_SIZE, colorBorder);
-        drawRect(x + 1, y + 1, x + width - 1, y + KEY_ICON_SIZE - 1, colorBack);
-        this.drawCenteredString(this.fontRenderer, key, x + width / 2 + 1, y + KEY_ICON_SIZE / 4, colorText);
     }
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial) {

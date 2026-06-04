@@ -3,7 +3,10 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiButtonTab extends GuiButton {
     private static final boolean FADE_IN = false;
     
