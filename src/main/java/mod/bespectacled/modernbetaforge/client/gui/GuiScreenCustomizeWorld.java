@@ -111,7 +111,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int KEY_ICON_SIZE = 14;
     private static final int KEY_ICON_PADDING = 6;
     
-    private static final int PAGE_TITLE_HEIGHT = 6;
+    private static final int PAGE_TITLE_HEIGHT = 7;
     
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;

@@ -5,6 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
 public class GuiButtonTab extends GuiButton {
+    private static final boolean FADE_IN = false;
+    
     private boolean selected;
     private float progress;
     
@@ -31,7 +33,7 @@ public class GuiButtonTab extends GuiButton {
             
             boolean hoveredOrSelected = this.hovered && this.enabled || this.selected;
             float target = hoveredOrSelected ? 0.0f : 1.0f;
-            this.progress = MathUtil.clampedLerp(this.progress, target, partialTicks);
+            this.progress = FADE_IN ? MathUtil.clampedLerp(this.progress, target, partialTicks) : target;
 
             int colorBox = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_LIGHTER_GREY, GuiColors.ARGB_TRANS_LIGHT_GREY, this.progress);
             int colorText = MathUtil.lerpRGBColor(GuiColors.RGB_WHITE, GuiColors.RGB_GREY, this.progress);
