@@ -2,6 +2,9 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import java.util.Random;
 
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
+import mod.bespectacled.modernbetaforge.compat.futuremc.WorldGenBamboo;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeColors;
@@ -15,6 +18,7 @@ import net.minecraft.world.gen.feature.WorldGenMelon;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import thedarkcolour.futuremc.config.FConfig;
 
 public class BiomeBetaRainforest extends BiomeBeta {
     public BiomeBetaRainforest() {
@@ -72,6 +76,10 @@ public class BiomeBetaRainforest extends BiomeBeta {
                 
                 new WorldGenMelon().generate(world, random, mutablePos.setPos(x, y, z));
             }
+        }
+        
+        if (ModCompat.isModLoaded(CompatFutureMC.MOD_ID) && FConfig.INSTANCE.getVillageAndPillage().bamboo.enabled) {
+            WorldGenBamboo.generate(random, chunkPos.x, chunkPos.z, world);    
         }
     }
     

@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
+import mod.bespectacled.modernbetaforge.compat.futuremc.WorldGenBeeNest;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -44,6 +47,10 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             this.placeTreeTrunk(world, pos, treeInfo);
             this.placeTreeBranches(world, pos, treeInfo);
     
+            if (ModCompat.isModLoaded(CompatFutureMC.MOD_ID)) {
+                WorldGenBeeNest.generateForFancyOak(world, treeRandom, pos, treeInfo.height, this);
+            }
+            
             return true;
         }
         

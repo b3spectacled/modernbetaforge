@@ -16,6 +16,7 @@
       "MixinMapGenStronghold",
       "MixinMapGenVillageStart",
       "MixinStructureVillagePiecesVillage",
+      "MixinWorldGenTrees",
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",
       "accessor.AccessorWorldProvider",

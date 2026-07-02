@@ -10,6 +10,7 @@ import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMine
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
+import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
 import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
 import mod.bespectacled.modernbetaforge.compat.nether_api.CompatNetherAPI;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
@@ -30,6 +31,7 @@ public class ModCompat {
         loadCompat(new CompatBuildCraftEnergy());
         loadCompat(new CompatThaumcraft());
         loadCompat(new CompatBetterMineshafts());
+        loadCompat(new CompatFutureMC());
     }
     
     public static boolean isModLoaded(String modId) {

@@ -439,6 +439,9 @@ createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
 createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
 createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale=Magical Forest Noise Scale
 
+createWorld.customize.custom.compatfuturemc=Future MC Compatibility
+createWorld.customize.custom.compatfuturemc.beenestflowercheck=Bee Nest Flower Check
+
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.alpha=Alpha
