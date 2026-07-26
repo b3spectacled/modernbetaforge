@@ -228,29 +228,32 @@ public class CompatOE implements Compat, ClientCompat {
 
     @Override
     public void loadClient() {
+        configWorldGen configWorld = ConfigHandler.worldGen;
+        configBlock configBlock = ConfigHandler.block;
+        
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COQUINA_OUTCROPS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_KELP, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configBlock.enableKelp
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_PALM_TREES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.palmTree.enablePalmTrees
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_PRISMARINE_POTS, new GuiPredicate(settings ->
             !GuiPredicates.isBiomeVanillaOrBoP(settings)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SEAGRASS_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SEA_OATS_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.seaOatsPatch.enableSeaOatsPatch && configBlock.seaOats.enableSeaOats
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SHELL_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.shellPatch.enableShellPatch
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SHIPWRECKS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.shipwreck.enableShipwrecks
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_FROZEN_OCEANS, new GuiPredicate(settings ->
             !GuiPredicates.isBiomeVanillaOrBoP(settings)
