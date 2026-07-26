@@ -9,7 +9,6 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import net.minecraft.util.ResourceLocation;
 
 public class CompatBuildCraftEnergy implements Compat, ClientCompat {
@@ -45,19 +44,19 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
     @Override
     public void loadClient() {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_DESERT_CHANCE, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_OCEAN_CHANCE, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_DESERT_NOISE_SCALE, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_OCEAN_NOISE_SCALE, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
     }
 

@@ -21,6 +21,9 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModernBetaRegistries {
     /**
@@ -95,6 +98,21 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     
     /**
+     * Holds registered {@link FeatureCreator interfaces} which instantiate {@link WorldGenerator}.
+     * Register world features/generators here.
+     * 
+     */
+    public static final ModernBetaRegistry<FeatureCreator> FEATURE;
+    
+    /**
+     * Holds registered {@link ForgeFeatureCreator interfaces} which instantiate {@link IWorldGenerator}.
+     * Register world features/generators that use the Forge world generator interface here,
+     * if you do not wish to register globally via {@link GameRegistry} and want to customize Forge world generators on a per-world basis.
+     * 
+     */
+    public static final ModernBetaRegistry<ForgeFeatureCreator> FORGE_FEATURE;
+    
+    /**
      * Holds registered {@link WorldSpawner world spawners}.
      * Register world spawners to modify the position players initially spawn at here.
      */
@@ -131,6 +149,8 @@ public class ModernBetaRegistries {
         CARVER = new ModernBetaRegistry<>("CARVER");
         CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
+        FEATURE = new ModernBetaRegistry<>("FEATURE");
+        FORGE_FEATURE = new ModernBetaRegistry<>("FORGE_FEATURE");
         WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
         DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
         MOD_DATA_FIX = new ModernBetaRegistry<>("MOD_DATA_FIX");
@@ -185,5 +205,15 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface BlockSourceCreator {
         BlockSource apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface FeatureCreator {
+        WorldGenerator apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface ForgeFeatureCreator {
+        IWorldGenerator apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
 }

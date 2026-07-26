@@ -442,6 +442,18 @@ createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale=Magical Fo
 createWorld.customize.custom.compatfuturemc=Future MC Compatibility
 createWorld.customize.custom.compatfuturemc.beenestflowercheck=Bee Nest Flower Check
 
+createWorld.customize.custom.compatoe=Oceanic Expanse Compatibility
+createWorld.customize.custom.compatoe.usecoquinaoutcrops=Use Coquina Outcrops
+createWorld.customize.custom.compatoe.usekelp=Use Kelp
+createWorld.customize.custom.compatoe.usepalmtrees=Use Palm Trees
+createWorld.customize.custom.compatoe.useprismarinepots=Use Prismarine Pots
+createWorld.customize.custom.compatoe.useseagrasspatches=Use Seagrass Patches
+createWorld.customize.custom.compatoe.useseaoatspatches=Use Sea Oats Patches
+createWorld.customize.custom.compatoe.useshellpatches=Use Shell Patches
+createWorld.customize.custom.compatoe.useshipwrecks=Use Shipwrecks
+createWorld.customize.custom.compatoe.usefrozenoceans=Use Frozen Oceans
+createWorld.customize.custom.compatoe.usewarmoceans=Use Warm Oceans
+
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.alpha=Alpha

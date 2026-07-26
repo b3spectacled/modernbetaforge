@@ -9,6 +9,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class WorldGenNoOp extends WorldGenerator {
     public static final WorldGenNoOp INSTANCE = new WorldGenNoOp();
     
+    private WorldGenNoOp() { }
+    
     @Override
     public boolean generate(World world, Random random, BlockPos blockPos) {
         return true;

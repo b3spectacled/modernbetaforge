@@ -9,7 +9,6 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import net.minecraft.util.ResourceLocation;
 
 public class CompatThaumcraft implements Compat, ClientCompat {
@@ -39,13 +38,13 @@ public class CompatThaumcraft implements Compat, ClientCompat {
     @Override
     public void loadClient() {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_MAGICAL_FOREST_CHANCE, new GuiPredicate(settings -> 
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_MAGICAL_FOREST_NOISE_SCALE, new GuiPredicate(settings -> 
-            !GuiPredicates.isBiomeInstanceOf(settings, ReleaseBiomeSource.class) && settings.getBooleanProperty(KEY_USE_COMPAT)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
     }
 

@@ -13,6 +13,7 @@ import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
 import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
 import mod.bespectacled.modernbetaforge.compat.nether_api.CompatNetherAPI;
+import mod.bespectacled.modernbetaforge.compat.oe.CompatOE;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
 import net.minecraftforge.fml.common.Loader;
 
@@ -32,6 +33,7 @@ public class ModCompat {
         loadCompat(new CompatThaumcraft());
         loadCompat(new CompatBetterMineshafts());
         loadCompat(new CompatFutureMC());
+        loadCompat(new CompatOE());
     }
     
     public static boolean isModLoaded(String modId) {

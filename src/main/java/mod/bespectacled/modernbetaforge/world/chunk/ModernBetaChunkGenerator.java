@@ -39,6 +39,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
@@ -51,6 +52,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
@@ -74,6 +76,8 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     
     private final Map<ResourceLocation, MapGenStructure> structures;
     private final Map<ResourceLocation, MapGenBase> carvers;
+    private final Map<ResourceLocation, WorldGenerator> features;
+    private final Map<ResourceLocation, IWorldGenerator> forgeFeatures;
     
     public ModernBetaChunkGenerator(World world, String generatorOptions) {
         super(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
@@ -102,6 +106,14 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         this.structures = this.initStructures(settings, world.getWorldInfo().isMapFeaturesEnabled());
         this.carvers = ModernBetaRegistries.CARVER
+            .getEntries()
+            .stream()
+            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
+        this.features = ModernBetaRegistries.FEATURE
+            .getEntries()
+            .stream()
+            .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
+        this.forgeFeatures = ModernBetaRegistries.FORGE_FEATURE
             .getEntries()
             .stream()
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().apply(this.chunkSource, this.settings)));
@@ -258,7 +270,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             this.random.setSeed(this.chunkSource.getPopulationSeed(chunkX, chunkZ));
             
             // Generate lakes, dungeons
-            
             boolean populateWaterLakes = TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.LAKE);
             if (this.settings.useWaterLakes && populateWaterLakes && !hasVillageGenerated) {
                 ModernBetaBiomeDecorator.populateWaterLakes(this.world, this.random, this.settings, mutablePos, chunkX, chunkZ, this.chunkSource.getDefaultFluid());
@@ -280,6 +291,20 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             // Generate animals
             if (TerrainGen.populate(this, this.world, this.random, chunkX, chunkZ, hasVillageGenerated, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
                 WorldEntitySpawner.performWorldGenSpawning(this.world, biome, startX + 8, startZ + 8, 16, 16, this.random);
+            }
+            
+            // Generate registered features
+            for (Entry<ResourceLocation, WorldGenerator> entry : this.features.entrySet()) {
+                WorldGenerator feature = entry.getValue();
+                
+                feature.generate(this.world, this.random, new BlockPos(startX, 0, startZ));
+            }
+            
+            // Generate registered Forge features
+            for (Entry<ResourceLocation, IWorldGenerator> entry : this.forgeFeatures.entrySet()) {
+                IWorldGenerator feature = entry.getValue();
+                
+                feature.generate(this.random, chunkX, chunkZ, this.world, this, this.world.getChunkProvider());
             }
         }
         

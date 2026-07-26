@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.biomesoplenty.BiomesOPlentyBiomeSource;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
@@ -26,6 +27,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.alpha.BiomeAlpha;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev415;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420;
+import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
@@ -195,6 +197,10 @@ public class GuiPredicates {
         MapGenBase caveCarver = ModernBetaRegistries.CAVE_CARVER.get(settings.caveCarver).apply(chunkSource, settings);
         
         return clazz.isAssignableFrom(caveCarver.getClass());
+    }
+    
+    public static boolean isBiomeVanillaOrBoP(ModernBetaGeneratorSettings settings) {
+        return isBiomeInstanceOf(settings, ReleaseBiomeSource.class) || isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class);
     }
     
     private static boolean isChunkEqualTo(ModernBetaGeneratorSettings settings, ModernBetaBuiltInTypes.Chunk type) {
