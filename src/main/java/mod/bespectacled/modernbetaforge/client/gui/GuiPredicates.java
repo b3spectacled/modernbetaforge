@@ -174,9 +174,45 @@ public class GuiPredicates {
     public static final GuiPredicate END_OUTER_ISLAND_OFFSET_TEST;
     public static final GuiPredicate USE_END_OUTER_ISLANDS_TEST;
     
-    public static final GuiPredicate BASE_BIOME_TEST;
-    public static final GuiPredicate OCEAN_BIOME_TEST;
-    public static final GuiPredicate BEACH_BIOME_TEST;
+    @Deprecated public static final GuiPredicate BASE_BIOME_TEST;
+    @Deprecated public static final GuiPredicate OCEAN_BIOME_TEST;
+    @Deprecated public static final GuiPredicate BEACH_BIOME_TEST;
+    
+    public static final GuiPredicate BASE_BIOME_DESERT_TEST;
+    public static final GuiPredicate BASE_BIOME_FOREST_TEST;
+    public static final GuiPredicate BASE_BIOME_ICE_DESERT_TEST;
+    public static final GuiPredicate BASE_BIOME_PLAINS_TEST;
+    public static final GuiPredicate BASE_BIOME_RAINFOREST_TEST;
+    public static final GuiPredicate BASE_BIOME_SAVANNA_TEST;
+    public static final GuiPredicate BASE_BIOME_SEASONAL_FOREST_TEST;
+    public static final GuiPredicate BASE_BIOME_SHRUBLAND_TEST;
+    public static final GuiPredicate BASE_BIOME_SWAMPLAND_TEST;
+    public static final GuiPredicate BASE_BIOME_TAIGA_TEST;
+    public static final GuiPredicate BASE_BIOME_TUNDRA_TEST;
+
+    public static final GuiPredicate OCEAN_BIOME_DESERT_TEST;
+    public static final GuiPredicate OCEAN_BIOME_FOREST_TEST;
+    public static final GuiPredicate OCEAN_BIOME_ICE_DESERT_TEST;
+    public static final GuiPredicate OCEAN_BIOME_PLAINS_TEST;
+    public static final GuiPredicate OCEAN_BIOME_RAINFOREST_TEST;
+    public static final GuiPredicate OCEAN_BIOME_SAVANNA_TEST;
+    public static final GuiPredicate OCEAN_BIOME_SEASONAL_FOREST_TEST;
+    public static final GuiPredicate OCEAN_BIOME_SHRUBLAND_TEST;
+    public static final GuiPredicate OCEAN_BIOME_SWAMPLAND_TEST;
+    public static final GuiPredicate OCEAN_BIOME_TAIGA_TEST;
+    public static final GuiPredicate OCEAN_BIOME_TUNDRA_TEST;
+    
+    public static final GuiPredicate BEACH_BIOME_DESERT_TEST;
+    public static final GuiPredicate BEACH_BIOME_FOREST_TEST;
+    public static final GuiPredicate BEACH_BIOME_ICE_DESERT_TEST;
+    public static final GuiPredicate BEACH_BIOME_PLAINS_TEST;
+    public static final GuiPredicate BEACH_BIOME_RAINFOREST_TEST;
+    public static final GuiPredicate BEACH_BIOME_SAVANNA_TEST;
+    public static final GuiPredicate BEACH_BIOME_SEASONAL_FOREST_TEST;
+    public static final GuiPredicate BEACH_BIOME_SHRUBLAND_TEST;
+    public static final GuiPredicate BEACH_BIOME_SWAMPLAND_TEST;
+    public static final GuiPredicate BEACH_BIOME_TAIGA_TEST;
+    public static final GuiPredicate BEACH_BIOME_TUNDRA_TEST;
     
     public static final GuiPredicate DEV_BIOME_PROP_TEST;
     
@@ -655,48 +691,46 @@ public class GuiPredicates {
         END_OUTER_ISLAND_DISTANCE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OUT_DT) && settings.useEndOuterIslands, GuiIdentifiers.PG4_S_END_OUT_DT, GuiIdentifiers.PG5_F_END_OUT_DT);
         END_OUTER_ISLAND_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_END_OUT_OF) && settings.useEndOuterIslands, GuiIdentifiers.PG4_S_END_OUT_OF, GuiIdentifiers.PG5_F_END_OUT_OF);
         
-        BASE_BIOME_TEST = new GuiPredicate(
-            settings -> isBetaOrPEBiomeSource(settings),
-            GuiIdentifiers.PG6_DSRT_LAND,
-            GuiIdentifiers.PG6_FRST_LAND,
-            GuiIdentifiers.PG6_ICED_LAND,
-            GuiIdentifiers.PG6_PLNS_LAND,
-            GuiIdentifiers.PG6_RAIN_LAND,
-            GuiIdentifiers.PG6_SAVA_LAND,
-            GuiIdentifiers.PG6_SEAS_LAND,
-            GuiIdentifiers.PG6_SHRB_LAND,
-            GuiIdentifiers.PG6_SWMP_LAND,
-            GuiIdentifiers.PG6_TAIG_LAND,
-            GuiIdentifiers.PG6_TUND_LAND
-        );
-        OCEAN_BIOME_TEST = new GuiPredicate(
-            settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes,
-            GuiIdentifiers.PG6_DSRT_OCEAN,
-            GuiIdentifiers.PG6_FRST_OCEAN,
-            GuiIdentifiers.PG6_ICED_OCEAN,
-            GuiIdentifiers.PG6_PLNS_OCEAN,
-            GuiIdentifiers.PG6_RAIN_OCEAN,
-            GuiIdentifiers.PG6_SAVA_OCEAN,
-            GuiIdentifiers.PG6_SEAS_OCEAN,
-            GuiIdentifiers.PG6_SHRB_OCEAN,
-            GuiIdentifiers.PG6_SWMP_OCEAN,
-            GuiIdentifiers.PG6_TAIG_OCEAN,
-            GuiIdentifiers.PG6_TUND_OCEAN
-        );
-        BEACH_BIOME_TEST = new GuiPredicate(
-            settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes,
-            GuiIdentifiers.PG6_DSRT_BEACH,
-            GuiIdentifiers.PG6_FRST_BEACH,
-            GuiIdentifiers.PG6_ICED_BEACH,
-            GuiIdentifiers.PG6_PLNS_BEACH,
-            GuiIdentifiers.PG6_RAIN_BEACH,
-            GuiIdentifiers.PG6_SAVA_BEACH,
-            GuiIdentifiers.PG6_SEAS_BEACH,
-            GuiIdentifiers.PG6_SHRB_BEACH,
-            GuiIdentifiers.PG6_SWMP_BEACH,
-            GuiIdentifiers.PG6_TAIG_BEACH,
-            GuiIdentifiers.PG6_TUND_BEACH
-        );
+        BASE_BIOME_TEST = new GuiPredicate(settings -> true, -1);
+        OCEAN_BIOME_TEST = new GuiPredicate(settings -> true, -1);
+        BEACH_BIOME_TEST = new GuiPredicate(settings -> true, -1);
+        
+        BASE_BIOME_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_DSRT_LAND);
+        BASE_BIOME_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_FRST_LAND);
+        BASE_BIOME_ICE_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_ICED_LAND);
+        BASE_BIOME_PLAINS_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_PLNS_LAND);
+        BASE_BIOME_RAINFOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_RAIN_LAND);
+        BASE_BIOME_SAVANNA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_SAVA_LAND);
+        BASE_BIOME_SEASONAL_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_SEAS_LAND);
+        BASE_BIOME_SHRUBLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_SHRB_LAND);
+        BASE_BIOME_SWAMPLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_SWMP_LAND);
+        BASE_BIOME_TAIGA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_TAIG_LAND);
+        BASE_BIOME_TUNDRA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings), GuiIdentifiers.PG6_TUND_LAND);
+        
+        OCEAN_BIOME_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_DSRT_OCEAN);
+        OCEAN_BIOME_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_FRST_OCEAN);
+        OCEAN_BIOME_ICE_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_ICED_OCEAN);
+        OCEAN_BIOME_PLAINS_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_PLNS_OCEAN);
+        OCEAN_BIOME_RAINFOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_RAIN_OCEAN);
+        OCEAN_BIOME_SAVANNA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_SAVA_OCEAN);
+        OCEAN_BIOME_SEASONAL_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_SEAS_OCEAN);
+        OCEAN_BIOME_SHRUBLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_SHRB_OCEAN);
+        OCEAN_BIOME_SWAMPLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_SWMP_OCEAN);
+        OCEAN_BIOME_TAIGA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_TAIG_OCEAN);
+        OCEAN_BIOME_TUNDRA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceOceanBiomes, GuiIdentifiers.PG6_TUND_OCEAN);
+        
+        BEACH_BIOME_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_DSRT_BEACH);
+        BEACH_BIOME_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_FRST_BEACH);
+        BEACH_BIOME_ICE_DESERT_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_ICED_BEACH);
+        BEACH_BIOME_PLAINS_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_PLNS_BEACH);
+        BEACH_BIOME_RAINFOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_RAIN_BEACH);
+        BEACH_BIOME_SAVANNA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_SAVA_BEACH);
+        BEACH_BIOME_SEASONAL_FOREST_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_SEAS_BEACH);
+        BEACH_BIOME_SHRUBLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_SHRB_BEACH);
+        BEACH_BIOME_SWAMPLAND_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_SWMP_BEACH);
+        BEACH_BIOME_TAIGA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_TAIG_BEACH);
+        BEACH_BIOME_TUNDRA_TEST = new GuiPredicate(settings -> isBetaOrPEBiomeSource(settings) && settings.replaceBeachBiomes, GuiIdentifiers.PG6_TUND_BEACH);
+        
         USE_CLIMATE_FEATURES_TEST = new GuiPredicate(settings -> isClimateSampler(settings), GuiIdentifiers.PG6_B_CLIMATE_FEAT);
         SNOW_LINE_OFFSET_TEST = new GuiPredicate(settings -> isClimateSamplerAndUsesFeatures(settings), GuiIdentifiers.PG6_S_SNOW_OFFSET);
         

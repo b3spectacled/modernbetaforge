@@ -119,9 +119,45 @@ public class GuiPredicate {
     public static final ResourceLocation LAYER_SIZE = createRegistryKey(NbtTags.LAYER_SIZE);
     public static final ResourceLocation SNOWY_BIOME_CHANCE = createRegistryKey(NbtTags.SNOWY_BIOME_CHANCE);
     
-    public static final ResourceLocation BASE_BIOME = createRegistryKey(NbtTags.BASE_BIOME);
-    public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);
-    public static final ResourceLocation BEACH_BIOME = createRegistryKey(NbtTags.BEACH_BIOME);
+    @Deprecated public static final ResourceLocation BASE_BIOME = createRegistryKey(NbtTags.BASE_BIOME);
+    @Deprecated public static final ResourceLocation OCEAN_BIOME = createRegistryKey(NbtTags.OCEAN_BIOME);
+    @Deprecated public static final ResourceLocation BEACH_BIOME = createRegistryKey(NbtTags.BEACH_BIOME);
+    
+    public static final ResourceLocation BASE_BIOME_DESERT = createRegistryKey(NbtTags.DESERT_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_FOREST = createRegistryKey(NbtTags.FOREST_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_ICE_DESERT = createRegistryKey(NbtTags.ICE_DESERT_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_PLAINS = createRegistryKey(NbtTags.PLAINS_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_RAINFOREST = createRegistryKey(NbtTags.RAINFOREST_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_SAVANNA = createRegistryKey(NbtTags.SAVANNA_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_SEASONAL_FOREST = createRegistryKey(NbtTags.SEASONAL_FOREST_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_SHRUBLAND = createRegistryKey(NbtTags.SHRUBLAND_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_SWAMPLAND = createRegistryKey(NbtTags.SWAMPLAND_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_TAIGA = createRegistryKey(NbtTags.TAIGA_BIOME_BASE);
+    public static final ResourceLocation BASE_BIOME_TUNDRA = createRegistryKey(NbtTags.TUNDRA_BIOME_BASE);
+    
+    public static final ResourceLocation OCEAN_BIOME_DESERT = createRegistryKey(NbtTags.DESERT_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_FOREST = createRegistryKey(NbtTags.FOREST_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_ICE_DESERT = createRegistryKey(NbtTags.ICE_DESERT_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_PLAINS = createRegistryKey(NbtTags.PLAINS_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_RAINFOREST = createRegistryKey(NbtTags.RAINFOREST_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_SAVANNA = createRegistryKey(NbtTags.SAVANNA_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_SEASONAL_FOREST = createRegistryKey(NbtTags.SEASONAL_FOREST_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_SHRUBLAND = createRegistryKey(NbtTags.SHRUBLAND_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_SWAMPLAND = createRegistryKey(NbtTags.SWAMPLAND_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_TAIGA = createRegistryKey(NbtTags.TAIGA_BIOME_OCEAN);
+    public static final ResourceLocation OCEAN_BIOME_TUNDRA = createRegistryKey(NbtTags.TUNDRA_BIOME_OCEAN);
+    
+    public static final ResourceLocation BEACH_BIOME_DESERT = createRegistryKey(NbtTags.DESERT_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_FOREST = createRegistryKey(NbtTags.FOREST_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_ICE_DESERT = createRegistryKey(NbtTags.ICE_DESERT_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_PLAINS = createRegistryKey(NbtTags.PLAINS_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_RAINFOREST = createRegistryKey(NbtTags.RAINFOREST_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_SAVANNA = createRegistryKey(NbtTags.SAVANNA_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_SEASONAL_FOREST = createRegistryKey(NbtTags.SEASONAL_FOREST_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_SHRUBLAND = createRegistryKey(NbtTags.SHRUBLAND_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_SWAMPLAND = createRegistryKey(NbtTags.SWAMPLAND_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_TAIGA = createRegistryKey(NbtTags.TAIGA_BIOME_BEACH);
+    public static final ResourceLocation BEACH_BIOME_TUNDRA = createRegistryKey(NbtTags.TUNDRA_BIOME_BEACH);
     
     public static final ResourceLocation END_ISLAND_OFFSET = createRegistryKey(NbtTags.END_ISLAND_OFFSET);
     public static final ResourceLocation END_ISLAND_WEIGHT = createRegistryKey(NbtTags.END_ISLAND_WEIGHT);
