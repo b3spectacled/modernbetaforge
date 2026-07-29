@@ -22,16 +22,25 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 public class WorldGenFancyOak extends WorldGenAbstractTree {
     private static final Set<Block> DIRT_REPLACEABLE = Stream.of(
-        BlockStates.DIRT.getBlock(),
-        BlockStates.GRASS_BLOCK.getBlock()
+        Blocks.DIRT, Blocks.GRASS
     ).collect(Collectors.toCollection(HashSet::new));
     
-    private static final byte[] AXIS_LOOKUP = new byte[] {2, 0, 0, 1, 2, 1};
+    private static final byte[] AXIS_LOOKUP = new byte[] { 2, 0, 0, 1, 2, 1 };
     private static final int FOLIAGE_BLOB_HEIGHT = 5;
     private static final int TREE_MAX_HEIGHT = 12;
 
+    private final IBlockState logBlock;
+    private final IBlockState leafBlock;
+    
     public WorldGenFancyOak(boolean notify) {
+        this(notify, BlockStates.OAK_LOG, BlockStates.OAK_LEAVES);
+    }
+    
+    public WorldGenFancyOak(boolean notify, IBlockState logBlock, IBlockState leafBlock) {
         super(notify);
+        
+        this.logBlock = logBlock;
+        this.leafBlock = leafBlock;
     }
 
     @Override
@@ -201,7 +210,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
         int[] startPos = {x, startY, z};
         int[] endPos = {x, topY, z};
         
-        this.placeBranch(world, startPos, endPos, BlockStates.OAK_LOG, treeInfo.getRotateLogs());
+        this.placeBranch(world, startPos, endPos, this.logBlock, treeInfo.getRotateLogs());
     }
 
     private void placeTreeBranches(World world, BlockPos basePos, TreeInfo treeInfo) {
@@ -218,7 +227,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             
             int relY = branchStartPos[1] - basePos.getY();
             if (relY >= treeInfo.getHeight() * 0.2) {
-                this.placeBranch(world, branchStartPos, branchEndPos, BlockStates.OAK_LOG, treeInfo.getRotateLogs());
+                this.placeBranch(world, branchStartPos, branchEndPos, this.logBlock, treeInfo.getRotateLogs());
             }
             
             curBranch++;
@@ -313,7 +322,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             // Note: VERY IMPORTANT to attach CHECK_DECAY flag,
             // tree leaves will start massively decaying if not present.
             // Also tested vanilla big oak trees exhibiting the same behavior.
-            this.placeLayer(world, x, curY, z, radius, (byte) 1, BlockStates.OAK_LEAVES);
+            this.placeLayer(world, x, curY, z, radius, (byte) 1, this.leafBlock);
             
             curY++;
         }

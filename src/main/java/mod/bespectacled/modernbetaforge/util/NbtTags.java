@@ -101,6 +101,7 @@ public class NbtTags {
     public static final String USE_SWAMP_TREES = "useSwampTrees";
     public static final String USE_JUNGLE_TREES = "useJungleTrees";
     public static final String USE_ACACIA_TREES = "useAcaciaTrees";
+    public static final String USE_DARK_OAK_TREES = "useDarkOakTrees";
     public static final String USE_NEW_FANCY_OAK_TREES = "useNewFancyOakTrees";
     
     public static final String SPAWN_NEW_CREATURE_MOBS = "spawnNewCreatureMobs";

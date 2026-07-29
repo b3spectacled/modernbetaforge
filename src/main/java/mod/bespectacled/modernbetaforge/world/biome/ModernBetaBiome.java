@@ -7,6 +7,7 @@ import java.util.Random;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenFancyOak;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.EnumCreatureType;
@@ -38,6 +39,9 @@ public abstract class ModernBetaBiome extends Biome {
     
     public static final WorldGenTrees TREE_FEATURE = new WorldGenTrees(false);
     public static final WorldGenFancyOak BIG_TREE_FEATURE = new WorldGenFancyOak(false);
+    
+    public static final WorldGenTrees DARK_OAK_TREE_FEATURE = new WorldGenTrees(false, 4, BlockStates.DARK_OAK_LOG, BlockStates.DARK_OAK_LEAVES, false);
+    public static final WorldGenFancyOak DARK_OAK_BIG_TREE_FEATURE = new WorldGenFancyOak(false, BlockStates.DARK_OAK_LOG, BlockStates.DARK_OAK_LEAVES);
     
     protected static final float BASE_HEIGHT_LOW = 0.1f;
     protected static final float HEIGHT_VARY_LOW = 0.2f;

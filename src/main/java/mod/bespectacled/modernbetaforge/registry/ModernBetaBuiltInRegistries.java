@@ -267,6 +267,7 @@ public class ModernBetaBuiltInRegistries {
         }
     }
     
+    @SuppressWarnings("deprecation")
     @SideOnly(Side.CLIENT)
     public static void registerPredicates() {
         ModernBetaRegistry<GuiPredicate> registry = ModernBetaClientRegistries.GUI_PREDICATE;

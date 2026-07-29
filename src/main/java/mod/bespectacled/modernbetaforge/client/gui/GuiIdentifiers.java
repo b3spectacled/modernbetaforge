@@ -134,11 +134,12 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_SWAMP = 308;
     public static final int PG2_B_USE_JUNGLE = 309;
     public static final int PG2_B_USE_ACACIA = 310;
-    public static final int PG2_B_USE_FANCY_OAK = 311;
-    public static final int PG2_B_USE_SAND_DISKS = 312;
-    public static final int PG2_B_USE_GRAV_DISKS = 313;
-    public static final int PG2_B_USE_CLAY_DISKS = 314;
-    public static final int PG2_B_USE_DOUBLE = 315;
+    public static final int PG2_B_USE_DARK_OAK = 311;
+    public static final int PG2_B_USE_FANCY_OAK = 312;
+    public static final int PG2_B_USE_SAND_DISKS = 313;
+    public static final int PG2_B_USE_GRAV_DISKS = 314;
+    public static final int PG2_B_USE_CLAY_DISKS = 315;
+    public static final int PG2_B_USE_DOUBLE = 316;
     
     public static final int PG2_B_SPAWN_CREATURE = 320;
     public static final int PG2_B_SPAWN_MONSTER = 321;

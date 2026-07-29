@@ -340,6 +340,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             createGuiButton(GuiIdentifiers.PG2_B_USE_SWAMP, NbtTags.USE_SWAMP_TREES, this.settings.useSwampTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
+            createGuiButton(GuiIdentifiers.PG2_B_USE_DARK_OAK, NbtTags.USE_DARK_OAK_TREES, this.settings.useDarkOakTrees),
+            null,
             
             createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
             null,
@@ -1221,6 +1223,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG2_B_USE_ACACIA:
                     this.settings.useAcaciaTrees = entryValue;
+                    break;
+                case GuiIdentifiers.PG2_B_USE_DARK_OAK:
+                    this.settings.useDarkOakTrees = entryValue;
                     break;
                 case GuiIdentifiers.PG2_B_USE_FANCY_OAK:
                     this.settings.useNewFancyOakTrees = entryValue;

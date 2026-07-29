@@ -50,14 +50,14 @@ public class BiomeBetaRainforest extends BiomeBeta {
             return this.getRandomTreeFeature(random);
         
         if (random.nextInt(5) == 0) {
-            return new WorldGenTrees(false, 4 + random.nextInt(4), BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, false);
+            return ModernBetaBiome.TREE_FEATURE;
         }
         
         if (random.nextInt(3) == 0) {
             return ModernBetaBiome.BIG_TREE_FEATURE;
         }
         
-        return ModernBetaBiome.TREE_FEATURE;
+        return new WorldGenTrees(false, 4 + random.nextInt(4), BlockStates.JUNGLE_LOG, BlockStates.JUNGLE_LEAVES, true);
     }
     
     @Override
