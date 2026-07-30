@@ -117,10 +117,23 @@ createWorld.customize.custom.modernbetaforge.entity=Entity
 createWorld.customize.custom.modernbetaforge.defaultBlock=Default Block
 createWorld.customize.custom.modernbetaforge.defaultFluid=Default Fluid
 
+createWorld.customize.custom.modernbetaforge.chunkSource.tooltip=Determines the shape of the terrain.
+createWorld.customize.custom.modernbetaforge.biomeSource.tooltip=Determines how biomes are distributed in the world.
+createWorld.customize.custom.modernbetaforge.surfaceBuilder.tooltip=Determines topsoil and beach generation in the world.
+createWorld.customize.custom.modernbetaforge.caveCarver.tooltip=Determines how caves generate in the world.
+createWorld.customize.custom.modernbetaforge.worldSpawner.tooltip=Determines how players initially spawn in the world.
+createWorld.customize.custom.modernbetaforge.singleBiome.tooltip=The biome to generate when using the Single Biome biome source.
+createWorld.customize.custom.modernbetaforge.defaultBlock.tooltip=The base block type used to generate the terrain. By default, this is stone.
+createWorld.customize.custom.modernbetaforge.defaultFluid.tooltip=The base fluid used to generate oceans and other bodies of fluid. By default, this is water.
+
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.modernbetaforge.replaceOceanBiomes=Ocean Biomes
 createWorld.customize.custom.modernbetaforge.replaceBeachBiomes=Beach Biomes
 createWorld.customize.custom.modernbetaforge.replaceRiverBiomes=River Biomes
+
+createWorld.customize.custom.modernbetaforge.replaceOceanBiomes.tooltip=Replace sufficiently deep bodies of water with ocean biomes.
+createWorld.customize.custom.modernbetaforge.replaceBeachBiomes.tooltip=Replace generated beaches with beach biomes.
+createWorld.customize.custom.modernbetaforge.replaceRiverBiomes.tooltip=Replace generated rivers with river biomes.
 
 # Page 1 - Other Feature Settings
 createWorld.customize.custom.modernbetaforge.caveWidth=Cave Width
@@ -145,6 +158,11 @@ createWorld.customize.custom.modernbetaforge.waterLakeChance=Water Lake Chance
 createWorld.customize.custom.modernbetaforge.useLavaLakes=Lava Lakes
 createWorld.customize.custom.modernbetaforge.lavaLakeChance=Lava Lake Chance
 
+createWorld.customize.custom.modernbetaforge.caveCount.tooltip=Number of caves to generate.
+createWorld.customize.custom.modernbetaforge.caveChance.tooltip=Chance of caves to not generate.
+createWorld.customize.custom.modernbetaforge.useSandstone.tooltip=Generate sandstone underneath deserts and beaches.
+createWorld.customize.custom.modernbetaforge.useVillageVariants.tooltip=Generate biome-specific villages in Beta biomes.
+
 # Page 1 - Nether Settings
 createWorld.customize.custom.modernbetaforge.useOldNether=Classic Nether
 createWorld.customize.custom.modernbetaforge.useNetherCaves=Nether Caves
@@ -154,6 +172,9 @@ createWorld.customize.custom.modernbetaforge.useLavaPockets=Lava Pockets
 # Page 2 - Infdev 227 Settings
 createWorld.customize.custom.modernbetaforge.useInfdevWalls=Infdev Obsidian Walls
 createWorld.customize.custom.modernbetaforge.useInfdevPyramids=Infdev Brick Pyramids
+
+createWorld.customize.custom.modernbetaforge.useInfdevWalls.tooltip=Generate obsidian walls along x/z-axes in Infdev 20100227 worlds.
+createWorld.customize.custom.modernbetaforge.useInfdevPyramids.tooltip=Generate scattered brick pyramids in Infdev 20100227 worlds.
 
 # Page 2 - Indev Settings
 createWorld.customize.custom.modernbetaforge.levelTheme=Level Theme
@@ -165,10 +186,17 @@ createWorld.customize.custom.modernbetaforge.levelHouse=Indev House
 createWorld.customize.custom.modernbetaforge.useIndevCaves=Indev Caves
 createWorld.customize.custom.modernbetaforge.levelCaveWidth=Indev Cave Width
 
+createWorld.customize.custom.modernbetaforge.levelTheme.tooltip=Generates Indev worlds in different styles. This does not affect gameplay.
+createWorld.customize.custom.modernbetaforge.levelType.tooltip=Generates Indev worlds in different configurations.
+
 # Page 2 - Release Settings
 createWorld.customize.custom.modernbetaforge.riverRarity=River Rarity
 createWorld.customize.custom.modernbetaforge.layerType=Layer Type
 createWorld.customize.custom.modernbetaforge.layerSize=Layer Size
+
+createWorld.customize.custom.modernbetaforge.riverRarity.tooltip=Chance of rivers to not generate.
+createWorld.customize.custom.modernbetaforge.layerType.tooltip=Generates Release worlds in different configurations.
+createWorld.customize.custom.modernbetaforge.layerSize.tooltip=Scales the terrain generated for Release worlds.
 
 # Page 3 - Features
 createWorld.customize.custom.modernbetaforge.useTallGrass=Tall Grass
@@ -192,12 +220,39 @@ createWorld.customize.custom.modernbetaforge.useNewFancyOakTrees=Modern Oak Tree
 createWorld.customize.custom.modernbetaforge.biomeSize=Biome Size
 createWorld.customize.custom.modernbetaforge.snowyBiomeChance=Snowy Biome Rarity
 
+createWorld.customize.custom.modernbetaforge.useTallGrass.tooltip=Generate tall grass in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.useNewFlowers.tooltip=Generate flowers added after Beta in Beta biomes.
+createWorld.customize.custom.modernbetaforge.useDoublePlants.tooltip=Generate two-block high flowers in the Beta Forest biome.
+createWorld.customize.custom.modernbetaforge.useLilyPads.tooltip=Generate lily pads in the Beta Swampland biome.
+createWorld.customize.custom.modernbetaforge.useMelons.tooltip=Generate melons in the Beta Rainforest biome.
+createWorld.customize.custom.modernbetaforge.useSandDisks.tooltip=Generate sand disks in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.useGravelDisks.tooltip=Generate gravel disks in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.useClayDisks.tooltip=Generate clay disks in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.useDesertWells.tooltip=Generate desert wells in the Beta Desert biome.
+createWorld.customize.custom.modernbetaforge.useFossils.tooltip=Generate fossils in the Beta Swampland biome.
+createWorld.customize.custom.modernbetaforge.useBirchTrees.tooltip=Generate birch trees in the Beta Forest biome.
+createWorld.customize.custom.modernbetaforge.usePineTrees.tooltip=Generate pine and spruce trees in the Beta Taiga biome.
+createWorld.customize.custom.modernbetaforge.useSwampTrees.tooltip=Generate swamp trees in the Beta Swampland biome.
+createWorld.customize.custom.modernbetaforge.useAcaciaTrees.tooltip=Generate acacia trees in the Beta Savanna biome.
+createWorld.customize.custom.modernbetaforge.useJungleTrees.tooltip=Generate jungle trees in the Beta Rainforest biome.
+createWorld.customize.custom.modernbetaforge.useDarkOakTrees.tooltip=Generate dark oak trees in the Beta Seasonal Forest biome.
+createWorld.customize.custom.modernbetaforge.useNewFancyOakTrees.tooltip=Generate fancy oak trees with modern rotated logs.
+
+createWorld.customize.custom.modernbetaforge.biomeSize.tooltip=Scales the biome distribution for Release biome source.
+createWorld.customize.custom.modernbetaforge.snowyBiomeChance.tooltip=Chance of Release biome source snowy biomes to not generate.
+
 # Page 3 - Mobs
 createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs=Modern Passive Mobs
 createWorld.customize.custom.modernbetaforge.spawnNewMonsterMobs=Modern Hostile Mobs
 createWorld.customize.custom.modernbetaforge.spawnWaterMobs=Water Mobs
 createWorld.customize.custom.modernbetaforge.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.modernbetaforge.spawnWolves=Wolves
+
+createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs.tooltip=Spawn passive mobs added in later versions.
+createWorld.customize.custom.modernbetaforge.spawnNewMonsterMobs.tooltip=Spawn hostile mobs added in later versions.
+createWorld.customize.custom.modernbetaforge.spawnWaterMobs.tooltip=Spawn water mobs added in later versions. By default, this includes just squid.
+createWorld.customize.custom.modernbetaforge.spawnAmbientMobs.tooltip=Spawn ambient mobs added in later versions. By default, this includes just bats.
+createWorld.customize.custom.modernbetaforge.spawnWolves.tooltip=Spawn wolves in most Modern Beta forest biomes.
 
 # Page 4 - Ores
 createWorld.customize.custom.modernbetaforge.oreType=Ore Type
@@ -293,6 +348,8 @@ createWorld.customize.custom.modernbetaforge.magmaCount=Magma Count
 createWorld.customize.custom.modernbetaforge.magmaMinHeight=Magma Min Height
 createWorld.customize.custom.modernbetaforge.magmaMaxHeight=Magma Max Height
 
+createWorld.customize.custom.modernbetaforge.oreType.tooltip=Sets the ore generator. Default is an optimized implementation of the vanilla ore generator. Classic is an optimized implementation of the Beta ore generator. 
+
 # Page 5/6 - Noise
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleX=Main Noise Scale X
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleY=Main Noise Scale Y
@@ -324,6 +381,36 @@ createWorld.customize.custom.modernbetaforge.endIslandWeight=Island Weight
 createWorld.customize.custom.modernbetaforge.endOuterIslandDistance=Outer Island Distance
 createWorld.customize.custom.modernbetaforge.endOuterIslandOffset=Outer Island Offset
 createWorld.customize.custom.modernbetaforge.useEndOuterIslands=Use Outer Islands
+
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleX.tooltip=Scales the terrain shape along the x-axis.
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleY.tooltip=Scales the terrain shape along the y-axis.
+createWorld.customize.custom.modernbetaforge.mainNoiseScaleZ.tooltip=Scales the terrain shape along the z-axis.
+createWorld.customize.custom.modernbetaforge.scaleNoiseScaleX.tooltip=Scales the noise used to determine terrain height variation along the x-axis.
+createWorld.customize.custom.modernbetaforge.scaleNoiseScaleZ.tooltip=Scales the noise used to determine terrain height variation along the z-axis.
+createWorld.customize.custom.modernbetaforge.depthNoiseScaleX.tooltip=Scales the noise used to determine base terrain height along the x-axis.
+createWorld.customize.custom.modernbetaforge.depthNoiseScaleZ.tooltip=Scales the noise used to determine base terrain height along the z-axis.
+createWorld.customize.custom.modernbetaforge.baseSize.tooltip=Determines the initial base terrain height. One unit is roughly equivalent to a change in height of 8 blocks.
+createWorld.customize.custom.modernbetaforge.coordinateScale.tooltip=Stretches the initial terrain shape along the x/z-axes.
+createWorld.customize.custom.modernbetaforge.heightScale.tooltip=Stretches the initial terrain shape along the y-axis.
+createWorld.customize.custom.modernbetaforge.stretchY.tooltip=Stretches the overall terrain along the y-axis.
+createWorld.customize.custom.modernbetaforge.upperLimitScale.tooltip=Scales the terrain density at a particular point. Depending on the sampled scale and depth values, overall terrain may be more or less solid.
+createWorld.customize.custom.modernbetaforge.lowerLimitScale.tooltip=Scales the terrain density at a particular point. Depending on the sampled scale and depth values, overall terrain may be more or less solid.
+createWorld.customize.custom.modernbetaforge.height.tooltip=The maximum generation height for terrain.
+createWorld.customize.custom.modernbetaforge.tempNoiseScale.tooltip=Scales temperature sampling for Beta/PE chunk or biome sources.
+createWorld.customize.custom.modernbetaforge.rainNoiseScale.tooltip=Scales rainfall sampling for Beta/PE chunk or biome sources.
+createWorld.customize.custom.modernbetaforge.detailNoiseScale.tooltip=Scales detail sampling for Beta/PE chunk or biome sources. Used for adding variation to climate transitions.
+createWorld.customize.custom.modernbetaforge.useTerrainCoordFix.tooltip=Fix Beta terrain generation quirk where terrain would sometimes generate with chunk borders.
+createWorld.customize.custom.modernbetaforge.biomeDepthWeight.tooltip=Changes the per-biome terrain height characteristics for Release terrain.
+createWorld.customize.custom.modernbetaforge.biomeDepthOffset.tooltip=Changes the base per-biome terrain height for Release terrain.
+createWorld.customize.custom.modernbetaforge.biomeScaleWeight.tooltip=Changes the per-biome terrain height variation characteristics for Release terrain.
+createWorld.customize.custom.modernbetaforge.biomeScaleOffset.tooltip=Changes the base per-biome terrain height variation for Release terrain.
+createWorld.customize.custom.modernbetaforge.riverDepthWeight.tooltip=Changes the river terrain height characteristics for Release terrain. Higher values will generate deeper rivers, reducing likelihood of constrictions.
+createWorld.customize.custom.modernbetaforge.useBiomeDepthScale.tooltip=Generate release terrain using the height characteristics of the biome map overlaid the base Release terrain.
+createWorld.customize.custom.modernbetaforge.useAmplified.tooltip=Generate release terrain as amplified terrain.
+createWorld.customize.custom.modernbetaforge.endIslandOffset.tooltip=Changes the base radius of the central End island.
+createWorld.customize.custom.modernbetaforge.endIslandWeight.tooltip=Changes the distance at which the central End island tapers off.
+createWorld.customize.custom.modernbetaforge.endOuterIslandDistance.tooltip=Changes the distance at which the outer islands begin to generate, in chunks.
+createWorld.customize.custom.modernbetaforge.endOuterIslandOffset.tooltip=Changes the base radius of outer End islands.
 
 # Page 7 - World Customization Beta Biomes
 createWorld.customize.custom.modernbetaforge.snowLineOffset=Snow Line Offset
@@ -388,6 +475,9 @@ createWorld.customize.custom.modernbetaforge.taigaBiomeOcean=Taiga Ocean Biome
 createWorld.customize.custom.modernbetaforge.tundraBiomeBase=Tundra Base Biome
 createWorld.customize.custom.modernbetaforge.tundraBiomeBeach=Tundra Beach Biome
 createWorld.customize.custom.modernbetaforge.tundraBiomeOcean=Tundra Ocean Biome
+
+createWorld.customize.custom.modernbetaforge.snowLineOffset.tooltip=Sets the base height at which snow generates for Beta/PE biome sources.
+createWorld.customize.custom.modernbetaforge.useClimateFeatures.tooltip=Use sampled climate noise to generate snow and ice instead of on a per-biome basis.
 
 ## Page 8 - Addons
 createWorld.customize.custom.modernbetaforge.propertyScreen=Open

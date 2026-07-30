@@ -17,4 +17,4 @@ This project is licensed under MIT.
 
 ## Credits
 
-Thanks to mrburgerUS, SuperCoder7979, Arenovas, Amb0s, PaulEvs, comp500, and the folks behind RetroMCP.
+Thanks to mrburgerUS, SuperCoder7979, Arenovas, Amb0s, PaulEvs, comp500, and the folks behind RetroMCP. The Minecraft Wiki was sourced to provide some descriptions in this mod.
