@@ -428,17 +428,18 @@ createWorld.customize.custom.modernbetaforge.tempNoiseScale.tooltip=Scales tempe
 createWorld.customize.custom.modernbetaforge.rainNoiseScale.tooltip=Scales rainfall sampling for Beta/PE chunk or biome sources.
 createWorld.customize.custom.modernbetaforge.detailNoiseScale.tooltip=Scales detail sampling for Beta/PE chunk or biome sources. Used for adding variation to climate transitions.
 createWorld.customize.custom.modernbetaforge.useTerrainCoordFix.tooltip=Fix Beta terrain generation quirk where terrain would sometimes generate with chunk borders.
-createWorld.customize.custom.modernbetaforge.biomeDepthWeight.tooltip=Changes the per-biome terrain height characteristics for Release terrain.
+createWorld.customize.custom.modernbetaforge.biomeDepthWeight.tooltip=Amplifies the per-biome terrain height characteristics for Release terrain.
 createWorld.customize.custom.modernbetaforge.biomeDepthOffset.tooltip=Changes the base per-biome terrain height for Release terrain.
-createWorld.customize.custom.modernbetaforge.biomeScaleWeight.tooltip=Changes the per-biome terrain height variation characteristics for Release terrain.
+createWorld.customize.custom.modernbetaforge.biomeScaleWeight.tooltip=Amplifies the per-biome terrain height variation characteristics for Release terrain.
 createWorld.customize.custom.modernbetaforge.biomeScaleOffset.tooltip=Changes the base per-biome terrain height variation for Release terrain.
-createWorld.customize.custom.modernbetaforge.riverDepthWeight.tooltip=Changes the river terrain height characteristics for Release terrain. Higher values will generate deeper rivers, reducing likelihood of constrictions.
+createWorld.customize.custom.modernbetaforge.riverDepthWeight.tooltip=Amplifies the river terrain height characteristics for Release terrain. Higher values will generate deeper rivers, reducing likelihood of constrictions.
 createWorld.customize.custom.modernbetaforge.useBiomeDepthScale.tooltip=Generate release terrain using the height characteristics of the biome map overlaid the base Release terrain.
 createWorld.customize.custom.modernbetaforge.useAmplified.tooltip=Generate release terrain as amplified terrain.
 createWorld.customize.custom.modernbetaforge.endIslandOffset.tooltip=Changes the base radius of the central End island.
-createWorld.customize.custom.modernbetaforge.endIslandWeight.tooltip=Changes the distance at which the central End island tapers off.
+createWorld.customize.custom.modernbetaforge.endIslandWeight.tooltip=Amplifies the distance at which the central End island tapers off.
 createWorld.customize.custom.modernbetaforge.endOuterIslandDistance.tooltip=Changes the distance at which the outer islands begin to generate, in chunks.
 createWorld.customize.custom.modernbetaforge.endOuterIslandOffset.tooltip=Changes the base radius of outer End islands.
+createWorld.customize.custom.modernbetaforge.useEndOuterIslands.tooltip=Generate outer End islands.
 
 # Page 7 - World Customization Beta Biomes
 createWorld.customize.custom.modernbetaforge.snowLineOffset=Snow Line Offset
