@@ -214,7 +214,7 @@ public class CompatOE implements Compat, ClientCompat {
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_WARM_OCEAN, (chunkSource, settings) -> {
             if (settings.getBooleanProperty(KEY_USE_WARM_OCEANS)) {
-                return new GeneratorWarmOcean(BETA_OCEANS);
+                return new GeneratorWarmOcean(BETA_OCEAN);
             }
             
             return WorldGenNoOpForge.INSTANCE;

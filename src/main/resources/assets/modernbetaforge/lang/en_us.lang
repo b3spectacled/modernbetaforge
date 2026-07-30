@@ -492,6 +492,12 @@ createWorld.customize.custom.compatbiomesoplenty.coralreefnoisescale=Coral Reef 
 createWorld.customize.custom.compatbiomesoplenty.kelpforestnoisescale=Kelp Forest Noise Scale
 createWorld.customize.custom.compatbiomesoplenty.kelpforestnoisescale.info=Release biome source only.
 
+createWorld.customize.custom.compatbiomesoplenty.usecompat.tooltip=Enable additional compatibility for Biomes O' Plenty when using Release biome source.
+createWorld.customize.custom.compatbiomesoplenty.coralreefchance.tooltip=Chance of the Coral Reef biome generating in oceans.
+createWorld.customize.custom.compatbiomesoplenty.kelpforestchance.tooltip=Chance of the Kelp Forest biome generating in oceans.
+createWorld.customize.custom.compatbiomesoplenty.coralreefnoisescale.tooltip=Scales the noise used to determine Coral Reef biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatbiomesoplenty.kelpforestnoisescale.tooltip=Scales the noise used to determine Kelp Forest biome placement. Higher values will generate more varied placements.
+
 createWorld.customize.custom.compatbiomesoplenty.biomesize=Biome Size
 createWorld.customize.custom.compatbiomesoplenty.biomesize.tiny=Tiny
 createWorld.customize.custom.compatbiomesoplenty.biomesize.small=Small
@@ -499,10 +505,14 @@ createWorld.customize.custom.compatbiomesoplenty.biomesize.medium=Medium
 createWorld.customize.custom.compatbiomesoplenty.biomesize.large=Large
 createWorld.customize.custom.compatbiomesoplenty.biomesize.huge=Huge
 
+createWorld.customize.custom.compatbiomesoplenty.biomesize.tooltip=Scales the biome distribution for Biomes O' Plenty biome source.
+
 createWorld.customize.custom.compatbiomesoplenty.landscheme=Landmass
 createWorld.customize.custom.compatbiomesoplenty.landscheme.vanilla=Vanilla
 createWorld.customize.custom.compatbiomesoplenty.landscheme.continents=Continents
 createWorld.customize.custom.compatbiomesoplenty.landscheme.archipelago=Archipelago
+
+createWorld.customize.custom.compatbiomesoplenty.landscheme.tooltip=Generates Biomes O' Plenty worlds in different configurations.
 
 createWorld.customize.custom.compatbiomesoplenty.tempscheme=Temperature
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.latitude=Latitude
@@ -511,12 +521,16 @@ createWorld.customize.custom.compatbiomesoplenty.tempscheme.medium_zones=Medium 
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.large_zones=Large Zones
 createWorld.customize.custom.compatbiomesoplenty.tempscheme.random=Random
 
+createWorld.customize.custom.compatbiomesoplenty.tempscheme.tooltip=Determines biome distribution based on temperature scheme.
+
 createWorld.customize.custom.compatbiomesoplenty.rainscheme=Rainfall
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.small_zones=Small Zones
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.medium_zones=Medium Zones
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.large_zones=Large Zones
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.random=Random
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.info=Biomes O' Plenty biome source only.
+
+createWorld.customize.custom.compatbiomesoplenty.rainscheme.tooltip=Determines biome distribution based on rainfall scheme.
 
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.info=Required for non-release biome sources only.
@@ -526,14 +540,25 @@ createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance=Oil Ocean Cha
 createWorld.customize.custom.compatbuildcraftenergy.oildesertnoisescale=Oil Desert Noise Scale
 createWorld.customize.custom.compatbuildcraftenergy.oiloceannoisescale=Oil Ocean Noise Scale
 
+createWorld.customize.custom.compatbuildcraftenergy.usecompat.tooltip=Enable additional compatibility for BuildCraft Energy when using non-Release biome sources. This is not needed for Release/BoP biome sources, where BuildCraft biomes already generate.
+createWorld.customize.custom.compatbuildcraftenergy.oildesertchance.tooltip=Chance of the Oil Desert biome generating in deserts.
+createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance.tooltip=Chance of the Oil Ocean biome generating in oceans.
+createWorld.customize.custom.compatbuildcraftenergy.oildesertnoisescale.tooltip=Scales the noise used to determine Oil Desert biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatbuildcraftenergy.oiloceannoisescale.tooltip=Scales the noise used to determine Oil Ocean biome placement. Higher values will generate more varied placements.
+
 createWorld.customize.custom.compatthaumcraft=Thaumcraft Compatibility
 createWorld.customize.custom.compatthaumcraft.info=Required for non-release biome sources only.
 createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
 createWorld.customize.custom.compatthaumcraft.magicalforestchance=Magical Forest Chance
 createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale=Magical Forest Noise Scale
 
+createWorld.customize.custom.compatthaumcraft.usecompat.tooltip=Enable additional compatibility for Thaumcraft when using non-Release biome sources. This is not needed for Release/BoP biome sources, where Thaumcraft biomes already generate.
+createWorld.customize.custom.compatthaumcraft.magicalforestchance.tooltip=Chance of the Magical Forest biome generating in forests.
+createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale.tooltip=Scales the noise used to determine Magical Forest biome placement. Higher values will generate more varied placements.
+
 createWorld.customize.custom.compatfuturemc=Future MC Compatibility
 createWorld.customize.custom.compatfuturemc.beenestflowercheck=Bee Nest Flower Check
+createWorld.customize.custom.compatfuturemc.beenestflowercheck.tooltip=Check whether there are flowers nearby before generating bee nests.
 
 createWorld.customize.custom.compatoe=Oceanic Expanse Compatibility
 createWorld.customize.custom.compatoe.usecoquinaoutcrops=Use Coquina Outcrops
@@ -546,6 +571,17 @@ createWorld.customize.custom.compatoe.useshellpatches=Use Shell Patches
 createWorld.customize.custom.compatoe.useshipwrecks=Use Shipwrecks
 createWorld.customize.custom.compatoe.usefrozenoceans=Use Frozen Oceans
 createWorld.customize.custom.compatoe.usewarmoceans=Use Warm Oceans
+
+createWorld.customize.custom.compatoe.usecoquinaoutcrops.tooltip=Generate coquina outcrops in the Beta Beach biome.
+createWorld.customize.custom.compatoe.usekelp.tooltip=Generate kelp in the Beta Ocean biome.
+createWorld.customize.custom.compatoe.usepalmtrees.tooltip=Generate palm trees in the Beta Beach biome.
+createWorld.customize.custom.compatoe.useprismarinepots.tooltip=Generate prismarine pots in the Beta Ocean biome.
+createWorld.customize.custom.compatoe.useseagrasspatches.tooltip=Generate seagrass patches in the Beta Ocean and Beta Swampland biomes.
+createWorld.customize.custom.compatoe.useseaoatspatches.tooltip=Generate sea oats patches in the Beta Beach biome.
+createWorld.customize.custom.compatoe.useshellpatches.tooltip=Generate shell patches in the Beta Beach biome.
+createWorld.customize.custom.compatoe.useshipwrecks.tooltip=Generate shipwrecks in Beta ocean biomes.
+createWorld.customize.custom.compatoe.usefrozenoceans.tooltip=Generate the Frozen Ocean biome in portions of Beta ocean biomes.
+createWorld.customize.custom.compatoe.usewarmoceans.tooltip=Generate the Warm Ocean biome in portions of the Beta Ocean biome.
 
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta

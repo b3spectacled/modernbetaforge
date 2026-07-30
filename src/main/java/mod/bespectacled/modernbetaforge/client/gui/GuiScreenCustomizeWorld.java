@@ -2464,10 +2464,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (!tooltipKey.isEmpty() && I18n.hasKey(tooltipKey) && System.currentTimeMillis() - this.lastHovered > TOOLTIP_DELAY) {
             String tooltip = I18n.format(tooltipKey);
             
-            int paddingL = 5;
-            int paddingT = 5;
-            int paddingR = 3;
-            int paddingB = 3;
+            int paddingL = 4;
+            int paddingT = 4;
+            int paddingR = 2;
+            int paddingB = 2;
             
             int tooltipHeight = this.fontRenderer.getWordWrappedHeight(tooltip, TOOLTIP_MAX_WIDTH);
             int tooltipWidth = this.getMaxStringWidth(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH));
@@ -2475,12 +2475,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             int rectH = tooltipHeight + paddingT + paddingB;
             int rectW = tooltipWidth + paddingL + paddingR;
             
-            boolean yClips = guiY + rectH > this.pageList.bottom;
+            boolean bottomClips = guiY + rectH > this.pageList.bottom;
             
             int offsetX = (guiWidth - rectW) / 2;
-            int offsetY = yClips ? -2 : 1;
+            int offsetY = bottomClips ? -2 : 1;
             
-            if (yClips) {
+            if (bottomClips) {
                 guiY -= guiHeight + rectH;
             }
             
