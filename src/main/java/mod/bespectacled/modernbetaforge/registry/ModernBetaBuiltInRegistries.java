@@ -322,6 +322,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.USE_SWAMP_TREES, GuiPredicates.USE_SWAMP_TREES_TEST);
         registry.register(GuiPredicate.USE_JUNGLE_TREES, GuiPredicates.USE_JUNGLE_TREES_TEST);
         registry.register(GuiPredicate.USE_ACACIA_TREES, GuiPredicates.USE_ACACIA_TREES_TEST);
+        registry.register(GuiPredicate.USE_DARK_OAK_TREES, GuiPredicates.USE_DARK_OAK_TREES_TEST);
         registry.register(GuiPredicate.USE_NEW_FANCY_OAK_TREES, GuiPredicates.USE_NEW_FANCY_OAK_TREES_TEST);
         registry.register(GuiPredicate.SPAWN_NEW_MONSTER_MOBS, GuiPredicates.SPAWN_NEW_MONSTER_MOBS_TEST);
         registry.register(GuiPredicate.SPAWN_NEW_CREATURE_MOBS, GuiPredicates.SPAWN_NEW_CREATURE_MOBS_TEST);

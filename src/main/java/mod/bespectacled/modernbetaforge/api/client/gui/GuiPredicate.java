@@ -64,6 +64,7 @@ public class GuiPredicate {
     public static final ResourceLocation USE_SWAMP_TREES = createRegistryKey(NbtTags.USE_SWAMP_TREES);
     public static final ResourceLocation USE_JUNGLE_TREES = createRegistryKey(NbtTags.USE_JUNGLE_TREES);
     public static final ResourceLocation USE_ACACIA_TREES = createRegistryKey(NbtTags.USE_ACACIA_TREES);
+    public static final ResourceLocation USE_DARK_OAK_TREES = createRegistryKey(NbtTags.USE_DARK_OAK_TREES);
     public static final ResourceLocation USE_NEW_FANCY_OAK_TREES = createRegistryKey(NbtTags.USE_NEW_FANCY_OAK_TREES);
     
     public static final ResourceLocation SPAWN_NEW_CREATURE_MOBS = createRegistryKey(NbtTags.SPAWN_NEW_CREATURE_MOBS);

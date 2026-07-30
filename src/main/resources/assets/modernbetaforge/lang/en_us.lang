@@ -163,13 +163,33 @@ createWorld.customize.custom.modernbetaforge.caveHeight.tooltip=Maximum generati
 createWorld.customize.custom.modernbetaforge.caveCount.tooltip=Number of caves to generate.
 createWorld.customize.custom.modernbetaforge.caveChance.tooltip=Chance of caves to not generate.
 createWorld.customize.custom.modernbetaforge.useSandstone.tooltip=Generate sandstone underneath deserts and beaches.
+createWorld.customize.custom.modernbetaforge.useUnderwaterCaves.tooltip=Generate flooded caves in ocean biomes.
+createWorld.customize.custom.modernbetaforge.seaLevel.tooltip=Base level for bodies of water.
+createWorld.customize.custom.modernbetaforge.useRavines.tooltip=Generate ravines.
+createWorld.customize.custom.modernbetaforge.useMineShafts.tooltip=Generate mineshafts.
+createWorld.customize.custom.modernbetaforge.useVillages.tooltip=Generate villages. Valid biomes include Beta Desert, Beta Ice Desert, Beta Savanna, Beta Shrubland, Beta Sky, Beta Taiga, and other biomes. 
 createWorld.customize.custom.modernbetaforge.useVillageVariants.tooltip=Generate biome-specific villages in Beta biomes.
+createWorld.customize.custom.modernbetaforge.useStrongholds.tooltip=Generate strongholds. In Indev and Classic worlds, one is guaranteed within level bounds.
+createWorld.customize.custom.modernbetaforge.useTemples.tooltip=Generate desert temples, igloos, and jungle pyramids.
+createWorld.customize.custom.modernbetaforge.useMonuments.tooltip=Generate ocean monuments. Valid biomes include Beta Ocean and Deep Ocean biomes.
+createWorld.customize.custom.modernbetaforge.useMansions.tooltip=Generate mansions. Valid biomes include Beta Seasonal Forest and Roofed Forest biomes.
+createWorld.customize.custom.modernbetaforge.useDungeons.tooltip=Generate dungeons/monster rooms.
+createWorld.customize.custom.modernbetaforge.dungeonChance.tooltip=Number of attempts to generate dungeons.
+createWorld.customize.custom.modernbetaforge.useWaterLakes.tooltip=Generate water lakes.
+createWorld.customize.custom.modernbetaforge.waterLakeChance.tooltip=Chance of water lakes to generate.
+createWorld.customize.custom.modernbetaforge.useLavaLakes.tooltip=Generate lava lakes.
+createWorld.customize.custom.modernbetaforge.lavaLakeChance.tooltip=Chance of lava lakes to generate.
 
 # Page 1 - Nether Settings
 createWorld.customize.custom.modernbetaforge.useOldNether=Classic Nether
 createWorld.customize.custom.modernbetaforge.useNetherCaves=Nether Caves
 createWorld.customize.custom.modernbetaforge.useFortresses=Nether Fortresses
 createWorld.customize.custom.modernbetaforge.useLavaPockets=Lava Pockets
+
+createWorld.customize.custom.modernbetaforge.useOldNether.tooltip=Generate the Nether with customizable features.
+createWorld.customize.custom.modernbetaforge.useNetherCaves.tooltip=Generate Beta Nether caves.
+createWorld.customize.custom.modernbetaforge.useFortresses.tooltip=Generate Nether fortresses.
+createWorld.customize.custom.modernbetaforge.useLavaPockets.tooltip=Generate lava pockets within terrain.
 
 # Page 2 - Infdev 227 Settings
 createWorld.customize.custom.modernbetaforge.useInfdevWalls=Infdev Obsidian Walls
@@ -190,6 +210,12 @@ createWorld.customize.custom.modernbetaforge.levelCaveWidth=Indev Cave Width
 
 createWorld.customize.custom.modernbetaforge.levelTheme.tooltip=Generates Indev worlds in different styles. This does not affect gameplay.
 createWorld.customize.custom.modernbetaforge.levelType.tooltip=Generates Indev worlds in different configurations.
+createWorld.customize.custom.modernbetaforge.levelWidth.tooltip=Width of the Indev world, in blocks.
+createWorld.customize.custom.modernbetaforge.levelLength.tooltip=Length of the Indev world, in blocks.
+createWorld.customize.custom.modernbetaforge.levelHeight.tooltip=Height of the Indev world, in blocks. This affects world sea level. When using the Floating level type, higher values will add more layers.
+createWorld.customize.custom.modernbetaforge.levelHouse.tooltip=Generate the Indev house, or disable the Indev house.
+createWorld.customize.custom.modernbetaforge.useIndevCaves.tooltip=Generate Indev caves. This setting is not mutually exclusive with the Cave Carver setting.
+createWorld.customize.custom.modernbetaforge.levelCaveWidth.tooltip=Maximum Indev cave width. Values above 1.0 will add variation in cave widths between the new value and 1.0.
 
 # Page 2 - Release Settings
 createWorld.customize.custom.modernbetaforge.riverRarity=River Rarity

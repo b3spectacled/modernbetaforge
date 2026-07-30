@@ -116,6 +116,7 @@ public class GuiPredicates {
     public static final GuiPredicate USE_SWAMP_TREES_TEST;
     public static final GuiPredicate USE_JUNGLE_TREES_TEST;
     public static final GuiPredicate USE_ACACIA_TREES_TEST;
+    public static final GuiPredicate USE_DARK_OAK_TREES_TEST;
     public static final GuiPredicate USE_NEW_FANCY_OAK_TREES_TEST;
     
     public static final GuiPredicate SPAWN_NEW_CREATURE_MOBS_TEST;
@@ -627,6 +628,7 @@ public class GuiPredicates {
         USE_SWAMP_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_SWAMP);
         USE_JUNGLE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_JUNGLE);
         USE_ACACIA_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_ACACIA);
+        USE_DARK_OAK_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_DARK_OAK);
         USE_NEW_FANCY_OAK_TREES_TEST = new GuiPredicate(
             settings -> {
                 boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
