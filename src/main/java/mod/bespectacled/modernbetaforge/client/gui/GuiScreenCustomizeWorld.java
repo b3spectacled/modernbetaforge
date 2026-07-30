@@ -2463,19 +2463,31 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (!tooltipKey.isEmpty() && I18n.hasKey(tooltipKey) && System.currentTimeMillis() - this.lastHovered > TOOLTIP_DELAY) {
             String tooltip = I18n.format(tooltipKey);
-            int tooltipHeight = this.fontRenderer.getWordWrappedHeight(tooltip, TOOLTIP_MAX_WIDTH) + 9;
-            int tooltipWidth = this.getMaxStringWidth(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH)) + 9;
-            int tooltipOffsetX = (guiWidth - tooltipWidth) / 2;
-            int tooltipOffsetY = 1;
             
-            if (guiY + tooltipHeight > this.pageList.bottom) {
-                guiY -= tooltipHeight + guiHeight + 2;
+            int paddingL = 5;
+            int paddingT = 5;
+            int paddingR = 3;
+            int paddingB = 3;
+            
+            int tooltipHeight = this.fontRenderer.getWordWrappedHeight(tooltip, TOOLTIP_MAX_WIDTH);
+            int tooltipWidth = this.getMaxStringWidth(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH));
+            
+            int rectH = tooltipHeight + paddingT + paddingB;
+            int rectW = tooltipWidth + paddingL + paddingR;
+            
+            boolean yClips = guiY + rectH > this.pageList.bottom;
+            
+            int offsetX = (guiWidth - rectW) / 2;
+            int offsetY = yClips ? -2 : 1;
+            
+            if (yClips) {
+                guiY -= guiHeight + rectH;
             }
             
-            int rectL = guiX + tooltipOffsetX;
-            int rectR = guiX + tooltipOffsetX + tooltipWidth;
-            int rectT = guiY + tooltipOffsetY;
-            int rectB = guiY + tooltipHeight;
+            int rectL = guiX + offsetX;
+            int rectR = guiX + offsetX + rectW;
+            int rectT = guiY + offsetY;
+            int rectB = guiY + offsetY + rectH;
             
             drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_DARKEST_GREY);
             this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
@@ -2483,8 +2495,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
             this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARK_GREY);
             
-            this.fontRenderer.drawSplitString(tooltip, guiX + 6 + tooltipOffsetX, guiY + tooltipOffsetY + 6, TOOLTIP_MAX_WIDTH, GuiColors.RGB_DARK_GREY);
-            this.fontRenderer.drawSplitString(tooltip, guiX + 5 + tooltipOffsetX, guiY + tooltipOffsetY + 5, TOOLTIP_MAX_WIDTH, GuiColors.RGB_WHITE);
+            this.fontRenderer.drawSplitString(tooltip, rectL + paddingL + 1, rectT + paddingT + 1, TOOLTIP_MAX_WIDTH, GuiColors.RGB_DARK_GREY);
+            this.fontRenderer.drawSplitString(tooltip, rectL + paddingL, rectT + paddingT, TOOLTIP_MAX_WIDTH, GuiColors.RGB_WHITE);
         }
     }
     

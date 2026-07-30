@@ -158,6 +158,8 @@ createWorld.customize.custom.modernbetaforge.waterLakeChance=Water Lake Chance
 createWorld.customize.custom.modernbetaforge.useLavaLakes=Lava Lakes
 createWorld.customize.custom.modernbetaforge.lavaLakeChance=Lava Lake Chance
 
+createWorld.customize.custom.modernbetaforge.caveWidth.tooltip=Maximum cave width. Values above 1.0 will add variation in cave widths between the new value and 1.0.
+createWorld.customize.custom.modernbetaforge.caveHeight.tooltip=Maximum generation height for caves.
 createWorld.customize.custom.modernbetaforge.caveCount.tooltip=Number of caves to generate.
 createWorld.customize.custom.modernbetaforge.caveChance.tooltip=Chance of caves to not generate.
 createWorld.customize.custom.modernbetaforge.useSandstone.tooltip=Generate sandstone underneath deserts and beaches.
