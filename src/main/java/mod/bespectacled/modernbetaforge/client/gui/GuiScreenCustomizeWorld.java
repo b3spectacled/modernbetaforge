@@ -2437,6 +2437,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             return;
         }
         
+        boolean showHint = false;
+        
         String tooltipKey = this.translationKeyMap.get(this.hoveredId) + ".tooltip";
         Gui gui = this.pageList.getComponent(this.hoveredId);
 
@@ -2461,13 +2463,46 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             guiY = label.y + label.height;
         }
         
+        // Somewhat distracting, disable for now
+        if (showHint && !tooltipKey.isEmpty() && I18n.hasKey(tooltipKey)) {
+            int ttX = guiX + guiWidth;
+            int ttY = guiY - guiHeight;
+            
+            int paddingL = 3;
+            int paddingT = 3;
+            int paddingR = 1;
+            int paddingB = 0;
+            
+            int offsetX = -5;
+            int offsetY = -5;
+            
+            int strHeight = this.fontRenderer.FONT_HEIGHT;
+            int strWidth = this.fontRenderer.getStringWidth("?");
+            
+            int rectH = strHeight + paddingT + paddingB;
+            int rectW = strWidth + paddingL + paddingR;
+            
+            int rectL = ttX + offsetX;
+            int rectR = ttX + offsetX + rectW;
+            int rectT = ttY + offsetY;
+            int rectB = ttY + offsetY + rectH;
+            
+            drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_GREY);
+            this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
+            this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARKER_GREY);
+            this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
+            this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARKER_GREY);
+            
+            this.fontRenderer.drawStringWithShadow("?", rectL + paddingL, rectT + paddingT, GuiColors.RGB_LIGHT_YELLOW);
+        }
+        
         if (!tooltipKey.isEmpty() && I18n.hasKey(tooltipKey) && System.currentTimeMillis() - this.lastHovered > TOOLTIP_DELAY) {
             String tooltip = I18n.format(tooltipKey);
             
-            int paddingL = 4;
-            int paddingT = 4;
+            int paddingL = 5;
+            int paddingT = 5;
             int paddingR = 2;
-            int paddingB = 2;
+            int paddingB = 3;
             
             int tooltipHeight = this.fontRenderer.getWordWrappedHeight(tooltip, TOOLTIP_MAX_WIDTH);
             int tooltipWidth = this.getMaxStringWidth(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH));
