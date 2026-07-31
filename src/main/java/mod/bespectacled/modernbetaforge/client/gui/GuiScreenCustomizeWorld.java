@@ -116,6 +116,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TAB_BUTTON_HEIGHT = 20;
     
     private static final int TOOLTIP_MAX_WIDTH = 140;
+    private static final int TOOLTIP_LINE_SPACING = 3;
     private static final long TOOLTIP_DELAY = 250L;
     
     private final GuiCreateWorld parent;
@@ -2489,9 +2490,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_GREY);
             this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
-            this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARKER_GREY);
+            this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARK_GREY);
             this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
-            this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARKER_GREY);
+            this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARK_GREY);
             
             this.fontRenderer.drawStringWithShadow("?", rectL + paddingL, rectT + paddingT, GuiColors.RGB_LIGHT_YELLOW);
         }
@@ -2504,7 +2505,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             int paddingR = 2;
             int paddingB = 3;
             
-            int tooltipHeight = this.fontRenderer.getWordWrappedHeight(tooltip, TOOLTIP_MAX_WIDTH);
+            List<String> tooltips = this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH);
+            
+            int tooltipHeight = this.fontRenderer.FONT_HEIGHT * tooltips.size() + TOOLTIP_LINE_SPACING * (tooltips.size() - 1);
             int tooltipWidth = this.getMaxStringWidth(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH));
             
             int rectH = tooltipHeight + paddingT + paddingB;
@@ -2523,15 +2526,21 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             int rectR = guiX + offsetX + rectW;
             int rectT = guiY + offsetY;
             int rectB = guiY + offsetY + rectH;
-            
+
             drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_DARKEST_GREY);
             this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
             this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARK_GREY);
             this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
             this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARK_GREY);
-            
-            this.fontRenderer.drawSplitString(tooltip, rectL + paddingL + 1, rectT + paddingT + 1, TOOLTIP_MAX_WIDTH, GuiColors.RGB_DARK_GREY);
-            this.fontRenderer.drawSplitString(tooltip, rectL + paddingL, rectT + paddingT, TOOLTIP_MAX_WIDTH, GuiColors.RGB_WHITE);
+
+            this.drawSplitString(tooltips, rectL + paddingL, rectT + paddingT, GuiColors.RGB_WHITE);
+        }
+    }
+    
+    private void drawSplitString(List<String> strings, int x, int y, int color) {
+        for (String str : strings) {
+            this.fontRenderer.drawStringWithShadow(str, x, y, color);
+            y += this.fontRenderer.FONT_HEIGHT + TOOLTIP_LINE_SPACING;
         }
     }
     
