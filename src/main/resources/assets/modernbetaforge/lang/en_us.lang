@@ -257,14 +257,14 @@ createWorld.customize.custom.modernbetaforge.useSandDisks.tooltip=Generate sand 
 createWorld.customize.custom.modernbetaforge.useGravelDisks.tooltip=Generate gravel disks in Modern Beta biomes.
 createWorld.customize.custom.modernbetaforge.useClayDisks.tooltip=Generate clay disks in Modern Beta biomes.
 createWorld.customize.custom.modernbetaforge.useDesertWells.tooltip=Generate desert wells in the Beta Desert biome.
-createWorld.customize.custom.modernbetaforge.useFossils.tooltip=Generate fossils in the Beta Swampland biome.
+createWorld.customize.custom.modernbetaforge.useFossils.tooltip=Generate fossils in the Beta Desert and Beta Swampland biomes.
 createWorld.customize.custom.modernbetaforge.useBirchTrees.tooltip=Generate birch trees in the Beta Forest biome.
 createWorld.customize.custom.modernbetaforge.usePineTrees.tooltip=Generate pine and spruce trees in the Beta Taiga biome.
 createWorld.customize.custom.modernbetaforge.useSwampTrees.tooltip=Generate swamp trees in the Beta Swampland biome.
 createWorld.customize.custom.modernbetaforge.useAcaciaTrees.tooltip=Generate acacia trees in the Beta Savanna biome.
 createWorld.customize.custom.modernbetaforge.useJungleTrees.tooltip=Generate jungle trees in the Beta Rainforest biome.
 createWorld.customize.custom.modernbetaforge.useDarkOakTrees.tooltip=Generate dark oak trees in the Beta Seasonal Forest biome.
-createWorld.customize.custom.modernbetaforge.useNewFancyOakTrees.tooltip=Generate fancy oak trees with modern rotated logs.
+createWorld.customize.custom.modernbetaforge.useNewFancyOakTrees.tooltip=Generate fancy oak trees with rotated logs.
 
 createWorld.customize.custom.modernbetaforge.biomeSize.tooltip=Scales the biome distribution for Release biome source.
 createWorld.customize.custom.modernbetaforge.snowyBiomeChance.tooltip=Chance of Release biome source snowy biomes to not generate.
