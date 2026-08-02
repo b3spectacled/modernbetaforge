@@ -588,6 +588,7 @@ createWorld.customize.custom.compatfuturemc.beenestflowercheck=Bee Nest Flower C
 createWorld.customize.custom.compatfuturemc.beenestflowercheck.tooltip=Check whether there are flowers nearby before generating bee nests.
 
 createWorld.customize.custom.compatoe=Oceanic Expanse Compatibility
+createWorld.customize.custom.compatoe.usecompat=Use Compatibility
 createWorld.customize.custom.compatoe.usecoquinaoutcrops=Use Coquina Outcrops
 createWorld.customize.custom.compatoe.usekelp=Use Kelp
 createWorld.customize.custom.compatoe.usepalmtrees=Use Palm Trees
@@ -599,6 +600,7 @@ createWorld.customize.custom.compatoe.useshipwrecks=Use Shipwrecks
 createWorld.customize.custom.compatoe.usefrozenoceans=Use Frozen Oceans
 createWorld.customize.custom.compatoe.usewarmoceans=Use Warm Oceans
 
+createWorld.customize.custom.compatoe.usecompat.tooltip=Enable additional compatibility for Oceanic Expanse when using non-Release biome sources. To use a feature, it must also be enabled in Oceanic Expanse's mod config.
 createWorld.customize.custom.compatoe.usecoquinaoutcrops.tooltip=Generate coquina outcrops in the Beta Beach biome.
 createWorld.customize.custom.compatoe.usekelp.tooltip=Generate kelp in the Beta Ocean biome.
 createWorld.customize.custom.compatoe.usepalmtrees.tooltip=Generate palm trees in the Beta Beach biome.

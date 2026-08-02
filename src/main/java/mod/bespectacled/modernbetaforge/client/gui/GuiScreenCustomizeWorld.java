@@ -2434,7 +2434,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     private void drawHoveredTooltip(int mouseX, int mouseY) {
-        if (!this.translationKeyMap.containsKey(this.hoveredId)) {
+        if (!this.isFocused || !this.translationKeyMap.containsKey(this.hoveredId)) {
             return;
         }
         

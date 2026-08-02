@@ -32,6 +32,7 @@ public class CompatOE implements Compat, ClientCompat {
     public static final String MOD_ID = "oe";
     public static final String ADDON_ID = "compat" + MOD_ID;
 
+    private static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     private static final ResourceLocation KEY_USE_COQUINA_OUTCROPS = new ResourceLocation(ADDON_ID, "useCoquinaOutcrops");
     private static final ResourceLocation KEY_USE_KELP = new ResourceLocation(ADDON_ID, "useKelp");
     private static final ResourceLocation KEY_USE_PALM_TREES = new ResourceLocation(ADDON_ID, "usePalmTrees");
@@ -67,6 +68,7 @@ public class CompatOE implements Compat, ClientCompat {
         configWorldGen configWorld = ConfigHandler.worldGen;
         configBlock configBlock = ConfigHandler.block;
 
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COQUINA_OUTCROPS, new BooleanProperty(true));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_KELP, new BooleanProperty(true));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_PALM_TREES, new BooleanProperty(true));
@@ -79,7 +81,7 @@ public class CompatOE implements Compat, ClientCompat {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_WARM_OCEANS, new BooleanProperty(false));
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_COQUINA_OUTCROP, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_COQUINA_OUTCROPS) && configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_COQUINA_OUTCROPS) && configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina) {
                 int count = configWorld.coquinaOutcrop.coquinaOutcropTriesPerChunk;
                 int chance = configWorld.coquinaOutcrop.coquinaOutcropChancePerChunk;
                 
@@ -91,7 +93,7 @@ public class CompatOE implements Compat, ClientCompat {
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_KELP, (chunkSource, settings) -> {
             // Only generate in non-Frozen ocean, per vanilla implementation
-            if (settings.getBooleanProperty(KEY_USE_KELP) && configBlock.enableKelp) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_KELP) && configBlock.enableKelp) {
                 return new WorldGenKelpForest(BETA_OCEAN);
             }
             
@@ -99,7 +101,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_PALM_TREE, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_PALM_TREES) && configWorld.palmTree.enablePalmTrees) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_PALM_TREES) && configWorld.palmTree.enablePalmTrees) {
                 int count = configWorld.palmTree.palmTreeTriesPerChunk;
                 int chance = configWorld.palmTree.palmTreeChancePerChunk;
                 
@@ -110,7 +112,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_PRISMARINE_POT_0, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_PRISMARINE_POTS)) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_PRISMARINE_POTS)) {
                 int count = 2;
                 int chance = 2;
                 int amount = 48;
@@ -124,7 +126,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_PRISMARINE_POT_1, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_PRISMARINE_POTS)) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_PRISMARINE_POTS)) {
                 int count = 2;
                 int chance = 2;
                 int amount = 48;
@@ -138,7 +140,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_SEAGRASS_PATCH_OCEAN, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_SEAGRASS_PATCHES) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_SEAGRASS_PATCHES) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass) {
                 IBlockState seaGrass = OEBlocks.SEAGRASS.getDefaultState();
                 int count = 6;
                 int chance = 2;
@@ -154,7 +156,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_SEAGRASS_PATCH_SWAMP, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_SEAGRASS_PATCHES) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_SEAGRASS_PATCHES) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass) {
                 IBlockState seaGrass = OEBlocks.SEAGRASS.getDefaultState();
                 int count = 2;
                 int chance = 2;
@@ -170,7 +172,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_SEA_OATS_PATCH, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_SEA_OATS_PATCHES) && configWorld.seaOatsPatch.enableSeaOatsPatch && configBlock.seaOats.enableSeaOats) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_SEA_OATS_PATCHES) && configWorld.seaOatsPatch.enableSeaOatsPatch && configBlock.seaOats.enableSeaOats) {
                 int count = configWorld.seaOatsPatch.seaOatsPatchTriesPerChunk;
                 int chance = configWorld.seaOatsPatch.seaOatsPatchChancePerChunk;
                 int amount = 48;
@@ -182,7 +184,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_SHELL_PATCH, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_SHELL_PATCHES) && configWorld.shellPatch.enableShellPatch) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_SHELL_PATCHES) && configWorld.shellPatch.enableShellPatch) {
                 int count = configWorld.shellPatch.shellPatchTriesPerChunk;
                 int chance = configWorld.shellPatch.shellPatchChancePerChunk;
                 int amount = 25;
@@ -194,7 +196,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_SHIPWRECK, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_SHIPWRECKS) && configWorld.shipwreck.enableShipwrecks) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_SHIPWRECKS) && configWorld.shipwreck.enableShipwrecks) {
                 int count = 1;
                 int chance = configWorld.shipwreck.shipwreckChancePerChunk;
                 
@@ -205,7 +207,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
 
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_FROZEN_OCEAN, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_FROZEN_OCEANS)) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_FROZEN_OCEANS)) {
                 return new GeneratorFrozenOcean(BETA_OCEANS);
             }
             
@@ -213,7 +215,7 @@ public class CompatOE implements Compat, ClientCompat {
         });
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_WARM_OCEAN, (chunkSource, settings) -> {
-            if (settings.getBooleanProperty(KEY_USE_WARM_OCEANS)) {
+            if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_WARM_OCEANS)) {
                 return new GeneratorWarmOcean(BETA_OCEAN);
             }
             
@@ -231,35 +233,38 @@ public class CompatOE implements Compat, ClientCompat {
         configWorldGen configWorld = ConfigHandler.worldGen;
         configBlock configBlock = ConfigHandler.block;
         
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
+            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+        ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COQUINA_OUTCROPS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) &&  configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_KELP, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configBlock.enableKelp
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) &&  configBlock.enableKelp
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_PALM_TREES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.palmTree.enablePalmTrees
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) &&  configWorld.palmTree.enablePalmTrees
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_PRISMARINE_POTS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SEAGRASS_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) && configWorld.enableSeagrassPatches && configBlock.seagrass.enableSeagrass
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SEA_OATS_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.seaOatsPatch.enableSeaOatsPatch && configBlock.seaOats.enableSeaOats
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) && configWorld.seaOatsPatch.enableSeaOatsPatch && configBlock.seaOats.enableSeaOats
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SHELL_PATCHES, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.shellPatch.enableShellPatch
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) && configWorld.shellPatch.enableShellPatch
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_SHIPWRECKS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings) && configWorld.shipwreck.enableShipwrecks
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT) &&  configWorld.shipwreck.enableShipwrecks
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_FROZEN_OCEANS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_WARM_OCEANS, new GuiPredicate(settings ->
-            !GuiPredicates.isBiomeVanillaOrBoP(settings)
+            !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
     }
 
