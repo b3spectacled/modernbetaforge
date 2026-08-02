@@ -123,8 +123,8 @@ createWorld.customize.custom.modernbetaforge.surfaceBuilder.tooltip=Determines t
 createWorld.customize.custom.modernbetaforge.caveCarver.tooltip=Determines how caves generate in the world.
 createWorld.customize.custom.modernbetaforge.worldSpawner.tooltip=Determines how players initially spawn in the world.
 createWorld.customize.custom.modernbetaforge.singleBiome.tooltip=The biome to generate when using the Single Biome biome source.
-createWorld.customize.custom.modernbetaforge.defaultBlock.tooltip=The base block type used to generate the terrain. By default, this is stone.
-createWorld.customize.custom.modernbetaforge.defaultFluid.tooltip=The base fluid used to generate oceans and other bodies of fluid. By default, this is water.
+createWorld.customize.custom.modernbetaforge.defaultBlock.tooltip=The base block type used to generate the terrain.
+createWorld.customize.custom.modernbetaforge.defaultFluid.tooltip=The base fluid used to generate oceans and other bodies of fluid.
 
 # Page 1 - Biome Replacement Settings
 createWorld.customize.custom.modernbetaforge.replaceOceanBiomes=Ocean Biomes
