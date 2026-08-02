@@ -609,8 +609,8 @@ createWorld.customize.custom.compatoe.useseagrasspatches.tooltip=Generate seagra
 createWorld.customize.custom.compatoe.useseaoatspatches.tooltip=Generate sea oats patches in the Beta Beach biome.
 createWorld.customize.custom.compatoe.useshellpatches.tooltip=Generate shell patches in the Beta Beach biome.
 createWorld.customize.custom.compatoe.useshipwrecks.tooltip=Generate shipwrecks in Beta ocean biomes.
-createWorld.customize.custom.compatoe.usefrozenoceans.tooltip=Generate the Frozen Ocean biome in portions of Beta ocean biomes.
-createWorld.customize.custom.compatoe.usewarmoceans.tooltip=Generate the Warm Ocean biome in portions of the Beta Ocean biome.
+createWorld.customize.custom.compatoe.usefrozenoceans.tooltip=Generate Frozen Ocean features in portions of the Beta Frozen Ocean biome.
+createWorld.customize.custom.compatoe.usewarmoceans.tooltip=Generate Warm Ocean features in portions of the Beta Ocean biome.
 
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
