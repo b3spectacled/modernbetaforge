@@ -77,8 +77,8 @@ public class CompatOE implements Compat, ClientCompat {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_SEA_OATS_PATCHES, new BooleanProperty(true));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_SHELL_PATCHES, new BooleanProperty(true));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_SHIPWRECKS, new BooleanProperty(true));
-        ModernBetaRegistries.PROPERTY.register(KEY_USE_FROZEN_OCEANS, new BooleanProperty(false));
-        ModernBetaRegistries.PROPERTY.register(KEY_USE_WARM_OCEANS, new BooleanProperty(false));
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_FROZEN_OCEANS, new BooleanProperty(true));
+        ModernBetaRegistries.PROPERTY.register(KEY_USE_WARM_OCEANS, new BooleanProperty(true));
         
         ModernBetaRegistries.FORGE_FEATURE.register(KEY_COQUINA_OUTCROP, (chunkSource, settings) -> {
             if (settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_COQUINA_OUTCROPS) && configWorld.coquinaOutcrop.enableCoquinaOutcrops && configBlock.coquina.enableCoquina) {
