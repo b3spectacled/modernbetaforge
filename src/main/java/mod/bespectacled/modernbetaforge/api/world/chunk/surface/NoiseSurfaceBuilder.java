@@ -78,7 +78,7 @@ public abstract class NoiseSurfaceBuilder extends SurfaceBuilder {
                 return;
             }
 
-            for (int y = this.getWorldHeight() - 1; y >= 0; y--) {
+            for (int y = this.getWorldHeight() - 1; y >= this.getWorldMinY(); y--) {
                 if (this.isBedrock(y, this.useBedrockRandom ? bedrockRandom : random)) {
                     chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                     continue;

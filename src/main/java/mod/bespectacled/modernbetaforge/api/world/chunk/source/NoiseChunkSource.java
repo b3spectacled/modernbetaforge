@@ -508,7 +508,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @return A HeightmapChunk, containing an array of ints containing the heights for the entire chunk.
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
-        short worldMinY = 0;
+        short worldMinY = (short)this.worldMinY;
         short worldHeight = (short)this.worldHeight;
         short minStructureHeight = 32;
         
@@ -526,7 +526,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
         for (int x = 0; x < sizeX; ++x) {
             for (int z = 0; z < sizeZ; ++z) {
                 for (int y = this.worldMinY; y < sizeY + this.worldMinY; ++y) {
-                    
                     double density = densityChunk.sample(x, y, z);
                     boolean isSolid = density > 0.0;
                     
@@ -539,7 +538,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                         
                         // Capture structure height at lowest possible solid block height,
                         // if above a certain height.
-                        if (height >= 8) {
+                        if (height >= 8 + this.worldMinY) {
                             heightmapStructure[ndx] = height;
                         }
                     }
@@ -564,7 +563,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     
                     // If no solid ground found (i.e. Skylands-style world types),
                     // then place structure height at 32.
-                    if (height == 0 && heightmapStructure[ndx] == 0) {
+                    if (height == this.worldMinY && heightmapStructure[ndx] == this.worldMinY) {
                         heightmapStructure[ndx] = minStructureHeight;
                     }
                 }

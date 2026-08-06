@@ -54,18 +54,20 @@ public class MapGenBetaCave extends MapGenBase {
     protected final int caveHeight;
     protected final int caveCount;
     protected final int caveChance;
+    protected final int caveMinY;
+    protected final int worldMinY;
     
     private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance);
+        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldMinY());
     }
     
     public MapGenBetaCave() {
-        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128, 40, 15);
+        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0);
     }
     
-    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance) {
+    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldMinY) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
@@ -79,6 +81,8 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveHeight = caveHeight;
         this.caveCount = caveCount;
         this.caveChance = caveChance;
+        this.caveMinY = caveMinY;
+        this.worldMinY = worldMinY;
         
         this.tunnelRandom = new Random();
         this.featureRandom = new Random();
@@ -164,8 +168,8 @@ public class MapGenBetaCave extends MapGenBase {
             maxX = 16;
         }
     
-        if (minY < 1) {
-            minY = 1;
+        if (minY < this.caveMinY + 1) {
+            minY = this.caveMinY + 1;
         }
         if (maxY > this.caveHeight - 8) {
             maxY = this.caveHeight - 8;
@@ -215,7 +219,7 @@ public class MapGenBetaCave extends MapGenBase {
         int localZ = blockPos.getZ() & 0xF;
         
         if (this.isPositionCarvable(blockPos, block)) {
-            if (localY - 1 < LAVA_LEVEL) { // Set lava below y = 10
+            if (localY - 1 < this.worldMinY + LAVA_LEVEL) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
                 chunkPrimer.setBlockState(localX, localY, localZ, this.defaultFill.getDefaultState());
@@ -229,7 +233,7 @@ public class MapGenBetaCave extends MapGenBase {
     }
 
     protected int getCaveY(Random random) {
-        return random.nextInt(random.nextInt(this.caveHeight - 8) + 8);
+        return random.nextInt(random.nextInt(this.caveHeight - this.caveMinY - 8) + 8) + this.caveMinY;
     }
 
     protected float getTunnelSystemWidth(Random random, Random tunnelRandom) {
@@ -395,7 +399,7 @@ public class MapGenBetaCave extends MapGenBase {
                 }
                 
                 for (int y = maxY + 1; y >= minY - 1; y--) {
-                    if (y < 0 || y >= this.caveHeight) {
+                    if (y < this.caveMinY || y >= this.caveHeight) {
                         continue;
                     }
                     

@@ -129,14 +129,23 @@ public abstract class SurfaceBuilder {
     public boolean replacesDefaultBlock() {
         return true;
     }
+    
+    /**
+     * Gets the minimum world level, from the chunk source.
+     * 
+     * @return The minimum world level.
+     */
+    protected int getWorldMinY() {
+        return this.chunkSource.getWorldMinY();
+    }
 
     /**
-     * Gets the world height, from generator settings.
+     * Gets the world height, from the chunk source.
      * 
      * @return The world height.
      */
     protected int getWorldHeight() {
-        return this.settings.height;
+        return this.chunkSource.getWorldHeight();
     }
     
     /**
