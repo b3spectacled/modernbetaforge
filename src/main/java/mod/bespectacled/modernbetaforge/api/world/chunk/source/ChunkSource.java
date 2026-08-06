@@ -44,6 +44,7 @@ public abstract class ChunkSource {
     protected final IBlockState defaultBlock;
     protected final IBlockState defaultFluid;
 
+    protected final int worldMinY;
     protected final int worldHeight;
     protected final int seaLevel;
     
@@ -69,6 +70,7 @@ public abstract class ChunkSource {
         this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(settings.defaultBlock).get().getDefaultState();
         this.defaultFluid = ForgeRegistries.BLOCKS.getValue(settings.defaultFluid).getDefaultState();
         
+        this.worldMinY = -64;
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
         

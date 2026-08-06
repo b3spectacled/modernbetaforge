@@ -12,6 +12,7 @@ public interface NoiseSampler {
      * @param noiseSizeX Number of subchunks in the x-axis of a chunk.
      * @param noiseSizeY Number of subchunks in world height.
      * @param noiseSizeZ Number of subchunks in the z-axis of a chunk.
+     * @param noiseMinY Minimum y-coordinate, in noise coordinates.
      * @return The modified terrain density. The density parameter should be returned if no work has been done.
      */
     double sample(
@@ -21,6 +22,7 @@ public interface NoiseSampler {
         int noiseZ,
         int noiseSizeX,
         int noiseSizeY,
-        int noiseSizeZ
+        int noiseSizeZ,
+        int noiseMinY
     );
 }

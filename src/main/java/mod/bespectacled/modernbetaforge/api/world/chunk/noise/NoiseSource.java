@@ -11,6 +11,7 @@ public final class NoiseSource {
     private final int noiseSizeX;
     private final int noiseSizeY;
     private final int noiseSizeZ;
+    private final int noiseMinY;
     private final double[] noise;
     
     private final ObjectPool<double[]> bufferPool;
@@ -42,13 +43,15 @@ public final class NoiseSource {
      * @param noiseSizeX Number of subchunks in the x-axis of a chunk.
      * @param noiseSizeY Number of subchunks in world height.
      * @param noiseSizeZ Number of subchunks in the z-axis of a chunk.
+     * @param noiseMinY Minimum y-coordinate in noise coordinates.
      */
-    public NoiseSource(NoiseColumnSampler noiseColumnSampler, int noiseSizeX, int noiseSizeY, int noiseSizeZ) {
+    public NoiseSource(NoiseColumnSampler noiseColumnSampler, int noiseSizeX, int noiseSizeY, int noiseSizeZ, int noiseMinY) {
         this.noiseColumnSampler = noiseColumnSampler;
         
         this.noiseSizeX = noiseSizeX;
         this.noiseSizeY = noiseSizeY;
         this.noiseSizeZ = noiseSizeZ;
+        this.noiseMinY = noiseMinY;
         this.noise = new double[(noiseSizeX + 1) * (noiseSizeY + 1) * (noiseSizeZ + 1)];
         
         this.bufferPool = new ObjectPool<>(() -> new double[(this.noiseSizeY + 1)]);
@@ -141,11 +144,11 @@ public final class NoiseSource {
                 double[] buffer = this.bufferPool.get();
                 this.sampleNoiseColumn(buffer, startNoiseX, startNoiseZ, localNoiseX, localNoiseZ, noiseSettings, noiseSamplers);
                 
-                for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
-                    this.noise[ndx++] = buffer[noiseY];
+                for (int bufferY = 0; bufferY < buffer.length; ++bufferY) {
+                    this.noise[ndx++] = buffer[bufferY];
                     
                     // Clear out buffer before returning to pool
-                    buffer[noiseY] = 0.0;
+                    buffer[bufferY] = 0.0;
                 }
                 
                 this.bufferPool.release(buffer);
@@ -184,11 +187,13 @@ public final class NoiseSource {
             localNoiseZ,
             this.noiseSizeX,
             this.noiseSizeY,
-            this.noiseSizeZ
+            this.noiseSizeZ,
+            this.noiseMinY
         );
         
-        for (int noiseY = 0; noiseY < this.noiseSizeY + 1; ++noiseY) {
-            double density = buffer[noiseY];
+        for (int bufferY = 0; bufferY < this.noiseSizeY + 1; ++bufferY) {
+            double density = buffer[bufferY];
+            int noiseY = bufferY + this.noiseMinY;
             
             for (int i = 0; i < noiseSamplers.size(); ++i) {
                 density = noiseSamplers.get(i).sample(
@@ -198,14 +203,15 @@ public final class NoiseSource {
                     noiseZ,
                     this.noiseSizeX,
                     this.noiseSizeY,
-                    this.noiseSizeZ
+                    this.noiseSizeZ,
+                    this.noiseMinY
                 );
             }
             
-            density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY);
+            density = noiseSettings.topSlideSettings.applyTopSlide(density, noiseY, this.noiseSizeY + this.noiseMinY);
             density = noiseSettings.bottomSlideSettings.applyBottomSlide(density, noiseY);
             
-            buffer[noiseY] = density;
+            buffer[bufferY] = density;
         }
     }
 }

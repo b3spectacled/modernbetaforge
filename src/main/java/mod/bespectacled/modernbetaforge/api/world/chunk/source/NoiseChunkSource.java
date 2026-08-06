@@ -50,7 +50,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
     protected final int noiseSizeX; // Number of horizontal subchunks along x
     protected final int noiseSizeZ; // Number of horizontal subchunks along z
     protected final int noiseSizeY; // Number of vertical subchunks
-    protected final int noiseTopY;  // Number of positive (y >= 0) vertical subchunks
+    protected final int noiseMinY;  // Minimum y-coordinate in noise coordinates
+    protected final int noiseTopY;  // Maximum y-coordinate in noise coordinates
     
     private final ChunkCache<HeightmapChunk> heightmapCache;
     private final ChunkCache<DensityChunk> densityCache;
@@ -85,7 +86,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.noiseSizeX = 16 / this.horizontalNoiseResolution;
         this.noiseSizeZ = 16 / this.horizontalNoiseResolution;
-        this.noiseSizeY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
+        this.noiseSizeY = Math.floorDiv(this.worldHeight - this.worldMinY, this.verticalNoiseResolution);
+        this.noiseMinY = Math.floorDiv(this.worldMinY, this.verticalNoiseResolution);
         this.noiseTopY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
@@ -385,52 +387,54 @@ public abstract class NoiseChunkSource extends ChunkSource {
         double scale = noiseHeight.scale;
         double depth = noiseHeight.depth;
 
-        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
+        for (int bufferY = 0; bufferY < buffer.length; ++bufferY) {
+            int noiseY = bufferY + this.noiseMinY;
+            
             double density;
             double densityOffset = this.sampleNoiseOffset(noiseY, scale, depth);
     
             double mainNoise = (this.mainOctaveNoise.scaledSample(
                 noiseX, noiseY, noiseZ,
-                coordinateScale / mainNoiseScaleX, 
-                heightScale / mainNoiseScaleY, 
+                coordinateScale / mainNoiseScaleX,
+                heightScale / mainNoiseScaleY,
                 coordinateScale / mainNoiseScaleZ
             ) / 10.0 + 1.0) / 2.0;
             
             if (mainNoise < 0.0) {
                 density = this.minLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
+                    coordinateScale,
+                    heightScale,
                     coordinateScale
                 ) / lowerLimitScale;
                 
             } else if (mainNoise > 1.0) {
                 density = this.maxLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
+                    coordinateScale,
+                    heightScale,
                     coordinateScale
                 ) / upperLimitScale;
                 
             } else {
                 double minLimitNoise = this.minLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
+                    coordinateScale,
+                    heightScale,
                     coordinateScale
                 ) / lowerLimitScale;
                 
                 double maxLimitNoise = this.maxLimitOctaveNoise.scaledSample(
                     noiseX, noiseY, noiseZ,
-                    coordinateScale, 
-                    heightScale, 
+                    coordinateScale,
+                    heightScale,
                     coordinateScale
                 ) / upperLimitScale;
                 
                 density = minLimitNoise + (maxLimitNoise - minLimitNoise) * mainNoise;
             }
             
-            buffer[noiseY] = density - densityOffset;
+            buffer[bufferY] = density - densityOffset;
         }
     }
     
@@ -487,7 +491,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             for (int localZ = 0; localZ < sizeZ; ++localZ) {
                 int z = localZ + startZ;
                 
-                for (int y = 0; y < sizeY; ++y) {
+                for (int y = this.worldMinY; y < sizeY + this.worldMinY; ++y) {
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }
@@ -521,7 +525,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         for (int x = 0; x < sizeX; ++x) {
             for (int z = 0; z < sizeZ; ++z) {
-                for (int y = 0; y < sizeY; ++y) {
+                for (int y = this.worldMinY; y < sizeY + this.worldMinY; ++y) {
                     
                     double density = densityChunk.sample(x, y, z);
                     boolean isSolid = density > 0.0;
@@ -578,7 +582,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      */
     private NoiseSource createInitialNoiseSource() {
         NoiseSource noiseSource = new NoiseSource(
-            (buffer, startX, startZ, localX, localZ, sizeX, sizeY, sizeZ) -> this.sampleNoiseColumn(
+            (buffer, startX, startZ, localX, localZ, sizeX, sizeY, sizeZ, minY) -> this.sampleNoiseColumn(
                 buffer,
                 startX,
                 startZ,
@@ -587,7 +591,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
             ),
             this.noiseSizeX,
             this.noiseSizeY,
-            this.noiseSizeZ
+            this.noiseSizeZ,
+            this.noiseMinY
         );
         
         return noiseSource;
@@ -648,7 +653,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
                 entry.getValue().apply(this, this.settings),
                 this.noiseSizeX,
                 this.noiseSizeY,
-                this.noiseSizeZ
+                this.noiseSizeZ,
+                this.noiseMinY
             )
         ));
         
@@ -698,6 +704,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
             densityMap.put(entry.getKey(), densities);
         }
         
-        return new DensityChunk(densityMap);
+        return new DensityChunk(densityMap, this.worldMinY);
     }
 }
