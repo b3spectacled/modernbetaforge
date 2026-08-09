@@ -2195,6 +2195,7 @@ public class ModernBetaGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
             jsonObject.addProperty(NbtTags.DEFAULT_FLUID, factory.defaultFluid);
+            jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
             jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
             jsonObject.addProperty(NbtTags.CAVE_WIDTH, factory.caveWidth);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
@@ -2216,7 +2217,6 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
             jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
             jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-            jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
 
             jsonObject.addProperty(NbtTags.USE_OLD_NETHER, factory.useOldNether);
             jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);
