@@ -25,7 +25,7 @@ public class MapGenRavineExtended extends MapGenRavine {
     public MapGenRavineExtended(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = chunkSource.getDefaultBlock().getBlock();
         this.defaultFluids = MapGenBetaCave.getDefaultFluids(chunkSource.getDefaultFluid());
-        this.ravineChance = 5;
+        this.ravineChance = settings.ravineChance;
     }
     
     @Override
@@ -51,9 +51,14 @@ public class MapGenRavineExtended extends MapGenRavine {
         Biome biome = this.world.getBiome(new BlockPos(x + chunkX * 16, 0, z + chunkZ * 16));
         
         Block block = chunkPrimer.getBlockState(x, y, z).getBlock();
-        Block topBlock = this.isExceptionBiome(biome) ? Blocks.GRASS.getDefaultState().getBlock() : biome.topBlock.getBlock();
-        Block fillerBlock = this.isExceptionBiome(biome) ? Blocks.DIRT.getDefaultState().getBlock() : biome.fillerBlock.getBlock();
-
+        Block topBlock = Blocks.GRASS;
+        Block fillerBlock = Blocks.DIRT;
+        
+        if (this.isExceptionBiome(biome)) {
+            topBlock = biome.topBlock.getBlock();
+            fillerBlock = biome.fillerBlock.getBlock();
+        }
+        
         if (block == this.defaultBlock || block == topBlock || block == fillerBlock) {
             if (y - 1 < 10) {
                 chunkPrimer.setBlockState(x, y, z, FLOWING_LAVA);
