@@ -56,29 +56,30 @@ public class GuiIdentifiers {
     public static final int PG0_B_USE_MONUMENTS = 115;
     public static final int PG0_B_USE_MANSIONS = 116;
     public static final int PG0_B_USE_RAVINES = 117;
-    public static final int PG0_B_USE_DUNGEONS = 118;
-    public static final int PG0_S_DUNGEON_CHANCE = 119;
-    public static final int PG0_B_USE_WATER_LAKES = 120;
-    public static final int PG0_S_WATER_LAKE_CHANCE = 121;
-    public static final int PG0_B_USE_LAVA_LAKES = 122;
-    public static final int PG0_S_LAVA_LAKE_CHANCE = 123;
-    public static final int PG0_B_USE_LAVA_OCEANS = 124;
-    public static final int PG0_B_USE_SANDSTONE = 125;
+    public static final int PG0_S_RAVINE_CHANCE = 118;
+    public static final int PG0_B_USE_DUNGEONS = 119;
+    public static final int PG0_S_DUNGEON_CHANCE = 120;
+    public static final int PG0_B_USE_WATER_LAKES = 121;
+    public static final int PG0_S_WATER_LAKE_CHANCE = 122;
+    public static final int PG0_B_USE_LAVA_LAKES = 123;
+    public static final int PG0_S_LAVA_LAKE_CHANCE = 124;
+    public static final int PG0_B_USE_LAVA_OCEANS = 125;
+    public static final int PG0_B_USE_SANDSTONE = 126;
     
-    public static final int PG0_B_USE_OLD_NETHER = 126;
-    public static final int PG0_B_USE_NETHER_CAVES = 127;
-    public static final int PG0_B_USE_FORTRESSES = 128;
-    public static final int PG0_B_USE_LAVA_POCKETS = 129;
+    public static final int PG0_B_USE_OLD_NETHER = 127;
+    public static final int PG0_B_USE_NETHER_CAVES = 128;
+    public static final int PG0_B_USE_FORTRESSES = 129;
+    public static final int PG0_B_USE_LAVA_POCKETS = 130;
     
-    public static final int PG0_S_CAVE_WIDTH = 130;
-    public static final int PG0_S_CAVE_HEIGHT = 131;
-    public static final int PG0_S_CAVE_COUNT = 132;
-    public static final int PG0_S_CAVE_CHANCE = 133;
+    public static final int PG0_S_CAVE_WIDTH = 131;
+    public static final int PG0_S_CAVE_HEIGHT = 132;
+    public static final int PG0_S_CAVE_COUNT = 133;
+    public static final int PG0_S_CAVE_CHANCE = 134;
     
-    public static final int PG0_S_BLOCK = 134;
-    public static final int PG0_S_FLUID = 135;
+    public static final int PG0_S_BLOCK = 135;
+    public static final int PG0_S_FLUID = 136;
     
-    public static final int PG0_B_USE_UNDERWATER_CAVES = 136;
+    public static final int PG0_B_USE_UNDERWATER_CAVES = 137;
     
     public static final int PG0_B_CHUNK = 190;
     public static final int PG0_B_BIOME = 191;

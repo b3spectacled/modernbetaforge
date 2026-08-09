@@ -23,6 +23,7 @@ public class GuiPredicate {
     public static final ResourceLocation CAVE_HEIGHT = createRegistryKey(NbtTags.CAVE_HEIGHT);
     public static final ResourceLocation CAVE_COUNT = createRegistryKey(NbtTags.CAVE_COUNT);
     public static final ResourceLocation CAVE_CHANCE = createRegistryKey(NbtTags.CAVE_CHANCE);
+    public static final ResourceLocation RAVINE_CHANCE = createRegistryKey(NbtTags.RAVINE_CHANCE);
     public static final ResourceLocation USE_STRONGHOLDS = createRegistryKey(NbtTags.USE_STRONGHOLDS);
     public static final ResourceLocation USE_VILLAGES = createRegistryKey(NbtTags.USE_VILLAGES);
     public static final ResourceLocation USE_VILLAGE_VARIANTS = createRegistryKey(NbtTags.USE_VILLAGE_VARIANTS);

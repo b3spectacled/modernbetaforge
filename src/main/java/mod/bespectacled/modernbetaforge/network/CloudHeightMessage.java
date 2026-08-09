@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.network;
 
 import io.netty.buffer.ByteBuf;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -24,7 +25,7 @@ public class CloudHeightMessage implements IMessage {
     
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.cloudHeight = MathHelper.clamp(buf.readInt(), -320, 320);
+        this.cloudHeight = MathHelper.clamp(buf.readInt(), ModernBetaGeneratorSettings.MIN_CLOUD_HEIGHT, ModernBetaGeneratorSettings.MAX_CLOUD_HEIGHT);
     }
     
     public static class CloudHeightMessageHandler implements IMessageHandler<CloudHeightMessage, IMessage> {

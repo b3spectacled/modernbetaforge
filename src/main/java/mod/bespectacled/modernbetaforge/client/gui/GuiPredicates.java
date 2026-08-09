@@ -72,6 +72,7 @@ public class GuiPredicates {
     public static final GuiPredicate CAVE_HEIGHT_TEST;
     public static final GuiPredicate CAVE_COUNT_TEST;
     public static final GuiPredicate CAVE_CHANCE_TEST;
+    public static final GuiPredicate RAVINE_CHANCE_TEST;
     public static final GuiPredicate USE_STRONGHOLDS_TEST;
     public static final GuiPredicate USE_VILLAGES_TEST;
     public static final GuiPredicate USE_VILLAGE_VARIANTS_TEST;
@@ -510,6 +511,7 @@ public class GuiPredicates {
         CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
         CAVE_COUNT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_COUNT);
         CAVE_CHANCE_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
+        RAVINE_CHANCE_TEST = new GuiPredicate(settings -> settings.useRavines, GuiIdentifiers.PG0_S_RAVINE_CHANCE);
         USE_STRONGHOLDS_TEST = new GuiPredicate(
             settings -> {
                 Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);

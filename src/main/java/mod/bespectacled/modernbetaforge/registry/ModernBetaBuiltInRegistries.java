@@ -283,6 +283,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.CAVE_HEIGHT, GuiPredicates.CAVE_HEIGHT_TEST);
         registry.register(GuiPredicate.CAVE_COUNT, GuiPredicates.CAVE_COUNT_TEST);
         registry.register(GuiPredicate.CAVE_CHANCE, GuiPredicates.CAVE_CHANCE_TEST);
+        registry.register(GuiPredicate.RAVINE_CHANCE, GuiPredicates.RAVINE_CHANCE_TEST);
         registry.register(GuiPredicate.USE_STRONGHOLDS, GuiPredicates.USE_STRONGHOLDS_TEST);
         registry.register(GuiPredicate.USE_VILLAGES, GuiPredicates.USE_VILLAGES_TEST);
         registry.register(GuiPredicate.USE_VILLAGE_VARIANTS, GuiPredicates.USE_VILLAGE_VARIANTS_TEST);

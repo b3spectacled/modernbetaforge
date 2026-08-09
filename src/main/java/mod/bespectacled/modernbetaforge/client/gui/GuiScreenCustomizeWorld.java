@@ -274,13 +274,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null,
             blockEntry,
             fluidEntry,
-            this.createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, NbtTags.SEA_LEVEL, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, (float)this.settings.seaLevel, this),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_SANDSTONE, NbtTags.USE_SANDSTONE, this.settings.useSandstone),
+            this.createGuiSlider(GuiIdentifiers.PG0_S_SEA_LEVEL, NbtTags.SEA_LEVEL, ModernBetaGeneratorSettings.MIN_SEA_LEVEL, ModernBetaGeneratorSettings.MAX_SEA_LEVEL, (float)this.settings.seaLevel, this),
             this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_WIDTH, NbtTags.CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_CAVE_WIDTH, this.settings.caveWidth, this),
             this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_HEIGHT, NbtTags.CAVE_HEIGHT, ModernBetaGeneratorSettings.MIN_CAVE_HEIGHT, ModernBetaGeneratorSettings.MAX_CAVE_HEIGHT, (float)this.settings.caveHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_COUNT, NbtTags.CAVE_COUNT, ModernBetaGeneratorSettings.MIN_CAVE_COUNT, ModernBetaGeneratorSettings.MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
             this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, ModernBetaGeneratorSettings.MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_RAVINES, NbtTags.USE_RAVINES, this.settings.useRavines),
+            this.createGuiSlider(GuiIdentifiers.PG0_S_RAVINE_CHANCE, NbtTags.RAVINE_CHANCE, ModernBetaGeneratorSettings.MIN_RAVINE_CHANCE, ModernBetaGeneratorSettings.MAX_RAVINE_CHANCE, (float)this.settings.ravineChance, this),
+            this.createGuiButton(GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES, NbtTags.USE_UNDERWATER_CAVES, this.settings.useUnderwaterCaves),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_SHAFTS, NbtTags.USE_MINESHAFTS, this.settings.useMineShafts),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGES, NbtTags.USE_VILLAGES, this.settings.useVillages),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS, NbtTags.USE_VILLAGE_VARIANTS, this.settings.useVillageVariants),
@@ -294,8 +296,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, NbtTags.WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_WATER_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_WATER_LAKE_CHANCE, (float)this.settings.waterLakeChance, this),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, NbtTags.USE_LAVA_LAKES, this.settings.useLavaLakes),
             this.createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, NbtTags.LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE, (float)this.settings.lavaLakeChance, this),
-            this.createGuiButton(GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES, NbtTags.USE_UNDERWATER_CAVES, this.settings.useUnderwaterCaves),
-            null,
             
             this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "page0", "nether"),
             null,
@@ -1476,6 +1476,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG0_S_CAVE_CHANCE:
                     this.settings.caveChance = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_RAVINE_CHANCE:
+                    this.settings.ravineChance = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG0_S_DUNGEON_CHANCE:
                     this.settings.dungeonChance = (int)entryValue;
