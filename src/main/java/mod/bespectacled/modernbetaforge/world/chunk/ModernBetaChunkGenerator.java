@@ -123,6 +123,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         
         // Handle FiniteChunkSource saves
         if (this.chunkSource instanceof FiniteChunkSource) {
+            FiniteChunkSource.clearHeightmapCache();
             FiniteChunkSource finiteChunkSource = (FiniteChunkSource)this.chunkSource;
             finiteChunkSource.setLevelNotifier(message -> {
                 if (world.getMinecraftServer() != null) {
