@@ -838,6 +838,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
     /**
      * A naive cache for heightmaps, mostly to reduce lag on the world customization GUI
      * when switching through different level width and length settings.
+     * Note that cached arrays will be dirty; zeroing them is fairly expensive.
      * 
      * @param levelWidth The level width.
      * @param levelLength The level length.
@@ -847,10 +848,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int size = levelWidth * levelLength;
         
         if (CACHED_HEIGHTMAPS.containsKey(size)) {
-            int[] heightmap = CACHED_HEIGHTMAPS.get(size);
-            Arrays.fill(heightmap, 0);
-            
-            return heightmap;
+            return CACHED_HEIGHTMAPS.get(size);
         }
 
         return CACHED_HEIGHTMAPS.put(size, new int[size]);
