@@ -24,6 +24,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.BiomeS
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.CarverCreator;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.CaveCarverCreator;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.ChunkSourceCreator;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.StructureCreator;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.SurfaceBuilderCreator;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistry;
 import mod.bespectacled.modernbetaforge.api.world.chunk.noise.NoiseSettings;
@@ -74,10 +75,19 @@ import mod.bespectacled.modernbetaforge.world.spawn.FarLandsWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.InfdevWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.NoOpWorldSpawner;
 import mod.bespectacled.modernbetaforge.world.spawn.PEWorldSpawner;
+import mod.bespectacled.modernbetaforge.world.structure.MapGenStructureNoOp;
+import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.structure.MapGenMineshaft;
+import net.minecraft.world.gen.structure.MapGenScatteredFeature;
+import net.minecraft.world.gen.structure.MapGenStronghold;
+import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraft.world.gen.structure.StructureOceanMonument;
+import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.relauncher.Side;
@@ -173,6 +183,35 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBetaBuiltInTypes.Carver.BETA_NETHER.getRegistryKey(), MapGenBetaCaveHell::new);
         registry.register(ModernBetaBuiltInTypes.Carver.RELEASE.getRegistryKey(), MapGenCavesExtended::new);
         registry.register(ModernBetaBuiltInTypes.Carver.NONE.getRegistryKey(), MapGenNoOp::new);
+    }
+    
+    public static void registerStructures() {
+        ModernBetaRegistry<StructureCreator> registry = ModernBetaRegistries.STRUCTURE;
+        
+        registry.register(ModernBetaStructures.MINESHAFT, (chunkGenerator, settings) -> settings.useMineShafts ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT) :
+            MapGenStructureNoOp.INSTANCE
+        );
+        registry.register(ModernBetaStructures.VILLAGE, (chunkGenerator, settings) -> settings.useVillages ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenVillage(), EventType.VILLAGE) :
+            MapGenStructureNoOp.INSTANCE
+        );
+        registry.register(ModernBetaStructures.STRONGHOLD, (chunkGenerator, settings) -> settings.useStrongholds ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenStronghold(), EventType.STRONGHOLD) :
+            MapGenStructureNoOp.INSTANCE
+        );
+        registry.register(ModernBetaStructures.TEMPLE, (chunkGenerator, settings) -> settings.useTemples ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE) :
+            MapGenStructureNoOp.INSTANCE
+        );
+        registry.register(ModernBetaStructures.MONUMENT, (chunkGenerator, settings) -> settings.useMonuments ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new StructureOceanMonument(), EventType.OCEAN_MONUMENT) :
+            MapGenStructureNoOp.INSTANCE
+        );
+        registry.register(ModernBetaStructures.MANSION, (chunkGenerator, settings) -> settings.useMansions ?
+            (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(chunkGenerator), EventType.WOODLAND_MANSION) :
+            MapGenStructureNoOp.INSTANCE
+        );
     }
     
     public static void registerWorldSpawners() {

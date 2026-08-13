@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries.StructureCreator;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
@@ -25,6 +26,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.structure.MapGenStructureNoOp;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -40,16 +42,11 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenStructure;
-import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -452,46 +449,17 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         Map<ResourceLocation, MapGenStructure> structureMap = new LinkedHashMap<>();
         
         if (mapFeaturesEnabled) {
-            if (settings.useMineShafts) {
-                structureMap.put(
-                    ModernBetaStructures.MINESHAFT,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenMineshaft(), EventType.MINESHAFT)
-                );
-            }
-            
-            if (settings.useVillages) {
-                structureMap.put(
-                    ModernBetaStructures.VILLAGE,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenVillage(), EventType.VILLAGE)
-                );
-            }
-            
-            if (settings.useStrongholds) {
-                structureMap.put(
-                    ModernBetaStructures.STRONGHOLD,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenStronghold(), EventType.STRONGHOLD)
-                );
-            }
-            
-            if (settings.useTemples) {
-                structureMap.put(
-                    ModernBetaStructures.TEMPLE,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), EventType.SCATTERED_FEATURE)
-                );
-            }
-            
-            if (settings.useMonuments) {
-                structureMap.put(
-                    ModernBetaStructures.MONUMENT,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new StructureOceanMonument(), EventType.OCEAN_MONUMENT)
-                );
-            }
-            
-            if (settings.useMansions) {
-                structureMap.put(
-                    ModernBetaStructures.MANSION,
-                    (MapGenStructure)TerrainGen.getModdedMapGen(new WoodlandMansion(this), EventType.WOODLAND_MANSION)
-                );
+            for (Entry<ResourceLocation, StructureCreator> entry : ModernBetaRegistries.STRUCTURE.getEntries()) {
+                ResourceLocation resourceKey = entry.getKey();
+                StructureCreator structureCreator = entry.getValue();
+                
+                if (structureCreator != null) {
+                    MapGenStructure structure = structureCreator.apply(this, settings);
+                    
+                    if (!(structure instanceof MapGenStructureNoOp)) {
+                        structureMap.put(resourceKey, structure);
+                    }
+                }
             }
         }
         
