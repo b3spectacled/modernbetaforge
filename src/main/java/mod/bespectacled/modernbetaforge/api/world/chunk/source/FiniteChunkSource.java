@@ -3,7 +3,9 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -30,6 +32,7 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -59,6 +62,8 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class FiniteChunkSource extends ChunkSource {
+    private static final Map<Integer, int[]> CACHED_HEIGHTMAPS = new HashMap<>();
+    
     protected static final Block PLACEHOLDER_BLOCK = Blocks.ANVIL;
     protected static final int MAX_FLOODS = 640;
     
@@ -92,7 +97,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelLength = settings.levelLength >> 4 << 4;
         this.levelHeight = settings.levelHeight;
         this.levelCaveWidth = settings.levelCaveWidth;
-        this.levelHeightmap = new int[this.levelWidth * this.levelLength];
+        this.levelHeightmap = getOrCreateHeightmap(this.levelWidth, this.levelLength);
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
     }
@@ -821,6 +826,32 @@ public abstract class FiniteChunkSource extends ChunkSource {
             ));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
+    }
+    
+    /**
+     * Clears the heightmap cache, to be called when a world is actually created, i.e. from {@link ModernBetaChunkGenerator}.
+     */
+    public static void clearHeightmapCache() {
+        CACHED_HEIGHTMAPS.clear();
+    }
+    
+    /**
+     * A naive cache for heightmaps, mostly to reduce lag on the world customization GUI
+     * when switching through different level width and length settings.
+     * Note that cached arrays will be dirty; zeroing them is fairly expensive.
+     * 
+     * @param levelWidth The level width.
+     * @param levelLength The level length.
+     * @return A heightmap array of length level width multiplied by level length, either newly initialized or fetched from cache.
+     */
+    private static int[] getOrCreateHeightmap(int levelWidth, int levelLength) {
+        int size = levelWidth * levelLength;
+        
+        if (CACHED_HEIGHTMAPS.containsKey(size)) {
+            return CACHED_HEIGHTMAPS.get(size);
+        }
+
+        return CACHED_HEIGHTMAPS.put(size, new int[size]);
     }
     
     public static class LevelDataContainer {

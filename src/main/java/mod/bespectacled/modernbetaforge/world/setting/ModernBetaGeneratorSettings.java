@@ -97,6 +97,10 @@ public class ModernBetaGeneratorSettings {
     public static final int MAX_CAVE_COUNT = 100;
     public static final int MIN_CAVE_CHANCE = 1;
     public static final int MAX_CAVE_CHANCE = 100;
+    public static final int MIN_RAVINE_CHANCE = 1;
+    public static final int MAX_RAVINE_CHANCE = 100;
+    public static final int MIN_CLOUD_HEIGHT = -64;
+    public static final int MAX_CLOUD_HEIGHT = 320;
     
     public static final int MIN_BIOME_SIZE = 1;
     public static final int MAX_BIOME_SIZE = 8;
@@ -197,6 +201,7 @@ public class ModernBetaGeneratorSettings {
     public final int caveChance;
     public final boolean useDungeons;
     public final int dungeonChance;
+    public final int ravineChance;
     
     public final boolean useStrongholds;
     public final boolean useVillages;
@@ -440,6 +445,7 @@ public class ModernBetaGeneratorSettings {
         this.caveChance = factory.caveChance;
         this.useDungeons = factory.useDungeons;
         this.dungeonChance = factory.dungeonChance;
+        this.ravineChance = factory.ravineChance;
         
         this.useStrongholds = factory.useStrongholds;
         this.useVillages = factory.useVillages;
@@ -746,6 +752,7 @@ public class ModernBetaGeneratorSettings {
         public int caveChance;
         public boolean useDungeons;
         public int dungeonChance;
+        public int ravineChance;
         
         public boolean useStrongholds;
         public boolean useVillages;
@@ -989,6 +996,7 @@ public class ModernBetaGeneratorSettings {
             this.caveChance = 15;
             this.useDungeons = true;
             this.dungeonChance = 8;
+            this.ravineChance = 50;
             
             this.useStrongholds = true;
             this.useVillages = true;
@@ -1255,6 +1263,7 @@ public class ModernBetaGeneratorSettings {
                 this.caveChance == factory.caveChance &&
                 this.useDungeons == factory.useDungeons &&
                 this.dungeonChance == factory.dungeonChance &&
+                this.ravineChance == factory.ravineChance &&
                 
                 this.useStrongholds == factory.useStrongholds &&
                 this.useVillages == factory.useVillages &&
@@ -1502,6 +1511,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.caveChance;
             hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
             hashCode = 31 * hashCode + this.dungeonChance;
+            hashCode = 31 * hashCode + this.ravineChance;
             
             hashCode = 31 * hashCode + (this.useStrongholds ? 1 : 0);
             hashCode = 31 * hashCode + (this.useVillages ? 1 : 0);
@@ -1784,6 +1794,7 @@ public class ModernBetaGeneratorSettings {
                 factory.caveChance = JsonUtils.getInt(jsonObject, NbtTags.CAVE_CHANCE, factory.caveChance);
                 factory.useDungeons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DUNGEONS, factory.useDungeons);
                 factory.dungeonChance = JsonUtils.getInt(jsonObject, NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
+                factory.ravineChance = JsonUtils.getInt(jsonObject, NbtTags.RAVINE_CHANCE, factory.ravineChance);
                 
                 factory.useStrongholds = JsonUtils.getBoolean(jsonObject, NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
                 factory.useVillages = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGES, factory.useVillages);
@@ -2007,6 +2018,7 @@ public class ModernBetaGeneratorSettings {
                 factory.caveHeight = MathHelper.clamp(factory.caveHeight, MIN_CAVE_HEIGHT, MAX_CAVE_HEIGHT);
                 factory.caveCount = MathHelper.clamp(factory.caveCount, MIN_CAVE_COUNT, MAX_CAVE_COUNT);
                 factory.caveChance = MathHelper.clamp(factory.caveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
+                factory.ravineChance = MathHelper.clamp(factory.ravineChance, MIN_RAVINE_CHANCE, MAX_RAVINE_CHANCE);
                 
                 factory.dungeonChance = MathHelper.clamp(factory.dungeonChance, MIN_DUNGEON_CHANCE, MAX_DUNGEON_CHANCE);
                 factory.waterLakeChance = MathHelper.clamp(factory.waterLakeChance, MIN_WATER_LAKE_CHANCE, MAX_WATER_LAKE_CHANCE);
@@ -2183,13 +2195,15 @@ public class ModernBetaGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.DEFAULT_BLOCK, factory.defaultBlock);
             jsonObject.addProperty(NbtTags.DEFAULT_FLUID, factory.defaultFluid);
-            jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
             jsonObject.addProperty(NbtTags.USE_SANDSTONE, factory.useSandstone);
+            jsonObject.addProperty(NbtTags.SEA_LEVEL, factory.seaLevel);
             jsonObject.addProperty(NbtTags.CAVE_WIDTH, factory.caveWidth);
             jsonObject.addProperty(NbtTags.CAVE_HEIGHT, factory.caveHeight);
             jsonObject.addProperty(NbtTags.CAVE_COUNT, factory.caveCount);
             jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
             jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
+            jsonObject.addProperty(NbtTags.RAVINE_CHANCE, factory.ravineChance);
+            jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
             jsonObject.addProperty(NbtTags.USE_MINESHAFTS, factory.useMineShafts);
             jsonObject.addProperty(NbtTags.USE_VILLAGES, factory.useVillages);
             jsonObject.addProperty(NbtTags.USE_VILLAGE_VARIANTS, factory.useVillageVariants);
@@ -2203,7 +2217,6 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
             jsonObject.addProperty(NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
             jsonObject.addProperty(NbtTags.LAVA_LAKE_CHANCE, factory.lavaLakeChance);
-            jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
 
             jsonObject.addProperty(NbtTags.USE_OLD_NETHER, factory.useOldNether);
             jsonObject.addProperty(NbtTags.USE_NETHER_CAVES, factory.useNetherCaves);

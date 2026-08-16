@@ -20,6 +20,7 @@ public class NbtTags {
     public static final String CAVE_COUNT = "caveCount";
     public static final String CAVE_CHANCE = "caveChance";
     public static final String USE_RAVINES = "useRavines";
+    public static final String RAVINE_CHANCE = "ravineChance";
     
     public static final String USE_SANDSTONE = "useSandstone";
     public static final String USE_MINESHAFTS = "useMineShafts";

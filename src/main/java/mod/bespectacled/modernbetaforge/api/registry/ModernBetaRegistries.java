@@ -17,11 +17,14 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
+import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import mod.bespectacled.modernbetaforge.world.structure.MapGenStructureNoOp;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -98,19 +101,24 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<BlockSourceCreator> BLOCK_SOURCE;
     
     /**
-     * Holds registered {@link FeatureCreator interfaces} which instantiate {@link WorldGenerator}.
+     * Holds registered {@link FeatureCreator interfaces} which instantiate {@link WorldGenerator features}.
      * Register world features/generators here.
-     * 
      */
     public static final ModernBetaRegistry<FeatureCreator> FEATURE;
     
     /**
-     * Holds registered {@link ForgeFeatureCreator interfaces} which instantiate {@link IWorldGenerator}.
+     * Holds registered {@link ForgeFeatureCreator interfaces} which instantiate {@link IWorldGenerator Forge features}.
      * Register world features/generators that use the Forge world generator interface here,
      * if you do not wish to register globally via {@link GameRegistry} and want to customize Forge world generators on a per-world basis.
-     * 
      */
     public static final ModernBetaRegistry<ForgeFeatureCreator> FORGE_FEATURE;
+    
+    /**
+     * Holds registered {@link StructureCreator interfaces} which instantiate {@link MapGenStructure structures}.
+     * Register world structures here.
+     * If structures are to be toggleable, include a conditional that returns either null or {@link MapGenStructureNoOp#INSTANCE}.
+     */
+    public static final ModernBetaRegistry<StructureCreator> STRUCTURE;
     
     /**
      * Holds registered {@link WorldSpawner world spawners}.
@@ -151,6 +159,7 @@ public class ModernBetaRegistries {
         BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
         FEATURE = new ModernBetaRegistry<>("FEATURE");
         FORGE_FEATURE = new ModernBetaRegistry<>("FORGE_FEATURE");
+        STRUCTURE = new ModernBetaRegistry<>("STRUCTURE");
         WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
         DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
         MOD_DATA_FIX = new ModernBetaRegistry<>("MOD_DATA_FIX");
@@ -215,5 +224,10 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface ForgeFeatureCreator {
         IWorldGenerator apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface StructureCreator {
+        MapGenStructure apply(ModernBetaChunkGenerator chunkGenerator, ModernBetaGeneratorSettings settings);
     }
 }
