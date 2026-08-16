@@ -116,7 +116,7 @@ public class ModernBetaRegistries {
     /**
      * Holds registered {@link StructureCreator interfaces} which instantiate {@link MapGenStructure structures}.
      * Register world structures here.
-     * If structures are to be toggleable, include a conditional that includes either null or {@link MapGenStructureNoOp#INSTANCE}.
+     * If structures are to be toggleable, include a conditional that returns either null or {@link MapGenStructureNoOp#INSTANCE}.
      */
     public static final ModernBetaRegistry<StructureCreator> STRUCTURE;
     
