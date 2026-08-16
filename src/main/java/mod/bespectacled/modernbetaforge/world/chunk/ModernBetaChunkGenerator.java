@@ -160,7 +160,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         // Copy chunk data into chunkPrimer parameter
         for (int x = 0; x < 16; ++x) {
             for (int z = 0; z < 16; ++z) {
-                for (int y = 0; y < 255; ++y) {
+                for (int y = this.chunkSource.getWorldMinY(); y <= this.chunkSource.getWorldTopY(); ++y) {
                     chunkPrimer.setBlockState(x, y, z, containerPrimer.getBlockState(x, y, z));
                 }
             }

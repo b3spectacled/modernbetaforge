@@ -140,12 +140,12 @@ public abstract class SurfaceBuilder {
     }
 
     /**
-     * Gets the world height, from the chunk source.
+     * Gets the maximum world level, from the chunk source.
      * 
-     * @return The world height.
+     * @return The maximum world level.
      */
-    protected int getWorldHeight() {
-        return this.chunkSource.getWorldHeight();
+    protected int getWorldTopY() {
+        return this.chunkSource.getWorldTopY();
     }
     
     /**

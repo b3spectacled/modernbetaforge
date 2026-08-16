@@ -44,6 +44,7 @@ public abstract class ChunkSource {
     protected final IBlockState defaultBlock;
     protected final IBlockState defaultFluid;
 
+    protected final int worldTopY;
     protected final int worldMinY;
     protected final int worldHeight;
     protected final int seaLevel;
@@ -70,6 +71,7 @@ public abstract class ChunkSource {
         this.defaultBlock = ModernBetaRegistries.DEFAULT_BLOCK.get(settings.defaultBlock).get().getDefaultState();
         this.defaultFluid = ForgeRegistries.BLOCKS.getValue(settings.defaultFluid).getDefaultState();
         
+        this.worldTopY = 255;
         this.worldMinY = 0;
         this.worldHeight = settings.height;
         this.seaLevel = settings.seaLevel;
@@ -136,6 +138,15 @@ public abstract class ChunkSource {
     public abstract int getHeight(int x, int z, HeightmapChunk.Type type);
     
     /**
+     * Gets the maximum world y-level as used by chunk generator.
+     * 
+     * @return The maximum y-level in block coordinates.
+     */
+    public int getWorldTopY() {
+        return this.worldTopY;
+    }
+    
+    /**
      * Gets the minimum world y-level.
      * 
      * @return The minimum y-level in block coordinates.
@@ -145,7 +156,7 @@ public abstract class ChunkSource {
     }
     
     /**
-     * Gets the maximum world y-level.
+     * Gets the maximum world y-level as used by {@link NoiseChunkSource}.
      * 
      * @return The maximum y-level in block coordinates.
      */
