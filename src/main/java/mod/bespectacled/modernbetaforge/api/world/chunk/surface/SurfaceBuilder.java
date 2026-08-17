@@ -132,20 +132,22 @@ public abstract class SurfaceBuilder {
     
     /**
      * Gets the minimum world level, from the chunk source.
+     * This should be the min between 0 and the minimum world level to ensure all blocks are traversed.
      * 
      * @return The minimum world level.
      */
     protected int getWorldMinY() {
-        return this.chunkSource.getWorldMinY();
+        return Math.min(0, this.chunkSource.getWorldMinY());
     }
 
     /**
      * Gets the maximum world level, from the chunk source.
+     * This should be the max between 255 and the world height to ensure all blocks are traversed.
      * 
      * @return The maximum world level.
      */
-    protected int getWorldTopY() {
-        return this.chunkSource.getWorldTopY();
+    protected int getWorldHeight() {
+        return Math.max(255, this.chunkSource.getWorldHeight());
     }
     
     /**
