@@ -83,6 +83,10 @@ import net.minecraft.client.gui.GuiPageButtonList.GuiListEntry;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiSlider.FormatHelper;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -95,6 +99,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
+    private static final ResourceLocation TOOLTIP_BACKGROUND = new ResourceLocation("textures/blocks/cobblestone.png");
     private static final String PREFIX_ADDON = "createWorld.customize.custom.";
     private static final String PREFIX = "createWorld.customize.custom.modernbetaforge.";
     private static final String PREFIX_TAB = "createWorld.customize.custom.tab.modernbetaforge.";
@@ -2529,12 +2534,36 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             int rectR = guiX + offsetX + rectW;
             int rectT = guiY + offsetY;
             int rectB = guiY + offsetY + rectH;
-
-            drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_DARKEST_GREY);
+            
+            int texL = rectL + 1;
+            int texR = rectR;
+            int texT = rectT + 1;
+            int texB = rectB;
+            
+            double texU = (texR - texL) * 0.03125;
+            double texV = (texB - texT) * 0.03125;
+            
             this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
             this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARK_GREY);
             this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
             this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARK_GREY);
+            
+            GlStateManager.disableLighting();
+            GlStateManager.disableFog();
+            
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferBuilder = tessellator.getBuffer();
+            
+            this.mc.getTextureManager().bindTexture(TOOLTIP_BACKGROUND);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            bufferBuilder.pos(texL, texB, 0.0).tex(0.0, texV).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(texR, texB, 0.0).tex(texU, texV).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(texR, texT, 0.0).tex(texU, 0.0).color(64, 64, 64, 64).endVertex();
+            bufferBuilder.pos(texL, texT, 0.0).tex(0.0, 0.0).color(64, 64, 64, 64).endVertex();
+            
+            tessellator.draw();
 
             this.drawSplitString(tooltips, rectL + paddingL, rectT + paddingT, GuiColors.RGB_WHITE);
         }
