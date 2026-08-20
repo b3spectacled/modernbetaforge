@@ -32,6 +32,8 @@ import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistry;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.ModCompat.HeightManager;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
@@ -61,6 +63,11 @@ public class ModernBetaGeneratorSettings {
     public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
     
     public static final int MAX_PRESET_LENGTH = 100000;
+    
+    @Deprecated public static final int MIN_HEIGHT = 1;
+    @Deprecated public static final int MAX_HEIGHT = 255;
+    @Deprecated public static final int MIN_FLOOR = -64;
+    @Deprecated public static final int MAX_FLOOR = 0;
     
     public static final int MIN_DUNGEON_CHANCE = 1;
     public static final int MAX_DUNGEON_CHANCE = 100;
@@ -95,11 +102,6 @@ public class ModernBetaGeneratorSettings {
     public static final int MAX_BIOME_SIZE = 8;
     public static final int MIN_RIVER_SIZE = 1;
     public static final int MAX_RIVER_SIZE = 5;
-    
-    private static final int MIN_HEIGHT = 1;
-    private static final int MAX_HEIGHT = 255;
-    private static final int MIN_FLOOR = -64;
-    private static final int MAX_FLOOR = 0;
     
     public static final float MIN_MAIN_NOISE = 1.0f;
     public static final float MAX_MAIN_NOISE = 5000.0f;
@@ -161,6 +163,7 @@ public class ModernBetaGeneratorSettings {
     public final float stretchY;
     public final int seaLevel;
     public final int height;
+    public final int floor;
     
     public final float tempNoiseScale;
     public final float rainNoiseScale;
@@ -405,6 +408,7 @@ public class ModernBetaGeneratorSettings {
         this.stretchY = factory.stretchY;
         this.seaLevel = factory.seaLevel;
         this.height = factory.height;
+        this.floor = factory.floor;
         
         this.tempNoiseScale = factory.tempNoiseScale;
         this.rainNoiseScale = factory.rainNoiseScale;
@@ -685,11 +689,13 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMaxHeight() {
-        return MAX_HEIGHT;
+        HeightManager manager = ModCompat.HEIGHT_MANAGER;
+        return manager.extendsHeight() ? manager.getMaxHeight() : MAX_HEIGHT;
     }
     
     public static int getMinFloor() {
-        return MIN_FLOOR;
+        HeightManager manager = ModCompat.HEIGHT_MANAGER;
+        return manager.extendsHeight() ? manager.getMinHeight() : MIN_FLOOR;
     }
     
     public static int getMaxFloor() {
@@ -768,6 +774,7 @@ public class ModernBetaGeneratorSettings {
         public float stretchY;
         public int seaLevel;
         public int height;
+        public int floor;
         
         public float tempNoiseScale;
         public float rainNoiseScale;
@@ -1012,6 +1019,7 @@ public class ModernBetaGeneratorSettings {
             this.stretchY = 12.0f;
             this.seaLevel = 64;
             this.height = 128;
+            this.floor = 0;
             
             this.tempNoiseScale = 1.0f;
             this.rainNoiseScale = 1.0f;
@@ -1279,6 +1287,7 @@ public class ModernBetaGeneratorSettings {
                 
                 this.seaLevel == factory.seaLevel &&
                 this.height == factory.height &&
+                this.floor == factory.floor &&
                         
                 Float.compare(factory.tempNoiseScale, this.tempNoiseScale) == 0 &&
                 Float.compare(factory.rainNoiseScale, this.rainNoiseScale) == 0 &&
@@ -1527,6 +1536,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + ((this.stretchY == 0.0f) ? 0 : Float.floatToIntBits(this.stretchY));
             hashCode = 31 * hashCode + this.seaLevel;
             hashCode = 31 * hashCode + this.height;
+            hashCode = 31 * hashCode + this.floor;
             
             hashCode = 31 * hashCode + ((this.tempNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.tempNoiseScale));
             hashCode = 31 * hashCode + ((this.rainNoiseScale == 0.0f) ? 0 : Float.floatToIntBits(this.rainNoiseScale));
@@ -1810,6 +1820,7 @@ public class ModernBetaGeneratorSettings {
                 factory.stretchY = JsonUtils.getFloat(jsonObject, NbtTags.STRETCH_Y, factory.stretchY);
                 factory.seaLevel = JsonUtils.getInt(jsonObject, NbtTags.SEA_LEVEL, factory.seaLevel);
                 factory.height = JsonUtils.getInt(jsonObject, NbtTags.HEIGHT, factory.height);
+                factory.floor = JsonUtils.getInt(jsonObject, NbtTags.FLOOR, factory.floor);
 
                 factory.tempNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
                 factory.rainNoiseScale = JsonUtils.getFloat(jsonObject, NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);
@@ -2041,7 +2052,8 @@ public class ModernBetaGeneratorSettings {
                 factory.baseSize = MathHelper.clamp(factory.baseSize, MIN_BASE_SIZE, MAX_BASE_SIZE);
                 factory.stretchY = MathHelper.clamp(factory.stretchY, MIN_STRETCH_Y, MAX_STRETCH_Y);
                 factory.seaLevel = MathHelper.clamp(factory.seaLevel, getMinSeaLevel(), getMaxSeaLevel());
-                factory.height = MathHelper.clamp(factory.height, MIN_HEIGHT, MAX_HEIGHT);
+                factory.height = MathHelper.clamp(factory.height, getMinHeight(), getMaxHeight());
+                factory.floor = MathHelper.clamp(factory.floor, getMinFloor(), getMaxFloor());
 
                 factory.tempNoiseScale = MathHelper.clamp(factory.tempNoiseScale, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
                 factory.rainNoiseScale = MathHelper.clamp(factory.rainNoiseScale, MIN_BIOME_SCALE, MAX_BIOME_SCALE);
@@ -2412,6 +2424,7 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.UPPER_LIMIT_SCALE, factory.upperLimitScale);
             jsonObject.addProperty(NbtTags.LOWER_LIMIT_SCALE, factory.lowerLimitScale);
             jsonObject.addProperty(NbtTags.HEIGHT, factory.height);
+            jsonObject.addProperty(NbtTags.FLOOR, factory.floor);
             
             jsonObject.addProperty(NbtTags.TEMP_NOISE_SCALE, factory.tempNoiseScale);
             jsonObject.addProperty(NbtTags.RAIN_NOISE_SCALE, factory.rainNoiseScale);

@@ -80,7 +80,7 @@ public class GenLayerBiomeExtended extends GenLayerBiome {
     }
     
     private void populateAdditionalBiomes(List<BiomeEntry>[] biomes, ModernBetaGeneratorSettings settings) {
-        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
             Compat compat = entry.getValue();
             
             if (compat instanceof BiomeCompat) {

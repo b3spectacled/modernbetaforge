@@ -103,6 +103,7 @@ public class GuiPredicate {
     public static final ResourceLocation BASE_SIZE = createRegistryKey(NbtTags.BASE_SIZE);
     public static final ResourceLocation STRETCH_Y = createRegistryKey(NbtTags.STRETCH_Y);
     public static final ResourceLocation HEIGHT = createRegistryKey(NbtTags.HEIGHT);
+    public static final ResourceLocation FLOOR = createRegistryKey(NbtTags.FLOOR);
     public static final ResourceLocation TEMP_NOISE_SCALE = createRegistryKey(NbtTags.TEMP_NOISE_SCALE);
     public static final ResourceLocation RAIN_NOISE_SCALE = createRegistryKey(NbtTags.RAIN_NOISE_SCALE);
     public static final ResourceLocation DETAIL_NOISE_SCALE = createRegistryKey(NbtTags.DETAIL_NOISE_SCALE);

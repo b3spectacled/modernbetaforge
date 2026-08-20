@@ -655,7 +655,7 @@ public class DrawUtil {
         BIOME_OVERRIDES = new HashMap<>();
         BIOME_OVERRIDES.put(Biomes.STONE_BEACH, TerrainType.STONE);
         
-        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
+        if (ModCompat.isCompatLoaded(CompatBiomesOPlenty.MOD_ID)) {
             if (BOPBiomes.volcanic_island.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.volcanic_island.get(), TerrainType.COAL);
             if (BOPBiomes.gravel_beach.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.gravel_beach.get(), TerrainType.STONE);
             if (BOPBiomes.cold_desert.isPresent()) BIOME_OVERRIDES.put(BOPBiomes.cold_desert.get(), TerrainType.STONE);

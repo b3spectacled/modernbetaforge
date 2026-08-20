@@ -56,7 +56,7 @@ public class WorldGenFancyOak extends WorldGenAbstractTree {
             this.placeTreeTrunk(world, pos, treeInfo);
             this.placeTreeBranches(world, pos, treeInfo);
     
-            if (ModCompat.isModLoaded(CompatFutureMC.MOD_ID)) {
+            if (ModCompat.isCompatLoaded(CompatFutureMC.MOD_ID)) {
                 WorldGenBeeNest.generateForFancyOak(world, treeRandom, pos, treeInfo.height, this);
             }
             

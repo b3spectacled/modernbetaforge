@@ -65,7 +65,7 @@ public abstract class SurfaceBuilder {
         );
         
         // Init modded surface info
-        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
             Compat compat = entry.getValue();
             if (compat instanceof SurfaceCompat) {
                 SurfaceCompat surfaceCompat = (SurfaceCompat)compat;

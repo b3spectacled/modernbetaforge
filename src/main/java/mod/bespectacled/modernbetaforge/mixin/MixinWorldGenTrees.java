@@ -20,7 +20,7 @@ import net.minecraft.world.gen.feature.WorldGenTrees;
 public class MixinWorldGenTrees {
     @Inject(method = "generate", at = @At(value = "RETURN", ordinal = 1), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void injectGenerate(World world, Random random, BlockPos pos, CallbackInfoReturnable<Boolean> info, int height, boolean canGenerate) {
-        if (ModCompat.isModLoaded(CompatFutureMC.MOD_ID) && world.getBiome(pos) instanceof ModernBetaBiome) {
+        if (ModCompat.isCompatLoaded(CompatFutureMC.MOD_ID) && world.getBiome(pos) instanceof ModernBetaBiome) {
             WorldGenBeeNest.generateForOak(world, random, pos, height);
         }
     }

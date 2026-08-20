@@ -279,7 +279,7 @@ public class MapGenBetaCave extends MapGenBase {
             ;
         
         // Add modded blocks
-        for (Entry<String, Compat> entry : ModCompat.LOADED_MODS.entrySet()) {
+        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
             Compat compat = entry.getValue();
             if (compat instanceof CarverCompat) {
                 ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));

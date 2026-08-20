@@ -499,6 +499,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG4_S_UPPER_LIM, NbtTags.UPPER_LIMIT_SCALE, ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, ModernBetaGeneratorSettings.MAX_LIMIT_SCALE, this.settings.upperLimitScale, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_LOWER_LIM, NbtTags.LOWER_LIMIT_SCALE, ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, ModernBetaGeneratorSettings.MAX_LIMIT_SCALE, this.settings.lowerLimitScale, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_LIM, NbtTags.HEIGHT, ModernBetaGeneratorSettings.getMinHeight(), ModernBetaGeneratorSettings.getMaxHeight(), this.settings.height, this),
+            this.createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_FLR, NbtTags.FLOOR, ModernBetaGeneratorSettings.getMinFloor(), ModernBetaGeneratorSettings.getMaxFloor(), this.settings.floor, this),
+            null,
             
             this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page4", "beta"),
             null,
@@ -557,6 +559,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiField(GuiIdentifiers.PG5_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_LIM, true, PREFIX + NbtTags.HEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_FLR, true, PREFIX + NbtTags.FLOOR),
+            this.createGuiField(GuiIdentifiers.PG5_F_HEIGH_FLR, String.format("%d",  this.settings.floor), this.intFilter),
 
             this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page5", "beta"),
             null,
@@ -698,13 +702,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         GuiPageButtonList.GuiListEntry[] pageCustom = this.createCustomPropertyPage();
         
-        if (!ModCompat.isNetherCompatible()) {
+        if (!ModCompat.NETHER_MANAGER.isCompatible()) {
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
             pageBasic[pageBasic.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, TextFormatting.GRAY, "page0", "netherIncompatible");
             pageBasic[pageBasic.length - 1] = null;
         }
         
-        if (ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID) && CompatDynamicTrees.isEnabled()) {
+        if (ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID) && CompatDynamicTrees.isEnabled()) {
             pageBiome = Arrays.copyOf(pageBiome, pageBiome.length + 2);
             pageBiome[pageBiome.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_TREES, TextFormatting.GRAY, "page2", "treesIncompatible");
             pageBiome[pageBiome.length - 1] = null;
@@ -971,6 +975,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG5_F_HEIGH_LIM:
                     this.settings.height = (int)MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.getMinHeight(), ModernBetaGeneratorSettings.getMaxHeight());
                     newEntryValue = this.settings.height;
+                    break;
+                case GuiIdentifiers.PG5_F_HEIGH_FLR:
+                    this.settings.floor = (int)MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.getMinFloor(), ModernBetaGeneratorSettings.getMaxFloor());
+                    newEntryValue = this.settings.floor;
                     break;
                 case GuiIdentifiers.PG5_F_TEMP_SCL:
                     this.settings.tempNoiseScale = MathHelper.clamp(entryValue, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE);
@@ -1412,6 +1420,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG4_S_HEIGH_LIM:
                     this.settings.height = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG4_S_HEIGH_FLR:
+                    this.settings.floor = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG4_S_TEMP_SCL:
                     this.settings.tempNoiseScale = roundToThreeDec(entryValue);

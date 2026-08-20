@@ -30,6 +30,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev420
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
+import mod.bespectacled.modernbetaforge.world.chunk.source.Infdev227ChunkSource;
 import mod.bespectacled.modernbetaforge.world.chunk.source.SkylandsChunkSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.util.ResourceLocation;
@@ -55,7 +56,8 @@ public class GuiPredicates {
         GuiIdentifiers.PG4_S_HEIGH_SCL,
         GuiIdentifiers.PG4_S_UPPER_LIM,
         GuiIdentifiers.PG4_S_LOWER_LIM,
-        GuiIdentifiers.PG4_S_HEIGH_LIM
+        GuiIdentifiers.PG4_S_HEIGH_LIM,
+        GuiIdentifiers.PG4_S_HEIGH_FLR
     );
     
     private static final BiomeSource DUMMY_BIOME_SOURCE = new SingleBiomeSource(0L, ModernBetaGeneratorSettings.build());
@@ -157,6 +159,7 @@ public class GuiPredicates {
     public static final GuiPredicate BASE_SIZE_TEST;
     public static final GuiPredicate STRETCH_Y_TEST;
     public static final GuiPredicate HEIGHT_TEST;
+    public static final GuiPredicate FLOOR_TEST;
     public static final GuiPredicate TEMP_NOISE_SCALE_TEST;
     public static final GuiPredicate RAIN_NOISE_SCALE_TEST;
     public static final GuiPredicate DETAIL_NOISE_SCALE_TEST;
@@ -318,7 +321,7 @@ public class GuiPredicates {
         ResourceLocation registryKey = settings.chunkSource;
         ChunkSource chunkSource = ModernBetaRegistries.CHUNK_SOURCE.get(registryKey).apply(0L, settings, DUMMY_BIOME_SOURCE);
         
-        if (!(chunkSource instanceof NoiseChunkSource)) {
+        if (!(chunkSource instanceof NoiseChunkSource || chunkSource instanceof Infdev227ChunkSource)) {
             return false;
         }
         
@@ -347,6 +350,7 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
                 GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR,
                 GuiIdentifiers.PG4_B_TERR_FIX
             )
         );
@@ -367,7 +371,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_STRETCH_Y,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
         
@@ -387,7 +392,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_STRETCH_Y,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
         
@@ -403,7 +409,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_STRETCH_Y,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
         
@@ -417,14 +424,16 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_HEIGH_SCL,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
         
         NOISE_SETTINGS.put(
             ModernBetaBuiltInTypes.Chunk.INFDEV_227.getRegistryKey(),
             ImmutableList.of(
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
         
@@ -438,7 +447,8 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_HEIGH_SCL,
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
-                GuiIdentifiers.PG4_S_HEIGH_LIM
+                GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR
             )
         );
 
@@ -462,6 +472,7 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
                 GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR,
                 
                 GuiIdentifiers.PG4_S_B_DPTH_WT,
                 GuiIdentifiers.PG4_S_B_DPTH_OF,
@@ -485,6 +496,7 @@ public class GuiPredicates {
                 GuiIdentifiers.PG4_S_UPPER_LIM,
                 GuiIdentifiers.PG4_S_LOWER_LIM,
                 GuiIdentifiers.PG4_S_HEIGH_LIM,
+                GuiIdentifiers.PG4_S_HEIGH_FLR,
                 GuiIdentifiers.PG4_S_END_WT,
                 GuiIdentifiers.PG4_S_END_OF,
                 GuiIdentifiers.PG4_B_USE_END_OUT,
@@ -572,8 +584,8 @@ public class GuiPredicates {
             },
             GuiIdentifiers.PG0_B_USE_SANDSTONE
         );
-        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
-        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.isNetherCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
+        USE_OLD_NETHER_TEST = new GuiPredicate(settings -> ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
+        USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
         USE_FORTRESSES_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_FORTRESSES);
         USE_LAVA_POCKETS_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
         LEVEL_THEME_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_THEME);
@@ -620,7 +632,7 @@ public class GuiPredicates {
             settings -> {
                 boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
                 boolean isFixedBiomeSource = isSingleBiome(settings);
-                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID);
+                boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
                 
                 return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings));
             },
@@ -635,7 +647,7 @@ public class GuiPredicates {
             settings -> {
                 boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
                 boolean isFixedBiomeSource = isSingleBiome(settings);
-                boolean isDynamicTreesLoaded = ModCompat.isModLoaded(CompatDynamicTrees.MOD_ID);
+                boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
                 
                 return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isFancyOakBiome(settings));
             },
@@ -678,6 +690,7 @@ public class GuiPredicates {
         BASE_SIZE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_BASE_SIZE), GuiIdentifiers.PG4_S_BASE_SIZE, GuiIdentifiers.PG5_F_BASE_SIZE);
         STRETCH_Y_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_STRETCH_Y), GuiIdentifiers.PG4_S_STRETCH_Y, GuiIdentifiers.PG5_F_STRETCH_Y);
         HEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_HEIGH_LIM), GuiIdentifiers.PG4_S_HEIGH_LIM, GuiIdentifiers.PG5_F_HEIGH_LIM);
+        FLOOR_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_HEIGH_FLR) && ModCompat.HEIGHT_MANAGER.extendsHeight(), GuiIdentifiers.PG4_S_HEIGH_FLR, GuiIdentifiers.PG5_F_HEIGH_FLR);
         TEMP_NOISE_SCALE_TEST = new GuiPredicate(settings -> isBetaOrPESource(settings), GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
         RAIN_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
         DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);

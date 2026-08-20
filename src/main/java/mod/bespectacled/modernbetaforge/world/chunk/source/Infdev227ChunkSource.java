@@ -109,7 +109,7 @@ public class Infdev227ChunkSource extends ChunkSource {
                 
                 int height = heightmap[(z & 0xF) + (x & 0xF) * 16];
                 
-                for (int y = 0; y < this.settings.height; ++y) {
+                for (int y = this.worldFloor; y < this.worldHeight; ++y) {
                     IBlockState blockState = BlockStates.AIR;
                     
                     if (this.settings.useInfdevWalls && (x == 0 || z == 0) && y <= height + 2) {

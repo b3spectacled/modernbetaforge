@@ -266,11 +266,12 @@ public class GuiIdentifiers {
     public static final int PG4_S_UPPER_LIM = 510;
     public static final int PG4_S_LOWER_LIM = 511;
     public static final int PG4_S_HEIGH_LIM = 512;
+    public static final int PG4_S_HEIGH_FLR = 513;
     
-    public static final int PG4_S_B_DPTH_WT = 513;
-    public static final int PG4_S_B_DPTH_OF = 514;
-    public static final int PG4_S_B_SCLE_WT = 515;
-    public static final int PG4_S_B_SCLE_OF = 516;
+    public static final int PG4_S_B_DPTH_WT = 514;
+    public static final int PG4_S_B_DPTH_OF = 515;
+    public static final int PG4_S_B_SCLE_WT = 516;
+    public static final int PG4_S_B_SCLE_OF = 517;
 
     public static final int PG4_S_TEMP_SCL = 520;
     public static final int PG4_S_RAIN_SCL = 521;
@@ -288,6 +289,7 @@ public class GuiIdentifiers {
     public static final int PG4_S_R_DPTH_WT = 530;
 
     public static final int PG4_SLIDER_END = 549;
+    
     public static final int PG4_B_USE_BDS = 550;
     public static final int PG4_B_USE_END_OUT = 551;
     public static final int PG4_B_USE_AMP = 552;
@@ -312,11 +314,12 @@ public class GuiIdentifiers {
     public static final int PG5_F_UPPER_LIM = 610;
     public static final int PG5_F_LOWER_LIM = 611;
     public static final int PG5_F_HEIGH_LIM = 612;
+    public static final int PG5_F_HEIGH_FLR = 613;
     
-    public static final int PG5_F_B_DPTH_WT = 613;
-    public static final int PG5_F_B_DPTH_OF = 614;
-    public static final int PG5_F_B_SCLE_WT = 615;
-    public static final int PG5_F_B_SCLE_OF = 616;
+    public static final int PG5_F_B_DPTH_WT = 614;
+    public static final int PG5_F_B_DPTH_OF = 615;
+    public static final int PG5_F_B_SCLE_WT = 616;
+    public static final int PG5_F_B_SCLE_OF = 617;
 
     public static final int PG5_F_TEMP_SCL = 620;
     public static final int PG5_F_RAIN_SCL = 621;
@@ -347,27 +350,26 @@ public class GuiIdentifiers {
     public static final int PG5_L_UPPER_LIM = 1610;
     public static final int PG5_L_LOWER_LIM = 1611;
     public static final int PG5_L_HEIGH_LIM = 1612;
+    public static final int PG5_L_HEIGH_FLR = 1613;
     
-    public static final int PG5_L_TEMP_SCL = 1613;
-    public static final int PG5_L_RAIN_SCL = 1614;
-    public static final int PG5_L_DETL_SCL = 1615;
+    public static final int PG5_L_B_DPTH_WT = 1614;
+    public static final int PG5_L_B_DPTH_OF = 1615;
+    public static final int PG5_L_B_SCLE_WT = 1616;
+    public static final int PG5_L_B_SCLE_OF = 1617;
     
-    public static final int PG5_L_B_DPTH_WT = 1617;
-    public static final int PG5_L_B_DPTH_OF = 1618;
-    public static final int PG5_L_B_SCLE_WT = 1619;
-    public static final int PG5_L_B_SCLE_OF = 1620;
-    public static final int PG5_L_RIVER_SZ = 1621;
-    public static final int PG5_L_LAYER_SZ = 1622;
+    public static final int PG5_L_TEMP_SCL = 1620;
+    public static final int PG5_L_RAIN_SCL = 1621;
+    public static final int PG5_L_DETL_SCL = 1622;
     
-    public static final int PG5_L_SCLE_NS_X = 1623;
-    public static final int PG5_L_SCLE_NS_Z = 1624;
+    public static final int PG5_L_SCLE_NS_X = 1624;
+    public static final int PG5_L_SCLE_NS_Z = 1625;
     
-    public static final int PG5_L_END_OF = 1625;
-    public static final int PG5_L_END_WT = 1626;
-    public static final int PG5_L_END_OUT_OF = 1627;
-    public static final int PG5_L_END_OUT_DT = 1628;
+    public static final int PG5_L_END_OF = 1626;
+    public static final int PG5_L_END_WT = 1627;
+    public static final int PG5_L_END_OUT_OF = 1628;
+    public static final int PG5_L_END_OUT_DT = 1629;
     
-    public static final int PG5_L_R_DPTH_WT = 1629;
+    public static final int PG5_L_R_DPTH_WT = 1630;
     
     /* Page 7 */
     
@@ -461,6 +463,7 @@ public class GuiIdentifiers {
         assertOffset(PG4_S_UPPER_LIM, PG5_F_UPPER_LIM);
         assertOffset(PG4_S_LOWER_LIM, PG5_F_LOWER_LIM);
         assertOffset(PG4_S_HEIGH_LIM, PG5_F_HEIGH_LIM);
+        assertOffset(PG4_S_HEIGH_FLR, PG5_F_HEIGH_FLR);
         
         assertOffset(PG4_S_TEMP_SCL, PG5_F_TEMP_SCL);
         assertOffset(PG4_S_RAIN_SCL, PG5_F_RAIN_SCL);

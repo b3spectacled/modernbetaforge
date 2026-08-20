@@ -402,7 +402,7 @@ public class DataFixers {
     }
     
     public static JsonElement fixBoPCompat(JsonObject jsonObject) {
-        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID) && DEFAULTS.containsProperty(CompatBiomesOPlenty.KEY_USE_COMPAT)) {
+        if (ModCompat.isCompatLoaded(CompatBiomesOPlenty.MOD_ID) && DEFAULTS.containsProperty(CompatBiomesOPlenty.KEY_USE_COMPAT)) {
             boolean useModdedBiomes = JsonUtils.getBoolean(jsonObject, NbtTags.DEPR_USE_MODDED_BIOMES, true);
             
             return new JsonPrimitive(useModdedBiomes);

@@ -932,7 +932,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (this.settings.useStrongholds)
             this.structureSims.put(ModernBetaStructures.STRONGHOLD, new StructureSimStronghold(this.chunkSource));
         if (this.settings.useMineShafts)
-            this.structureSims.put(ModernBetaStructures.MINESHAFT, ModCompat.isModLoaded(CompatBetterMineshafts.MOD_ID) ? new StructureSimBetterMineshafts(seed) : new StructureSimMineshaft(seed));
+            this.structureSims.put(ModernBetaStructures.MINESHAFT, ModCompat.isCompatLoaded(CompatBetterMineshafts.MOD_ID) ? new StructureSimBetterMineshafts(seed) : new StructureSimMineshaft(seed));
         if (this.settings.useMonuments)
             this.structureSims.put(ModernBetaStructures.MONUMENT, new StructureSimMonument(seed));
         if (this.settings.useMansions)

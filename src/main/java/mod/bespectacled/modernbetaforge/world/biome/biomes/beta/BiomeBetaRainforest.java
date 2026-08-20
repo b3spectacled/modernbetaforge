@@ -78,7 +78,7 @@ public class BiomeBetaRainforest extends BiomeBeta {
             }
         }
         
-        if (ModCompat.isModLoaded(CompatFutureMC.MOD_ID) && FConfig.INSTANCE.getVillageAndPillage().bamboo.enabled) {
+        if (ModCompat.isCompatLoaded(CompatFutureMC.MOD_ID) && FConfig.INSTANCE.getVillageAndPillage().bamboo.enabled) {
             WorldGenBamboo.generate(random, chunkPos.x, chunkPos.z, world);    
         }
     }

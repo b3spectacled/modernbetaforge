@@ -15,10 +15,13 @@ import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
 import mod.bespectacled.modernbetaforge.compat.nether_api.CompatNetherAPI;
 import mod.bespectacled.modernbetaforge.compat.oe.CompatOE;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.fml.common.Loader;
 
 public class ModCompat {
-    public static final Map<String, Compat> LOADED_MODS = new LinkedHashMap<>();
+    public static final Map<String, Compat> LOADED_COMPATS = new LinkedHashMap<>();
+    public static final HeightManager HEIGHT_MANAGER = new HeightManager();
+    public static final NetherManager NETHER_MANAGER = new NetherManager();
     
     public static void loadCompat() {
         if (!Loader.isModLoaded("mixinbooter")) {
@@ -36,18 +39,8 @@ public class ModCompat {
         loadCompat(new CompatOE());
     }
     
-    public static boolean isModLoaded(String modId) {
-        return LOADED_MODS.containsKey(modId);
-    }
-    
-    public static boolean isNetherCompatible() {
-        for (Compat compat : LOADED_MODS.values()) {
-            if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
-                return false;
-            }
-        }
-        
-        return true;
+    public static boolean isCompatLoaded(String modId) {
+        return LOADED_COMPATS.containsKey(modId);
     }
     
     private static void loadCompat(Compat compat) {
@@ -57,11 +50,62 @@ public class ModCompat {
             try {
                 ModernBeta.log(Level.INFO, String.format("Found mod '%s'..", modId));
                 compat.load();
-                LOADED_MODS.put(modId, compat);
+                HEIGHT_MANAGER.checkCompat(compat);
+                NETHER_MANAGER.checkCompat(compat);
+                LOADED_COMPATS.put(modId, compat);
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, String.format("Couldn't load compat for mod '%s'!", modId));
                 
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static class HeightManager {
+        private HeightCompat heightCompat;
+        private int numHeightMods;
+        private boolean warned;
+        
+        private HeightManager() { }
+        
+        public boolean extendsHeight() {
+            return this.numHeightMods == 1 && this.heightCompat.extendsHeight();
+        }
+        
+        public int getMinHeight() {
+            return this.heightCompat != null ? this.heightCompat.getMinHeight() : ModernBetaGeneratorSettings.MIN_FLOOR;
+        }
+        
+        public int getMaxHeight() {
+            return this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
+        }
+        
+        private void checkCompat(Compat compat) {
+            if (compat instanceof HeightCompat) {
+                this.heightCompat = (HeightCompat)compat;
+                this.numHeightMods++;
+            }
+            
+            if (this.numHeightMods > 1 && !this.warned) {
+                ModernBeta.log(Level.WARN, "More than one height extension mod is installed. Related generator settings will be disabled.");
+                this.warned = true;
+            }
+        }
+    }
+    
+    public static class NetherManager {
+        private boolean isCompatible;
+        
+        private NetherManager() { }
+        
+        public boolean isCompatible() {
+            return this.isCompatible;
+        }
+        
+        private void checkCompat(Compat compat) {
+            if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
+                this.isCompatible = false;
             }
         }
     }

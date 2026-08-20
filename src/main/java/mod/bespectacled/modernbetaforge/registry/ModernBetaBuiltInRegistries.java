@@ -299,7 +299,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiCustomizePresets.BETA_PLUS, GuiCustomizePresets.PRESET_BETA_PLUS);
         registry.register(GuiCustomizePresets.BETA_RELEASE, GuiCustomizePresets.PRESET_BETA_RELEASE);
         
-        if (ModCompat.isModLoaded(CompatBiomesOPlenty.MOD_ID)) {
+        if (ModCompat.isCompatLoaded(CompatBiomesOPlenty.MOD_ID)) {
             registry.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
         }
         
@@ -398,6 +398,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.BASE_SIZE, GuiPredicates.BASE_SIZE_TEST);
         registry.register(GuiPredicate.STRETCH_Y, GuiPredicates.STRETCH_Y_TEST);
         registry.register(GuiPredicate.HEIGHT, GuiPredicates.HEIGHT_TEST);
+        registry.register(GuiPredicate.FLOOR, GuiPredicates.FLOOR_TEST);
         registry.register(GuiPredicate.TEMP_NOISE_SCALE, GuiPredicates.TEMP_NOISE_SCALE_TEST);
         registry.register(GuiPredicate.RAIN_NOISE_SCALE, GuiPredicates.RAIN_NOISE_SCALE_TEST);
         registry.register(GuiPredicate.DETAIL_NOISE_SCALE, GuiPredicates.DETAIL_NOISE_SCALE_TEST);
