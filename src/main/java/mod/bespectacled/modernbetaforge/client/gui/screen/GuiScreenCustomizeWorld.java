@@ -2949,7 +2949,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
                 ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
                 
-            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", DEFAULT_NAME_TRUNCATE_LEN, nameFormatter);
         }
     
         @Override
@@ -2957,7 +2957,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Function<String, String> nameFormatter = key ->
                 ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
-            return getFormattedForgeRegistryName(property.getValue(), "", 20, nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", DEFAULT_NAME_TRUNCATE_LEN, nameFormatter);
         }
     
         @Override
