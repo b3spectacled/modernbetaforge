@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.client.gui;
+package mod.bespectacled.modernbetaforge.client.gui.screen;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPropertyScreen;
 import net.minecraft.util.ResourceLocation;

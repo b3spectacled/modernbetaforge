@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.client.gui;
+package mod.bespectacled.modernbetaforge.client.gui.screen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.lwjgl.input.Keyboard;
 
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;

@@ -1,5 +1,6 @@
-package mod.bespectacled.modernbetaforge.client.gui;
+package mod.bespectacled.modernbetaforge.client.gui.element;
 
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.fml.relauncher.Side;

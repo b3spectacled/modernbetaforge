@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.api.property;
 
 import java.util.function.Predicate;
 
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeRegistry;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class RegistryProperty extends StringProperty {

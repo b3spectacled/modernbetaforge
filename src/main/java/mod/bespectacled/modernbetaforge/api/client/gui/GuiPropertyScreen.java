@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

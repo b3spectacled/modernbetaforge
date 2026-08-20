@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.client.gui;
+package mod.bespectacled.modernbetaforge.client.gui.screen;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,6 +29,8 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;

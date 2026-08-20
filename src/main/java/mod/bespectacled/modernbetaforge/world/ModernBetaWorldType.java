@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world;
 
 import java.util.Random;
 
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;

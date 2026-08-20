@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.config;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets.FilterType;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePresets.FilterType;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;

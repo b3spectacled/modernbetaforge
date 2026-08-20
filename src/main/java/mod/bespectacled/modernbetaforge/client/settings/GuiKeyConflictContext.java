@@ -1,6 +1,6 @@
 package mod.bespectacled.modernbetaforge.client.settings;
 
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.settings.IKeyConflictContext;

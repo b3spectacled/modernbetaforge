@@ -1,4 +1,4 @@
-package mod.bespectacled.modernbetaforge.client.gui;
+package mod.bespectacled.modernbetaforge.client.gui.screen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,10 @@ import org.lwjgl.input.Keyboard;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler.PresetData;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.IconTexture;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.State;

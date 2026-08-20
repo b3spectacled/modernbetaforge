@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import com.google.gson.JsonObject;
 
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeRegistry;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;

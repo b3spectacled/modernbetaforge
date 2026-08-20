@@ -24,7 +24,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.data.FiniteDataHandler;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePreview;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePreview;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;

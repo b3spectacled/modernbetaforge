@@ -7,9 +7,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
-import mod.bespectacled.modernbetaforge.client.gui.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizePresets;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;

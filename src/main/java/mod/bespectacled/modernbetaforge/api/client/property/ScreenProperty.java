@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.api.client.property;
 
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPropertyScreen;
 import mod.bespectacled.modernbetaforge.api.client.property.ScreenProperty.PropertyScreenCreator;
-import mod.bespectacled.modernbetaforge.client.gui.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.property.visitor.EntryValuePropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.FormattedPropertyVisitor;
 import mod.bespectacled.modernbetaforge.property.visitor.GuiPropertyVisitor;
