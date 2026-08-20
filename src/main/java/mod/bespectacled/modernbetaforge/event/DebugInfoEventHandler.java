@@ -148,12 +148,14 @@ public class DebugInfoEventHandler {
 
                 String baseBiomeText = String.format("[Modern Beta] Base Biome: %s", modernBetaBiomeProvider.getBaseBiome(x, z).getBiomeName());
                 addDebugText(event, baseBiomeText);
-                addDebugText(event, "");
             }
             
-            addGenDebugText(event, DebugUtil.SECTION_GEN_CHUNK);
-            addGenDebugText(event, DebugUtil.SECTION_POP_CHUNK);
-            addGenDebugText(event, DebugUtil.SECTION_GET_BASE_BIOMES);
+            if (ModernBetaConfig.debugOptions.displayDebugBenchmarkInfo) {
+                addDebugText(event, "");
+                addGenDebugText(event, DebugUtil.SECTION_GEN_CHUNK);
+                addGenDebugText(event, DebugUtil.SECTION_POP_CHUNK);
+                addGenDebugText(event, DebugUtil.SECTION_GET_BASE_BIOMES);
+            }
         }
     }
     
