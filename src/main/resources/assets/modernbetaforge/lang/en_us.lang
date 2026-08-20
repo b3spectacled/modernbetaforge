@@ -802,6 +802,7 @@ modernbetaforge.general.serveroptions.sendcloudheight=Send Cloud Height to Clien
 modernbetaforge.general.serveroptions.sendworldinfo=Send World Info to Clients
 
 modernbetaforge.general.debugoptions.displaydebuginfo=Display Debug Info
+modernbetaforge.general.debugoptions.displaydebugbenchmarkinfo=Display Debug Benchmark Info
 modernbetaforge.general.debugoptions.displaypreviewgenerationinfo=Display Preview Generation Info
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 modernbetaforge.general.debugoptions.registerdebugnoisechunksource=Register Debug Noise Chunk Source

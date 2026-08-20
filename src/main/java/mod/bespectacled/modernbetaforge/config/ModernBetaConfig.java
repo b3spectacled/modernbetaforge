@@ -155,6 +155,11 @@ public class ModernBetaConfig {
         public boolean displayDebugInfo = false;
         
         @Comment({
+            "Display Modern Beta debug info related to generation times in debug screen. Does not display unless displayDebugInfo is also true."
+        })
+        public boolean displayDebugBenchmarkInfo = false;
+        
+        @Comment({
             "Display generation info in map preview screen."
         })
         public boolean displayPreviewGenerationInfo = false;
