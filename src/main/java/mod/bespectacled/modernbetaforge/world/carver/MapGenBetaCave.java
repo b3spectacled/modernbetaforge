@@ -55,19 +55,19 @@ public class MapGenBetaCave extends MapGenBase {
     protected final int caveCount;
     protected final int caveChance;
     protected final int caveMinY;
-    protected final int worldMinY;
+    protected final int worldFloor;
     
     private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldMinY());
+        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldFloor());
     }
     
     public MapGenBetaCave() {
         this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0);
     }
     
-    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldMinY) {
+    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
@@ -82,7 +82,7 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveCount = caveCount;
         this.caveChance = caveChance;
         this.caveMinY = caveMinY;
-        this.worldMinY = worldMinY;
+        this.worldFloor = worldFloor;
         
         this.tunnelRandom = new Random();
         this.featureRandom = new Random();
@@ -219,7 +219,7 @@ public class MapGenBetaCave extends MapGenBase {
         int localZ = blockPos.getZ() & 0xF;
         
         if (this.isPositionCarvable(blockPos, block)) {
-            if (localY - 1 < this.worldMinY + LAVA_LEVEL) { // Set lava below y = 10
+            if (localY - 1 < this.worldFloor + LAVA_LEVEL) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
                 chunkPrimer.setBlockState(localX, localY, localZ, this.defaultFill.getDefaultState());

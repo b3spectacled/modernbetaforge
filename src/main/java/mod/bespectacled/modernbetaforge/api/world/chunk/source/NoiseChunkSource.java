@@ -86,8 +86,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         this.noiseSizeX = 16 / this.horizontalNoiseResolution;
         this.noiseSizeZ = 16 / this.horizontalNoiseResolution;
-        this.noiseSizeY = Math.floorDiv(this.worldHeight - this.worldMinY, this.verticalNoiseResolution);
-        this.noiseMinY = Math.floorDiv(this.worldMinY, this.verticalNoiseResolution);
+        this.noiseSizeY = Math.floorDiv(this.worldHeight - this.worldFloor, this.verticalNoiseResolution);
+        this.noiseMinY = Math.floorDiv(this.worldFloor, this.verticalNoiseResolution);
         this.noiseTopY = Math.floorDiv(this.worldHeight, this.verticalNoiseResolution);
         
         this.heightmapCache = new ChunkCache<>("heightmap", this::sampleHeightmap);
@@ -491,7 +491,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             for (int localZ = 0; localZ < sizeZ; ++localZ) {
                 int z = localZ + startZ;
                 
-                for (int y = this.worldMinY; y < sizeY + this.worldMinY; ++y) {
+                for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }
@@ -508,7 +508,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @return A HeightmapChunk, containing an array of ints containing the heights for the entire chunk.
      */
     private HeightmapChunk sampleHeightmap(int chunkX, int chunkZ) {
-        short worldMinY = (short)this.worldMinY;
+        short worldFloor = (short)this.worldFloor;
         short worldHeight = (short)this.worldHeight;
         short minStructureHeight = 32;
         
@@ -525,7 +525,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         for (int x = 0; x < sizeX; ++x) {
             for (int z = 0; z < sizeZ; ++z) {
-                for (int y = this.worldMinY; y < sizeY + this.worldMinY; ++y) {
+                for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
                     double density = densityChunk.sample(x, y, z);
                     boolean isSolid = density > 0.0;
                     
@@ -538,7 +538,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                         
                         // Capture structure height at lowest possible solid block height,
                         // if above a certain height.
-                        if (height >= 8 + this.worldMinY) {
+                        if (height >= 8 + this.worldFloor) {
                             heightmapStructure[ndx] = height;
                         }
                     }
@@ -553,7 +553,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     // then set the actual height value when hitting first non-solid layer.
                     // This handles situations where the bottom of the world may not be solid,
                     // i.e. Skylands-style world types.
-                    if (isSolid && heightmapFloor[ndx] == worldMinY) {
+                    if (isSolid && heightmapFloor[ndx] == worldFloor) {
                         heightmapFloor[ndx] = worldHeight;
                     }
                     
@@ -563,7 +563,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                     
                     // If no solid ground found (i.e. Skylands-style world types),
                     // then place structure height at 32.
-                    if (height == this.worldMinY && heightmapStructure[ndx] == this.worldMinY) {
+                    if (height == this.worldFloor && heightmapStructure[ndx] == this.worldFloor) {
                         heightmapStructure[ndx] = minStructureHeight;
                     }
                 }
@@ -703,6 +703,6 @@ public abstract class NoiseChunkSource extends ChunkSource {
             densityMap.put(entry.getKey(), densities);
         }
         
-        return new DensityChunk(densityMap, this.worldMinY);
+        return new DensityChunk(densityMap, this.worldFloor);
     }
 }

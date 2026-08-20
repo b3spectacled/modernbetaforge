@@ -136,8 +136,8 @@ public abstract class SurfaceBuilder {
      * 
      * @return The minimum world level.
      */
-    protected int getWorldMinY() {
-        return Math.min(0, this.chunkSource.getWorldMinY());
+    protected int getWorldFloor() {
+        return Math.min(0, this.chunkSource.getWorldFloor());
     }
 
     /**

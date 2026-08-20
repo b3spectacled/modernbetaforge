@@ -11,11 +11,11 @@ public class DensityChunk {
     public static final ResourceLocation INITIAL = ModernBeta.createRegistryKey("initial");
     
     private final Map<ResourceLocation, double[]> densityMap;
-    private final int worldMinY;
+    private final int worldFloor;
     
-    public DensityChunk(Map<ResourceLocation, double[]> densityMap, int worldMinY) {
+    public DensityChunk(Map<ResourceLocation, double[]> densityMap, int worldFloor) {
         this.densityMap = ImmutableMap.copyOf(densityMap);
-        this.worldMinY = worldMinY;
+        this.worldFloor = worldFloor;
     }
     
     public DensityChunk(double[] densities, int worldMinY) {
@@ -33,6 +33,6 @@ public class DensityChunk {
             throw new IllegalArgumentException(error);
         }
         
-        return this.densityMap.get(key)[((y - this.worldMinY) * 16 + (x & 0xF)) * 16 + (z & 0xF)];
+        return this.densityMap.get(key)[((y - this.worldFloor) * 16 + (x & 0xF)) * 16 + (z & 0xF)];
     }
 }

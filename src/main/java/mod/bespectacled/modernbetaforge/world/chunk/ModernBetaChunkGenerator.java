@@ -144,7 +144,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
      */
     @Override
     public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer chunkPrimer) {
-        int worldMinY = Math.min(0, this.chunkSource.getWorldMinY());
+        int worldMinY = Math.min(0, this.chunkSource.getWorldFloor());
         int worldTopY = Math.max(255, this.chunkSource.getWorldHeight());
         
         // Retrieve chunk primer from cache
