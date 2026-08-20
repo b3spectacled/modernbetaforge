@@ -8,6 +8,7 @@ import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.client.gui.GuiPageButtonList;
 
@@ -29,4 +30,6 @@ public interface GuiPropertyVisitor {
     GuiPageButtonList.GuiListEntry visit(EntityEntryProperty property, int guiIdentifier);
     
     GuiPageButtonList.GuiListEntry visit(ScreenProperty property, int guiIdentifier);
+    
+    GuiPageButtonList.GuiListEntry visit(RegistryProperty<?> property, int guiIdentifier);
 }

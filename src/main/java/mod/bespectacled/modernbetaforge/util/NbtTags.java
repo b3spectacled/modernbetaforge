@@ -1,14 +1,34 @@
 package mod.bespectacled.modernbetaforge.util;
 
 public class NbtTags {
+    /* Registries */
     public static final String CHUNK_SOURCE = "chunkSource";
     public static final String BIOME_SOURCE = "biomeSource";
     public static final String SURFACE_BUILDER = "surfaceBuilder";
     public static final String CAVE_CARVER = "caveCarver";
     public static final String WORLD_SPAWNER = "worldSpawner";
     
-    public static final String SINGLE_BIOME = "singleBiome";
+    public static final String BIOME_RESOLVER = "biomeResolver";
+    public static final String NOISE_SAMPLER = "noiseSampler";
+    public static final String NOISE_COLUMN_SAMPLER = "noiseColumnSampler";
+    public static final String NOISE_HEIGHT_SAMPLER = "noiseHeightSampler";
+    public static final String NOISE_SETTINGS = "noiseSettings";
+    public static final String CARVER = "carver";
+    public static final String BLOCK_SOURCE = "blockSource";
+    public static final String FEATURE = "feature";
+    public static final String FORGE_FEATURE = "forgeFeature";
+    public static final String STRUCTURE = "structure";
     public static final String DEFAULT_BLOCK = "defaultBlock";
+    public static final String MOD_DATA_FIX = "modDataFix";
+    public static final String PROPERTY = "property";
+    
+    public static final String GUI_PRESET = "guiPreset";
+    public static final String GUI_PREDICATE = "guiPredicate";
+    public static final String GUI_PROPERTY = "guiProperty";
+
+    /* Other Settings */
+    
+    public static final String SINGLE_BIOME = "singleBiome";
     public static final String DEFAULT_FLUID = "defaultFluid";
     
     public static final String REPLACE_OCEAN_BIOMES = "replaceOceanBiomes";
@@ -214,4 +234,5 @@ public class NbtTags {
     public static final String DEPR_BEACH_BIOME = "beachBiome";
     
     public static final String DEPR_USE_INDEV_HOUSE = "useIndevHouse";
+    
 }

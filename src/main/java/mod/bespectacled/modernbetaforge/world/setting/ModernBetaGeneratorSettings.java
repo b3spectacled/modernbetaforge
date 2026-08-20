@@ -28,8 +28,10 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistry;
 import mod.bespectacled.modernbetaforge.property.visitor.FactoryPropertyVisitor;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
@@ -2558,6 +2560,19 @@ public class ModernBetaGeneratorSettings {
 
             factory.customProperties.put(registryKey, entityProperty);
         }
+        
+        @Override
+        public void visit(RegistryProperty<?> property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = property.getValue();
+            ModernBetaRegistry<?> registry = property.getRegistry();
+            ResourceLocation resourceLocation = registry.validateOrElse(new ResourceLocation(value), registry.getEntries().get(0).getKey());
+            Predicate<ResourceLocation> predicate = property.getFilter();
+            
+            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, registry, predicate);
+            registryProperty.setDisplay(property.getDisplay());
+            
+            factory.customProperties.put(registryKey, registryProperty);
+        }
 
     }
     
@@ -2655,6 +2670,19 @@ public class ModernBetaGeneratorSettings {
             
             factory.customProperties.put(registryKey, entityProperty);
         }
+        
+        @Override
+        public void visit(RegistryProperty<?> property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            ModernBetaRegistry<?> registry = property.getRegistry();
+            ResourceLocation resourceLocation = registry.validateOrElse(new ResourceLocation(value), registry.getEntries().get(0).getKey());
+            Predicate<ResourceLocation> predicate = property.getFilter();
+            
+            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, registry, predicate);
+            registryProperty.setDisplay(property.getDisplay());
+            
+            factory.customProperties.put(registryKey, registryProperty);
+        }
 
     }
     
@@ -2696,6 +2724,11 @@ public class ModernBetaGeneratorSettings {
 
         @Override
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
+            jsonObject.addProperty(registryKey.toString(), property.getValue());
+        }
+        
+        @Override
+        public void visit(RegistryProperty<?> property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             jsonObject.addProperty(registryKey.toString(), property.getValue());
         }
         

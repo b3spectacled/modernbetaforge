@@ -828,6 +828,7 @@ createWorld.customize.custom.modernbetaforge.fluidprop=Fluid Prop
 createWorld.customize.custom.modernbetaforge.entityprop=Entity Prop
 createWorld.customize.custom.modernbetaforge.screenprop=Screen Prop
 createWorld.customize.custom.modernbetaforge.hiddenprop=Hidden Prop
+createWorld.customize.custom.modernbetaforge.registryprop=Registry Prop
 
 ## Keybinds
 key.modernbetaforge.categories.ui=Modern Beta GUI

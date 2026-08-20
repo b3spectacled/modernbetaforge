@@ -16,6 +16,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.NoiseChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -146,24 +147,24 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<Property<?>> PROPERTY;
     
     static {
-        CHUNK_SOURCE = new ModernBetaRegistry<>("CHUNK_SOURCE");
-        BIOME_SOURCE = new ModernBetaRegistry<>("BIOME_SOURCE");
-        BIOME_RESOLVER = new ModernBetaRegistry<>("BIOME_RESOLVER");
-        NOISE_SAMPLER = new ModernBetaRegistry<>("NOISE_SAMPLER");
-        NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>("NOISE_COLUMN_SAMPLER");
-        NOISE_HEIGHT_SAMPLER = new ModernBetaRegistry<>("NOISE_HEIGHT_SAMPLER");
-        NOISE_SETTING = new ModernBetaRegistry<>("NOISE_SETTINGS");
-        SURFACE_BUILDER = new ModernBetaRegistry<>("SURFACE_BUILDER");
-        CARVER = new ModernBetaRegistry<>("CARVER");
-        CAVE_CARVER = new ModernBetaRegistry<>("CAVE_CARVER");
-        BLOCK_SOURCE = new ModernBetaRegistry<>("BLOCK_SOURCE");
-        FEATURE = new ModernBetaRegistry<>("FEATURE");
-        FORGE_FEATURE = new ModernBetaRegistry<>("FORGE_FEATURE");
-        STRUCTURE = new ModernBetaRegistry<>("STRUCTURE");
-        WORLD_SPAWNER = new ModernBetaRegistry<>("WORLD_SPAWNER");
-        DEFAULT_BLOCK = new ModernBetaRegistry<>("DEFAULT_BLOCK");
-        MOD_DATA_FIX = new ModernBetaRegistry<>("MOD_DATA_FIX");
-        PROPERTY = new ModernBetaRegistry<>("PROPERTY");
+        CHUNK_SOURCE = new ModernBetaRegistry<>(NbtTags.CHUNK_SOURCE);
+        BIOME_SOURCE = new ModernBetaRegistry<>(NbtTags.BIOME_SOURCE);
+        BIOME_RESOLVER = new ModernBetaRegistry<>(NbtTags.BIOME_RESOLVER);
+        NOISE_SAMPLER = new ModernBetaRegistry<>(NbtTags.NOISE_SAMPLER);
+        NOISE_COLUMN_SAMPLER = new ModernBetaRegistry<>(NbtTags.NOISE_COLUMN_SAMPLER);
+        NOISE_HEIGHT_SAMPLER = new ModernBetaRegistry<>(NbtTags.NOISE_HEIGHT_SAMPLER);
+        NOISE_SETTING = new ModernBetaRegistry<>(NbtTags.NOISE_SETTINGS);
+        SURFACE_BUILDER = new ModernBetaRegistry<>(NbtTags.SURFACE_BUILDER);
+        CARVER = new ModernBetaRegistry<>(NbtTags.CARVER);
+        CAVE_CARVER = new ModernBetaRegistry<>(NbtTags.CAVE_CARVER);
+        BLOCK_SOURCE = new ModernBetaRegistry<>(NbtTags.BLOCK_SOURCE);
+        FEATURE = new ModernBetaRegistry<>(NbtTags.FEATURE);
+        FORGE_FEATURE = new ModernBetaRegistry<>(NbtTags.FORGE_FEATURE);
+        STRUCTURE = new ModernBetaRegistry<>(NbtTags.STRUCTURE);
+        WORLD_SPAWNER = new ModernBetaRegistry<>(NbtTags.WORLD_SPAWNER);
+        DEFAULT_BLOCK = new ModernBetaRegistry<>(NbtTags.DEFAULT_BLOCK);
+        MOD_DATA_FIX = new ModernBetaRegistry<>(NbtTags.MOD_DATA_FIX);
+        PROPERTY = new ModernBetaRegistry<>(NbtTags.PROPERTY);
     }
     
     @FunctionalInterface

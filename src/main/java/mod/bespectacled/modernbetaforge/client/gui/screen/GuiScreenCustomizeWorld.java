@@ -42,6 +42,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -739,11 +740,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.pageList.width += PAGELIST_SCROLLBAR_PADDING;
         
         // Set text for primary options
-        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, DEFAULT_NAME_TRUNCATE_LEN, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, DEFAULT_NAME_TRUNCATE_LEN, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, DEFAULT_NAME_TRUNCATE_LEN, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, DEFAULT_NAME_TRUNCATE_LEN, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, DEFAULT_NAME_TRUNCATE_LEN, true));
         
         // Set text for default block options
         this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_NAME_TRUNCATE_LEN));
@@ -2120,7 +2121,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                             getFormattedBlockName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
                                 id == GuiIdentifiers.PG0_B_FLUID ? 
                                 getFormattedFluidName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
-                                getFormattedRegistryName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN);
+                                getFormattedRegistryName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN, true);
                         
                         GuiIdentifiers.BASE_BUTTON_SETTINGS.get(id).accept(registryName, this.settings);
                         this.setTextButton(id, formattedName);
@@ -2820,10 +2821,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return registryKey.getNamespace() + "." + registryKey.getPath();
     }
 
-    private static String getFormattedRegistryName(String registryName, String langName, int truncateLen) {
+    private static String getFormattedRegistryName(String registryName, String langName, int truncateLen, boolean includeTitle) {
         ResourceLocation registryKey = new ResourceLocation(registryName);
         String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
-        String formattedText = String.format("%s: %s", I18n.format(PREFIX + langName), formattedName);
+        String formattedText = includeTitle ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
 
         return getTruncatedString(formattedText, truncateLen);
     }
@@ -2963,6 +2964,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         public String visit(ScreenProperty property, ResourceLocation registryKey) {
             return I18n.format(PREFIX + "propertyScreen");
         }
+        
+        @Override
+        public String visit(RegistryProperty<?> property, ResourceLocation registryKey) {
+            return getFormattedRegistryName(property.getValue(), property.getRegistry().getName(), DEFAULT_NAME_TRUNCATE_LEN, false);
+        }
+        
     }
 
     private class CreateGuiPropertyVisitor implements GuiPropertyVisitor {
@@ -3036,22 +3043,27 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
         @Override
         public GuiPageButtonList.GuiListEntry visit(BiomeProperty property, int guiIdentifier) {
-            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "enabled", true);
+            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "", true);
         }
 
         @Override
         public GuiListEntry visit(BlockProperty property, int guiIdentifier) {
-            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "enabled", true);
+            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "", true);
         }
 
         @Override
         public GuiListEntry visit(EntityEntryProperty property, int guiIdentifier) {
-            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "enabled", true);
+            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "", true);
         }
 
         @Override
         public GuiListEntry visit(ScreenProperty property, int guiIdentifier) {
-            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "enabled", true);
+            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "", true);
+        }
+        
+        @Override
+        public GuiListEntry visit(RegistryProperty<?> property, int guiIdentifier) {
+            return GuiScreenCustomizeWorld.this.createGuiButton(guiIdentifier, "", true);
         }
         
     }
@@ -3160,6 +3172,16 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             GuiScreen screen = property.getValue().apply(GuiScreenCustomizeWorld.this, registryKey);
             GuiScreenCustomizeWorld.this.mc.displayGuiScreen(screen);
         };
+        
+        @Override
+        public void visit(RegistryProperty<?> property, int guiIdentifier, ResourceLocation registryKey) {
+            GuiScreenCustomizeWorld.this.openRegistryScreen(
+                (str, factory) -> ((RegistryProperty<?>)factory.customProperties.get(registryKey)).setValue(str),
+                property.getValue(),
+                property.getRegistry().getName(),
+                property.getRegistry().getKeys()
+            );
+        }
         
     }
 }

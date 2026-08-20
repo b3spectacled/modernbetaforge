@@ -219,6 +219,15 @@ public final class ModernBetaRegistry<T> {
         return this.registryEntries.get(registryKey).setPriority(priority);
     }
     
+    /**
+     * Gets the registry name.
+     * 
+     * @return The registry name string.
+     */
+    public String getName() {
+        return this.name;
+    }
+    
     private List<Entry<ResourceLocation, RegistryEntry<T>>> sortRegistryEntries() {
         List<Entry<ResourceLocation, RegistryEntry<T>>> registryEntries = new ArrayList<>(this.registryEntries.entrySet());
         registryEntries.sort(Entry.comparingByValue());

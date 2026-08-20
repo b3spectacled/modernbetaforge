@@ -8,6 +8,7 @@ import mod.bespectacled.modernbetaforge.api.property.EntityEntryProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
 import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
+import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import net.minecraft.util.ResourceLocation;
 
@@ -29,4 +30,6 @@ public interface FormattedPropertyVisitor {
     String visit(EntityEntryProperty property, ResourceLocation registryKey);
     
     String visit(ScreenProperty property, ResourceLocation registryKey);
+    
+    String visit(RegistryProperty<?> property, ResourceLocation registryKey);
 }

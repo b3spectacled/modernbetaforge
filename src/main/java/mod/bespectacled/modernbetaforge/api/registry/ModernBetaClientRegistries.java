@@ -3,6 +3,7 @@ package mod.bespectacled.modernbetaforge.api.registry;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiCustomizePreset;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.client.property.GuiProperty;
+import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,8 +29,8 @@ public class ModernBetaClientRegistries {
     public static final ModernBetaRegistry<GuiProperty<?>> GUI_PROPERTY;
     
     static {
-        GUI_PRESET = new ModernBetaRegistry<>("PRESET");
-        GUI_PREDICATE = new ModernBetaRegistry<>("GUI_PREDICATE");
-        GUI_PROPERTY = new ModernBetaRegistry<>("GUI_PROPERTY");
+        GUI_PRESET = new ModernBetaRegistry<>(NbtTags.GUI_PRESET);
+        GUI_PREDICATE = new ModernBetaRegistry<>(NbtTags.GUI_PREDICATE);
+        GUI_PROPERTY = new ModernBetaRegistry<>(NbtTags.GUI_PROPERTY);
     }
 }

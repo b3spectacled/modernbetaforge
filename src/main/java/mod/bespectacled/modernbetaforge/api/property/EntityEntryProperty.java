@@ -15,7 +15,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public final class EntityEntryProperty extends RegistryProperty {
+public final class EntityEntryProperty extends StringFilterProperty {
     /**
      * Constructs a new EntityEntryProperty with an initial entity entry, storing the entity entry registry name,
      * with default predicate not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.

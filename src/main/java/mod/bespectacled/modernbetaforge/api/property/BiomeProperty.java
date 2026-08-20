@@ -13,7 +13,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public final class BiomeProperty extends RegistryProperty {
+public final class BiomeProperty extends StringFilterProperty {
     /**
      * Constructs a new BiomeProperty with an initial biome, storing the biome registry name, with default predicate
      * not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
@@ -25,8 +25,8 @@ public final class BiomeProperty extends RegistryProperty {
     }
     
     /**
-     * Constructs a new BiomeProperty with an initial biome, storing the biome registry name, and a predicate used
-     * to filter Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * Constructs a new BiomeProperty with an initial biome, storing the biome registry name, and a predicate
+     * used to filter Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
      * 
      * @param value The initial biome registry name value.
      * @param filter The predicate used to filter the Forge Registry collection values.

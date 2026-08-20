@@ -13,7 +13,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.util.ResourceLocation;
 
-public final class BlockProperty extends RegistryProperty {
+public final class BlockProperty extends StringFilterProperty {
     /**
      * Constructs a new BlockProperty with an initial block, storing the block registry name, with default predicate
      * not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.

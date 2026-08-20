@@ -17,6 +17,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.Property;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
+import mod.bespectacled.modernbetaforge.api.property.RegistryProperty;
 import mod.bespectacled.modernbetaforge.api.property.StringProperty;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
@@ -250,6 +251,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBeta.createRegistryKey("fluidProp"), new BlockProperty(Blocks.WATER.getRegistryName(), key -> ForgeRegistryUtil.getFluidBlockRegistryNames().contains(key)));
         registry.register(ModernBeta.createRegistryKey("entityProp"), new EntityEntryProperty(new ResourceLocation("pig")));
         registry.register(ModernBeta.createRegistryKey("hiddenProp"), new IntProperty(0, 0, 10, PropertyGuiType.SLIDER));
+        registry.register(ModernBeta.createRegistryKey("registryProp"), new RegistryProperty<CaveCarverCreator>(ModernBetaBuiltInTypes.Carver.BETA_1_8.getRegistryKey(), ModernBetaRegistries.CAVE_CARVER));
         
         registry.get(ModernBeta.createRegistryKey("hiddenProp")).setDisplay(false);
     }
