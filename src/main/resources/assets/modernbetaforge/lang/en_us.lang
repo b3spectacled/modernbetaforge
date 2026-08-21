@@ -104,6 +104,10 @@ createWorld.customize.custom.modernbetaforge.confirmSettings.title=Confirm Chang
 createWorld.customize.custom.modernbetaforge.confirmSettings.missing=Setting is missing or has been removed.
 createWorld.customize.custom.modernbetaforge.confirmSettings.sort=Sort
 
+# Page Tooltips
+createWorld.customize.custom.modernbetaforge.min=Min
+createWorld.customize.custom.modernbetaforge.max=Max
+
 # Page 1 - Main Settings
 createWorld.customize.custom.modernbetaforge.chunkSource=Chunk Source
 createWorld.customize.custom.modernbetaforge.biomeSource=Biome Source
@@ -288,8 +292,8 @@ createWorld.customize.custom.modernbetaforge.spawnWolves.tooltip=Spawn wolves in
 createWorld.customize.custom.modernbetaforge.oreType=Ore Type
 createWorld.customize.custom.modernbetaforge.size=Spawn Size
 createWorld.customize.custom.modernbetaforge.count=Spawn Tries
-createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
-createWorld.customize.custom.modernbetaforge.maxHeight=Max. Height
+createWorld.customize.custom.modernbetaforge.minHeight=Min Height
+createWorld.customize.custom.modernbetaforge.maxHeight=Max Height
 createWorld.customize.custom.modernbetaforge.center=Center Height
 createWorld.customize.custom.modernbetaforge.spread=Spread Height
 
