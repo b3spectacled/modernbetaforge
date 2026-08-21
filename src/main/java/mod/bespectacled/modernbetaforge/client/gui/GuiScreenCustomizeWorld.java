@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -2481,6 +2482,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "min")) + TextFormatting.YELLOW + rangedProperty.getMinValue().toString());
                 tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "max")) + TextFormatting.YELLOW + rangedProperty.getMaxValue().toString());
             }
+        } else if (GuiIdentifiers.RANGED_SETTINGS.containsKey(this.hoveredId)) {
+            Tuple<Supplier<Number>, Supplier<Number>> range = GuiIdentifiers.RANGED_SETTINGS.get(this.hoveredId);
+            
+            tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "min")) + TextFormatting.YELLOW + range.getFirst().get().toString());
+            tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "max")) + TextFormatting.YELLOW + range.getSecond().get().toString());
         }
         
         if (!tooltips.isEmpty() && System.currentTimeMillis() - this.lastHovered > TOOLTIP_DELAY) {

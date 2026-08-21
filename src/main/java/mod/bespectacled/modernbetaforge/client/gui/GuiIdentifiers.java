@@ -3,11 +3,13 @@ package mod.bespectacled.modernbetaforge.client.gui;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,6 +18,7 @@ public class GuiIdentifiers {
     public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BIOME_SETTINGS;
     public static final Map<Integer, BiConsumer<String, ModernBetaGeneratorSettings.Factory>> BASE_BUTTON_SETTINGS;
     public static final Set<Integer> BASE_SLIDER_SETTINGS;
+    public static final Map<Integer, Tuple<Supplier<Number>, Supplier<Number>>> RANGED_SETTINGS;
     
     /* Function Buttons */
     public static final int FUNC_INITIAL_TAB = 30;
@@ -550,6 +553,172 @@ public class GuiIdentifiers {
             .add(GuiIdentifiers.PG1_S_LEVEL_HOUSE)
             .add(GuiIdentifiers.PG1_S_LAYER_TYPE)
             .add(GuiIdentifiers.PG3_S_ORE_TYPE)
+            .build();
+        
+        RANGED_SETTINGS = ImmutableMap.<Integer, Tuple<Supplier<Number>, Supplier<Number>>>builder()
+            // Page 1 - Basic
+            .put(GuiIdentifiers.PG0_S_SEA_LEVEL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SEA_LEVEL, () -> ModernBetaGeneratorSettings.MAX_SEA_LEVEL))
+            .put(GuiIdentifiers.PG0_S_CAVE_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, () -> ModernBetaGeneratorSettings.MAX_CAVE_WIDTH))
+            .put(GuiIdentifiers.PG0_S_CAVE_HEIGHT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_CAVE_HEIGHT))
+            .put(GuiIdentifiers.PG0_S_CAVE_COUNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_COUNT, () -> ModernBetaGeneratorSettings.MAX_CAVE_COUNT))
+            .put(GuiIdentifiers.PG0_S_CAVE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_CAVE_CHANCE))
+            .put(GuiIdentifiers.PG0_S_RAVINE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_RAVINE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_RAVINE_CHANCE))
+            
+            .put(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DUNGEON_CHANCE, () -> ModernBetaGeneratorSettings.MAX_DUNGEON_CHANCE))
+            .put(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_WATER_LAKE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_WATER_LAKE_CHANCE))
+            .put(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE))
+             
+            // Page 2 - Chunk
+            .put(GuiIdentifiers.PG1_S_LEVEL_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[0], () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1]))
+            .put(GuiIdentifiers.PG1_S_LEVEL_LENGTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[0], () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1]))
+            .put(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS[0], () -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS[ModernBetaGeneratorSettings.LEVEL_HEIGHTS.length - 1]))
+            .put(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, () -> ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH))
+            
+            .put(GuiIdentifiers.PG1_S_LAYER_SZ, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SIZE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SIZE))
+            .put(GuiIdentifiers.PG1_S_RIVER_SZ, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_RIVER_SIZE, () -> ModernBetaGeneratorSettings.MAX_RIVER_SIZE))
+            
+            // Page 3 - Biome
+            .put(GuiIdentifiers.PG2_S_BIOME_SZ, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SIZE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SIZE))
+            .put(GuiIdentifiers.PG2_S_SNOWY_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SNOWY_BIOME_CHANCE, () -> ModernBetaGeneratorSettings.MAX_SNOWY_BIOME_CHANCE))
+            
+            // Page 4 - Ore
+            .put(GuiIdentifiers.PG3_S_CLAY_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_CLAY_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_CLAY_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_CLAY_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_DIRT_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_DIRT_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_DIRT_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_DIRT_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_GRAV_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_GRAV_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_GRAV_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_GRAV_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_GRAN_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_GRAN_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_GRAN_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_GRAN_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_DIOR_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_DIOR_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_DIOR_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_DIOR_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_ANDE_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_ANDE_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_ANDE_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_ANDE_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_COAL_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_COAL_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_COAL_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_COAL_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_IRON_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_IRON_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_IRON_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_IRON_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_GOLD_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_GOLD_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_GOLD_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_GOLD_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_REDS_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_REDS_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_REDS_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_REDS_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_DIAM_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_DIAM_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_DIAM_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_DIAM_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_LAPS_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_LAPS_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_LAPS_CTR, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_CENTER, () -> ModernBetaGeneratorSettings.MAX_ORE_CENTER))
+            .put(GuiIdentifiers.PG3_S_LAPS_SPR, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SPREAD, () -> ModernBetaGeneratorSettings.MAX_ORE_SPREAD))
+            
+            .put(GuiIdentifiers.PG3_S_EMER_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_EMER_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            .put(GuiIdentifiers.PG3_S_EMER_MIN, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            .put(GuiIdentifiers.PG3_S_EMER_MAX, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_ORE_HEIGHT))
+            
+            .put(GuiIdentifiers.PG3_S_QRTZ_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_QRTZ_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            
+            .put(GuiIdentifiers.PG3_S_MGMA_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_SIZE, () -> ModernBetaGeneratorSettings.MAX_ORE_SIZE))
+            .put(GuiIdentifiers.PG3_S_MGMA_CNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_ORE_COUNT, () -> ModernBetaGeneratorSettings.MAX_ORE_COUNT))
+            
+            // Page 5/6
+            .put(GuiIdentifiers.PG4_S_MAIN_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG4_S_MAIN_NS_Y, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG4_S_MAIN_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG4_S_DPTH_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, () -> ModernBetaGeneratorSettings.MAX_DEPTH_NOISE))
+            .put(GuiIdentifiers.PG4_S_DPTH_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, () -> ModernBetaGeneratorSettings.MAX_DEPTH_NOISE))
+            .put(GuiIdentifiers.PG4_S_BASE_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BASE_SIZE, () -> ModernBetaGeneratorSettings.MAX_BASE_SIZE))
+            .put(GuiIdentifiers.PG4_S_COORD_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_COORD_SCALE, () -> ModernBetaGeneratorSettings.MAX_COORD_SCALE))
+            .put(GuiIdentifiers.PG4_S_HEIGH_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_HEIGHT_SCALE, () -> ModernBetaGeneratorSettings.MAX_HEIGHT_SCALE))
+            .put(GuiIdentifiers.PG4_S_STRETCH_Y, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_STRETCH_Y, () -> ModernBetaGeneratorSettings.MAX_STRETCH_Y))
+            .put(GuiIdentifiers.PG4_S_UPPER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
+            .put(GuiIdentifiers.PG4_S_LOWER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
+            .put(GuiIdentifiers.PG4_S_HEIGH_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_HEIGHT))
+            
+            .put(GuiIdentifiers.PG4_S_TEMP_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+            .put(GuiIdentifiers.PG4_S_RAIN_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+            .put(GuiIdentifiers.PG4_S_DETL_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+
+            .put(GuiIdentifiers.PG4_S_B_DPTH_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT))
+            .put(GuiIdentifiers.PG4_S_B_DPTH_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, () -> ModernBetaGeneratorSettings.MAX_BIOME_OFFSET))
+            .put(GuiIdentifiers.PG4_S_B_SCLE_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT))
+            .put(GuiIdentifiers.PG4_S_B_SCLE_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, () -> ModernBetaGeneratorSettings.MAX_BIOME_OFFSET))
+            .put(GuiIdentifiers.PG4_S_R_DPTH_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_RIVER_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_RIVER_WEIGHT))
+            
+            .put(GuiIdentifiers.PG4_S_SCLE_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SCALE_NOISE, () -> ModernBetaGeneratorSettings.MAX_SCALE_NOISE))
+            .put(GuiIdentifiers.PG4_S_SCLE_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SCALE_NOISE, () -> ModernBetaGeneratorSettings.MAX_SCALE_NOISE))
+            
+            .put(GuiIdentifiers.PG4_S_END_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_OFFSET, () -> ModernBetaGeneratorSettings.MAX_END_OFFSET))
+            .put(GuiIdentifiers.PG4_S_END_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_END_WEIGHT))
+            .put(GuiIdentifiers.PG4_S_END_OUT_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_OFFSET, () -> ModernBetaGeneratorSettings.MAX_END_OFFSET))
+            .put(GuiIdentifiers.PG4_S_END_OUT_DT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_DIST, () -> ModernBetaGeneratorSettings.MAX_END_DIST))
+
+            .put(GuiIdentifiers.PG5_L_MAIN_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG5_L_MAIN_NS_Y, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG5_L_MAIN_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_MAIN_NOISE, () -> ModernBetaGeneratorSettings.MAX_MAIN_NOISE))
+            .put(GuiIdentifiers.PG5_L_DPTH_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, () -> ModernBetaGeneratorSettings.MAX_DEPTH_NOISE))
+            .put(GuiIdentifiers.PG5_L_DPTH_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DEPTH_NOISE, () -> ModernBetaGeneratorSettings.MAX_DEPTH_NOISE))
+            .put(GuiIdentifiers.PG5_L_BASE_SIZE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BASE_SIZE, () -> ModernBetaGeneratorSettings.MAX_BASE_SIZE))
+            .put(GuiIdentifiers.PG5_L_COORD_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_COORD_SCALE, () -> ModernBetaGeneratorSettings.MAX_COORD_SCALE))
+            .put(GuiIdentifiers.PG5_L_HEIGH_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_HEIGHT_SCALE, () -> ModernBetaGeneratorSettings.MAX_HEIGHT_SCALE))
+            .put(GuiIdentifiers.PG5_L_STRETCH_Y, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_STRETCH_Y, () -> ModernBetaGeneratorSettings.MAX_STRETCH_Y))
+            .put(GuiIdentifiers.PG5_L_UPPER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
+            .put(GuiIdentifiers.PG5_L_LOWER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
+            .put(GuiIdentifiers.PG5_L_HEIGH_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_HEIGHT, () -> ModernBetaGeneratorSettings.MAX_HEIGHT))
+            
+            .put(GuiIdentifiers.PG5_L_TEMP_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+            .put(GuiIdentifiers.PG5_L_RAIN_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+            .put(GuiIdentifiers.PG5_L_DETL_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
+
+            .put(GuiIdentifiers.PG5_L_B_DPTH_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT))
+            .put(GuiIdentifiers.PG5_L_B_DPTH_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, () -> ModernBetaGeneratorSettings.MAX_BIOME_OFFSET))
+            .put(GuiIdentifiers.PG5_L_B_SCLE_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT))
+            .put(GuiIdentifiers.PG5_L_B_SCLE_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, () -> ModernBetaGeneratorSettings.MAX_BIOME_OFFSET))
+            .put(GuiIdentifiers.PG5_L_R_DPTH_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_RIVER_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_RIVER_WEIGHT))
+            
+            .put(GuiIdentifiers.PG5_L_SCLE_NS_X, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SCALE_NOISE, () -> ModernBetaGeneratorSettings.MAX_SCALE_NOISE))
+            .put(GuiIdentifiers.PG5_L_SCLE_NS_Z, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SCALE_NOISE, () -> ModernBetaGeneratorSettings.MAX_SCALE_NOISE))
+            
+            .put(GuiIdentifiers.PG5_L_END_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_OFFSET, () -> ModernBetaGeneratorSettings.MAX_END_OFFSET))
+            .put(GuiIdentifiers.PG5_L_END_WT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_WEIGHT, () -> ModernBetaGeneratorSettings.MAX_END_WEIGHT))
+            .put(GuiIdentifiers.PG5_L_END_OUT_OF, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_OFFSET, () -> ModernBetaGeneratorSettings.MAX_END_OFFSET))
+            .put(GuiIdentifiers.PG5_L_END_OUT_DT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_END_DIST, () -> ModernBetaGeneratorSettings.MAX_END_DIST))
+            
+            // Page 7 - Climate
+            .put(GuiIdentifiers.PG6_S_SNOW_OFFSET, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_SEA_LEVEL, () -> ModernBetaGeneratorSettings.MAX_SEA_LEVEL))
+            
             .build();
         
         assertOffsets();
