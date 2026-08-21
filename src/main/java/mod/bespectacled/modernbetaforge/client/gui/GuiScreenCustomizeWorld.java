@@ -6,14 +6,12 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -155,7 +153,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private BiMap<Integer, ResourceLocation> propertyMap;
     private BiMap<Integer, ResourceLocation> guiPropertyMap;
     private Map<Integer, String> translationKeyMap;
-    private Set<Integer> unlabeledSliders;
     private int tabStartX;
     private int tabEndX;
     private boolean isFocused;
@@ -210,7 +207,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.propertyMap = HashBiMap.create();
         this.guiPropertyMap = HashBiMap.create();
         this.translationKeyMap = new HashMap<>();
-        this.unlabeledSliders = new HashSet<>();
         
         int chunkSourceId = ModernBetaRegistries.CHUNK_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.chunkSource));
         int biomeSourceId = ModernBetaRegistries.BIOME_SOURCE.getKeys().indexOf(new ResourceLocation(this.settings.biomeSource));
@@ -876,7 +872,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public String getText(int entry, String entryString, float entryValue) {
         // Do not append colon for custom property entries
-        if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry) || this.unlabeledSliders.contains(entry)) {
+        if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
 
@@ -2746,13 +2742,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.translationKeyMap.put(id, key);
         
         return new GuiPageButtonList.GuiSlideEntry(id, I18n.format(key), true, formatHelper, minValue, maxValue, initialValue);
-    }
-    
-    @SuppressWarnings("unused")
-    private GuiPageButtonList.GuiSlideEntry createGuiSliderNoLabel(int id, float minValue, float maxValue, float initialValue, FormatHelper formatHelper) {
-        this.unlabeledSliders.add(id);
-        
-        return new GuiPageButtonList.GuiSlideEntry(id, "", true, formatHelper, minValue, maxValue, initialValue);
     }
     
     private GuiPageButtonList.GuiButtonEntry createGuiButton(int id, String tag, boolean initialValue) {
