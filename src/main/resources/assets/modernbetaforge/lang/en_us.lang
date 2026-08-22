@@ -104,6 +104,10 @@ createWorld.customize.custom.modernbetaforge.confirmSettings.title=Confirm Chang
 createWorld.customize.custom.modernbetaforge.confirmSettings.missing=Setting is missing or has been removed.
 createWorld.customize.custom.modernbetaforge.confirmSettings.sort=Sort
 
+# Page Tooltips
+createWorld.customize.custom.modernbetaforge.min=Min
+createWorld.customize.custom.modernbetaforge.max=Max
+
 # Page 1 - Main Settings
 createWorld.customize.custom.modernbetaforge.chunkSource=Chunk Source
 createWorld.customize.custom.modernbetaforge.biomeSource=Biome Source
@@ -167,7 +171,7 @@ createWorld.customize.custom.modernbetaforge.useSandstone.tooltip=Generate sands
 createWorld.customize.custom.modernbetaforge.useUnderwaterCaves.tooltip=Generate flooded caves in ocean biomes.
 createWorld.customize.custom.modernbetaforge.seaLevel.tooltip=Base height for bodies of water.
 createWorld.customize.custom.modernbetaforge.useRavines.tooltip=Generate ravines.
-createWorld.customize.custom.modernbetaforge.ravineChance.tooltip=Change of ravines to not generate.
+createWorld.customize.custom.modernbetaforge.ravineChance.tooltip=Chance of ravines to not generate.
 createWorld.customize.custom.modernbetaforge.useMineShafts.tooltip=Generate mineshafts.
 createWorld.customize.custom.modernbetaforge.useVillages.tooltip=Generate villages. Valid biomes include Beta Desert, Beta Ice Desert, Beta Savanna, Beta Shrubland, Beta Sky, Beta Taiga, and other biomes. 
 createWorld.customize.custom.modernbetaforge.useVillageVariants.tooltip=Generate biome-specific villages in Beta biomes.
@@ -288,8 +292,8 @@ createWorld.customize.custom.modernbetaforge.spawnWolves.tooltip=Spawn wolves in
 createWorld.customize.custom.modernbetaforge.oreType=Ore Type
 createWorld.customize.custom.modernbetaforge.size=Spawn Size
 createWorld.customize.custom.modernbetaforge.count=Spawn Tries
-createWorld.customize.custom.modernbetaforge.minHeight=Min. Height
-createWorld.customize.custom.modernbetaforge.maxHeight=Max. Height
+createWorld.customize.custom.modernbetaforge.minHeight=Min Height
+createWorld.customize.custom.modernbetaforge.maxHeight=Max Height
 createWorld.customize.custom.modernbetaforge.center=Center Height
 createWorld.customize.custom.modernbetaforge.spread=Spread Height
 
