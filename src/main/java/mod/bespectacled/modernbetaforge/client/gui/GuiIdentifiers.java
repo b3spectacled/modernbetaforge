@@ -669,6 +669,7 @@ public class GuiIdentifiers {
             .put(GuiIdentifiers.PG4_S_UPPER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
             .put(GuiIdentifiers.PG4_S_LOWER_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LIMIT_SCALE, () -> ModernBetaGeneratorSettings.MAX_LIMIT_SCALE))
             .put(GuiIdentifiers.PG4_S_HEIGH_LIM, new Tuple<>(() -> ModernBetaGeneratorSettings.getMinHeight(), () -> ModernBetaGeneratorSettings.getMaxHeight()))
+            .put(GuiIdentifiers.PG4_S_HEIGH_FLR, new Tuple<>(() -> ModernBetaGeneratorSettings.getMinFloor(), () -> ModernBetaGeneratorSettings.getMaxFloor()))
             
             .put(GuiIdentifiers.PG4_S_TEMP_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))
             .put(GuiIdentifiers.PG4_S_RAIN_SCL, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SCALE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SCALE))

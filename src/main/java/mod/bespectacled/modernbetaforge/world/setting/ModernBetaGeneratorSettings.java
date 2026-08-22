@@ -66,7 +66,7 @@ public class ModernBetaGeneratorSettings {
     
     @Deprecated public static final int MIN_HEIGHT = 1;
     @Deprecated public static final int MAX_HEIGHT = 255;
-    @Deprecated public static final int MIN_FLOOR = -64;
+    @Deprecated public static final int MIN_FLOOR = 0;
     @Deprecated public static final int MAX_FLOOR = 0;
     
     public static final int MIN_DUNGEON_CHANCE = 1;
