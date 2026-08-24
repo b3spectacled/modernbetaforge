@@ -86,6 +86,8 @@ createWorld.customize.custom.label.modernbetaforge.page5.release=Release Noise S
 createWorld.customize.custom.label.modernbetaforge.page4.end=End Noise Settings
 createWorld.customize.custom.label.modernbetaforge.page5.end=End Noise Settings
 
+createWorld.customize.custom.label.modernbetaforge.page0.netherIncompatible.tooltip=These mods have been marked as incompatible:
+
 # Page Buttons
 createWorld.customize.custom.modernbetaforge.defaults=Defaults
 createWorld.customize.custom.modernbetaforge.randomize=Randomize

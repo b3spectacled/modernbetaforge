@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.compat;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.Level;
@@ -95,17 +97,25 @@ public class ModCompat {
     }
     
     public static class NetherManager {
+        private List<String> incompatibleMods;
         private boolean isCompatible;
         
-        private NetherManager() { }
+        private NetherManager() { 
+            this.incompatibleMods = new ArrayList<>();
+        }
         
         public boolean isCompatible() {
             return this.isCompatible;
         }
         
+        public List<String> getIncompatibleMods() {
+            return new ArrayList<>(this.incompatibleMods);
+        }
+        
         private void checkCompat(Compat compat) {
             if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
                 this.isCompatible = false;
+                this.incompatibleMods.add(compat.getModId());
             }
         }
     }

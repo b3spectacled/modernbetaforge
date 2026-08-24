@@ -517,7 +517,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
      * 
      * @return A level heightmap of size level width * level length.
      */
-    @SuppressWarnings("unused")
     protected int[] getLevelHeightmap() {
         if (this.levelHeightmap == null) {
             this.levelHeightmap = new int[this.levelWidth * this.levelLength];

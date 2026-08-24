@@ -2485,8 +2485,24 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             guiY = label.y + label.height;
         }
         
-        // Add description
-        if (!tooltipKey.isEmpty() && I18n.hasKey(tooltipKey)) {
+        // Description
+        if (this.hoveredId == GuiIdentifiers.PG0_L_NETHER_BOP) {
+            String tooltip = I18n.format(this.translationKeyMap.get(this.hoveredId) + ".tooltip");
+            int tooltipWidth = this.fontRenderer.getStringWidth(tooltip);
+            List<String> incompatibleMods = ModCompat.NETHER_MANAGER.getIncompatibleMods();
+            String modList = "";
+            
+            for (int i = 0; i < incompatibleMods.size(); ++i) {
+                modList += TextFormatting.AQUA + incompatibleMods.get(i);
+                
+                if (i < incompatibleMods.size() - 1) {
+                    modList += TextFormatting.RESET + ", ";
+                }
+            }
+
+            tooltips.add(tooltip);
+            tooltips.addAll(this.fontRenderer.listFormattedStringToWidth(modList, tooltipWidth));
+        } else if (!tooltipKey.isEmpty() && I18n.hasKey(tooltipKey)) {
             String tooltip = I18n.format(tooltipKey);
             
             tooltips.addAll(this.fontRenderer.listFormattedStringToWidth(tooltip, TOOLTIP_MAX_WIDTH));
