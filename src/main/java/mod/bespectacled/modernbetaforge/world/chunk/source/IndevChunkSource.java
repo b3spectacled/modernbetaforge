@@ -198,7 +198,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                     height *= 0.8;
                 }
                 
-                this.levelHeightmap[x + z * this.levelWidth] = (int)height;
+                this.getLevelHeightmap()[x + z * this.levelWidth] = (int)height;
             }
         }
     }
@@ -212,10 +212,10 @@ public class IndevChunkSource extends FiniteChunkSource {
                 int erodeNoise = this.erodeOctaveNoise.sample(x << 1, z << 1) > 0.0 ? 1 : 0;
             
                 if (erodeSelector > 2.0) {
-                    int height = this.levelHeightmap[x + z * this.levelWidth];
+                    int height = this.getLevelHeightmap()[x + z * this.levelWidth];
                     height = ((height - erodeNoise) / 2 << 1) + erodeNoise;
                     
-                    this.levelHeightmap[x + z * this.levelWidth] = height;
+                    this.getLevelHeightmap()[x + z * this.levelWidth] = height;
                 }
             }
         }
@@ -237,17 +237,17 @@ public class IndevChunkSource extends FiniteChunkSource {
                 normalizedZ = normalizedZ * normalizedZ * normalizedZ;
 
                 int dirtDepth = (int)(this.soilOctaveNoise.sample(x, z) / 24.0) - 4;
-                int dirtThreshold = this.levelHeightmap[x + z * this.levelWidth] + seaLevel;
+                int dirtThreshold = this.getLevelHeightmap()[x + z * this.levelWidth] + seaLevel;
          
                 int stoneThreshold = dirtDepth + dirtThreshold;
-                this.levelHeightmap[x + z * this.levelWidth] = Math.max(dirtThreshold, stoneThreshold);
+                this.getLevelHeightmap()[x + z * this.levelWidth] = Math.max(dirtThreshold, stoneThreshold);
              
-                if (this.levelHeightmap[x + z * this.levelWidth] > this.levelHeight - 2) {
-                    this.levelHeightmap[x + z * this.levelWidth] = this.levelHeight - 2;
+                if (this.getLevelHeightmap()[x + z * this.levelWidth] > this.levelHeight - 2) {
+                    this.getLevelHeightmap()[x + z * this.levelWidth] = this.levelHeight - 2;
                 }
              
-                if (this.levelHeightmap[x + z * this.levelWidth] <= 0) {
-                    this.levelHeightmap[x + z * this.levelWidth] = 1;
+                if (this.getLevelHeightmap()[x + z * this.levelWidth] <= 0) {
+                    this.getLevelHeightmap()[x + z * this.levelWidth] = 1;
                 }
              
                 double floatingNoise = floatingOctaveNoise.sample(x * 2.3, z * 2.3) / 24.0;
@@ -308,7 +308,7 @@ public class IndevChunkSource extends FiniteChunkSource {
                     genSand = sandOctaveNoise.sample(x, z) > -8.0;
                 }
 
-                int height = levelHeightmap[x + z * this.levelWidth];
+                int height = this.getLevelHeightmap()[x + z * this.levelWidth];
                 Block blockUp = this.getLevelBlock(x, height + 1, z);
                 
                 if ((blockUp == this.defaultFluid.getBlock() || blockUp == Blocks.AIR) && height <= this.waterLevel - 1 && genGravel) {

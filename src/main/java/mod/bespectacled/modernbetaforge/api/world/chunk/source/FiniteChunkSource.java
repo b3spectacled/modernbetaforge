@@ -3,9 +3,7 @@ package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -32,7 +30,6 @@ import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionStep;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjector;
-import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceDefault;
 import mod.bespectacled.modernbetaforge.world.chunk.blocksource.BlockSourceRules;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -62,8 +59,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class FiniteChunkSource extends ChunkSource {
-    private static final Map<Integer, int[]> CACHED_HEIGHTMAPS = new HashMap<>();
-    
     protected static final Block PLACEHOLDER_BLOCK = Blocks.ANVIL;
     protected static final int MAX_FLOODS = 640;
     
@@ -71,10 +66,10 @@ public abstract class FiniteChunkSource extends ChunkSource {
     protected final int levelLength;
     protected final int levelHeight;
     protected final float levelCaveWidth;
-    protected final int[] levelHeightmap;
     private final IndevHouse levelHouse;
     
     protected boolean haltGeneration;
+    @Deprecated private int[] levelHeightmap;
     private Consumer<String> levelNotifier;
     private LevelDataContainer levelDataContainer;
     
@@ -97,7 +92,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
         this.levelLength = settings.levelLength >> 4 << 4;
         this.levelHeight = settings.levelHeight;
         this.levelCaveWidth = settings.levelCaveWidth;
-        this.levelHeightmap = getOrCreateHeightmap(this.levelWidth, this.levelLength);
         
         this.levelHouse = IndevHouse.fromId(this.settings.levelHouse);
     }
@@ -517,6 +511,22 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
 
     /**
+     * Get or create level heightmap.
+     * This is lazily initialized so that GC'ing large arrays does not cause lag
+     * in world customization screen.
+     * 
+     * @return A level heightmap of size level width * level length.
+     */
+    @SuppressWarnings("unused")
+    protected int[] getLevelHeightmap() {
+        if (this.levelHeightmap == null) {
+            this.levelHeightmap = new int[this.levelWidth * this.levelLength];
+        }
+        
+        return this.levelHeightmap;
+    }
+
+    /**
      * Indicates whether the given level coordinates are within the level area.
      * 
      * @param x x-coordinate in block coordinates in level space.
@@ -826,32 +836,6 @@ public abstract class FiniteChunkSource extends ChunkSource {
             ));
             ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
         }
-    }
-    
-    /**
-     * Clears the heightmap cache, to be called when a world is actually created, i.e. from {@link ModernBetaChunkGenerator}.
-     */
-    public static void clearHeightmapCache() {
-        CACHED_HEIGHTMAPS.clear();
-    }
-    
-    /**
-     * A naive cache for heightmaps, mostly to reduce lag on the world customization GUI
-     * when switching through different level width and length settings.
-     * Note that cached arrays will be dirty; zeroing them is fairly expensive.
-     * 
-     * @param levelWidth The level width.
-     * @param levelLength The level length.
-     * @return A heightmap array of length level width multiplied by level length, either newly initialized or fetched from cache.
-     */
-    private static int[] getOrCreateHeightmap(int levelWidth, int levelLength) {
-        int size = levelWidth * levelLength;
-        
-        if (CACHED_HEIGHTMAPS.containsKey(size)) {
-            return CACHED_HEIGHTMAPS.get(size);
-        }
-
-        return CACHED_HEIGHTMAPS.put(size, new int[size]);
     }
     
     public static class LevelDataContainer {
