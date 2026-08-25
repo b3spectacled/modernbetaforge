@@ -69,6 +69,7 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     static {
         CONDITIONAL_MIXINS = ImmutableMap.<String, Supplier<Boolean>>builder()
             .put(getMixinPath("compat.biomesoplenty.MixinWorldProviderBOPHell"), () -> hasModClass("biomesoplenty.core.BiomesOPlenty"))
+            .put(getMixinPath("compat.nether_api.MixinWorldProviderNether"), () -> hasModClass("git.jbredwards.nether_api.api.registry.INetherAPIRegistry"))
             .build();
     }
 }

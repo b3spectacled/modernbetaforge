@@ -21,7 +21,8 @@
       "accessor.AccessorVillage",
       "accessor.AccessorWorldProvider",
       "accessor.AccessorMapGenBase",
-      "compat.biomesoplenty.MixinWorldProviderBOPHell"
+      "compat.biomesoplenty.MixinWorldProviderBOPHell",
+      "compat.nether_api.MixinWorldProviderNether"
     ],
     "client": [
       "client.MixinEntityRenderer",

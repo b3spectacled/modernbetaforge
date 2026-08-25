@@ -43,6 +43,7 @@ dependencies {
     implementation fg.deobf('curse.maven:yungs-better-mineshafts-forge-389665:3247154')
     implementation fg.deobf('curse.maven:future-mc-310059:6162819')
     implementation fg.deobf("curse.maven:oceanic-expanse-840576:7009970")
+    implementation fg.deobf("curse.maven:nether-api-1306115:8201135")
     
     annotationProcessor 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
     annotationProcessor 'com.google.code.gson:gson:2.8.9'

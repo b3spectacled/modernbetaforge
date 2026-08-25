@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
 import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
-import mod.bespectacled.modernbetaforge.compat.nether_api.CompatNetherAPI;
 import mod.bespectacled.modernbetaforge.compat.oe.CompatOE;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
 import net.minecraftforge.fml.common.Loader;
@@ -27,7 +26,6 @@ public class ModCompat {
         
         loadCompat(new CompatBiomesOPlenty());
         loadCompat(new CompatGalacticraft());
-        loadCompat(new CompatNetherAPI());
         loadCompat(new CompatDynamicTrees());
         loadCompat(new CompatBuildCraftEnergy());
         loadCompat(new CompatThaumcraft());
@@ -40,6 +38,7 @@ public class ModCompat {
         return LOADED_MODS.containsKey(modId);
     }
     
+    @SuppressWarnings("deprecation")
     public static boolean isNetherCompatible() {
         for (Compat compat : LOADED_MODS.values()) {
             if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
