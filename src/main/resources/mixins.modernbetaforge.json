@@ -20,7 +20,8 @@
       "accessor.AccessorStructureStart",
       "accessor.AccessorVillage",
       "accessor.AccessorWorldProvider",
-      "accessor.AccessorMapGenBase"
+      "accessor.AccessorMapGenBase",
+      "compat.biomesoplenty.MixinWorldProviderBOPHell"
     ],
     "client": [
       "client.MixinEntityRenderer",

@@ -14,12 +14,6 @@ import com.google.common.collect.ImmutableMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 
-/*
- * This plugin is of dubious usefulness at the moment;
- * Mixins are loaded before Forge can either refresh the mod configs or detect loaded mods,
- * so there is no convenient way to conditionally load particular mixins.
- * 
- */
 public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     private static final Map<String, Supplier<Boolean>> CONDITIONAL_MIXINS;
     
@@ -29,7 +23,7 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (CONDITIONAL_MIXINS.containsKey(mixinClassName)) {
             boolean shouldApply = CONDITIONAL_MIXINS.get(mixinClassName).get();
-            ModernBeta.log(Level.INFO, String.format("Applying conditional mixin '%s': %b", mixinClassName, shouldApply));
+            ModernBeta.log(Level.DEBUG, String.format("Applying conditional mixin '%s': %b", mixinClassName, shouldApply));
             
             return shouldApply;
         }
@@ -59,12 +53,22 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) { }
     
-    @SuppressWarnings("unused")
     private static String getMixinPath(String mixinClassName) {
         return MIXIN_PATH + "." + mixinClassName;
     }
+    
+    private static boolean hasModClass(String clazz) {
+        try {
+            Class.forName(clazz);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
     static {
-        CONDITIONAL_MIXINS = ImmutableMap.<String, Supplier<Boolean>>builder().build();
+        CONDITIONAL_MIXINS = ImmutableMap.<String, Supplier<Boolean>>builder()
+            .put(getMixinPath("compat.biomesoplenty.MixinWorldProviderBOPHell"), () -> hasModClass("biomesoplenty.core.BiomesOPlenty"))
+            .build();
     }
 }
