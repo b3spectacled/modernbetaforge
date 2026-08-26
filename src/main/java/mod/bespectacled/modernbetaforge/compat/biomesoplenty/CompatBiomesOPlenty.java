@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.common.world.BOPWorldSettings;
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
@@ -23,7 +20,6 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.compat.NetherCompat;
 import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -39,7 +35,7 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * For biome climates, see: https://github.com/Glitchfiend/BiomesOPlenty/blob/BOP-1.12.x-7.0.x/src/main/java/biomesoplenty/api/enums/BOPClimates.java
  * 
  */
-public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat, NetherCompat {
+public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat {
     public static final String MOD_ID = "biomesoplenty";
     public static final String ADDON_ID = "compat" + MOD_ID;
     
@@ -59,7 +55,6 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     
     @Override
     public void load() {
-        ModernBeta.log(Level.WARN, "Biomes O' Plenty has been detected, classic Nether settings will be disabled due to incompatibilties!");
         String[] biomeSizes = Stream.of(BOPWorldSettings.BiomeSize.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
         String[] landMassSchemes = Stream.of(BOPWorldSettings.LandMassScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
         String[] tempVarySchemes = Stream.of(BOPWorldSettings.TemperatureVariationScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
