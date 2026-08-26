@@ -23,7 +23,7 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (CONDITIONAL_MIXINS.containsKey(mixinClassName)) {
             boolean shouldApply = CONDITIONAL_MIXINS.get(mixinClassName).get();
-            ModernBeta.log(Level.DEBUG, String.format("Applying conditional mixin '%s': %b", mixinClassName, shouldApply));
+            ModernBeta.log(Level.INFO, String.format("Applying conditional mixin '%s': %b", mixinClassName, shouldApply));
             
             return shouldApply;
         }
@@ -59,7 +59,9 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     
     private static boolean hasModClass(String clazz) {
         try {
-            Class.forName(clazz);
+            // Use this instead of Class.forName() to avoid class initialization, which will stop crashing on servers and certain devices
+            // running older versions of MixinBooter and/or Cleanroom; the conditional mixins will just not load in this case.
+            ClassLoader.getSystemClassLoader().loadClass(clazz);
             return true;
         } catch (ClassNotFoundException e) {
             return false;
