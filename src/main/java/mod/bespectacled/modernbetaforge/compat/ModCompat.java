@@ -61,7 +61,7 @@ public class ModCompat {
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, String.format("Couldn't load compat for mod '%s'!", modId));
-                
+                ModernBeta.log(Level.ERROR, e.getLocalizedMessage());
             }
         }
     }

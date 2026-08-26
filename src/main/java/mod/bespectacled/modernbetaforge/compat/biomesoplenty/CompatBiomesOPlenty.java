@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.common.world.BOPWorldSettings;
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
 import mod.bespectacled.modernbetaforge.api.property.FloatProperty;
@@ -56,6 +59,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     
     @Override
     public void load() {
+        ModernBeta.log(Level.WARN, "Biomes O' Plenty has been detected, classic Nether settings will be disabled due to incompatibilties!");
+        
         String[] biomeSizes = Stream.of(BOPWorldSettings.BiomeSize.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
         String[] landMassSchemes = Stream.of(BOPWorldSettings.LandMassScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
         String[] tempVarySchemes = Stream.of(BOPWorldSettings.TemperatureVariationScheme.values()).map(value -> value.name().toLowerCase()).toArray(String[]::new);
