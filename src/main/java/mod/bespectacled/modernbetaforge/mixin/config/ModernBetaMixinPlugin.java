@@ -59,9 +59,7 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     
     private static boolean hasModClass(String clazz) {
         try {
-            // Use this instead of Class.forName() to avoid class initialization, which will stop crashing on servers and certain devices
-            // running older versions of MixinBooter and/or Cleanroom; the conditional mixins will just not load in this case.
-            ClassLoader.getSystemClassLoader().loadClass(clazz);
+            Class.forName(clazz);
             return true;
         } catch (ClassNotFoundException e) {
             return false;

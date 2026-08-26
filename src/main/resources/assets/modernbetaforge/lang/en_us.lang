@@ -192,7 +192,7 @@ createWorld.customize.custom.modernbetaforge.useNetherCaves=Nether Caves
 createWorld.customize.custom.modernbetaforge.useFortresses=Nether Fortresses
 createWorld.customize.custom.modernbetaforge.useLavaPockets=Lava Pockets
 
-createWorld.customize.custom.modernbetaforge.useOldNether.tooltip=Generate the Nether with customizable features. This does not modify the current Nether biome generator.
+createWorld.customize.custom.modernbetaforge.useOldNether.tooltip=Generate the Nether with customizable features.
 createWorld.customize.custom.modernbetaforge.useNetherCaves.tooltip=Generate Beta Nether caves.
 createWorld.customize.custom.modernbetaforge.useFortresses.tooltip=Generate Nether fortresses.
 createWorld.customize.custom.modernbetaforge.useLavaPockets.tooltip=Generate lava pockets within terrain.
