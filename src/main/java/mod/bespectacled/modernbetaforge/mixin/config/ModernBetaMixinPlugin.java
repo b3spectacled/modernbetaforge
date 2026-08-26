@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableMap;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 
+@SuppressWarnings("unused")
 public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
     private static final Map<String, Supplier<Boolean>> CONDITIONAL_MIXINS;
     
@@ -68,8 +69,9 @@ public class ModernBetaMixinPlugin implements IMixinConfigPlugin {
 
     static {
         CONDITIONAL_MIXINS = ImmutableMap.<String, Supplier<Boolean>>builder()
-            .put(getMixinPath("compat.biomesoplenty.MixinWorldProviderBOPHell"), () -> hasModClass("biomesoplenty.core.BiomesOPlenty"))
-            .put(getMixinPath("compat.nether_api.MixinWorldProviderNether"), () -> hasModClass("git.jbredwards.nether_api.api.registry.INetherAPIRegistry"))
+            // Disable for now until I can figure out how to make this load consistently
+            //.put(getMixinPath("compat.biomesoplenty.MixinWorldProviderBOPHell"), () -> hasModClass("biomesoplenty.core.BiomesOPlenty"))
+            //.put(getMixinPath("compat.nether_api.MixinWorldProviderNether"), () -> hasModClass("git.jbredwards.nether_api.api.registry.INetherAPIRegistry"))
             .build();
     }
 }

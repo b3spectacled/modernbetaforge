@@ -20,6 +20,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
+import mod.bespectacled.modernbetaforge.compat.NetherCompat;
 import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
 import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -35,7 +36,7 @@ import net.minecraftforge.common.BiomeManager.BiomeType;
  * For biome climates, see: https://github.com/Glitchfiend/BiomesOPlenty/blob/BOP-1.12.x-7.0.x/src/main/java/biomesoplenty/api/enums/BOPClimates.java
  * 
  */
-public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat {
+public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, SurfaceCompat, NetherCompat {
     public static final String MOD_ID = "biomesoplenty";
     public static final String ADDON_ID = "compat" + MOD_ID;
     

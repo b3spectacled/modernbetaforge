@@ -22,7 +22,6 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -116,11 +115,14 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
 
         // Generate final chunk
         Chunk chunk = new Chunk(this.world, chunkprimer, chunkX, chunkZ);
+        
+        // Generate biome map
+        Biome[] biomes = this.world.getBiomeProvider().getBiomes(null, chunkX * 16, chunkZ * 16, 16, 16);
 
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
         for (int i = 0; i < biomeArray.length; ++i) {
-           biomeArray[i] = (byte)Biome.getIdForBiome(Biomes.HELL); 
+           biomeArray[i] = (byte)Biome.getIdForBiome(biomes[i]); 
         }
 
         chunk.resetRelightChecks();
