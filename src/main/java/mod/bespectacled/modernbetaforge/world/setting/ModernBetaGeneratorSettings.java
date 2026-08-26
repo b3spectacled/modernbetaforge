@@ -2532,8 +2532,7 @@ public class ModernBetaGeneratorSettings {
     private static class NewFactoryPropertyVisitor implements FactoryPropertyVisitor {
         @Override
         public void visit(BooleanProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
-            BooleanProperty booleanProperty = new BooleanProperty(property.getValue());
-            booleanProperty.setDisplay(property.getDisplay());
+            BooleanProperty booleanProperty = new BooleanProperty(property.getValue(), property.getDisplay());
             
             factory.customProperties.put(registryKey, booleanProperty);
         }
@@ -2541,48 +2540,44 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(FloatProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             float value = property.getValue();
+            boolean display = property.getDisplay();
             float minValue = property.getMinValue();
             float maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
             int decimalPlaces = property.getScale();
             
-            FloatProperty floatProperty = new FloatProperty(value, minValue, maxValue, guiType, decimalPlaces);
-            floatProperty.setDisplay(property.getDisplay());
-
+            FloatProperty floatProperty = new FloatProperty(value, display, minValue, maxValue, guiType, decimalPlaces);
             factory.customProperties.put(registryKey, floatProperty);
         }
 
         @Override
         public void visit(IntProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             int value = property.getValue();
+            boolean display = property.getDisplay();
             int minValue = property.getMinValue();
             int maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
             
-            IntProperty intProperty = new IntProperty(value, minValue, maxValue, guiType);
-            intProperty.setDisplay(property.getDisplay());
-
+            IntProperty intProperty = new IntProperty(value, display, minValue, maxValue, guiType);
             factory.customProperties.put(registryKey, intProperty);
         }
 
         @Override
         public void visit(StringProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            boolean display = property.getDisplay();
            
-            StringProperty stringProperty = new StringProperty(value);
-            stringProperty.setDisplay(property.getDisplay());
-            
+            StringProperty stringProperty = new StringProperty(value, display);
             factory.customProperties.put(registryKey, stringProperty);
         }
 
         @Override
         public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
+            boolean display = property.getDisplay();
             String[] values = property.getValues();
             
-            ListProperty listProperty = new ListProperty(property.indexOf(value), values);
-            listProperty.setDisplay(property.getDisplay());
-            
+            ListProperty listProperty = new ListProperty(property.indexOf(value), display, values);
             factory.customProperties.put(registryKey, listProperty);
         }
 
@@ -2590,11 +2585,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Biomes.PLAINS.getRegistryName(), ForgeRegistries.BIOMES);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            BiomeProperty biomeProperty = new BiomeProperty(resourceLocation, predicate);
-            biomeProperty.setDisplay(property.getDisplay());
-            
+            BiomeProperty biomeProperty = new BiomeProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, biomeProperty);
         }
 
@@ -2602,11 +2596,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Blocks.AIR.getRegistryName(), ForgeRegistries.BLOCKS);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            BlockProperty blockProperty = new BlockProperty(resourceLocation, predicate);
-            blockProperty.setDisplay(property.getDisplay());
-            
+            BlockProperty blockProperty = new BlockProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, blockProperty);
         }
 
@@ -2614,11 +2607,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = property.getValue();
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), new ResourceLocation("pig"), ForgeRegistries.ENTITIES);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            EntityEntryProperty entityProperty = new EntityEntryProperty(resourceLocation, predicate);
-            entityProperty.setDisplay(property.getDisplay());
-
+            EntityEntryProperty entityProperty = new EntityEntryProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, entityProperty);
         }
         
@@ -2627,11 +2619,10 @@ public class ModernBetaGeneratorSettings {
             String value = property.getValue();
             ModernBetaRegistry<?> registry = property.getRegistry();
             ResourceLocation resourceLocation = registry.validateOrElse(new ResourceLocation(value), registry.getEntries().get(0).getKey());
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, registry, predicate);
-            registryProperty.setDisplay(property.getDisplay());
-            
+            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, display, registry, predicate);
             factory.customProperties.put(registryKey, registryProperty);
         }
 
@@ -2641,58 +2632,53 @@ public class ModernBetaGeneratorSettings {
         @Override
         public void visit(BooleanProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             boolean value = JsonUtils.getBoolean(jsonObject, registryKey.toString(), property.getValue());
+            boolean display = property.getDisplay();
             
-            BooleanProperty booleanProperty = new BooleanProperty(value);
-            booleanProperty.setDisplay(property.getDisplay());
-            
+            BooleanProperty booleanProperty = new BooleanProperty(value, display);
             factory.customProperties.put(registryKey, booleanProperty);
         }
 
         @Override
         public void visit(FloatProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             float value = JsonUtils.getFloat(jsonObject, registryKey.toString(), property.getValue());
+            boolean display = property.getDisplay();
             float minValue = property.getMinValue();
             float maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
             int decimalPlaces = property.getScale();
             
-            FloatProperty floatProperty = new FloatProperty(value, minValue, maxValue, guiType, decimalPlaces);
-            floatProperty.setDisplay(property.getDisplay());
-
+            FloatProperty floatProperty = new FloatProperty(value, display, minValue, maxValue, guiType, decimalPlaces);
             factory.customProperties.put(registryKey, floatProperty);
         }
 
         @Override
         public void visit(IntProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             int value = JsonUtils.getInt(jsonObject, registryKey.toString(), property.getValue());
+            boolean display = property.getDisplay();
             int minValue = property.getMinValue();
             int maxValue = property.getMaxValue();
             PropertyGuiType guiType = property.getGuiType();
             
-            IntProperty intProperty = new IntProperty(value, minValue, maxValue, guiType);
-            intProperty.setDisplay(property.getDisplay());
-
+            IntProperty intProperty = new IntProperty(value, display, minValue, maxValue, guiType);
             factory.customProperties.put(registryKey, intProperty);
         }
 
         @Override
         public void visit(StringProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            boolean display = property.getDisplay();
            
-            StringProperty stringProperty = new StringProperty(value);
-            stringProperty.setDisplay(property.getDisplay());
-            
+            StringProperty stringProperty = new StringProperty(value, display);
             factory.customProperties.put(registryKey, stringProperty);
         }
 
         @Override
         public void visit(ListProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
+            boolean display = property.getDisplay();
             String[] values = property.getValues();
             
-            ListProperty listProperty = new ListProperty(property.indexOf(value), values);
-            listProperty.setDisplay(property.getDisplay());
-            
+            ListProperty listProperty = new ListProperty(property.indexOf(value), display, values);
             factory.customProperties.put(registryKey, listProperty);
         }
 
@@ -2700,11 +2686,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(BiomeProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Biomes.PLAINS.getRegistryName(), ForgeRegistries.BIOMES);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            BiomeProperty biomeProperty = new BiomeProperty(resourceLocation, predicate);
-            biomeProperty.setDisplay(property.getDisplay());
-            
+            BiomeProperty biomeProperty = new BiomeProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, biomeProperty);
         }
 
@@ -2712,11 +2697,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(BlockProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), Blocks.AIR.getRegistryName(), ForgeRegistries.BLOCKS);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            BlockProperty blockProperty = new BlockProperty(resourceLocation, predicate);
-            blockProperty.setDisplay(property.getDisplay());
-            
+            BlockProperty blockProperty = new BlockProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, blockProperty);
         }
 
@@ -2724,11 +2708,10 @@ public class ModernBetaGeneratorSettings {
         public void visit(EntityEntryProperty property, Factory factory, ResourceLocation registryKey, JsonObject jsonObject) {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             ResourceLocation resourceLocation = ForgeRegistryUtil.validateOrElse(new ResourceLocation(value), new ResourceLocation("pig"), ForgeRegistries.ENTITIES);
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            EntityEntryProperty entityProperty = new EntityEntryProperty(resourceLocation, predicate);
-            entityProperty.setDisplay(property.getDisplay());
-            
+            EntityEntryProperty entityProperty = new EntityEntryProperty(resourceLocation, display, predicate);
             factory.customProperties.put(registryKey, entityProperty);
         }
         
@@ -2737,11 +2720,10 @@ public class ModernBetaGeneratorSettings {
             String value = JsonUtils.getString(jsonObject, registryKey.toString(), property.getValue());
             ModernBetaRegistry<?> registry = property.getRegistry();
             ResourceLocation resourceLocation = registry.validateOrElse(new ResourceLocation(value), registry.getEntries().get(0).getKey());
+            boolean display = property.getDisplay();
             Predicate<ResourceLocation> predicate = property.getFilter();
             
-            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, registry, predicate);
-            registryProperty.setDisplay(property.getDisplay());
-            
+            RegistryProperty<?> registryProperty = new RegistryProperty<>(resourceLocation, display, registry, predicate);
             factory.customProperties.put(registryKey, registryProperty);
         }
 

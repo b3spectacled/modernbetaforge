@@ -20,6 +20,16 @@ public final class BooleanProperty extends Property<Boolean> {
         super(value);
     }
     
+    /**
+     * Constructs a new BooleanProperty.
+     * 
+     * @param value The initial boolean value.
+     * @param display The initial display value.
+     */
+    public BooleanProperty(boolean value, boolean display) {
+        super(value, display);
+    }
+    
     @Override
     public String getType() {
         return "boolean";

@@ -23,7 +23,7 @@ public final class EntityEntryProperty extends StringFilterProperty {
      * @param value The initial entity entry registry name value.
      */
     public EntityEntryProperty(ResourceLocation value) {
-        this(value, key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass()));
+        this(value, true, key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass()));
     }
     
     /**
@@ -34,7 +34,30 @@ public final class EntityEntryProperty extends StringFilterProperty {
      * @param filter The predicate used to filter the Forge Registry collection values.
      */
     public EntityEntryProperty(ResourceLocation value, Predicate<ResourceLocation> filter) {
-        super(value, filter);
+        this(value, true, filter);
+    }
+    
+    /**
+     * Constructs a new EntityEntryProperty with an initial entity entry, storing the entity entry registry name,
+     * with default predicate not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial entity entry registry name value.
+     * @param display The initial display value.
+     */
+    public EntityEntryProperty(ResourceLocation value, boolean display) {
+        this(value, display, key -> EntityLiving.class.isAssignableFrom(ForgeRegistries.ENTITIES.getValue(key).getEntityClass()));
+    }
+    
+    /**
+     * Constructs a new EntityEntryProperty with an initial entity entry, storing the entity entry registry name,
+     * and a predicate used to filter Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial entity entry registry name value.
+     * @param display The initial display value.
+     * @param filter The predicate used to filter the Forge Registry collection values.
+     */
+    public EntityEntryProperty(ResourceLocation value, boolean display, Predicate<ResourceLocation> filter) {
+        super(value, display, filter);
     }
 
     @Override

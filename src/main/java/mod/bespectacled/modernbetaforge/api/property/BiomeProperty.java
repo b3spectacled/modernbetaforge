@@ -21,7 +21,7 @@ public final class BiomeProperty extends StringFilterProperty {
      * @param value The initial biome registry name value.
      */
     public BiomeProperty(ResourceLocation value) {
-        this(value, key -> true);
+        this(value, true, key -> true);
     }
     
     /**
@@ -32,7 +32,30 @@ public final class BiomeProperty extends StringFilterProperty {
      * @param filter The predicate used to filter the Forge Registry collection values.
      */
     public BiomeProperty(ResourceLocation value, Predicate<ResourceLocation> filter) {
-        super(value, filter);
+        this(value, true, filter);
+    }
+    
+    /**
+     * Constructs a new BiomeProperty with an initial biome, storing the biome registry name, with default predicate
+     * not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial biome registry name value.
+     * @param display The initial display value.
+     */
+    public BiomeProperty(ResourceLocation value, boolean display) {
+        this(value, display, key -> true);
+    }
+    
+    /**
+     * Constructs a new BiomeProperty with an initial biome, storing the biome registry name, and a predicate
+     * used to filter Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial biome registry name value.
+     * @param display The initial display value.
+     * @param filter The predicate used to filter the Forge Registry collection values.
+     */
+    public BiomeProperty(ResourceLocation value, boolean display, Predicate<ResourceLocation> filter) {
+        super(value, display, filter);
     }
 
     @Override

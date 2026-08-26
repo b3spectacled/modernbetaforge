@@ -17,7 +17,17 @@ public class StringProperty extends Property<String> {
      * @param value The initial String value.
      */
     public StringProperty(String value) {
-        super(value);
+        this(value, true);
+    }
+    
+    /**
+     * Constructs a new StringProperty with an initial string.
+     * 
+     * @param value The initial String value.
+     * @param display The initial display value.
+     */
+    public StringProperty(String value, boolean display) {
+        super(value, display);
     }
 
     @Override

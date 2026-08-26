@@ -15,7 +15,19 @@ public abstract class StringFilterProperty extends StringProperty {
      * @param filter The predicate used to filter the collection values.
      */
     public StringFilterProperty(ResourceLocation value, Predicate<ResourceLocation> filter) {
-        super(value.toString());
+        this(value, true, filter);
+    }
+
+    /**
+     * Constructs a new StringFilterProperty with an initial value, storing the registry name, and a predicate used
+     * to filter entries when populating a list.
+     * 
+     * @param value The initial name value.
+     * @param display The initial display value.
+     * @param filter The predicate used to filter the collection values.
+     */
+    public StringFilterProperty(ResourceLocation value, boolean display, Predicate<ResourceLocation> filter) {
+        super(value.toString(), display);
         
         this.filter = filter;
     }

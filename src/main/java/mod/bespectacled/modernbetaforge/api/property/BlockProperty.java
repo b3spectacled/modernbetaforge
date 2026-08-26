@@ -21,7 +21,7 @@ public final class BlockProperty extends StringFilterProperty {
      * @param value The initial block registry name value.
      */
     public BlockProperty(ResourceLocation value) {
-        this(value, key -> true);
+        this(value, true, key -> true);
     }
     
     /**
@@ -32,7 +32,30 @@ public final class BlockProperty extends StringFilterProperty {
      * @param filter The predicate used to filter the Forge Registry collection values.
      */
     public BlockProperty(ResourceLocation value, Predicate<ResourceLocation> filter) {
-        super(value, filter);
+        this(value, true, filter);
+    }
+    
+    /**
+     * Constructs a new BlockProperty with an initial block, storing the block registry name, with default predicate
+     * not filtering any Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial block registry name value.
+     * @param display The initial display value.
+     */
+    public BlockProperty(ResourceLocation value, boolean display) {
+        this(value, display, key -> true);
+    }
+    
+    /**
+     * Constructs a new BlockProperty with an initial block, storing the block registry name, and a predicate used
+     * to filter Forge registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial block registry name value.
+     * @param display The initial display value.
+     * @param filter The predicate used to filter the Forge Registry collection values.
+     */
+    public BlockProperty(ResourceLocation value, boolean display, Predicate<ResourceLocation> filter) {
+        super(value, display, filter);
     }
 
     @Override

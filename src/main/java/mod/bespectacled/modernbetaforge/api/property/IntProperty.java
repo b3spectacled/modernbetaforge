@@ -15,6 +15,16 @@ import net.minecraft.util.math.MathHelper;
 
 public final class IntProperty extends RangedProperty<Integer> {
     /**
+     * Constructs a new IntProperty with {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE} value constraints.
+     * The PropertyGuiType is set to {@link PropertyGuiType#FIELD}.
+     * 
+     * @param value The initial int property value.
+     */
+    public IntProperty(int value) {
+        this(value, true, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);
+    }
+    
+    /**
      * Constructs a new IntProperty with minimum and maximum value constraints.
      * 
      * @param value The initial int property value.
@@ -23,7 +33,7 @@ public final class IntProperty extends RangedProperty<Integer> {
      * @param guiType The {@link PropertyGuiType}.
      */
     public IntProperty(int value, int minValue, int maxValue, PropertyGuiType guiType) {
-        super(MathHelper.clamp(value, minValue, maxValue), minValue, maxValue, guiType);
+        this(value, true, minValue, maxValue, guiType);
     }
     
     /**
@@ -31,9 +41,23 @@ public final class IntProperty extends RangedProperty<Integer> {
      * The PropertyGuiType is set to {@link PropertyGuiType#FIELD}.
      * 
      * @param value The initial int property value.
+     * @param display The initial display value.
      */
-    public IntProperty(int value) {
-        this(value, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);
+    public IntProperty(int value, boolean display) {
+        this(value, display, Integer.MIN_VALUE, Integer.MAX_VALUE, PropertyGuiType.FIELD);
+    }
+    
+    /**
+     * Constructs a new IntProperty with minimum and maximum value constraints.
+     * 
+     * @param value The initial int property value.
+     * @param display The initial display value.
+     * @param minValue The minimum int property value.
+     * @param maxValue The maximum int property value.
+     * @param guiType The {@link PropertyGuiType}.
+     */
+    public IntProperty(int value, boolean display, int minValue, int maxValue, PropertyGuiType guiType) {
+        super(MathHelper.clamp(value, minValue, maxValue), display, minValue, maxValue, guiType);
     }
 
     @Override

@@ -17,18 +17,6 @@ public final class ListProperty extends StringProperty {
     private final String[] values;
     
     /**
-     * Constructs a new ListProperty with the index of the initial value from an array of valid values.
-     * 
-     * @param index Index of the initial value from values.
-     * @param values Array of valid String values.
-     */
-    public ListProperty(int index, String[] values) {
-        super(values[MathHelper.clamp(index, 0, values.length - 1)]);
-        
-        this.values = values;
-    }
-    
-    /**
      * Constructs a new ListProperty with the String value of the initial value from an array of valid values.
      * If the initial value isn't actually valid, then the value at index 0 of values is used.
      * 
@@ -36,7 +24,42 @@ public final class ListProperty extends StringProperty {
      * @param values Array of valid String values.
      */
     public ListProperty(String value, String[] values) {
-        this(indexOfOrDefault(value, values), values);
+        this(indexOfOrDefault(value, values), true, values);
+    }
+    
+    /**
+     * Constructs a new ListProperty with the index of the initial value from an array of valid values.
+     * 
+     * @param index Index of the initial value from values.
+     * @param values Array of valid String values.
+     */
+    public ListProperty(int index, String[] values) {
+        this(index, true, values);
+    }
+    
+    /**
+     * Constructs a new ListProperty with the String value of the initial value from an array of valid values.
+     * If the initial value isn't actually valid, then the value at index 0 of values is used.
+     * 
+     * @param value The initial value from values.
+     * @param display The initial display value.
+     * @param values Array of valid String values.
+     */
+    public ListProperty(String value, boolean display, String[] values) {
+        this(indexOfOrDefault(value, values), display, values);
+    }
+    
+    /**
+     * Constructs a new ListProperty with the index of the initial value from an array of valid values.
+     * 
+     * @param index Index of the initial value from values.
+     * @param display The initial display value.
+     * @param values Array of valid String values.
+     */
+    public ListProperty(int index, boolean display, String[] values) {
+        super(values[MathHelper.clamp(index, 0, values.length - 1)], display);
+        
+        this.values = values;
     }
 
     @Override

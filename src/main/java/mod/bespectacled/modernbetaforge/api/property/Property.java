@@ -22,8 +22,19 @@ public abstract class Property<T> {
      * @param value The initial property value.
      */
     public Property(T value) {
+        this(value, true);
+    }
+    
+    /**
+     * Constructs a new Property with initial value and display boolean.
+     * If registering the property to {@link ModernBetaRegistries#PROPERTY} then the initial value is the default value.
+     * 
+     * @param value The initial property value.
+     * @param display The initial display boolean, that is, whether to display the property in the GUI.
+     */
+    public Property(T value, boolean display) {
         this.value = value;
-        this.display = true;
+        this.display = display;
     }
     
     /**
@@ -110,6 +121,7 @@ public abstract class Property<T> {
      * 
      * @param display Whether the property should be displayed.
      */
+    @Deprecated
     public void setDisplay(boolean display) {
         this.display = display;
     }

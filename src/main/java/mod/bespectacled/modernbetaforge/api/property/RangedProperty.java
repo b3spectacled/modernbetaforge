@@ -16,7 +16,20 @@ public abstract class RangedProperty<T> extends Property<T> {
      * @param guiType The {@link PropertyGuiType}.
      */
     public RangedProperty(T value, T minValue, T maxValue, PropertyGuiType guiType) {
-        super(value);
+        this(value, true, minValue, maxValue, guiType);
+    }
+    
+    /**
+     * Constructs a new Property with minimum and maximum value constraints.
+     * 
+     * @param value The initial property value.
+     * @param display The initial display value.
+     * @param minValue The minimum property value.
+     * @param maxValue The maximum property value.
+     * @param guiType The {@link PropertyGuiType}.
+     */
+    public RangedProperty(T value, boolean display, T minValue, T maxValue, PropertyGuiType guiType) {
+        super(value, display);
         
         this.minValue = minValue;
         this.maxValue = maxValue;

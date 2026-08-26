@@ -25,7 +25,7 @@ public class RegistryProperty<T> extends StringFilterProperty {
      * @param registry The {@link ModernBetaRegistry} used to populate the list.
      */
     public RegistryProperty(ResourceLocation value, ModernBetaRegistry<T> registry) {
-        this(value, registry, key -> true);
+        this(value, true, registry, key -> true);
     }
     
     /**
@@ -37,7 +37,32 @@ public class RegistryProperty<T> extends StringFilterProperty {
      * @param filter The predicate used to filter the {@link ModernBetaRegistry} collection values.
      */
     public RegistryProperty(ResourceLocation value, ModernBetaRegistry<T> registry, Predicate<ResourceLocation> filter) {
-        super(value, filter);
+        this(value, true, registry, filter);
+    }
+    
+    /**
+     * Constructs a new RegistryProperty with an initial registry entry and respective {@link ModernBetaRegistry}, with default predicate
+     * not filtering any registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial registry name value.
+     * @param display The initial display value.
+     * @param registry The {@link ModernBetaRegistry} used to populate the list.
+     */
+    public RegistryProperty(ResourceLocation value, boolean display, ModernBetaRegistry<T> registry) {
+        this(value, display, registry, key -> true);
+    }
+    
+    /**
+     * Constructs a new RegistryProperty with an initial registry entry and respective {@link ModernBetaRegistry}, and a predicate
+     * used to filter registry entries when populating {@link GuiScreenCustomizeRegistry} list.
+     * 
+     * @param value The initial registry name value.
+     * @param display The initial display value.
+     * @param registry The {@link ModernBetaRegistry} used to populate the list.
+     * @param filter The predicate used to filter the {@link ModernBetaRegistry} collection values.
+     */
+    public RegistryProperty(ResourceLocation value, boolean display, ModernBetaRegistry<T> registry, Predicate<ResourceLocation> filter) {
+        super(value, display, filter);
         
         this.registry = registry;
     }
