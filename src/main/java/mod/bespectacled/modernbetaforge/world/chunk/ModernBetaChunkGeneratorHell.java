@@ -115,10 +115,10 @@ public class ModernBetaChunkGeneratorHell extends ChunkGeneratorHell {
 
         // Generate final chunk
         Chunk chunk = new Chunk(this.world, chunkprimer, chunkX, chunkZ);
-
+        
         // Generate biome map
         Biome[] biomes = this.world.getBiomeProvider().getBiomes(null, chunkX * 16, chunkZ * 16, 16, 16);
-        
+
         // Set biome map in chunk
         byte[] biomeArray = chunk.getBiomeArray();
         for (int i = 0; i < biomeArray.length; ++i) {
