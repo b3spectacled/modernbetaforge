@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.api.world.chunk.source;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -517,6 +518,11 @@ public abstract class NoiseChunkSource extends ChunkSource {
         short[] heightmapOcean = new short[256];
         short[] heightmapFloor = new short[256];
         short[] heightmapStructure = new short[256];
+
+        Arrays.fill(heightmapSurface, worldFloor);
+        Arrays.fill(heightmapOcean, worldFloor);
+        Arrays.fill(heightmapFloor, worldFloor);
+        Arrays.fill(heightmapStructure, worldFloor);
         
         int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
         int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;

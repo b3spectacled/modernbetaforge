@@ -363,7 +363,7 @@ public class DrawUtil {
             terrainType = defaultFluid;
         }
         
-        if (height <= 0) {
+        if (height <= chunkSource.getWorldFloor()) {
             terrainType = TerrainType.VOID;
         }
         
