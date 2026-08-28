@@ -84,14 +84,14 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<SurfaceBuilderCreator> SURFACE_BUILDER;
     
     /**
-     * Holds registered {@link CarverCreator interfaces} which instantiate non-cave carvers extending from {@link MapGenBase}.
-     * Register non-cave carvers (i.e. ravines, etc.) here.
+     * Holds registered {@link CarverCreator interfaces} which instantiate secondary carvers extending from {@link MapGenBase}.
+     * Register secondary carvers (i.e. ravines, etc.) here.
      */
     public static final ModernBetaRegistry<CarverCreator> CARVER;
     
     /**
-     * Holds registered {@link CaveCarverCreator interfaces} which instantiate cave carvers extending from {@link MapGenBase}.
-     * Register cave carvers here.
+     * Holds registered {@link CaveCarverCreator interfaces} which instantiate primary cave carvers extending from {@link MapGenBase}.
+     * Register primary cave carvers here.
      */
     public static final ModernBetaRegistry<CaveCarverCreator> CAVE_CARVER;
     

@@ -67,7 +67,7 @@ public class MapGenBetaCave extends MapGenBase {
         this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0);
     }
     
-    protected MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor) {
+    public MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();

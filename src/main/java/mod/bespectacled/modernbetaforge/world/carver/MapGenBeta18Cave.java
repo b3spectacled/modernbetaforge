@@ -19,7 +19,7 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
         super(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128, 40, 15, 0, 0);
     }
     
-    protected MapGenBeta18Cave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveMinY, int caveHeight, int caveCount, int caveChance, int worldMinY) {
+    public MapGenBeta18Cave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldMinY) {
         super(defaultBlock, defaultFluid, defaultFill, caveWidth, caveHeight, caveCount, caveChance, caveMinY, worldMinY);
     }
     
