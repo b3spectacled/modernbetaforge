@@ -715,6 +715,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
             .add(defaultSource)
             .add(this.blockSources)
             .build();
+        blockSources.init(chunkX, chunkZ);
         
         for (int localX = 0; localX < 16; ++localX) {
             int x = localX + startX;

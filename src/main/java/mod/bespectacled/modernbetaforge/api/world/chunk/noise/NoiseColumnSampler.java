@@ -16,7 +16,7 @@ public interface NoiseColumnSampler {
      * @param noiseSizeZ Number of subchunks in the z-axis of a chunk.
      * @param noiseMinY Minimum y-coordinate in noise coordinates.
      */
-    public void sampleNoiseColumn(
+    void sampleNoiseColumn(
         double[] buffer,
         int startNoiseX,
         int startNoiseZ,

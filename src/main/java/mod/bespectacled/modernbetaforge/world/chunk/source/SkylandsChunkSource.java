@@ -39,7 +39,7 @@ public class SkylandsChunkSource extends NoiseChunkSource {
     
     @Override
     public int getSeaLevel() {
-        return 0;
+        return this.worldFloor;
     }
     
     @Override

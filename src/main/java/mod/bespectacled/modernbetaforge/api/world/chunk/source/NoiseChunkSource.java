@@ -484,6 +484,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
             .add(this.getInitialBlockSource(densityChunk, weightSampler))
             .add(this.blockSources)
             .build();
+        blockSources.init(chunkX, chunkZ);
         
         for (int localX = 0; localX < sizeX; ++localX) {
             int x = localX + startX;

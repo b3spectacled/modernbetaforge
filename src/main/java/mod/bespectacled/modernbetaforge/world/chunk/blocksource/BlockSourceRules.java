@@ -23,6 +23,13 @@ public class BlockSourceRules implements BlockSource {
         this.debugBlockSources = ModernBetaConfig.debugOptions.debugBlockSources;
         this.debugCrossSection = ModernBetaConfig.debugOptions.debugCrossSection;
     }
+    
+    @Override
+    public void init(int chunkX, int chunkZ) {
+        for (BlockSource blockSource : this.rules) {
+            blockSource.init(chunkX, chunkZ);
+        }
+    }
 
     @Override
     public IBlockState sample(int x, int y, int z) {

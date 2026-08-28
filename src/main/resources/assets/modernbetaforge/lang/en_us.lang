@@ -628,12 +628,20 @@ createWorld.customize.custom.compatdepthsupdate.usedeepcaves=Deep Caves
 createWorld.customize.custom.compatdepthsupdate.deepcaveswidth=Deep Caves Width
 createWorld.customize.custom.compatdepthsupdate.deepcavescount=Deep Caves Count
 createWorld.customize.custom.compatdepthsupdate.deepcaveschance=Deep Caves Rarity
+createWorld.customize.custom.compatdepthsupdate.usedeepslate=Deepslate Layer
+createWorld.customize.custom.compatdepthsupdate.deepslateblock=Deepslate Block
+createWorld.customize.custom.compatdepthsupdate.deepslatemaxy=Deepslate Max Y
+createWorld.customize.custom.compatdepthsupdate.deepslaterange=Deepslate Range
 
 createWorld.customize.custom.compatdepthsupdate.usecompat.tooltip=Enable additional compatibility for Depths Update. For best results, please disable the 'Extend Custom World Types' setting in Depths Update's mod config.
 createWorld.customize.custom.compatdepthsupdate.usedeepcaves.tooltip=Generate caves below y0. Caves will be distributed between y8 and the world floor.
 createWorld.customize.custom.compatdepthsupdate.deepcaveswidth.tooltip=Maximum cave width. Values above 1.0 will add variation in cave widths between the new value and 1.0.
 createWorld.customize.custom.compatdepthsupdate.deepcavescount.tooltip=Number of caves to generate.
 createWorld.customize.custom.compatdepthsupdate.deepcaveschance.tooltip=Chance of caves to not generate.
+createWorld.customize.custom.compatdepthsupdate.usedeepslate.tooltip=Generate deepslate layer.
+createWorld.customize.custom.compatdepthsupdate.deepslateblock.tooltip=Deepslate layer block.
+createWorld.customize.custom.compatdepthsupdate.deepslatemaxy.tooltip=Deepslate layer maximum height level.
+createWorld.customize.custom.compatdepthsupdate.deepslaterange.tooltip=Deepslate layer transition range.
 
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta
