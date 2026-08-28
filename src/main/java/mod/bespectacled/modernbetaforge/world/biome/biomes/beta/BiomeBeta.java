@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.world.biome.biomes.beta;
 
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -90,7 +91,11 @@ public abstract class BiomeBeta extends ModernBetaBiome {
             return false;
         }
         
-        if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
+        int minY = Math.min(settings.floor, 0);
+        int maxY = Math.max(settings.height, 255);
+        
+        if (blockPos.getY() >= minY && blockPos.getY() <= maxY && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
             IBlockState blockState = world.getBlockState(blockPos);
             Block block = blockState.getBlock();
 
@@ -121,7 +126,11 @@ public abstract class BiomeBeta extends ModernBetaBiome {
             return false;
         }
         
-        if (blockPos.getY() >= 0 && blockPos.getY() < 256 && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
+        int minY = Math.min(settings.floor, 0);
+        int maxY = Math.max(settings.height, 255);
+        
+        if (blockPos.getY() >= minY && blockPos.getY() <= maxY && world.getLightFor(EnumSkyBlock.BLOCK, blockPos) < 10) {
             IBlockState blockState = world.getBlockState(blockPos);
             if (blockState.getBlock().isAir(blockState, world, blockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, blockPos)) {
                 return true;

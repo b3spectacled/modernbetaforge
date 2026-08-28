@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
+import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
 import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
@@ -39,6 +40,7 @@ public class ModCompat {
         loadCompat(new CompatBetterMineshafts());
         loadCompat(new CompatFutureMC());
         loadCompat(new CompatOE());
+        loadCompat(new CompatDepthsUpdate());
     }
     
     public static boolean isCompatLoaded(String modId) {
@@ -72,7 +74,7 @@ public class ModCompat {
         private HeightManager() { }
         
         public boolean extendsHeight() {
-            return this.numHeightMods == 1 && this.heightCompat.extendsHeight();
+            return this.numHeightMods == 1 && this.heightCompat.extendHeight();
         }
         
         public int getMinHeight() {

@@ -93,7 +93,7 @@ public abstract class SurfaceBuilder {
      * @return Whether bedrock should generate at the given coordinates.
      */
     public boolean isBedrock(int y, Random random) {
-        return this.useBedrock() && y <= random.nextInt(5);
+        return this.useBedrock() && y <= random.nextInt(5) + this.getWorldFloor();
     }
     
     /**

@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.compat;
 
 public interface HeightCompat {
-    boolean extendsHeight();
+    boolean extendHeight();
     
     int getMinHeight();
     
