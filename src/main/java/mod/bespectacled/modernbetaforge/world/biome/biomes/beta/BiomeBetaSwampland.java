@@ -65,6 +65,7 @@ public class BiomeBetaSwampland extends BiomeBeta {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         ChunkPos chunkPos = new ChunkPos(startPos);
         WorldGenerator waterLilyGen = new WorldGenWaterlily();
+        int floor = settings.floor;
         
         if (settings.useFossils && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FOSSIL) && random.nextInt(64) == 0) {
             new WorldGenFossils().generate(world, random, startPos);
@@ -76,12 +77,12 @@ public class BiomeBetaSwampland extends BiomeBeta {
                 int dZ = random.nextInt(16) + 8;
                 
                 int height = world.getHeight(startPos.add(dX, 0, dZ)).getY() * 2;
-                if (height > 0) {
-                    int dY = random.nextInt(height);
+                if (height > floor) {
+                    int dY = random.nextInt(height - floor) + floor;
                     BlockPos blockPos;
                     BlockPos blockPosDown;
                     
-                    for (blockPos = startPos.add(dX, dY, dZ); blockPos.getY() > 0; blockPos = blockPosDown) {
+                    for (blockPos = startPos.add(dX, dY, dZ); blockPos.getY() > floor; blockPos = blockPosDown) {
                         blockPosDown = blockPos.down();
                         if (!world.isAirBlock(blockPosDown)) {
                             break;
@@ -99,8 +100,8 @@ public class BiomeBetaSwampland extends BiomeBeta {
                 int dZ = random.nextInt(16) + 8;
                 
                 int height = world.getHeight(startPos.add(dX, 0, dZ)).getY() + 32;
-                if (height > 0) {
-                    int dY = random.nextInt(height);
+                if (height > floor) {
+                    int dY = random.nextInt(height - floor) + floor;
                     BlockPos blockPos = startPos.add(dX, dY, dZ);
                     
                     EnumFlowerType enumFlowerType = this.pickRandomFlower(random, blockPos);

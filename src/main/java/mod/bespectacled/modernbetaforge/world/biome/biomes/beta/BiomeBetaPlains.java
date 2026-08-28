@@ -53,6 +53,7 @@ public class BiomeBetaPlains extends BiomeBeta {
 
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         ChunkPos chunkPos = new ChunkPos(startPos);
+        int floor = settings.floor;
         
         if (settings.useNewFlowers && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             for (int i = 0; i < 4; ++i) {
@@ -60,8 +61,8 @@ public class BiomeBetaPlains extends BiomeBeta {
                 int dZ = random.nextInt(16) + 8;
                 
                 int height = world.getHeight(startPos.add(dX, 0, dZ)).getY() + 32;
-                if (height > 0) {
-                    int dY = random.nextInt(height);
+                if (height > floor) {
+                    int dY = random.nextInt(height - floor) + floor;
                     BlockPos blockPos = startPos.add(dX, dY, dZ);
                     
                     EnumFlowerType enumFlowerType = this.pickRandomFlower(random, blockPos);

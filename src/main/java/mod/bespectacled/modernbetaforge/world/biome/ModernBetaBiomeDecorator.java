@@ -194,7 +194,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    protected void populateWaterfalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height) {
+    protected void populateWaterfalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -208,20 +208,20 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         WorldGenerator worldGenLiquids = new WorldGenLiquids(fluidBlock);
         for (int i = 0; i < 50; ++i) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(random.nextInt(height - 8) + 8);
+            int y = random.nextInt(random.nextInt(height - 8 - floor) + 8) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             worldGenLiquids.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
-    protected void populateLavafalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height) {
+    protected void populateLavafalls(World world, Random random, BlockPos startPos, MutableBlockPos mutablePos, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
 
         for (int i = 0; i < 20; ++i) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(random.nextInt(random.nextInt(height - 16) + 8) + 8);
+            int y = random.nextInt(random.nextInt(random.nextInt(height - 16 - floor) + 8) + 8) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             FEATURE_LAVA_FALL.generate(world, random, mutablePos.setPos(x, y, z));
@@ -243,26 +243,26 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         return new PerlinOctaveNoise(random, 8, true);
     }
     
-    public static void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height) {
+    public static void populateWorldGenCount(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int count, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
         for (int i = 0; i < count; ++i) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
+            int y = random.nextInt(height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             generator.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
-    public static void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height) {
+    public static void populateWorldGenChance(World world, Random random, BlockPos startPos, WorldGenerator generator, MutableBlockPos mutablePos, int chance, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
         if (random.nextInt(chance) == 0) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
+            int y = random.nextInt(height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             generator.generate(world, random, mutablePos.setPos(x, y, z));
@@ -307,7 +307,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         }
     }
     
-    public static void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height) {
+    public static void populateTallGrassCount(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int count, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -318,14 +318,14 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             }
             
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
+            int y = random.nextInt(height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
-    public static void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height) {
+    public static void populateTallGrassChance(World world, Random random, Biome biome, BlockPos startPos, MutableBlockPos mutablePos, int chance, int height, int floor) {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
         
@@ -336,7 +336,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             }
             
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(height);
+            int y = random.nextInt(height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             new WorldGenTallGrass(tallGrassType).generate(world, random, mutablePos.setPos(x, y, z));
@@ -346,6 +346,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     public static void populateWaterLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ, IBlockState defaultFluid) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
+        int floor = settings.floor;
 
         Block fluidBlock = ForgeRegistryUtil.getFluid(settings.defaultFluid).getBlock();
         
@@ -356,7 +357,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         WorldGenerator worldGenLakes = new WorldGenLakes(fluidBlock);
         if (random.nextInt(settings.waterLakeChance) == 0) { // Default: 4
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(settings.height);
+            int y = random.nextInt(settings.height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             worldGenLakes.generate(world, random, mutablePos.setPos(x, y, z));
@@ -366,10 +367,11 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     public static void populateLavaLakes(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
+        int floor = settings.floor;
         
         if (random.nextInt(settings.lavaLakeChance / 10) == 0) { // Default: 80 / 10 = 8
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(random.nextInt(settings.height - 8) + 8);
+            int y = random.nextInt(random.nextInt(settings.height - 8 - floor) + 8) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             if (y < 64 || random.nextInt(10) == 0) {
@@ -381,10 +383,11 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     public static void populateDungeons(World world, Random random, ModernBetaGeneratorSettings settings, MutableBlockPos mutablePos, int chunkX, int chunkZ) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
+        int floor = settings.floor;
         
         for (int i = 0; i < settings.dungeonChance; i++) {
             int x = startX + random.nextInt(16) + 8;
-            int y = random.nextInt(settings.height);
+            int y = random.nextInt(settings.height - floor) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
             FEATURE_DUNGEONS.generate(world, random, mutablePos.setPos(x, y, z));

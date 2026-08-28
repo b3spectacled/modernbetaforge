@@ -73,6 +73,9 @@ public class DebugInfoEventHandler {
                 addDebugText(event, carverText);
                 addDebugText(event, spawnerText);
                 addDebugText(event, "");
+                
+                int worldHeight = worldServer.getHeight(x, z);
+                addDebugText(event, String.format("[Modern Beta] Chunk height value: %d", worldHeight));
 
                 if (!(chunkSource instanceof FiniteChunkSource) ||
                     chunkSource instanceof FiniteChunkSource && ((FiniteChunkSource)chunkSource).hasPregenerated()

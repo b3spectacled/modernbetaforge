@@ -70,6 +70,7 @@ public class NoiseSettings {
          * 
          * @param density Current terrain density.
          * @param noiseY y-coordinate in noise coordinates.
+         * @param noiseMinY Minimum world height in noise coordinates.
          * @return Modified terrain density.
          */
         public double applyBottomSlide(double density, int noiseY, int noiseMinY) {

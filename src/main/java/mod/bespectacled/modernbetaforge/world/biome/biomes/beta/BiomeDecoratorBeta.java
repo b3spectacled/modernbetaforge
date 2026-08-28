@@ -49,48 +49,48 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int plantCount = this.getYellowFlowerCount(biome);
             
-            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, plantCount, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, plantCount, settings.height, settings.floor);
         }
 
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
             int plantCount = this.getTallGrassCount(biome);
 
-            populateTallGrassCount(world, random, biome, startPos, mutablePos, plantCount, settings.height);
+            populateTallGrassCount(world, random, biome, startPos, mutablePos, plantCount, settings.height, settings.floor);
         }
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH)) {
             if (biome instanceof BiomeBetaDesert) {
-                populateWorldGenCount(world, random, startPos, FEATURE_DEAD_BUSH, mutablePos, 2, settings.height);
+                populateWorldGenCount(world, random, startPos, FEATURE_DEAD_BUSH, mutablePos, 2, settings.height, settings.floor);
             }
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            populateWorldGenChance(world, random, startPos, FEATURE_POPPY, mutablePos, 2, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_POPPY, mutablePos, 2, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
-            populateWorldGenChance(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, 4, settings.height);
-            populateWorldGenChance(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, 8, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, 4, settings.height, settings.floor);
+            populateWorldGenChance(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, 8, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.REED)) {
-            populateWorldGenCount(world, random, startPos, FEATURE_REED, mutablePos, 10, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_REED, mutablePos, 10, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.PUMPKIN)) {
-            populateWorldGenChance(world, random, startPos, FEATURE_PUMPKIN, mutablePos, 32, settings.height);
+            populateWorldGenChance(world, random, startPos, FEATURE_PUMPKIN, mutablePos, 32, settings.height, settings.floor);
         }
         
         if (biome instanceof BiomeBetaDesert && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CACTUS)) {
-            populateWorldGenCount(world, random, startPos, FEATURE_CACTUS, mutablePos, 10, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_CACTUS, mutablePos, 10, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
-            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height);
+            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
-            this.populateLavafalls(world, random, startPos, mutablePos, settings.height);
+            this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor);
         }
         
         /*

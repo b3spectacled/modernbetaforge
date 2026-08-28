@@ -67,11 +67,12 @@ public class BiomeBetaRainforest extends BiomeBeta {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         ChunkPos chunkPos = new ChunkPos(startPos);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        int floor = settings.floor;
         
         if (settings.useMelons && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.PUMPKIN)) {
             if (random.nextInt(4) == 0) {
                 int x = startPos.getX() + random.nextInt(16) + 8;
-                int y = random.nextInt(settings.height);
+                int y = random.nextInt(settings.height - floor) + floor;
                 int z = startPos.getZ() + random.nextInt(16) + 8;
                 
                 new WorldGenMelon().generate(world, random, mutablePos.setPos(x, y, z));

@@ -60,7 +60,7 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
+            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor);
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));

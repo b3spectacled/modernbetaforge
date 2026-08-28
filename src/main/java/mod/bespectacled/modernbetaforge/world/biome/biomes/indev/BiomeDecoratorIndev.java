@@ -45,21 +45,21 @@ public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int count = this.getFlowerCount(biome);
             
-            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, count, settings.height);
-            populateWorldGenCount(world, random, startPos, FEATURE_POPPY, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, count, settings.height, settings.floor);
+            populateWorldGenCount(world, random, startPos, FEATURE_POPPY, mutablePos, count, settings.height, settings.floor);
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
             int count = this.getMushroomCount();
             
-            populateWorldGenCount(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, count, settings.height);
-            populateWorldGenCount(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, count, settings.height);
+            populateWorldGenCount(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, count, settings.height, settings.floor);
+            populateWorldGenCount(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, count, settings.height, settings.floor);
         }
 
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height);
+            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor);
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));
