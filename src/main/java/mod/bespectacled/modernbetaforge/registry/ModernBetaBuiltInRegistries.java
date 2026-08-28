@@ -36,7 +36,6 @@ import mod.bespectacled.modernbetaforge.client.gui.screen.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
@@ -45,6 +44,7 @@ import mod.bespectacled.modernbetaforge.world.biome.source.ReleaseBiomeSource;
 import mod.bespectacled.modernbetaforge.world.biome.source.SingleBiomeSource;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBeta18Cave;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCave;
+import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveDeep;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveHell;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenBetaCaveUnderwater;
 import mod.bespectacled.modernbetaforge.world.carver.MapGenCavesExtended;
@@ -177,17 +177,7 @@ public class ModernBetaBuiltInRegistries {
         );
         registry.register(ModernBetaChunkGenerator.DEEP_CAVE_KEY, (chunkSource, settings) ->
             settings.useDeepCaves && ModCompat.HEIGHT_MANAGER.extendsHeight() ?
-                TerrainGen.getModdedMapGen(new MapGenBeta18Cave(
-                    chunkSource.getDefaultBlock(),
-                    chunkSource.getDefaultFluid(),
-                    BlockStates.AIR,
-                    settings.deepCaveWidth,
-                    8,
-                    settings.deepCaveCount,
-                    settings.deepCaveChance,
-                    settings.floor,
-                    settings.floor
-                ), EventType.CUSTOM) :
+                TerrainGen.getModdedMapGen(new MapGenBetaCaveDeep(chunkSource, settings), EventType.CUSTOM) :
                 new MapGenNoOp(chunkSource, settings)
         );
     }
