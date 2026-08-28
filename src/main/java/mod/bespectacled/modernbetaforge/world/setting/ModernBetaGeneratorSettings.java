@@ -703,7 +703,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinSeaLevel() {
-        return getMinHeight();
+        return getMinFloor();
     }
     
     public static int getMaxSeaLevel() {
@@ -711,7 +711,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinOreHeight() {
-        return getMinHeight();
+        return getMinFloor();
     }
     
     public static int getMaxOreHeight() {
@@ -719,7 +719,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinOreCenter() {
-        return getMinHeight();
+        return getMinFloor();
     }
     
     public static int getMaxOreCenter() {
@@ -727,7 +727,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinOreSpread() {
-        return getMinHeight() + 1;
+        return getMinFloor() + 1;
     }
     
     public static int getMaxOreSpread() {
@@ -735,7 +735,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinCaveHeight() {
-        return getMinHeight() + 9;
+        return getMinFloor() + 9;
     }
     
     public static int getMaxCaveHeight() {
