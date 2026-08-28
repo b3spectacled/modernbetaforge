@@ -93,7 +93,9 @@ public class BetaColorSampler {
     }
     
     private static double getTempOffset(int y, int seaLevel) {
-        boolean useHeightTempGradient = ModernBetaConfig.visualOptions.useHeightTempGradient; 
+        boolean useHeightTempGradient = ModernBetaConfig.visualOptions.useHeightTempGradient;
+        y = Math.max(y, 0);
+        
         return useHeightTempGradient ? MathHelper.clamp(1.0 - (seaLevel + 64) / (double)y, 0.0, 0.5) : 0.0;
     }
 }

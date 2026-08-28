@@ -72,9 +72,9 @@ public class NoiseSettings {
          * @param noiseY y-coordinate in noise coordinates.
          * @return Modified terrain density.
          */
-        public double applyBottomSlide(double density, int noiseY) {
+        public double applyBottomSlide(double density, int noiseY, int noiseMinY) {
             if (this.slideSize > 0.0) {
-                double delta = ((double)noiseY - this.slideOffset) / this.slideSize;
+                double delta = ((double)(noiseY - noiseMinY) - this.slideOffset) / this.slideSize;
                 density = MathUtil.clampedLerp(this.slideTarget, density, delta);
             }
             
