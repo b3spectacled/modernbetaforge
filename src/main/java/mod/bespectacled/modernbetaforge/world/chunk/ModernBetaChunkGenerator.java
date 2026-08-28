@@ -55,6 +55,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public static final ResourceLocation CAVE_KEY = new ResourceLocation("cave");
     public static final ResourceLocation RAVINE_KEY = new ResourceLocation("ravine");
     public static final ResourceLocation CAVE_WATER_KEY = ModernBeta.createRegistryKey("cave_water");
+    public static final ResourceLocation DEEP_CAVE_KEY = ModernBeta.createRegistryKey("deep_cave");
     
     private static final int INITIAL_CHUNK_CAPACITY = 256;
     private static final int MAX_RENDER_DISTANCE_AREA = 1024;

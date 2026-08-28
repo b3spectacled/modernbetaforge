@@ -42,6 +42,11 @@ public class NbtTags {
     public static final String USE_RAVINES = "useRavines";
     public static final String RAVINE_CHANCE = "ravineChance";
     
+    public static final String USE_DEEP_CAVES = "useDeepCaves";
+    public static final String DEEP_CAVE_WIDTH = "deepCaveWidth";
+    public static final String DEEP_CAVE_COUNT = "deepCaveCount";
+    public static final String DEEP_CAVE_CHANCE = "deepCaveChance";
+    
     public static final String USE_SANDSTONE = "useSandstone";
     public static final String USE_MINESHAFTS = "useMineShafts";
     public static final String USE_STRONGHOLDS = "useStrongholds";

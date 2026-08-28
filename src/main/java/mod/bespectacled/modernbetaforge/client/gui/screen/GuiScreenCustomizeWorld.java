@@ -290,6 +290,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG0_S_CAVE_CHANCE, NbtTags.CAVE_CHANCE, ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, ModernBetaGeneratorSettings.MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_RAVINES, NbtTags.USE_RAVINES, this.settings.useRavines),
             this.createGuiSlider(GuiIdentifiers.PG0_S_RAVINE_CHANCE, NbtTags.RAVINE_CHANCE, ModernBetaGeneratorSettings.MIN_RAVINE_CHANCE, ModernBetaGeneratorSettings.MAX_RAVINE_CHANCE, (float)this.settings.ravineChance, this),
+            this.createGuiButton(GuiIdentifiers.PG0_B_USE_DEEP_CAVES, NbtTags.USE_DEEP_CAVES, this.settings.useDeepCaves),
+            this.createGuiSlider(GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH, NbtTags.DEEP_CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_CAVE_WIDTH, this.settings.deepCaveWidth, this),
+            this.createGuiSlider(GuiIdentifiers.PG0_S_DEEP_CAVE_COUNT, NbtTags.DEEP_CAVE_COUNT, ModernBetaGeneratorSettings.MIN_CAVE_COUNT, ModernBetaGeneratorSettings.MAX_CAVE_COUNT, (float)this.settings.caveCount, this),
+            this.createGuiSlider(GuiIdentifiers.PG0_S_DEEP_CAVE_CHANCE, NbtTags.DEEP_CAVE_CHANCE, ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, ModernBetaGeneratorSettings.MAX_CAVE_CHANCE, (float)this.settings.caveChance, this),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_UNDERWATER_CAVES, NbtTags.USE_UNDERWATER_CAVES, this.settings.useUnderwaterCaves),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_SHAFTS, NbtTags.USE_MINESHAFTS, this.settings.useMineShafts),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_VILLAGES, NbtTags.USE_VILLAGES, this.settings.useVillages),
@@ -1297,6 +1301,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG0_B_USE_RAVINES:
                     this.settings.useRavines = entryValue;
                     break;
+                case GuiIdentifiers.PG0_B_USE_DEEP_CAVES:
+                    this.settings.useDeepCaves = entryValue;
+                    break;
                 case GuiIdentifiers.PG0_B_USE_DUNGEONS:
                     this.settings.useDungeons = entryValue;
                     break;
@@ -1498,6 +1505,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     break;
                 case GuiIdentifiers.PG0_S_RAVINE_CHANCE:
                     this.settings.ravineChance = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH:
+                    this.settings.deepCaveWidth = roundToOneDec(entryValue);
+                    break;
+                case GuiIdentifiers.PG0_S_DEEP_CAVE_COUNT:
+                    this.settings.deepCaveCount = (int)entryValue;
+                    break;
+                case GuiIdentifiers.PG0_S_DEEP_CAVE_CHANCE:
+                    this.settings.deepCaveChance = (int)entryValue;
                     break;
                 case GuiIdentifiers.PG0_S_DUNGEON_CHANCE:
                     this.settings.dungeonChance = (int)entryValue;
@@ -2252,6 +2268,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 return String.format("%2.3f", entryValue);
                 
             case GuiIdentifiers.PG0_S_CAVE_WIDTH:
+            case GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH:
             case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
                 return String.format("%2.1f", entryValue);
             

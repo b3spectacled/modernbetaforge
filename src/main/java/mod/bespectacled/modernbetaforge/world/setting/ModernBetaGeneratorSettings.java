@@ -196,9 +196,14 @@ public class ModernBetaGeneratorSettings {
     public final int caveHeight;
     public final int caveCount;
     public final int caveChance;
-    public final boolean useDungeons;
-    public final int dungeonChance;
+    public final boolean useRavines;
     public final int ravineChance;
+    public final boolean useUnderwaterCaves;
+    
+    public final boolean useDeepCaves;
+    public final float deepCaveWidth;
+    public final int deepCaveCount;
+    public final int deepCaveChance;
     
     public final boolean useStrongholds;
     public final boolean useVillages;
@@ -207,9 +212,9 @@ public class ModernBetaGeneratorSettings {
     public final boolean useTemples;
     public final boolean useMonuments;
     public final boolean useMansions;
-    public final boolean useRavines;
-    public final boolean useUnderwaterCaves;
-    
+
+    public final boolean useDungeons;
+    public final int dungeonChance;
     public final boolean useWaterLakes;
     public final int waterLakeChance;
     public final boolean useLavaLakes;
@@ -441,9 +446,14 @@ public class ModernBetaGeneratorSettings {
         this.caveHeight = factory.caveHeight;
         this.caveCount = factory.caveCount;
         this.caveChance = factory.caveChance;
-        this.useDungeons = factory.useDungeons;
-        this.dungeonChance = factory.dungeonChance;
+        this.useRavines = factory.useRavines;
         this.ravineChance = factory.ravineChance;
+        this.useUnderwaterCaves = factory.useUnderwaterCaves;
+        
+        this.useDeepCaves = factory.useDeepCaves;
+        this.deepCaveWidth = factory.deepCaveWidth;
+        this.deepCaveCount = factory.deepCaveCount;
+        this.deepCaveChance = factory.deepCaveChance;
         
         this.useStrongholds = factory.useStrongholds;
         this.useVillages = factory.useVillages;
@@ -452,8 +462,6 @@ public class ModernBetaGeneratorSettings {
         this.useTemples = factory.useTemples;
         this.useMonuments = factory.useMonuments;
         this.useMansions = factory.useMansions;
-        this.useRavines = factory.useRavines;
-        this.useUnderwaterCaves = factory.useUnderwaterCaves;
         
         this.useBirchTrees = factory.useBirchTrees;
         this.usePineTrees = factory.usePineTrees;
@@ -462,7 +470,9 @@ public class ModernBetaGeneratorSettings {
         this.useAcaciaTrees = factory.useAcaciaTrees;
         this.useDarkOakTrees = factory.useDarkOakTrees;
         this.useNewFancyOakTrees = factory.useNewFancyOakTrees;
-        
+
+        this.useDungeons = factory.useDungeons;
+        this.dungeonChance = factory.dungeonChance;
         this.useWaterLakes = factory.useWaterLakes;
         this.waterLakeChance = factory.waterLakeChance;
         this.useLavaLakes = factory.useLavaLakes;
@@ -807,9 +817,14 @@ public class ModernBetaGeneratorSettings {
         public int caveHeight;
         public int caveCount;
         public int caveChance;
-        public boolean useDungeons;
-        public int dungeonChance;
+        public boolean useRavines;
         public int ravineChance;
+        public boolean useUnderwaterCaves;
+        
+        public boolean useDeepCaves;
+        public float deepCaveWidth;
+        public int deepCaveCount;
+        public int deepCaveChance;
         
         public boolean useStrongholds;
         public boolean useVillages;
@@ -818,9 +833,9 @@ public class ModernBetaGeneratorSettings {
         public boolean useTemples;
         public boolean useMonuments;
         public boolean useMansions;
-        public boolean useRavines;
-        public boolean useUnderwaterCaves;
-        
+
+        public boolean useDungeons;
+        public int dungeonChance;
         public boolean useWaterLakes;
         public int waterLakeChance;
         public boolean useLavaLakes;
@@ -1052,9 +1067,14 @@ public class ModernBetaGeneratorSettings {
             this.caveHeight = 128;
             this.caveCount = 40;
             this.caveChance = 15;
-            this.useDungeons = true;
-            this.dungeonChance = 8;
+            this.useRavines = true;
             this.ravineChance = 50;
+            this.useUnderwaterCaves = false;
+            
+            this.useDeepCaves = false;
+            this.deepCaveWidth = 1.0f;
+            this.deepCaveCount = 40;
+            this.deepCaveChance = 15;
             
             this.useStrongholds = true;
             this.useVillages = true;
@@ -1063,9 +1083,9 @@ public class ModernBetaGeneratorSettings {
             this.useTemples = true;
             this.useMonuments = true;
             this.useMansions = true;
-            this.useRavines = true;
-            this.useUnderwaterCaves = false;
-            
+
+            this.useDungeons = true;
+            this.dungeonChance = 8;
             this.useWaterLakes = true;
             this.waterLakeChance = 4;
             this.useLavaLakes = true;
@@ -1320,9 +1340,14 @@ public class ModernBetaGeneratorSettings {
                 this.caveHeight == factory.caveHeight &&
                 this.caveCount == factory.caveCount &&
                 this.caveChance == factory.caveChance &&
-                this.useDungeons == factory.useDungeons &&
-                this.dungeonChance == factory.dungeonChance &&
+                this.useRavines == factory.useRavines &&
                 this.ravineChance == factory.ravineChance &&
+                this.useUnderwaterCaves == factory.useUnderwaterCaves &&
+                
+                this.useDeepCaves == factory.useDeepCaves &&
+                Float.compare(factory.deepCaveWidth, this.deepCaveWidth) == 0 &&
+                this.deepCaveCount == factory.deepCaveCount &&
+                this.deepCaveChance == factory.deepCaveChance &&
                 
                 this.useStrongholds == factory.useStrongholds &&
                 this.useVillages == factory.useVillages &&
@@ -1331,9 +1356,9 @@ public class ModernBetaGeneratorSettings {
                 this.useTemples == factory.useTemples &&
                 this.useMonuments == factory.useMonuments &&
                 this.useMansions == factory.useMansions &&
-                this.useRavines == factory.useRavines &&
-                this.useUnderwaterCaves == factory.useUnderwaterCaves &&
-                
+
+                this.useDungeons == factory.useDungeons &&
+                this.dungeonChance == factory.dungeonChance &&
                 this.useWaterLakes == factory.useWaterLakes &&
                 this.waterLakeChance == factory.waterLakeChance &&
                 this.useLavaLakes == factory.useLavaLakes &&
@@ -1569,9 +1594,14 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + this.caveHeight;
             hashCode = 31 * hashCode + this.caveCount;
             hashCode = 31 * hashCode + this.caveChance;
-            hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
-            hashCode = 31 * hashCode + this.dungeonChance;
+            hashCode = 31 * hashCode + (this.useRavines ? 1 : 0);
             hashCode = 31 * hashCode + this.ravineChance;
+            hashCode = 31 * hashCode + (this.useUnderwaterCaves ? 1 : 0);
+            
+            hashCode = 31 * hashCode + (this.useDeepCaves ? 1 : 0);
+            hashCode = 31 * hashCode + ((this.deepCaveWidth == 0.0f) ? 0 : Float.floatToIntBits(this.deepCaveWidth));
+            hashCode = 31 * hashCode + this.deepCaveCount;
+            hashCode = 31 * hashCode + this.deepCaveChance;
             
             hashCode = 31 * hashCode + (this.useStrongholds ? 1 : 0);
             hashCode = 31 * hashCode + (this.useVillages ? 1 : 0);
@@ -1580,9 +1610,9 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useTemples ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMonuments ? 1 : 0);
             hashCode = 31 * hashCode + (this.useMansions ? 1 : 0);
-            hashCode = 31 * hashCode + (this.useRavines ? 1 : 0);
-            hashCode = 31 * hashCode + (this.useUnderwaterCaves ? 1 : 0);
-            
+
+            hashCode = 31 * hashCode + (this.useDungeons ? 1 : 0);
+            hashCode = 31 * hashCode + this.dungeonChance;
             hashCode = 31 * hashCode + (this.useWaterLakes ? 1 : 0);
             hashCode = 31 * hashCode + this.waterLakeChance;
             hashCode = 31 * hashCode + (this.useLavaLakes ? 1 : 0);
@@ -1853,9 +1883,14 @@ public class ModernBetaGeneratorSettings {
                 factory.caveHeight = JsonUtils.getInt(jsonObject, NbtTags.CAVE_HEIGHT, factory.caveHeight);
                 factory.caveCount = JsonUtils.getInt(jsonObject, NbtTags.CAVE_COUNT, factory.caveCount);
                 factory.caveChance = JsonUtils.getInt(jsonObject, NbtTags.CAVE_CHANCE, factory.caveChance);
-                factory.useDungeons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DUNGEONS, factory.useDungeons);
-                factory.dungeonChance = JsonUtils.getInt(jsonObject, NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
+                factory.useRavines = JsonUtils.getBoolean(jsonObject, NbtTags.USE_RAVINES, factory.useRavines);
                 factory.ravineChance = JsonUtils.getInt(jsonObject, NbtTags.RAVINE_CHANCE, factory.ravineChance);
+                factory.useUnderwaterCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
+                
+                factory.useDeepCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DEEP_CAVES, factory.useDeepCaves);
+                factory.deepCaveWidth = JsonUtils.getFloat(jsonObject, NbtTags.DEEP_CAVE_WIDTH, factory.deepCaveWidth);
+                factory.deepCaveCount = JsonUtils.getInt(jsonObject, NbtTags.DEEP_CAVE_COUNT, factory.deepCaveCount);
+                factory.deepCaveChance = JsonUtils.getInt(jsonObject, NbtTags.DEEP_CAVE_CHANCE, factory.deepCaveChance);
                 
                 factory.useStrongholds = JsonUtils.getBoolean(jsonObject, NbtTags.USE_STRONGHOLDS, factory.useStrongholds);
                 factory.useVillages = JsonUtils.getBoolean(jsonObject, NbtTags.USE_VILLAGES, factory.useVillages);
@@ -1864,9 +1899,9 @@ public class ModernBetaGeneratorSettings {
                 factory.useTemples = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TEMPLES, factory.useTemples);
                 factory.useMonuments = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MONUMENTS, factory.useMonuments);
                 factory.useMansions = JsonUtils.getBoolean(jsonObject, NbtTags.USE_MANSIONS, factory.useMansions);
-                factory.useRavines = JsonUtils.getBoolean(jsonObject, NbtTags.USE_RAVINES, factory.useRavines);
-                factory.useUnderwaterCaves = JsonUtils.getBoolean(jsonObject, NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
-                
+
+                factory.useDungeons = JsonUtils.getBoolean(jsonObject, NbtTags.USE_DUNGEONS, factory.useDungeons);
+                factory.dungeonChance = JsonUtils.getInt(jsonObject, NbtTags.DUNGEON_CHANCE, factory.dungeonChance);
                 factory.useWaterLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_WATER_LAKES, factory.useWaterLakes);
                 factory.waterLakeChance = JsonUtils.getInt(jsonObject, NbtTags.WATER_LAKE_CHANCE, factory.waterLakeChance);
                 factory.useLavaLakes = JsonUtils.getBoolean(jsonObject, NbtTags.USE_LAVA_LAKES, factory.useLavaLakes);
@@ -2082,6 +2117,10 @@ public class ModernBetaGeneratorSettings {
                 factory.caveChance = MathHelper.clamp(factory.caveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
                 factory.ravineChance = MathHelper.clamp(factory.ravineChance, MIN_RAVINE_CHANCE, MAX_RAVINE_CHANCE);
                 
+                factory.deepCaveWidth = MathHelper.clamp(factory.caveChance, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH);
+                factory.deepCaveCount = MathHelper.clamp(factory.deepCaveCount, MIN_CAVE_COUNT, MAX_CAVE_COUNT);
+                factory.deepCaveChance = MathHelper.clamp(factory.deepCaveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
+                
                 factory.dungeonChance = MathHelper.clamp(factory.dungeonChance, MIN_DUNGEON_CHANCE, MAX_DUNGEON_CHANCE);
                 factory.waterLakeChance = MathHelper.clamp(factory.waterLakeChance, MIN_WATER_LAKE_CHANCE, MAX_WATER_LAKE_CHANCE);
                 factory.lavaLakeChance = MathHelper.clamp(factory.lavaLakeChance, MIN_LAVA_LAKE_CHANCE, MAX_LAVA_LAKE_CHANCE);
@@ -2265,6 +2304,10 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.CAVE_CHANCE, factory.caveChance);
             jsonObject.addProperty(NbtTags.USE_RAVINES, factory.useRavines);
             jsonObject.addProperty(NbtTags.RAVINE_CHANCE, factory.ravineChance);
+            jsonObject.addProperty(NbtTags.USE_DEEP_CAVES, factory.useDeepCaves);
+            jsonObject.addProperty(NbtTags.DEEP_CAVE_WIDTH, factory.deepCaveWidth);
+            jsonObject.addProperty(NbtTags.DEEP_CAVE_COUNT, factory.deepCaveCount);
+            jsonObject.addProperty(NbtTags.DEEP_CAVE_CHANCE, factory.deepCaveChance);
             jsonObject.addProperty(NbtTags.USE_UNDERWATER_CAVES, factory.useUnderwaterCaves);
             jsonObject.addProperty(NbtTags.USE_MINESHAFTS, factory.useMineShafts);
             jsonObject.addProperty(NbtTags.USE_VILLAGES, factory.useVillages);

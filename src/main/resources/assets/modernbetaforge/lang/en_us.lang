@@ -151,6 +151,10 @@ createWorld.customize.custom.modernbetaforge.useUnderwaterCaves=Ocean Caves
 createWorld.customize.custom.modernbetaforge.seaLevel=Sea Level
 createWorld.customize.custom.modernbetaforge.useRavines=Ravines
 createWorld.customize.custom.modernbetaforge.ravineChance=Ravine Rarity
+createWorld.customize.custom.modernbetaforge.useDeepCaves=Deep Caves
+createWorld.customize.custom.modernbetaforge.deepCaveWidth=Deep Cave Width
+createWorld.customize.custom.modernbetaforge.deepCaveCount=Deep Cave Count
+createWorld.customize.custom.modernbetaforge.deepCaveChance=Deep Cave Chance
 createWorld.customize.custom.modernbetaforge.useMineShafts=Mineshafts
 createWorld.customize.custom.modernbetaforge.useVillages=Villages
 createWorld.customize.custom.modernbetaforge.useVillageVariants=Village Variants
@@ -174,6 +178,10 @@ createWorld.customize.custom.modernbetaforge.useUnderwaterCaves.tooltip=Generate
 createWorld.customize.custom.modernbetaforge.seaLevel.tooltip=Base height for bodies of water.
 createWorld.customize.custom.modernbetaforge.useRavines.tooltip=Generate ravines.
 createWorld.customize.custom.modernbetaforge.ravineChance.tooltip=Chance of ravines to not generate.
+createWorld.customize.custom.modernbetaforge.useDeepCaves.tooltip=Generate caves below y0. Caves will be distributed between y8 and the world floor. Disabled unless a height extension mod is installed and enabled.
+createWorld.customize.custom.modernbetaforge.deepCaveWidth.tooltip=Maximum deep cave width. Values above 1.0 will add variation in cave widths between the new value and 1.0.
+createWorld.customize.custom.modernbetaforge.deepCaveCount.tooltip=Number of deep caves to generate.
+createWorld.customize.custom.modernbetaforge.deepCaveChance.tooltip=Chance of deep caves to not generate.
 createWorld.customize.custom.modernbetaforge.useMineShafts.tooltip=Generate mineshafts.
 createWorld.customize.custom.modernbetaforge.useVillages.tooltip=Generate villages. Valid biomes include Beta Desert, Beta Ice Desert, Beta Savanna, Beta Shrubland, Beta Sky, Beta Taiga, and other biomes. 
 createWorld.customize.custom.modernbetaforge.useVillageVariants.tooltip=Generate biome-specific villages in Beta biomes.
@@ -284,10 +292,10 @@ createWorld.customize.custom.modernbetaforge.spawnWaterMobs=Water Mobs
 createWorld.customize.custom.modernbetaforge.spawnAmbientMobs=Ambient Mobs
 createWorld.customize.custom.modernbetaforge.spawnWolves=Wolves
 
-createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs.tooltip=Spawn passive mobs added in later versions.
-createWorld.customize.custom.modernbetaforge.spawnNewMonsterMobs.tooltip=Spawn hostile mobs added in later versions.
-createWorld.customize.custom.modernbetaforge.spawnWaterMobs.tooltip=Spawn water mobs added in later versions. By default, this includes just squid.
-createWorld.customize.custom.modernbetaforge.spawnAmbientMobs.tooltip=Spawn ambient mobs added in later versions. By default, this includes just bats.
+createWorld.customize.custom.modernbetaforge.spawnNewCreatureMobs.tooltip=Spawn passive mobs added in later versions in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.spawnNewMonsterMobs.tooltip=Spawn hostile mobs added in later versions in Modern Beta biomes.
+createWorld.customize.custom.modernbetaforge.spawnWaterMobs.tooltip=Spawn water mobs added in later versions in Modern Beta biomes. By default, this includes just squid.
+createWorld.customize.custom.modernbetaforge.spawnAmbientMobs.tooltip=Spawn ambient mobs added in later versions in Modern Beta biomes. By default, this includes just bats.
 createWorld.customize.custom.modernbetaforge.spawnWolves.tooltip=Spawn wolves in most Modern Beta forest biomes.
 
 # Page 4 - Ores

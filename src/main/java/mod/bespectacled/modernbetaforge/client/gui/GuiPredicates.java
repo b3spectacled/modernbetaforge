@@ -75,6 +75,10 @@ public class GuiPredicates {
     public static final GuiPredicate CAVE_COUNT_TEST;
     public static final GuiPredicate CAVE_CHANCE_TEST;
     public static final GuiPredicate RAVINE_CHANCE_TEST;
+    public static final GuiPredicate USE_DEEP_CAVES_TEST;
+    public static final GuiPredicate DEEP_CAVE_WIDTH_TEST;
+    public static final GuiPredicate DEEP_CAVE_COUNT_TEST;
+    public static final GuiPredicate DEEP_CAVE_CHANCE_TEST;
     public static final GuiPredicate USE_STRONGHOLDS_TEST;
     public static final GuiPredicate USE_VILLAGES_TEST;
     public static final GuiPredicate USE_VILLAGE_VARIANTS_TEST;
@@ -331,6 +335,85 @@ public class GuiPredicates {
         
         return NOISE_SETTINGS.get(registryKey).contains(guiId);
     }
+    
+    private static boolean testSurfaceBuilder(ModernBetaGeneratorSettings settings) {
+        boolean isFloating = isChunkInstanceOf(settings, SkylandsChunkSource.class);
+
+        return !isFloating && !isFiniteChunk(settings);
+    }
+    
+    private static boolean testStrongholds(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return isSingleBiome(settings) ? STRONGHOLD.allowedBiomes.contains(biome) : true;
+    }
+    
+    private static boolean testVillages(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
+    }
+    
+    private static boolean testVillageVariants(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        boolean hasVillages = isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
+
+        return hasVillages && settings.useVillages;
+    }
+    
+    private static boolean testTemples(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return isSingleBiome(settings) ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
+    }
+    
+    private static boolean testMonuments(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return isSingleBiome(settings) ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
+    }
+    
+    private static boolean testMansions(ModernBetaGeneratorSettings settings) {
+        Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
+        
+        return isSingleBiome(settings) ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
+    }
+    
+    private static boolean testSandstone(ModernBetaGeneratorSettings settings) {
+        boolean isReleaseSurface = isSurfaceEqualTo(settings, ModernBetaBuiltInTypes.Surface.RELEASE);
+        
+        return !isReleaseSurface && !isFiniteChunk(settings);
+    }
+    
+    private static boolean testModernBetaBiomes(ModernBetaGeneratorSettings settings) {
+        boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+        boolean isFixedBiomeSource = isSingleBiome(settings);
+
+        return isBetaPEBiomeSource || isFixedBiomeSource && isModernBetaBiome(settings);
+    }
+    
+    private static boolean testBetaBiomes(ModernBetaGeneratorSettings settings) {
+        boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+        boolean isFixedBiomeSource = isSingleBiome(settings);
+
+        return isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings);
+    }
+    
+    private static boolean testNewTrees(ModernBetaGeneratorSettings settings) {
+        boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+        boolean isFixedBiomeSource = isSingleBiome(settings);
+        boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
+        
+        return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings));
+    }
+    
+    private static boolean testFancyOakTrees(ModernBetaGeneratorSettings settings) {
+        boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
+        boolean isFixedBiomeSource = isSingleBiome(settings);
+        boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
+        
+        return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isFancyOakBiome(settings));
+    }
 
     static {
         NOISE_SETTINGS.put(
@@ -505,176 +588,89 @@ public class GuiPredicates {
             )
         );
         
-        SURFACE_BUILDER_TEST = new GuiPredicate(
-            settings -> {
-                boolean isFloating = isChunkInstanceOf(settings, SkylandsChunkSource.class);
-
-                return !isFloating && !isFiniteChunk(settings);
-            },
-            GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE
-        );
+        SURFACE_BUILDER_TEST = new GuiPredicate(GuiPredicates::testSurfaceBuilder, GuiIdentifiers.PG0_S_SURFACE, GuiIdentifiers.PG0_B_SURFACE);
         SPAWN_LOCATOR_TEST = new GuiPredicate(settings -> !isFiniteChunk(settings), GuiIdentifiers.PG0_S_SPAWN, GuiIdentifiers.PG0_B_SPAWN);
-        SINGLE_BIOME_TEST = new GuiPredicate(settings -> isSingleBiome(settings), GuiIdentifiers.PG0_B_FIXED);
+        SINGLE_BIOME_TEST = new GuiPredicate(GuiPredicates::isSingleBiome, GuiIdentifiers.PG0_B_FIXED);
         REPLACE_OCEAN_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverOcean.class), GuiIdentifiers.PG0_B_USE_OCEAN);
         REPLACE_BEACH_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverBeach.class), GuiIdentifiers.PG0_B_USE_BEACH);
         REPLACE_RIVER_TEST = new GuiPredicate(settings -> isBiomeInstanceOf(settings, BiomeResolverRiver.class), GuiIdentifiers.PG0_B_USE_RIVER);
-        SEA_LEVEL_TEST = new GuiPredicate(SURFACE_BUILDER_TEST::test, GuiIdentifiers.PG0_S_SEA_LEVEL);
+        SEA_LEVEL_TEST = new GuiPredicate(GuiPredicates::testSurfaceBuilder, GuiIdentifiers.PG0_S_SEA_LEVEL);
         CAVE_WIDTH_TEST = new GuiPredicate(settings -> isCarverInstanceof(settings, MapGenBetaCave.class), GuiIdentifiers.PG0_S_CAVE_WIDTH);
-        CAVE_HEIGHT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_HEIGHT);
-        CAVE_COUNT_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_COUNT);
-        CAVE_CHANCE_TEST = new GuiPredicate(CAVE_WIDTH_TEST::test, GuiIdentifiers.PG0_S_CAVE_CHANCE);
+        CAVE_HEIGHT_TEST = new GuiPredicate(settings -> isCarverInstanceof(settings, MapGenBetaCave.class), GuiIdentifiers.PG0_S_CAVE_HEIGHT);
+        CAVE_COUNT_TEST = new GuiPredicate(settings -> isCarverInstanceof(settings, MapGenBetaCave.class), GuiIdentifiers.PG0_S_CAVE_COUNT);
+        CAVE_CHANCE_TEST = new GuiPredicate(settings -> isCarverInstanceof(settings, MapGenBetaCave.class), GuiIdentifiers.PG0_S_CAVE_CHANCE);
         RAVINE_CHANCE_TEST = new GuiPredicate(settings -> settings.useRavines, GuiIdentifiers.PG0_S_RAVINE_CHANCE);
-        USE_STRONGHOLDS_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-    
-                return isSingleBiome(settings) ? STRONGHOLD.allowedBiomes.contains(biome) : true;
-            },
-            GuiIdentifiers.PG0_B_USE_HOLDS
-        );
-        USE_VILLAGES_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-    
-                return isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
-            },
-            GuiIdentifiers.PG0_B_USE_VILLAGES
-        );
-        USE_VILLAGE_VARIANTS_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-                boolean hasVillages = isSingleBiome(settings) ? MapGenVillage.VILLAGE_SPAWN_BIOMES.contains(biome) : true;
-    
-                return hasVillages && settings.useVillages; 
-            },
-            GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS
-        );
-        USE_TEMPLES_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-    
-                return isSingleBiome(settings) ? MapGenScatteredFeature.BIOMELIST.contains(biome) : true;
-            },
-            GuiIdentifiers.PG0_B_USE_TEMPLES
-        );
-        USE_MONUMENTS_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-    
-                return isSingleBiome(settings) ? StructureOceanMonument.SPAWN_BIOMES.contains(biome) : true;
-            },
-            GuiIdentifiers.PG0_B_USE_MONUMENTS
-        );
-        USE_MANSIONS_TEST = new GuiPredicate(
-            settings -> {
-                Biome biome = ForgeRegistries.BIOMES.getValue(settings.singleBiome);
-    
-                return isSingleBiome(settings) ? WoodlandMansion.ALLOWED_BIOMES.contains(biome) : true;
-            },
-            GuiIdentifiers.PG0_B_USE_MANSIONS
-        );
+        USE_DEEP_CAVES_TEST = new GuiPredicate(settings -> ModCompat.HEIGHT_MANAGER.extendsHeight(), GuiIdentifiers.PG0_B_USE_DEEP_CAVES);
+        DEEP_CAVE_WIDTH_TEST = new GuiPredicate(settings -> ModCompat.HEIGHT_MANAGER.extendsHeight() && settings.useDeepCaves, GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH);
+        DEEP_CAVE_COUNT_TEST = new GuiPredicate(settings -> ModCompat.HEIGHT_MANAGER.extendsHeight() && settings.useDeepCaves, GuiIdentifiers.PG0_S_DEEP_CAVE_COUNT);
+        DEEP_CAVE_CHANCE_TEST = new GuiPredicate(settings -> ModCompat.HEIGHT_MANAGER.extendsHeight() && settings.useDeepCaves, GuiIdentifiers.PG0_S_DEEP_CAVE_CHANCE);
+        USE_STRONGHOLDS_TEST = new GuiPredicate(GuiPredicates::testStrongholds, GuiIdentifiers.PG0_B_USE_HOLDS);
+        USE_VILLAGES_TEST = new GuiPredicate(GuiPredicates::testVillages,  GuiIdentifiers.PG0_B_USE_VILLAGES);
+        USE_VILLAGE_VARIANTS_TEST = new GuiPredicate(GuiPredicates::testVillageVariants, GuiIdentifiers.PG0_B_USE_VILLAGE_VARIANTS);
+        USE_TEMPLES_TEST = new GuiPredicate(GuiPredicates::testTemples, GuiIdentifiers.PG0_B_USE_TEMPLES);
+        USE_MONUMENTS_TEST = new GuiPredicate(GuiPredicates::testMonuments, GuiIdentifiers.PG0_B_USE_MONUMENTS);
+        USE_MANSIONS_TEST = new GuiPredicate(GuiPredicates::testMansions, GuiIdentifiers.PG0_B_USE_MANSIONS);
         DUNGEON_CHANCE_TEST = new GuiPredicate(settings -> settings.useDungeons, GuiIdentifiers.PG0_S_DUNGEON_CHANCE);
         WATER_LAKE_CHANCE_TEST = new GuiPredicate(settings -> settings.useWaterLakes, GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE);
         LAVA_LAKE_CHANCE_TEST = new GuiPredicate(settings -> settings.useLavaLakes, GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE);
-        USE_SANDSTONE_TEST = new GuiPredicate(
-            settings -> {
-                boolean isReleaseSurface = isSurfaceEqualTo(settings, ModernBetaBuiltInTypes.Surface.RELEASE);
-                
-                return !isReleaseSurface && !isFiniteChunk(settings);
-            },
-            GuiIdentifiers.PG0_B_USE_SANDSTONE
-        );
+        USE_SANDSTONE_TEST = new GuiPredicate(GuiPredicates::testSandstone, GuiIdentifiers.PG0_B_USE_SANDSTONE);
         USE_OLD_NETHER_TEST = new GuiPredicate(settings -> ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_OLD_NETHER);
         USE_NETHER_CAVES_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_NETHER_CAVES);
-        USE_FORTRESSES_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_FORTRESSES);
-        USE_LAVA_POCKETS_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
+        USE_FORTRESSES_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_FORTRESSES);
+        USE_LAVA_POCKETS_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG0_B_USE_LAVA_POCKETS);
         LEVEL_THEME_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_THEME);
-        LEVEL_TYPE_TEST = new GuiPredicate(LEVEL_THEME_TEST::test, GuiIdentifiers.PG1_S_LEVEL_TYPE);
-        LEVEL_WIDTH_TEST = new GuiPredicate(settings -> isFiniteChunk(settings), GuiIdentifiers.PG1_S_LEVEL_WIDTH);
-        LEVEL_LENGTH_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_LENGTH);
-        LEVEL_HEIGHT_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_HEIGHT);
-        LEVEL_HOUSE_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_S_LEVEL_HOUSE);
-        USE_INDEV_CAVES_TEST = new GuiPredicate(LEVEL_WIDTH_TEST::test, GuiIdentifiers.PG1_B_USE_INDEV_CAVES);
+        LEVEL_TYPE_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INDEV), GuiIdentifiers.PG1_S_LEVEL_TYPE);
+        LEVEL_WIDTH_TEST = new GuiPredicate(GuiPredicates::isFiniteChunk, GuiIdentifiers.PG1_S_LEVEL_WIDTH);
+        LEVEL_LENGTH_TEST = new GuiPredicate(GuiPredicates::isFiniteChunk, GuiIdentifiers.PG1_S_LEVEL_LENGTH);
+        LEVEL_HEIGHT_TEST = new GuiPredicate(GuiPredicates::isFiniteChunk, GuiIdentifiers.PG1_S_LEVEL_HEIGHT);
+        LEVEL_HOUSE_TEST = new GuiPredicate(GuiPredicates::isFiniteChunk, GuiIdentifiers.PG1_S_LEVEL_HOUSE);
+        USE_INDEV_CAVES_TEST = new GuiPredicate(GuiPredicates::isFiniteChunk, GuiIdentifiers.PG1_B_USE_INDEV_CAVES);
         LEVEL_CAVE_WIDTH_TEST = new GuiPredicate(settings -> isFiniteChunk(settings) && settings.useIndevCaves, GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH);
         USE_INFDEV_WALLS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_WALLS);
-        USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(USE_INFDEV_WALLS_TEST::test, GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
+        USE_INFDEV_PYRAMIDS_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.INFDEV_227), GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS);
         RIVER_SIZE_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class), GuiIdentifiers.PG1_S_RIVER_SZ);
-        LAYER_SIZE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test, GuiIdentifiers.PG1_S_LAYER_SZ);
-        LAYER_TYPE_TEST = new GuiPredicate(RIVER_SIZE_TEST::test,GuiIdentifiers.PG1_S_LAYER_TYPE);
+        LAYER_SIZE_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class), GuiIdentifiers.PG1_S_LAYER_SZ);
+        LAYER_TYPE_TEST = new GuiPredicate(settings -> isChunkEqualTo(settings, ModernBetaBuiltInTypes.Chunk.RELEASE) && !isBiomeInstanceOf(settings, NoiseBiomeSource.class),GuiIdentifiers.PG1_S_LAYER_TYPE);
         
-        USE_TALL_GRASS_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-    
-                return isBetaPEBiomeSource || isFixedBiomeSource && isModernBetaBiome(settings);
-            },
-            GuiIdentifiers.PG2_B_USE_GRASS
-        );
-        USE_NEW_FLOWERS_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-    
-                return isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings);
-            },
-            GuiIdentifiers.PG2_B_USE_FLOWERS
-        );
-        USE_DOUBLE_PLANTS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_DOUBLE);
-        USE_LILY_PADS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_PADS);
-        USE_MELONS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_MELONS);
-        USE_DESERT_WELLS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_WELLS);
-        USE_FOSSILS_TEST = new GuiPredicate(USE_NEW_FLOWERS_TEST::test, GuiIdentifiers.PG2_B_USE_FOSSILS);
-        USE_SAND_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
-        USE_GRAVEL_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
-        USE_CLAY_DISKS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
-        USE_BIRCH_TREES_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-                boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
-                
-                return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isBetaBiome(settings));
-            },
-            GuiIdentifiers.PG2_B_USE_BIRCH
-        );
-        USE_PINE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_PINE);
-        USE_SWAMP_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_SWAMP);
-        USE_JUNGLE_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_JUNGLE);
-        USE_ACACIA_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_ACACIA);
-        USE_DARK_OAK_TREES_TEST = new GuiPredicate(USE_BIRCH_TREES_TEST::test, GuiIdentifiers.PG2_B_USE_DARK_OAK);
-        USE_NEW_FANCY_OAK_TREES_TEST = new GuiPredicate(
-            settings -> {
-                boolean isBetaPEBiomeSource = isBetaOrPEBiomeSource(settings);
-                boolean isFixedBiomeSource = isSingleBiome(settings);
-                boolean isDynamicTreesLoaded = ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID);
-                
-                return (!isDynamicTreesLoaded || isDynamicTreesLoaded && !CompatDynamicTrees.isEnabled()) && (isBetaPEBiomeSource || isFixedBiomeSource && isFancyOakBiome(settings));
-            },
-            GuiIdentifiers.PG2_B_USE_FANCY_OAK
-        );
-        SPAWN_NEW_CREATURE_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_CREATURE);
-        SPAWN_NEW_MONSTER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_MONSTER);
-        SPAWN_WATER_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WATER);
-        SPAWN_AMBIENT_MOBS_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_AMBIENT);
-        SPAWN_WOLVES_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG2_B_SPAWN_WOLVES);
+        USE_TALL_GRASS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_GRASS);
+        USE_NEW_FLOWERS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_FLOWERS);
+        USE_DOUBLE_PLANTS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_DOUBLE);
+        USE_LILY_PADS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_PADS);
+        USE_MELONS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_MELONS);
+        USE_DESERT_WELLS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_WELLS);
+        USE_FOSSILS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_FOSSILS);
+        USE_SAND_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
+        USE_GRAVEL_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
+        USE_CLAY_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
+        USE_BIRCH_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_BIRCH);
+        USE_PINE_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_PINE);
+        USE_SWAMP_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_SWAMP);
+        USE_JUNGLE_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_JUNGLE);
+        USE_ACACIA_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_ACACIA);
+        USE_DARK_OAK_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_DARK_OAK);
+        USE_NEW_FANCY_OAK_TREES_TEST = new GuiPredicate(GuiPredicates::testFancyOakTrees, GuiIdentifiers.PG2_B_USE_FANCY_OAK);
+        SPAWN_NEW_CREATURE_MOBS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_SPAWN_CREATURE);
+        SPAWN_NEW_MONSTER_MOBS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_SPAWN_MONSTER);
+        SPAWN_WATER_MOBS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_SPAWN_WATER);
+        SPAWN_AMBIENT_MOBS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_SPAWN_AMBIENT);
+        SPAWN_WOLVES_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_SPAWN_WOLVES);
         
         BIOME_SIZE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_BIOME_SZ);
         SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_SNOWY_CHANCE);
 
-        ORE_TYPE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_ORE_TYPE);
-        CLAY_SIZE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_SIZE);
-        CLAY_COUNT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_CNT);
-        CLAY_MIN_HEIGHT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_MIN);
-        CLAY_MAX_HEIGHT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_CLAY_MAX);
-        EMERALD_SIZE_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_EMER_SIZE);
-        EMERALD_COUNT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_EMER_CNT);
-        EMERALD_MIN_HEIGHT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_EMER_MIN);
-        EMERALD_MAX_HEIGHT_TEST = new GuiPredicate(USE_TALL_GRASS_TEST::test, GuiIdentifiers.PG3_S_EMER_MAX);
-        QUARTZ_SIZE_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG3_S_QRTZ_SIZE);
-        QUARTZ_COUNT_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG3_S_QRTZ_CNT);
-        MAGMA_SIZE_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG3_S_MGMA_SIZE);
-        MAGMA_COUNT_TEST = new GuiPredicate(USE_NETHER_CAVES_TEST::test, GuiIdentifiers.PG3_S_MGMA_CNT);
+        ORE_TYPE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_ORE_TYPE);
+        CLAY_SIZE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_SIZE);
+        CLAY_COUNT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_CNT);
+        CLAY_MIN_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_MIN);
+        CLAY_MAX_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_MAX);
+        EMERALD_SIZE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_SIZE);
+        EMERALD_COUNT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_CNT);
+        EMERALD_MIN_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_MIN);
+        EMERALD_MAX_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_MAX);
+        QUARTZ_SIZE_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG3_S_QRTZ_SIZE);
+        QUARTZ_COUNT_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG3_S_QRTZ_CNT);
+        MAGMA_SIZE_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG3_S_MGMA_SIZE);
+        MAGMA_COUNT_TEST = new GuiPredicate(settings -> settings.useOldNether && ModCompat.NETHER_MANAGER.isCompatible(), GuiIdentifiers.PG3_S_MGMA_CNT);
         
         COORDINATE_SCALE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_COORD_SCL), GuiIdentifiers.PG4_S_COORD_SCL, GuiIdentifiers.PG5_F_COORD_SCL);
         HEIGHT_SCALE_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_HEIGH_SCL), GuiIdentifiers.PG4_S_HEIGH_SCL, GuiIdentifiers.PG5_F_HEIGH_SCL);
@@ -691,9 +687,9 @@ public class GuiPredicates {
         STRETCH_Y_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_STRETCH_Y), GuiIdentifiers.PG4_S_STRETCH_Y, GuiIdentifiers.PG5_F_STRETCH_Y);
         HEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_HEIGH_LIM), GuiIdentifiers.PG4_S_HEIGH_LIM, GuiIdentifiers.PG5_F_HEIGH_LIM);
         FLOOR_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_HEIGH_FLR) && ModCompat.HEIGHT_MANAGER.extendsHeight(), GuiIdentifiers.PG4_S_HEIGH_FLR, GuiIdentifiers.PG5_F_HEIGH_FLR);
-        TEMP_NOISE_SCALE_TEST = new GuiPredicate(settings -> isBetaOrPESource(settings), GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
-        RAIN_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
-        DETAIL_NOISE_SCALE_TEST = new GuiPredicate(TEMP_NOISE_SCALE_TEST::test, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);
+        TEMP_NOISE_SCALE_TEST = new GuiPredicate(GuiPredicates::isBetaOrPESource, GuiIdentifiers.PG4_S_TEMP_SCL, GuiIdentifiers.PG5_F_TEMP_SCL);
+        RAIN_NOISE_SCALE_TEST = new GuiPredicate(GuiPredicates::isBetaOrPESource, GuiIdentifiers.PG4_S_RAIN_SCL, GuiIdentifiers.PG5_F_RAIN_SCL);
+        DETAIL_NOISE_SCALE_TEST = new GuiPredicate(GuiPredicates::isBetaOrPESource, GuiIdentifiers.PG4_S_DETL_SCL, GuiIdentifiers.PG5_F_DETL_SCL);
         USE_TERRAIN_COORD_FIX_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_B_TERR_FIX), GuiIdentifiers.PG4_B_TERR_FIX);
         BIOME_DEPTH_WEIGHT_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_WT), GuiIdentifiers.PG4_S_B_DPTH_WT, GuiIdentifiers.PG5_F_B_DPTH_WT);
         BIOME_DEPTH_OFFSET_TEST = new GuiPredicate(settings -> containsNoiseSetting(settings, GuiIdentifiers.PG4_S_B_DPTH_OF), GuiIdentifiers.PG4_S_B_DPTH_OF, GuiIdentifiers.PG5_F_B_DPTH_OF);

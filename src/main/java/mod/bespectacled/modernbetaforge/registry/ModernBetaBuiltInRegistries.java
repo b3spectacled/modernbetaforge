@@ -36,6 +36,7 @@ import mod.bespectacled.modernbetaforge.client.gui.screen.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
 import mod.bespectacled.modernbetaforge.world.biome.source.BetaBiomeSource;
@@ -172,6 +173,21 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModernBetaChunkGenerator.CAVE_WATER_KEY, (chunkSource, settings) ->
             settings.useUnderwaterCaves ?
                 TerrainGen.getModdedMapGen(new MapGenBetaCaveUnderwater(chunkSource, settings), EventType.CUSTOM) :
+                new MapGenNoOp(chunkSource, settings)
+        );
+        registry.register(ModernBetaChunkGenerator.DEEP_CAVE_KEY, (chunkSource, settings) ->
+            settings.useDeepCaves && ModCompat.HEIGHT_MANAGER.extendsHeight() ?
+                TerrainGen.getModdedMapGen(new MapGenBeta18Cave(
+                    chunkSource.getDefaultBlock(),
+                    chunkSource.getDefaultFluid(),
+                    BlockStates.AIR,
+                    settings.deepCaveWidth,
+                    8,
+                    settings.deepCaveCount,
+                    settings.deepCaveChance,
+                    settings.floor,
+                    settings.floor
+                ), EventType.CUSTOM) :
                 new MapGenNoOp(chunkSource, settings)
         );
     }
@@ -323,6 +339,10 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.CAVE_COUNT, GuiPredicates.CAVE_COUNT_TEST);
         registry.register(GuiPredicate.CAVE_CHANCE, GuiPredicates.CAVE_CHANCE_TEST);
         registry.register(GuiPredicate.RAVINE_CHANCE, GuiPredicates.RAVINE_CHANCE_TEST);
+        registry.register(GuiPredicate.USE_DEEP_CAVES, GuiPredicates.USE_DEEP_CAVES_TEST);
+        registry.register(GuiPredicate.DEEP_CAVE_WIDTH, GuiPredicates.DEEP_CAVE_WIDTH_TEST);
+        registry.register(GuiPredicate.DEEP_CAVE_COUNT, GuiPredicates.DEEP_CAVE_COUNT_TEST);
+        registry.register(GuiPredicate.DEEP_CAVE_CHANCE, GuiPredicates.DEEP_CAVE_CHANCE_TEST);
         registry.register(GuiPredicate.USE_STRONGHOLDS, GuiPredicates.USE_STRONGHOLDS_TEST);
         registry.register(GuiPredicate.USE_VILLAGES, GuiPredicates.USE_VILLAGES_TEST);
         registry.register(GuiPredicate.USE_VILLAGE_VARIANTS, GuiPredicates.USE_VILLAGE_VARIANTS_TEST);
