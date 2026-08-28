@@ -826,6 +826,7 @@ modernbetaforge.general.debugoptions.displaypreviewgenerationinfo=Display Previe
 modernbetaforge.general.debugoptions.registerdebugproperties=Register Debug Properties
 modernbetaforge.general.debugoptions.registerdebugnoisechunksource=Register Debug Noise Chunk Source
 modernbetaforge.general.debugoptions.debugblocksources=Debug Block Sources
+modernbetaforge.general.debugoptions.debugcrosssection=Debug Cross Section
 modernbetaforge.general.debugoptions.debugindevlevelsaves=Debug Indev Level Saves
 
 modernbetaforge.general.experimentaloptions.enableexperimentalfeatures=Enable Experimental Features

@@ -14,6 +14,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverOcean;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.blocksource.BlockSource;
 import mod.bespectacled.modernbetaforge.api.world.spawn.WorldSpawner;
+import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
@@ -259,7 +260,7 @@ public abstract class ChunkSource {
      * @return Whether the chunk should be skipped.
      */
     public boolean skipChunk(int chunkX, int chunkZ) {
-        return false;
+        return ModernBetaConfig.debugOptions.debugCrossSection && chunkX < 0;
     }
     
     /**

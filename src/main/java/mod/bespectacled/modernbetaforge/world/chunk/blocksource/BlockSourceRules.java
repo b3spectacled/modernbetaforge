@@ -13,23 +13,31 @@ public class BlockSourceRules implements BlockSource {
     private final List<BlockSource> rules;
     private final IBlockState defaultBlock;
     
+    private final boolean debugBlockSources;
+    private final boolean debugCrossSection;
+    
     private BlockSourceRules(List<BlockSource> rules, IBlockState defaultBlock) {
         this.rules = rules;
         this.defaultBlock = defaultBlock;
+        
+        this.debugBlockSources = ModernBetaConfig.debugOptions.debugBlockSources;
+        this.debugCrossSection = ModernBetaConfig.debugOptions.debugCrossSection;
     }
 
     @Override
     public IBlockState sample(int x, int y, int z) {
+        boolean debugCrossSection = this.debugCrossSection && x < 0;
+        
         for (int i = 0; i < this.rules.size(); ++i) {
             IBlockState blockState = this.rules.get(i).sample(x, y, z);
             
             if (blockState == null)
                 continue;
             
-            return blockState;
+            return debugCrossSection ? BlockStates.AIR : blockState;
         }
         
-        return ModernBetaConfig.debugOptions.debugBlockSources ? BlockStates.AIR : this.defaultBlock;
+        return this.debugBlockSources || debugCrossSection ? BlockStates.AIR : this.defaultBlock;
     }
     
     public static class Builder {

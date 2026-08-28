@@ -401,7 +401,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
         
-        return !this.inWorldBounds(startX, startZ);
+        return !this.inWorldBounds(startX, startZ) || (ModernBetaConfig.debugOptions.debugCrossSection && chunkX < 0);
     }
     
     /**

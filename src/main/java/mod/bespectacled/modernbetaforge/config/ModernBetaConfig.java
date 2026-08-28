@@ -183,6 +183,12 @@ public class ModernBetaConfig {
         public boolean debugBlockSources = false;
         
         @Comment({
+            "Debug world generation by generating cross section along x-axis."
+        })
+        @RequiresWorldRestart
+        public boolean debugCrossSection = false;
+        
+        @Comment({
             "Debug Indev level saving functionality."
         })
         @RequiresWorldRestart
