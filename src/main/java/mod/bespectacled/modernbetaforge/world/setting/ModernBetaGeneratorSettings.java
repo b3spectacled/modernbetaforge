@@ -735,7 +735,7 @@ public class ModernBetaGeneratorSettings {
     }
     
     public static int getMinCaveHeight() {
-        return getMinFloor() + 9;
+        return getMinHeight() + 8;
     }
     
     public static int getMaxCaveHeight() {
