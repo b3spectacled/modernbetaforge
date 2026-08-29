@@ -1,10 +1,17 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.Set;
+import java.util.Map.Entry;
+
+import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableSet;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
+import mod.bespectacled.modernbetaforge.compat.CarverCompat;
+import mod.bespectacled.modernbetaforge.compat.Compat;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -21,12 +28,20 @@ public class MapGenRavineExtended extends MapGenRavine {
     
     private final Block defaultBlock;
     private final Set<Block> defaultFluids;
+    
+    private final Set<Block> carvables;
+    private final Set<Block> uncarvables;
+    
     private final int ravineChance;
     private final MutableBlockPos mutablePos;
 
     public MapGenRavineExtended(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = chunkSource.getDefaultBlock().getBlock();
         this.defaultFluids = MapGenBetaCave.getDefaultFluids(chunkSource.getDefaultFluid());
+        
+        this.carvables = this.initializeCarvables(this.defaultBlock).build();
+        this.uncarvables = this.initializeUncarvables().build();
+        
         this.ravineChance = settings.ravineChance;
         this.mutablePos = new MutableBlockPos();
     }
@@ -62,7 +77,7 @@ public class MapGenRavineExtended extends MapGenRavine {
             fillerBlock = biome.fillerBlock.getBlock();
         }
         
-        if (block == this.defaultBlock || block == topBlock || block == fillerBlock) {
+        if ((block == topBlock || block == fillerBlock || this.carvables.contains(block)) && !this.uncarvables.contains(block)) {
             if (y - 1 < 10) {
                 chunkPrimer.setBlockState(x, y, z, FLOWING_LAVA);
             } else {
@@ -78,6 +93,36 @@ public class MapGenRavineExtended extends MapGenRavine {
     @Override
     protected boolean isOceanBlock(ChunkPrimer chunkPrimer, int x, int y, int z, int chunkX, int chunkZ) {
         return this.defaultFluids.contains(chunkPrimer.getBlockState(x, y, z).getBlock());
+    }
+
+    private ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
+        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
+        
+        // Add default blocks
+        carvables.add(defaultBlock)
+            .add(Blocks.STONE)
+            .add(Blocks.COAL_ORE)
+            .add(Blocks.IRON_ORE)
+            ;
+        
+        // Add modded blocks
+        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
+            Compat compat = entry.getValue();
+            if (compat instanceof CarverCompat) {
+                ModernBeta.log(Level.DEBUG, String.format("Adding ravine carvables from mod '%s'", entry.getKey()));
+                
+                carvables.addAll(((CarverCompat)compat).getCarvables());
+            }
+        }
+        
+        return carvables;
+    }
+    
+    private ImmutableSet.Builder<Block> initializeUncarvables() {
+        ImmutableSet.Builder<Block> uncarvables = new ImmutableSet.Builder<>();
+        uncarvables.add(Blocks.SAND);
+
+        return uncarvables;
     }
     
     private boolean isExceptionBiome(Biome biome) {
