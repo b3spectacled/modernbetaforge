@@ -75,6 +75,7 @@ public class ModernBetaGeneratorSettings {
     public static final int MAX_WATER_LAKE_CHANCE = 100;
     public static final int MIN_LAVA_LAKE_CHANCE = 10;
     public static final int MAX_LAVA_LAKE_CHANCE = 100;
+    public static final int CARVER_LAVA_LEVEL = 10;
     
     public static final float MIN_LEVEL_CAVE_WIDTH = 1.0f;
     public static final float MAX_LEVEL_CAVE_WIDTH = 5.0f;

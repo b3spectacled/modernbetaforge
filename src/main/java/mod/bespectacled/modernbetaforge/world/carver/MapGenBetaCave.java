@@ -38,8 +38,6 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class MapGenBetaCave extends MapGenBase {
     private static final int STRUCTURE_PADDING_XZ = 4;
     private static final int STRUCTURE_PADDING_Y = 8;
-
-    protected static final int LAVA_LEVEL = 10;
     
     protected final Block defaultBlock;
     protected final Set<Block> defaultFluids;
@@ -56,18 +54,19 @@ public class MapGenBetaCave extends MapGenBase {
     protected final int caveChance;
     protected final int caveMinY;
     protected final int worldFloor;
+    protected final int worldHeight;
     
     private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldFloor());
+        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldFloor(), chunkSource.getWorldHeight());
     }
     
     public MapGenBetaCave() {
-        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0);
+        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0, 255);
     }
     
-    public MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor) {
+    public MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor, int worldHeight) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
@@ -83,6 +82,7 @@ public class MapGenBetaCave extends MapGenBase {
         this.caveChance = caveChance;
         this.caveMinY = caveMinY;
         this.worldFloor = worldFloor;
+        this.worldHeight = worldHeight;
         
         this.tunnelRandom = new Random();
         this.featureRandom = new Random();
@@ -147,7 +147,7 @@ public class MapGenBetaCave extends MapGenBase {
         double ctrX = startX + 8;
         double ctrZ = startZ + 8;
     
-        if ( // Check for valid tunnel starts, I guess? Or to prevent overlap?
+        if (
         x < ctrX - 16.0 - yaw * 2.0 || z < ctrZ - 16.0 - yaw * 2.0 || x > ctrX + 16.0 + yaw * 2.0 || z > ctrZ + 16.0 + yaw * 2.0) {
             return false;
         }
@@ -168,11 +168,11 @@ public class MapGenBetaCave extends MapGenBase {
             maxX = 16;
         }
     
-        if (minY < this.caveMinY + 1) {
-            minY = this.caveMinY + 1;
+        if (minY < this.worldFloor + 1) {
+            minY = this.worldFloor + 1;
         }
-        if (maxY > this.caveHeight - 8) {
-            maxY = this.caveHeight - 8;
+        if (maxY > this.worldHeight - 8) {
+            maxY = this.worldHeight - 8;
         }
     
         if (minZ < 0) {
@@ -219,7 +219,7 @@ public class MapGenBetaCave extends MapGenBase {
         int localZ = blockPos.getZ() & 0xF;
         
         if (this.isPositionCarvable(blockPos, block)) {
-            if (localY - 1 < this.worldFloor + LAVA_LEVEL) { // Set lava below y = 10
+            if (localY - 1 < this.worldFloor + ModernBetaGeneratorSettings.CARVER_LAVA_LEVEL) { // Set lava below y = 10
                 chunkPrimer.setBlockState(localX, localY, localZ, Blocks.LAVA.getDefaultState());
             } else {
                 chunkPrimer.setBlockState(localX, localY, localZ, this.defaultFill.getDefaultState());

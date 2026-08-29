@@ -23,20 +23,20 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenCaves;
 
 public class MapGenCavesExtended extends MapGenCaves {
-    private static final int LAVA_LEVEL = 10;
-    
     private final Block defaultBlock;
     private final Set<Block> defaultFluids;
     private final Set<Block> carvables;
-    private final MutableBlockPos mutablePos;
+    
     private final int worldFloor;
+    private final MutableBlockPos mutablePos;
     
     public MapGenCavesExtended(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = chunkSource.getDefaultBlock().getBlock();
         this.defaultFluids = MapGenBetaCave.getDefaultFluids(chunkSource.getDefaultFluid());
         this.carvables = this.initializeCarvables(this.defaultBlock).build();
-        this.mutablePos = new MutableBlockPos();
+        
         this.worldFloor = chunkSource.getWorldFloor();
+        this.mutablePos = new MutableBlockPos();
     }
     
     @Override
@@ -60,7 +60,7 @@ public class MapGenCavesExtended extends MapGenCaves {
         Block fillerBlock = biome.fillerBlock.getBlock();
 
         if (this.canReplaceBlock(blockState, blockStateUp) || block == topBlock || block == fillerBlock) {
-            if (y - 1 < this.worldFloor + LAVA_LEVEL) {
+            if (y - 1 < this.worldFloor + ModernBetaGeneratorSettings.CARVER_LAVA_LEVEL) {
                 chunkPrimer.setBlockState(x, y, z, BlockStates.LAVA);
             } else {
                 chunkPrimer.setBlockState(x, y, z, BlockStates.AIR);

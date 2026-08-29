@@ -19,7 +19,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class MapGenBetaCaveUnderwater extends MapGenBeta18Cave {
     public MapGenBetaCaveUnderwater(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        super(chunkSource.getDefaultBlock(), BlockStates.AIR, chunkSource.getDefaultFluid(), 1.0f, chunkSource.getSeaLevel(), 20, 15, 0, chunkSource.getWorldFloor());
+        super(chunkSource.getDefaultBlock(), BlockStates.AIR, chunkSource.getDefaultFluid(), 1.0f, chunkSource.getSeaLevel(), 20, 15, 0, chunkSource.getWorldFloor(), chunkSource.getWorldHeight());
     }
     
     @Override
@@ -58,7 +58,7 @@ public class MapGenBetaCaveUnderwater extends MapGenBeta18Cave {
         int localY = blockPos.getY();
         int localZ = blockPos.getZ() & 0xF;
         
-        if (this.isPositionCarvable(blockPos, block) && localY - 1 == LAVA_LEVEL - 1) {
+        if (this.isPositionCarvable(blockPos, block) && localY - 1 == ModernBetaGeneratorSettings.CARVER_LAVA_LEVEL - 1) {
             chunkPrimer.setBlockState(localX, localY, localZ, BlockStates.OBSIDIAN);
             
         } else {

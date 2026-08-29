@@ -33,6 +33,7 @@ public class MapGenRavineExtended extends MapGenRavine {
     private final Set<Block> uncarvables;
     
     private final int ravineChance;
+    private final int worldFloor;
     private final MutableBlockPos mutablePos;
 
     public MapGenRavineExtended(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
@@ -43,6 +44,7 @@ public class MapGenRavineExtended extends MapGenRavine {
         this.uncarvables = this.initializeUncarvables().build();
         
         this.ravineChance = settings.ravineChance;
+        this.worldFloor = settings.floor;
         this.mutablePos = new MutableBlockPos();
     }
     
@@ -78,7 +80,7 @@ public class MapGenRavineExtended extends MapGenRavine {
         }
         
         if ((block == topBlock || block == fillerBlock || this.carvables.contains(block)) && !this.uncarvables.contains(block)) {
-            if (y - 1 < 10) {
+            if (y - 1 < this.worldFloor + ModernBetaGeneratorSettings.CARVER_LAVA_LEVEL) {
                 chunkPrimer.setBlockState(x, y, z, FLOWING_LAVA);
             } else {
                 chunkPrimer.setBlockState(x, y, z, AIR);

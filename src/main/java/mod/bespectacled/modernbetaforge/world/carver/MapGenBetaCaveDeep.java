@@ -17,13 +17,14 @@ public class MapGenBetaCaveDeep extends MapGenBeta18Cave {
             settings.deepCaveCount,
             settings.deepCaveChance,
             settings.floor,
-            settings.floor
+            settings.floor,
+            settings.height
         );
     }
     
     @Override
     protected boolean isPositionForRegionUncarvable(int localX, int y, int localZ, Block block) {
         return super.isPositionForRegionUncarvable(localX, y, localZ, block) ||
-            (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) && y > this.worldFloor + LAVA_LEVEL;
+            (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) && y > this.worldFloor + ModernBetaGeneratorSettings.CARVER_LAVA_LEVEL;
     }
 }
