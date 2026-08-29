@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.logging.log4j.Level;
 
@@ -65,7 +65,7 @@ public class MapGenRavineExtended extends MapGenRavine {
     }
     
     @Override
-    protected void digBlock(ChunkPrimer chunkPrimer, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop) {
+    protected void digBlock(ChunkPrimer chunkPrimer, int x, int y, int z, int chunkX, int chunkZ, boolean isTopSoil) {
         Biome biome = this.world.getBiome(this.mutablePos.setPos(x + chunkX * 16, 0, z + chunkZ * 16));
         
         Block block = chunkPrimer.getBlockState(x, y, z).getBlock();
@@ -83,7 +83,7 @@ public class MapGenRavineExtended extends MapGenRavine {
             } else {
                 chunkPrimer.setBlockState(x, y, z, AIR);
 
-                if (foundTop && chunkPrimer.getBlockState(x, y - 1, z).getBlock() == fillerBlock) {
+                if (isTopSoil && chunkPrimer.getBlockState(x, y - 1, z).getBlock() == fillerBlock) {
                     chunkPrimer.setBlockState(x, y - 1, z, topBlock.getDefaultState());
                 }
             }

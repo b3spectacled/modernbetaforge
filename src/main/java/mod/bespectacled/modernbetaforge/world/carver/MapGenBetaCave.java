@@ -191,7 +191,7 @@ public class MapGenBetaCave extends MapGenBase {
     
             for (int localZ = minZ; localZ < maxZ; localZ++) {
                 double scaledLocalZ = (((double)localZ + startZ + 0.5) - z) / yaw;
-                boolean isGrassBlock = false;
+                boolean isTopSoil = false;
                 
                 for (int localY = maxY; localY >= minY; localY--) {
                     double scaledLocalY = (((double)localY - 1 + 0.5) - y) / pitch;
@@ -200,11 +200,11 @@ public class MapGenBetaCave extends MapGenBase {
                         Block block = chunkPrimer.getBlockState(localX, localY, localZ).getBlock();
     
                         if (block == Blocks.GRASS) {
-                            isGrassBlock = true;
+                            isTopSoil = true;
                         }
     
                         blockPos.setPos(localX + startX, localY, localZ + startZ);
-                        this.carveAtPoint(chunkPrimer, blockPos, block, isGrassBlock);
+                        this.carveAtPoint(chunkPrimer, blockPos, block, isTopSoil);
                     }
                 }
             }
@@ -213,7 +213,7 @@ public class MapGenBetaCave extends MapGenBase {
         return true;
     }
 
-    protected void carveAtPoint(ChunkPrimer chunkPrimer, BlockPos blockPos, Block block, boolean isGrassBlock) {
+    protected void carveAtPoint(ChunkPrimer chunkPrimer, BlockPos blockPos, Block block, boolean isTopSoil) {
         int localX = blockPos.getX() & 0xF;
         int localY = blockPos.getY();
         int localZ = blockPos.getZ() & 0xF;
@@ -225,7 +225,7 @@ public class MapGenBetaCave extends MapGenBase {
                 chunkPrimer.setBlockState(localX, localY, localZ, this.defaultFill.getDefaultState());
     
                 // This replaces carved-out dirt with grass, if block that was removed was grass.
-                if (isGrassBlock && chunkPrimer.getBlockState(localX, localY - 1, localZ).getBlock() == Blocks.DIRT) {
+                if (isTopSoil && chunkPrimer.getBlockState(localX, localY - 1, localZ).getBlock() == Blocks.DIRT) {
                     chunkPrimer.setBlockState(localX, localY - 1, localZ, Blocks.GRASS.getDefaultState());
                 }
             }
@@ -266,6 +266,10 @@ public class MapGenBetaCave extends MapGenBase {
         Block fillerBlock = biome.fillerBlock.getBlock();
         
         return (this.carvables.contains(block) || topBlock == block || fillerBlock == block) && !this.uncarvables.contains(block);
+    }
+    
+    protected boolean isPositionForRegionUncarvable(int localX, int y, int localZ, Block block) {
+        return this.defaultFluids.contains(block);
     }
 
     protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
@@ -403,7 +407,7 @@ public class MapGenBetaCave extends MapGenBase {
                         continue;
                     }
                     
-                    if (this.defaultFluids.contains(chunkPrimer.getBlockState(localX, y, localZ).getBlock())) {
+                    if (this.isPositionForRegionUncarvable(localX, y, localZ, chunkPrimer.getBlockState(localX, y, localZ).getBlock())) {
                         return true;
                     }
                     
