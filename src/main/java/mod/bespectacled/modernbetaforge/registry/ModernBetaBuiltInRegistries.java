@@ -160,10 +160,7 @@ public class ModernBetaBuiltInRegistries {
         ModernBetaRegistry<CarverCreator> registry = ModernBetaRegistries.CARVER;
         
         registry.register(ModernBetaChunkGenerator.CAVE_KEY, (chunkSource, settings) -> 
-            TerrainGen.getModdedMapGen(
-                ModernBetaRegistries.CAVE_CARVER.get(settings.caveCarver).apply(chunkSource, settings),
-                EventType.CAVE
-            )
+            TerrainGen.getModdedMapGen(ModernBetaRegistries.CAVE_CARVER.get(settings.caveCarver).apply(chunkSource, settings), EventType.CAVE)
         );
         registry.register(ModernBetaChunkGenerator.RAVINE_KEY, (chunkSource, settings) -> 
             settings.useRavines ?

@@ -22,7 +22,7 @@ public class AlphaSurfaceBuilder extends NoiseSurfaceBuilder {
     
     @Override
     public boolean isBedrock(int y, Random random) {
-        return this.useBedrock() && y <= random.nextInt(6) - 1;
+        return this.useBedrock() && y <= random.nextInt(6) + this.getWorldFloor() - 1;
     }
     
     @Override

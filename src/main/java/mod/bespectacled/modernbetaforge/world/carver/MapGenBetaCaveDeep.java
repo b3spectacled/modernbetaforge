@@ -11,7 +11,7 @@ public class MapGenBetaCaveDeep extends MapGenBeta18Cave {
             chunkSource.getDefaultFluid(),
             BlockStates.AIR,
             settings.deepCaveWidth,
-            8,
+            32,
             settings.deepCaveCount,
             settings.deepCaveChance,
             settings.floor,

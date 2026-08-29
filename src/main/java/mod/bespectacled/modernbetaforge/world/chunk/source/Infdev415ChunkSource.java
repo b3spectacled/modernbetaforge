@@ -60,7 +60,9 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
         double lowerLimitScale = this.settings.lowerLimitScale;
         double upperLimitScale = this.settings.upperLimitScale;
         
-        for (int noiseY = 0; noiseY < buffer.length; ++noiseY) {
+        for (int bufferY = 0; bufferY < buffer.length; ++bufferY) {
+            int noiseY = bufferY + this.noiseMinY;
+            
             double density;
             double densityOffset = this.sampleNoiseOffset(noiseY, 0.0, 0.0);
             
@@ -116,7 +118,7 @@ public class Infdev415ChunkSource extends NoiseChunkSource {
                 density = minLimitVal + (maxLimitVal - minLimitVal) * delta;
             };
             
-            buffer[noiseY] = density;
+            buffer[bufferY] = density;
         }
     }
     

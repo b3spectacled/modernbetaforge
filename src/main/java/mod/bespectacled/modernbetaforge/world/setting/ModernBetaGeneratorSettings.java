@@ -2117,7 +2117,7 @@ public class ModernBetaGeneratorSettings {
                 factory.caveChance = MathHelper.clamp(factory.caveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
                 factory.ravineChance = MathHelper.clamp(factory.ravineChance, MIN_RAVINE_CHANCE, MAX_RAVINE_CHANCE);
                 
-                factory.deepCaveWidth = MathHelper.clamp(factory.caveChance, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH);
+                factory.deepCaveWidth = MathHelper.clamp(factory.deepCaveWidth, MIN_CAVE_WIDTH, MAX_CAVE_WIDTH);
                 factory.deepCaveCount = MathHelper.clamp(factory.deepCaveCount, MIN_CAVE_COUNT, MAX_CAVE_COUNT);
                 factory.deepCaveChance = MathHelper.clamp(factory.deepCaveChance, MIN_CAVE_CHANCE, MAX_CAVE_CHANCE);
                 
