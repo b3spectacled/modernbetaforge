@@ -69,6 +69,7 @@ public class ModCompat {
     public static class HeightManager {
         private HeightCompat heightCompat;
         private int numHeightMods;
+        private String heightModId;
         private boolean warned;
         
         private HeightManager() { }
@@ -85,9 +86,14 @@ public class ModCompat {
             return this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
         }
         
+        public String getHeightModId() {
+            return this.numHeightMods == 1 ? this.heightModId : null;
+        }
+        
         private void checkCompat(Compat compat) {
             if (compat instanceof HeightCompat) {
                 this.heightCompat = (HeightCompat)compat;
+                this.heightModId = compat.getModId();
                 this.numHeightMods++;
             }
             
@@ -99,25 +105,26 @@ public class ModCompat {
     }
     
     public static class NetherManager {
-        private List<String> incompatibleMods;
+        private List<String> incompatibleModIds;
         private boolean isCompatible;
         
         private NetherManager() { 
-            this.incompatibleMods = new ArrayList<>();
+            this.incompatibleModIds = new ArrayList<>();
+            this.isCompatible = true;
         }
         
         public boolean isCompatible() {
             return this.isCompatible;
         }
         
-        public List<String> getIncompatibleMods() {
-            return new ArrayList<>(this.incompatibleMods);
+        public List<String> getIncompatibleModIds() {
+            return new ArrayList<>(this.incompatibleModIds);
         }
         
         private void checkCompat(Compat compat) {
             if (compat instanceof NetherCompat && !((NetherCompat)compat).isCompatible()) {
                 this.isCompatible = false;
-                this.incompatibleMods.add(compat.getModId());
+                this.incompatibleModIds.add(compat.getModId());
             }
         }
     }

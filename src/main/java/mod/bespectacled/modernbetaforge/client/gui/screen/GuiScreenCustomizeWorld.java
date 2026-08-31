@@ -145,7 +145,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private ModernBetaGeneratorSettings.Factory prevSettings;
     private ModernBetaGeneratorSettings builtSettings;
     private GuiPageButtonList pageList;
-    private GuiPageButtonList.GuiListEntry[][] pageArray;
+    private GuiListEntry[][] pageArray;
     private GuiButton buttonDone;
     private GuiButton buttonRandomize;
     private GuiButton buttonDefaults;
@@ -263,7 +263,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG0_B_FLUID, NbtTags.DEFAULT_FLUID, true) :
             this.createGuiSlider(GuiIdentifiers.PG0_S_FLUID, NbtTags.DEFAULT_FLUID, 0f, ForgeRegistryUtil.getFluidBlockRegistryNames().size() - 1, defaultFluidId, this);
         
-        GuiPageButtonList.GuiListEntry[] pageBasic = {
+        GuiListEntry[] pageBasic = {
             chunkEntry,
             biomeEntry,
             surfaceEntry,
@@ -317,7 +317,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_POCKETS, NbtTags.USE_LAVA_POCKETS, this.settings.useLavaPockets)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageChunk = {
+        GuiListEntry[] pageChunk = {
             this.createGuiLabel(GuiIdentifiers.PG1_L_INFDEV_227_FEATURES, "page1", "infdev227"),
             null,
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_INFDEV_WALLS, NbtTags.USE_INFDEV_WALLS, this.settings.useInfdevWalls),
@@ -343,7 +343,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG1_S_LAYER_TYPE, NbtTags.LAYER_TYPE, 0f, GenLayerType.values().length - 1, layerTypeId, this)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageBiome = {
+        GuiListEntry[] pageBiome = {
             this.createGuiLabel(GuiIdentifiers.PG2_L_BETA, "page2", "beta"),
             null,
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
@@ -380,7 +380,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null
         };
         
-        GuiPageButtonList.GuiListEntry[] pageOre = {
+        GuiListEntry[] pageOre = {
             this.createGuiSlider(GuiIdentifiers.PG3_S_ORE_TYPE, NbtTags.ORE_TYPE, 0f, OreType.values().length - 1, oreTypeId, this),
             null,
                 
@@ -486,7 +486,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
         };
         
-        GuiPageButtonList.GuiListEntry[] pageNoise0 = {
+        GuiListEntry[] pageNoise0 = {
             this.createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_X, NbtTags.MAIN_NOISE_SCALE_X, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleX, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Y, NbtTags.MAIN_NOISE_SCALE_Y, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleY, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_MAIN_NS_Z, NbtTags.MAIN_NOISE_SCALE_Z, ModernBetaGeneratorSettings.MIN_MAIN_NOISE, ModernBetaGeneratorSettings.MAX_MAIN_NOISE, this.settings.mainNoiseScaleZ, this),
@@ -532,7 +532,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null
         };
         
-        GuiPageButtonList.GuiListEntry[] pageNoise1 = {
+        GuiListEntry[] pageNoise1 = {
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_X, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_X),
             this.createGuiField(GuiIdentifiers.PG5_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_Y, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_Y),
@@ -598,7 +598,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiField(GuiIdentifiers.PG5_F_END_OUT_OF, String.format("%2.3f", this.settings.endOuterIslandOffset), this.floatFilter)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageClimate = {
+        GuiListEntry[] pageClimate = {
             this.createGuiButton(GuiIdentifiers.PG6_B_CLIMATE_FEAT, NbtTags.USE_CLIMATE_FEATURES, this.settings.useClimateFeatures),
             this.createGuiSlider(GuiIdentifiers.PG6_S_SNOW_OFFSET, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.getMinSeaLevel(), ModernBetaGeneratorSettings.getMaxSeaLevel(), this.settings.snowLineOffset, this),
             
@@ -702,8 +702,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG6_TUND_BEACH, NbtTags.TUNDRA_BIOME_BEACH, true)
         };
         
-        GuiPageButtonList.GuiListEntry[] pageCustom = this.createCustomPropertyPage();
-        
         if (!ModCompat.NETHER_MANAGER.isCompatible()) {
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
             pageBasic[pageBasic.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, TextFormatting.GRAY, "page0", "netherIncompatible");
@@ -716,7 +714,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageBiome[pageBiome.length - 1] = null;
         }
         
-        GuiPageButtonList.GuiListEntry[][] pageArray = new GuiPageButtonList.GuiListEntry[][] {
+        GuiListEntry[][] pageArray = new GuiListEntry[][] {
             pageBasic,
             pageChunk,
             pageBiome,
@@ -724,7 +722,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageNoise0,
             pageNoise1,
             pageClimate,
-            pageCustom
+            this.createCustomPropertyPage()
         };
         
         if (ModernBetaRegistries.PROPERTY.getValues().isEmpty()) {
@@ -1987,7 +1985,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
     }
     
-    private GuiPageButtonList.GuiListEntry[] createCustomPropertyPage() {
+    private GuiListEntry[] createCustomPropertyPage() {
         // Get total number of page list entries,
         // and add an additional entry for float/int/string properties to accommodate label entry
         List<ResourceLocation> propertyKeys = new ArrayList<>();
@@ -2044,7 +2042,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             modRegistryKeys.get(namespace).getSecond().add(registryKey);
         }
         
-        GuiPageButtonList.GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
+        GuiListEntry[] pageList = new GuiPageButtonList.GuiListEntry[numEntries];
         
         int ndx = 0;
         for (String namespace : modRegistryKeys.keySet()) {
@@ -2506,7 +2504,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         if (this.hoveredId == GuiIdentifiers.PG0_L_NETHER_BOP) {
             String tooltip = I18n.format(this.translationKeyMap.get(this.hoveredId) + ".tooltip");
             int tooltipWidth = this.fontRenderer.getStringWidth(tooltip);
-            List<String> incompatibleMods = ModCompat.NETHER_MANAGER.getIncompatibleMods();
+            List<String> incompatibleMods = ModCompat.NETHER_MANAGER.getIncompatibleModIds();
             String modList = "";
             
             for (int i = 0; i < incompatibleMods.size(); ++i) {
@@ -2542,7 +2540,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "min")) + TextFormatting.YELLOW + range.getFirst().get().toString());
             tooltips.add(TextFormatting.AQUA + String.format("%s: ", I18n.format(PREFIX + "max")) + TextFormatting.YELLOW + range.getSecond().get().toString());
         }
-        
+
         if (!tooltips.isEmpty() && System.currentTimeMillis() - this.lastHovered > TOOLTIP_DELAY) {
             int paddingL = 5;
             int paddingT = 5;

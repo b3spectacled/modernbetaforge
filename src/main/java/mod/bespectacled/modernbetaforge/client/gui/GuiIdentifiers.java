@@ -571,6 +571,10 @@ public class GuiIdentifiers {
             .put(GuiIdentifiers.PG0_S_CAVE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_CAVE_CHANCE))
             .put(GuiIdentifiers.PG0_S_RAVINE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_RAVINE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_RAVINE_CHANCE))
             
+            .put(GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_WIDTH, () -> ModernBetaGeneratorSettings.MAX_CAVE_WIDTH))
+            .put(GuiIdentifiers.PG0_S_DEEP_CAVE_COUNT, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_COUNT, () -> ModernBetaGeneratorSettings.MAX_CAVE_COUNT))
+            .put(GuiIdentifiers.PG0_S_DEEP_CAVE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_CAVE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_CAVE_CHANCE))
+            
             .put(GuiIdentifiers.PG0_S_DUNGEON_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_DUNGEON_CHANCE, () -> ModernBetaGeneratorSettings.MAX_DUNGEON_CHANCE))
             .put(GuiIdentifiers.PG0_S_WATER_LAKE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_WATER_LAKE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_WATER_LAKE_CHANCE))
             .put(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE))
