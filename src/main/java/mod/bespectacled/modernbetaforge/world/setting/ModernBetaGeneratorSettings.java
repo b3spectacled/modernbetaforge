@@ -1072,7 +1072,7 @@ public class ModernBetaGeneratorSettings {
             this.ravineChance = 50;
             this.useUnderwaterCaves = false;
             
-            this.useDeepCaves = true;
+            this.useDeepCaves = false;
             this.deepCaveWidth = 1.0f;
             this.deepCaveCount = 40;
             this.deepCaveChance = 15;
