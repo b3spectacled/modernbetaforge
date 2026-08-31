@@ -53,6 +53,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonNav;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonTab;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiHoverableText;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalChangelist;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirm;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePreview.PreviewSettings;
@@ -111,7 +112,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final String PREFIX_LABEL = "createWorld.customize.custom.label.modernbetaforge.";
     
     private static final int PAGE_TITLE_HEIGHT = 7;
-    
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
     private static final int PAGELIST_SCROLLBAR_PADDING = 24;
@@ -128,6 +128,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int TOOLTIP_MAX_WIDTH = 140;
     private static final int TOOLTIP_LINE_SPACING = 3;
     private static final long TOOLTIP_DELAY = 250L;
+    
+    private static final int HEIGHT_INFO_OFFSET_X = 5;
+    private static final int HEIGHT_INFO_OFFSET_Y = 5;
     
     private final GuiCreateWorld parent;
     private final Predicate<String> floatFilter;
@@ -153,6 +156,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonPreview;
     private GuiButton buttonNavL;
     private GuiButton buttonNavR;
+    private GuiHoverableText heightInfo;
     private boolean settingsModified;
     private boolean clicked;
     private boolean clickedRandom;
@@ -835,16 +839,15 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        
-        int curPage = 0;
-        int curScroll = 0;
-        
-        if (this.pageList != null) {
-            curPage = this.pageList.getPage();
-            curScroll = this.pageList.getAmountScrolled();
-        }
-        
         this.buttonList.clear();
+        
+        int curPage = this.pageList != null ? this.pageList.getPage() : 0;
+        int curScroll = this.pageList != null ? this.pageList.getAmountScrolled() : 0;
+        
+        this.createPagedList();
+        this.pageList.setPage(curPage);
+        this.pageList.scrollBy(curScroll);
+        this.createPageTabs();
 
         int centerX = this.width / 2;
         
@@ -854,25 +857,46 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int previewX = centerX - BUTTON_WIDTH / 2;
         int presetsX = centerX + BUTTON_WIDTH / 2 + 3;
         int doneX = centerX + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
-
-        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
-        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
-        
-        this.createPagedList();
-        this.pageList.setPage(curPage);
-        this.pageList.scrollBy(curScroll);
-        this.createPageTabs();
         
         int tabY = this.pageList.top + this.pageList.headerPadding - TAB_BUTTON_HEIGHT;
         int navY = tabY + (TAB_BUTTON_HEIGHT - GuiButtonNav.BUTTON_SIZE) / 2;
         int navXL = this.tabStartX - GuiButtonNav.getButtonWidth(this.mc, KeyBindings.LEFT_NAV_KEY.getDisplayName()) - 3;
         int navXR = this.tabEndX + 3;
 
+        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
+
         this.buttonNavL = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_LNAV, navXL, navY, KeyBindings.LEFT_NAV_KEY.getDisplayName()));
         this.buttonNavR = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_RNAV, navXR, navY, KeyBindings.RIGHT_NAV_KEY.getDisplayName()));
+        
+        if (ModCompat.HEIGHT_MANAGER.extendsHeight()) {
+            int heightX = HEIGHT_INFO_OFFSET_X;
+            int heightY = this.pageList.top + HEIGHT_INFO_OFFSET_Y;
+            String heightText = TextFormatting.RESET + "[" + TextFormatting.BOLD + "\u16E8" + TextFormatting.RESET + "]";
+            List<String> heightTooltips = new ArrayList<>();
+            
+            String title = ModCompat.HEIGHT_MANAGER.getModId();
+            String version = ModCompat.HEIGHT_MANAGER.getModRecommendedVersion();
+            String note = ModCompat.HEIGHT_MANAGER.getModTooltip();
+            
+            heightTooltips.add(TextFormatting.AQUA + I18n.format(PREFIX + "heightExtension.title") + ": " + TextFormatting.RESET + title);
+            
+            if (version != null && !version.isEmpty()) {
+                heightTooltips.add(TextFormatting.AQUA + I18n.format(PREFIX + "heightExtension.version") + ": " + TextFormatting.RESET + version);
+            }
+            
+            if (note != null && !note.isEmpty()) {
+                String noteText = TextFormatting.AQUA + I18n.format(PREFIX + "heightExtension.note") + ": " + TextFormatting.RESET + note;
+                
+                heightTooltips.addAll(this.fontRenderer.listFormattedStringToWidth(noteText, 200));
+            }
+            
+            this.heightInfo = new GuiHoverableText(this.mc, heightX, heightY, heightText, heightTooltips);
+        }
+        
         
         // Set default enabled for certain options
         this.initButtonValidity();
@@ -1772,6 +1796,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         // Tooltips
         this.updateHoveredTooltip(mouseX, mouseY);
         this.drawHoveredTooltip(mouseX, mouseY);
+        
+        // Info
+        if (this.heightInfo != null) {
+            this.heightInfo.draw(this.mc, mouseX, mouseY, partialTicks);
+        }
     }
     
     @Override

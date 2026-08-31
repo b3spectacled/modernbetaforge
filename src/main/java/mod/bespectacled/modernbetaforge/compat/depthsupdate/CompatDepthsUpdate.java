@@ -17,12 +17,14 @@ import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.HeightCompat;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat, CarverCompat {
 	public static final String MOD_ID = "depthsupdate";
+	public static final String RECOMMENDED_MOD_VERSION = "1.12.2-1.0.0-a12";
     public static final String ADDON_ID = "compat" + MOD_ID;
 	
 	public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
@@ -69,6 +71,16 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat, C
 	public String getModId() {
 		return MOD_ID;
 	}
+    
+    @Override
+    public String getRecommendedModVersion() {
+        return RECOMMENDED_MOD_VERSION;
+    }
+    
+    @Override
+    public String getModTooltip() {
+        return I18n.format(String.format("createWorld.customize.custom.%s.tooltip", ADDON_ID));
+    }
 
     @Override
     public boolean extendHeight() {

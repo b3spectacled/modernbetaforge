@@ -67,9 +67,9 @@ public class ModCompat {
 
     @SuppressWarnings("deprecation")
     public static class HeightManager {
+        private Compat compat;
         private HeightCompat heightCompat;
         private int numHeightMods;
-        private String heightModId;
         private boolean warned;
         
         private HeightManager() { }
@@ -86,14 +86,22 @@ public class ModCompat {
             return this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
         }
         
-        public String getHeightModId() {
-            return this.numHeightMods == 1 ? this.heightModId : null;
+        public String getModId() {
+            return this.compat.getModId();
+        }
+        
+        public String getModRecommendedVersion() {
+            return this.compat.getRecommendedModVersion();
+        }
+        
+        public String getModTooltip() {
+            return this.compat.getModTooltip();
         }
         
         private void checkCompat(Compat compat) {
             if (compat instanceof HeightCompat) {
+                this.compat = compat;
                 this.heightCompat = (HeightCompat)compat;
-                this.heightModId = compat.getModId();
                 this.numHeightMods++;
             }
             
