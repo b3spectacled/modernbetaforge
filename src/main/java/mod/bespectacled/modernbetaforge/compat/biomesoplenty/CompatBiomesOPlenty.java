@@ -113,7 +113,7 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_TEMP_SCHEME, new GuiPredicate(settings ->
             GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
         ));
-            ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_RAIN_SCHEME, new GuiPredicate(settings ->
+        ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_RAIN_SCHEME, new GuiPredicate(settings ->
             GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
         ));
     }

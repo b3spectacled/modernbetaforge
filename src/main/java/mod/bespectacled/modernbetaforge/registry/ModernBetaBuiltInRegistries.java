@@ -35,6 +35,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
+import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
@@ -302,6 +303,10 @@ public class ModernBetaBuiltInRegistries {
         
         if (ModCompat.isCompatLoaded(CompatBiomesOPlenty.MOD_ID)) {
             registry.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
+        }
+        
+        if (ModCompat.isCompatLoaded(CompatDepthsUpdate.MOD_ID)) {
+            registry.register(GuiCustomizePresets.DEPTHS_UPDATE_BETA, GuiCustomizePresets.PRESET_DEPTHS_UPDATE_BETA);
         }
         
         if (ModernBetaConfig.debugOptions.registerDebugNoiseChunkSource) {
