@@ -766,7 +766,7 @@ createWorld.customize.custom.preset.info.modernbetaforge.beta_plus=Beta generati
 createWorld.customize.custom.preset.info.modernbetaforge.beta_pe=Based on Minecraft PE v0.6.0 with Beta biomes
 createWorld.customize.custom.preset.info.modernbetaforge.beta_release=Release 1.12.2 generation with Beta biomes
 createWorld.customize.custom.preset.info.modernbetaforge.bop=Biomes O' Plenty world type generation
-createWorld.customize.custom.preset.info.modernbetaforge.depths_update_beta=Beta generation with extended depths and modified ore distributions.
+createWorld.customize.custom.preset.info.modernbetaforge.depths_update_beta=Beta generation with extended depths and ore distributions
 
 ## Commands
 commands.modernbetaforge.locate.usage=/modernbetaforge:locate <structure>
