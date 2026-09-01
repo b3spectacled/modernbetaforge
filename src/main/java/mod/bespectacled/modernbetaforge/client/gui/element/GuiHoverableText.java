@@ -17,6 +17,8 @@ public class GuiHoverableText extends Gui {
     private static final int TOOLTIP_LINE_SPACING = 3;
     private static final long TOOLTIP_DELAY = 250L;
     
+    private static boolean hoveredOnce = false;
+    
     private final int x;
     private final int y;
     private final int width;
@@ -45,8 +47,10 @@ public class GuiHoverableText extends Gui {
         
         this.bounds.updateBounds(this.x, this.y, this.width, this.height);
         this.bounds.updateHovered(mouseX, mouseY);
-        
-        int textColor = this.bounds.isHovered() ? GuiColors.RGB_LIGHT_YELLOW : GuiColors.RGB_WHITE;
+
+        int textColor = this.bounds.isHovered() ?
+            GuiColors.RGB_LIGHT_YELLOW :
+            (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_GREY;
         
         if (this.bounds.isHovered()) {
             if (!lastHovered) {
@@ -55,6 +59,10 @@ public class GuiHoverableText extends Gui {
             
             if (System.currentTimeMillis() > this.lastHovered + TOOLTIP_DELAY) {
                 this.drawTooltip(mc);
+            }
+            
+            if (!hoveredOnce) {
+                hoveredOnce = true;
             }
         }
         
