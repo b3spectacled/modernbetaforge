@@ -5,7 +5,10 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
+import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -29,6 +32,24 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
                 
                 Biome biome = biomes[localX + localZ * 16];
                 this.useCustomSurfaceBuilder(world, biome, chunkPrimer, random, x, z, true);
+                
+                // Post-process bedrock for variable height (extended) worlds
+                if (this.getWorldFloor() != 0) {
+                    for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
+                        IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
+                        
+                        // Replace vanilla bedrock layer with either default block or air, depending on height map
+                        if (y >= 0 && y <= 4 && blockState.getBlock() == Blocks.BEDROCK) {
+                            int height = this.chunkSource.getHeight(x, z, Type.FLOOR);
+                            
+                            chunkPrimer.setBlockState(localX, y, localZ, y <= height ? this.defaultBlock : BlockStates.AIR);
+                        }
+                        
+                        if (this.isBedrock(y, random)) {
+                            chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
+                        }
+                    }
+                }
             }
         }
     }
