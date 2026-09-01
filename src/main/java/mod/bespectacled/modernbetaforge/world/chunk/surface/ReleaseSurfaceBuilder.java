@@ -5,7 +5,6 @@ import java.util.Random;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
-import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk.Type;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -38,11 +37,12 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
                     for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
                         IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
                         
-                        // Replace vanilla bedrock layer with either default block or air, depending on height map
-                        if (y >= 0 && y <= 4 && blockState.getBlock() == Blocks.BEDROCK) {
-                            int height = this.chunkSource.getHeight(x, z, Type.FLOOR);
-                            
-                            chunkPrimer.setBlockState(localX, y, localZ, y <= height ? this.defaultBlock : BlockStates.AIR);
+                        // Replace vanilla bedrock layer with default block
+                        // This will wipe out all original bedrock, regardless of height,
+                        // to account for odd bedrock generation ranges;
+                        // surely no one is crazy enough to generate surfaces with bedrock..?
+                        if (blockState.getBlock() == Blocks.BEDROCK) {
+                            chunkPrimer.setBlockState(localX, y, localZ, this.defaultBlock);
                         }
                         
                         if (this.isBedrock(y, random)) {
