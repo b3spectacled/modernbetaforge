@@ -47,10 +47,12 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         );
         this.injectedBiomeCache = new ChunkCache<BiomeChunk>(
             "biomes",
-            (chunkX, chunkZ) -> new BiomeChunk(this.chunkGenerator.getBiomes(chunkX, chunkZ))
+            (chunkX, chunkZ) -> new BiomeChunk(
+                // Get base biomes if chunk generator is not set, which should normally not happen
+                // unless another mod uses the biome provider alone for some reason (e.g. Extra Utilities)
+                this.chunkGenerator != null ? this.chunkGenerator.getBiomes(chunkX, chunkZ) : this.getBaseBiomes(chunkX, chunkZ)
+            )
         );
-        
-        this.chunkGenerator = null;
         
         DebugUtil.resetDebug(DebugUtil.SECTION_GET_BASE_BIOMES);
     }
