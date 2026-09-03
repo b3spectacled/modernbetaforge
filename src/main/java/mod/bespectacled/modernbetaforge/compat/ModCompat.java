@@ -47,7 +47,7 @@ public class ModCompat {
         return LOADED_COMPATS.containsKey(modId);
     }
     
-    private static void loadCompat(Compat compat) {
+    public static void loadCompat(Compat compat) {
         String modId = compat.getModId();
         
         if (Loader.isModLoaded(modId)) {

@@ -36,7 +36,7 @@ public class BlockSourceDeepslate implements BlockSource {
         if (y <= this.deepslateMaxY - this.deepslateRange) {
             return this.deepslateBlock;
         }
-        
+
         double chance = (this.deepslateMaxY - y) / (double)this.deepslateRange;
         return this.random.nextDouble() < chance ? this.deepslateBlock : null;
     }

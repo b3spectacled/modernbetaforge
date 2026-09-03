@@ -23,6 +23,7 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
         int startZ = chunkZ * 16;
         
         Random random = this.createSurfaceRandom(chunkX, chunkZ);
+        IBlockState[] blockColumn = new IBlockState[this.getWorldHeight() - this.getWorldFloor() + 1];
 
         for (int localX = 0; localX < 16; ++localX) {
             for (int localZ = 0; localZ < 16; ++localZ) {
@@ -30,25 +31,37 @@ public class ReleaseSurfaceBuilder extends SurfaceBuilder {
                 int z = startZ + localZ;
                 
                 Biome biome = biomes[localX + localZ * 16];
+                this.preProcessBedrock(chunkPrimer, localX, localZ, blockColumn);
                 this.useCustomSurfaceBuilder(world, biome, chunkPrimer, random, x, z, true);
+                this.postProcessBedrock(chunkPrimer, localX, localZ, random, blockColumn);
+            }
+        }
+    }
+    
+    private void preProcessBedrock(ChunkPrimer chunkPrimer, int localX, int localZ, IBlockState[] blockColumn) {
+        // Pre-process bedrock for variable height (extended) worlds
+        if (this.getWorldFloor() != 0) {
+            for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
+                blockColumn[y - this.getWorldFloor()] = chunkPrimer.getBlockState(localX, y, localZ);
+            }
+        }
+    }
+    
+    private void postProcessBedrock(ChunkPrimer chunkPrimer, int localX, int localZ, Random random, IBlockState[] blockColumn) {
+        // Post-process bedrock for variable height (extended) worlds
+        if (this.getWorldFloor() != 0) {
+            for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
+                IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
+                IBlockState prevBlockState = blockColumn[y - this.getWorldFloor()];
                 
-                // Post-process bedrock for variable height (extended) worlds
-                if (this.getWorldFloor() != 0) {
-                    for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
-                        IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
-                        
-                        // Replace vanilla bedrock layer with default block
-                        // This will wipe out all original bedrock, regardless of height,
-                        // to account for odd bedrock generation ranges;
-                        // surely no one is crazy enough to generate surfaces with bedrock..?
-                        if (blockState.getBlock() == Blocks.BEDROCK) {
-                            chunkPrimer.setBlockState(localX, y, localZ, this.defaultBlock);
-                        }
-                        
-                        if (this.isBedrock(y, random)) {
-                            chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
-                        }
-                    }
+                // Replace vanilla bedrock layer with pre-surface generation block,
+                // which would have been supplied by the block source rules
+                if (blockState.getBlock() == Blocks.BEDROCK) {
+                    chunkPrimer.setBlockState(localX, y, localZ, prevBlockState);
+                }
+                
+                if (this.isBedrock(y, random)) {
+                    chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
                 }
             }
         }
