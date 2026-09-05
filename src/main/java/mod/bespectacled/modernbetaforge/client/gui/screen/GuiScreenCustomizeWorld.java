@@ -924,7 +924,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         if (formattedEntryWidth > this.getTrimWidth()) {
             int colonWidth = fontRenderer.getStringWidth(": ");
-            entryCaption = fontRenderer.trimStringToWidth(entryCaption, this.getTrimWidth() - formattedValueWidth - colonWidth) + "..";
+            entryCaption = fontRenderer.trimStringToWidth(entryCaption, this.getTrimWidth() - formattedValueWidth - colonWidth) + "...";
         }
 
         return entryCaption + ": " + this.getFormattedValue(entry, entryValue);
@@ -2729,7 +2729,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void setTextButton(int id, String value) {
         Gui guiComponent = this.pageList.getComponent(id);
         if (guiComponent != null && guiComponent instanceof GuiButton) {
-            ((GuiButton)guiComponent).displayString = getTrimmedString(value, this.getTrimWidth());
+            ((GuiButton)guiComponent).displayString = value;
         }
     }
     
@@ -2922,8 +2922,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int stringWidth = fontRenderer.getStringWidth(string);
         
         if (trimWidth > 0 && stringWidth > trimWidth) {
-            // TODO: Figure out why the string adds additional periods depending on the length of the trimmed string
-            string = fontRenderer.trimStringToWidth(string, trimWidth) + "...";
+            string = fontRenderer.trimStringToWidth(string, trimWidth).trim() + "...";
         }
         
         return string;
