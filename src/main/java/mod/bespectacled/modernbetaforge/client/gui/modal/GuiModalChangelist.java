@@ -20,7 +20,6 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiCheckbox;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
-import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld.NameFormatterPropertyVisitor;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.util.PresetUtil;
@@ -316,7 +315,7 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
             return FORMATTERS.get(modSetting).apply(modId, modSetting, value);
         } else if (properties.containsKey(registryKey)) {
             Property<?> property = properties.get(registryKey);
-            return property.visitNameFormatter(new NameFormatterPropertyVisitor(), registryKey);
+            return property.visitNameFormatter(((GuiScreenCustomizeWorld)this.parent).new NameFormatterPropertyVisitor(), registryKey);
         }
         
         return value;

@@ -54,6 +54,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonNav;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonTab;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiHoverableText;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiPageButtonListExtended;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalChangelist;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalConfirm;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePreview.PreviewSettings;
@@ -114,8 +115,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGE_TITLE_HEIGHT = 7;
     private static final int PAGELIST_PADDING_TOP = 40;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
-    private static final int PAGELIST_SCROLLBAR_PADDING = 24;
-    private static final int DEFAULT_NAME_TRUNCATE_LEN = 132;
 
     private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
@@ -147,7 +146,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private ModernBetaGeneratorSettings.Factory settings;
     private ModernBetaGeneratorSettings.Factory prevSettings;
     private ModernBetaGeneratorSettings builtSettings;
-    private GuiPageButtonList pageList;
+    private GuiPageButtonListExtended pageList;
     private GuiListEntry[][] pageArray;
     private GuiButton buttonDone;
     private GuiButton buttonRandomize;
@@ -734,7 +733,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         this.pageArray = pageArray;
-        this.pageList = new GuiPageButtonList(
+        this.pageList = new GuiPageButtonListExtended(
             this.mc,
             this.width,
             this.height,
@@ -745,66 +744,64 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             pageArray
         );
         
-        this.pageList.width += PAGELIST_SCROLLBAR_PADDING;
-        
         // Set text for primary options
-        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, DEFAULT_NAME_TRUNCATE_LEN, true));
-        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, DEFAULT_NAME_TRUNCATE_LEN, true));
-        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, DEFAULT_NAME_TRUNCATE_LEN, true));
-        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, DEFAULT_NAME_TRUNCATE_LEN, true));
-        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, DEFAULT_NAME_TRUNCATE_LEN, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_CHUNK, getFormattedRegistryName(this.settings.chunkSource, NbtTags.CHUNK_SOURCE, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_BIOME, getFormattedRegistryName(this.settings.biomeSource, NbtTags.BIOME_SOURCE, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_SURFACE, getFormattedRegistryName(this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_CARVER, getFormattedRegistryName(this.settings.caveCarver, NbtTags.CAVE_CARVER, true));
+        this.setTextButton(GuiIdentifiers.PG0_B_SPAWN, getFormattedRegistryName(this.settings.worldSpawner, NbtTags.WORLD_SPAWNER, true));
         
         // Set text for default block options
-        this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedFluidName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_BLOCK, getFormattedBlockName(this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK));
+        this.setTextButton(GuiIdentifiers.PG0_B_FLUID, getFormattedFluidName(this.settings.defaultFluid, NbtTags.DEFAULT_FLUID));
         
         // Set biome text for Single Biome button
-        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, NbtTags.SINGLE_BIOME, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG0_B_FIXED, getFormattedBiomeName(this.settings.singleBiome, NbtTags.SINGLE_BIOME));
         
         // Set biome text for Beta Biome buttons
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_LAND, getFormattedBiomeName(this.settings.desertBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_OCEAN, getFormattedBiomeName(this.settings.desertBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_DSRT_BEACH, getFormattedBiomeName(this.settings.desertBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_LAND, getFormattedBiomeName(this.settings.forestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_OCEAN, getFormattedBiomeName(this.settings.forestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_FRST_BEACH, getFormattedBiomeName(this.settings.forestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_LAND, getFormattedBiomeName(this.settings.iceDesertBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_OCEAN, getFormattedBiomeName(this.settings.iceDesertBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_ICED_BEACH, getFormattedBiomeName(this.settings.iceDesertBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_LAND, getFormattedBiomeName(this.settings.plainsBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_OCEAN, getFormattedBiomeName(this.settings.plainsBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_PLNS_BEACH, getFormattedBiomeName(this.settings.plainsBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_LAND, getFormattedBiomeName(this.settings.rainforestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_OCEAN, getFormattedBiomeName(this.settings.rainforestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_RAIN_BEACH, getFormattedBiomeName(this.settings.rainforestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_LAND, getFormattedBiomeName(this.settings.savannaBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_OCEAN, getFormattedBiomeName(this.settings.savannaBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SAVA_BEACH, getFormattedBiomeName(this.settings.savannaBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_LAND, getFormattedBiomeName(this.settings.shrublandBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_OCEAN, getFormattedBiomeName(this.settings.shrublandBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SHRB_BEACH, getFormattedBiomeName(this.settings.shrublandBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_LAND, getFormattedBiomeName(this.settings.seasonalForestBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_OCEAN, getFormattedBiomeName(this.settings.seasonalForestBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SEAS_BEACH, getFormattedBiomeName(this.settings.seasonalForestBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_LAND, getFormattedBiomeName(this.settings.swamplandBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_OCEAN, getFormattedBiomeName(this.settings.swamplandBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_SWMP_BEACH, getFormattedBiomeName(this.settings.swamplandBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_LAND, getFormattedBiomeName(this.settings.taigaBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_OCEAN, getFormattedBiomeName(this.settings.taigaBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_TAIG_BEACH, getFormattedBiomeName(this.settings.taigaBiomeBeach));
         
-        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean, DEFAULT_NAME_TRUNCATE_LEN));
-        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach, DEFAULT_NAME_TRUNCATE_LEN));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_LAND, getFormattedBiomeName(this.settings.tundraBiomeBase));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_OCEAN, getFormattedBiomeName(this.settings.tundraBiomeOcean));
+        this.setTextButton(GuiIdentifiers.PG6_TUND_BEACH, getFormattedBiomeName(this.settings.tundraBiomeBeach));
         
         this.setPropertyText();
     }
@@ -911,13 +908,26 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
     
     @Override
-    public String getText(int entry, String entryString, float entryValue) {
+    public String getText(int entry, String entryCaption, float entryValue) {
         // Do not append colon for custom property entries
         if (this.propertyMap.containsKey(entry) || this.guiPropertyMap.containsKey(entry)) {
             return this.getFormattedValue(entry, entryValue);
         }
+        
+        FontRenderer fontRenderer = this.mc.fontRenderer;
+        
+        String formattedValue = this.getFormattedValue(entry, entryValue);
+        String formattedEntry = entryCaption + ": " + formattedValue;
+        
+        int formattedValueWidth = fontRenderer.getStringWidth(formattedValue);
+        int formattedEntryWidth = fontRenderer.getStringWidth(formattedEntry);
+        
+        if (formattedEntryWidth > this.getTrimWidth()) {
+            int colonWidth = fontRenderer.getStringWidth(": ");
+            entryCaption = fontRenderer.trimStringToWidth(entryCaption, this.getTrimWidth() - formattedValueWidth - colonWidth) + "..";
+        }
 
-        return entryString + ": " + this.getFormattedValue(entry, entryValue);
+        return entryCaption + ": " + this.getFormattedValue(entry, entryValue);
     }
 
     @Override
@@ -2170,10 +2180,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     if (randomKey != null && langName != null) {
                         String registryName = randomKey.toString();
                         String formattedName = id == GuiIdentifiers.PG0_B_BLOCK ?
-                            getFormattedBlockName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
+                            getFormattedBlockName(registryName, langName) :
                                 id == GuiIdentifiers.PG0_B_FLUID ? 
-                                getFormattedFluidName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN) :
-                                getFormattedRegistryName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN, true);
+                                getFormattedFluidName(registryName, langName) :
+                                getFormattedRegistryName(registryName, langName, true);
                         
                         GuiIdentifiers.BASE_BUTTON_SETTINGS.get(id).accept(registryName, this.settings);
                         this.setTextButton(id, formattedName);
@@ -2195,7 +2205,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     String langName = id == GuiIdentifiers.PG0_B_FIXED ? NbtTags.SINGLE_BIOME : "";
                     
                     GuiIdentifiers.BIOME_SETTINGS.get(id).accept(registryName,  this.settings);
-                    this.setTextButton(id, getFormattedBiomeName(registryName, langName, DEFAULT_NAME_TRUNCATE_LEN));
+                    this.setTextButton(id, getFormattedBiomeName(registryName, langName));
                 }
                 
             } else {
@@ -2214,6 +2224,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     }
 
     private String getFormattedValue(int entry, float entryValue) {
+        String formattedString;
+        
         if (this.propertyMap.containsKey(entry)) {
             ResourceLocation registryKey = this.propertyMap.get(entry);
             Property<?> property = this.settings.customProperties.get(registryKey);
@@ -2222,171 +2234,154 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ListProperty listProperty = (ListProperty)property;
                 String entryText = String.format("createWorld.customize.custom.%s.%s.", registryKey.getNamespace(), registryKey.getPath());
 
-                return I18n.format(entryText + listProperty.getValues()[(int)entryValue]);
+                formattedString = I18n.format(entryText + listProperty.getValues()[(int)entryValue]);
             } else if (property instanceof IntProperty) {
                 IntProperty intProperty = (IntProperty)property;
                 
-                return String.format(intProperty.getFormatter(), (int)entryValue);
+                formattedString = String.format(intProperty.getFormatter(), (int)entryValue);
             } else {
-                return String.format(property.getFormatter(), entryValue);
+                formattedString = String.format(property.getFormatter(), entryValue);
             }
-        }
-        
-        if (this.guiPropertyMap.containsKey(entry)) {
+        } else if (this.guiPropertyMap.containsKey(entry)) {
             ResourceLocation registryKey = this.propertyMap.get(entry);
             GuiProperty<?> property = ModernBetaClientRegistries.GUI_PROPERTY.get(registryKey);
 
-            return String.format(property.getFormatter(), entryValue);
+            formattedString = String.format(property.getFormatter(), entryValue);
+        } else {
+            switch (entry) {
+                case GuiIdentifiers.PG4_S_MAIN_NS_X:
+                case GuiIdentifiers.PG4_S_MAIN_NS_Y:
+                case GuiIdentifiers.PG4_S_MAIN_NS_Z:
+                case GuiIdentifiers.PG4_S_SCLE_NS_X:
+                case GuiIdentifiers.PG4_S_SCLE_NS_Z:
+                case GuiIdentifiers.PG4_S_DPTH_NS_X:
+                case GuiIdentifiers.PG4_S_DPTH_NS_Z:
+                case GuiIdentifiers.PG4_S_COORD_SCL:
+                case GuiIdentifiers.PG4_S_HEIGH_SCL:
+                case GuiIdentifiers.PG4_S_UPPER_LIM:
+                case GuiIdentifiers.PG4_S_LOWER_LIM:
+                    
+                case GuiIdentifiers.PG5_F_MAIN_NS_X:
+                case GuiIdentifiers.PG5_F_MAIN_NS_Y:
+                case GuiIdentifiers.PG5_F_MAIN_NS_Z:
+                case GuiIdentifiers.PG5_F_SCLE_NS_X:
+                case GuiIdentifiers.PG5_F_SCLE_NS_Z:
+                case GuiIdentifiers.PG5_F_DPTH_NS_X:
+                case GuiIdentifiers.PG5_F_DPTH_NS_Z:
+                case GuiIdentifiers.PG5_F_COORD_SCL:
+                case GuiIdentifiers.PG5_F_HEIGH_SCL:
+                case GuiIdentifiers.PG5_F_UPPER_LIM:
+                case GuiIdentifiers.PG5_F_LOWER_LIM:
+                    formattedString = String.format("%5.3f", entryValue);
+                    break;
+                    
+                case GuiIdentifiers.PG4_S_BASE_SIZE:
+                case GuiIdentifiers.PG4_S_STRETCH_Y:
+                case GuiIdentifiers.PG4_S_TEMP_SCL:
+                case GuiIdentifiers.PG4_S_RAIN_SCL:
+                case GuiIdentifiers.PG4_S_DETL_SCL:
+                case GuiIdentifiers.PG4_S_B_DPTH_WT:
+                case GuiIdentifiers.PG4_S_B_DPTH_OF:
+                case GuiIdentifiers.PG4_S_B_SCLE_WT:
+                case GuiIdentifiers.PG4_S_B_SCLE_OF:
+                case GuiIdentifiers.PG4_S_R_DPTH_WT:
+                case GuiIdentifiers.PG4_S_END_WT:
+                case GuiIdentifiers.PG4_S_END_OF:
+                case GuiIdentifiers.PG4_S_END_OUT_OF:
+                
+                case GuiIdentifiers.PG5_F_BASE_SIZE:
+                case GuiIdentifiers.PG5_F_STRETCH_Y:
+                case GuiIdentifiers.PG5_F_TEMP_SCL:
+                case GuiIdentifiers.PG5_F_RAIN_SCL:
+                case GuiIdentifiers.PG5_F_DETL_SCL:
+                case GuiIdentifiers.PG5_F_B_DPTH_WT:
+                case GuiIdentifiers.PG5_F_B_DPTH_OF:
+                case GuiIdentifiers.PG5_F_B_SCLE_WT:
+                case GuiIdentifiers.PG5_F_B_SCLE_OF:
+                case GuiIdentifiers.PG5_F_R_DPTH_WT:
+                case GuiIdentifiers.PG5_F_END_WT:
+                case GuiIdentifiers.PG5_F_END_OF:
+                case GuiIdentifiers.PG5_F_END_OUT_OF:
+                    formattedString = String.format("%2.3f", entryValue);
+                    break;
+                    
+                case GuiIdentifiers.PG0_S_CAVE_WIDTH:
+                case GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH:
+                case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
+                    formattedString = String.format("%2.1f", entryValue);
+                    break;
+                
+                case GuiIdentifiers.PG0_S_CHUNK: {
+                    ResourceLocation registryKey = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue);
+                    formattedString = I18n.format(PREFIX + NbtTags.CHUNK_SOURCE + "." + getFormattedRegistryString(registryKey));
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_BIOME: {
+                    ResourceLocation registryKey = ModernBetaRegistries.BIOME_SOURCE.getKeys().get((int)entryValue);
+                    formattedString = I18n.format(PREFIX + NbtTags.BIOME_SOURCE + "." + getFormattedRegistryString(registryKey));
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_SURFACE: {
+                    ResourceLocation registryKey = ModernBetaRegistries.SURFACE_BUILDER.getKeys().get((int)entryValue);
+                    formattedString = I18n.format(PREFIX + NbtTags.SURFACE_BUILDER + "." + getFormattedRegistryString(registryKey));
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_CARVER: {
+                    ResourceLocation registryKey = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue);
+                    formattedString = I18n.format(PREFIX + NbtTags.CAVE_CARVER + "." + getFormattedRegistryString(registryKey));
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_SPAWN: {
+                    ResourceLocation registryKey = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue);
+                    formattedString = I18n.format(PREFIX + NbtTags.WORLD_SPAWNER + "." + getFormattedRegistryString(registryKey));
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_BLOCK: {
+                    ResourceLocation registryKey = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().get((int)entryValue);
+                    formattedString = ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
+                    break;
+                }
+                case GuiIdentifiers.PG0_S_FLUID: {
+                    ResourceLocation registryKey = ForgeRegistryUtil.getFluidBlockRegistryNames().get((int)entryValue);
+                    formattedString = ForgeRegistryUtil.getFluidLocalizedName(registryKey);
+                    break;
+                }
+                case GuiIdentifiers.PG1_S_LEVEL_THEME: {
+                    formattedString = I18n.format(PREFIX + "levelTheme." + IndevTheme.values()[(int)entryValue].id);
+                    break;
+                }
+                case GuiIdentifiers.PG1_S_LEVEL_TYPE: {
+                    formattedString = I18n.format(PREFIX + "levelType." + IndevType.values()[(int)entryValue].id);
+                    break;
+                }
+                case GuiIdentifiers.PG1_S_LEVEL_HOUSE: {
+                    formattedString = I18n.format(PREFIX + "levelHouse." + IndevHouse.values()[(int)entryValue].id);
+                    break;
+                }
+                case GuiIdentifiers.PG1_S_LAYER_TYPE: {
+                    formattedString = I18n.format(PREFIX + "layerType." + GenLayerType.values()[(int)entryValue].id);
+                    break;
+                }
+                case GuiIdentifiers.PG3_S_ORE_TYPE: {
+                    formattedString = I18n.format(PREFIX + "oreType." + OreType.values()[(int)entryValue].id);
+                    break;
+                }
+                
+                case GuiIdentifiers.PG1_S_LEVEL_WIDTH:
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
+                    break;
+                case GuiIdentifiers.PG1_S_LEVEL_LENGTH:
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
+                    break;
+                case GuiIdentifiers.PG1_S_LEVEL_HEIGHT:
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_HEIGHTS[(int)entryValue]);
+                    break;
+                
+                default: formattedString = String.format("%d", (int)entryValue);
+            }
         }
-        
-        switch (entry) {
-            case GuiIdentifiers.PG4_S_MAIN_NS_X:
-            case GuiIdentifiers.PG4_S_MAIN_NS_Y:
-            case GuiIdentifiers.PG4_S_MAIN_NS_Z:
-            case GuiIdentifiers.PG4_S_SCLE_NS_X:
-            case GuiIdentifiers.PG4_S_SCLE_NS_Z:
-            case GuiIdentifiers.PG4_S_DPTH_NS_X:
-            case GuiIdentifiers.PG4_S_DPTH_NS_Z:
-            case GuiIdentifiers.PG4_S_COORD_SCL:
-            case GuiIdentifiers.PG4_S_HEIGH_SCL:
-            case GuiIdentifiers.PG4_S_UPPER_LIM:
-            case GuiIdentifiers.PG4_S_LOWER_LIM:
-                
-            case GuiIdentifiers.PG5_F_MAIN_NS_X:
-            case GuiIdentifiers.PG5_F_MAIN_NS_Y:
-            case GuiIdentifiers.PG5_F_MAIN_NS_Z:
-            case GuiIdentifiers.PG5_F_SCLE_NS_X:
-            case GuiIdentifiers.PG5_F_SCLE_NS_Z:
-            case GuiIdentifiers.PG5_F_DPTH_NS_X:
-            case GuiIdentifiers.PG5_F_DPTH_NS_Z:
-            case GuiIdentifiers.PG5_F_COORD_SCL:
-            case GuiIdentifiers.PG5_F_HEIGH_SCL:
-            case GuiIdentifiers.PG5_F_UPPER_LIM:
-            case GuiIdentifiers.PG5_F_LOWER_LIM:
-                return String.format("%5.3f", entryValue);
-                
-            case GuiIdentifiers.PG4_S_BASE_SIZE:
-            case GuiIdentifiers.PG4_S_STRETCH_Y:
-            case GuiIdentifiers.PG4_S_TEMP_SCL:
-            case GuiIdentifiers.PG4_S_RAIN_SCL:
-            case GuiIdentifiers.PG4_S_DETL_SCL:
-            case GuiIdentifiers.PG4_S_B_DPTH_WT:
-            case GuiIdentifiers.PG4_S_B_DPTH_OF:
-            case GuiIdentifiers.PG4_S_B_SCLE_WT:
-            case GuiIdentifiers.PG4_S_B_SCLE_OF:
-            case GuiIdentifiers.PG4_S_R_DPTH_WT:
-            case GuiIdentifiers.PG4_S_END_WT:
-            case GuiIdentifiers.PG4_S_END_OF:
-            case GuiIdentifiers.PG4_S_END_OUT_OF:
-            
-            case GuiIdentifiers.PG5_F_BASE_SIZE:
-            case GuiIdentifiers.PG5_F_STRETCH_Y:
-            case GuiIdentifiers.PG5_F_TEMP_SCL:
-            case GuiIdentifiers.PG5_F_RAIN_SCL:
-            case GuiIdentifiers.PG5_F_DETL_SCL:
-            case GuiIdentifiers.PG5_F_B_DPTH_WT:
-            case GuiIdentifiers.PG5_F_B_DPTH_OF:
-            case GuiIdentifiers.PG5_F_B_SCLE_WT:
-            case GuiIdentifiers.PG5_F_B_SCLE_OF:
-            case GuiIdentifiers.PG5_F_R_DPTH_WT:
-            case GuiIdentifiers.PG5_F_END_WT:
-            case GuiIdentifiers.PG5_F_END_OF:
-            case GuiIdentifiers.PG5_F_END_OUT_OF:
-                return String.format("%2.3f", entryValue);
-                
-            case GuiIdentifiers.PG0_S_CAVE_WIDTH:
-            case GuiIdentifiers.PG0_S_DEEP_CAVE_WIDTH:
-            case GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH:
-                return String.format("%2.1f", entryValue);
-            
-            case GuiIdentifiers.PG0_S_CHUNK: {
-                ResourceLocation registryKey = ModernBetaRegistries.CHUNK_SOURCE.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.CHUNK_SOURCE);
-                String registryEntry = I18n.format(PREFIX + NbtTags.CHUNK_SOURCE + "." + getFormattedRegistryString(registryKey));
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_BIOME: {
-                ResourceLocation registryKey = ModernBetaRegistries.BIOME_SOURCE.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.BIOME_SOURCE);
-                String registryEntry = I18n.format(PREFIX + NbtTags.BIOME_SOURCE + "." + getFormattedRegistryString(registryKey));
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_SURFACE: {
-                ResourceLocation registryKey = ModernBetaRegistries.SURFACE_BUILDER.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.SURFACE_BUILDER);
-                String registryEntry = I18n.format(PREFIX + NbtTags.SURFACE_BUILDER + "." + getFormattedRegistryString(registryKey));
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_CARVER: {
-                ResourceLocation registryKey = ModernBetaRegistries.CAVE_CARVER.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.CAVE_CARVER);
-                String registryEntry = I18n.format(PREFIX + NbtTags.CAVE_CARVER + "." + getFormattedRegistryString(registryKey));
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_SPAWN: {
-                ResourceLocation registryKey = ModernBetaRegistries.WORLD_SPAWNER.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.WORLD_SPAWNER);
-                String registryEntry = I18n.format(PREFIX + NbtTags.WORLD_SPAWNER + "." + getFormattedRegistryString(registryKey));
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_BLOCK: {
-                ResourceLocation registryKey = ModernBetaRegistries.DEFAULT_BLOCK.getKeys().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.DEFAULT_BLOCK);
-                String registryEntry = ForgeRegistries.BLOCKS.getValue(registryKey).getLocalizedName();
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
-                
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG0_S_FLUID: {
-                ResourceLocation registryKey = ForgeRegistryUtil.getFluidBlockRegistryNames().get((int)entryValue);
-                String registryName = I18n.format(PREFIX + NbtTags.DEFAULT_FLUID);
-                String registryEntry = ForgeRegistryUtil.getFluidLocalizedName(registryKey);
-                int registryNameWidth = this.fontRenderer.getStringWidth(registryName);
 
-                return getTruncatedString(registryEntry, Math.max(DEFAULT_NAME_TRUNCATE_LEN - registryNameWidth, 0));
-            }
-            case GuiIdentifiers.PG1_S_LEVEL_THEME: {
-                String key = IndevTheme.values()[(int)entryValue].id;
-                
-                return I18n.format(PREFIX + "levelTheme." + key);
-            }
-            case GuiIdentifiers.PG1_S_LEVEL_TYPE: {
-                String key = IndevType.values()[(int)entryValue].id;
-                
-                return I18n.format(PREFIX + "levelType." + key);
-            }
-            case GuiIdentifiers.PG1_S_LEVEL_HOUSE: {
-                String key = IndevHouse.values()[(int)entryValue].id;
-                
-                return I18n.format(PREFIX + "levelHouse." + key);
-            }
-            case GuiIdentifiers.PG1_S_LAYER_TYPE: {
-                String key = GenLayerType.values()[(int)entryValue].id;
-                
-                return I18n.format(PREFIX + "layerType." + key);
-            }
-            case GuiIdentifiers.PG3_S_ORE_TYPE: {
-                String key = OreType.values()[(int)entryValue].id;
-                
-                return I18n.format(PREFIX + "oreType." + key);
-            }
-            
-            case GuiIdentifiers.PG1_S_LEVEL_WIDTH: return String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
-            case GuiIdentifiers.PG1_S_LEVEL_LENGTH: return String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
-            case GuiIdentifiers.PG1_S_LEVEL_HEIGHT: return String.format("%d", ModernBetaGeneratorSettings.LEVEL_HEIGHTS[(int)entryValue]);
-            
-            default: return String.format("%d", (int)entryValue);
-        }
+        return formattedString;
     }
 
     private ModernBetaGeneratorSettings getBuiltSettings() {
@@ -2651,6 +2646,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return maxWidth;
     }
     
+    private int getTrimWidth() {
+        return GuiPageButtonListExtended.getEntryWidth(this.width) - 18;
+    }
+    
     private int isGuiHovered(Gui gui, int mouseX, int mouseY) {
         if (mouseY < this.pageList.top || mouseY > this.pageList.bottom) {
             return -1;
@@ -2730,7 +2729,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void setTextButton(int id, String value) {
         Gui guiComponent = this.pageList.getComponent(id);
         if (guiComponent != null && guiComponent instanceof GuiButton) {
-            ((GuiButton)guiComponent).displayString = value;
+            ((GuiButton)guiComponent).displayString = getTrimmedString(value, this.getTrimWidth());
         }
     }
     
@@ -2824,9 +2823,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, TextFormatting formatting, String... tags) {
         String key = PREFIX_LABEL + String.join(".", tags);
+        String formattedString = formatting + I18n.format(key);
         this.translationKeyMap.put(id, key);
         
-        return new GuiPageButtonList.GuiLabelEntry(id, formatting + I18n.format(key), true);
+        return new GuiPageButtonList.GuiLabelEntry(id, formattedString, true);
     }
     
     private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, boolean addColon, String... tags) {
@@ -2843,9 +2843,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, boolean addColon, String suffix, TextFormatting formatting, String... tags) {
         String key = String.join(".", tags);
+        String formattedString = formatting + I18n.format(key) + suffix;
         this.translationKeyMap.put(id, key);
         
-        return new GuiPageButtonList.GuiLabelEntry(id, formatting + I18n.format(key) + suffix + (addColon ? ":" : ""), true);
+        return new GuiPageButtonList.GuiLabelEntry(id, formattedString + (addColon ? ":" : ""), true);
     }
     
     private GuiPageButtonList.GuiSlideEntry createGuiSlider(int id, String tag, float minValue, float maxValue, float initialValue, FormatHelper formatHelper) {
@@ -2866,66 +2867,63 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return new GuiPageButtonList.EditBoxEntry(id, formattedValue, true, predicate);
     }
     
-    private static String getFormattedRegistryString(ResourceLocation registryKey) {
-        return registryKey.getNamespace() + "." + registryKey.getPath();
-    }
-
-    private static String getFormattedRegistryName(String registryName, String langName, int truncateLen, boolean includeTitle) {
+    private String getFormattedRegistryName(String registryName, String langName, boolean includeTitle) {
         ResourceLocation registryKey = new ResourceLocation(registryName);
         String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
         String formattedText = includeTitle ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
 
-        return getTruncatedString(formattedText, truncateLen);
+        return getTrimmedString(formattedText, this.getTrimWidth());
     }
     
-    private static String getFormattedBiomeName(String registryName) {
-        return getFormattedBiomeName(registryName, "", -1);
+    private String getFormattedBiomeName(String registryName) {
+        return getFormattedForgeRegistryName(registryName, "", this.getTrimWidth(), key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BIOMES).getBiomeName());
     }
     
-    private static String getFormattedBiomeName(String registryName, int truncateLen) {
-        return getFormattedBiomeName(registryName, "", truncateLen);
-    }
-    
-    private static String getFormattedBiomeName(String registryName, String langName, int truncateLen) {
+    private String getFormattedBiomeName(String registryName, String langName) {
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            truncateLen,
+            this.getTrimWidth(),
             key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BIOMES).getBiomeName()
         );
     }
     
-    private static String getFormattedBlockName(String registryName, String langName, int truncateLen) {
+    private String getFormattedBlockName(String registryName, String langName) {
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            truncateLen,
+            this.getTrimWidth(),
             key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BLOCKS).getLocalizedName()
         );
     }
     
-    private static String getFormattedFluidName(String registryName, String langName, int truncateLen) {
+    private String getFormattedFluidName(String registryName, String langName) {
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            truncateLen,
+            this.getTrimWidth(),
             key -> ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key))
         );
     }
     
-    private static String getFormattedForgeRegistryName(String registryName, String langName, int truncateLen, Function<String, String> nameFormatter) {
+    private static String getFormattedRegistryString(ResourceLocation registryKey) {
+        return registryKey.getNamespace() + "." + registryKey.getPath();
+    }
+
+    private static String getFormattedForgeRegistryName(String registryName, String langName, int trimWidth, Function<String, String> nameFormatter) {
         String formattedName = nameFormatter.apply(registryName);
         String formattedText = !langName.isEmpty() ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
         
-        return getTruncatedString(formattedText, truncateLen);
+        return getTrimmedString(formattedText, trimWidth);
     }
     
-    private static String getTruncatedString(String string, int truncateLen) {
+    private static String getTrimmedString(String string, int trimWidth) {
         FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         int stringWidth = fontRenderer.getStringWidth(string);
         
-        if (truncateLen > 0 && stringWidth > truncateLen) {
-            string = fontRenderer.trimStringToWidth(string, truncateLen) + "...";
+        if (trimWidth > 0 && stringWidth > trimWidth) {
+            // TODO: Figure out why the string adds additional periods depending on the length of the trimmed string
+            string = fontRenderer.trimStringToWidth(string, trimWidth) + "...";
         }
         
         return string;
@@ -2954,7 +2952,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return bigDecimal.floatValue();
     }
     
-    public static class NameFormatterPropertyVisitor implements FormattedPropertyVisitor {
+    public class NameFormatterPropertyVisitor implements FormattedPropertyVisitor {
         @Override
         public String visit(BooleanProperty property, ResourceLocation registryKey) {
             return I18n.format(property.getValue() ? "gui.yes" : "gui.no");
@@ -2986,7 +2984,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
         @Override
         public String visit(BiomeProperty property, ResourceLocation registryKey) {
-            return getFormattedBiomeName(property.getValue());
+            return GuiScreenCustomizeWorld.this.getFormattedBiomeName(property.getValue());
         }
     
         @Override
@@ -2998,7 +2996,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
                 ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
                 
-            return getFormattedForgeRegistryName(property.getValue(), "", DEFAULT_NAME_TRUNCATE_LEN, nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", GuiScreenCustomizeWorld.this.getTrimWidth(), nameFormatter);
         }
     
         @Override
@@ -3006,7 +3004,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Function<String, String> nameFormatter = key ->
                 ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
-            return getFormattedForgeRegistryName(property.getValue(), "", DEFAULT_NAME_TRUNCATE_LEN, nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", GuiScreenCustomizeWorld.this.getTrimWidth(), nameFormatter);
         }
     
         @Override
@@ -3016,7 +3014,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         @Override
         public String visit(RegistryProperty<?> property, ResourceLocation registryKey) {
-            return getFormattedRegistryName(property.getValue(), property.getRegistry().getName(), DEFAULT_NAME_TRUNCATE_LEN, false);
+            return GuiScreenCustomizeWorld.this.getFormattedRegistryName(property.getValue(), property.getRegistry().getName(), false);
         }
         
     }

@@ -482,13 +482,13 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             int registryNameColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GREY;
             
             // Render name
-            this.parent.fontRenderer.drawString(this.truncateName(info.name), x + paddingL, y + paddingY, nameColor);
+            this.parent.fontRenderer.drawString(this.trimName(info.name), x + paddingL, y + paddingY, nameColor);
             
             // Render registry name
-            this.parent.fontRenderer.drawString(this.truncateName(info.registryName), x + paddingL, y + 12 + paddingY, registryNameColor);
+            this.parent.fontRenderer.drawString(this.trimName(info.registryName), x + paddingL, y + 12 + paddingY, registryNameColor);
         }
         
-        private String truncateName(String name) {
+        private String trimName(String name) {
             if (this.parent.fontRenderer.getStringWidth(name) > MAX_NAME_WIDTH) {
                 return this.parent.fontRenderer.trimStringToWidth(name, TRUNC_NAME_WIDTH) + "...";
             }

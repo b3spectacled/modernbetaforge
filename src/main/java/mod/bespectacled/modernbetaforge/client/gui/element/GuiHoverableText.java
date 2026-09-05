@@ -11,7 +11,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiHoverableText extends Gui {
     private static final ResourceLocation TOOLTIP_BACKGROUND = new ResourceLocation("textures/blocks/cobblestone.png");
     private static final int TOOLTIP_LINE_SPACING = 3;

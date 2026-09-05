@@ -212,8 +212,8 @@ createWorld.customize.custom.modernbetaforge.useFortresses.tooltip=Generate Neth
 createWorld.customize.custom.modernbetaforge.useLavaPockets.tooltip=Generate lava pockets within terrain.
 
 # Page 2 - Infdev 227 Settings
-createWorld.customize.custom.modernbetaforge.useInfdevWalls=Infdev Obsidian Walls
-createWorld.customize.custom.modernbetaforge.useInfdevPyramids=Infdev Brick Pyramids
+createWorld.customize.custom.modernbetaforge.useInfdevWalls=Obsidian Walls
+createWorld.customize.custom.modernbetaforge.useInfdevPyramids=Brick Pyramids
 
 createWorld.customize.custom.modernbetaforge.useInfdevWalls.tooltip=Generate obsidian walls along x/z-axes in Infdev 20100227 worlds.
 createWorld.customize.custom.modernbetaforge.useInfdevPyramids.tooltip=Generate scattered brick pyramids in Infdev 20100227 worlds.
@@ -417,7 +417,7 @@ createWorld.customize.custom.modernbetaforge.floor=World Floor
 createWorld.customize.custom.modernbetaforge.tempNoiseScale=Temp Noise Scale
 createWorld.customize.custom.modernbetaforge.rainNoiseScale=Rainfall Noise Scale
 createWorld.customize.custom.modernbetaforge.detailNoiseScale=Detail Noise Scale
-createWorld.customize.custom.modernbetaforge.useTerrainCoordFix=Terrain Coordinate Fix
+createWorld.customize.custom.modernbetaforge.useTerrainCoordFix=Terrain Coord Fix
 createWorld.customize.custom.modernbetaforge.biomeDepthWeight=Biome Depth Weight
 createWorld.customize.custom.modernbetaforge.biomeDepthOffset=Biome Depth Offset
 createWorld.customize.custom.modernbetaforge.biomeScaleWeight=Biome Scale Weight
@@ -429,7 +429,7 @@ createWorld.customize.custom.modernbetaforge.endIslandOffset=Island Offset
 createWorld.customize.custom.modernbetaforge.endIslandWeight=Island Weight
 createWorld.customize.custom.modernbetaforge.endOuterIslandDistance=Outer Island Distance
 createWorld.customize.custom.modernbetaforge.endOuterIslandOffset=Outer Island Offset
-createWorld.customize.custom.modernbetaforge.useEndOuterIslands=Use Outer Islands
+createWorld.customize.custom.modernbetaforge.useEndOuterIslands=Outer Islands
 
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleX.tooltip=Scales the terrain shape along the x-axis.
 createWorld.customize.custom.modernbetaforge.mainNoiseScaleY.tooltip=Scales the terrain shape along the y-axis.
@@ -465,7 +465,7 @@ createWorld.customize.custom.modernbetaforge.useEndOuterIslands.tooltip=Generate
 
 # Page 7 - World Customization Beta Biomes
 createWorld.customize.custom.modernbetaforge.snowLineOffset=Snow Line Offset
-createWorld.customize.custom.modernbetaforge.useClimateFeatures=Use Climate Features
+createWorld.customize.custom.modernbetaforge.useClimateFeatures=Climate Features
 
 createWorld.customize.custom.modernbetaforge.desertBiomes=Desert
 createWorld.customize.custom.modernbetaforge.forestBiomes=Forest
