@@ -4,11 +4,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiPageButtonList;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.math.MathHelper;
@@ -17,16 +17,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiPageButtonListExtended extends GuiPageButtonList {
-    private static final int BUTTON_SPACE = 5;
-    private static final int PADDING_WIDTH = 10;
-    private static final int OFFSET_X = 0;
-    private static final int OFFSET_SCROLLBAR_X = 5;
+    public static final int BUTTON_SPACE = 5;
+    public static final int PADDING_WIDTH = 10;
+    public static final int OFFSET_SCROLLBAR_X = 5;
     
     private static final int MAX_WIDTH = 360;
-    private static final int MIN_WIDTH = 300;
+    private static final int MIN_WIDTH = 250;
     
-    public GuiPageButtonListExtended(Minecraft mc, int width, int height, int top, int bottom, int slotHeight, GuiResponder responder, GuiListEntry[][] entries) {
-        super(mc, width, height, top, bottom, slotHeight, responder, entries);
+    private final GuiScreen parent;
+    private final int offsetX;
+    
+    public GuiPageButtonListExtended(GuiScreen parent, int width, int height, int top, int bottom, int slotHeight, GuiResponder responder, GuiListEntry[][] entries) {
+        super(parent.mc, width, height, top, bottom, slotHeight, responder, entries);
+        
+        this.parent = parent;
+        this.offsetX = getOffsetX();
+        
+        this.repopulateEntries();
     }
     
     @Override
@@ -36,8 +43,8 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
 
     @Override
     protected void populateComponents() {
-        int entryX0 = this.width / 2 + OFFSET_X - getEntryWidth(this.width) - BUTTON_SPACE / 2;
-        int entryX1 = this.width / 2 + OFFSET_X + BUTTON_SPACE / 2;
+        int entryX0 = this.width / 2 + this.offsetX - getEntryWidth(this.width) - BUTTON_SPACE / 2;
+        int entryX1 = this.width / 2 + this.offsetX + BUTTON_SPACE / 2;
         
         for (GuiListEntry[] listEntry : this.pages) {
             for (int i = 0; i < listEntry.length; i += 2) {
@@ -84,7 +91,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
 
     @Override
     protected GuiListButton createButton(int x, int y, GuiButtonEntry entry) {
-        GuiListButton guiButton = new GuiListButton(this.responder, entry.getId(), x, y, entry.getCaption(), entry.getInitialValue());
+        GuiListButton guiButton = new GuiListButtonExtended(this.parent, this.responder, entry.getId(), x, y, entry.getCaption(), entry.getInitialValue());
 
         guiButton.visible = entry.shouldStartVisible();
         guiButton.width = getEntryWidth(this.width);
@@ -109,7 +116,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         List<String> captions = this.mc.fontRenderer.listFormattedStringToWidth(entry.getCaption(), this.getListWidth() - OFFSET_SCROLLBAR_X * 3);
 
         if (blankSpace) {
-            guiLabel = new GuiLabel(this.mc.fontRenderer, entry.getId(), x, y, this.width - x * 2 + OFFSET_X * 2, 20, -1);
+            guiLabel = new GuiLabel(this.mc.fontRenderer, entry.getId(), x, y, this.width - x * 2 + this.offsetX * 2, 20, -1);
         } else {
             guiLabel = new GuiLabel(this.mc.fontRenderer, entry.getId(), x, y, getEntryWidth(this.width), 20, -1);
         }
@@ -123,7 +130,16 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     
     @Override
     protected int getScrollBarX() {
-        return this.width / 2 + this.getListWidth() / 2 + OFFSET_X - OFFSET_SCROLLBAR_X;
+        return this.width / 2 + this.getListWidth() / 2 + this.offsetX - OFFSET_SCROLLBAR_X;
+    }
+    
+    private void repopulateEntries() {
+        this.entries.clear();
+        this.componentMap.clearMap();
+        this.editBoxes.clear();
+        
+        this.populateComponents();
+        this.populateEntries();
     }
     
     private void addComponent(GuiListEntry guiEntry, Gui gui) {
@@ -136,11 +152,19 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         }
     }
     
+    public static int getOffsetX() {
+        return 25;
+    }
+    
     public static int getListWidth(int width) {
         return MathHelper.clamp((int)(width * 0.8), MIN_WIDTH, MAX_WIDTH);
     }
 
     public static int getEntryWidth(int width) {
         return getListWidth(width) / 2 - BUTTON_SPACE / 2 - PADDING_WIDTH;
+    }
+    
+    public static int getTrimWidth(int width) {
+        return getEntryWidth(width) - 12;
     }
 }

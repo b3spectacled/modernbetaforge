@@ -51,10 +51,10 @@ public class GuiButtonTab extends GuiButton {
             int textX = boxL + this.width / 2;
             int textY = boxT + this.height / 2 - mc.fontRenderer.FONT_HEIGHT / 2;
 
-            drawRect(boxL, boxT + 2, boxR, boxB, colorBox);
-            this.drawHorizontalLine(boxL + 1, boxR - 2, boxT + 1, colorBox);
-            this.drawHorizontalLine(boxL + 3, boxR - 4, boxT, colorBox);
-            this.drawHorizontalLine(boxL, boxR - 1, boxB - 1, colorBar);
+            drawRect(boxL + 2, boxT, boxR, boxB, colorBox);
+            this.drawVerticalLine(boxL, boxT + 2, boxB - 3, colorBox);
+            this.drawVerticalLine(boxL + 1, boxT, boxB - 1, colorBox);
+            this.drawVerticalLine(boxR - 1, boxT - 1, boxB, colorBar);
             this.drawCenteredString(mc.fontRenderer, this.displayString, textX, textY, colorText);
             
         }
