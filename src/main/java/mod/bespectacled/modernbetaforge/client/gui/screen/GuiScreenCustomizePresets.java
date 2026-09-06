@@ -122,8 +122,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.mc.displayWidth);
         
         int centerX = this.width / 2;
-        int fieldExportPadding = TEXTBOX_PADDING + 40 + GuiUtil.BUTTON_SPACE;
-        int fieldExportX = fieldExportPadding / 2 - 20 - GuiUtil.BUTTON_SPACE / 2;
+        int fieldExportPadding = TEXTBOX_PADDING + GuiButtonIcon.ICON_SIZE * 2 + GuiUtil.BUTTON_SPACE;
+        int fieldExportX = fieldExportPadding / 2 - GuiButtonIcon.ICON_SIZE - GuiUtil.BUTTON_SPACE / 2;
         int fieldExportY = 40;
         int fieldExportW = this.width - fieldExportPadding;
         int fieldExportH = 20;

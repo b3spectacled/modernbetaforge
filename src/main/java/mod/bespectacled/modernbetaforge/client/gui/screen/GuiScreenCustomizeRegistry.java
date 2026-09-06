@@ -10,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonIcon;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,8 +34,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final String PREFIX_SETTINGS = "createWorld.customize.custom.modernbetaforge.";
     
     private static final int DEFAULT_SLOT_HEIGHT = 32;
-    private static final int MAX_SEARCH_LENGTH = 40;
     private static final int SEARCH_BAR_LENGTH = 360;
+    private static final int MAX_SEARCH_BAR_TEXT_LEN = 300;
     
     private static final int GUI_ID_SELECT = 0;
     private static final int GUI_ID_CANCEL = 1;
@@ -127,11 +129,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         int selectX = centerX - GuiUtil.BUTTON_SPACE / 2 - buttonWidth;
         int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         
+        int fieldSearchW = MathHelper.clamp((int)(this.width * 0.8), SEARCH_BAR_LENGTH - 120, SEARCH_BAR_LENGTH);
+        int fieldSearchH = 20;
+        int fieldSearchX = centerX - fieldSearchW / 2 - GuiButtonIcon.ICON_SIZE - GuiUtil.BUTTON_SPACE / 2;
+        int fieldSearchY = 40;
+        
         this.buttonList.clear();
         this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
         this.buttonList.add(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
-        this.buttonSearch = this.addButton(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "search")));
-        this.buttonReset = this.addButton(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "reset")));
         
         this.searchText = I18n.format(PREFIX_REGISTRY + "search.info");
         
@@ -153,10 +158,18 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             this.list.scrollBy(this.amountScrolled);
         }
         
-        this.fieldSearch = new GuiTextField(5, this.fontRenderer, this.width / 2 - SEARCH_BAR_LENGTH / 2, 40, SEARCH_BAR_LENGTH, 20);
-        this.fieldSearch.setMaxStringLength(MAX_SEARCH_LENGTH);
+        this.fieldSearch = new GuiTextField(5, this.fontRenderer, fieldSearchX, fieldSearchY, fieldSearchW, fieldSearchH);
+        this.fieldSearch.setMaxStringLength(MAX_SEARCH_BAR_TEXT_LEN);
         this.fieldSearch.setText(this.searchEntry);
         this.fieldSearch.setFocused(this.startSearchFocused);
+        
+        int searchX = this.fieldSearch.x + this.fieldSearch.width + GuiUtil.BUTTON_SPACE;
+        int searchY = fieldSearchY;
+        int resetX = searchX + 20 + GuiUtil.BUTTON_SPACE / 2;
+        int resetY = searchY;
+        
+        this.buttonSearch = this.addButton(new GuiButtonIcon(GUI_ID_SEARCH, searchX, searchY, "\u1C04", false));
+        this.buttonReset = this.addButton(new GuiButtonIcon(GUI_ID_RESET, resetX, resetY, "\u21BA"));
         
         this.updateButtonValidity();
     }
@@ -181,7 +194,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, GuiColors.RGB_WHITE);
-        this.drawString(this.fontRenderer, this.searchText, this.width / 2 - SEARCH_BAR_LENGTH / 2, 30, GuiColors.RGB_GREY);
+        this.drawString(this.fontRenderer, this.searchText, this.fieldSearch.x, 30, GuiColors.RGB_GREY);
 
         if (this.hoveredElement != -1) {
             String name = this.entries.get(this.hoveredElement).name;
@@ -198,6 +211,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
                 
                 this.drawHoveringText(textList, mouseX, mouseY);
             }
+        }
+        
+        if (this.buttonSearch.isMouseOver()) {
+            this.drawHoveringText(I18n.format(PREFIX_REGISTRY + "search"), mouseX, mouseY);
+        }
+        
+        if (this.buttonReset.isMouseOver()) {
+            this.drawHoveringText(I18n.format(PREFIX_REGISTRY + "reset"), mouseX, mouseY);
         }
     }
     
