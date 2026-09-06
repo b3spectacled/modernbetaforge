@@ -1376,10 +1376,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        if (!this.tabListBounds.isHovered()) {
-            this.pageList.mouseReleased(mouseX, mouseY, mouseButton);
-        }
-        
+        this.pageList.mouseReleased(mouseX, mouseY, mouseButton);
         this.clicked = false;
         super.mouseReleased(mouseX, mouseY, mouseButton);
     }
