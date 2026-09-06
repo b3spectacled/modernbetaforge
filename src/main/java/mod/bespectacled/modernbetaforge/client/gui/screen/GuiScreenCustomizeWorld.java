@@ -51,6 +51,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonTab;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiHoverableText;
@@ -116,7 +117,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private static final int PAGELIST_PADDING_TOP = 20;
     private static final int PAGELIST_PADDING_BOTTOM = 32;
 
-    private static final int BUTTON_WIDTH = 70;
     private static final int BUTTON_HEIGHT = 20;
     private static final int BUTTON_SLOT_HEIGHT = 25;
     
@@ -225,18 +225,19 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
         int centerX = this.width / 2;
         
+        int buttonWidth = GuiUtil.getStandardButtonWidth(this.mc.displayWidth);
         int buttonY = this.height - 27;
-        int defaultsX = centerX - BUTTON_WIDTH * 2 - BUTTON_WIDTH / 2 - 6;
-        int randomizeX = centerX - BUTTON_WIDTH - BUTTON_WIDTH / 2 - 3;
-        int previewX = centerX - BUTTON_WIDTH / 2;
-        int presetsX = centerX + BUTTON_WIDTH / 2 + 3;
-        int doneX = centerX + BUTTON_WIDTH / 2 + BUTTON_WIDTH + 6;
-
-        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
-        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, BUTTON_WIDTH, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
+        int defaultsX = centerX - buttonWidth * 2 - buttonWidth / 2 - 6;
+        int randomizeX = centerX - buttonWidth - buttonWidth / 2 - 3;
+        int previewX = centerX - buttonWidth / 2;
+        int presetsX = centerX + buttonWidth / 2 + 3;
+        int doneX = centerX + buttonWidth / 2 + buttonWidth + 6;
+        
+        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
         if (ModCompat.HEIGHT_MANAGER.extendsHeight()) {
             String heightText = TextFormatting.RESET + "[" + TextFormatting.BOLD + "\u16E8" + TextFormatting.RESET + "]";

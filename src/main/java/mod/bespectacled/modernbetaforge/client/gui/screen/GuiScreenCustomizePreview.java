@@ -30,6 +30,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource
 import mod.bespectacled.modernbetaforge.api.world.chunk.surface.SurfaceBuilder;
 import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
@@ -194,44 +195,57 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     public void initGui() {
         this.list = new EmptyListPreset(this);
         
-        int zoomNdX = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
+        int zoomNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
+        
+        int minWideButtonWidth = BUTTON_LARGE_WIDTH - 20;
+        int maxWideButtonWidth = BUTTON_LARGE_WIDTH + 80;
+        
+        int minButtonWidth = (minWideButtonWidth * 2 - BUTTON_SPACE) / 3;
+        int maxButtonWidth = (maxWideButtonWidth * 2 - BUTTON_SPACE ) / 3;
+        
+        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, minButtonWidth, maxButtonWidth, this.mc.displayWidth);
+        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.mc.displayWidth);
+        
+        int totalR0Width = buttonWidth * 3 + BUTTON_SPACE * 2;
+        int totalR1Width = wideButtonWidth * 2 + BUTTON_SPACE;
+        int buttonOffset = totalR1Width - totalR0Width;
+        int blendWidth = totalR0Width == totalR1Width ? buttonWidth : buttonWidth + buttonOffset;
         
         int centerX = this.width / 2;
-
         int viewportSize = this.getViewportSize();
         int viewportX = this.getViewportX();
         int viewportY = this.getViewportY();
         
-        int generateX = centerX - BUTTON_SPACE / 2 - BUTTON_LARGE_WIDTH;
+        int generateX = centerX - BUTTON_SPACE / 2 - wideButtonWidth;
         int cancelX = centerX + BUTTON_SPACE / 2;
         
         int zoomX = generateX;
-        int biomeX = zoomX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
-        int structureX = biomeX + BUTTON_SMALL_WIDTH + BUTTON_SPACE;
+        int biomeX = zoomX + buttonWidth + BUTTON_SPACE;
+        int structureX = biomeX + blendWidth + BUTTON_SPACE;
         
         int screenshotX = viewportX + viewportSize + BUTTON_SPACE / 2;
         int screenshotY = viewportY - BUTTON_SPACE / 2;
         
         this.buttonList.clear();
-        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "generate")));
-        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_LARGE_WIDTH, 20, I18n.format("gui.cancel")));
+        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, wideButtonWidth, 20, I18n.format(PREFIX + "generate")));
+        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, wideButtonWidth, 20, I18n.format("gui.cancel")));
         
-        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, zoomX, this.height - 50, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdX, this));
+        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, zoomX, this.height - 50, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdx, this));
         this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
         this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
         
         this.buttonScreenshot = this.addButton(new GuiButton(GUI_ID_SCREENSHOT, screenshotX, screenshotY, 20, 20, "\u2399"));
 
-        this.sliderZoom.width = BUTTON_SMALL_WIDTH;
-        this.buttonBiomeBlend.width = BUTTON_SMALL_WIDTH;
-        this.buttonStructures.width = BUTTON_SMALL_WIDTH;
+        this.sliderZoom.width = buttonWidth;
+        this.buttonBiomeBlend.width = blendWidth;
+        this.buttonStructures.width = buttonWidth;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
         this.buttonStructures.setValue(this.previewSettings.useStructures);
         
         this.mapBounds.updateBounds(viewportX, viewportY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
         this.useSeedLabelBounds.updateBounds(this.getUseSeedLabelX(), this.getUseSeedLabelY(), this.getUseSeedLabelWidth(), this.fontRenderer.FONT_HEIGHT);
-        this.structureButtonBounds.updateBounds(structureX, this.height - 50, BUTTON_SMALL_WIDTH, 20);
+        this.structureButtonBounds.updateBounds(structureX, this.height - 50, buttonWidth, 20);
         this.updateButtonValidity();
     }
     

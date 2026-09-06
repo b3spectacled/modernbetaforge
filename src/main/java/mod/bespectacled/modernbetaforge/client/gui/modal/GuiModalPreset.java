@@ -85,12 +85,12 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     };
     
     private static final int BUTTON_SPACE = 4;
-    private static final int MODAL_WIDTH = 320;
+    private static final int MODAL_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
     private static final int NAME_FIELD_LENGTH = 220;
     private static final int DESC_FIELD_LENGTH = 220;
     private static final int SETTINGS_FIELD_LENGTH = 240;
-    private static final int ICON_PADDING_R = 20;
+    private static final int ICON_PADDING_R = 8;
     private static final int ICON_PADDING_T = 36;
     private static final int ICON_SIZE = 50;
     private static final int SCROLL_TEXTURE_SIZE_W = 13;

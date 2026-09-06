@@ -15,6 +15,7 @@ import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler.PresetData;
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.IconTexture;
@@ -53,8 +54,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
     private static final int BUTTON_SPACE = 4;
-    private static final int BUTTON_SMALL_WIDTH = 80;
-    private static final int BUTTON_LARGE_WIDTH = BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE;
+    private static final int BUTTON_SMALL_WIDTH = 85;
+    private static final int BUTTON_LARGE_WIDTH = 174;
     private static final int TEXTBOX_PADDING = 100;
     
     private static final int GUI_ID_FILTER = 0;
@@ -122,6 +123,9 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         
+        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, BUTTON_SMALL_WIDTH - 10, BUTTON_SMALL_WIDTH + 40, this.mc.displayWidth);
+        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.mc.displayWidth);
+        
         int centerX = this.width / 2;
         int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
         int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
@@ -131,18 +135,18 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         int selectX = centerX + BUTTON_SPACE / 2;
         int filterX = centerX + BUTTON_SPACE / 2;
-        int cancelX = centerX + BUTTON_SMALL_WIDTH + BUTTON_LARGE_WIDTH - BUTTON_SMALL_WIDTH * 2 + BUTTON_SPACE / 2;
-        int saveX = centerX - BUTTON_LARGE_WIDTH - BUTTON_SPACE / 2;
-        int editX = centerX - BUTTON_LARGE_WIDTH - BUTTON_SPACE / 2;
-        int deleteX = centerX - BUTTON_SMALL_WIDTH - BUTTON_SPACE / 2;
+        int cancelX = centerX + BUTTON_SPACE / 2 + buttonWidth + BUTTON_SPACE;
+        int saveX = centerX - wideButtonWidth - BUTTON_SPACE / 2;
+        int editX = centerX - wideButtonWidth - BUTTON_SPACE / 2;
+        int deleteX = centerX - buttonWidth - BUTTON_SPACE / 2;
         
         this.buttonList.clear();
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "select")));
-        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, filterX, this.height - 27, BUTTON_SMALL_WIDTH, 20, this.getFilterText()));
-        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format("gui.cancel")));
-        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, saveX, this.height - 50, BUTTON_LARGE_WIDTH, 20, I18n.format(PREFIX + "save")));
-        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, editX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format(PREFIX + "edit")));
-        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, deleteX, this.height - 27, BUTTON_SMALL_WIDTH, 20, I18n.format(PREFIX + "delete")));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, wideButtonWidth, 20, I18n.format(PREFIX + "select")));
+        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, filterX, this.height - 27, buttonWidth, 20, this.getFilterText()));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
+        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, saveX, this.height - 50, wideButtonWidth, 20, I18n.format(PREFIX + "save")));
+        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, editX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX + "edit")));
+        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, deleteX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
