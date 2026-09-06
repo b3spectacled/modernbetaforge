@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiListButton;
@@ -17,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiPageButtonListExtended extends GuiPageButtonList {
-    public static final int BUTTON_SPACE = 5;
     public static final int PADDING_WIDTH = 10;
     public static final int OFFSET_SCROLLBAR_X = 5;
     
@@ -43,8 +43,8 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
 
     @Override
     protected void populateComponents() {
-        int entryX0 = this.width / 2 + this.offsetX - getEntryWidth(this.width) - BUTTON_SPACE / 2;
-        int entryX1 = this.width / 2 + this.offsetX + BUTTON_SPACE / 2;
+        int entryX0 = this.width / 2 + this.offsetX - getEntryWidth(this.width) - GuiUtil.BUTTON_SPACE / 2;
+        int entryX1 = this.width / 2 + this.offsetX + GuiUtil.BUTTON_SPACE / 2;
         
         for (GuiListEntry[] listEntry : this.pages) {
             for (int i = 0; i < listEntry.length; i += 2) {
@@ -161,7 +161,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     }
 
     public static int getEntryWidth(int width) {
-        return getListWidth(width) / 2 - BUTTON_SPACE / 2 - PADDING_WIDTH;
+        return getListWidth(width) / 2 - GuiUtil.BUTTON_SPACE / 2 - PADDING_WIDTH;
     }
     
     public static int getTrimWidth(int width) {

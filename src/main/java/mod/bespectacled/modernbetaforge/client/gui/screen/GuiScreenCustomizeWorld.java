@@ -1991,7 +1991,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int id = GuiIdentifiers.FUNC_INITIAL_TAB;
         int startY = this.pageList.top + this.pageList.headerPadding + 5;
         
-        int x = this.width / 2 - GuiPageButtonListExtended.getEntryWidth(this.width) - GuiPageButtonListExtended.BUTTON_SPACE / 2 - TAB_BUTTON_WIDTH / 2 - 8;
+        int x = this.width / 2 - GuiPageButtonListExtended.getEntryWidth(this.width) - GuiUtil.BUTTON_SPACE / 2 - TAB_BUTTON_WIDTH / 2 - 8;
         int y = startY;
         
         this.pageTabMap = new LinkedHashMap<>();

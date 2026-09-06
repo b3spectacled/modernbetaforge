@@ -16,7 +16,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler;
 import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresetsDataHandler.PresetData;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
-import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonIcon;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.IconTexture;
 import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalPreset.State;
@@ -53,7 +53,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
-    private static final int BUTTON_SPACE = 4;
     private static final int BUTTON_SMALL_WIDTH = 85;
     private static final int BUTTON_LARGE_WIDTH = 174;
     private static final int TEXTBOX_PADDING = 100;
@@ -75,8 +74,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private final GuiCustomizePresetsDataHandler dataHandler;
     private final List<Info> presets;
     private final int initialPreset;
-    private final GuiBoundsChecker copyBounds;
-    private final GuiBoundsChecker pasteBounds;
     private final ExecutorWrapper executor;
     
     protected String title;
@@ -89,8 +86,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private GuiButton buttonFilter;
     private GuiButton buttonSelect;
     private GuiButton buttonCancel;
-    private GuiButton buttonCopy;
-    private GuiButton buttonPaste;
+    private GuiButtonIcon buttonCopy;
+    private GuiButtonIcon buttonPaste;
     private String shareText;
     private int hoveredElement;
     @SuppressWarnings("unused") private long hoveredTime;
@@ -110,8 +107,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.dataHandler = new GuiCustomizePresetsDataHandler();
         this.presets = this.loadPresets(filterType, this.dataHandler);
         this.initialPreset = initialPreset;
-        this.copyBounds = new GuiBoundsChecker();
-        this.pasteBounds = new GuiBoundsChecker();
         this.executor = new ExecutorWrapper(1, "clipboard");
         
         this.hoveredElement = -1;
@@ -127,18 +122,18 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.mc.displayWidth);
         
         int centerX = this.width / 2;
-        int fieldExportPadding = TEXTBOX_PADDING + 40 + BUTTON_SPACE;
-        int fieldExportX = fieldExportPadding / 2 - 20 - BUTTON_SPACE / 2;
+        int fieldExportPadding = TEXTBOX_PADDING + 40 + GuiUtil.BUTTON_SPACE;
+        int fieldExportX = fieldExportPadding / 2 - 20 - GuiUtil.BUTTON_SPACE / 2;
         int fieldExportY = 40;
         int fieldExportW = this.width - fieldExportPadding;
         int fieldExportH = 20;
         
-        int selectX = centerX + BUTTON_SPACE / 2;
-        int filterX = centerX + BUTTON_SPACE / 2;
-        int cancelX = centerX + BUTTON_SPACE / 2 + buttonWidth + BUTTON_SPACE;
-        int saveX = centerX - wideButtonWidth - BUTTON_SPACE / 2;
-        int editX = centerX - wideButtonWidth - BUTTON_SPACE / 2;
-        int deleteX = centerX - buttonWidth - BUTTON_SPACE / 2;
+        int selectX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        int filterX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2 + buttonWidth + GuiUtil.BUTTON_SPACE;
+        int saveX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
+        int editX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
+        int deleteX = centerX - buttonWidth - GuiUtil.BUTTON_SPACE / 2;
         
         this.buttonList.clear();
         this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, wideButtonWidth, 20, I18n.format(PREFIX + "select")));
@@ -154,16 +149,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
         this.fieldExport = this.createInitialField(fieldExportX, fieldExportY, fieldExportW, fieldExportH);
         
-        int copyX = this.fieldExport.x + this.fieldExport.width + BUTTON_SPACE;
+        int copyX = this.fieldExport.x + this.fieldExport.width + GuiUtil.BUTTON_SPACE;
         int copyY = fieldExportY;
-        int pasteX = copyX + 20 + BUTTON_SPACE / 2;
+        int pasteX = copyX + 20 + GuiUtil.BUTTON_SPACE / 2;
         int pasteY = copyY;
         
-        this.buttonCopy = this.addButton(new GuiButton(GUI_ID_COPY, copyX, copyY, 20, 20, "\u29C9"));
-        this.buttonPaste = this.addButton(new GuiButton(GUI_ID_PASTE, pasteX, pasteY, 20, 20, "\u29C8"));
-        
-        this.copyBounds.updateBounds(copyX, copyY, 20, 20);
-        this.pasteBounds.updateBounds(pasteX, pasteY, 20, 20);
+        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, copyX, copyY, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, pasteX, pasteY, "\u29C8"));
         
         this.updateButtonValidity();
     }
@@ -192,11 +184,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, GuiColors.RGB_GREY);
         this.fieldExport.drawTextBox();
         
-        if (this.isFocused && this.copyBounds.inBounds(mouseX, mouseY)) {
+        if (this.buttonCopy.isMouseOver()) {
             this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
         }
         
-        if (this.isFocused && this.pasteBounds.inBounds(mouseX, mouseY)) {
+        if (this.buttonPaste.isMouseOver()) {
             this.drawHoveringText(I18n.format(PREFIX + "paste"), mouseX, mouseY);
         }
     }

@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.lwjgl.input.Keyboard;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -121,9 +122,14 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         
+        int centerX = this.width / 2;
+        int buttonWidth = GuiUtil.getButtonWidth(120, 160, this.mc.displayWidth);
+        int selectX = centerX - GuiUtil.BUTTON_SPACE / 2 - buttonWidth;
+        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        
         this.buttonList.clear();
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, this.width / 2 - 122, this.height - 27, 120, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
-        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, this.width / 2 + 3, this.height - 27, 120, 20, I18n.format("gui.cancel")));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
+        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
         this.buttonSearch = this.addButton(new GuiButton(GUI_ID_SEARCH, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 100, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "search")));
         this.buttonReset = this.addButton(new GuiButton(GUI_ID_RESET, this.width / 2 + SEARCH_BAR_LENGTH / 2 - 50, 40, 50, 20, I18n.format(PREFIX_REGISTRY + "reset")));
         

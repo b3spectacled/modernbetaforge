@@ -110,7 +110,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int BUTTON_SMALL_WIDTH = 108;
-    private static final int BUTTON_SPACE = 4;
     private static final int TEXT_BOX_PADDING = 4;
     
     private static final int GUI_ID_BIOME_COLORS = 0;
@@ -200,14 +199,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int minWideButtonWidth = BUTTON_LARGE_WIDTH - 20;
         int maxWideButtonWidth = BUTTON_LARGE_WIDTH + 80;
         
-        int minButtonWidth = (minWideButtonWidth * 2 - BUTTON_SPACE) / 3;
-        int maxButtonWidth = (maxWideButtonWidth * 2 - BUTTON_SPACE ) / 3;
+        int minButtonWidth = (minWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
+        int maxButtonWidth = (maxWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
         
         int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, minButtonWidth, maxButtonWidth, this.mc.displayWidth);
         int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.mc.displayWidth);
         
-        int totalR0Width = buttonWidth * 3 + BUTTON_SPACE * 2;
-        int totalR1Width = wideButtonWidth * 2 + BUTTON_SPACE;
+        int totalR0Width = buttonWidth * 3 + GuiUtil.BUTTON_SPACE * 2;
+        int totalR1Width = wideButtonWidth * 2 + GuiUtil.BUTTON_SPACE;
         int buttonOffset = totalR1Width - totalR0Width;
         int blendWidth = totalR0Width == totalR1Width ? buttonWidth : buttonWidth + buttonOffset;
         
@@ -216,15 +215,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int viewportX = this.getViewportX();
         int viewportY = this.getViewportY();
         
-        int generateX = centerX - BUTTON_SPACE / 2 - wideButtonWidth;
-        int cancelX = centerX + BUTTON_SPACE / 2;
+        int generateX = centerX - GuiUtil.BUTTON_SPACE / 2 - wideButtonWidth;
+        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         
         int zoomX = generateX;
-        int biomeX = zoomX + buttonWidth + BUTTON_SPACE;
-        int structureX = biomeX + blendWidth + BUTTON_SPACE;
+        int biomeX = zoomX + buttonWidth + GuiUtil.BUTTON_SPACE;
+        int structureX = biomeX + blendWidth + GuiUtil.BUTTON_SPACE;
         
-        int screenshotX = viewportX + viewportSize + BUTTON_SPACE / 2;
-        int screenshotY = viewportY - BUTTON_SPACE / 2;
+        int screenshotX = viewportX + viewportSize + GuiUtil.BUTTON_SPACE / 2;
+        int screenshotY = viewportY - GuiUtil.BUTTON_SPACE / 2;
         
         this.buttonList.clear();
         this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, wideButtonWidth, 20, I18n.format(PREFIX + "generate")));

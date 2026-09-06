@@ -8,7 +8,9 @@ import org.lwjgl.input.Mouse;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
+import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonIcon;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizePresets;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -84,7 +86,6 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         new IconTexture(KZ, 8.0 / 16.0, 12.0 / 16.0, 4.0 / 16.0)
     };
     
-    private static final int BUTTON_SPACE = 4;
     private static final int MODAL_WIDTH = 300;
     private static final int MODAL_HEIGHT = 200;
     private static final int NAME_FIELD_LENGTH = 220;
@@ -113,17 +114,15 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
     private final String initialNameText;
     private final String initialDescText;
     private final String initialExportText;
-    private final GuiBoundsChecker copyBounds;
-    private final GuiBoundsChecker pasteBounds;
     private final ExecutorWrapper executor;
     
     private GuiTextField fieldName;
     private GuiTextField fieldDesc;
     private GuiTextField fieldSettings;
-    private GuiButton buttonPrev;
-    private GuiButton buttonNext;
-    private GuiButton buttonCopy;
-    private GuiButton buttonPaste;
+    private GuiButtonIcon buttonPrev;
+    private GuiButtonIcon buttonNext;
+    private GuiButtonIcon buttonCopy;
+    private GuiButtonIcon buttonPaste;
     
     private int selectedIcon;
     private long copiedTime;
@@ -137,8 +136,6 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         this.initialDescText = state == State.SAVE ? "" : parent.getSelectedPresetDesc();
         this.initialExportText = state == State.SAVE ? parent.getInitialSettings() : parent.getSelectedPresetSettings();
         this.selectedIcon = state == State.SAVE ? 0 : MathHelper.clamp(parent.getSelectedPresetIcon(), 0, ICON_TEXTURES.length - 1);
-        this.copyBounds = new GuiBoundsChecker();
-        this.pasteBounds = new GuiBoundsChecker();
         this.executor = new ExecutorWrapper(1, "clipboard_modal");
     }
     
@@ -167,24 +164,22 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         String initialModalDescText = this.fieldDesc != null ? this.fieldDesc.getText() : this.initialDescText;
         String intialModalSettingsText = this.fieldSettings != null ? this.fieldSettings.getText() : this.initialExportText;
         
-        this.buttonPrev = this.addButton(new GuiButton(GUI_ID_PREV, prevX, boxB + 4, 20, 20, I18n.format(PREFIX + "prev")));
-        this.buttonNext = this.addButton(new GuiButton(GUI_ID_NEXT, nextX, boxB + 4, 20, 20, I18n.format(PREFIX + "next")));
+        this.buttonPrev = this.addButton(new GuiButtonIcon(GUI_ID_PREV, prevX, boxB + 4, "<"));
+        this.buttonNext = this.addButton(new GuiButtonIcon(GUI_ID_NEXT, nextX, boxB + 4, ">"));
         
         this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, fieldX, fieldNameY, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
         this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, fieldX, fieldDescY, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, fieldX, fieldSettingsY, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
-        int copyX = this.fieldSettings.x + this.fieldSettings.width + BUTTON_SPACE;
+        int copyX = this.fieldSettings.x + this.fieldSettings.width + GuiUtil.BUTTON_SPACE;
         int copyY = fieldSettingsY;
-        int pasteX = copyX + 20 + BUTTON_SPACE / 2;
+        int pasteX = copyX + 20 + GuiUtil.BUTTON_SPACE / 2;
         int pasteY = copyY;
         
-        this.buttonCopy = this.addButton(new GuiButton(GUI_ID_COPY, copyX, copyY, 20, 20, "\u29C9"));
-        this.buttonPaste = this.addButton(new GuiButton(GUI_ID_PASTE, pasteX, pasteY, 20, 20, "\u29C8"));
+        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, copyX, copyY, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, pasteX, pasteY, "\u29C8"));
         
         this.iconBounds.updateBounds(boxL + 1, boxT + 1, ICON_SIZE, ICON_SIZE);
-        this.copyBounds.updateBounds(copyX, copyY, 20, 20);
-        this.pasteBounds.updateBounds(pasteX, pasteY, 20, 20);
         
         this.updateButtonValidity();
     }
@@ -194,11 +189,11 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawSaveScreen(this.width / 2, this.height / 2, mouseX, mouseY);
         
-        if (this.copyBounds.inBounds(mouseX, mouseY)) {
+        if (this.buttonCopy.isMouseOver()) {
             this.drawHoveringText(I18n.format(PREFIX + "copy"), mouseX, mouseY);
         }
         
-        if (this.pasteBounds.inBounds(mouseX, mouseY)) {
+        if (this.buttonPaste.isMouseOver()) {
             this.drawHoveringText(I18n.format(PREFIX + "paste"), mouseX, mouseY);
         }
     }
