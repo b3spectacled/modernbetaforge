@@ -36,7 +36,7 @@ public class GuiListButtonExtended extends GuiListButton {
         int formattedValueWidth = fontRenderer.getStringWidth(formattedValue);
         int formattedEntryWidth = fontRenderer.getStringWidth(formattedEntry);
         
-        int trimWidth = GuiPageButtonListExtended.getTrimWidth(this.parent.width);
+        int trimWidth = GuiPageButtonListExtended.getEntryTrimWidth(this.parent.width);
         
         if (formattedEntryWidth > trimWidth) {
             int colonWidth = fontRenderer.getStringWidth(": ");

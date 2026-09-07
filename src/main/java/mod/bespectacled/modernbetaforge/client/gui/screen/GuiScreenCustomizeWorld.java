@@ -296,7 +296,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int formattedValueWidth = fontRenderer.getStringWidth(formattedValue);
         int formattedEntryWidth = fontRenderer.getStringWidth(formattedEntry);
         
-        int trimWidth = GuiPageButtonListExtended.getTrimWidth(this.width);
+        int trimWidth = GuiPageButtonListExtended.getEntryTrimWidth(this.width);
         
         if (formattedEntryWidth > trimWidth) {
             int colonWidth = fontRenderer.getStringWidth(": ");
@@ -1461,14 +1461,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             carverEntry,
             spawnEntry,
     
-            this.createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, "page0", "biomeReplacement"),
+            this.createGuiLabel(GuiIdentifiers.PG0_L_BIOME_REPLACEMENT, GuiPageButtonListExtended::getListTrimWidth, "page0", "biomeReplacement"),
             null,
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_OCEAN, NbtTags.REPLACE_OCEAN_BIOMES, this.settings.replaceOceanBiomes),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_BEACH, NbtTags.REPLACE_BEACH_BIOMES, this.settings.replaceBeachBiomes),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_RIVER, NbtTags.REPLACE_RIVER_BIOMES, this.settings.replaceRiverBiomes),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, "page0", "overworld"),
+            this.createGuiLabel(GuiIdentifiers.PG0_L_BASIC_FEATURES, GuiPageButtonListExtended::getListTrimWidth, "page0", "overworld"),
             null,
             blockEntry,
             fluidEntry,
@@ -1499,7 +1499,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_LAVA_LAKES, NbtTags.USE_LAVA_LAKES, this.settings.useLavaLakes),
             this.createGuiSlider(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, NbtTags.LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE, (float)this.settings.lavaLakeChance, this),
             
-            this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, "page0", "nether"),
+            this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_FEATURES, GuiPageButtonListExtended::getListTrimWidth, "page0", "nether"),
             null,
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_OLD_NETHER, NbtTags.USE_OLD_NETHER, this.settings.useOldNether),
             this.createGuiButton(GuiIdentifiers.PG0_B_USE_NETHER_CAVES, NbtTags.USE_NETHER_CAVES, this.settings.useNetherCaves),
@@ -1508,25 +1508,25 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiListEntry[] pageChunk = {
-            this.createGuiLabel(GuiIdentifiers.PG1_L_INFDEV_227_FEATURES, "page1", "infdev227"),
+            this.createGuiLabel(GuiIdentifiers.PG1_L_INFDEV_227_FEATURES, GuiPageButtonListExtended::getListTrimWidth, "page1", "infdev227"),
             null,
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_INFDEV_WALLS, NbtTags.USE_INFDEV_WALLS, this.settings.useInfdevWalls),
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_INFDEV_PYRAMIDS, NbtTags.USE_INFDEV_PYRAMIDS, this.settings.useInfdevPyramids),
             
-            this.createGuiLabel(GuiIdentifiers.PG1_L_INDEV_FEATURES, "page1", "indev"),
+            this.createGuiLabel(GuiIdentifiers.PG1_L_INDEV_FEATURES, GuiPageButtonListExtended::getListTrimWidth, "page1", "indev"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_THEME, NbtTags.LEVEL_THEME, 0f, IndevTheme.values().length - 1, levelThemeId, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_TYPE, NbtTags.LEVEL_TYPE, 0f, IndevType.values().length - 1, levelTypeId, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_WIDTH, NbtTags.LEVEL_WIDTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, levelWidth, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_LENGTH, NbtTags.LEVEL_LENGTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, levelLength, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, NbtTags.LEVEL_HEIGHT, 0f, ModernBetaGeneratorSettings.LEVEL_HEIGHTS.length - 1, levelHeight, this),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL, ": " + levelSeaLevelStr, false, PREFIX + "seaLevel"),                                                                                                                                     
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL,  ": " + levelSeaLevelStr, GuiPageButtonListExtended::getEntryTrimWidth, false, PREFIX + "seaLevel"),                                                                                                                                     
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HOUSE, NbtTags.LEVEL_HOUSE, 0f, IndevHouse.values().length - 1, levelHouseId, this),
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_INDEV_CAVES, NbtTags.USE_INDEV_CAVES, this.settings.useIndevCaves),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, NbtTags.LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH, this.settings.levelCaveWidth, this),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, "page1", "release"),
+            this.createGuiLabel(GuiIdentifiers.PG1_L_RELEASE_FEATURES, GuiPageButtonListExtended::getListTrimWidth, "page1", "release"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG1_S_LAYER_SZ, NbtTags.LAYER_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.layerSize, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_RIVER_SZ, "riverRarity", ModernBetaGeneratorSettings.MIN_RIVER_SIZE, ModernBetaGeneratorSettings.MAX_RIVER_SIZE, this.settings.riverSize, this),
@@ -1534,7 +1534,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiListEntry[] pageBiome = {
-            this.createGuiLabel(GuiIdentifiers.PG2_L_BETA, "page2", "beta"),
+            this.createGuiLabel(GuiIdentifiers.PG2_L_BETA, GuiPageButtonListExtended::getListTrimWidth, "page2", "beta"),
             null,
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_FLOWERS, NbtTags.USE_NEW_FLOWERS, this.settings.useNewFlowers),
@@ -1555,12 +1555,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_DARK_OAK, NbtTags.USE_DARK_OAK_TREES, this.settings.useDarkOakTrees),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, "page2", "release"),
+            this.createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, GuiPageButtonListExtended::getListTrimWidth, "page2", "release"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG2_S_BIOME_SZ, NbtTags.BIOME_SIZE, ModernBetaGeneratorSettings.MIN_BIOME_SIZE, ModernBetaGeneratorSettings.MAX_BIOME_SIZE, this.settings.biomeSize, this),
             this.createGuiSlider(GuiIdentifiers.PG2_S_SNOWY_CHANCE, NbtTags.SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MIN_SNOWY_BIOME_CHANCE, ModernBetaGeneratorSettings.MAX_SNOWY_BIOME_CHANCE, this.settings.snowyBiomeChance, this),
         
-            this.createGuiLabel(GuiIdentifiers.PG2_L_MOBS, "page2", "mobSpawn"),
+            this.createGuiLabel(GuiIdentifiers.PG2_L_MOBS, GuiPageButtonListExtended::getListTrimWidth, "page2", "mobSpawn"),
             null,
             this.createGuiButton(GuiIdentifiers.PG2_B_SPAWN_CREATURE, NbtTags.SPAWN_NEW_CREATURE_MOBS, this.settings.spawnNewCreatureMobs),
             this.createGuiButton(GuiIdentifiers.PG2_B_SPAWN_MONSTER, NbtTags.SPAWN_NEW_MONSTER_MOBS, this.settings.spawnNewMonsterMobs),
@@ -1574,103 +1574,103 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG3_S_ORE_TYPE, NbtTags.ORE_TYPE, 0f, OreType.values().length - 1, oreTypeId, this),
             null,
                 
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, false, "tile.dirt.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.dirt.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIRT_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dirtCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.dirtMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIRT_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.dirtMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAV_NAME, false, "tile.gravel.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAV_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.gravel.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAV_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.gravelSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAV_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.gravelCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.gravelMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAV_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.gravelMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAN_NAME, false, "tile.stone.granite.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GRAN_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.stone.granite.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAN_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.graniteSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAN_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.graniteCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.graniteMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GRAN_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.graniteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIOR_NAME, false, "tile.stone.diorite.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIOR_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.stone.diorite.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIOR_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dioriteSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIOR_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.dioriteCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.dioriteMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIOR_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.dioriteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_ANDE_NAME, false, "tile.stone.andesite.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_ANDE_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.stone.andesite.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_ANDE_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.andesiteSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_ANDE_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.andesiteCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.andesiteMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_ANDE_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.andesiteMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_COAL_NAME, false, "tile.oreCoal.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_COAL_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreCoal.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_COAL_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.coalSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_COAL_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.coalCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_COAL_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.coalMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_COAL_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.coalMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_IRON_NAME, false, "tile.oreIron.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_IRON_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreIron.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_IRON_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.ironSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_IRON_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.ironCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_IRON_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.ironMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_IRON_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.ironMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GOLD_NAME, false, "tile.oreGold.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_GOLD_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreGold.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_GOLD_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.goldSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GOLD_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.goldCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.goldMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_GOLD_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.goldMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_REDS_NAME, false, "tile.oreRedstone.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_REDS_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreRedstone.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_REDS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.redstoneSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_REDS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.redstoneCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_REDS_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.redstoneMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_REDS_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.redstoneMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIAM_NAME, false, "tile.oreDiamond.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIAM_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreDiamond.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIAM_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.diamondSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIAM_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.diamondCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.diamondMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIAM_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.diamondMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_LAPS_NAME, false, "tile.oreLapis.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_LAPS_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreLapis.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.lapisSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.lapisCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_LAPS_CTR, "center", ModernBetaGeneratorSettings.getMinOreCenter(), ModernBetaGeneratorSettings.getMaxOreCenter(), (float)this.settings.lapisCenterHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_LAPS_SPR, "spread", ModernBetaGeneratorSettings.getMinOreSpread(), ModernBetaGeneratorSettings.getMaxOreSpread(), (float)this.settings.lapisSpread, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, false, "tile.oreEmerald.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_EMER_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.oreEmerald.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.emeraldSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.emeraldMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.emeraldMaxHeight, this),
     
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, false, "tile.clay.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.clay.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMaxHeight, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, false, "tile.netherquartz.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.netherquartz.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.quartzSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_QRTZ_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.quartzCount, this),
     
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, false, "tile.magma.name"),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_MGMA_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.magma.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_MGMA_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.magmaSize, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_MGMA_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.magmaCount, this),
@@ -1694,14 +1694,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG4_S_HEIGH_FLR, NbtTags.FLOOR, ModernBetaGeneratorSettings.getMinFloor(), ModernBetaGeneratorSettings.getMaxFloor(), this.settings.floor, this),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page4", "beta"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, GuiPageButtonListExtended::getListTrimWidth, "page4", "beta"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG4_S_TEMP_SCL, NbtTags.TEMP_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.tempNoiseScale, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_RAIN_SCL, NbtTags.RAIN_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.rainNoiseScale, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_DETL_SCL, NbtTags.DETAIL_NOISE_SCALE, ModernBetaGeneratorSettings.MIN_BIOME_SCALE, ModernBetaGeneratorSettings.MAX_BIOME_SCALE, this.settings.detailNoiseScale, this),
             this.createGuiButton(GuiIdentifiers.PG4_B_TERR_FIX, NbtTags.USE_TERRAIN_COORD_FIX, this.settings.useTerrainCoordFix),
             
-            this.createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page4", "release"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, GuiPageButtonListExtended::getListTrimWidth, "page4", "release"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_WT, NbtTags.BIOME_DEPTH_WEIGHT, ModernBetaGeneratorSettings.MIN_BIOME_WEIGHT, ModernBetaGeneratorSettings.MAX_BIOME_WEIGHT, this.settings.biomeDepthWeight, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_B_DPTH_OF, NbtTags.BIOME_DEPTH_OFFSET, ModernBetaGeneratorSettings.MIN_BIOME_OFFSET, ModernBetaGeneratorSettings.MAX_BIOME_OFFSET, this.settings.biomeDepthOffset, this),
@@ -1712,7 +1712,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG4_B_USE_AMP, NbtTags.USE_AMPLIFIED, this.settings.useAmplified),
             null,
             
-            this.createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page4", "end"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, GuiPageButtonListExtended::getListTrimWidth, "page4", "end"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG4_S_END_WT, NbtTags.END_ISLAND_WEIGHT, ModernBetaGeneratorSettings.MIN_END_WEIGHT, ModernBetaGeneratorSettings.MAX_END_WEIGHT, this.settings.endIslandWeight, this),
             this.createGuiSlider(GuiIdentifiers.PG4_S_END_OF, NbtTags.END_ISLAND_OFFSET, ModernBetaGeneratorSettings.MIN_END_OFFSET, ModernBetaGeneratorSettings.MAX_END_OFFSET, this.settings.endIslandOffset, this),
@@ -1723,68 +1723,68 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiListEntry[] pageNoise1 = {
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_X, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_X),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_X, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_X),
             this.createGuiField(GuiIdentifiers.PG5_F_MAIN_NS_X, String.format("%5.3f", this.settings.mainNoiseScaleX), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_Y, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_Y),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_Y, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_Y),
             this.createGuiField(GuiIdentifiers.PG5_F_MAIN_NS_Y, String.format("%5.3f", this.settings.mainNoiseScaleY), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_Z, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_Z),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_MAIN_NS_Z, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.MAIN_NOISE_SCALE_Z),
             this.createGuiField(GuiIdentifiers.PG5_F_MAIN_NS_Z, String.format("%5.3f", this.settings.mainNoiseScaleZ), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SCLE_NS_X, true, PREFIX + NbtTags.SCALE_NOISE_SCALE_X),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SCLE_NS_X, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.SCALE_NOISE_SCALE_X),
             this.createGuiField(GuiIdentifiers.PG5_F_SCLE_NS_X, String.format("%5.3f", this.settings.scaleNoiseScaleX), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SCLE_NS_Z, true, PREFIX + NbtTags.SCALE_NOISE_SCALE_Z),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_SCLE_NS_Z, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.SCALE_NOISE_SCALE_Z),
             this.createGuiField(GuiIdentifiers.PG5_F_SCLE_NS_Z, String.format("%5.3f", this.settings.scaleNoiseScaleZ), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DPTH_NS_X, true, PREFIX + NbtTags.DEPTH_NOISE_SCALE_X),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DPTH_NS_X, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.DEPTH_NOISE_SCALE_X),
             this.createGuiField(GuiIdentifiers.PG5_F_DPTH_NS_X, String.format("%5.3f", this.settings.depthNoiseScaleX), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DPTH_NS_Z, true, PREFIX + NbtTags.DEPTH_NOISE_SCALE_Z),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DPTH_NS_Z, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.DEPTH_NOISE_SCALE_Z),
             this.createGuiField(GuiIdentifiers.PG5_F_DPTH_NS_Z, String.format("%5.3f", this.settings.depthNoiseScaleZ), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_BASE_SIZE, true, PREFIX + NbtTags.BASE_SIZE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_BASE_SIZE, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_SIZE),
             this.createGuiField(GuiIdentifiers.PG5_F_BASE_SIZE, String.format("%2.3f", this.settings.baseSize), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_COORD_SCL, true, PREFIX + NbtTags.COORDINATE_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_COORD_SCL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.COORDINATE_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_COORD_SCL, String.format("%5.3f", this.settings.coordinateScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_SCL, true, PREFIX + NbtTags.HEIGHT_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_SCL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.HEIGHT_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_HEIGH_SCL, String.format("%5.3f", this.settings.heightScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_STRETCH_Y, true, PREFIX + NbtTags.STRETCH_Y),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_STRETCH_Y, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.STRETCH_Y),
             this.createGuiField(GuiIdentifiers.PG5_F_STRETCH_Y, String.format("%2.3f", this.settings.stretchY), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_UPPER_LIM, true, PREFIX + NbtTags.UPPER_LIMIT_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_UPPER_LIM, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.UPPER_LIMIT_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_UPPER_LIM, String.format("%5.3f", this.settings.upperLimitScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_LOWER_LIM, true, PREFIX + NbtTags.LOWER_LIMIT_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_LOWER_LIM, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.LOWER_LIMIT_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_LOWER_LIM, String.format("%5.3f", this.settings.lowerLimitScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_LIM, true, PREFIX + NbtTags.HEIGHT),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_LIM, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.HEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_HEIGH_LIM, String.format("%d", this.settings.height), this.intFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_FLR, true, PREFIX + NbtTags.FLOOR),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_HEIGH_FLR, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.FLOOR),
             this.createGuiField(GuiIdentifiers.PG5_F_HEIGH_FLR, String.format("%d",  this.settings.floor), this.intFilter),
     
-            this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, "page5", "beta"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_BETA_LABL, GuiPageButtonListExtended::getListTrimWidth, "page5", "beta"),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_TEMP_SCL, true, PREFIX + NbtTags.TEMP_NOISE_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_TEMP_SCL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.TEMP_NOISE_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_TEMP_SCL, String.format("%2.3f", this.settings.tempNoiseScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_RAIN_SCL, true, PREFIX + NbtTags.RAIN_NOISE_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_RAIN_SCL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.RAIN_NOISE_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_RAIN_SCL, String.format("%2.3f", this.settings.rainNoiseScale), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DETL_SCL, true, PREFIX + NbtTags.DETAIL_NOISE_SCALE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_DETL_SCL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.DETAIL_NOISE_SCALE),
             this.createGuiField(GuiIdentifiers.PG5_F_DETL_SCL, String.format("%2.3f", this.settings.detailNoiseScale), this.floatFilter),
     
-            this.createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, "page5", "release"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_RELE_LABL, GuiPageButtonListExtended::getListTrimWidth, "page5", "release"),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_DPTH_WT, true, PREFIX + NbtTags.BIOME_DEPTH_WEIGHT),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_DPTH_WT, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BIOME_DEPTH_WEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_B_DPTH_WT, String.format("%2.3f", this.settings.biomeDepthWeight), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_DPTH_OF, true, PREFIX + NbtTags.BIOME_DEPTH_OFFSET),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_DPTH_OF, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BIOME_DEPTH_OFFSET),
             this.createGuiField(GuiIdentifiers.PG5_F_B_DPTH_OF, String.format("%2.3f", this.settings.biomeDepthOffset), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_WT, true, PREFIX + NbtTags.BIOME_SCALE_WEIGHT),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_WT, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BIOME_SCALE_WEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_B_SCLE_WT, String.format("%2.3f", this.settings.biomeScaleWeight), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_OF, true, PREFIX + NbtTags.BIOME_SCALE_OFFSET),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_B_SCLE_OF, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BIOME_SCALE_OFFSET),
             this.createGuiField(GuiIdentifiers.PG5_F_B_SCLE_OF, String.format("%2.3f", this.settings.biomeScaleOffset), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_R_DPTH_WT, true, PREFIX + NbtTags.RIVER_DEPTH_WEIGHT),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_R_DPTH_WT, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.RIVER_DEPTH_WEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_R_DPTH_WT, String.format("%2.3f", this.settings.riverDepthWeight), this.floatFilter),
             
-            this.createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, "page5", "end"),
+            this.createGuiLabel(GuiIdentifiers.PG4_L_END_LABL, GuiPageButtonListExtended::getListTrimWidth, "page5", "end"),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_WT, true, PREFIX + NbtTags.END_ISLAND_WEIGHT),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_WT, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.END_ISLAND_WEIGHT),
             this.createGuiField(GuiIdentifiers.PG5_F_END_WT, String.format("%2.3f", this.settings.endIslandWeight), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OF, true, PREFIX + NbtTags.END_ISLAND_OFFSET),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OF, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.END_ISLAND_OFFSET),
             this.createGuiField(GuiIdentifiers.PG5_F_END_OF, String.format("%2.3f", this.settings.endIslandOffset), this.floatFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OUT_DT, true, PREFIX + NbtTags.END_OUTER_ISLAND_DISTANCE),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OUT_DT, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.END_OUTER_ISLAND_DISTANCE),
             this.createGuiField(GuiIdentifiers.PG5_F_END_OUT_DT, String.format("%d", this.settings.endOuterIslandDistance), this.intFilter),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OUT_OF, true, PREFIX + NbtTags.END_OUTER_ISLAND_OFFSET),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG5_L_END_OUT_OF, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.END_OUTER_ISLAND_OFFSET),
             this.createGuiField(GuiIdentifiers.PG5_F_END_OUT_OF, String.format("%2.3f", this.settings.endOuterIslandOffset), this.floatFilter)
         };
         
@@ -1792,115 +1792,115 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG6_B_CLIMATE_FEAT, NbtTags.USE_CLIMATE_FEATURES, this.settings.useClimateFeatures),
             this.createGuiSlider(GuiIdentifiers.PG6_S_SNOW_OFFSET, NbtTags.SNOW_LINE_OFFSET, ModernBetaGeneratorSettings.getMinSeaLevel(), ModernBetaGeneratorSettings.getMaxSeaLevel(), this.settings.snowLineOffset, this),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, false, PREFIX + NbtTags.DESERT_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_DSRT_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.DESERT_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_DSRT_LAND, NbtTags.DESERT_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_DSRT_OCEAN, NbtTags.DESERT_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_DSRT_BEACH, NbtTags.DESERT_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_FRST_LABL, false, PREFIX + NbtTags.FOREST_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_FRST_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.FOREST_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_FRST_LAND, NbtTags.FOREST_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_FRST_OCEAN, NbtTags.FOREST_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_FRST_BEACH, NbtTags.FOREST_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_ICED_LABL, false, PREFIX + NbtTags.ICE_DESERT_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_ICED_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.ICE_DESERT_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_ICED_LAND, NbtTags.ICE_DESERT_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_ICED_OCEAN, NbtTags.ICE_DESERT_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_ICED_BEACH, NbtTags.ICE_DESERT_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_PLNS_LABL, false, PREFIX + NbtTags.PLAINS_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_PLNS_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.PLAINS_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_PLNS_LAND, NbtTags.PLAINS_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_PLNS_OCEAN, NbtTags.PLAINS_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_PLNS_BEACH, NbtTags.PLAINS_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_RAIN_LABL, false, PREFIX + NbtTags.RAINFOREST_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_RAIN_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.RAINFOREST_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_RAIN_LAND, NbtTags.RAINFOREST_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_RAIN_OCEAN, NbtTags.RAINFOREST_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_RAIN_BEACH, NbtTags.RAINFOREST_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SAVA_LABL, false, PREFIX + NbtTags.SAVANNA_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SAVA_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.SAVANNA_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SAVA_LAND, NbtTags.SAVANNA_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SAVA_OCEAN, NbtTags.SAVANNA_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SAVA_BEACH, NbtTags.SAVANNA_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SHRB_LABL, false, PREFIX + NbtTags.SHRUBLAND_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SHRB_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.SHRUBLAND_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SHRB_LAND, NbtTags.SHRUBLAND_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SHRB_OCEAN, NbtTags.SHRUBLAND_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SHRB_BEACH, NbtTags.SHRUBLAND_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SEAS_LABL, false, PREFIX + NbtTags.SEASONAL_FOREST_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SEAS_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.SEASONAL_FOREST_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SEAS_LAND, NbtTags.SEASONAL_FOREST_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SEAS_OCEAN, NbtTags.SEASONAL_FOREST_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SEAS_BEACH, NbtTags.SEASONAL_FOREST_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SWMP_LABL, false, PREFIX + NbtTags.SWAMPLAND_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_SWMP_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.SWAMPLAND_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SWMP_LAND, NbtTags.SWAMPLAND_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SWMP_OCEAN, NbtTags.SWAMPLAND_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_SWMP_BEACH, NbtTags.SWAMPLAND_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_TAIG_LABL, false, PREFIX + NbtTags.TAIGA_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_TAIG_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.TAIGA_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TAIG_LAND, NbtTags.TAIGA_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TAIG_OCEAN, NbtTags.TAIGA_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TAIG_BEACH, NbtTags.TAIGA_BIOME_BEACH, true),
             
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_TUND_LABL, false, PREFIX + NbtTags.TUNDRA_BIOMES),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_TUND_LABL, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX + NbtTags.TUNDRA_BIOMES),
             null,
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, true, PREFIX + NbtTags.BASE_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_LAND_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BASE_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TUND_LAND, NbtTags.TUNDRA_BIOME_BASE, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, true, PREFIX + NbtTags.OCEAN_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_OCEAN_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.OCEAN_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TUND_OCEAN, NbtTags.TUNDRA_BIOME_OCEAN, true),
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, true, PREFIX + NbtTags.BEACH_BIOME),
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG6_BEACH_LABL, GuiPageButtonListExtended::getEntryTrimWidth, true, PREFIX + NbtTags.BEACH_BIOME),
             this.createGuiButton(GuiIdentifiers.PG6_TUND_BEACH, NbtTags.TUNDRA_BIOME_BEACH, true)
         };
         
         if (!ModCompat.NETHER_MANAGER.isCompatible()) {
             pageBasic = Arrays.copyOf(pageBasic, pageBasic.length + 2);
-            pageBasic[pageBasic.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, TextFormatting.GRAY, "page0", "netherIncompatible");
+            pageBasic[pageBasic.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_NETHER_BOP, GuiPageButtonListExtended::getListTrimWidth, TextFormatting.GRAY, "page0", "netherIncompatible");
             pageBasic[pageBasic.length - 1] = null;
         }
         
         if (ModCompat.isCompatLoaded(CompatDynamicTrees.MOD_ID) && CompatDynamicTrees.isEnabled()) {
             pageBiome = Arrays.copyOf(pageBiome, pageBiome.length + 2);
-            pageBiome[pageBiome.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_TREES, TextFormatting.GRAY, "page2", "treesIncompatible");
+            pageBiome[pageBiome.length - 2] = this.createGuiLabel(GuiIdentifiers.PG0_L_TREES, GuiPageButtonListExtended::getListTrimWidth, TextFormatting.GRAY, "page2", "treesIncompatible");
             pageBiome[pageBiome.length - 1] = null;
         }
         
@@ -2070,7 +2070,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             List<ResourceLocation> registryKeys = modRegistryKeys.get(namespace).getFirst();
             List<ResourceLocation> guiRegistryKeys = modRegistryKeys.get(namespace).getSecond();
             
-            pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, false, PREFIX_ADDON + namespace);
+            pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getListTrimWidth, false, PREFIX_ADDON + namespace);
             pageList[ndx++] = null;
             
             // Create GUI elements for main settings
@@ -2079,11 +2079,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
                 int propertyId;
     
-                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, true, localizationKey);
+                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getEntryTrimWidth, true, localizationKey);
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
                 
                 if (I18n.hasKey(localizationKey + ".info")) {
-                    pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, false, TextFormatting.GRAY, localizationKey + ".info");
+                    pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getListTrimWidth, false, TextFormatting.GRAY, localizationKey + ".info");
                     pageList[ndx++] = null;
                 }
                 
@@ -2096,11 +2096,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 String localizationKey = PREFIX_ADDON + getFormattedRegistryString(registryKey);
                 int propertyId;
     
-                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, true, localizationKey);
+                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getEntryTrimWidth, true, localizationKey);
                 pageList[ndx++] = property.visitGui(this.new CreateGuiPropertyVisitor(), propertyId = this.customId++);
                 
                 if (I18n.hasKey(localizationKey + ".gui.info")) {
-                    pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, false, TextFormatting.GRAY, localizationKey + ".gui.info");
+                    pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getListTrimWidth, false, TextFormatting.GRAY, localizationKey + ".gui.info");
                     pageList[ndx++] = null;
                 }
                 
@@ -2109,7 +2109,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             
             // Add general mod info string if there is one
             if (I18n.hasKey(PREFIX_ADDON + namespace + ".info")) {
-                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, false, TextFormatting.GRAY, PREFIX_ADDON + namespace + ".info");
+                pageList[ndx++] = this.createGuiLabelNoPrefix(this.customId++, GuiPageButtonListExtended::getListTrimWidth, false, TextFormatting.GRAY, PREFIX_ADDON + namespace + ".info");
                 pageList[ndx++] = null;
             }
         }
@@ -2789,36 +2789,54 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, registryKeys));
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, String... tags) {
-        return this.createGuiLabel(id, TextFormatting.RESET, tags);
+    private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id,Function<Integer, Integer> trimFunc, String... tags) {
+        return this.createGuiLabel(id, trimFunc, TextFormatting.RESET, tags);
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, TextFormatting formatting, String... tags) {
+    private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id, Function<Integer, Integer> trimFunc, TextFormatting formatting, String... tags) {
         String key = PREFIX_LABEL + String.join(".", tags);
         String formattedString = formatting + I18n.format(key);
         this.translationKeyMap.put(id, key);
         
+        if (trimFunc != null) {
+            int trimWidth = trimFunc.apply(this.width);
+            int colonWidth = this.fontRenderer.getStringWidth(":");
+            
+            if (this.fontRenderer.getStringWidth(formattedString) + colonWidth > trimWidth) {
+                formattedString = this.fontRenderer.trimStringToWidth(formattedString, trimWidth - colonWidth) + "...";
+            }
+        }
+        
         return new GuiPageButtonList.GuiLabelEntry(id, formattedString, true);
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, boolean addColon, String... tags) {
-        return this.createGuiLabelNoPrefix(id, "", addColon, tags);
+    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, Function<Integer, Integer> trimFunc, boolean addColon, String... tags) {
+        return this.createGuiLabelNoPrefix(id, "", trimFunc, addColon, tags);
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, String suffix, boolean addColon, String... tags) {
-        return this.createGuiLabelNoPrefix(id, addColon, suffix, TextFormatting.RESET, tags);
+    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, String suffix, Function<Integer, Integer> trimFunc, boolean addColon, String... tags) {
+        return this.createGuiLabelNoPrefix(id, trimFunc, addColon, suffix, TextFormatting.RESET, tags);
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, boolean addColon, TextFormatting formatting, String... tags) {
-        return this.createGuiLabelNoPrefix(id, addColon, "", formatting, tags);
+    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, Function<Integer, Integer> trimFunc, boolean addColon, TextFormatting formatting, String... tags) {
+        return this.createGuiLabelNoPrefix(id, trimFunc, addColon, "", formatting, tags);
     }
     
-    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, boolean addColon, String suffix, TextFormatting formatting, String... tags) {
+    private GuiPageButtonList.GuiLabelEntry createGuiLabelNoPrefix(int id, Function<Integer, Integer> trimFunc, boolean addColon, String suffix, TextFormatting formatting, String... tags) {
         String key = String.join(".", tags);
         String formattedString = formatting + I18n.format(key) + suffix;
         this.translationKeyMap.put(id, key);
         
-        return new GuiPageButtonList.GuiLabelEntry(id, formattedString + (addColon ? ":" : ""), true);
+        if (trimFunc != null) {
+            int trimWidth = trimFunc.apply(this.width);
+            int colonWidth = this.fontRenderer.getStringWidth(":");
+            
+            if (this.fontRenderer.getStringWidth(formattedString) + colonWidth > trimWidth) {
+                formattedString = this.fontRenderer.trimStringToWidth(formattedString, trimWidth - colonWidth) + "...";
+            }
+        }
+        
+        return new GuiPageButtonList.GuiLabelEntry(id, formattedString  + (addColon ? ":" : ""), true);
     }
     
     private GuiPageButtonList.GuiSlideEntry createGuiSlider(int id, String tag, float minValue, float maxValue, float initialValue, FormatHelper formatHelper) {
@@ -2844,18 +2862,18 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         String formattedName = I18n.format(String.format("%s%s.%s.%s", PREFIX, langName, registryKey.getNamespace(), registryKey.getPath()));
         String formattedText = includeTitle ? String.format("%s: %s", I18n.format(PREFIX + langName), formattedName) : formattedName;
 
-        return getTrimmedString(formattedText, GuiPageButtonListExtended.getTrimWidth(this.width));
+        return getTrimmedString(formattedText, GuiPageButtonListExtended.getEntryTrimWidth(this.width));
     }
     
     private String getFormattedBiomeName(String registryName) {
-        return getFormattedForgeRegistryName(registryName, "", GuiPageButtonListExtended.getTrimWidth(this.width), key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BIOMES).getBiomeName());
+        return getFormattedForgeRegistryName(registryName, "", GuiPageButtonListExtended.getEntryTrimWidth(this.width), key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BIOMES).getBiomeName());
     }
     
     private String getFormattedBiomeName(String registryName, String langName) {
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            GuiPageButtonListExtended.getTrimWidth(this.width),
+            GuiPageButtonListExtended.getEntryTrimWidth(this.width),
             key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BIOMES).getBiomeName()
         );
     }
@@ -2864,7 +2882,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            GuiPageButtonListExtended.getTrimWidth(this.width),
+            GuiPageButtonListExtended.getEntryTrimWidth(this.width),
             key -> ForgeRegistryUtil.get(new ResourceLocation(key), ForgeRegistries.BLOCKS).getLocalizedName()
         );
     }
@@ -2873,7 +2891,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         return getFormattedForgeRegistryName(
             registryName,
             langName,
-            GuiPageButtonListExtended.getTrimWidth(this.width),
+            GuiPageButtonListExtended.getEntryTrimWidth(this.width),
             key -> ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key))
         );
     }
@@ -2967,7 +2985,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 ForgeRegistryUtil.getFluidLocalizedName(new ResourceLocation(key)) :
                 ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key)).getLocalizedName();
                 
-            return getFormattedForgeRegistryName(property.getValue(), "", GuiPageButtonListExtended.getTrimWidth(GuiScreenCustomizeWorld.this.width), nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", GuiPageButtonListExtended.getEntryTrimWidth(GuiScreenCustomizeWorld.this.width), nameFormatter);
         }
     
         @Override
@@ -2975,7 +2993,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             Function<String, String> nameFormatter = key ->
                 ForgeRegistries.ENTITIES.getValue(new ResourceLocation(key)).getName();
             
-            return getFormattedForgeRegistryName(property.getValue(), "", GuiPageButtonListExtended.getTrimWidth(GuiScreenCustomizeWorld.this.width), nameFormatter);
+            return getFormattedForgeRegistryName(property.getValue(), "", GuiPageButtonListExtended.getEntryTrimWidth(GuiScreenCustomizeWorld.this.width), nameFormatter);
         }
     
         @Override

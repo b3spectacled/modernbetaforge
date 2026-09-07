@@ -21,7 +21,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     public static final int PADDING_WIDTH = 10;
     public static final int OFFSET_SCROLLBAR_X = 5;
     
-    private static final int MAX_WIDTH = 360;
+    private static final int MAX_WIDTH = 380;
     private static final int MIN_WIDTH = 250;
     
     private final GuiScreen parent;
@@ -92,7 +92,6 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     @Override
     protected GuiListButton createButton(int x, int y, GuiButtonEntry entry) {
         GuiListButton guiButton = new GuiListButtonExtended(this.parent, this.responder, entry.getId(), x, y, entry.getCaption(), entry.getInitialValue());
-
         guiButton.visible = entry.shouldStartVisible();
         guiButton.width = getEntryWidth(this.width);
         
@@ -113,7 +112,6 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     @Override
     protected GuiLabel createLabel(int x, int y, GuiLabelEntry entry, boolean blankSpace) {
         GuiLabel guiLabel;
-        List<String> captions = this.mc.fontRenderer.listFormattedStringToWidth(entry.getCaption(), this.getListWidth() - OFFSET_SCROLLBAR_X * 3);
 
         if (blankSpace) {
             guiLabel = new GuiLabel(this.mc.fontRenderer, entry.getId(), x, y, this.width - x * 2 + this.offsetX * 2, 20, -1);
@@ -122,7 +120,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         }
 
         guiLabel.visible = entry.shouldStartVisible();
-        captions.forEach(caption -> guiLabel.addLine(caption));
+        guiLabel.addLine(entry.getCaption());
         guiLabel.setCentered();
         
         return guiLabel;
@@ -164,7 +162,11 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         return getListWidth(width) / 2 - GuiUtil.BUTTON_SPACE / 2 - PADDING_WIDTH;
     }
     
-    public static int getTrimWidth(int width) {
-        return getEntryWidth(width) - 12;
+    public static int getListTrimWidth(int width) {
+        return getListWidth(width) - 24;
+    }
+    
+    public static int getEntryTrimWidth(int width) {
+        return getEntryWidth(width) - 24;
     }
 }
