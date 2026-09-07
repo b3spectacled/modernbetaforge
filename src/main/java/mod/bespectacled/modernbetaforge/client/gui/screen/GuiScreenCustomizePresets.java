@@ -55,8 +55,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_LINE_LEN = 188;
-    private static final int BUTTON_SMALL_WIDTH = 85;
-    private static final int BUTTON_LARGE_WIDTH = 174;
+    private static final int BUTTON_SMALL_WIDTH = 80;
+    private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int TEXTBOX_PADDING = 100;
     
     private static final int GUI_ID_FILTER = 0;
