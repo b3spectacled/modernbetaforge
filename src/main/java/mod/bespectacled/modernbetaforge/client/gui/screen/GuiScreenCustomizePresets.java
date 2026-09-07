@@ -25,6 +25,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -37,6 +38,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,7 +54,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
-    private static final int MAX_PRESET_DESC_LINE_LENGTH = 188;
+    private static final int MAX_PRESET_LINE_LEN = 188;
     private static final int BUTTON_SMALL_WIDTH = 85;
     private static final int BUTTON_LARGE_WIDTH = 174;
     private static final int TEXTBOX_PADDING = 100;
@@ -90,7 +92,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private GuiButtonIcon buttonPaste;
     private String shareText;
     private int hoveredElement;
-    @SuppressWarnings("unused") private long hoveredTime;
     private int amountScrolled;
     private boolean isFocused;
     private long copiedTime;
@@ -176,6 +177,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        Info hoveredInfo = this.hoveredElement >= 0 ? this.presets.get(this.hoveredElement) : null;
+        
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -190,6 +193,19 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         if (this.buttonPaste.isMouseOver()) {
             this.drawHoveringText(I18n.format(PREFIX + "paste"), mouseX, mouseY);
+        }
+        
+        if (hoveredInfo != null && (hoveredInfo.hasLongDesc(this.fontRenderer) || hoveredInfo.hasLongName(fontRenderer))) {
+            List<String> tooltips = new ArrayList<>();
+            tooltips.addAll(this.fontRenderer.listFormattedStringToWidth(hoveredInfo.name, MAX_PRESET_LINE_LEN));
+            
+            List<String> desc = this.fontRenderer.listFormattedStringToWidth(hoveredInfo.desc, MAX_PRESET_LINE_LEN);
+            for (int i = 0; i < desc.size(); ++i) {
+                desc.set(i, TextFormatting.GRAY + desc.get(i));
+            }
+            tooltips.addAll(desc);
+            
+            this.drawHoveringText(tooltips, mouseX, mouseY);
         }
     }
     
@@ -436,6 +452,11 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static class ListPreset extends GuiSlot {
         private static final int LIST_PADDING_TOP = 66;
         private static final int LIST_PADDING_BOTTOM = 54;
+        private static final int SLOT_PADDING_X = 5;
+        private static final int SLOT_PADDING_Y = 2;
+        private static final int SLOT_TEXT_PADDING_X = 10;
+        private static final int SLOT_TEXT_NAME_PADDING_Y = 2;
+        private static final int SLOT_TEXT_DESC_PADDING_Y = 13;
         
         private final GuiScreenCustomizePresets parent;
         public int selected;
@@ -454,6 +475,28 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             this.selected = MathHelper.clamp(selected, -1, parent.presets.size() - 1);
         }
         
+        public String getSlotName(Info info, boolean trim) {
+            String name = info.name;
+            
+            if (trim && info.hasLongName(this.parent.fontRenderer)) {
+                name = this.parent.fontRenderer.trimStringToWidth(name, MAX_PRESET_LINE_LEN - 3) + "...";
+            }
+            
+            return name;
+        }
+        
+        public List<String> getSlotDescription(Info info, boolean trim) {
+            List<String> desc = this.parent.fontRenderer.listFormattedStringToWidth(info.desc, MAX_PRESET_LINE_LEN);
+            
+            if (trim && info.hasLongDesc(this.parent.fontRenderer)) {
+                String secondLine = desc.get(1);
+                desc.set(1, secondLine.substring(0, secondLine.length() - 3) + "...");
+                desc = desc.subList(0, 2);
+            }
+            
+            return desc;
+        }
+        
         @Override
         public void handleMouseInput() {
             super.handleMouseInput();
@@ -469,7 +512,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
             if (inListBounds && inSlotBounds && listMouseY >= 0 && element < this.getSize()) {
                 this.parent.hoveredElement = element;
-                this.parent.hoveredTime = System.currentTimeMillis();
                 
             } else {
                 this.parent.hoveredElement = -1;
@@ -560,36 +602,34 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         @Override
         protected void drawSlot(int preset, int x, int y, int height, int mouseX, int mouseY, float partialTicks) {
             Info info = this.parent.presets.get(preset);
-            int paddingY = 2;
+            String name = this.getSlotName(info, true);
+            List<String> desc = this.getSlotDescription(info, true);
             
             boolean hovered = this.parent.hoveredElement == preset;
             int nameColor = hovered ? GuiColors.RGB_LIGHT_YELLOW : GuiColors.RGB_WHITE;
             int descColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GREY;
             
-            int iX = x + 5;
-            int iY = y + paddingY;
+            int iconX = x + SLOT_PADDING_X;
+            int iconY = y + SLOT_PADDING_Y;
+            
+            int nameX = x + SLOT_HEIGHT + SLOT_TEXT_PADDING_X;
+            int nameY = y + SLOT_PADDING_Y + SLOT_TEXT_NAME_PADDING_Y;
             
             // Cull if not in list frame
-            if (iY + SLOT_HEIGHT <= LIST_PADDING_TOP || iY >= this.parent.height - LIST_PADDING_BOTTOM) {
+            if (iconY + SLOT_HEIGHT <= LIST_PADDING_TOP || iconY >= this.parent.height - LIST_PADDING_BOTTOM) {
                 return;
             }
             
             // Render preset icon
-            this.blitIcon(iX, iY, info.icon());
+            this.blitIcon(iconX, iconY, info.icon());
             
             // Render preset name
-            this.parent.fontRenderer.drawString(info.name, x + SLOT_HEIGHT + 10, y + 2 + paddingY, nameColor);
+            this.parent.fontRenderer.drawString(name, nameX, nameY, nameColor);
             
             // Render preset description, splitting if too long
-            List<String> splitString = this.parent.fontRenderer.listFormattedStringToWidth(info.desc, MAX_PRESET_DESC_LINE_LENGTH);
-            if (splitString.size() > 1) {
-                for (int i = 0; i < splitString.size(); ++i) {
-                    String line = splitString.get(i);
-                    this.parent.fontRenderer.drawString(line, x + SLOT_HEIGHT + 10, y + 13 + paddingY + i * 10, descColor);
-                }
-                
-            } else {
-                this.parent.fontRenderer.drawString(info.desc, x + SLOT_HEIGHT + 10, y + 13 + paddingY, descColor);
+            for (int i = 0; i < desc.size(); ++i) {
+                String line = desc.get(i);
+                this.parent.fontRenderer.drawString(line, x + SLOT_HEIGHT + SLOT_TEXT_PADDING_X, y + SLOT_PADDING_Y + SLOT_TEXT_DESC_PADDING_Y + i * (this.parent.fontRenderer.FONT_HEIGHT + 1), descColor);
             }
         }
 
@@ -651,6 +691,14 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             }
             
             return GuiModalPreset.getIconTexture(0);
+        }
+        
+        public boolean hasLongName(FontRenderer fontRenderer) {
+            return fontRenderer.getStringWidth(this.name) > MAX_PRESET_LINE_LEN;
+        }
+        
+        public boolean hasLongDesc(FontRenderer fontRenderer) {
+            return fontRenderer.listFormattedStringToWidth(this.desc, MAX_PRESET_LINE_LEN).size() >= 3;
         }
     }
 }
