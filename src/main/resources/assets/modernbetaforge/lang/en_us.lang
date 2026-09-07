@@ -232,7 +232,7 @@ createWorld.customize.custom.modernbetaforge.levelWidth.tooltip=Width of the Ind
 createWorld.customize.custom.modernbetaforge.levelLength.tooltip=Length of the Indev world, in blocks.
 createWorld.customize.custom.modernbetaforge.levelHeight.tooltip=Height of the Indev world, in blocks. This affects world sea level. When using the Floating level type, higher values will add more layers.
 createWorld.customize.custom.modernbetaforge.levelHouse.tooltip=Generate the Indev house, or disable the Indev house.
-createWorld.customize.custom.modernbetaforge.useIndevCaves.tooltip=Generate Indev caves. This setting is not mutually exclusive with the Cave Carver setting.
+createWorld.customize.custom.modernbetaforge.useIndevCaves.tooltip=Generate Indev caves. This can be used with Cave Carver options.
 createWorld.customize.custom.modernbetaforge.levelCaveWidth.tooltip=Maximum Indev cave width. Values above 1.0 will add variation in cave widths between the new value and 1.0.
 
 # Page 2 - Release Settings
