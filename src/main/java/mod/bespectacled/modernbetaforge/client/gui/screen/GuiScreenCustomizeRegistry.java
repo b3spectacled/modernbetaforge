@@ -125,7 +125,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         
         int centerX = this.width / 2;
-        int buttonWidth = GuiUtil.getButtonWidth(120, 160, this.mc.displayWidth);
+        int buttonWidth = GuiUtil.getButtonWidth(120, 160, this.width);
         int selectX = centerX - GuiUtil.BUTTON_SPACE / 2 - buttonWidth;
         int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         

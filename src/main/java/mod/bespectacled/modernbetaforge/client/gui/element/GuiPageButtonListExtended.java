@@ -1,7 +1,5 @@
 package mod.bespectacled.modernbetaforge.client.gui.element;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;

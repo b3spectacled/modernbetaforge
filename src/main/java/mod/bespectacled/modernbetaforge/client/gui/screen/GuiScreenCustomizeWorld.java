@@ -225,7 +225,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
         int centerX = this.width / 2;
         
-        int buttonWidth = GuiUtil.getStandardButtonWidth(this.mc.displayWidth);
+        int buttonWidth = GuiUtil.getStandardButtonWidth(this.width);
         int buttonY = this.height - 27;
         int defaultsX = centerX - buttonWidth * 2 - buttonWidth / 2 - 6;
         int randomizeX = centerX - buttonWidth - buttonWidth / 2 - 3;

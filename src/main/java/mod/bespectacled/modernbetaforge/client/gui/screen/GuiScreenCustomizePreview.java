@@ -202,8 +202,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int minButtonWidth = (minWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
         int maxButtonWidth = (maxWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
         
-        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, minButtonWidth, maxButtonWidth, this.mc.displayWidth);
-        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.mc.displayWidth);
+        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, minButtonWidth, maxButtonWidth, this.width);
+        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.width);
         
         int totalR0Width = buttonWidth * 3 + GuiUtil.BUTTON_SPACE * 2;
         int totalR1Width = wideButtonWidth * 2 + GuiUtil.BUTTON_SPACE;

@@ -119,8 +119,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         
-        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, BUTTON_SMALL_WIDTH - 10, BUTTON_SMALL_WIDTH + 40, this.mc.displayWidth);
-        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.mc.displayWidth);
+        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, BUTTON_SMALL_WIDTH - 10, BUTTON_SMALL_WIDTH + 40, this.width);
+        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.width);
         
         int centerX = this.width / 2;
         int fieldExportPadding = TEXTBOX_PADDING + GuiButtonIcon.ICON_SIZE * 2 + GuiUtil.BUTTON_SPACE;
