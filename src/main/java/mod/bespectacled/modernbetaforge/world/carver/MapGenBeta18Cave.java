@@ -1,10 +1,11 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
+import java.util.List;
 import java.util.Random;
 
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -15,12 +16,20 @@ public class MapGenBeta18Cave extends MapGenBetaCave {
         super(chunkSource, settings);
     }
     
-    public MapGenBeta18Cave() {
-        super(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128, 40, 15, 0, 0, 255);
-    }
-    
-    public MapGenBeta18Cave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor, int worldHeight) {
-        super(defaultBlock, defaultFluid, defaultFill, caveWidth, caveHeight, caveCount, caveChance, caveMinY, worldFloor, worldHeight);
+    public MapGenBeta18Cave(
+        IBlockState defaultBlock,
+        IBlockState defaultFluid,
+        IBlockState defaultFill,
+        float caveWidth,
+        int caveHeight,
+        int caveCount,
+        int caveChance,
+        int caveMinY,
+        int worldFloor,
+        int worldHeight,
+        List<Block> additionalCarvableBlocks
+    ) {
+        super(defaultBlock, defaultFluid, defaultFill, caveWidth, caveHeight, caveCount, caveChance, caveMinY, worldFloor, worldHeight, additionalCarvableBlocks);
     }
     
     @Override

@@ -2,6 +2,8 @@ package mod.bespectacled.modernbetaforge.world.carver;
 
 import java.util.Random;
 
+import com.google.common.collect.ImmutableList;
+
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -16,7 +18,7 @@ public class MapGenBetaCaveHell extends MapGenBetaCave {
     }
     
     public MapGenBetaCaveHell() {
-        super(BlockStates.NETHERRACK, BlockStates.LAVA, BlockStates.AIR, 1.0f, 128, 10, 5, 0, 0, 128);
+        super(BlockStates.NETHERRACK, BlockStates.LAVA, BlockStates.AIR, 1.0f, 128, 10, 5, 0, 0, 128, ImmutableList.of());
     }
     
     @Override

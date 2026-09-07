@@ -1,17 +1,11 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.Set;
-
-import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableSet;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.compat.CarverCompat;
-import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeHolders;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -40,8 +34,8 @@ public class MapGenRavineExtended extends MapGenRavine {
         this.defaultBlock = chunkSource.getDefaultBlock().getBlock();
         this.defaultFluids = MapGenBetaCave.getDefaultFluids(chunkSource.getDefaultFluid());
         
-        this.carvables = this.initializeCarvables(this.defaultBlock).build();
-        this.uncarvables = this.initializeUncarvables().build();
+        this.carvables = this.initCarvableBlocks(this.defaultBlock, MapGenBetaCave.getAdditionalCarvableBlocks(chunkSource, settings)).build();
+        this.uncarvables = this.initUncarvableBlocks().build();
         
         this.ravineChance = settings.ravineChance;
         this.worldFloor = settings.floor;
@@ -97,34 +91,19 @@ public class MapGenRavineExtended extends MapGenRavine {
         return this.defaultFluids.contains(chunkPrimer.getBlockState(x, y, z).getBlock());
     }
 
-    private ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
-        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
+    private ImmutableSet.Builder<Block> initCarvableBlocks(Block defaultBlock, List<Block> additionalCarvableBlocks) {
+        ImmutableSet.Builder<Block> carvableBlocks = new ImmutableSet.Builder<>();
+        carvableBlocks.add(defaultBlock).add(defaultBlock);
+        carvableBlocks.addAll(additionalCarvableBlocks);
         
-        // Add default blocks
-        carvables.add(defaultBlock)
-            .add(Blocks.STONE)
-            .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE)
-            ;
-        
-        // Add modded blocks
-        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
-            Compat compat = entry.getValue();
-            if (compat instanceof CarverCompat) {
-                ModernBeta.log(Level.DEBUG, String.format("Adding ravine carvables from mod '%s'", entry.getKey()));
-                
-                carvables.addAll(((CarverCompat)compat).getCarvables());
-            }
-        }
-        
-        return carvables;
+        return carvableBlocks;
     }
     
-    private ImmutableSet.Builder<Block> initializeUncarvables() {
-        ImmutableSet.Builder<Block> uncarvables = new ImmutableSet.Builder<>();
-        uncarvables.add(Blocks.SAND);
+    private ImmutableSet.Builder<Block> initUncarvableBlocks() {
+        ImmutableSet.Builder<Block> uncarvableBlocks = new ImmutableSet.Builder<>();
+        uncarvableBlocks.add(Blocks.SAND);
 
-        return uncarvables;
+        return uncarvableBlocks;
     }
     
     private boolean isExceptionBiome(Biome biome) {

@@ -19,6 +19,7 @@ public class NbtTags {
     public static final String FORGE_FEATURE = "forgeFeature";
     public static final String STRUCTURE = "structure";
     public static final String DEFAULT_BLOCK = "defaultBlock";
+    public static final String CARVABLE_BLOCK = "carvableBlock";
     public static final String MOD_DATA_FIX = "modDataFix";
     public static final String PROPERTY = "property";
     

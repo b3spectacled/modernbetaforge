@@ -134,6 +134,12 @@ public class ModernBetaRegistries {
     public static final ModernBetaRegistry<Supplier<Block>> DEFAULT_BLOCK;
     
     /**
+     * Holds registered {@link CarvableBlockCreator interfaces} which return {@link Block blocks} as valid carvable blocks.
+     * Register functions to return blocks that should be carvable (e.g. mod blocks) here.
+     */
+    public static final ModernBetaRegistry<CarvableBlockCreator> CARVABLE_BLOCK;
+    
+    /**
      * Holds registered {@link ModDataFix datafixes} for the {@link ModDataFixer}.
      * For datafixes to function, the mod must also register to {@link ModernBetaModRegistry}
      * with its mod ID and current data version.
@@ -163,6 +169,7 @@ public class ModernBetaRegistries {
         STRUCTURE = new ModernBetaRegistry<>(NbtTags.STRUCTURE);
         WORLD_SPAWNER = new ModernBetaRegistry<>(NbtTags.WORLD_SPAWNER);
         DEFAULT_BLOCK = new ModernBetaRegistry<>(NbtTags.DEFAULT_BLOCK);
+        CARVABLE_BLOCK = new ModernBetaRegistry<>(NbtTags.CARVABLE_BLOCK);
         MOD_DATA_FIX = new ModernBetaRegistry<>(NbtTags.MOD_DATA_FIX);
         PROPERTY = new ModernBetaRegistry<>(NbtTags.PROPERTY);
     }
@@ -230,5 +237,10 @@ public class ModernBetaRegistries {
     @FunctionalInterface
     public static interface StructureCreator {
         MapGenStructure apply(ModernBetaChunkGenerator chunkGenerator, ModernBetaGeneratorSettings settings);
+    }
+    
+    @FunctionalInterface
+    public static interface CarvableBlockCreator {
+        Block apply(ChunkSource chunkSource, ModernBetaGeneratorSettings settings);
     }
 }

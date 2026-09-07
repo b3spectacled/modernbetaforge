@@ -1,8 +1,8 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
@@ -11,10 +11,8 @@ import org.apache.logging.log4j.Level;
 import com.google.common.collect.ImmutableSet;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
+import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.compat.CarverCompat;
-import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
@@ -43,8 +41,8 @@ public class MapGenBetaCave extends MapGenBase {
     protected final Set<Block> defaultFluids;
     protected final Block defaultFill;
     
-    protected final Set<Block> carvables;
-    protected final Set<Block> uncarvables;
+    protected final Set<Block> carvableBlocks;
+    protected final Set<Block> uncarvableBlocks;
     protected final Random tunnelRandom;
     protected final Random featureRandom;
     
@@ -59,22 +57,42 @@ public class MapGenBetaCave extends MapGenBase {
     private List<StructureComponent> structureComponents;
     
     public MapGenBetaCave(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
-        this(chunkSource.getDefaultBlock(), chunkSource.getDefaultFluid(), BlockStates.AIR, settings.caveWidth, settings.caveHeight, settings.caveCount, settings.caveChance, 0, chunkSource.getWorldFloor(), chunkSource.getWorldHeight());
+        this(
+            chunkSource.getDefaultBlock(),
+            chunkSource.getDefaultFluid(),
+            BlockStates.AIR,
+            settings.caveWidth,
+            settings.caveHeight,
+            settings.caveCount,
+            settings.caveChance,
+            0,
+            chunkSource.getWorldFloor(),
+            chunkSource.getWorldHeight(),
+            getAdditionalCarvableBlocks(chunkSource, settings)
+        );
     }
     
-    public MapGenBetaCave() {
-        this(BlockStates.STONE, BlockStates.WATER, BlockStates.AIR, 1.0f, 128,  40, 15, 0, 0, 255);
-    }
-    
-    public MapGenBetaCave(IBlockState defaultBlock, IBlockState defaultFluid, IBlockState defaultFill, float caveWidth, int caveHeight, int caveCount, int caveChance, int caveMinY, int worldFloor, int worldHeight) {
+    public MapGenBetaCave(
+        IBlockState defaultBlock,
+        IBlockState defaultFluid,
+        IBlockState defaultFill,
+        float caveWidth,
+        int caveHeight,
+        int caveCount,
+        int caveChance,
+        int caveMinY,
+        int worldFloor,
+        int worldHeight,
+        List<Block> additionalCarvableBlocks
+    ) {
         super();
         
         this.defaultBlock = defaultBlock.getBlock();
         this.defaultFluids = getDefaultFluids(defaultFluid);
         this.defaultFill = defaultFill.getBlock();
         
-        this.carvables = this.initializeCarvables(defaultBlock.getBlock()).build();
-        this.uncarvables = this.initializeUncarvables().build();
+        this.carvableBlocks = this.initCarvableBlocks(defaultBlock.getBlock(), additionalCarvableBlocks).build();
+        this.uncarvableBlocks = this.initUncarvableBlocks().build();
         
         this.caveWidth = caveWidth;
         this.caveHeight = caveHeight;
@@ -265,37 +283,22 @@ public class MapGenBetaCave extends MapGenBase {
         Block topBlock = biome.topBlock.getBlock();
         Block fillerBlock = biome.fillerBlock.getBlock();
         
-        return (this.carvables.contains(block) || topBlock == block || fillerBlock == block) && !this.uncarvables.contains(block);
+        return (this.carvableBlocks.contains(block) || topBlock == block || fillerBlock == block) && !this.uncarvableBlocks.contains(block);
     }
     
     protected boolean isPositionForRegionUncarvable(int localX, int y, int localZ, Block block) {
         return this.defaultFluids.contains(block);
     }
 
-    protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
+    protected ImmutableSet.Builder<Block> initCarvableBlocks(Block defaultBlock, List<Block> additionalBlocks) {
         ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
-        
-        // Add default blocks
-        carvables.add(defaultBlock)
-            .add(Blocks.STONE)
-            .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE)
-            ;
-        
-        // Add modded blocks
-        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
-            Compat compat = entry.getValue();
-            if (compat instanceof CarverCompat) {
-                ModernBeta.log(Level.DEBUG, String.format("Adding carvables from mod '%s'", entry.getKey()));
-                
-                carvables.addAll(((CarverCompat)compat).getCarvables());
-            }
-        }
+        carvables.add(defaultBlock);
+        carvables.addAll(additionalBlocks);
         
         return carvables;
     }
     
-    protected ImmutableSet.Builder<Block> initializeUncarvables() {
+    protected ImmutableSet.Builder<Block> initUncarvableBlocks() {
         ImmutableSet.Builder<Block> uncarvables = new ImmutableSet.Builder<>();
         uncarvables.add(Blocks.SAND);
 
@@ -456,5 +459,12 @@ public class MapGenBetaCave extends MapGenBase {
         }
         
         return defaultFluids;
+    }
+    
+    public static List<Block> getAdditionalCarvableBlocks(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
+        List<Block> carvableBlocks = new ArrayList<>();
+        ModernBetaRegistries.CARVABLE_BLOCK.getValues().forEach(entry -> carvableBlocks.add(entry.apply(chunkSource, settings)));
+        
+        return carvableBlocks;
     }
 }

@@ -16,7 +16,8 @@ public class MapGenBetaCaveDeep extends MapGenBeta18Cave {
             settings.deepCaveChance,
             settings.floor,
             settings.floor,
-            settings.height
+            settings.height,
+            getAdditionalCarvableBlocks(chunkSource, settings)
         );
     }
 }

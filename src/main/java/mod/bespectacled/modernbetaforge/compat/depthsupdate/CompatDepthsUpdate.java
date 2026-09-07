@@ -1,9 +1,5 @@
 package mod.bespectacled.modernbetaforge.compat.depthsupdate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 import mod.bespectacled.modernbetaforge.api.client.gui.GuiPredicate;
 import mod.bespectacled.modernbetaforge.api.property.BlockProperty;
 import mod.bespectacled.modernbetaforge.api.property.BooleanProperty;
@@ -11,18 +7,14 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
-import mod.bespectacled.modernbetaforge.compat.CarverCompat;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.HeightCompat;
-import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat, CarverCompat {
+public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat {
 	public static final String MOD_ID = "depthsupdate";
 	public static final String RECOMMENDED_MOD_VERSION = "1.12.2-1.0.0-a12";
     public static final String ADDON_ID = "compat" + MOD_ID;
@@ -46,6 +38,7 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat, C
         ModernBetaRegistries.PROPERTY.register(KEY_DEEPSLATE_RANGE, new IntProperty(8, 0, 32, PropertyGuiType.SLIDER));
 
         ModernBetaRegistries.BLOCK_SOURCE.register(KEY_DEEPSLATE, BlockSourceDeepslate::new);
+        ModernBetaRegistries.CARVABLE_BLOCK.register(KEY_DEEPSLATE, (chunkSource, settings) -> settings.getBlockProperty(KEY_DEEPSLATE_BLOCK));
 	}
 
 	@Override
@@ -95,23 +88,5 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat, C
     @Override
     public int getMaxHeight() {
         return DepthsUpdateConfig.INSTANCE.getMaxY();
-    }
-
-    @Override
-    public List<Block> getCarvables() {
-        Function<ResourceLocation, Block> blockFunc = key -> ForgeRegistryUtil.getOrElse(key, new ResourceLocation("stone"), ForgeRegistries.BLOCKS);
-        List<Block> carvables = new ArrayList<>();
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "cobbled_deepslate")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_coal_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_iron_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_gold_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_redstone_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_lapis_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_diamond_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_emerald_ore")));
-        carvables.add(blockFunc.apply(new ResourceLocation(MOD_ID, "deepslate_copper_ore")));
-        
-        return carvables;
     }
 }

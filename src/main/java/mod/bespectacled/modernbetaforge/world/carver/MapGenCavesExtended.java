@@ -1,22 +1,15 @@
 package mod.bespectacled.modernbetaforge.world.carver;
 
-import java.util.Map.Entry;
+import java.util.List;
 import java.util.Set;
-
-import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableSet;
 
-import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.compat.CarverCompat;
-import mod.bespectacled.modernbetaforge.compat.Compat;
-import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -25,7 +18,7 @@ import net.minecraft.world.gen.MapGenCaves;
 public class MapGenCavesExtended extends MapGenCaves {
     private final Block defaultBlock;
     private final Set<Block> defaultFluids;
-    private final Set<Block> carvables;
+    private final Set<Block> carvableBlocks;
     
     private final int worldFloor;
     private final MutableBlockPos mutablePos;
@@ -33,7 +26,7 @@ public class MapGenCavesExtended extends MapGenCaves {
     public MapGenCavesExtended(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         this.defaultBlock = chunkSource.getDefaultBlock().getBlock();
         this.defaultFluids = MapGenBetaCave.getDefaultFluids(chunkSource.getDefaultFluid());
-        this.carvables = this.initializeCarvables(this.defaultBlock).build();
+        this.carvableBlocks = this.initCarvableBlocks(this.defaultBlock, MapGenBetaCave.getAdditionalCarvableBlocks(chunkSource, settings)).build();
         
         this.worldFloor = chunkSource.getWorldFloor();
         this.mutablePos = new MutableBlockPos();
@@ -48,7 +41,7 @@ public class MapGenCavesExtended extends MapGenCaves {
     
     @Override
     protected boolean canReplaceBlock(IBlockState blockState, IBlockState blockStateUp) {
-        return super.canReplaceBlock(blockState, blockStateUp) || this.carvables.contains(blockState.getBlock());
+        return super.canReplaceBlock(blockState, blockStateUp) || this.carvableBlocks.contains(blockState.getBlock());
     }
     
     @Override
@@ -72,26 +65,11 @@ public class MapGenCavesExtended extends MapGenCaves {
         }
     }
 
-    protected ImmutableSet.Builder<Block> initializeCarvables(Block defaultBlock) {
-        ImmutableSet.Builder<Block> carvables = new ImmutableSet.Builder<>();
+    protected ImmutableSet.Builder<Block> initCarvableBlocks(Block defaultBlock, List<Block> additionalCarvableBlocks) {
+        ImmutableSet.Builder<Block> carvableBlocks = new ImmutableSet.Builder<>();
+        carvableBlocks.add(defaultBlock).add(defaultBlock);
+        carvableBlocks.addAll(additionalCarvableBlocks);
         
-        // Add default blocks
-        carvables.add(defaultBlock)
-            .add(Blocks.STONE)
-            .add(Blocks.COAL_ORE)
-            .add(Blocks.IRON_ORE)
-            ;
-        
-        // Add modded blocks
-        for (Entry<String, Compat> entry : ModCompat.LOADED_COMPATS.entrySet()) {
-            Compat compat = entry.getValue();
-            if (compat instanceof CarverCompat) {
-                ModernBeta.log(Level.DEBUG, String.format("Adding vanilla cave carvables from mod '%s'", entry.getKey()));
-                
-                carvables.addAll(((CarverCompat)compat).getCarvables());
-            }
-        }
-        
-        return carvables;
+        return carvableBlocks;
     }
 }
