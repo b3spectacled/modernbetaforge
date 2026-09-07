@@ -10,6 +10,6 @@ public class KeyBindings {
     private static final String CATEGORY = String.format("%scategories.ui", PREFIX);
     private static final GuiKeyConflictContext CONFLICT_CONTEXT = new GuiKeyConflictContext();
     
-    public static final KeyBinding LEFT_NAV_KEY = new KeyBinding(PREFIX + "leftNav", CONFLICT_CONTEXT, Keyboard.KEY_A, CATEGORY);
-    public static final KeyBinding RIGHT_NAV_KEY = new KeyBinding(PREFIX + "rightNav", CONFLICT_CONTEXT, Keyboard.KEY_D, CATEGORY);
+    public static final KeyBinding LEFT_NAV_KEY = new KeyBinding(PREFIX + "leftNav", CONFLICT_CONTEXT, Keyboard.KEY_W, CATEGORY);
+    public static final KeyBinding RIGHT_NAV_KEY = new KeyBinding(PREFIX + "rightNav", CONFLICT_CONTEXT, Keyboard.KEY_S, CATEGORY);
 }

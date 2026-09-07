@@ -53,6 +53,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiIdentifiers;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonNav;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonTab;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiHoverableText;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiPageButtonListExtended;
@@ -122,7 +123,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private static final int TAB_SPACE = 2;
     private static final int TAB_BUTTON_WIDTH = 55;
-    private static final int TAB_BUTTON_HEIGHT = 20;
+    private static final int TAB_BUTTON_LOW_HEIGHT = 18;
+    private static final int TAB_BUTTON_HIGH_HEIGHT = 20;
     
     private static final int TOOLTIP_MAX_WIDTH = 140;
     private static final int TOOLTIP_LINE_SPACING = 3;
@@ -150,6 +152,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private GuiButton buttonDefaults;
     private GuiButton buttonPresets;
     private GuiButton buttonPreview;
+    private GuiButton buttonNavL;
+    private GuiButton buttonNavR;
     private GuiHoverableText heightInfo;
     private boolean settingsModified;
     private boolean clicked;
@@ -232,12 +236,20 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int previewX = centerX - buttonWidth / 2;
         int presetsX = centerX + buttonWidth / 2 + 3;
         int doneX = centerX + buttonWidth / 2 + buttonWidth + 6;
+
+        int centerTabX = this.tabListBounds.getX() + this.tabListBounds.getWidth() / 2;
+        int navY = this.tabListBounds.getY() + this.tabListBounds.getHeight() - 4;
+        int navXL = centerTabX - GuiButtonNav.getButtonWidth(this.mc, KeyBindings.LEFT_NAV_KEY.getDisplayName()) - GuiUtil.BUTTON_SPACE / 2;
+        int navXR = centerTabX + GuiUtil.BUTTON_SPACE / 2;
         
         this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
         this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
         this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
         this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
         this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
+        
+        this.buttonNavL = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_LNAV, navXL, navY, KeyBindings.LEFT_NAV_KEY.getDisplayName()));
+        this.buttonNavR = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_RNAV, navXR, navY, KeyBindings.RIGHT_NAV_KEY.getDisplayName()));
         
         if (ModCompat.HEIGHT_MANAGER.extendsHeight()) {
             String heightText = TextFormatting.RESET + "[" + TextFormatting.BOLD + "\u16E8" + TextFormatting.RESET + "]";
@@ -276,7 +288,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
         
-        if (!this.tabListBounds.isHovered()) {
+        if (!this.tabListBounds.isHovered() && !this.buttonNavL.isMouseOver() && !this.buttonNavR.isMouseOver()) {
             this.pageList.handleMouseInput();
         }
     }
@@ -1366,7 +1378,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (!this.tabListBounds.isHovered()) {
+        if (!this.tabListBounds.isHovered() && !this.buttonNavL.isMouseOver() && !this.buttonNavR.isMouseOver()) {
             this.pageList.mouseClicked(mouseX, mouseY, mouseButton);
         }
 
@@ -1987,6 +1999,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void createPageTabs() {
         int id = GuiIdentifiers.FUNC_INITIAL_TAB;
         int startY = this.pageList.top + this.pageList.headerPadding + 5;
+        int buttonHeight = ModernBetaConfig.guiOptions.displayNavButtons ? TAB_BUTTON_LOW_HEIGHT : TAB_BUTTON_HIGH_HEIGHT;
         
         int x = this.width / 2 - GuiPageButtonListExtended.getEntryWidth(this.width) - GuiUtil.BUTTON_SPACE / 2 - TAB_BUTTON_WIDTH / 2 - 8;
         int y = startY;
@@ -1996,14 +2009,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             String text = I18n.format(this.pageNames[i]);
             boolean selected = this.pageList.getPage() == i;
             
-            GuiButtonTab guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, TAB_BUTTON_HEIGHT, text, selected);
+            GuiButtonTab guiButton = new GuiButtonTab(id + i, x, y, TAB_BUTTON_WIDTH, buttonHeight, text, selected);
             this.pageTabMap.put(GuiIdentifiers.FUNC_INITIAL_TAB + i, this.<GuiButtonTab>addButton(guiButton));
             
-            y += TAB_BUTTON_HEIGHT + TAB_SPACE;
+            y += buttonHeight + TAB_SPACE;
         }
         
         this.tabListBounds = new GuiBoundsChecker();
-        this.tabListBounds.updateBounds(x, startY, TAB_BUTTON_WIDTH, y - TAB_BUTTON_HEIGHT - TAB_SPACE);
+        this.tabListBounds.updateBounds(x, startY, TAB_BUTTON_WIDTH, y - buttonHeight - TAB_SPACE);
     }
 
     private GuiListEntry[] createAddOnPage() {
@@ -2400,6 +2413,12 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
         this.buttonPresets.enabled = this.isFocused;
         this.buttonPreview.enabled = this.isFocused;
+        
+        // Nav buttons
+        this.buttonNavL.visible = this.displayNavButtons;
+        this.buttonNavR.visible = this.displayNavButtons;
+        this.buttonNavL.enabled = this.isFocused && this.pageList.getPage() > 0;
+        this.buttonNavR.enabled = this.isFocused && this.pageList.getPage() < this.pageList.getPageCount() - 1;
         
         // Tab buttons
         for (Entry<Integer, GuiButtonTab> pageTab : this.pageTabMap.entrySet()) {
