@@ -80,7 +80,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     
     @Override
     protected GuiSlider createSlider(int x, int y, GuiSlideEntry entry) {
-        GuiSlider guiSlider = new GuiSlider(this.responder, entry.getId(), x, y, entry.getCaption(), entry.getMinValue(), entry.getMaxValue(), entry.getInitalValue(), entry.getFormatter());
+        GuiSlider guiSlider = new GuiSlider(this.responder, entry.getId(), x, y, entry.getCaption().trim(), entry.getMinValue(), entry.getMaxValue(), entry.getInitalValue(), entry.getFormatter());
         guiSlider.visible = entry.shouldStartVisible();
         guiSlider.width = getEntryWidth(this.width);
         
@@ -89,7 +89,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
 
     @Override
     protected GuiListButton createButton(int x, int y, GuiButtonEntry entry) {
-        GuiListButton guiButton = new GuiListButtonExtended(this.parent, this.responder, entry.getId(), x, y, entry.getCaption(), entry.getInitialValue());
+        GuiListButton guiButton = new GuiListButtonExtended(this.parent, this.responder, entry.getId(), x, y, entry.getCaption().trim(), entry.getInitialValue());
         guiButton.visible = entry.shouldStartVisible();
         guiButton.width = getEntryWidth(this.width);
         
@@ -99,7 +99,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     @Override
     protected GuiTextField createTextField(int x, int y, EditBoxEntry entry) {
         GuiTextField guiField = new GuiTextField(entry.getId(), this.mc.fontRenderer, x, y, getEntryWidth(this.width), 20);
-        guiField.setText(entry.getCaption());
+        guiField.setText(entry.getCaption().trim());
         guiField.setGuiResponder(this.responder);
         guiField.setVisible(entry.shouldStartVisible());
         guiField.setValidator(entry.getFilter());
@@ -118,7 +118,7 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         }
 
         guiLabel.visible = entry.shouldStartVisible();
-        guiLabel.addLine(entry.getCaption());
+        guiLabel.addLine(entry.getCaption().trim());
         guiLabel.setCentered();
         
         return guiLabel;
@@ -165,6 +165,6 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     }
     
     public static int getEntryTrimWidth(int width) {
-        return getEntryWidth(width) - 24;
+        return getEntryWidth(width) - 6;
     }
 }
