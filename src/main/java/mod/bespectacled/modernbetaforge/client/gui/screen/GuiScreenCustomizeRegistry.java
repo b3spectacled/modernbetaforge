@@ -535,4 +535,3 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         }
     }
 }
-;
