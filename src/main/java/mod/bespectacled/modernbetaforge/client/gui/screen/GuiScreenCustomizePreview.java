@@ -219,7 +219,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         
         int zoomX = generateX;
-        int biomeX = zoomX + buttonWidth + GuiUtil.BUTTON_SPACE;
+        int biomeX = centerX - buttonWidth / 2;
         int structureX = biomeX + blendWidth + GuiUtil.BUTTON_SPACE;
         
         int screenshotX = viewportX + viewportSize + GuiUtil.BUTTON_SPACE / 2;

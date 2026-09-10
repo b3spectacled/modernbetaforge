@@ -131,7 +131,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         
         int selectX = centerX + GuiUtil.BUTTON_SPACE / 2;
         int filterX = centerX + GuiUtil.BUTTON_SPACE / 2;
-        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2 + buttonWidth + GuiUtil.BUTTON_SPACE;
+        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2 + wideButtonWidth - buttonWidth;
         int saveX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
         int editX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
         int deleteX = centerX - buttonWidth - GuiUtil.BUTTON_SPACE / 2;
