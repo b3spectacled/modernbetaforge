@@ -55,7 +55,6 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     private static final int SLOT_HEIGHT = 32;
     private static final int SLOT_PADDING = 6;
     private static final int MAX_PRESET_LINE_LEN = 188;
-    private static final int BUTTON_SMALL_WIDTH = 80;
     private static final int BUTTON_LARGE_WIDTH = 164;
     private static final int TEXTBOX_PADDING = 100;
     
@@ -119,8 +118,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         
-        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, BUTTON_SMALL_WIDTH - 10, BUTTON_SMALL_WIDTH + 40, this.width);
-        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 20, BUTTON_LARGE_WIDTH + 80, this.width);
+        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, BUTTON_LARGE_WIDTH - 10, BUTTON_LARGE_WIDTH + 80, this.width);
+        int buttonWidth = wideButtonWidth / 2 - GuiUtil.BUTTON_SPACE / 2;
         
         int centerX = this.width / 2;
         int fieldExportPadding = TEXTBOX_PADDING + GuiButtonIcon.ICON_SIZE * 2 + GuiUtil.BUTTON_SPACE;
@@ -130,8 +129,8 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int fieldExportH = 20;
         
         int selectX = centerX + GuiUtil.BUTTON_SPACE / 2;
-        int filterX = centerX + GuiUtil.BUTTON_SPACE / 2;
-        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2 + wideButtonWidth - buttonWidth;
+        int filterX = selectX;
+        int cancelX = selectX + wideButtonWidth - buttonWidth;
         int saveX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
         int editX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
         int deleteX = centerX - buttonWidth - GuiUtil.BUTTON_SPACE / 2;

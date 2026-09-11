@@ -109,7 +109,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int PROGRESS_BAR_W_PADDING = 10;
     private static final int PROGRESS_TEXT_OFFSET = 13;
     private static final int BUTTON_LARGE_WIDTH = 164;
-    private static final int BUTTON_SMALL_WIDTH = 108;
     private static final int TEXT_BOX_PADDING = 4;
     
     private static final int GUI_ID_BIOME_COLORS = 0;
@@ -199,11 +198,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int minWideButtonWidth = BUTTON_LARGE_WIDTH - 20;
         int maxWideButtonWidth = BUTTON_LARGE_WIDTH + 80;
         
-        int minButtonWidth = (minWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
-        int maxButtonWidth = (maxWideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
-        
-        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_SMALL_WIDTH, minButtonWidth, maxButtonWidth, this.width);
         int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.width);
+        int buttonWidth = (wideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
         
         int totalR0Width = buttonWidth * 3 + GuiUtil.BUTTON_SPACE * 2;
         int totalR1Width = wideButtonWidth * 2 + GuiUtil.BUTTON_SPACE;
@@ -219,7 +215,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         
         int zoomX = generateX;
-        int biomeX = centerX - buttonWidth / 2;
+        int biomeX = centerX - blendWidth / 2;
         int structureX = biomeX + blendWidth + GuiUtil.BUTTON_SPACE;
         
         int screenshotX = viewportX + viewportSize + GuiUtil.BUTTON_SPACE / 2;
