@@ -658,6 +658,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 case GuiIdentifiers.PG2_B_USE_CLAY_DISKS:
                     this.settings.useClayDisks = entryValue;
                     break;
+                case GuiIdentifiers.PG2_B_USE_SPRINGS:
+                    this.settings.useSprings = entryValue;
+                    break;
                     
                 case GuiIdentifiers.PG2_B_USE_BIRCH:
                     this.settings.useBirchTrees = entryValue;
@@ -1555,9 +1558,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_MELONS, NbtTags.USE_MELONS, this.settings.useMelons),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_WELLS, NbtTags.USE_DESERT_WELLS, this.settings.useDesertWells),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_FOSSILS, NbtTags.USE_FOSSILS, this.settings.useFossils),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_FANCY_OAK, NbtTags.USE_NEW_FANCY_OAK_TREES, this.settings.useNewFancyOakTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_BIRCH, NbtTags.USE_BIRCH_TREES, this.settings.useBirchTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_PINE, NbtTags.USE_PINE_TREES, this.settings.usePineTrees),
@@ -1565,7 +1565,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_DARK_OAK, NbtTags.USE_DARK_OAK_TREES, this.settings.useDarkOakTrees),
-            null,
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SPRINGS, NbtTags.USE_SPRINGS, this.settings.useSprings),
             
             this.createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, GuiPageButtonListExtended::getListTrimWidth, "page2", "release"),
             null,

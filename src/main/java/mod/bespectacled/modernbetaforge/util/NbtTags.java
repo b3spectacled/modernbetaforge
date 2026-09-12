@@ -122,6 +122,7 @@ public class NbtTags {
     public static final String USE_SAND_DISKS = "useSandDisks";
     public static final String USE_GRAVEL_DISKS = "useGravelDisks";
     public static final String USE_CLAY_DISKS = "useClayDisks";
+    public static final String USE_SPRINGS = "useSprings";
     
     public static final String USE_BIRCH_TREES = "useBirchTrees";
     public static final String USE_PINE_TREES = "usePineTrees";

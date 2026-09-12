@@ -20,6 +20,8 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.indev.BiomeIndev;
+import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev;
 import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
@@ -27,6 +29,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.init.Blocks;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DataFixers {
@@ -411,27 +414,43 @@ public class DataFixers {
         return null;
     }
     
+    public static JsonElement fixSprings(JsonObject jsonObject) {
+        boolean useSprings = true;
+        
+        ResourceLocation biomeSourceKey = new ResourceLocation(JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, ModernBetaBuiltInTypes.Biome.BETA.getId()));
+        if (biomeSourceKey.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
+            ResourceLocation singleBiomeKey = new ResourceLocation(JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, DEFAULTS.singleBiome.toString()));
+            Biome singleBiome = ForgeRegistryUtil.get(singleBiomeKey, ForgeRegistries.BIOMES);
+            
+            if (singleBiome instanceof BiomeInfdev || singleBiome instanceof BiomeIndev) {
+                useSprings = false;
+            }
+        }
+        
+        return new JsonPrimitive(useSprings);
+    }
+    
     private static boolean isResourceFormat(String resourceString) {
         return resourceString.split(":").length == 2;
     }
     
     private static boolean hasVanillaBiome(JsonObject jsonObject) {
         String biomeSourceStr = JsonUtils.getString(jsonObject, NbtTags.BIOME_SOURCE, ModernBetaBuiltInTypes.Biome.BETA.getId());
-        ResourceLocation biomeSource = new ResourceLocation(biomeSourceStr);
+        ResourceLocation biomeSourceKey = new ResourceLocation(biomeSourceStr);
         
         boolean hasVanillaBiome = true;
         
-        if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey()) ||
-            biomeSource.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())
+        if (biomeSourceKey.equals(ModernBetaBuiltInTypes.Biome.BETA.getRegistryKey()) ||
+            biomeSourceKey.equals(ModernBetaBuiltInTypes.Biome.PE.getRegistryKey())
         ) {
             ModernBetaGeneratorSettings.Factory factory = ModernBetaGeneratorSettings.Factory.jsonToFactory(jsonObject.toString());
             hasVanillaBiome = new BetaClimateMap(factory.build()).containsNonModernBetaBiomes();
             
-        } else if (biomeSource.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
+        } else if (biomeSourceKey.equals(ModernBetaBuiltInTypes.Biome.SINGLE.getRegistryKey())) {
             String singleBiomeStr = JsonUtils.getString(jsonObject, NbtTags.SINGLE_BIOME, DEFAULTS.singleBiome.toString());
-            ResourceLocation singleBiome = new ResourceLocation(singleBiomeStr);
+            ResourceLocation singleBiomeKey = new ResourceLocation(singleBiomeStr);
             
-            hasVanillaBiome = !(ForgeRegistryUtil.get(singleBiome, ForgeRegistries.BIOMES) instanceof ModernBetaBiome);
+            hasVanillaBiome = !(ForgeRegistryUtil.get(singleBiomeKey, ForgeRegistries.BIOMES) instanceof ModernBetaBiome);
             
         }
         

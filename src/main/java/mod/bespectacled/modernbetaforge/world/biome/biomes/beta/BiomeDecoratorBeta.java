@@ -85,11 +85,11 @@ public class BiomeDecoratorBeta extends ModernBetaBiomeDecorator {
             populateWorldGenCount(world, random, startPos, FEATURE_CACTUS, mutablePos, 10, settings.height, settings.floor);
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
+        if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
             this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor);
         }
         
-        if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
+        if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
             this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor);
         }
         

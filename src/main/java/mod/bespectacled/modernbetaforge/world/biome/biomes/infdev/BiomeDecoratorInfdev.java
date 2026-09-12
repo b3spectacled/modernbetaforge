@@ -63,6 +63,14 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
             populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor);
         }
         
+        if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
+            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+        }
+        
+        if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
+            this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+        }
+        
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));
     }
 

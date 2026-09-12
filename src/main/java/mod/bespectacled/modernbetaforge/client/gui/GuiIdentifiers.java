@@ -148,6 +148,7 @@ public class GuiIdentifiers {
     public static final int PG2_B_USE_GRAV_DISKS = 314;
     public static final int PG2_B_USE_CLAY_DISKS = 315;
     public static final int PG2_B_USE_DOUBLE = 316;
+    public static final int PG2_B_USE_SPRINGS = 317;
     
     public static final int PG2_B_SPAWN_CREATURE = 320;
     public static final int PG2_B_SPAWN_MONSTER = 321;

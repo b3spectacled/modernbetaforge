@@ -323,6 +323,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useSandDisks;
     public final boolean useGravelDisks;
     public final boolean useClayDisks;
+    public final boolean useSprings;
     
     public final boolean useBirchTrees;
     public final boolean usePineTrees;
@@ -581,6 +582,7 @@ public class ModernBetaGeneratorSettings {
         this.useSandDisks = factory.useSandDisks;
         this.useGravelDisks = factory.useGravelDisks;
         this.useClayDisks = factory.useClayDisks;
+        this.useSprings = factory.useSprings;
         
         this.spawnNewCreatureMobs = factory.spawnNewCreatureMobs;
         this.spawnNewMonsterMobs = factory.spawnNewMonsterMobs;
@@ -944,6 +946,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useSandDisks;
         public boolean useGravelDisks;
         public boolean useClayDisks;
+        public boolean useSprings;
         
         public boolean useBirchTrees;
         public boolean usePineTrees;
@@ -1194,6 +1197,7 @@ public class ModernBetaGeneratorSettings {
             this.useSandDisks = false;
             this.useGravelDisks = false;
             this.useClayDisks = false;
+            this.useSprings = true; 
             
             this.useBirchTrees = true;
             this.usePineTrees = true;
@@ -1467,6 +1471,7 @@ public class ModernBetaGeneratorSettings {
                 this.useSandDisks == factory.useSandDisks &&
                 this.useGravelDisks == factory.useGravelDisks &&
                 this.useClayDisks == factory.useClayDisks &&
+                this.useSprings == factory.useSprings &&
                         
                 this.useBirchTrees == factory.useBirchTrees &&
                 this.usePineTrees == factory.usePineTrees &&
@@ -1721,6 +1726,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useSandDisks ? 1 : 0);
             hashCode = 31 * hashCode + (this.useGravelDisks ? 1 : 0);
             hashCode = 31 * hashCode + (this.useClayDisks ? 1 : 0);
+            hashCode = 31 * hashCode + (this.useSprings ? 1 : 0);
 
             hashCode = 31 * hashCode + (this.useBirchTrees ? 1 : 0);
             hashCode = 31 * hashCode + (this.usePineTrees ? 1 : 0);
@@ -2010,6 +2016,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useSandDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SAND_DISKS, factory.useSandDisks);
                 factory.useGravelDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
                 factory.useClayDisks = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
+                factory.useSprings = JsonUtils.getBoolean(jsonObject, NbtTags.USE_SPRINGS, factory.useSprings);
                 
                 factory.useBirchTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
                 factory.usePineTrees = JsonUtils.getBoolean(jsonObject, NbtTags.USE_PINE_TREES, factory.usePineTrees);
@@ -2357,9 +2364,6 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_MELONS, factory.useMelons);
             jsonObject.addProperty(NbtTags.USE_DESERT_WELLS, factory.useDesertWells);
             jsonObject.addProperty(NbtTags.USE_FOSSILS, factory.useFossils);
-            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, factory.useSandDisks);
-            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
-            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
             jsonObject.addProperty(NbtTags.USE_NEW_FANCY_OAK_TREES, factory.useNewFancyOakTrees);
             jsonObject.addProperty(NbtTags.USE_BIRCH_TREES, factory.useBirchTrees);
             jsonObject.addProperty(NbtTags.USE_PINE_TREES, factory.usePineTrees);
@@ -2367,6 +2371,10 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.USE_JUNGLE_TREES, factory.useJungleTrees);
             jsonObject.addProperty(NbtTags.USE_ACACIA_TREES, factory.useAcaciaTrees);
             jsonObject.addProperty(NbtTags.USE_DARK_OAK_TREES, factory.useDarkOakTrees);
+            jsonObject.addProperty(NbtTags.USE_SAND_DISKS, factory.useSandDisks);
+            jsonObject.addProperty(NbtTags.USE_GRAVEL_DISKS, factory.useGravelDisks);
+            jsonObject.addProperty(NbtTags.USE_CLAY_DISKS, factory.useClayDisks);
+            jsonObject.addProperty(NbtTags.USE_SPRINGS, factory.useSprings);
 
             jsonObject.addProperty(NbtTags.BIOME_SIZE, factory.biomeSize);
             jsonObject.addProperty(NbtTags.SNOWY_BIOME_CHANCE, factory.snowyBiomeChance);

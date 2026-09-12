@@ -192,6 +192,7 @@ public class ModDataFixers {
         DATA_VERSION_V1_10_1_0,
         new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixDisks),
         new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixDisks),
-        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixDisks)
+        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixDisks),
+        new DataFix(NbtTags.USE_SPRINGS, DataFixers::fixSprings)
     );
 }

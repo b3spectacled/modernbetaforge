@@ -38,8 +38,8 @@ import net.minecraftforge.event.terraingen.TerrainGen;
 
 @Mixin(BiomeDecorator.class)
 public class MixinBiomeDecorator {
-    @Shadow public BlockPos chunkPos;
-    @Shadow public ChunkGeneratorSettings chunkProviderSettings;
+    @Shadow private BlockPos chunkPos;
+    @Shadow private ChunkGeneratorSettings chunkProviderSettings;
     @Shadow private WorldGenerator clayGen;
     @Shadow private WorldGenerator sandGen;
     @Shadow private WorldGenerator gravelGen;
@@ -55,14 +55,34 @@ public class MixinBiomeDecorator {
     @Shadow private WorldGenerator diamondGen;
     @Shadow private WorldGenerator lapisGen;
     @Shadow private boolean decorating;
+    @Shadow private boolean generateFalls;
+    
+    @Unique private WorldGenerator initClayGen;
+    @Unique private WorldGenerator initSandGen;
+    @Unique private WorldGenerator initGravelGen;
+    @Unique private boolean initGenerateFalls;
     @Unique private WorldGenerator clayOreGen;
     
     @Shadow protected void genDecorations(Biome biome, World world, Random random) { }
+    
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void injectConstructor(CallbackInfo info) {
+        this.initClayGen = this.clayGen;
+        this.initSandGen = this.sandGen;
+        this.initGravelGen = this.gravelGen;
+        this.initGenerateFalls = this.generateFalls;
+    }
     
     @Inject(method = "decorate", at = @At("HEAD"), cancellable = true)
     private void injectDecorate(World world, Random random, Biome biome, BlockPos pos, CallbackInfo info) {
         WorldServer worldServer = (WorldServer)world;
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
+        
+        // Reset world generators that are only initialized with the new decorator.
+        this.clayGen = this.initClayGen;
+        this.sandGen = this.initSandGen;
+        this.gravelGen = this.initGravelGen;
+        this.generateFalls = this.initGenerateFalls;
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             if (this.decorating) {
@@ -88,6 +108,7 @@ public class MixinBiomeDecorator {
                 this.clayGen = settings.useClayDisks ? new WorldGenClay(4) : WorldGenNoOp.INSTANCE;
                 this.sandGen = settings.useSandDisks ? new WorldGenSand(Blocks.SAND, 7) : WorldGenNoOp.INSTANCE;
                 this.gravelGen = settings.useGravelDisks ? new WorldGenSand(Blocks.GRAVEL, 6) : WorldGenNoOp.INSTANCE;
+                this.generateFalls = settings.useSprings;
                 
                 this.genDecorations(biome, world, random);
                 this.decorating = false;
