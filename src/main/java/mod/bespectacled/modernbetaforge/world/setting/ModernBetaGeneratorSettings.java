@@ -2381,6 +2381,11 @@ public class ModernBetaGeneratorSettings {
             
             jsonObject.addProperty(NbtTags.ORE_TYPE, factory.oreType);
             
+            jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
+            jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
+            jsonObject.addProperty(NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
+            jsonObject.addProperty(NbtTags.CLAY_MAX_HEIGHT, factory.clayMaxHeight);
+            
             jsonObject.addProperty("dirtSize", factory.dirtSize);
             jsonObject.addProperty("dirtCount", factory.dirtCount);
             jsonObject.addProperty("dirtMinHeight", factory.dirtMinHeight);
@@ -2440,11 +2445,6 @@ public class ModernBetaGeneratorSettings {
             jsonObject.addProperty(NbtTags.EMERALD_COUNT, factory.emeraldCount);
             jsonObject.addProperty(NbtTags.EMERALD_MIN_HEIGHT, factory.emeraldMinHeight);
             jsonObject.addProperty(NbtTags.EMERALD_MAX_HEIGHT, factory.emeraldMaxHeight);
-            
-            jsonObject.addProperty(NbtTags.CLAY_SIZE, factory.claySize);
-            jsonObject.addProperty(NbtTags.CLAY_COUNT, factory.clayCount);
-            jsonObject.addProperty(NbtTags.CLAY_MIN_HEIGHT, factory.clayMinHeight);
-            jsonObject.addProperty(NbtTags.CLAY_MAX_HEIGHT, factory.clayMaxHeight);
             
             jsonObject.addProperty(NbtTags.QUARTZ_SIZE, factory.quartzSize);
             jsonObject.addProperty(NbtTags.QUARTZ_COUNT, factory.quartzCount);

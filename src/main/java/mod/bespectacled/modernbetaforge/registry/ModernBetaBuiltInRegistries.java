@@ -277,6 +277,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(ModDataFixers.LAYER_VERSION_FIX_KEY, ModDataFixers.LAYER_VERSION_FIX);
         registry.register(ModDataFixers.RIVER_BIOMES_FIX_KEY, ModDataFixers.RIVER_BIOMES_FIX);
         registry.register(ModDataFixers.RELEASE_WORLD_SPAWNER_FIX_KEY, ModDataFixers.RELEASE_WORLD_SPAWNER_FIX);
+        registry.register(ModDataFixers.DISKS_FIX_2_KEY, ModDataFixers.DISKS_FIX_2);
     }
 
     @SideOnly(Side.CLIENT)

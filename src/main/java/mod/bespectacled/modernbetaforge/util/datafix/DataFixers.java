@@ -357,27 +357,7 @@ public class DataFixers {
         return null;
     }
     
-    public static JsonElement fixSandDisks(JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
-        
-        if (hasVanillaBiome) {
-            return new JsonPrimitive(true);
-        }
-        
-        return null;
-    }
-    
-    public static JsonElement fixGravelDisks(JsonObject jsonObject) {
-        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
-        
-        if (hasVanillaBiome) {
-            return new JsonPrimitive(true);
-        }
-        
-        return null;
-    }
-    
-    public static JsonElement fixClayDisks(JsonObject jsonObject) {
+    public static JsonElement fixDisks(JsonObject jsonObject) {
         boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
         
         if (hasVanillaBiome) {

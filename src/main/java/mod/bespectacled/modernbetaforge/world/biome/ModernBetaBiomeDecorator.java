@@ -17,7 +17,7 @@ import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBeta;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.beta.BiomeBetaRainforest;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.OreType;
-import mod.bespectacled.modernbetaforge.world.feature.WorldGenClay;
+import mod.bespectacled.modernbetaforge.world.feature.WorldGenClayOre;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
@@ -93,7 +93,7 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         ChunkPos chunkPos = new ChunkPos(startX >> 4, startZ >> 4);
         
         // Ore generators
-        this.oreClay = new WorldGenClay(settings.claySize);
+        this.oreClay = new WorldGenClayOre(settings.claySize);
         this.oreDirt = createMinable(BlockStates.DIRT, settings.dirtSize, oreType);
         this.oreGravel = createMinable(BlockStates.GRAVEL, settings.gravelSize, oreType);
         this.oreCoal = createMinable(BlockStates.COAL_ORE, settings.coalSize, oreType);

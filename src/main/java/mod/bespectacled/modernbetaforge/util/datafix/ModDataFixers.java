@@ -21,6 +21,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_7_0_0 = 1700;
     private static final int DATA_VERSION_V1_7_1_0 = 1710;
     private static final int DATA_VERSION_V1_8_1_0 = 1810;
+    private static final int DATA_VERSION_V1_10_1_0 = 11010;
     
     public static final ResourceLocation BIOME_MAP_FIX_KEY = ModernBeta.createRegistryKey("BIOME_MAP_FIX");
     public static final ResourceLocation SANDSTONE_WOLVES_SURFACE_FIX_KEY = ModernBeta.createRegistryKey("SANDSTONE_WOLVES_SURFACE_FIX");
@@ -38,6 +39,7 @@ public class ModDataFixers {
     public static final ResourceLocation LAYER_VERSION_FIX_KEY = ModernBeta.createRegistryKey("LAYER_VERSION_FIX");
     public static final ResourceLocation RIVER_BIOMES_FIX_KEY = ModernBeta.createRegistryKey("RIVER_BIOMES_FIX");
     public static final ResourceLocation RELEASE_WORLD_SPAWNER_FIX_KEY = ModernBeta.createRegistryKey("RELEASE_WORLD_SPAWNER_FIX");
+    public static final ResourceLocation DISKS_FIX_2_KEY = ModernBeta.createRegistryKey("DISKS_FIX_2");
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -159,9 +161,9 @@ public class ModDataFixers {
     
     public static final ModDataFix DISKS_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_6_1_0,
-        new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixSandDisks),
-        new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisks),
-        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisks)
+        new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixDisks),
+        new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixDisks),
+        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixDisks)
     );
     
     public static final ModDataFix DOUBLE_PLANT_FIX = ModDataFix.createModDataFix(
@@ -184,5 +186,12 @@ public class ModDataFixers {
     public static final ModDataFix RELEASE_WORLD_SPAWNER_FIX = ModDataFix.createModDataFix(
         DATA_VERSION_V1_8_1_0,
         new DataFix(NbtTags.WORLD_SPAWNER, DataFixers::fixReleaseWorldSpawner)
+    );
+    
+    public static final ModDataFix DISKS_FIX_2 = ModDataFix.createModDataFix(
+        DATA_VERSION_V1_10_1_0,
+        new DataFix(NbtTags.USE_SAND_DISKS, DataFixers::fixDisks),
+        new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixDisks),
+        new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixDisks)
     );
 }

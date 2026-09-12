@@ -639,9 +639,9 @@ public class GuiPredicates {
         USE_MELONS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_MELONS);
         USE_DESERT_WELLS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_WELLS);
         USE_FOSSILS_TEST = new GuiPredicate(GuiPredicates::testBetaBiomes, GuiIdentifiers.PG2_B_USE_FOSSILS);
-        USE_SAND_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
-        USE_GRAVEL_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
-        USE_CLAY_DISKS_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
+        USE_SAND_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
+        USE_GRAVEL_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
+        USE_CLAY_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
         USE_BIRCH_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_BIRCH);
         USE_PINE_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_PINE);
         USE_SWAMP_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_SWAMP);
@@ -658,11 +658,11 @@ public class GuiPredicates {
         BIOME_SIZE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_BIOME_SZ);
         SNOWY_BIOME_CHANCE_TEST = new GuiPredicate(settings -> isBiomeEqualTo(settings, ModernBetaBuiltInTypes.Biome.RELEASE), GuiIdentifiers.PG2_S_SNOWY_CHANCE);
 
-        ORE_TYPE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_ORE_TYPE);
-        CLAY_SIZE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_SIZE);
-        CLAY_COUNT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_CNT);
-        CLAY_MIN_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_MIN);
-        CLAY_MAX_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_CLAY_MAX);
+        ORE_TYPE_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG3_S_ORE_TYPE);
+        CLAY_SIZE_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG3_S_CLAY_SIZE);
+        CLAY_COUNT_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG3_S_CLAY_CNT);
+        CLAY_MIN_HEIGHT_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG3_S_CLAY_MIN);
+        CLAY_MAX_HEIGHT_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG3_S_CLAY_MAX);
         EMERALD_SIZE_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_SIZE);
         EMERALD_COUNT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_CNT);
         EMERALD_MIN_HEIGHT_TEST = new GuiPredicate(GuiPredicates::testModernBetaBiomes, GuiIdentifiers.PG3_S_EMER_MIN);

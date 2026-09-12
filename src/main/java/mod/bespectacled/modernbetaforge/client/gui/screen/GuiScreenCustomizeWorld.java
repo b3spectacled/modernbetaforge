@@ -1585,7 +1585,14 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         GuiListEntry[] pageOre = {
             this.createGuiSlider(GuiIdentifiers.PG3_S_ORE_TYPE, NbtTags.ORE_TYPE, 0f, OreType.values().length - 1, oreTypeId, this),
             null,
-                
+            
+            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.clay.name"),
+            null,
+            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
+            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
+            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMinHeight, this),
+            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMaxHeight, this),
+            
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_DIRT_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.dirt.name"),
             null,
             this.createGuiSlider(GuiIdentifiers.PG3_S_DIRT_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.dirtSize, this),
@@ -1669,13 +1676,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.emeraldCount, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.emeraldMinHeight, this),
             this.createGuiSlider(GuiIdentifiers.PG3_S_EMER_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.emeraldMaxHeight, this),
-    
-            this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_CLAY_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.clay.name"),
-            null,
-            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_SIZE, "size", ModernBetaGeneratorSettings.MIN_ORE_SIZE, ModernBetaGeneratorSettings.MAX_ORE_SIZE, (float)this.settings.claySize, this),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_CNT, "count", ModernBetaGeneratorSettings.MIN_ORE_COUNT, ModernBetaGeneratorSettings.MAX_ORE_COUNT, (float)this.settings.clayCount, this),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MIN, "minHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMinHeight, this),
-            this.createGuiSlider(GuiIdentifiers.PG3_S_CLAY_MAX, "maxHeight", ModernBetaGeneratorSettings.getMinOreHeight(), ModernBetaGeneratorSettings.getMaxOreHeight(), (float)this.settings.clayMaxHeight, this),
             
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG3_L_QRTZ_NAME, GuiPageButtonListExtended::getListTrimWidth, false, "tile.netherquartz.name"),
             null,
