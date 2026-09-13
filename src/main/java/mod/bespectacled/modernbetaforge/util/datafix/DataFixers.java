@@ -370,6 +370,36 @@ public class DataFixers {
         return null;
     }
     
+    public static JsonElement fixSandDisk(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
+        
+        if (hasVanillaBiome) {
+            return new JsonPrimitive(true);
+        }
+
+        return new JsonPrimitive(JsonUtils.getBoolean(jsonObject, NbtTags.USE_SAND_DISKS, DEFAULTS.useSandDisks));
+    }
+    
+    public static JsonElement fixGravelDisk(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
+        
+        if (hasVanillaBiome) {
+            return new JsonPrimitive(true);
+        }
+        
+        return new JsonPrimitive(JsonUtils.getBoolean(jsonObject, NbtTags.USE_GRAVEL_DISKS, DEFAULTS.useGravelDisks));
+    }
+    
+    public static JsonElement fixClayDisk(JsonObject jsonObject) {
+        boolean hasVanillaBiome = hasVanillaBiome(jsonObject);
+        
+        if (hasVanillaBiome) {
+            return new JsonPrimitive(true);
+        }
+        
+        return new JsonPrimitive(JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLAY_DISKS, DEFAULTS.useClayDisks));
+    }
+    
     public static JsonElement fixDoublePlants(JsonObject jsonObject) {
         boolean useNewFlowers = JsonUtils.getBoolean(jsonObject, NbtTags.USE_NEW_FLOWERS, DEFAULTS.useNewFlowers);
         
