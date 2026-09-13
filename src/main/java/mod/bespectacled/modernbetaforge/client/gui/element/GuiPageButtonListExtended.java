@@ -164,7 +164,11 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
         return getListWidth(width) - 24;
     }
     
-    public static int getEntryTrimWidth(int width) {
+    public static int getEntryLabelTrimWidth(int width) {
         return getEntryWidth(width) - 6;
+    }
+    
+    public static int getEntryTrimWidth(int width) {
+        return getEntryWidth(width) - 24;
     }
 }
