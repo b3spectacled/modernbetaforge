@@ -118,6 +118,7 @@ public class GuiPredicates {
     public static final GuiPredicate USE_SAND_DISKS_TEST;
     public static final GuiPredicate USE_GRAVEL_DISKS_TEST;
     public static final GuiPredicate USE_CLAY_DISKS_TEST;
+    public static final GuiPredicate USE_SPRINGS_TEST;
     public static final GuiPredicate USE_BIRCH_TREES_TEST;
     public static final GuiPredicate USE_PINE_TREES_TEST;
     public static final GuiPredicate USE_SWAMP_TREES_TEST;
@@ -642,6 +643,7 @@ public class GuiPredicates {
         USE_SAND_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_SAND_DISKS);
         USE_GRAVEL_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_GRAV_DISKS);
         USE_CLAY_DISKS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_CLAY_DISKS);
+        USE_SPRINGS_TEST = new GuiPredicate(settings -> true, GuiIdentifiers.PG2_B_USE_SPRINGS);
         USE_BIRCH_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_BIRCH);
         USE_PINE_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_PINE);
         USE_SWAMP_TREES_TEST = new GuiPredicate(GuiPredicates::testNewTrees, GuiIdentifiers.PG2_B_USE_SWAMP);

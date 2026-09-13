@@ -160,11 +160,12 @@ public class GuiIdentifiers {
     public static final int PG2_S_SNOWY_CHANCE = 331;
     
     // Labels
-    public static final int PG2_L_BETA = 1300;
-    public static final int PG2_L_MOBS = 1301;
-    public static final int PG2_L_RELEASE = 1302;
-    public static final int PG2_L_MODS = 1303;
-    public static final int PG0_L_TREES = 1304;
+    public static final int PG2_L_ALL = 1300;
+    public static final int PG2_L_BETA = 1301;
+    public static final int PG2_L_MOBS = 1302;
+    public static final int PG2_L_RELEASE = 1303;
+    public static final int PG2_L_MODS = 1304;
+    public static final int PG0_L_TREES = 1305;
     
     /* Page 4 */
     

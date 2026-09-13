@@ -370,6 +370,7 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiPredicate.USE_SAND_DISKS, GuiPredicates.USE_SAND_DISKS_TEST);
         registry.register(GuiPredicate.USE_GRAVEL_DISKS, GuiPredicates.USE_GRAVEL_DISKS_TEST);
         registry.register(GuiPredicate.USE_CLAY_DISKS, GuiPredicates.USE_CLAY_DISKS_TEST);
+        registry.register(GuiPredicate.USE_SPRINGS, GuiPredicates.USE_SPRINGS_TEST);
         registry.register(GuiPredicate.USE_BIRCH_TREES, GuiPredicates.USE_BIRCH_TREES_TEST);
         registry.register(GuiPredicate.USE_PINE_TREES, GuiPredicates.USE_PINE_TREES_TEST);
         registry.register(GuiPredicate.USE_SWAMP_TREES, GuiPredicates.USE_SWAMP_TREES_TEST);

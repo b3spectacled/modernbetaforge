@@ -1549,6 +1549,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         };
         
         GuiListEntry[] pageBiome = {
+            this.createGuiLabel(GuiIdentifiers.PG2_L_ALL, GuiPageButtonListExtended::getListTrimWidth, "page2", "all"),
+            null,
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
+            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SPRINGS, NbtTags.USE_SPRINGS, this.settings.useSprings),
+                
             this.createGuiLabel(GuiIdentifiers.PG2_L_BETA, GuiPageButtonListExtended::getListTrimWidth, "page2", "beta"),
             null,
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRASS, NbtTags.USE_TALL_GRASS, this.settings.useTallGrass),
@@ -1565,10 +1572,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_JUNGLE, NbtTags.USE_JUNGLE_TREES, this.settings.useJungleTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_ACACIA, NbtTags.USE_ACACIA_TREES, this.settings.useAcaciaTrees),
             this.createGuiButton(GuiIdentifiers.PG2_B_USE_DARK_OAK, NbtTags.USE_DARK_OAK_TREES, this.settings.useDarkOakTrees),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SAND_DISKS, NbtTags.USE_SAND_DISKS, this.settings.useSandDisks),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_GRAV_DISKS, NbtTags.USE_GRAVEL_DISKS, this.settings.useGravelDisks),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_CLAY_DISKS, NbtTags.USE_CLAY_DISKS, this.settings.useClayDisks),
-            this.createGuiButton(GuiIdentifiers.PG2_B_USE_SPRINGS, NbtTags.USE_SPRINGS, this.settings.useSprings),
             
             this.createGuiLabel(GuiIdentifiers.PG2_L_RELEASE, GuiPageButtonListExtended::getListTrimWidth, "page2", "release"),
             null,

@@ -64,6 +64,7 @@ public class GuiPredicate {
     public static final ResourceLocation USE_SAND_DISKS = createRegistryKey(NbtTags.USE_SAND_DISKS);
     public static final ResourceLocation USE_GRAVEL_DISKS = createRegistryKey(NbtTags.USE_GRAVEL_DISKS);
     public static final ResourceLocation USE_CLAY_DISKS = createRegistryKey(NbtTags.USE_CLAY_DISKS);
+    public static final ResourceLocation USE_SPRINGS = createRegistryKey(NbtTags.USE_SPRINGS);
     public static final ResourceLocation USE_BIRCH_TREES = createRegistryKey(NbtTags.USE_BIRCH_TREES);
     public static final ResourceLocation USE_PINE_TREES = createRegistryKey(NbtTags.USE_PINE_TREES);
     public static final ResourceLocation USE_SWAMP_TREES = createRegistryKey(NbtTags.USE_SWAMP_TREES);

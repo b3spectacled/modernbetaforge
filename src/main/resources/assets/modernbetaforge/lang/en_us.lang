@@ -73,6 +73,7 @@ createWorld.customize.custom.label.modernbetaforge.page0.netherIncompatible=Clas
 createWorld.customize.custom.label.modernbetaforge.page1.infdev227=Infdev 20100227 Chunk Settings
 createWorld.customize.custom.label.modernbetaforge.page1.indev=Indev/Classic Chunk Settings
 createWorld.customize.custom.label.modernbetaforge.page1.release=Release Chunk Settings
+createWorld.customize.custom.label.modernbetaforge.page2.all=Biome Feature Settings
 createWorld.customize.custom.label.modernbetaforge.page2.beta=Beta Biome Feature Settings
 createWorld.customize.custom.label.modernbetaforge.page2.release=Release Biome Feature Settings
 createWorld.customize.custom.label.modernbetaforge.page2.mobSpawn=Modern Beta Biome Mob Settings
