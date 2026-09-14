@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
@@ -37,13 +37,15 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     
     implementation 'com.google.guava:guava:21.0'
-    implementation 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
+    implementation 'org.spongepowered:mixin:0.8.3-SNAPSHOT'
     implementation fg.deobf('curse.maven:biomes-o-plenty-220318:2842510')
     implementation fg.deobf('curse.maven:dynamictress-252818:3812473')
     implementation fg.deobf('curse.maven:yungs-better-mineshafts-forge-389665:3247154')
     implementation fg.deobf('curse.maven:future-mc-310059:6162819')
     implementation fg.deobf("curse.maven:oceanic-expanse-840576:7009970")
     implementation fg.deobf("curse.maven:nether-api-1306115:8201135")
+    implementation fg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
+    implementation fg.deobf("curse.maven:smooth-menus-1532143:8153081")
     
     annotationProcessor 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
     annotationProcessor 'com.google.code.gson:gson:2.8.9'

@@ -29,7 +29,7 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat {
 
 	@Override
 	public void load() { 
-	    MinecraftForge.EVENT_BUS.register(DepthsUpdateConfig.class);
+	    MinecraftForge.EVENT_BUS.register(DepthsUpdateConfigManager.class);
 
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_USE_DEEPSLATE, new BooleanProperty(true));
@@ -44,19 +44,19 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat {
 	@Override
     public void loadClient() {
 	    ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_COMPAT, new GuiPredicate(settings ->
-            DepthsUpdateConfig.INSTANCE.extendHeight()
+            DepthsUpdateConfigManager.INSTANCE.extendHeight()
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_DEEPSLATE, new GuiPredicate(settings ->
-            DepthsUpdateConfig.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT)
+            DepthsUpdateConfigManager.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_DEEPSLATE_BLOCK, new GuiPredicate(settings ->
-            DepthsUpdateConfig.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
+            DepthsUpdateConfigManager.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_DEEPSLATE_MAX_Y, new GuiPredicate(settings ->
-            DepthsUpdateConfig.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
+            DepthsUpdateConfigManager.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
         ));
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_DEEPSLATE_RANGE, new GuiPredicate(settings ->
-            DepthsUpdateConfig.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
+            DepthsUpdateConfigManager.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
         ));
     }
 
@@ -77,16 +77,16 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat {
 
     @Override
     public boolean extendHeight() {
-        return DepthsUpdateConfig.INSTANCE.extendHeight();
+        return DepthsUpdateConfigManager.INSTANCE.extendHeight();
     }
 
     @Override
     public int getMinHeight() {
-        return DepthsUpdateConfig.INSTANCE.getMinY();
+        return DepthsUpdateConfigManager.INSTANCE.getMinY();
     }
 
     @Override
     public int getMaxHeight() {
-        return DepthsUpdateConfig.INSTANCE.getMaxY();
+        return DepthsUpdateConfigManager.INSTANCE.getMaxY();
     }
 }

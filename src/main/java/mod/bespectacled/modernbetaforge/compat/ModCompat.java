@@ -79,11 +79,15 @@ public class ModCompat {
         }
         
         public int getMinHeight() {
-            return this.heightCompat != null ? this.heightCompat.getMinHeight() : ModernBetaGeneratorSettings.MIN_FLOOR;
+            int height = this.heightCompat != null ? this.heightCompat.getMinHeight() : ModernBetaGeneratorSettings.MIN_FLOOR;
+            
+            return Math.max(height, -2048);
         }
         
         public int getMaxHeight() {
-            return this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
+            int height = this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
+            
+            return Math.min(height, 2047);
         }
         
         public String getModId() {

@@ -7,8 +7,8 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class DepthsUpdateConfig {
-	public static final DepthsUpdateConfig INSTANCE = new DepthsUpdateConfig();
+public class DepthsUpdateConfigManager {
+	public static final DepthsUpdateConfigManager INSTANCE = new DepthsUpdateConfigManager();
     
     private static final String CATEGORY = "general.height extension";
 	private static final String KEY_MAX_Y = "Global Maximum Y";
@@ -23,7 +23,7 @@ public class DepthsUpdateConfig {
 	private boolean applyGlobally;
 	private String[] override;
 	
-	private DepthsUpdateConfig() {
+	private DepthsUpdateConfigManager() {
 	    this.config = new Configuration(new File(ModernBeta.getConfigDirectory(), CompatDepthsUpdate.MOD_ID + ".cfg"));
 	    
 	    this.minY = this.readMinY();

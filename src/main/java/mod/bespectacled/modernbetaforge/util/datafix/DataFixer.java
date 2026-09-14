@@ -18,7 +18,7 @@ public class DataFixer {
             
             // logDataFix(tag, worldName, fixVersion);
             
-            JsonElement newValue = dataFixes[i].getDataFixer().apply(ModDataFixer.getAsJsonObject(jsonObject.toString()));
+            JsonElement newValue = dataFix.getDataFixer().apply(ModDataFixer.getAsJsonObject(jsonObject.toString(), worldName));
             if (newValue != null) {
                 jsonObject.add(tag, newValue);
             }
