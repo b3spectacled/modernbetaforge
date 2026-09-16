@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +20,7 @@ import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSetting
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.WorldInfo;
 
 public class ModernBetaBiomeProvider extends BiomeProvider {
@@ -28,11 +30,16 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
     private final ChunkCache<BiomeChunk> baseBiomeCache;
     private final ChunkCache<BiomeChunk> injectedBiomeCache;
     
-    private ModernBetaChunkGenerator chunkGenerator;
+    private Supplier<IChunkGenerator> chunkGenerator;
     
     public ModernBetaBiomeProvider(WorldInfo worldInfo) {
+        this(worldInfo, () -> null);
+    }
+    
+    public ModernBetaBiomeProvider(WorldInfo worldInfo, Supplier<IChunkGenerator> chunkGenerator) {
         super(worldInfo);
 
+        this.chunkGenerator = chunkGenerator;
         this.settings = worldInfo.getGeneratorOptions() != null ?
             ModernBetaGeneratorSettings.build(worldInfo.getGeneratorOptions()) :
             ModernBetaGeneratorSettings.build();
@@ -50,7 +57,9 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
             (chunkX, chunkZ) -> new BiomeChunk(
                 // Get base biomes if chunk generator is not set, which should normally not happen
                 // unless another mod uses the biome provider alone for some reason (e.g. Extra Utilities)
-                this.chunkGenerator != null ? this.chunkGenerator.getBiomes(chunkX, chunkZ) : this.getBaseBiomes(chunkX, chunkZ)
+                this.chunkGenerator != null && this.chunkGenerator.get() != null && this.chunkGenerator.get() instanceof ModernBetaChunkGenerator ?
+                    ((ModernBetaChunkGenerator)this.chunkGenerator.get()).getBiomes(chunkX, chunkZ) :
+                    this.getBaseBiomes(chunkX, chunkZ)
             )
         );
         
@@ -158,10 +167,6 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
 
     public BiomeSource getBiomeSource() {
         return this.biomeSource;
-    }
-    
-    public void setChunkGenerator(ModernBetaChunkGenerator chunkGenerator) {
-        this.chunkGenerator = chunkGenerator;
     }
     
     public boolean useVillageVariants() {

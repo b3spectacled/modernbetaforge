@@ -1,6 +1,7 @@
 package mod.bespectacled.modernbetaforge.world;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -62,7 +63,11 @@ public class ModernBetaWorldType extends WorldType {
     
     @Override
     public BiomeProvider getBiomeProvider(World world) {
-        return new ModernBetaBiomeProvider(world.getWorldInfo());
+        Supplier<IChunkGenerator> chunkGenerator = world instanceof WorldServer ?
+            () -> ((WorldServer)world).getChunkProvider().chunkGenerator :
+            () -> null;
+        
+        return new ModernBetaBiomeProvider(world.getWorldInfo(), chunkGenerator);
     }
     
     @Override

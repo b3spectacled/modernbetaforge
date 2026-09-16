@@ -85,7 +85,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
             ModernBetaGeneratorSettings.build();
 
         this.biomeProvider = (ModernBetaBiomeProvider)world.getBiomeProvider();
-        this.biomeProvider.setChunkGenerator(this);
         
         this.world = world;
         this.random = new Random(world.getSeed());
