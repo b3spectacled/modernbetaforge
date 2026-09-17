@@ -136,6 +136,7 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         }
         
         DebugUtil.resetDebug(DebugUtil.SECTION_GEN_CHUNK);
+        ModernBetaBiomeDecorator.DecoratorRepeater.logged = false;
     }
     
     /*

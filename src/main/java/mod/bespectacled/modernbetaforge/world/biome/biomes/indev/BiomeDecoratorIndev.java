@@ -22,6 +22,7 @@ public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        DecoratorRepeater repeater = new DecoratorRepeater(world);
         
         this.chunkPos = startPos;
         int startX = startPos.getX();
@@ -45,29 +46,29 @@ public class BiomeDecoratorIndev extends ModernBetaBiomeDecorator {
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
             int count = this.getFlowerCount(biome);
             
-            populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, count, settings.height, settings.floor);
-            populateWorldGenCount(world, random, startPos, FEATURE_POPPY, mutablePos, count, settings.height, settings.floor);
+            repeater.repeat(() -> populateWorldGenCount(world, random, startPos, FEATURE_DANDELION, mutablePos, count, settings.height, settings.floor));
+            repeater.repeat(() -> populateWorldGenCount(world, random, startPos, FEATURE_POPPY, mutablePos, count, settings.height, settings.floor));
         }
         
         if (TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SHROOM)) {
             int count = this.getMushroomCount();
             
-            populateWorldGenCount(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, count, settings.height, settings.floor);
-            populateWorldGenCount(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, count, settings.height, settings.floor);
+            repeater.repeat(() -> populateWorldGenCount(world, random, startPos, FEATURE_BROWN_SHROOM, mutablePos, count, settings.height, settings.floor));
+            repeater.repeat(() -> populateWorldGenCount(world, random, startPos, FEATURE_RED_SHROOM, mutablePos, count, settings.height, settings.floor));
         }
 
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor);
+            repeater.repeat(() -> populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor));
         }
         
         if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
-            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+            repeater.repeat(() -> this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor));
         }
         
         if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
-            this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+            repeater.repeat(() -> this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor));
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));

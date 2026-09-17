@@ -4,9 +4,12 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.api.world.biome.climate.ClimateSampler;
 import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
@@ -470,5 +473,41 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
 
     private static int getOreHeightSpread(Random random, int centerHeight, int spread) {
         return random.nextInt(spread) + random.nextInt(spread) + centerHeight - spread;
+    }
+    
+    public static class DecoratorRepeater {
+        public static boolean logged = false;
+        
+        private final int repeats;
+        
+        public DecoratorRepeater(World world) {
+            ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
+            ChunkProviderServer chunkProviderServer = (ChunkProviderServer)world.getChunkProvider();
+            IChunkGenerator chunkGenerator = chunkProviderServer.chunkGenerator;
+            
+            int worldHeight = settings.height;
+            int worldFloor = settings.floor;
+            
+            if (chunkGenerator instanceof ModernBetaChunkGenerator) {
+                ModernBetaChunkGenerator modernBetaChunkGenerator = (ModernBetaChunkGenerator)chunkGenerator;
+                ChunkSource chunkSource = modernBetaChunkGenerator.getChunkSource();
+            
+                worldHeight = chunkSource.getWorldHeight();
+                worldFloor = chunkSource.getWorldFloor();
+            }
+            
+            this.repeats = Math.max((worldHeight - worldFloor + 1) / 128, 1);
+            
+            if (!logged) {
+                ModernBeta.log(Level.DEBUG, String.format("Repeater using world height %d and world floor %d; will repeat %d times", worldHeight, worldFloor, this.repeats));
+                logged = true;
+            }
+        }
+       
+        public void repeat(Runnable runnable) {
+            for (int i = 0; i < this.repeats; ++i) {
+                runnable.run();
+            }
+        }
     }
 }

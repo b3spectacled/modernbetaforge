@@ -26,6 +26,7 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
     public void decorate(World world, Random random, Biome biome, BlockPos startPos) {
         ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        DecoratorRepeater repeater = new DecoratorRepeater(world);
 
         this.chunkPos = startPos;
         int startX = startPos.getX();
@@ -60,15 +61,15 @@ public abstract class BiomeDecoratorInfdev extends ModernBetaBiomeDecorator {
         // New feature generators
         
         if (settings.useTallGrass && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS)) {
-            populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor);
+            repeater.repeat(() -> populateTallGrassChance(world, random, biome, startPos, mutablePos, 2, settings.height, settings.floor));
         }
         
         if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER)) {
-            this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+            repeater.repeat(() -> this.populateWaterfalls(world, random, startPos, mutablePos, settings.height, settings.floor));
         }
         
         if (settings.useSprings && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA)) {
-            this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor);
+            repeater.repeat(() -> this.populateLavafalls(world, random, startPos, mutablePos, settings.height, settings.floor));
         }
         
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(world, random, chunkPos));

@@ -153,6 +153,24 @@ public abstract class FiniteChunkSource extends ChunkSource {
     }
     
     /**
+     * Inherited from {@link ChunkSource#getWorldHeight() getWorldHeight}.
+     * Returns the maximum world height, the level height for finite worlds.
+     */
+    @Override
+    public int getWorldHeight() {
+        return this.levelHeight;
+    }
+    
+    /**
+     * Inherited from {@link ChunkSource#getWorldFloor() getWorldFloor}
+     * Returns the minimum world height, which is always zero for finite worlds.
+     */
+    @Override
+    public int getWorldFloor() {
+        return 0;
+    }
+    
+    /**
      * Gets a block given coordinates from level data.
      * 
      * @param x x-coordinate in block coordinates.
