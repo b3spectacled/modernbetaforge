@@ -16,7 +16,8 @@ public class ChunkPrimerExtended extends ChunkPrimer {
     
     public ChunkPrimerExtended(int worldHeight, int worldFloor) {
         // Ensure minimum array size
-        worldHeight = Math.max(worldHeight, 256);
+        worldHeight = Math.max(worldHeight, 255);
+        worldFloor = worldFloor - (16 + (worldFloor % 16));
         
         int worldSizeY = worldHeight - worldFloor;
         int bitShift = 0;
@@ -59,9 +60,9 @@ public class ChunkPrimerExtended extends ChunkPrimer {
     }
     
     private int getBlockIndex(int x, int y, int z)  {
-        int ndx = x << (this.bitShift + 4) | z << (this.bitShift) | (y - this.worldFloor);
+        int ndx = (x << (this.bitShift + 4)) | (z << this.bitShift) | (y - this.worldFloor);
         if (ndx < 0) {
-            throw new ArrayIndexOutOfBoundsException(String.format("Block index %d out of bounds at (%d, %d, %d)!", ndx, x, y, z));
+            throw new ArrayIndexOutOfBoundsException(String.format("Block index %d out of bounds at (%d, %d, %d), Shift %d, World floor %d.", ndx, x, y, z, this.bitShift, this.worldFloor));
         }
         
         return ndx;

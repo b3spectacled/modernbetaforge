@@ -5,6 +5,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.HeightCompat;
+import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -35,7 +36,10 @@ public class CompatCubicChunks implements Compat, ClientCompat, HeightCompat {
     
     @Override
     public String getModTooltip() {
-        return I18n.format(String.format("createWorld.customize.custom.%s.tooltip", ADDON_ID));
+        int minHeight = ModernBetaGeneratorSettings.MIN_MIN_HEIGHT;
+        int maxHeight = ModernBetaGeneratorSettings.MAX_MAX_HEIGHT;
+        
+        return I18n.format(String.format("createWorld.customize.custom.%s.tooltip", ADDON_ID), minHeight, maxHeight);
     }
 
     @Override

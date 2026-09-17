@@ -3,18 +3,21 @@ package mod.bespectacled.modernbetaforge.compat.cubicchunks;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.logging.log4j.Level;
+
 import io.github.opencubicchunks.cubicchunks.api.util.Box;
 import io.github.opencubicchunks.cubicchunks.api.world.ICube;
 import io.github.opencubicchunks.cubicchunks.api.worldgen.CubeGeneratorsRegistry;
 import io.github.opencubicchunks.cubicchunks.api.worldgen.CubePrimer;
 import io.github.opencubicchunks.cubicchunks.api.worldgen.ICubeGenerator;
-import io.github.opencubicchunks.cubicchunks.core.CubicChunks;
 import io.github.opencubicchunks.cubicchunks.core.asm.mixin.ICubicWorldInternal;
 import io.github.opencubicchunks.cubicchunks.core.asm.mixin.core.common.IGameRegistry;
 import io.github.opencubicchunks.cubicchunks.core.util.CompatHandler;
 import io.github.opencubicchunks.cubicchunks.core.world.cube.Cube;
 import io.github.opencubicchunks.cubicchunks.core.worldgen.WorldgenHangWatchdog;
 import io.github.opencubicchunks.cubicchunks.core.worldgen.generator.vanilla.VanillaCompatibilityGenerator;
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkPrimerExtended;
@@ -31,6 +34,7 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator implements ICubeGenerator {
     private static final int INITIAL_CHUNK_CAPACITY = 256;
+    private static final int MAX_POPULATOR_EXCEPTIONS = 10;
     
     private final ModernBetaChunkGenerator chunkGenerator;
     private final World world;
@@ -38,6 +42,8 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
     private final int cubeSizeY;
     private final int cubeMinY;
     private final int cubeTopY;
+    
+    private int populatorExceptions;
     
     public CubicModernBetaChunkGenerator(ModernBetaChunkGenerator chunkGenerator, World world) {
         super(chunkGenerator, world);
@@ -106,13 +112,8 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
                     CompatHandler.beforePopulate(this.world, this.chunkGenerator);
                     this.chunkGenerator.populate(cube.getX(), cube.getZ());
                     
-                } catch (IllegalArgumentException ex) {
-                    StackTraceElement[] stack = ex.getStackTrace();
-                    if (stack == null || stack.length < 1 || !stack[0].getClassName().equals(Random.class.getName()) || !stack[0].getMethodName().equals("nextInt")) {
-                        throw ex;
-                    } else {
-                        CubicChunks.LOGGER.error("Error while populating. Likely known mod issue, ignoring...", ex);
-                    }
+                } catch (IllegalArgumentException e) {
+                    this.logPopulatorExceptions(e);
                 } finally {
                     CompatHandler.afterPopulate(this.world);
                 }
@@ -184,6 +185,8 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
             try {
                 CompatHandler.beforeGenerate(world, generator);
                 generator.generate(fmlRandom, x, z, world, chunkGenerator, chunkProvider);
+            } catch (IllegalArgumentException e) {
+                this.logPopulatorExceptions(e);
             } finally {
                 CompatHandler.afterGenerate(world);
             }
@@ -197,6 +200,22 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
         rand.setSeed(rand.nextInt() ^ cubeY);
         
         return rand;
+    }
+    
+    private void logPopulatorExceptions(IllegalArgumentException e) {
+        if (this.populatorExceptions < MAX_POPULATOR_EXCEPTIONS) {
+            StackTraceElement[] stack = e.getStackTrace();
+            if (stack == null || stack.length < 1 || !stack[0].getClassName().equals(Random.class.getName()) || !stack[0].getMethodName().equals("nextInt")) {
+                throw e;
+            } else {
+                ModernBeta.log(Level.ERROR, "Error while running Cubic Chunks populators, ignoring.. ");
+                ModernBeta.log(Level.ERROR, ExceptionUtils.getStackTrace(e));
+            }
+        } else if (this.populatorExceptions == MAX_POPULATOR_EXCEPTIONS) {
+            ModernBeta.log(Level.ERROR, "Cubic Chunks populators are still erroring; errors will no longer be logged but offending populators will continue to cause issues.");
+        }
+        
+        this.populatorExceptions++;
     }
 
 }

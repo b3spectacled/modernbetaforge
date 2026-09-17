@@ -13,12 +13,14 @@ import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.SurfaceCompat;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
+import mod.bespectacled.modernbetaforge.util.BlockStates;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.noise.SimplexOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeLists;
 import mod.bespectacled.modernbetaforge.world.chunk.surface.ReleaseSurfaceBuilder;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -185,7 +187,7 @@ public abstract class SurfaceBuilder {
      * @param world The world object.
      * @param biome Biome with surface builder to use.
      * @param chunkPrimer Chunk primer.
-     * @param random Random
+     * @param random Random.
      * @param x x-coordinate in block coordinates.
      * @param z z-coordinate in block coordinates.
      * @param override Force usage of vanilla surface builder.
@@ -195,15 +197,71 @@ public abstract class SurfaceBuilder {
      */
     protected boolean useCustomSurfaceBuilder(World world, Biome biome, ChunkPrimer chunkPrimer, Random random, int x, int z, boolean override) {
         if (this.biomesWithCustomSurfaces.contains(biome) || override) {
+            IBlockState[] blockColumn = new IBlockState[this.getWorldHeight() - this.getWorldFloor() + 1];
             double surfaceNoise = this.surfaceOctaveNoise.sample(x, z, 0.0625, 0.0625, 1.0);
+            
+            int localX = x & 0xF;
+            int localZ = z & 0xF;
             
             // Reverse x/z because ??? why is it done this way in the surface gen code ????
             // Special surfaces won't properly generate if x/z are provided in the correct order, because WTF?!
+            this.preProcessBedrock(chunkPrimer, localX, localZ, blockColumn);
             biome.genTerrainBlocks(world, random, chunkPrimer, z, x, surfaceNoise);
+            this.postProcessBedrock(chunkPrimer, localX, localZ, random, blockColumn);
             
             return true;
         }
         
         return false;
+    }
+    
+    /**
+     * Stores the blockstates of the block column before {@link Biome#genTerrainBlocks(World, Random, ChunkPrimer, int, int, double) genTerrainBlocks} is used.
+     * This captures the state of the raw terrain (default block and whatever block source is used).
+     * If a height extension mod is used, this state is used to remove the y0 bedrock layer and
+     * replace it with a new one in {@link #postProcessBedrock(ChunkPrimer, int, int, Random, IBlockState[]) postProcessBedrock}.
+     * 
+     * @param chunkPrimer Chunk Primer.
+     * @param localX Chunk-local x-coordinate in block coordinates.
+     * @param localZ Chunk-local z-coordinate in block coordinates.
+     * @param blockColumn The blockstate column at localX/localZ.
+     */
+    private void preProcessBedrock(ChunkPrimer chunkPrimer, int localX, int localZ, IBlockState[] blockColumn) {
+        // Pre-process bedrock for variable height (extended) worlds
+        if (this.getWorldFloor() != 0) {
+            for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
+                blockColumn[y - this.getWorldFloor()] = chunkPrimer.getBlockState(localX, y, localZ);
+            }
+        }
+    }
+    
+    /**
+     * Replaces the default bedrock layer for worlds with deeper worlds with original default block state.
+     * A new bedrock layer is then placed to where the actual world floor is.
+     * 
+     * @param chunkPrimer Chunk Primer.
+     * @param localX Chunk-local x-coordinate in block coordinates.
+     * @param localZ Chunk-local z-coordinate in block coordinates.
+     * @param random Random.
+     * @param blockColumn The blockstate column at localX/localZ.
+     */
+    private void postProcessBedrock(ChunkPrimer chunkPrimer, int localX, int localZ, Random random, IBlockState[] blockColumn) {
+        // Post-process bedrock for variable height (extended) worlds
+        if (this.getWorldFloor() != 0) {
+            for (int y = this.getWorldHeight(); y >= this.getWorldFloor(); y--) {
+                IBlockState blockState = chunkPrimer.getBlockState(localX, y, localZ);
+                IBlockState prevBlockState = blockColumn[y - this.getWorldFloor()];
+                
+                // Replace vanilla bedrock layer with pre-surface generation block,
+                // which would have been supplied by the block source rules
+                if (blockState.getBlock() == Blocks.BEDROCK) {
+                    chunkPrimer.setBlockState(localX, y, localZ, prevBlockState);
+                }
+                
+                if (this.isBedrock(y, random)) {
+                    chunkPrimer.setBlockState(localX, y, localZ, BlockStates.BEDROCK);
+                }
+            }
+        }
     }
 }
