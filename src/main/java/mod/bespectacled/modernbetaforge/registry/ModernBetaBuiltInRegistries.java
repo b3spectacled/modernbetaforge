@@ -34,8 +34,6 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiPropertyScreenTest;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
-import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
-import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixers;
@@ -238,7 +236,10 @@ public class ModernBetaBuiltInRegistries {
         registry.register(Blocks.END_STONE.getRegistryName(), () -> Blocks.END_STONE);
     }
     
-    public static void registerProperties() {
+    public static void registerDebugProperties() {
+        if (!ModernBetaConfig.debugOptions.registerDebugProperties) {
+            return;
+        }
         ModernBetaRegistry<Property<?>> registry = ModernBetaRegistries.PROPERTY;
         
         registry.register(ModernBeta.createRegistryKey("booleanProp"), new BooleanProperty(true));
@@ -301,14 +302,6 @@ public class ModernBetaBuiltInRegistries {
         registry.register(GuiCustomizePresets.BETA_REALISTIC, GuiCustomizePresets.PRESET_BETA_REALISTIC);
         registry.register(GuiCustomizePresets.BETA_PLUS, GuiCustomizePresets.PRESET_BETA_PLUS);
         registry.register(GuiCustomizePresets.BETA_RELEASE, GuiCustomizePresets.PRESET_BETA_RELEASE);
-        
-        if (ModCompat.isCompatLoaded(CompatBiomesOPlenty.MOD_ID)) {
-            registry.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
-        }
-        
-        if (ModCompat.isCompatLoaded(CompatDepthsUpdate.MOD_ID)) {
-            registry.register(GuiCustomizePresets.DEPTHS_UPDATE_BETA, GuiCustomizePresets.PRESET_DEPTHS_UPDATE_BETA);
-        }
         
         if (ModernBetaConfig.debugOptions.registerDebugNoiseChunkSource) {
             registry.register(GuiCustomizePresets.DEBUG_NOISE, GuiCustomizePresets.PRESET_DEBUG_NOISE);

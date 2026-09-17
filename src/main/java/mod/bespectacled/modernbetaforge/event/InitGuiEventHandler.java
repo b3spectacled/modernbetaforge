@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.event;
 
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.PresetUtil;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.world.WorldType;
@@ -24,7 +24,7 @@ public class InitGuiEventHandler {
             GuiCreateWorld guiCreateWorld = (GuiCreateWorld)guiScreen;
             
             if (guiCreateWorld.selectedIndex == WorldType.DEFAULT.getId()) {
-                guiCreateWorld.selectedIndex = ModernBetaWorldType.INSTANCE.getId();
+                guiCreateWorld.selectedIndex = WorldTypeManager.INSTANCE.getWorldTypeId();
                 if (guiCreateWorld.chunkProviderSettingsJson.isEmpty() && PresetUtil.isDefaultPresetModified()) {
                     guiCreateWorld.chunkProviderSettingsJson = PresetUtil.getDefaultPreset();
                 }

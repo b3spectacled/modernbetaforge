@@ -38,7 +38,7 @@ public class BiomeBetaForest extends BiomeBeta {
         ChunkPos chunkPos = new ChunkPos(startPos);
         
         if (settings.useDoublePlants && TerrainGen.decorate(world, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS)) {
-            this.addDoublePlants(world, random, startPos, random.nextInt(5) - 3);
+            this.addDoublePlants(world, random, startPos, random.nextInt(5) - 3, settings.floor);
         }
     }
     
@@ -64,7 +64,7 @@ public class BiomeBetaForest extends BiomeBeta {
         return this.getRandomTreeFeature(random);
     }
     
-    public void addDoublePlants(World world, Random random, BlockPos startPos, int flowerNdx) {
+    public void addDoublePlants(World world, Random random, BlockPos startPos, int flowerNdx, int floor) {
         for (int i = 0; i < flowerNdx; ++i) {
             int flowerType = random.nextInt(3);
 
@@ -81,10 +81,10 @@ public class BiomeBetaForest extends BiomeBeta {
 
             for (int j = 0; j < 5; ++j) {
                 int x = random.nextInt(16) + 8;
-                int y = random.nextInt(16) + 8;
-                int z = random.nextInt(world.getHeight(startPos.add(x, 0, y)).getY() + 32);
+                int z = random.nextInt(16) + 8;
+                int y = random.nextInt(world.getHeight(startPos.add(x, 0, z)).getY() + 32 - floor) + floor;
 
-                if (DOUBLE_PLANT_GENERATOR.generate(world, random, new BlockPos(startPos.getX() + x, z, startPos.getZ() + y))) {
+                if (DOUBLE_PLANT_GENERATOR.generate(world, random, new BlockPos(startPos.getX() + x, y, startPos.getZ() + z))) {
                     break;
                 }
             }

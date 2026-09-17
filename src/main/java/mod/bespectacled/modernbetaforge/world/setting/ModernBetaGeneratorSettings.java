@@ -64,6 +64,9 @@ public class ModernBetaGeneratorSettings {
     
     public static final int MAX_PRESET_LENGTH = 100000;
     
+    public static final int MIN_MIN_HEIGHT = -512;
+    public static final int MAX_MAX_HEIGHT = 511;
+    
     @Deprecated public static final int MIN_HEIGHT = 1;
     @Deprecated public static final int MAX_HEIGHT = 255;
     @Deprecated public static final int MIN_FLOOR = 0;

@@ -7,7 +7,7 @@ import mod.bespectacled.modernbetaforge.api.world.biome.source.BiomeSource;
 import mod.bespectacled.modernbetaforge.util.BiomeUtil;
 import mod.bespectacled.modernbetaforge.util.chunk.BiomeChunk;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import mod.bespectacled.modernbetaforge.world.biome.layer.ModernBetaGenLayer;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.init.Biomes;
@@ -31,10 +31,10 @@ public class ReleaseBiomeSource extends BiomeSource implements BiomeResolverOcea
         this.biomeCache = new ChunkCache<>("biome", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getBiomes));
         this.oceanCache = new ChunkCache<>("ocean", (chunkX, chunkZ) -> new BiomeChunk(chunkX, chunkZ, this::getOceanBiomes));
         
-        GenLayer[] biomeLayers = ModernBetaGenLayer.initBiomeLayers(seed, ModernBetaWorldType.INSTANCE, settings);
+        GenLayer[] biomeLayers = ModernBetaGenLayer.initBiomeLayers(seed, WorldTypeManager.INSTANCE.getWorldType(), settings);
         biomeLayers = BiomeUtil.getModdedBiomeGenerators(WorldType.CUSTOMIZED, seed, biomeLayers);
         
-        GenLayer[] oceanLayers = ModernBetaGenLayer.initOceanLayers(seed, ModernBetaWorldType.INSTANCE, settings);
+        GenLayer[] oceanLayers = ModernBetaGenLayer.initOceanLayers(seed, WorldTypeManager.INSTANCE.getWorldType(), settings);
         oceanLayers = BiomeUtil.getModdedBiomeGenerators(WorldType.CUSTOMIZED, seed, oceanLayers);
         
         this.biomeLayer = biomeLayers[1];

@@ -61,7 +61,7 @@ public class BlockStates {
     public static final IBlockState MAGMA = Blocks.MAGMA.getDefaultState();
     
     public static boolean isAir(IBlockState blockState) {
-        return blockState.getBlock().isAir(blockState, null, null);
+        return blockState.getBlock() == Blocks.AIR;
     }
     
     public static boolean isEqual(IBlockState blockState0, IBlockState blockState1) {

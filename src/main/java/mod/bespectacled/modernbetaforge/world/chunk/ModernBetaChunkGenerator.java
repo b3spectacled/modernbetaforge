@@ -18,6 +18,7 @@ import mod.bespectacled.modernbetaforge.api.world.chunk.source.FiniteChunkSource
 import mod.bespectacled.modernbetaforge.util.DebugUtil;
 import mod.bespectacled.modernbetaforge.util.ObjectPool;
 import mod.bespectacled.modernbetaforge.util.chunk.ChunkCache;
+import mod.bespectacled.modernbetaforge.util.chunk.ChunkPrimerExtended;
 import mod.bespectacled.modernbetaforge.util.chunk.ComponentChunk;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeDecorator;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeMobs;
@@ -173,47 +174,10 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
     public Chunk generateChunk(int chunkX, int chunkZ) {
         DebugUtil.startDebug(DebugUtil.SECTION_GEN_CHUNK);
         
+        // Generate chunk primer
         ChunkPrimer chunkPrimer = this.primerPool.get();
-        this.setBlocksInChunk(chunkX, chunkZ, chunkPrimer);
-        
         Biome[] biomes = this.initialChunkCache.get(chunkX, chunkZ).biomes;
-        
-        if (!this.chunkSource.skipChunk(chunkX, chunkZ)) {
-            // Flag is village component has generated in this chunk
-            boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
-            
-            // Populate biome-specific surface
-            this.chunkSource.provideSurface(this.world, biomes, chunkPrimer, chunkX, chunkZ);
-            
-            // Post-process biome map, after surface generation
-            if (this.biomeInjector != null) {
-                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
-            }
-            
-            // Carve terrain
-            for (Entry<ResourceLocation, MapGenBase> entry : this.carvers.entrySet()) {
-                MapGenBase carver = entry.getValue();
-                
-                if (carver instanceof MapGenBetaCave) {
-                    List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
-                    ((MapGenBetaCave)carver).generate(this.world, chunkX, chunkZ, chunkPrimer, biomes, structureComponents);
-                    
-                } else if (!villageGenerated) {
-                    entry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
-                    
-                }
-            }
-
-            // Generate map feature placements
-            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structures.entrySet()) {
-                if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
-                    structureEntry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
-                }
-            }
-            
-            // Remove component chunk now that terrain has generated.
-            this.componentCache.remove(chunkX, chunkZ);
-        }
+        this.generateChunkPrimer(chunkX, chunkZ, chunkPrimer, biomes);
         
         // Generate final chunk
         Chunk chunk = new Chunk(this.world, chunkPrimer, chunkX, chunkZ);
@@ -422,6 +386,63 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
 
         return false;
     }
+
+    private ChunkPrimerContainer provideInitialChunk(int chunkX, int chunkZ) {
+        ChunkPrimer chunkPrimer = new ChunkPrimerExtended(this.chunkSource.getWorldHeight(), this.chunkSource.getWorldFloor());
+        Biome[] biomes = this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
+        
+        // Generate base terrain
+        this.chunkSource.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
+
+        // Post-process biome map, before surface generation
+        if (this.biomeInjector != null) {
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
+            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.CUSTOM);
+        }
+        
+        return new ChunkPrimerContainer(chunkPrimer, biomes);
+    }
+    
+    public void generateChunkPrimer(int chunkX, int chunkZ, ChunkPrimer chunkPrimer, Biome[] biomes) {
+        this.setBlocksInChunk(chunkX, chunkZ, chunkPrimer);
+        
+        if (!this.chunkSource.skipChunk(chunkX, chunkZ)) {
+            // Flag is village component has generated in this chunk
+            boolean villageGenerated = !this.componentCache.get(chunkX, chunkZ).getComponents().isEmpty();
+            
+            // Populate biome-specific surface
+            this.chunkSource.provideSurface(this.world, biomes, chunkPrimer, chunkX, chunkZ);
+            
+            // Post-process biome map, after surface generation
+            if (this.biomeInjector != null) {
+                this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.POST_SURFACE);
+            }
+            
+            // Carve terrain
+            for (Entry<ResourceLocation, MapGenBase> entry : this.carvers.entrySet()) {
+                MapGenBase carver = entry.getValue();
+                
+                if (carver instanceof MapGenBetaCave) {
+                    List<StructureComponent> structureComponents = this.componentCache.get(chunkX, chunkZ).getComponents();
+                    ((MapGenBetaCave)carver).generate(this.world, chunkX, chunkZ, chunkPrimer, biomes, structureComponents);
+                    
+                } else if (!villageGenerated) {
+                    entry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
+                    
+                }
+            }
+
+            // Generate map feature placements
+            for (Entry<ResourceLocation, MapGenStructure> structureEntry : this.structures.entrySet()) {
+                if (!structureEntry.getKey().equals(ModernBetaStructures.VILLAGE)) {
+                    structureEntry.getValue().generate(this.world, chunkX, chunkZ, chunkPrimer);
+                }
+            }
+            
+            // Remove component chunk now that terrain has generated.
+            this.componentCache.remove(chunkX, chunkZ);
+        }
+    }
     
     public void cacheStructureComponent(int chunkX, int chunkZ, StructureComponent structureComponent) {
         this.componentCache.get(chunkX, chunkZ).addComponent(structureComponent);
@@ -466,22 +487,6 @@ public class ModernBetaChunkGenerator extends ChunkGeneratorOverworld {
         }
         
         return structureMap;
-    }
-    
-    private ChunkPrimerContainer provideInitialChunk(int chunkX, int chunkZ) {
-        ChunkPrimer chunkPrimer = new ChunkPrimer();
-        Biome[] biomes = this.biomeProvider.getBaseBiomes(chunkX, chunkZ);
-        
-        // Generate base terrain
-        this.chunkSource.provideInitialChunk(chunkPrimer, chunkX, chunkZ);
-
-        // Post-process biome map, before surface generation
-        if (this.biomeInjector != null) {
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.PRE_SURFACE);
-            this.biomeInjector.injectBiomes(biomes, chunkPrimer, this.chunkSource, this.biomeProvider.getBiomeSource(), chunkX, chunkZ, BiomeInjectionStep.CUSTOM);
-        }
-        
-        return new ChunkPrimerContainer(chunkPrimer, biomes);
     }
     
     private static class ChunkPrimerContainer {

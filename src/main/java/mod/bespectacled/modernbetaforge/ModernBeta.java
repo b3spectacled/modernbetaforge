@@ -13,13 +13,12 @@ import mod.bespectacled.modernbetaforge.command.CommandLocateBiome;
 import mod.bespectacled.modernbetaforge.command.CommandLocateStructure;
 import mod.bespectacled.modernbetaforge.command.CommandSetGeneratorSetting;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
-import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.event.PlayerEventHandler;
 import mod.bespectacled.modernbetaforge.event.WorldEventHandler;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInRegistries;
 import mod.bespectacled.modernbetaforge.util.datafix.ModDataFixer;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import mod.bespectacled.modernbetaforge.world.structure.ModernBetaStructures;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +40,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ModernBeta {
     public static final String MODID = "modernbetaforge";
     public static final String NAME = "Modern Beta Forge";
-    public static final String VERSION = "1.10.1.1";
+    public static final String VERSION = "1.10.2.0";
     public static final String MCVERSION = "1.12.2";
     public static final String UPDATE_JSON = "https://forge.curseupdate.com/805719/modernbetaforge";
     public static final int DATA_VERSION = 11010;
@@ -85,10 +84,6 @@ public class ModernBeta {
         MinecraftForge.EVENT_BUS.register(new WorldEventHandler());
         MinecraftForge.EVENT_BUS.register(new PlayerEventHandler());
         
-        ModernBetaWorldType.register();
-        ModernBetaStructures.register();
-        ModernBetaPacketHandler.register();
-        
         ModernBetaBuiltInRegistries.registerChunkSources();
         ModernBetaBuiltInRegistries.registerBiomeSources();
         ModernBetaBuiltInRegistries.registerNoiseSettings();
@@ -99,19 +94,14 @@ public class ModernBeta {
         ModernBetaBuiltInRegistries.registerWorldSpawners();
         ModernBetaBuiltInRegistries.registerDefaultBlocks();
         ModernBetaBuiltInRegistries.registerModDataFixes();
-        
-        if (ModernBetaConfig.debugOptions.registerDebugProperties) {
-            ModernBetaBuiltInRegistries.registerProperties();
-        }
-        
-        /*
-        if (ModernBetaConfig.experimentalOptions.enableExperimentalFeatures) {
-            ModernBetaExperimental.register();
-        }
-        */
+        ModernBetaBuiltInRegistries.registerDebugProperties();
         
         ModCompat.loadCompat();
-
+        
+        WorldTypeManager.INSTANCE.registerWorldType();
+        ModernBetaStructures.register();
+        ModernBetaPacketHandler.register();
+        
         proxy.init();
     }
     

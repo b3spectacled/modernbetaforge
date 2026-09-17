@@ -18,6 +18,7 @@ import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.util.chunk.HeightmapChunk;
 import mod.bespectacled.modernbetaforge.util.noise.PerlinOctaveNoise;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules;
@@ -334,7 +335,7 @@ public abstract class ChunkSource {
      * @param cloudHeight y-coordinate of the new cloud height, in block coordinates.
      */
     protected void setCloudHeight(int cloudHeight) {
-        ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
+        WorldTypeManager.INSTANCE.setCloudHeight(cloudHeight);
     }
 
     /**

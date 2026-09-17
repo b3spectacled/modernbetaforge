@@ -18,10 +18,12 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModernBetaWorldType extends WorldType {
-    public static final ModernBetaWorldType INSTANCE = new ModernBetaWorldType("modernbeta");
-    
+public class ModernBetaWorldType extends WorldType implements AdjustableCloudHeightWorldType {
     private float cloudHeight;
+    
+    public ModernBetaWorldType() {
+        this("modernbeta");
+    }
     
     public ModernBetaWorldType(String name) {
         super(name);
@@ -29,8 +31,6 @@ public class ModernBetaWorldType extends WorldType {
         this.cloudHeight = super.getCloudHeight();
     }
 
-    public static void register() {}
-    
     @Override
     public boolean isCustomizable() {
         return true;
@@ -81,7 +81,10 @@ public class ModernBetaWorldType extends WorldType {
         minecraft.displayGuiScreen(new GuiScreenCustomizeWorld(guiCreateWorld, guiCreateWorld.chunkProviderSettingsJson));
     }
     
+    @Override
     public void setCloudHeight(int cloudHeight) {
         this.cloudHeight = cloudHeight;
     }
+
+    public static void register() { }
 }

@@ -1,7 +1,7 @@
 package mod.bespectacled.modernbetaforge.network;
 
 import io.netty.buffer.ByteBuf;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
@@ -34,7 +34,7 @@ public class CloudHeightMessage implements IMessage {
             int cloudHeight = message.cloudHeight;
 
             Minecraft.getMinecraft().addScheduledTask(() -> {
-                ModernBetaWorldType.INSTANCE.setCloudHeight(cloudHeight);
+                WorldTypeManager.INSTANCE.setCloudHeight(cloudHeight);
             });
 
             return null;

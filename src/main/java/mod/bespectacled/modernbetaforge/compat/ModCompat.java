@@ -11,6 +11,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
+import mod.bespectacled.modernbetaforge.compat.cubicchunks.CompatCubicChunks;
 import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
@@ -41,6 +42,7 @@ public class ModCompat {
         loadCompat(new CompatFutureMC());
         loadCompat(new CompatOE());
         loadCompat(new CompatDepthsUpdate());
+        loadCompat(new CompatCubicChunks());
     }
     
     public static boolean isCompatLoaded(String modId) {
@@ -81,13 +83,13 @@ public class ModCompat {
         public int getMinHeight() {
             int height = this.heightCompat != null ? this.heightCompat.getMinHeight() : ModernBetaGeneratorSettings.MIN_FLOOR;
             
-            return Math.max(height, -2048);
+            return Math.max(height, ModernBetaGeneratorSettings.MIN_MIN_HEIGHT);
         }
         
         public int getMaxHeight() {
             int height = this.heightCompat != null ?  this.heightCompat.getMaxHeight() : ModernBetaGeneratorSettings.MAX_HEIGHT;
             
-            return Math.min(height, 2047);
+            return Math.min(height, ModernBetaGeneratorSettings.MAX_MAX_HEIGHT);
         }
         
         public String getModId() {

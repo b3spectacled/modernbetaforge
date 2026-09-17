@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.api.property.ListProperty;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.client.gui.GuiPredicates;
 import mod.bespectacled.modernbetaforge.compat.BiomeCompat;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
@@ -116,6 +117,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_RAIN_SCHEME, new GuiPredicate(settings ->
             GuiPredicates.isBiomeInstanceOf(settings, BiomesOPlentyBiomeSource.class)
         ));
+        
+        ModernBetaClientRegistries.GUI_PRESET.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
     }
 
     @Override

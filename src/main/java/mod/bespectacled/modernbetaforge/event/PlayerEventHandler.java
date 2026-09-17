@@ -12,6 +12,7 @@ import mod.bespectacled.modernbetaforge.network.CloudHeightMessage;
 import mod.bespectacled.modernbetaforge.network.ModernBetaPacketHandler;
 import mod.bespectacled.modernbetaforge.network.WorldInfoMessage;
 import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -64,7 +65,7 @@ public class PlayerEventHandler {
             }
             
             if (ModernBetaConfig.serverOptions.sendCloudHeight) {
-                int cloudHeight = (int)ModernBetaWorldType.INSTANCE.getCloudHeight();
+                int cloudHeight = (int)WorldTypeManager.INSTANCE.getCloudHeight();
                 
                 ModernBetaPacketHandler.INSTANCE.sendTo(new CloudHeightMessage(cloudHeight), player);
             }

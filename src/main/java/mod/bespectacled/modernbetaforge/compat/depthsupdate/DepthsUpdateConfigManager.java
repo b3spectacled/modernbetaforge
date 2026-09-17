@@ -26,10 +26,7 @@ public class DepthsUpdateConfigManager {
 	private DepthsUpdateConfigManager() {
 	    this.config = new Configuration(new File(ModernBeta.getConfigDirectory(), CompatDepthsUpdate.MOD_ID + ".cfg"));
 	    
-	    this.minY = this.readMinY();
-	    this.maxY = this.readMaxY();
-	    this.applyGlobally = this.readApplyGlobally();
-	    this.override = this.readOverride();
+	    this.reloadConfig();
 	}
 	
 	public void reloadConfig() {

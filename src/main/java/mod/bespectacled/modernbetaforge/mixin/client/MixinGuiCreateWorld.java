@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import mod.bespectacled.modernbetaforge.util.PresetUtil;
-import mod.bespectacled.modernbetaforge.world.ModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.world.WorldTypeManager;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
 
@@ -24,7 +24,7 @@ public abstract class MixinGuiCreateWorld {
      */
     @Inject(method = "actionPerformed", at = @At("RETURN"))
     private void injectActionPerformed(GuiButton button, CallbackInfo info) {
-        if (button.enabled && button.id == 5 && this.selectedIndex == ModernBetaWorldType.INSTANCE.getId()) {
+        if (button.enabled && button.id == 5 && this.selectedIndex == WorldTypeManager.INSTANCE.getWorldTypeId()) {
             if (this.chunkProviderSettingsJson.isEmpty() && PresetUtil.isDefaultPresetModified()) {
                 this.chunkProviderSettingsJson = PresetUtil.getDefaultPreset();
             }

@@ -7,6 +7,7 @@ import mod.bespectacled.modernbetaforge.api.property.IntProperty;
 import mod.bespectacled.modernbetaforge.api.property.PropertyGuiType;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaClientRegistries;
 import mod.bespectacled.modernbetaforge.api.registry.ModernBetaRegistries;
+import mod.bespectacled.modernbetaforge.client.gui.GuiCustomizePresets;
 import mod.bespectacled.modernbetaforge.compat.ClientCompat;
 import mod.bespectacled.modernbetaforge.compat.Compat;
 import mod.bespectacled.modernbetaforge.compat.HeightCompat;
@@ -58,6 +59,8 @@ public class CompatDepthsUpdate implements Compat, ClientCompat, HeightCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_DEEPSLATE_RANGE, new GuiPredicate(settings ->
             DepthsUpdateConfigManager.INSTANCE.extendHeight() && settings.getBooleanProperty(KEY_USE_COMPAT) && settings.getBooleanProperty(KEY_USE_DEEPSLATE)
         ));
+        
+        ModernBetaClientRegistries.GUI_PRESET.register(GuiCustomizePresets.DEPTHS_UPDATE_BETA, GuiCustomizePresets.PRESET_DEPTHS_UPDATE_BETA);
     }
 
     @Override
