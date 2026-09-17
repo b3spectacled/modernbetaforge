@@ -2,7 +2,7 @@ package mod.bespectacled.modernbetaforge.world;
 
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.cubicchunks.CompatCubicChunks;
-import mod.bespectacled.modernbetaforge.compat.cubicchunks.CubicModernBetaWorldType;
+import mod.bespectacled.modernbetaforge.compat.cubicchunks.CubicModernBetaWorldTypeRegistrar;
 import net.minecraft.world.WorldType;
 
 public class WorldTypeManager {
@@ -18,7 +18,7 @@ public class WorldTypeManager {
         }
         
         if (ModCompat.isCompatLoaded(CompatCubicChunks.MOD_ID)) {
-            this.worldType = new CubicModernBetaWorldType();
+            this.worldType = CubicModernBetaWorldTypeRegistrar.createCubicChunksWorldType();
         } else {
             this.worldType = new ModernBetaWorldType();
         }

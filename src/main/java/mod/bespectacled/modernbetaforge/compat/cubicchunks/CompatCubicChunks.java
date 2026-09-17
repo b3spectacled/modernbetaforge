@@ -52,5 +52,4 @@ public class CompatCubicChunks implements Compat, ClientCompat, HeightCompat {
     public int getMaxHeight() {
         return CubicChunksConfigManager.INSTANCE.getDefaultMaxHeight();
     }
-    
 }
