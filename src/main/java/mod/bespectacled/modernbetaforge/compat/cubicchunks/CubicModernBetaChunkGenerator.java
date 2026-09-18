@@ -95,22 +95,29 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
     @Override
     public void populate(ICube cube) {
         try {
+            int cubeX = cube.getX();
+            int cubeY = cube.getY();
+            int cubeZ = cube.getZ();
+            
+            int cubeTopY = this.cubeTopY;
+            int cubeMinY = this.cubeMinY;
+            
             WorldgenHangWatchdog.startWorldGen();
-            Random random = getCubeSpecificRandom(cube.getX(), cube.getY(), cube.getZ());
+            Random random = getCubeSpecificRandom(cubeX, cubeY, cubeZ);
             CubeGeneratorsRegistry.populateVanillaCubic(this.world, random, cube);
             
-            if (cube.getY() < 0 || cube.getY() >= this.cubeSizeY) {
+            if (cubeY < cubeMinY || cubeY >= cubeTopY) {
                 return;
             }
             
-            if (cube.getY() >= 0 || cube.getY() < this.cubeSizeY) {
-                for (int y = this.cubeSizeY - 1; y >= 0; y--) {
-                    ((ICubicWorldInternal)this.world).getCubeFromCubeCoords(cube.getX(), y, cube.getZ()).setPopulated(true);
+            if (cubeY >= cubeMinY || cubeY < cubeTopY) {
+                for (int y = cubeTopY - 1; y >= cubeMinY; y--) {
+                    ((ICubicWorldInternal)this.world).getCubeFromCubeCoords(cubeX, y, cubeZ).setPopulated(true);
                 }
 
                 try {
                     CompatHandler.beforePopulate(this.world, this.chunkGenerator);
-                    this.chunkGenerator.populate(cube.getX(), cube.getZ());
+                    this.chunkGenerator.populate(cubeX, cubeZ);
                     
                 } catch (IllegalArgumentException e) {
                     this.logPopulatorExceptions(e);
@@ -118,7 +125,7 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
                     CompatHandler.afterPopulate(this.world);
                 }
                 
-                this.applyModGenerators(cube.getX(), cube.getZ(), this.world, this.chunkGenerator, this.world.getChunkProvider());
+                this.applyModGenerators(cubeX, cubeZ, this.world, this.chunkGenerator, this.world.getChunkProvider());
             }
             
         } finally {
@@ -128,12 +135,12 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
 
     @Override
     public Box getPopulationPregenerationRequirements(ICube cube) {
-        return ICubeGenerator.RECOMMENDED_GENERATE_POPULATOR_REQUIREMENT;
+        return super.getPopulationPregenerationRequirements(cube);
     }
 
     @Override
     public Box getFullPopulationRequirements(ICube cube) {
-        return ICubeGenerator.RECOMMENDED_FULL_POPULATOR_REQUIREMENT;
+        return super.getFullPopulationRequirements(cube);
     }
 
     @Override
