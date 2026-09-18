@@ -39,7 +39,7 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
     private final ModernBetaChunkGenerator chunkGenerator;
     private final World world;
     private final ChunkCache<ChunkPrimerExtended> chunkPrimerCache;;
-    private final int cubeSizeY;
+    @SuppressWarnings("unused") private final int cubeSizeY;
     private final int cubeMinY;
     private final int cubeTopY;
     

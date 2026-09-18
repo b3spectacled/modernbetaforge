@@ -13,11 +13,11 @@ public class ChunkPrimerExtended extends ChunkPrimer {
     private final int worldFloor;
     private final int bitShift;
     private final char[] data;
-    
+    static int test = 0;
     public ChunkPrimerExtended(int worldHeight, int worldFloor) {
         // Ensure minimum array size
         worldHeight = Math.max(worldHeight, 255);
-        worldFloor = worldFloor - (16 + (worldFloor % 16));
+        worldFloor = Math.floorDiv(worldFloor, 16) << 4;
         
         int worldSizeY = worldHeight - worldFloor;
         int bitShift = 0;
