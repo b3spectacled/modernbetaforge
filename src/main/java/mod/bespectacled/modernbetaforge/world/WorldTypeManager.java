@@ -25,6 +25,7 @@ public class WorldTypeManager {
     }
     
     public WorldType getWorldType() {
+        this.registerWorldType();
         return this.worldType;
     }
 
