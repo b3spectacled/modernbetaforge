@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeWorld;
+import mod.bespectacled.modernbetaforge.compat.ModCompat;
+import mod.bespectacled.modernbetaforge.compat.tropicraft.CompatTropicraft;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeProvider;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -14,9 +16,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.tropicraft.core.common.dimension.WorldProviderTropicraft;
 
 public class ModernBetaWorldType extends WorldType implements AdjustableCloudHeightWorldType {
     private float cloudHeight;
@@ -58,6 +62,11 @@ public class ModernBetaWorldType extends WorldType implements AdjustableCloudHei
     
     @Override
     public IChunkGenerator getChunkGenerator(World world, String generatorOptions) {
+        // Jank check to fix jank code from Tropicraft
+        if (ModCompat.isCompatLoaded(CompatTropicraft.MOD_ID) && world.provider instanceof WorldProviderTropicraft) {
+            return new ChunkGeneratorOverworld(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
+        }
+        
         return new ModernBetaChunkGenerator(world, generatorOptions);
     }
     

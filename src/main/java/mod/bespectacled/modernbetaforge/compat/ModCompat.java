@@ -19,6 +19,7 @@ import mod.bespectacled.modernbetaforge.compat.galacticraft.CompatGalacticraft;
 import mod.bespectacled.modernbetaforge.compat.nether_api.CompatNetherAPI;
 import mod.bespectacled.modernbetaforge.compat.oe.CompatOE;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
+import mod.bespectacled.modernbetaforge.compat.tropicraft.CompatTropicraft;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.fml.common.Loader;
 
@@ -43,6 +44,7 @@ public class ModCompat {
         loadCompat(new CompatOE());
         loadCompat(new CompatDepthsUpdate());
         loadCompat(new CompatCubicChunks());
+        loadCompat(new CompatTropicraft());
     }
     
     public static boolean isCompatLoaded(String modId) {

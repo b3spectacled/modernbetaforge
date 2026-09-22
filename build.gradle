@@ -47,6 +47,7 @@ dependencies {
     implementation fg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
     implementation fg.deobf("curse.maven:smooth-menus-1532143:8153081")
     implementation fg.deobf("curse.maven:opencubicchunks-292243:3546640")
+    implementation fg.deobf("curse.maven:tropicraft-254794:2713918")
     
     annotationProcessor 'org.spongepowered:mixin:0.8.7-SNAPSHOT'
     annotationProcessor 'com.google.code.gson:gson:2.8.9'
