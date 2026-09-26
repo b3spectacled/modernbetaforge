@@ -33,6 +33,10 @@ public class DensityChunk {
             throw new IllegalArgumentException(error);
         }
         
-        return this.densityMap.get(key)[((y - this.worldFloor) * 16 + (x & 0xF)) * 16 + (z & 0xF)];
+        return this.densityMap.get(key)[getNdx(x, y - this.worldFloor, z)];
+    }
+    
+    public static int getNdx(int x, int y, int z) {
+        return (((y << 4) + (x & 0xF)) << 4) + (z & 0xF);
     }
 }

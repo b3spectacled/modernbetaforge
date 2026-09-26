@@ -642,9 +642,8 @@ public abstract class NoiseChunkSource extends ChunkSource {
      * @return Container of interpolated densities, to be cached and used in other methods for terrain generation and height sampling.
      */
     private DensityChunk sampleDensities(int chunkX, int chunkZ) {
-        int sizeX = this.horizontalNoiseResolution * this.noiseSizeX;
-        int sizeZ = this.horizontalNoiseResolution * this.noiseSizeZ;
         int sizeY = this.verticalNoiseResolution * this.noiseSizeY;
+        int size = 16 * 16 * sizeY;
 
         // Create noise sources and sample.
         // Since a NoiseSource object is stateful (contains a noise array),
@@ -674,7 +673,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
         Map<ResourceLocation, double[]> densityMap = new LinkedHashMap<>();
         for (Entry<ResourceLocation, NoiseSource> entry : noiseSources.entrySet()) {
             NoiseSource noiseSource = entry.getValue();
-            double[] densities = new double[sizeX * sizeZ * sizeY];
+            double[] densities = new double[size];
             
             for (int subChunkX = 0; subChunkX < this.noiseSizeX; ++subChunkX) {
                 for (int subChunkZ = 0; subChunkZ < this.noiseSizeZ; ++subChunkZ) {
@@ -699,7 +698,7 @@ public abstract class NoiseChunkSource extends ChunkSource {
                                     double deltaZ = subZ / (double)this.horizontalNoiseResolution;
                                     noiseSource.sampleNoiseZ(deltaZ);
                                     
-                                    densities[(y * 16 + x) * 16 + z] = noiseSource.sample();
+                                    densities[DensityChunk.getNdx(x, y, z)] = noiseSource.sample();
                                 }
                             }
                         }
