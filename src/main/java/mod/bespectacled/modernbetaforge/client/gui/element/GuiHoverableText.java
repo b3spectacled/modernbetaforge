@@ -32,6 +32,7 @@ public class GuiHoverableText extends Gui {
     private final FontRenderer fontRenderer;
     
     private long lastHovered;
+    private boolean enabled;
     
     public GuiHoverableText(Minecraft mc, int x, int y, String text, List<String> tooltips) {
         this.x = x;
@@ -42,6 +43,7 @@ public class GuiHoverableText extends Gui {
         this.tooltips = tooltips;
         this.bounds = new GuiBoundsChecker();
         this.fontRenderer = mc.fontRenderer;
+        this.enabled = true;
     }
     
     public void draw(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
@@ -51,11 +53,12 @@ public class GuiHoverableText extends Gui {
         this.bounds.updateBounds(this.x, this.y, this.width, this.height);
         this.bounds.updateHovered(mouseX, mouseY);
 
-        int textColor = this.bounds.isHovered() ?
+        boolean isHovered = this.enabled && this.bounds.isHovered();
+        int textColor = isHovered ?
             GuiColors.RGB_LIGHT_YELLOW :
             (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_GREY;
         
-        if (this.bounds.isHovered()) {
+        if (isHovered) {
             if (!lastHovered) {
                 this.lastHovered = System.currentTimeMillis();
             }
@@ -70,6 +73,10 @@ public class GuiHoverableText extends Gui {
         }
         
         fontRenderer.drawStringWithShadow(this.text, this.x, this.y, textColor);
+    }
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
     private void drawTooltip(Minecraft mc) {

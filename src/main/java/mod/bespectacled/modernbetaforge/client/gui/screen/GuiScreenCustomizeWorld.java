@@ -2419,6 +2419,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
         this.buttonPresets.enabled = this.isFocused;
         this.buttonPreview.enabled = this.isFocused;
+        this.heightInfo.setEnabled(clicked);
         
         // Nav buttons
         this.buttonNavL.visible = this.displayNavButtons;
@@ -2439,6 +2440,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 tab.setSelected(false);
             }
         }
+        
+        // Hoverable text
+        this.heightInfo.setEnabled(this.isFocused);
     }
     
     private void updateSettingValidity() {
