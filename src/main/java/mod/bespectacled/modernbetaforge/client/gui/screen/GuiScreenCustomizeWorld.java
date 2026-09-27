@@ -241,6 +241,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int navY = this.tabListBounds.getY() + this.tabListBounds.getHeight() - 4;
         int navXL = centerTabX - GuiButtonNav.getButtonWidth(this.mc, KeyBindings.LEFT_NAV_KEY.getDisplayName()) - GuiUtil.BUTTON_SPACE / 2;
         int navXR = centerTabX + GuiUtil.BUTTON_SPACE / 2;
+
+        String heightText = TextFormatting.RESET + "[" + TextFormatting.BOLD + "\u16E8" + TextFormatting.RESET + "]";
+        int heightX = PAGE_TITLE_HEIGHT;
+        int heightY = PAGE_TITLE_HEIGHT;
         
         this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
         this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
@@ -251,12 +255,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonNavL = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_LNAV, navXL, navY, KeyBindings.LEFT_NAV_KEY.getDisplayName()));
         this.buttonNavR = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_RNAV, navXR, navY, KeyBindings.RIGHT_NAV_KEY.getDisplayName()));
         
+        this.heightInfo = new GuiHoverableText(this.mc, heightX, heightY, heightText);
+        this.heightInfo.setVisible(false);
+        
         if (ModCompat.HEIGHT_MANAGER.extendsHeight()) {
-            String heightText = TextFormatting.RESET + "[" + TextFormatting.BOLD + "\u16E8" + TextFormatting.RESET + "]";
             List<String> heightTooltips = new ArrayList<>();
-            
-            int heightX = PAGE_TITLE_HEIGHT;
-            int heightY = PAGE_TITLE_HEIGHT;
             
             String title = ModCompat.HEIGHT_MANAGER.getModId();
             String version = ModCompat.HEIGHT_MANAGER.getModRecommendedVersion();
@@ -274,7 +277,8 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 heightTooltips.addAll(this.fontRenderer.listFormattedStringToWidth(noteText, 200));
             }
             
-            this.heightInfo = new GuiHoverableText(this.mc, heightX, heightY, heightText, heightTooltips);
+            this.heightInfo.setTooltips(heightTooltips);
+            this.heightInfo.setVisible(true);
         }
         
         
@@ -1199,9 +1203,7 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.drawHoveredTooltip(mouseX, mouseY);
         
         // Info
-        if (this.heightInfo != null) {
-            this.heightInfo.draw(this.mc, mouseX, mouseY, partialTicks);
-        }
+        this.heightInfo.draw(this.mc, mouseX, mouseY, partialTicks);
         
         this.tabListBounds.updateHovered(mouseX, mouseY);
     }
@@ -2419,7 +2421,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         this.buttonDefaults.enabled = this.isFocused && this.settingsModified;
         this.buttonPresets.enabled = this.isFocused;
         this.buttonPreview.enabled = this.isFocused;
-        this.heightInfo.setEnabled(clicked);
         
         // Nav buttons
         this.buttonNavL.visible = this.displayNavButtons;

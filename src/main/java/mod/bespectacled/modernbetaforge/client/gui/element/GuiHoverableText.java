@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.client.gui.element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
@@ -33,50 +34,63 @@ public class GuiHoverableText extends Gui {
     
     private long lastHovered;
     private boolean enabled;
+    private boolean visible;
     
-    public GuiHoverableText(Minecraft mc, int x, int y, String text, List<String> tooltips) {
+    public GuiHoverableText(Minecraft mc, int x, int y, String text) {
         this.x = x;
         this.y = y;
         this.width = mc.fontRenderer.getStringWidth(text);
         this.height = mc.fontRenderer.FONT_HEIGHT;
         this.text = text;
-        this.tooltips = tooltips;
+        this.tooltips = new ArrayList<>();
         this.bounds = new GuiBoundsChecker();
         this.fontRenderer = mc.fontRenderer;
         this.enabled = true;
+        this.visible = true;
     }
     
     public void draw(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        FontRenderer fontRenderer = mc.fontRenderer;
-        boolean lastHovered = this.bounds.isHovered();
-        
-        this.bounds.updateBounds(this.x, this.y, this.width, this.height);
-        this.bounds.updateHovered(mouseX, mouseY);
+        if (this.visible) {
+            FontRenderer fontRenderer = mc.fontRenderer;
+            boolean lastHovered = this.bounds.isHovered();
+            
+            this.bounds.updateBounds(this.x, this.y, this.width, this.height);
+            this.bounds.updateHovered(mouseX, mouseY);
 
-        boolean isHovered = this.enabled && this.bounds.isHovered();
-        int textColor = isHovered ?
-            GuiColors.RGB_LIGHT_YELLOW :
-            (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_GREY;
-        
-        if (isHovered) {
-            if (!lastHovered) {
-                this.lastHovered = System.currentTimeMillis();
+            boolean isHovered = this.enabled && this.bounds.isHovered();
+            int textColor = isHovered ?
+                GuiColors.RGB_LIGHT_YELLOW :
+                (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_GREY;
+            
+            if (isHovered) {
+                if (!lastHovered) {
+                    this.lastHovered = System.currentTimeMillis();
+                }
+                
+                if (System.currentTimeMillis() > this.lastHovered + TOOLTIP_DELAY) {
+                    this.drawTooltip(mc);
+                }
+                
+                if (!hoveredOnce) {
+                    hoveredOnce = true;
+                }
             }
             
-            if (System.currentTimeMillis() > this.lastHovered + TOOLTIP_DELAY) {
-                this.drawTooltip(mc);
-            }
-            
-            if (!hoveredOnce) {
-                hoveredOnce = true;
-            }
+            fontRenderer.drawStringWithShadow(this.text, this.x, this.y, textColor);
         }
-        
-        fontRenderer.drawStringWithShadow(this.text, this.x, this.y, textColor);
     }
     
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+    
+    public void setTooltips(List<String> tooltips) {
+        this.tooltips.clear();
+        this.tooltips.addAll(tooltips);
     }
     
     private void drawTooltip(Minecraft mc) {
