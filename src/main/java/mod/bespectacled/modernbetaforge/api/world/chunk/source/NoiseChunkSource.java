@@ -486,14 +486,14 @@ public abstract class NoiseChunkSource extends ChunkSource {
             .add(this.blockSources)
             .build();
         blockSources.init(chunkX, chunkZ);
-        
-        for (int localX = 0; localX < sizeX; ++localX) {
-            int x = localX + startX;
-            
-            for (int localZ = 0; localZ < sizeZ; ++localZ) {
-                int z = localZ + startZ;
+
+        for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
+            for (int localX = 0; localX < sizeX; ++localX) {
+                int x = startX + localX;
                 
-                for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
+                for (int localZ = 0; localZ < sizeZ; ++localZ) {
+                    int z = startZ + localZ;
+                    
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }
@@ -530,9 +530,9 @@ public abstract class NoiseChunkSource extends ChunkSource {
         
         DensityChunk densityChunk = this.densityCache.get(chunkX, chunkZ);
         
-        for (int x = 0; x < sizeX; ++x) {
-            for (int z = 0; z < sizeZ; ++z) {
-                for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
+        for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
+            for (int x = 0; x < sizeX; ++x) {
+                for (int z = 0; z < sizeZ; ++z) {
                     double density = densityChunk.sample(x, y, z);
                     boolean isSolid = density > 0.0;
                     
