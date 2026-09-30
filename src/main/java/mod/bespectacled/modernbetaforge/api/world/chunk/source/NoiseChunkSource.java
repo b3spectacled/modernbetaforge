@@ -487,13 +487,13 @@ public abstract class NoiseChunkSource extends ChunkSource {
             .build();
         blockSources.init(chunkX, chunkZ);
 
-        for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
-            for (int localX = 0; localX < sizeX; ++localX) {
-                int x = startX + localX;
+        for (int localX = 0; localX < sizeX; ++localX) {
+            int x = startX + localX;
+            
+            for (int localZ = 0; localZ < sizeZ; ++localZ) {
+                int z = startZ + localZ;
                 
-                for (int localZ = 0; localZ < sizeZ; ++localZ) {
-                    int z = startZ + localZ;
-                    
+                for (int y = this.worldFloor; y < sizeY + this.worldFloor; ++y) {
                     chunkPrimer.setBlockState(localX, y, localZ, blockSources.sample(x, y, z));
                 }
             }

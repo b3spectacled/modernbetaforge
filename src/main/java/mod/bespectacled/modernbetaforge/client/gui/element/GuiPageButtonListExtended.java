@@ -22,6 +22,10 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     private static final int MAX_WIDTH = 380;
     private static final int MIN_WIDTH = 250;
     
+    private static final int LIST_PADDING = 12;
+    private static final int ENTRY_PADDING = 12;
+    private static final int LABEL_PADDING = 6;
+    
     private final GuiScreen parent;
     private final int offsetX;
     
@@ -161,14 +165,14 @@ public class GuiPageButtonListExtended extends GuiPageButtonList {
     }
     
     public static int getListTrimWidth(int width) {
-        return getListWidth(width) - 24;
+        return getListWidth(width) - LIST_PADDING;
     }
     
     public static int getEntryLabelTrimWidth(int width) {
-        return getEntryWidth(width) - 6;
+        return getEntryWidth(width) - LABEL_PADDING;
     }
     
     public static int getEntryTrimWidth(int width) {
-        return getEntryWidth(width) - 24;
+        return getEntryWidth(width) - ENTRY_PADDING;
     }
 }
