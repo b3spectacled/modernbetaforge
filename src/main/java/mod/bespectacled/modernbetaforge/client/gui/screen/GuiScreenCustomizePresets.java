@@ -633,10 +633,10 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         }
 
         private void blitIcon(int x, int y, IconTexture icon) {
-            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y - 1, GuiColors.ARGB_LIGHT_GREY);
-            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y + SLOT_HEIGHT, GuiColors.ARGB_GREY);
-            this.parent.drawVerticalLine(x - 1, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_LIGHT_GREY);
-            this.parent.drawVerticalLine(x + SLOT_HEIGHT, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_GREY);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y - 1, GuiColors.ARGB_GREY_224);
+            this.parent.drawHorizontalLine(x - 1, x + SLOT_HEIGHT, y + SLOT_HEIGHT, GuiColors.ARGB_GREY_160);
+            this.parent.drawVerticalLine(x - 1, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_GREY_224);
+            this.parent.drawVerticalLine(x + SLOT_HEIGHT, y - 1, y + SLOT_HEIGHT, GuiColors.ARGB_GREY_160);
             
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             

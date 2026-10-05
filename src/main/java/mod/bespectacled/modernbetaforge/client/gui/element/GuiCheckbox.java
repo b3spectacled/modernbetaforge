@@ -33,10 +33,10 @@ public class GuiCheckbox extends GuiButton {
             int boxB = this.y + this.height;
             
             int colorSelected = this.hovered ? GuiColors.ARGB_LIGHT_GREEN : GuiColors.ARGB_GREEN;
-            int colorDeselected = this.hovered ? GuiColors.ARGB_DARK_GREY : GuiColors.ARGB_DARKER_GREY;
+            int colorDeselected = this.hovered ? GuiColors.ARGB_GREY_128 : GuiColors.ARGB_GREY_096;
             
-            drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_LIGHT_GREY);
-            drawRect(boxL + 1, boxT + 1, boxR - 1, boxB - 1, GuiColors.ARGB_DARKEST_GREY);
+            drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_GREY_224);
+            drawRect(boxL + 1, boxT + 1, boxR - 1, boxB - 1, GuiColors.ARGB_GREY_032);
             drawRect(boxL + 2, boxT + 2, boxR - 2, boxB - 2, this.toggled ? colorSelected : colorDeselected);
         }
     }

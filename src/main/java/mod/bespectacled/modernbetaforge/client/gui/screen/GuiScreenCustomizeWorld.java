@@ -2605,10 +2605,10 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             double texU = (texR - texL) * 0.03125;
             double texV = (texB - texT) * 0.03125;
             
-            this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_LIGHT_GREY);
-            this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_DARK_GREY);
-            this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_LIGHT_GREY);
-            this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_DARK_GREY);
+            this.drawHorizontalLine(rectL, rectR, rectT, GuiColors.ARGB_GREY_224);
+            this.drawHorizontalLine(rectL, rectR, rectB, GuiColors.ARGB_GREY_128);
+            this.drawVerticalLine(rectL, rectT, rectB, GuiColors.ARGB_GREY_224);
+            this.drawVerticalLine(rectR, rectT, rectB, GuiColors.ARGB_GREY_128);
             
             GlStateManager.disableLighting();
             GlStateManager.disableFog();

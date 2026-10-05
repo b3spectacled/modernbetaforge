@@ -44,7 +44,7 @@ public class GuiButtonTab extends GuiButton {
             float target = hoveredOrSelected ? 0.0f : 1.0f;
             this.progress = this.fadeIn ? MathUtil.clampedLerp(this.progress, target, partialTicks) : target;
 
-            int colorBox = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_LIGHTER_GREY, GuiColors.ARGB_TRANS_LIGHT_GREY, this.progress);
+            int colorBox = MathUtil.lerpARGBColor(GuiColors.ARGB_GREY_096, GuiColors.ARGB_GREY_064, this.progress);
             int colorText = MathUtil.lerpRGBColor(GuiColors.RGB_WHITE, GuiColors.RGB_GREY, this.progress);
             int colorBar = this.selected ? GuiColors.ARGB_GREEN : GuiColors.ARGB_TRANSPARENT;
          

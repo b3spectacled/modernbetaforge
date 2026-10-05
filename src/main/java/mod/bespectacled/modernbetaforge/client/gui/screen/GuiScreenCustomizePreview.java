@@ -296,11 +296,11 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         progressLen = MathHelper.clamp(progressLen, 0.0, progressBarLen);
         this.progressLen = progressLen;
         
-        drawRect(viewportX, viewportY, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_TRANS_GREY);
-        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY - 1, GuiColors.ARGB_LIGHT_GREY);
-        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_GREY);
-        this.drawVerticalLine(viewportX - 1, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_LIGHT_GREY);
-        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_GREY);
+        drawRect(viewportX, viewportY, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_TRANS_GREY_050_000);
+        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY - 1, GuiColors.ARGB_GREY_224);
+        this.drawHorizontalLine(viewportX - 1, viewportX + viewportSize, viewportY + viewportSize, GuiColors.ARGB_GREY_160);
+        this.drawVerticalLine(viewportX - 1, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_GREY_224);
+        this.drawVerticalLine(viewportX + viewportSize, viewportY - 1, viewportY + viewportSize, GuiColors.ARGB_GREY_160);
         
         String text;
         int textLen;
@@ -339,10 +339,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     }
                 } else {
                     DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, GuiColors.ARGB_TRANS_GREEN);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
-                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_GREY);
-                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_LIGHT_GREY);
-                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_GREY);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_GREY_224);
+                    this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_GREY_160);
+                    this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_GREY_224);
+                    this.drawVerticalLine(progressBarR + 1, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_GREY_160);
                     
                     this.drawCenteredString(this.fontRenderer, String.format("%d%%", (int)(this.progress * 100.0)), centerX, progressHeight, GuiColors.RGB_WHITE);
                 }
@@ -833,7 +833,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void drawProgressBox(int boxL, int boxR, int boxT, int boxB) {
         if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
-            drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_TRANS_DARK_GREY);
+            drawRect(boxL, boxT, boxR, boxB, GuiColors.ARGB_TRANS_GREY_200_000);
         }
     }
     
@@ -862,7 +862,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int textX = rectL + paddingX;
             int textY = rectT + paddingY + 1;
             
-            drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_DARK_GREY);
+            drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_GREY_200_000);
             this.fontRenderer.drawStringWithShadow(text, textX, textY, GuiColors.RGB_WHITE);
         }
     }
@@ -898,7 +898,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textY0 = rectT + paddingY + 1;
         int textY1 = textY0 + this.fontRenderer.FONT_HEIGHT + 3;
 
-        drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_DARK_GREY);
+        drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_GREY_200_000);
         this.drawString(this.fontRenderer, text0, textX, textY0, GuiColors.RGB_WHITE);
         this.drawString(this.fontRenderer, text1, textX, textY1, GuiColors.RGB_WHITE);
     }

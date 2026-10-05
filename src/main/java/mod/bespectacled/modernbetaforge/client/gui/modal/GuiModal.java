@@ -114,10 +114,10 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         double texU = modalWidth * 0.0625;
         double texV = modalHeight * 0.0625;
         
-        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, GuiColors.ARGB_LIGHT_GREY);
-        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, GuiColors.ARGB_GREY);
-        this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_LIGHT_GREY);
-        this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_GREY);
+        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY - modalHeight - 1, GuiColors.ARGB_GREY_224);
+        this.drawHorizontalLine(centerX - modalWidth - 1, centerX + modalWidth, centerY + modalHeight, GuiColors.ARGB_GREY_160);
+        this.drawVerticalLine(centerX - modalWidth - 1, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_GREY_224);
+        this.drawVerticalLine(centerX + modalWidth, centerY - modalHeight - 1, centerY + modalHeight, GuiColors.ARGB_GREY_160);
         
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
