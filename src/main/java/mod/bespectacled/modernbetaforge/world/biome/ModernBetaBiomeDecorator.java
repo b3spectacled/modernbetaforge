@@ -22,6 +22,7 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClayOre;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
+import mod.bespectacled.modernbetaforge.world.feature.WorldGenSpring;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
@@ -43,7 +44,6 @@ import net.minecraft.world.gen.feature.WorldGenDeadBush;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
@@ -66,7 +66,6 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
     
     private static final WorldGenerator FEATURE_LAVA_LAKES = new WorldGenLakes(Blocks.LAVA);
     private static final WorldGenerator FEATURE_DUNGEONS = new WorldGenDungeons();
-    private static final WorldGenerator FEATURE_LAVA_FALL = new WorldGenLiquids(Blocks.FLOWING_LAVA);
     
     private static final Set<Block> VANILLA_FLUIDS = ImmutableSet.of(Blocks.WATER, Blocks.FLOWING_WATER, Blocks.LAVA, Blocks.FLOWING_LAVA);
     
@@ -208,13 +207,13 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
             fluidBlock = Blocks.FLOWING_WATER;
         }
         
-        WorldGenerator worldGenLiquids = new WorldGenLiquids(fluidBlock);
+        WorldGenerator worldGenSpring = new WorldGenSpring(fluidBlock, settings);
         for (int i = 0; i < 50; ++i) {
             int x = startX + random.nextInt(16) + 8;
             int y = random.nextInt(random.nextInt(height - 8 - floor) + 8) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
-            worldGenLiquids.generate(world, random, mutablePos.setPos(x, y, z));
+            worldGenSpring.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     
@@ -222,12 +221,15 @@ public abstract class ModernBetaBiomeDecorator extends BiomeDecorator {
         int startX = startPos.getX();
         int startZ = startPos.getZ();
 
+        ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(world);
+        WorldGenerator worldGenSpring = new WorldGenSpring(Blocks.FLOWING_LAVA, settings);
+        
         for (int i = 0; i < 20; ++i) {
             int x = startX + random.nextInt(16) + 8;
             int y = random.nextInt(random.nextInt(random.nextInt(height - 16 - floor) + 8) + 8) + floor;
             int z = startZ + random.nextInt(16) + 8;
             
-            FEATURE_LAVA_FALL.generate(world, random, mutablePos.setPos(x, y, z));
+            worldGenSpring.generate(world, random, mutablePos.setPos(x, y, z));
         }
     }
     

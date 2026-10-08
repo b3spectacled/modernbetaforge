@@ -10,10 +10,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenHellSpring extends WorldGenerator {
-    private final Block block;
+    private final Block blockLiquid;
     
-    public WorldGenHellSpring(Block block) {
-        this.block = block;
+    public WorldGenHellSpring(Block blockLiquid) {
+        this.blockLiquid = blockLiquid;
     }
     
     @Override
@@ -70,7 +70,7 @@ public class WorldGenHellSpring extends WorldGenerator {
         }
         
         if (sidesClosed == 4 && sidesOpened == 1) {
-            IBlockState blockState = this.block.getDefaultState();
+            IBlockState blockState = this.blockLiquid.getDefaultState();
             world.setBlockState(pos, blockState, 2);
             world.immediateBlockTick(pos, blockState, random);
         }
