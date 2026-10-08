@@ -12,6 +12,7 @@ import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMine
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
 import mod.bespectacled.modernbetaforge.compat.cubicchunks.CompatCubicChunks;
+import mod.bespectacled.modernbetaforge.compat.defiledlands.CompatDefiledLands;
 import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.compat.dynamictrees.CompatDynamicTrees;
 import mod.bespectacled.modernbetaforge.compat.futuremc.CompatFutureMC;
@@ -45,6 +46,7 @@ public class ModCompat {
         loadCompat(new CompatDepthsUpdate());
         loadCompat(new CompatCubicChunks());
         loadCompat(new CompatTropicraft());
+        loadCompat(new CompatDefiledLands());
     }
     
     public static boolean isCompatLoaded(String modId) {

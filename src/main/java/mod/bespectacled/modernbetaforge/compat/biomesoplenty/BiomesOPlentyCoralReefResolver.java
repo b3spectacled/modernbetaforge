@@ -3,41 +3,32 @@ package mod.bespectacled.modernbetaforge.compat.biomesoplenty;
 import java.util.function.Predicate;
 
 import biomesoplenty.api.biome.BOPBiomes;
-import mod.bespectacled.modernbetaforge.api.world.biome.BiomeResolverAddSingleBiome;
 import mod.bespectacled.modernbetaforge.api.world.chunk.source.ChunkSource;
-import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
+import mod.bespectacled.modernbetaforge.world.biome.BiomeResolverNonReleaseSingle;
 import mod.bespectacled.modernbetaforge.world.biome.injector.BiomeInjectionRules.BiomeInjectionContext;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-public class BiomesOPlentyCoralReefResolver extends BiomeResolverAddSingleBiome {
-    private final boolean isReleaseBiomeSource;
-    private final boolean useCompat;
-
+public class BiomesOPlentyCoralReefResolver extends BiomeResolverNonReleaseSingle {
     public BiomesOPlentyCoralReefResolver(ChunkSource chunkSource, ModernBetaGeneratorSettings settings) {
         super(
-            BOPBiomes.coral_reef.get(),
-            chunkSource.getSeed(),
+            chunkSource,
+            settings,
+            BOPBiomes.coral_reef.get().getRegistryName(),
             2027L,
             26183L,
             settings.getFloatProperty(CompatBiomesOPlenty.KEY_CORAL_REEF_CHANCE),
-            settings.getFloatProperty(CompatBiomesOPlenty.KEY_CORAL_REEF_NOISE_SCALE)
+            settings.getFloatProperty(CompatBiomesOPlenty.KEY_CORAL_REEF_NOISE_SCALE),
+            settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT),
+            Type.OCEAN
         );
-        
-        this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
-        this.useCompat = settings.getBooleanProperty(CompatBiomesOPlenty.KEY_USE_COMPAT);
-    }
-    
-    @Override
-    public boolean useCustomResolver() {
-        return this.useCompat && this.isReleaseBiomeSource;
     }
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context ->
-            BiomeDictionary.hasType(context.getBiome(), Type.OCEAN) &&
-            !BiomeDictionary.hasType(context.getBiome(), Type.COLD);
+        Predicate<BiomeInjectionContext> predicate = super.getCustomPredicate();
+        
+        return context -> predicate.test(context) && !BiomeDictionary.hasType(context.getBiome(), Type.COLD);
     }
 }

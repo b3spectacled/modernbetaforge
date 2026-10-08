@@ -9,6 +9,7 @@ import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.compat.biomesoplenty.CompatBiomesOPlenty;
 import mod.bespectacled.modernbetaforge.compat.buildcraft.CompatBuildCraftEnergy;
 import mod.bespectacled.modernbetaforge.compat.cubicchunks.CompatCubicChunks;
+import mod.bespectacled.modernbetaforge.compat.defiledlands.CompatDefiledLands;
 import mod.bespectacled.modernbetaforge.compat.depthsupdate.CompatDepthsUpdate;
 import mod.bespectacled.modernbetaforge.compat.oe.CompatOE;
 import mod.bespectacled.modernbetaforge.compat.thaumcraft.CompatThaumcraft;
@@ -27,6 +28,7 @@ public class ClientModCompat {
         loadCompat(new CompatOE());
         loadCompat(new CompatDepthsUpdate());
         loadCompat(new CompatCubicChunks());
+        loadCompat(new CompatDefiledLands());
     }
     
     public static boolean isModLoaded(String modId) {
