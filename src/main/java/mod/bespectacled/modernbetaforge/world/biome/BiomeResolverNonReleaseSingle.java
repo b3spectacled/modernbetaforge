@@ -15,10 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSingleBiome {
-    private final boolean enabled;
-    private final boolean isReleaseBiomeSource;
-    
     protected final Set<BiomeDictionary.Type> replacementTypes;
+    protected final boolean enabled;
+    protected final boolean isReleaseBiomeSource;
 
     public BiomeResolverNonReleaseSingle(
         ChunkSource chunkSource,
@@ -32,11 +31,10 @@ public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSing
         BiomeDictionary.Type ...replacementTypes
     ) {
         super(biomeKey, chunkSource.getSeed(), climateSeed, detailSeed, chance, noiseScale);
-        
+
+        this.replacementTypes = ImmutableSet.copyOf(Arrays.asList(replacementTypes));
         this.enabled = enabled;
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
-        
-        this.replacementTypes = ImmutableSet.copyOf(Arrays.asList(replacementTypes));
     }
     
     @Override
