@@ -224,11 +224,6 @@ public class CompatOE implements Compat, ClientCompat {
     }
 
     @Override
-    public String getModId() {
-        return MOD_ID;
-    }
-
-    @Override
     public void loadClient() {
         configWorldGen configWorld = ConfigHandler.worldGen;
         configBlock configBlock = ConfigHandler.block;
@@ -266,6 +261,11 @@ public class CompatOE implements Compat, ClientCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_USE_WARM_OCEANS, new GuiPredicate(settings ->
             !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
+    }
+
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
 }

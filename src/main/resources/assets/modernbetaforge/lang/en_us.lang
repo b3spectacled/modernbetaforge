@@ -534,6 +534,8 @@ createWorld.customize.custom.modernbetaforge.useClimateFeatures.tooltip=Use samp
 ## Page 8 - Addons
 createWorld.customize.custom.modernbetaforge.propertyScreen=Open
 
+# Biomes O' Plenty
+
 createWorld.customize.custom.compatbiomesoplenty=Biomes O' Plenty Compatibility
 createWorld.customize.custom.compatbiomesoplenty.usecompat=Enable Compatibility
 createWorld.customize.custom.compatbiomesoplenty.coralreefchance=Coral Reef Chance
@@ -582,6 +584,8 @@ createWorld.customize.custom.compatbiomesoplenty.rainscheme.info=Biomes O' Plent
 
 createWorld.customize.custom.compatbiomesoplenty.rainscheme.tooltip=Determines biome distribution based on rainfall scheme.
 
+# BuildCraft Energy
+
 createWorld.customize.custom.compatbuildcraftenergy=BuildCraft Energy Compatibility
 createWorld.customize.custom.compatbuildcraftenergy.info=Required for non-release biome sources only.
 createWorld.customize.custom.compatbuildcraftenergy.usecompat=Enable Compatibility
@@ -596,6 +600,8 @@ createWorld.customize.custom.compatbuildcraftenergy.oiloceanchance.tooltip=Chanc
 createWorld.customize.custom.compatbuildcraftenergy.oildesertnoisescale.tooltip=Scales the noise used to determine Oil Desert biome placement. Higher values will generate more varied placements.
 createWorld.customize.custom.compatbuildcraftenergy.oiloceannoisescale.tooltip=Scales the noise used to determine Oil Ocean biome placement. Higher values will generate more varied placements.
 
+# Thaumcraft
+
 createWorld.customize.custom.compatthaumcraft=Thaumcraft Compatibility
 createWorld.customize.custom.compatthaumcraft.info=Required for non-release biome sources only.
 createWorld.customize.custom.compatthaumcraft.usecompat=Enable Compatibility
@@ -606,9 +612,14 @@ createWorld.customize.custom.compatthaumcraft.usecompat.tooltip=Enable additiona
 createWorld.customize.custom.compatthaumcraft.magicalforestchance.tooltip=Chance of the Magical Forest biome generating in forests.
 createWorld.customize.custom.compatthaumcraft.magicalforestnoisescale.tooltip=Scales the noise used to determine Magical Forest biome placement. Higher values will generate more varied placements.
 
+# Future MC
+
 createWorld.customize.custom.compatfuturemc=Future MC Compatibility
 createWorld.customize.custom.compatfuturemc.beenestflowercheck=Bee Nest Flower Check
+
 createWorld.customize.custom.compatfuturemc.beenestflowercheck.tooltip=Check whether there are flowers nearby before generating bee nests.
+
+# Oceanic Expanse
 
 createWorld.customize.custom.compatoe=Oceanic Expanse Compatibility
 createWorld.customize.custom.compatoe.usecompat=Enable Compatibility
@@ -635,6 +646,8 @@ createWorld.customize.custom.compatoe.useshipwrecks.tooltip=Generate shipwrecks 
 createWorld.customize.custom.compatoe.usefrozenoceans.tooltip=Generate Frozen Ocean features in portions of the Beta Frozen Ocean biome.
 createWorld.customize.custom.compatoe.usewarmoceans.tooltip=Generate Warm Ocean features in portions of the Beta Ocean biome.
 
+# Depths Update
+
 createWorld.customize.custom.compatdepthsupdate=Depths Update Compatibility
 createWorld.customize.custom.compatdepthsupdate.usecompat=Enable Compatibility
 createWorld.customize.custom.compatdepthsupdate.usedeepslate=Deepslate Layer
@@ -648,10 +661,47 @@ createWorld.customize.custom.compatdepthsupdate.deepslateblock.tooltip=Deepslate
 createWorld.customize.custom.compatdepthsupdate.deepslatemaxy.tooltip=Deepslate layer maximum height level.
 createWorld.customize.custom.compatdepthsupdate.deepslaterange.tooltip=Deepslate layer transition range.
 
-createWorld.customize.custom.compatdepthsupdate.tooltip=For best results, please disable the 'Extend Custom World Types' setting in Depths Update's mod config.
+# Cubic Chunks
 
 createWorld.customize.custom.compatcubicchunks=Cubic Chunks Compatibility
-createWorld.customize.custom.compatcubicchunks.tooltip=For performance, minimum and maximum world heights are %d and %d respectively.
+
+# Defiled Lands
+
+createWorld.customize.custom.compatdefiledlands=Defiled Lands Compatibility
+createWorld.customize.custom.compatdefiledlands.usecompat=Enable Compatibility
+createWorld.customize.custom.compatdefiledlands.defileddesertchance=Defiled Desert Chance
+createWorld.customize.custom.compatdefiledlands.defiledhillschance=Defiled Hills Chance
+createWorld.customize.custom.compatdefiledlands.defilediceplainschance=Defiled Ice Plains Chance
+createWorld.customize.custom.compatdefiledlands.defiledplainschance=Defiled Plains Chance
+createWorld.customize.custom.compatdefiledlands.defiledswampchance=Defiled Swamp Chance
+createWorld.customize.custom.compatdefiledlands.tenebraforestchance=Tenebra Forest Chance
+createWorld.customize.custom.compatdefiledlands.vilespineforestchance=Vilespine Forest Chance
+createWorld.customize.custom.compatdefiledlands.defileddesertnoisescale=Defiled Desert Noise Scale
+createWorld.customize.custom.compatdefiledlands.defiledhillsnoisescale=Defiled Hills Noise Scale
+createWorld.customize.custom.compatdefiledlands.defilediceplainsnoisescale=Defiled Ice Plains Noise Scale
+createWorld.customize.custom.compatdefiledlands.defiledplainsnoisescale=Defiled Plains Noise Scale
+createWorld.customize.custom.compatdefiledlands.defiledswampnoisescale=Defiled Swamp Noise Scale
+createWorld.customize.custom.compatdefiledlands.tenebraforestnoisescale=Tenebra Forest Noise Scale
+createWorld.customize.custom.compatdefiledlands.vilespineforestnoisescale=Vilespine Forest Noise Scale
+
+createWorld.customize.custom.compatdefiledlands.usecompat.tooltip=Enable additional compatibility for Defiled Lands when using non-Release biome sources. This is not needed for Release/BoP biome sources, where Defiled Lands biomes already generate.
+createWorld.customize.custom.compatdefiledlands.defileddesertchance.tooltip=Chance of the Defiled Desert biome generating in deserts.
+createWorld.customize.custom.compatdefiledlands.defiledhillschance.tooltip=Chance of the Defiled Hills biome generating in mountains.
+createWorld.customize.custom.compatdefiledlands.defilediceplainschance.tooltip=Chance of the Defiled Ice Plains biome generating in snowy/ice plains.
+createWorld.customize.custom.compatdefiledlands.defiledplainschance.tooltip=Chance of the Defiled Plains biome generating in plains.
+createWorld.customize.custom.compatdefiledlands.defiledswampchance.tooltip=Chance of the Defiled Swamp generating in swamps.
+createWorld.customize.custom.compatdefiledlands.tenebraforestchance.tooltip=Chance of the Tenebra Forest biome generating in forests.
+createWorld.customize.custom.compatdefiledlands.vilespineforestchance.tooltip=Chance of the Vilespine Forest biome generating in forests.
+createWorld.customize.custom.compatdefiledlands.defileddesertnoisescale.tooltip=Scales the noise used to determine Defiled Desert biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.defiledhillsnoisescale.tooltip=Scales the noise used to determine Defiled Hills biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.defilediceplainsnoisescale.tooltip=Scales the noise used to determine Defiled Ice Plains biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.defiledplainsnoisescale.tooltip=Scales the noise used to determine Defiled Plains biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.defiledswampnoisescale.tooltip=Scales the noise used to determine Defiled Swamp biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.tenebraforestnoisescale.tooltip=Scales the noise used to determine Tenebra Forest biome placement. Higher values will generate more varied placements.
+createWorld.customize.custom.compatdefiledlands.vilespineforestnoisescale.tooltip=Scales the noise used to determine Vilespine Forest biome placement. Higher values will generate more varied placements.
+
+
+## Primary Settings
 
 # Main Settings Names
 createWorld.customize.custom.modernbetaforge.chunkSource.modernbetaforge.beta=Beta

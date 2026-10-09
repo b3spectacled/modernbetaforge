@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 
 public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSingleBiome {
-    protected final Set<BiomeDictionary.Type> replacementTypes;
+    protected final Set<BiomeDictionary.Type> requiredTypes;
     protected final boolean enabled;
     protected final boolean isReleaseBiomeSource;
 
@@ -28,11 +28,11 @@ public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSing
         float chance,
         float noiseScale,
         boolean enabled,
-        BiomeDictionary.Type ...replacementTypes
+        BiomeDictionary.Type ...requiredTypes
     ) {
         super(biomeKey, chunkSource.getSeed(), climateSeed, detailSeed, chance, noiseScale);
 
-        this.replacementTypes = ImmutableSet.copyOf(Arrays.asList(replacementTypes));
+        this.requiredTypes = ImmutableSet.copyOf(Arrays.asList(requiredTypes));
         this.enabled = enabled;
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());
     }
@@ -44,7 +44,7 @@ public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSing
 
     @Override
     public Predicate<BiomeInjectionContext> getCustomPredicate() {
-        return context -> this.replacementTypes.stream().anyMatch(type -> BiomeDictionary.hasType(context.getBiome(), type));
+        return context -> BiomeDictionary.getTypes(context.getBiome()).containsAll(this.requiredTypes);
     }
 
 }

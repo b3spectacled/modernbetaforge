@@ -49,8 +49,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
     public static final ResourceLocation KEY_KELP_FOREST_CHANCE = createKey("kelpForestChance");
     public static final ResourceLocation KEY_CORAL_REEF_NOISE_SCALE = createKey("coralReefNoiseScale");
     public static final ResourceLocation KEY_KELP_FOREST_NOISE_SCALE = createKey("kelpForestNoiseScale");
-    public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = createKey("resolverCoralReef");
-    public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = createKey("resolverKelpForest");
+    public static final ResourceLocation KEY_CORAL_REEF_RESOLVER = createKey("coralReefResolver");
+    public static final ResourceLocation KEY_KELP_FOREST_RESOLVER = createKey("kelpForestResolver");
 
     public static final ResourceLocation KEY_BIOME_SOURCE = createKey("bop");
     public static final ResourceLocation KEY_BIOME_SIZE = createKey("biomeSize");
@@ -80,11 +80,6 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBetaRegistries.PROPERTY.register(KEY_LAND_SCHEME, new ListProperty(BOPWorldSettings.LandMassScheme.VANILLA.name().toLowerCase(), landMassSchemes));
         ModernBetaRegistries.PROPERTY.register(KEY_TEMP_SCHEME, new ListProperty(BOPWorldSettings.TemperatureVariationScheme.MEDIUM_ZONES.name().toLowerCase(), tempVarySchemes));
         ModernBetaRegistries.PROPERTY.register(KEY_RAIN_SCHEME, new ListProperty(BOPWorldSettings.RainfallVariationScheme.MEDIUM_ZONES.name().toLowerCase(), rainVarySchemes));
-    }
-    
-    @Override
-    public String getModId() {
-        return MOD_ID;
     }
     
     @Override
@@ -119,6 +114,11 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ));
         
         ModernBetaClientRegistries.GUI_PRESET.register(GuiCustomizePresets.BOP, GuiCustomizePresets.PRESET_BOP);
+    }
+    
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
     @Override

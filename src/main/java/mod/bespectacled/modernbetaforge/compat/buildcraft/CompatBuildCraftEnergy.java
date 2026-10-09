@@ -20,9 +20,8 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
     public static final ResourceLocation KEY_OIL_OCEAN_CHANCE = new ResourceLocation(ADDON_ID, "oilOceanChance");
     public static final ResourceLocation KEY_OIL_DESERT_NOISE_SCALE = new ResourceLocation(ADDON_ID, "oilDesertNoiseScale");
     public static final ResourceLocation KEY_OIL_OCEAN_NOISE_SCALE = new ResourceLocation(ADDON_ID, "oilOceanNoiseScale");
-    
-    public static final ResourceLocation KEY_OIL_DESERT_RESOLVER = new ResourceLocation(ADDON_ID, "resolverOilDesert");
-    public static final ResourceLocation KEY_OIL_OCEAN_RESOLVER = new ResourceLocation(ADDON_ID, "resolverOilOcean");
+    public static final ResourceLocation KEY_OIL_DESERT_RESOLVER = new ResourceLocation(ADDON_ID, "oilDesertResolver");
+    public static final ResourceLocation KEY_OIL_OCEAN_RESOLVER = new ResourceLocation(ADDON_ID, "oilOceanResolver");
     
     @Override
     public void load() {
@@ -34,11 +33,6 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
         
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_OIL_DESERT_RESOLVER, BuildCraftOilDesertResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_OIL_OCEAN_RESOLVER, BuildCraftOilOceanResolver::new);
-    }
-
-    @Override
-    public String getModId() {
-        return MOD_ID;
     }
 
     @Override
@@ -58,6 +52,11 @@ public class CompatBuildCraftEnergy implements Compat, ClientCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_OIL_OCEAN_NOISE_SCALE, new GuiPredicate(settings ->
             !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
+    }
+
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
 }

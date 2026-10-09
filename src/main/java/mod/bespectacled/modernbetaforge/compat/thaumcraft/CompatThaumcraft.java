@@ -18,8 +18,7 @@ public class CompatThaumcraft implements Compat, ClientCompat {
     public static final ResourceLocation KEY_USE_COMPAT = new ResourceLocation(ADDON_ID, "useCompat");
     public static final ResourceLocation KEY_MAGICAL_FOREST_CHANCE = new ResourceLocation(ADDON_ID, "magicalForestChance");
     public static final ResourceLocation KEY_MAGICAL_FOREST_NOISE_SCALE = new ResourceLocation(ADDON_ID, "magicalForestNoiseScale");
-    
-    public static final ResourceLocation KEY_MAGICAL_FOREST_RESOLVER = new ResourceLocation(ADDON_ID, "resolverMagicalForest");
+    public static final ResourceLocation KEY_MAGICAL_FOREST_RESOLVER = new ResourceLocation(ADDON_ID, "magicalForestResolver");
 
     @Override
     public void load() {
@@ -28,11 +27,6 @@ public class CompatThaumcraft implements Compat, ClientCompat {
         ModernBetaRegistries.PROPERTY.register(KEY_MAGICAL_FOREST_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
         
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_MAGICAL_FOREST_RESOLVER, ThaumcraftMagicalForestResolver::new);
-    }
-
-    @Override
-    public String getModId() {
-        return MOD_ID;
     }
 
     @Override
@@ -46,6 +40,11 @@ public class CompatThaumcraft implements Compat, ClientCompat {
         ModernBetaClientRegistries.GUI_PREDICATE.register(KEY_MAGICAL_FOREST_NOISE_SCALE, new GuiPredicate(settings -> 
             !GuiPredicates.isBiomeVanillaOrBoP(settings) && settings.getBooleanProperty(KEY_USE_COMPAT)
         ));
+    }
+
+    @Override
+    public String getModId() {
+        return MOD_ID;
     }
 
 }
