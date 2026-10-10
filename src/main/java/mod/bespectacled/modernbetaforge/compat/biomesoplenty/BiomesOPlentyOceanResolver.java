@@ -30,7 +30,8 @@ public abstract class BiomesOPlentyOceanResolver extends BiomeResolverAddSingleB
             climateSeed,
             detailSeed,
             chance,
-            noiseScale
+            noiseScale,
+            settings.simpleClimateVersion
         );
         
         this.isReleaseBiomeSource = settings.biomeSource.equals(ModernBetaBuiltInTypes.Biome.RELEASE.getRegistryKey());

@@ -30,7 +30,7 @@ public abstract class BiomeResolverNonReleaseSingle extends BiomeResolverAddSing
         boolean enabled,
         BiomeDictionary.Type ...requiredTypes
     ) {
-        super(biomeKey, chunkSource.getSeed(), climateSeed, detailSeed, chance, noiseScale);
+        super(biomeKey, chunkSource.getSeed(), climateSeed, detailSeed, chance, noiseScale, settings.simpleClimateVersion);
 
         this.requiredTypes = ImmutableSet.copyOf(Arrays.asList(requiredTypes));
         this.enabled = enabled;

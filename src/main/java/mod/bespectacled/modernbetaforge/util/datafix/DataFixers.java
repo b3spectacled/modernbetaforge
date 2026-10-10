@@ -23,6 +23,7 @@ import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiome;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.indev.BiomeIndev;
 import mod.bespectacled.modernbetaforge.world.biome.biomes.infdev.BiomeInfdev;
 import mod.bespectacled.modernbetaforge.world.biome.climate.BetaClimateMap;
+import mod.bespectacled.modernbetaforge.world.biome.climate.SimpleClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.indev.IndevHouse;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
@@ -458,6 +459,10 @@ public class DataFixers {
         }
         
         return new JsonPrimitive(useSprings);
+    }
+    
+    public static JsonElement fixSimpleClimateVersion(JsonObject jsonObject) {
+        return new JsonPrimitive(SimpleClimateSampler.VERSION_V1_10_2_0);
     }
     
     private static boolean isResourceFormat(String resourceString) {

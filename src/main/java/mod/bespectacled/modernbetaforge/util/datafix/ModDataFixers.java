@@ -22,6 +22,7 @@ public class ModDataFixers {
     private static final int DATA_VERSION_V1_7_1_0 = 1710;
     private static final int DATA_VERSION_V1_8_1_0 = 1810;
     private static final int DATA_VERSION_V1_10_1_0 = 11010;
+    private static final int DATA_VERSION_V1_10_3_0 = 11030;
     
     public static final ResourceLocation BIOME_MAP_FIX_KEY = ModernBeta.createRegistryKey("BIOME_MAP_FIX");
     public static final ResourceLocation SANDSTONE_WOLVES_SURFACE_FIX_KEY = ModernBeta.createRegistryKey("SANDSTONE_WOLVES_SURFACE_FIX");
@@ -40,6 +41,7 @@ public class ModDataFixers {
     public static final ResourceLocation RIVER_BIOMES_FIX_KEY = ModernBeta.createRegistryKey("RIVER_BIOMES_FIX");
     public static final ResourceLocation RELEASE_WORLD_SPAWNER_FIX_KEY = ModernBeta.createRegistryKey("RELEASE_WORLD_SPAWNER_FIX");
     public static final ResourceLocation DISKS_FIX_2_KEY = ModernBeta.createRegistryKey("DISKS_FIX_2");
+    public static final ResourceLocation SIMPLE_CLIMATE_FIX_KEY = ModernBeta.createRegistryKey("SIMPLE_CLIMATE_FIX");
     
     /*
      * Reference: https://gist.github.com/JoshieGemFinder/982830b6d66fccec04c1d1912ca76246
@@ -194,5 +196,10 @@ public class ModDataFixers {
         new DataFix(NbtTags.USE_GRAVEL_DISKS, DataFixers::fixGravelDisk),
         new DataFix(NbtTags.USE_CLAY_DISKS, DataFixers::fixClayDisk),
         new DataFix(NbtTags.USE_SPRINGS, DataFixers::fixSprings)
+    );
+    
+    public static final ModDataFix SIMPLE_CLIMATE_FIX = ModDataFix.createModDataFix(
+        DATA_VERSION_V1_10_3_0,
+        new DataFix(NbtTags.SIMPLE_CLIMATE_VERSION, DataFixers::fixSimpleClimateVersion)
     );
 }

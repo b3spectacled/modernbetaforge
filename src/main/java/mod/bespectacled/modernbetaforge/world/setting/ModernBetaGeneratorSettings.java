@@ -39,6 +39,7 @@ import mod.bespectacled.modernbetaforge.registry.ModernBetaBuiltInTypes;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.NbtTags;
 import mod.bespectacled.modernbetaforge.world.biome.ModernBetaBiomeTags;
+import mod.bespectacled.modernbetaforge.world.biome.climate.SimpleClimateSampler;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerType;
 import mod.bespectacled.modernbetaforge.world.biome.layer.GenLayerVersion;
 import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
@@ -175,6 +176,7 @@ public class ModernBetaGeneratorSettings {
     public final boolean useTerrainCoordFix;
     public final int snowLineOffset;
     public final boolean useClimateFeatures;
+    public final int simpleClimateVersion;
     
     public final float biomeDepthWeight;
     public final float biomeDepthOffset;
@@ -426,6 +428,7 @@ public class ModernBetaGeneratorSettings {
         this.useTerrainCoordFix = factory.useTerrainCoordFix;
         this.snowLineOffset = factory.snowLineOffset;
         this.useClimateFeatures = factory.useClimateFeatures;
+        this.simpleClimateVersion = factory.simpleClimateVersion;
         
         this.biomeDepthWeight = factory.biomeDepthWeight;
         this.biomeDepthOffset = factory.biomeDepthOffset;
@@ -798,6 +801,7 @@ public class ModernBetaGeneratorSettings {
         public boolean useTerrainCoordFix;
         public int snowLineOffset;
         public boolean useClimateFeatures;
+        public int simpleClimateVersion;
         
         public float biomeDepthWeight;
         public float biomeDepthOffset;
@@ -1049,6 +1053,7 @@ public class ModernBetaGeneratorSettings {
             this.useTerrainCoordFix = false;
             this.snowLineOffset = 64;
             this.useClimateFeatures = true;
+            this.simpleClimateVersion = SimpleClimateSampler.getVersion();
             
             this.biomeDepthWeight = 1.0f;
             this.biomeDepthOffset = 0.0f;
@@ -1323,6 +1328,7 @@ public class ModernBetaGeneratorSettings {
                 this.useTerrainCoordFix == factory.useTerrainCoordFix &&
                 this.snowLineOffset == factory.snowLineOffset &&
                 this.useClimateFeatures == factory.useClimateFeatures &&
+                this.simpleClimateVersion == factory.simpleClimateVersion &&
                 
                 Float.compare(factory.biomeDepthWeight, this.biomeDepthWeight) == 0 &&
                 Float.compare(factory.biomeDepthOffset, this.biomeDepthOffset) == 0 &&
@@ -1578,6 +1584,7 @@ public class ModernBetaGeneratorSettings {
             hashCode = 31 * hashCode + (this.useTerrainCoordFix ? 1 : 0);
             hashCode = 31 * hashCode + this.snowLineOffset;
             hashCode = 31 * hashCode + (this.useClimateFeatures ? 1 : 0);
+            hashCode = 31 * hashCode + this.simpleClimateVersion;
             
             hashCode = 31 * hashCode + ((this.biomeDepthWeight == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthWeight));
             hashCode = 31 * hashCode + ((this.biomeDepthOffset == 0.0f) ? 0 : Float.floatToIntBits(this.biomeDepthOffset));
@@ -1868,6 +1875,7 @@ public class ModernBetaGeneratorSettings {
                 factory.useTerrainCoordFix = JsonUtils.getBoolean(jsonObject, NbtTags.USE_TERRAIN_COORD_FIX, factory.useTerrainCoordFix);
                 factory.snowLineOffset = JsonUtils.getInt(jsonObject, NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
                 factory.useClimateFeatures = JsonUtils.getBoolean(jsonObject, NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
+                factory.simpleClimateVersion = JsonUtils.getInt(jsonObject, NbtTags.SIMPLE_CLIMATE_VERSION, factory.simpleClimateVersion);
                 
                 factory.biomeDepthWeight = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_WEIGHT, factory.biomeDepthWeight);
                 factory.biomeDepthOffset = JsonUtils.getFloat(jsonObject, NbtTags.BIOME_DEPTH_OFFSET, factory.biomeDepthOffset);
@@ -2504,6 +2512,7 @@ public class ModernBetaGeneratorSettings {
 
             jsonObject.addProperty(NbtTags.USE_CLIMATE_FEATURES, factory.useClimateFeatures);
             jsonObject.addProperty(NbtTags.SNOW_LINE_OFFSET, factory.snowLineOffset);
+            jsonObject.addProperty(NbtTags.SIMPLE_CLIMATE_VERSION, factory.simpleClimateVersion);
 
             jsonObject.addProperty(NbtTags.DESERT_BIOME_BASE, factory.desertBiomeBase);
             jsonObject.addProperty(NbtTags.DESERT_BIOME_OCEAN, factory.desertBiomeOcean);

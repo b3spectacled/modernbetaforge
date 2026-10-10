@@ -157,6 +157,7 @@ public class NbtTags {
     
     public static final String SNOW_LINE_OFFSET = "snowLineOffset";
     public static final String USE_CLIMATE_FEATURES = "useClimateFeatures";
+    public static final String SIMPLE_CLIMATE_VERSION = "simpleClimateVersion";
     
     public static final String TEMP_NOISE_SCALE = "tempNoiseScale";
     public static final String RAIN_NOISE_SCALE = "rainNoiseScale";

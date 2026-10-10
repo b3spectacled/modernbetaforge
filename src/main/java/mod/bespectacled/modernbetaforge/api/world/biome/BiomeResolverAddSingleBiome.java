@@ -22,9 +22,10 @@ public abstract class BiomeResolverAddSingleBiome implements BiomeResolverCustom
      * @param detailSeed The detail seed multiplier. Ideally should be an odd prime number.
      * @param chance The threshold for the climate noise to meet to return the biome. Between 0.0 and 1.0 inclusive.
      * @param noiseScale The noise scale for x/z coordinates when sampling.
+     * @param version The climate sampler version.
      */
-    public BiomeResolverAddSingleBiome(ResourceLocation biome, long seed, long climateSeed, long detailSeed, float chance, float noiseScale) {
-        this(ForgeRegistryUtil.get(biome, ForgeRegistries.BIOMES), seed, climateSeed, detailSeed, chance, noiseScale);
+    public BiomeResolverAddSingleBiome(ResourceLocation biome, long seed, long climateSeed, long detailSeed, float chance, float noiseScale, int version) {
+        this(ForgeRegistryUtil.get(biome, ForgeRegistries.BIOMES), seed, climateSeed, detailSeed, chance, noiseScale, version);
     }
 
     /**
@@ -36,10 +37,11 @@ public abstract class BiomeResolverAddSingleBiome implements BiomeResolverCustom
      * @param detailSeed The detail seed multiplier. Ideally should be an odd prime number.
      * @param chance The threshold for the climate noise to meet to return the biome. Between 0.0 and 1.0 inclusive.
      * @param noiseScale The noise scale for x/z coordinates when sampling.
+     * @param version The climate sampler version.
      */
-    public BiomeResolverAddSingleBiome(Biome biome, long seed, long climateSeed, long detailSeed, float chance, float noiseScale) {
+    public BiomeResolverAddSingleBiome(Biome biome, long seed, long climateSeed, long detailSeed, float chance, float noiseScale, int version) {
         this.biome = biome;
-        this.climateSampler = new SimpleClimateSampler(seed, climateSeed, detailSeed);
+        this.climateSampler = new SimpleClimateSampler(seed, climateSeed, detailSeed, version);
         this.chance = MathHelper.clamp(chance, 0.0f, 1.0f);
         this.noiseScale = noiseScale;
     }
