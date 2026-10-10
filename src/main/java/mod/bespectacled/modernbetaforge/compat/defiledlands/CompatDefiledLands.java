@@ -45,21 +45,21 @@ public class CompatDefiledLands implements Compat, ClientCompat {
     public void load() {
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_DESERT_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_HILLS_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_ICE_PLAINS_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_PLAINS_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_SWAMP_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_TENEBRA_FOREST_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_VILESPINE_FOREST_CHANCE, new FloatProperty(0.01f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_DESERT_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_HILLS_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_ICE_PLAINS_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_PLAINS_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_SWAMP_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_TENEBRA_FOREST_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_VILESPINE_FOREST_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
 
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_DESERT_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_HILLS_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_ICE_PLAINS_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_PLAINS_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_SWAMP_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_TENEBRA_FOREST_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_VILESPINE_FOREST_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_DESERT_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_HILLS_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_ICE_PLAINS_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_PLAINS_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_DEFILED_SWAMP_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_TENEBRA_FOREST_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_VILESPINE_FOREST_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.f, PropertyGuiType.SLIDER));
         
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_DEFILED_DESERT_RESOLVER, DefiledDesertBiomeResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_DEFILED_HILLS_RESOLVER, DefiledHillsBiomeResolver::new);

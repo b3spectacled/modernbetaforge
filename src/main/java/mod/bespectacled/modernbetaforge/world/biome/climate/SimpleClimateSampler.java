@@ -40,16 +40,19 @@ public class SimpleClimateSampler {
         double climate = this.climateOctaveNoise.sample(x, z, this.climateScale, this.climateScale, 0.25);
         double detail = this.detailOctaveNoise.sample(x, z, this.detailScale, this.detailScale, 0.33333333333333331);
         
-        detail = detail * 0.675;
-        climate = climate * 0.1675;
+        detail = ((detail * 0.675) + 1.0) / 2.0;
+        climate = ((climate * 0.1675) + 1.0) / 2.0;
         climate = climate * 0.99 + detail * 0.01;
         
         return MathHelper.clamp(climate, 0.0, 1.0);
     }
     
     private double sampleV11020(double x, double z) {
-        double climate = this.climateOctaveNoise.sample(x, z, this.climateScale, this.climateScale, 0.25);
-        double detail = this.detailOctaveNoise.sample(x, z, this.detailScale, this.detailScale, 0.33333333333333331);
+        double climateScale = 0.025;
+        double detailScale = 0.050;
+        
+        double climate = this.climateOctaveNoise.sample(x, z, climateScale, climateScale, 0.25);
+        double detail = this.detailOctaveNoise.sample(x, z, detailScale, detailScale, 0.33333333333333331);
         
         detail = detail * 1.1 + 0.5;
         climate = climate * 0.15 + 0.5;

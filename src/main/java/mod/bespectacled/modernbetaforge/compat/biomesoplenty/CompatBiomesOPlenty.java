@@ -70,8 +70,8 @@ public class CompatBiomesOPlenty implements Compat, ClientCompat, BiomeCompat, S
         ModernBetaRegistries.PROPERTY.register(KEY_USE_COMPAT, new BooleanProperty(false));
         ModernBetaRegistries.PROPERTY.register(KEY_CORAL_REEF_CHANCE, new FloatProperty(0.1f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.PROPERTY.register(KEY_KELP_FOREST_CHANCE, new FloatProperty(0.25f, 0.0f, 1.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_CORAL_REEF_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
-        ModernBetaRegistries.PROPERTY.register(KEY_KELP_FOREST_NOISE_SCALE, new FloatProperty(5.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_CORAL_REEF_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
+        ModernBetaRegistries.PROPERTY.register(KEY_KELP_FOREST_NOISE_SCALE, new FloatProperty(1.0f, 1.0f, 20.0f, PropertyGuiType.SLIDER));
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_CORAL_REEF_RESOLVER, BiomesOPlentyCoralReefResolver::new);
         ModernBetaRegistries.BIOME_RESOLVER.register(KEY_KELP_FOREST_RESOLVER, BiomesOPlentyKelpForestResolver::new);
         
