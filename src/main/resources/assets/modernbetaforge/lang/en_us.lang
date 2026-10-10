@@ -700,6 +700,11 @@ createWorld.customize.custom.compatdefiledlands.defiledswampnoisescale.tooltip=S
 createWorld.customize.custom.compatdefiledlands.tenebraforestnoisescale.tooltip=Scales the noise used to determine Tenebra Forest biome placement. Higher values will generate more varied placements.
 createWorld.customize.custom.compatdefiledlands.vilespineforestnoisescale.tooltip=Scales the noise used to determine Vilespine Forest biome placement. Higher values will generate more varied placements.
 
+## Hidden Settings
+# These options are not normally exposed in the GUI, but are listed here so the settings print nicely in the change list screen.
+
+createWorld.customize.custom.modernbetaforge.layerVersion=Layer Version
+createWorld.customize.custom.modernbetaforge.simpleClimateVersion=Simple Climate Version
 
 ## Primary Settings
 
