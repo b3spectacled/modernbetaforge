@@ -17,7 +17,6 @@ import mod.bespectacled.modernbetaforge.world.chunk.ModernBetaChunkGenerator;
 import mod.bespectacled.modernbetaforge.world.feature.OreType;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenClayOre;
 import mod.bespectacled.modernbetaforge.world.feature.WorldGenMinableMutable;
-import mod.bespectacled.modernbetaforge.world.feature.WorldGenNoOp;
 import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -52,63 +51,64 @@ public class MixinBiomeDecorator {
     @Shadow private WorldGenerator diamondGen;
     @Shadow private WorldGenerator lapisGen;
     @Shadow private boolean decorating;
+    @Shadow private int gravelPatchesPerChunk;
+    @Shadow private int sandPatchesPerChunk;
+    @Shadow private int clayPerChunk;
     @Shadow private boolean generateFalls;
     
-    @Unique private WorldGenerator initClayGen;
-    @Unique private WorldGenerator initSandGen;
-    @Unique private WorldGenerator initGravelGen;
-    @Unique private boolean initGenerateFalls;
     @Unique private WorldGenerator clayOreGen;
     
     @Shadow protected void genDecorations(Biome biome, World world, Random random) { }
-    
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void injectConstructor(CallbackInfo info) {
-        this.initClayGen = this.clayGen;
-        this.initSandGen = this.sandGen;
-        this.initGravelGen = this.gravelGen;
-        this.initGenerateFalls = this.generateFalls;
-    }
     
     @Inject(method = "decorate", at = @At("HEAD"), cancellable = true)
     private void injectDecorate(World world, Random random, Biome biome, BlockPos pos, CallbackInfo info) {
         WorldServer worldServer = (WorldServer)world;
         IChunkGenerator chunkGenerator = worldServer.getChunkProvider().chunkGenerator;
         
-        // Reset world generators that are only initialized with the new decorator.
-        this.clayGen = this.initClayGen;
-        this.sandGen = this.initSandGen;
-        this.gravelGen = this.initGravelGen;
-        this.generateFalls = this.initGenerateFalls;
+        // Save patch and fall values
+        int prevGravelPatches = this.gravelPatchesPerChunk;
+        int prevSandPatches = this.sandPatchesPerChunk;
+        int prevClayPatches = this.clayPerChunk;
+        boolean prevGenerateFalls = this.generateFalls;
         
         if (chunkGenerator instanceof ModernBetaChunkGenerator) {
             if (this.decorating) {
                 throw new RuntimeException("Already decorating");
             } else {
-                ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(worldServer);
-                OreType oreType = OreType.fromIdOrElse(settings.oreType, OreType.VANILLA);
-                
-                this.chunkPos = pos;
-                this.chunkProviderSettings = ChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
-                this.dirtGen = createMinable(BlockStates.DIRT, settings.dirtSize, oreType);
-                this.gravelOreGen = createMinable(BlockStates.GRAVEL, settings.gravelSize, oreType);
-                this.graniteGen = createMinable(BlockStates.GRANITE, settings.graniteSize, oreType);
-                this.dioriteGen = createMinable(BlockStates.DIORITE, settings.dioriteSize, oreType);
-                this.andesiteGen = createMinable(BlockStates.ANDESITE, settings.andesiteSize, oreType);
-                this.coalGen = createMinable(BlockStates.COAL_ORE, settings.coalSize, oreType);
-                this.ironGen = createMinable(BlockStates.IRON_ORE, settings.ironSize, oreType);
-                this.goldGen = createMinable(BlockStates.GOLD_ORE, settings.goldSize, oreType);
-                this.redstoneGen = createMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize, oreType);
-                this.diamondGen = createMinable(BlockStates.DIAMOND_ORE, settings.diamondSize, oreType);
-                this.lapisGen = createMinable(BlockStates.LAPIS_ORE, settings.lapisSize, oreType);
-                this.clayOreGen = new WorldGenClayOre(settings.claySize);
-                this.clayGen = settings.useClayDisks ? this.initClayGen : WorldGenNoOp.INSTANCE;
-                this.sandGen = settings.useSandDisks ? this.initSandGen : WorldGenNoOp.INSTANCE;
-                this.gravelGen = settings.useGravelDisks ? this.initGravelGen : WorldGenNoOp.INSTANCE;
-                this.generateFalls = settings.useSprings;
-                
-                this.genDecorations(biome, world, random);
-                this.decorating = false;
+                try {
+                    ModernBetaGeneratorSettings settings = ModernBetaGeneratorSettings.buildOrGet(worldServer);
+                    OreType oreType = OreType.fromIdOrElse(settings.oreType, OreType.VANILLA);
+                    
+                    this.chunkPos = pos;
+                    this.chunkProviderSettings = ChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+                    this.dirtGen = createMinable(BlockStates.DIRT, settings.dirtSize, oreType);
+                    this.gravelOreGen = createMinable(BlockStates.GRAVEL, settings.gravelSize, oreType);
+                    this.graniteGen = createMinable(BlockStates.GRANITE, settings.graniteSize, oreType);
+                    this.dioriteGen = createMinable(BlockStates.DIORITE, settings.dioriteSize, oreType);
+                    this.andesiteGen = createMinable(BlockStates.ANDESITE, settings.andesiteSize, oreType);
+                    this.coalGen = createMinable(BlockStates.COAL_ORE, settings.coalSize, oreType);
+                    this.ironGen = createMinable(BlockStates.IRON_ORE, settings.ironSize, oreType);
+                    this.goldGen = createMinable(BlockStates.GOLD_ORE, settings.goldSize, oreType);
+                    this.redstoneGen = createMinable(BlockStates.REDSTONE_ORE, settings.redstoneSize, oreType);
+                    this.diamondGen = createMinable(BlockStates.DIAMOND_ORE, settings.diamondSize, oreType);
+                    this.lapisGen = createMinable(BlockStates.LAPIS_ORE, settings.lapisSize, oreType);
+                    this.clayOreGen = new WorldGenClayOre(settings.claySize);
+                    
+                    if (!settings.useGravelDisks) this.gravelPatchesPerChunk = 0;
+                    if (!settings.useSandDisks) this.sandPatchesPerChunk = 0;
+                    if (!settings.useClayDisks) this.clayPerChunk = 0;
+                    this.generateFalls = settings.useSprings;
+                    
+                    this.genDecorations(biome, world, random);
+                } catch (Exception e) {
+                } finally {
+                    // Restore the previous patch and fall values
+                    this.gravelPatchesPerChunk = prevGravelPatches;
+                    this.sandPatchesPerChunk = prevSandPatches;
+                    this.clayPerChunk = prevClayPatches;
+                    this.generateFalls = prevGenerateFalls;
+                    this.decorating = false;
+                }
             }
             
             info.cancel();
