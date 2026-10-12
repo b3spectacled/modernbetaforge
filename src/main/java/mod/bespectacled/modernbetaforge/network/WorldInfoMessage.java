@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import io.netty.buffer.ByteBuf;
@@ -49,7 +50,7 @@ public class WorldInfoMessage implements IMessage {
             
         } catch (UnsupportedEncodingException e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be encoded!"));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             
         }
     }
@@ -66,7 +67,7 @@ public class WorldInfoMessage implements IMessage {
             
         } catch (UnsupportedEncodingException e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be decoded!"));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             
         }
     }
@@ -86,7 +87,7 @@ public class WorldInfoMessage implements IMessage {
             
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be compressed!"));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
         }
         
         return new byte[0];
@@ -112,7 +113,7 @@ public class WorldInfoMessage implements IMessage {
             
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Generator options couldn't be decompressed!"));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
         }
        
         return new byte[0];

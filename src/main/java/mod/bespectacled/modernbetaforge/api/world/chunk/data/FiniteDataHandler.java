@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.BiMap;
@@ -66,7 +67,7 @@ public class FiniteDataHandler {
             
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Level file '%s' couldn't be saved!", FILE_NAME));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             
         }
         
@@ -99,7 +100,7 @@ public class FiniteDataHandler {
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteDataHandler.FILE_NAME
             ));
-            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
+            ModernBeta.log(Level.WARN, "Error: " + ExceptionUtils.getStackTrace(e));
         }
     
         return levelDataContainer;

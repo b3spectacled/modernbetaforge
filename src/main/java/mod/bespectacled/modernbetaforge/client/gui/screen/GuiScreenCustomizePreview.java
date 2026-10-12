@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -607,7 +608,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.updateButtonValidity();
                     } catch (IOException e) {
                         ModernBeta.log(Level.ERROR, "Couldn't save preview image!");
-                        ModernBeta.log(Level.ERROR, e.getLocalizedMessage());
+                        ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
                     }
                 });
 
@@ -698,7 +699,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, "Failed to draw terrain map!");
-                ModernBeta.log(Level.ERROR, "Error: " + e.getLocalizedMessage());
+                ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
                 this.updateState(ProgressState.FAILED);
                 
             } finally {

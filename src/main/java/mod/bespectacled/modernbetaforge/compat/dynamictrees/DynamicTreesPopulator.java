@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.ferreusveritas.dynamictrees.api.WorldGenRegistry.BiomeDataBasePopulatorRegistryEvent;
@@ -73,7 +74,7 @@ public class DynamicTreesPopulator implements IBiomeDataBasePopulator {
                     GSON.toJson(this.defaultJson, JsonElement.class, writer);
                 } catch (Exception e) {
                     ModernBeta.log(Level.ERROR, String.format("Dynamic Trees config file '%s' couldn't be saved!", CONFIG_FILE_NAME));
-                    ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+                    ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
                 }
             }
         }

@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.BiMap;
@@ -852,7 +853,7 @@ public abstract class FiniteChunkSource extends ChunkSource {
                 "Level file '%s' is missing or corrupted and couldn't be loaded. Level will be generated and then saved!",
                 FiniteDataHandler.FILE_NAME
             ));
-            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
+            ModernBeta.log(Level.WARN, "Error: " + ExceptionUtils.getStackTrace(e));
         }
     }
     

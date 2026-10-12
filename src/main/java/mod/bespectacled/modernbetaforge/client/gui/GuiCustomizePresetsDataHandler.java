@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
@@ -81,7 +82,7 @@ public class GuiCustomizePresetsDataHandler {
             
         } catch (Exception e) {
             ModernBeta.log(Level.WARN, String.format("Preset file '%s' is missing or corrupted and couldn't be loaded! A new one will be created!", CONFIG_FILE_NAME));
-            ModernBeta.log(Level.WARN, "Error: " + e.getMessage());
+            ModernBeta.log(Level.WARN, "Error: " + ExceptionUtils.getStackTrace(e));
             
             this.writePresets(true);
         }
@@ -95,7 +96,7 @@ public class GuiCustomizePresetsDataHandler {
             
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Preset file '%s' couldn't be saved!", CONFIG_FILE_NAME));
-            ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
         }
     }
     

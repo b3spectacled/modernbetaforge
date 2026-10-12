@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import mod.bespectacled.modernbetaforge.ModernBeta;
@@ -66,7 +67,7 @@ public class ModCompat {
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, String.format("Couldn't load compat for mod '%s'!", modId));
-                ModernBeta.log(Level.ERROR, e.getLocalizedMessage());
+                ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             }
         }
     }

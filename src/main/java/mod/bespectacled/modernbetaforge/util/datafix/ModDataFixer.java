@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.JsonObject;
@@ -65,7 +66,7 @@ public class ModDataFixer {
             jsonObject = new JsonParser().parse(json == null || json.isEmpty() ? "{}" : json).getAsJsonObject();
         } catch (Exception e) {
             ModernBeta.log(Level.ERROR, String.format("Couldn't parse generator options for world '%s' for data fixer..", worldName));
-            ModernBeta.log(Level.ERROR, e.getLocalizedMessage());
+            ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             jsonObject = new JsonObject();      
         }
         

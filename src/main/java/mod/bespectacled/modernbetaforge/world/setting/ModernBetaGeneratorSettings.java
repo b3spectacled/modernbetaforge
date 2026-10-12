@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableMap;
@@ -2288,7 +2289,7 @@ public class ModernBetaGeneratorSettings {
                 
             } catch (Exception e) {
                 ModernBeta.log(Level.ERROR, "[Modern Beta] Failed to deserialize generator settings!");
-                ModernBeta.log(Level.ERROR, "Error: " + e.getMessage());
+                ModernBeta.log(Level.ERROR, "Error: " + ExceptionUtils.getStackTrace(e));
             }
             
             return factory;
