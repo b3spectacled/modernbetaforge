@@ -660,10 +660,12 @@ createWorld.customize.custom.compatdepthsupdate.usedeepslate.tooltip=Generate de
 createWorld.customize.custom.compatdepthsupdate.deepslateblock.tooltip=Deepslate layer block.
 createWorld.customize.custom.compatdepthsupdate.deepslatemaxy.tooltip=Deepslate layer maximum height level.
 createWorld.customize.custom.compatdepthsupdate.deepslaterange.tooltip=Deepslate layer transition range.
+createWorld.customize.custom.compatdepthsupdate.tooltip=For best results, please disable the 'Extend Custom World Types' setting in Depths Update's mod config.
 
 # Cubic Chunks
 
 createWorld.customize.custom.compatcubicchunks=Cubic Chunks Compatibility
+createWorld.customize.custom.compatcubicchunks.tooltip=For performance, minimum and maximum world heights are %d and %d respectively.
 
 # Defiled Lands
 
