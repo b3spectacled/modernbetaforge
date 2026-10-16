@@ -55,6 +55,10 @@ public abstract class BiomeResolverAddSingleBiome implements BiomeResolverCustom
             return null;
         }
         
+        if (this.chance >= 1.0) {
+            return this.biome;
+        }
+        
         if (this.climateSampler.sample(scaledX, scaledZ) <= this.chance) {
             return this.biome;
         }
