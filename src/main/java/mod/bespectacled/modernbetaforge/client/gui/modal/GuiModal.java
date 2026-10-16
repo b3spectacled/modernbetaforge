@@ -44,6 +44,8 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
     protected final Consumer<T> onConfirm;
     protected final Consumer<T> onCancel;
 
+    protected int titleX;
+    protected int titleY;
     protected int modalWidth;
     protected int modalHeight;
     protected GuiButton buttonConfirm;
@@ -67,14 +69,17 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         int centerX = this.width / 2;
         int centerY = this.height / 2;
         
-        int confirmX = centerX - 62;
-        int confirmY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
+        int buttonConfirmX = centerX - 62;
+        int buttonConfirmY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
         
-        int cancelX = centerX + 2;
-        int cancelY = confirmY;
+        int buttonCancelX = centerX + 2;
+        int buttonCancelY = buttonConfirmY;
 
-        this.buttonConfirm = this.addButton(new GuiButton(GUI_ID_CONFIRM, confirmX, confirmY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_CONFIRM));
-        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, cancelY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_CANCEL));
+        this.buttonConfirm = this.addButton(new GuiButton(GUI_ID_CONFIRM, buttonConfirmX, buttonConfirmY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_CONFIRM));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, buttonCancelX, buttonCancelY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_CANCEL));
+        
+        this.titleX = this.width / 2;
+        this.titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
     }
     
     @Override
@@ -83,9 +88,7 @@ public abstract class GuiModal<T extends GuiModal<?>> extends GuiScreen {
         this.drawModal(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
         
-        int titleX = this.width / 2;
-        int titleY = this.height / 2 - this.modalHeight / 2 + this.fontRenderer.FONT_HEIGHT;
-        this.drawCenteredString(this.fontRenderer, this.title, titleX, titleY, GuiColors.RGB_WHITE);
+        this.drawCenteredString(this.fontRenderer, this.title, this.titleX, this.titleY, GuiColors.RGB_WHITE);
     }
     
     @SuppressWarnings("unchecked")

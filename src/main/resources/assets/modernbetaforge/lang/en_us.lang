@@ -54,6 +54,9 @@ createWorld.customize.preview.modernbetaforge.structuresNote=Vanilla structures 
 createWorld.customize.preview.modernbetaforge.screenshot=Save Screenshot
 createWorld.customize.preview.modernbetaforge.generationTime.info0=Done in
 createWorld.customize.preview.modernbetaforge.generationTime.info1=chunk
+createWorld.customize.preview.modernbetaforge.locateBiome=Locate Biome
+createWorld.customize.preview.modernbetaforge.locateBiome.success=is %s block(s) away from 0/0.
+createWorld.customize.preview.modernbetaforge.locateBiome.failure=is not nearby.
 
 # Page Tabs
 createWorld.customize.custom.tab.modernbetaforge.page0=Basic

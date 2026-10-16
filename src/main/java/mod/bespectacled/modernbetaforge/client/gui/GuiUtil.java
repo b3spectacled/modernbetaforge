@@ -1,5 +1,6 @@
 package mod.bespectacled.modernbetaforge.client.gui;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,5 +36,13 @@ public class GuiUtil {
     
     public static int getWideButtonWidth(float currentGuiWidth) {
         return getButtonWidth(DEFAULT_WIDE_BUTTON_WIDTH, MIN_WIDE_BUTTON_WIDTH, MAX_WIDE_BUTTON_WIDTH, currentGuiWidth);
+    }
+    
+    public static String trimString(FontRenderer fontRenderer, String string, int width) {
+        if (fontRenderer.getStringWidth(string) > width) {
+            string = fontRenderer.trimStringToWidth(string, width - fontRenderer.getStringWidth("...")) + "...";
+        }
+        
+        return string;
     }
 }

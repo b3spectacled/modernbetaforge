@@ -125,26 +125,26 @@ public class GuiModalChangelist extends GuiModal<GuiModalChangelist> {
         
         int centerY = this.height / 2;
         
-        int confirmX = this.width / 2 - BUTTON_S_WIDTH / 2 - BUTTON_S_WIDTH - BUTTON_PADDING;
-        int cancelX = this.width / 2 + BUTTON_S_WIDTH / 2 + BUTTON_PADDING;
+        int buttonConfirmX = this.width / 2 - BUTTON_S_WIDTH / 2 - BUTTON_S_WIDTH - BUTTON_PADDING;
+        int buttonCancelX = this.width / 2 + BUTTON_S_WIDTH / 2 + BUTTON_PADDING;
         
-        int discardX = this.width / 2 - BUTTON_S_WIDTH / 2;
-        int discardY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
+        int buttonDiscardX = this.width / 2 - BUTTON_S_WIDTH / 2;
+        int buttonDiscardY = centerY + this.modalHeight / 2 - BUTTON_HEIGHT - GUI_PADDING;
         
         int sortPadding = LIST_PADDING_TOP / 2 - GuiCheckbox.DEFAULT_WIDTH / 2;
-        int sortX = this.width / 2 + this.modalWidth / 2 - GuiCheckbox.DEFAULT_WIDTH - sortPadding;
-        int sortY = this.height / 2 - this.modalHeight / 2 + sortPadding;
+        int buttonSortX = this.width / 2 + this.modalWidth / 2 - GuiCheckbox.DEFAULT_WIDTH - sortPadding;
+        int buttonSortY = this.height / 2 - this.modalHeight / 2 + sortPadding;
         
         boolean sortList = this.sortCheckBox == null ? this.initialSort : this.sortCheckBox.getToggled();
         
-        this.buttonConfirm.x = confirmX;
-        this.buttonConfirm.y = discardY;
+        this.buttonConfirm.x = buttonConfirmX;
+        this.buttonConfirm.y = buttonDiscardY;
         
-        this.buttonCancel.x = cancelX;
-        this.buttonCancel.y = discardY;
+        this.buttonCancel.x = buttonCancelX;
+        this.buttonCancel.y = buttonDiscardY;
         
-        this.addButton(new GuiButton(GUI_ID_DISCARD, discardX, discardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
-        this.sortCheckBox = this.addButton(new GuiCheckbox(GUI_ID_SORT, sortX, sortY, sortList));
+        this.addButton(new GuiButton(GUI_ID_DISCARD, buttonDiscardX, buttonDiscardY, BUTTON_S_WIDTH, BUTTON_HEIGHT, GUI_LABEL_DISCARD));
+        this.sortCheckBox = this.addButton(new GuiCheckbox(GUI_ID_SORT, buttonSortX, buttonSortY, sortList));
     }
     
     @Override

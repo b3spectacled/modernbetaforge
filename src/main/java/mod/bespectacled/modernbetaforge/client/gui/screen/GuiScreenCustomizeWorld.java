@@ -230,12 +230,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int centerX = this.width / 2;
         
         int buttonWidth = GuiUtil.getStandardButtonWidth(this.width);
-        int buttonY = this.height - 27;
-        int defaultsX = centerX - buttonWidth * 2 - buttonWidth / 2 - 6;
-        int randomizeX = centerX - buttonWidth - buttonWidth / 2 - 3;
-        int previewX = centerX - buttonWidth / 2;
-        int presetsX = centerX + buttonWidth / 2 + 3;
-        int doneX = centerX + buttonWidth / 2 + buttonWidth + 6;
+        int buttonDefaultX = centerX - buttonWidth * 2 - buttonWidth / 2 - 6;
+        int buttonRandomX = centerX - buttonWidth - buttonWidth / 2 - 3;
+        int buttonPreviewX = centerX - buttonWidth / 2;
+        int buttonPresetsX = centerX + buttonWidth / 2 + 3;
+        int buttonDoneX = centerX + buttonWidth / 2 + buttonWidth + 6;
+        
+        int buttonR0Y = this.height - 27;
 
         int centerTabX = this.tabListBounds.getX() + this.tabListBounds.getWidth() / 2;
         int navY = this.tabListBounds.getY() + this.tabListBounds.getHeight() - 4;
@@ -246,11 +247,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         int heightX = PAGE_TITLE_HEIGHT;
         int heightY = PAGE_TITLE_HEIGHT;
         
-        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, defaultsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
-        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, randomizeX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
-        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, previewX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
-        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, presetsX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
-        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, doneX, buttonY, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
+        this.buttonDefaults = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DFLT, buttonDefaultX, buttonR0Y, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "defaults")));
+        this.buttonRandomize = this.addButton(new GuiButton(GuiIdentifiers.FUNC_RAND, buttonRandomX, buttonR0Y, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "randomize")));
+        this.buttonPreview = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRVW, buttonPreviewX, buttonR0Y, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "preview")));
+        this.buttonPresets = this.addButton(new GuiButton(GuiIdentifiers.FUNC_PRST, buttonPresetsX, buttonR0Y, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "presets")));
+        this.buttonDone = this.addButton(new GuiButton(GuiIdentifiers.FUNC_DONE, buttonDoneX, buttonR0Y, buttonWidth, BUTTON_HEIGHT, I18n.format(PREFIX + "confirm")));
         
         this.buttonNavL = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_LNAV, navXL, navY, KeyBindings.LEFT_NAV_KEY.getDisplayName()));
         this.buttonNavR = this.addButton(new GuiButtonNav(this.mc, GuiIdentifiers.FUNC_RNAV, navXR, navY, KeyBindings.RIGHT_NAV_KEY.getDisplayName()));
@@ -488,138 +489,138 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         } else {
             switch (entry) {
                 case GuiIdentifiers.PG0_B_CHUNK:
-                    this.openRegistryScreen((str, factory) -> factory.chunkSource = str, settings.chunkSource, NbtTags.CHUNK_SOURCE,  ModernBetaRegistries.CHUNK_SOURCE.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.chunkSource = str, this.settings.chunkSource, NbtTags.CHUNK_SOURCE,  ModernBetaRegistries.CHUNK_SOURCE.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_BIOME:
-                    this.openRegistryScreen((str, factory) -> factory.biomeSource = str, settings.biomeSource, NbtTags.BIOME_SOURCE,  ModernBetaRegistries.BIOME_SOURCE.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.biomeSource = str, this.settings.biomeSource, NbtTags.BIOME_SOURCE,  ModernBetaRegistries.BIOME_SOURCE.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_SURFACE:
-                    this.openRegistryScreen((str, factory) -> factory.surfaceBuilder = str, settings.surfaceBuilder, NbtTags.SURFACE_BUILDER,  ModernBetaRegistries.SURFACE_BUILDER.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.surfaceBuilder = str, this.settings.surfaceBuilder, NbtTags.SURFACE_BUILDER,  ModernBetaRegistries.SURFACE_BUILDER.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_CARVER:
-                    this.openRegistryScreen((str, factory) -> factory.caveCarver = str, settings.caveCarver, NbtTags.CAVE_CARVER,  ModernBetaRegistries.CAVE_CARVER.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.caveCarver = str, this.settings.caveCarver, NbtTags.CAVE_CARVER,  ModernBetaRegistries.CAVE_CARVER.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_SPAWN:
-                    this.openRegistryScreen((str, factory) -> factory.worldSpawner = str, settings.worldSpawner, NbtTags.WORLD_SPAWNER,  ModernBetaRegistries.WORLD_SPAWNER.getKeys());
+                    this.openRegistryScreen((str, factory) -> factory.worldSpawner = str, this.settings.worldSpawner, NbtTags.WORLD_SPAWNER,  ModernBetaRegistries.WORLD_SPAWNER.getKeys());
                     break;
                 case GuiIdentifiers.PG0_B_FIXED:
-                    this.openBiomeScreen((str, factory) -> factory.singleBiome = str, settings.singleBiome);
+                    this.openBiomeScreen((str, factory) -> factory.singleBiome = str, this.settings.singleBiome);
                     break;
                 case GuiIdentifiers.PG0_B_BLOCK:
-                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, settings.defaultBlock, NbtTags.DEFAULT_BLOCK, key -> ModernBetaRegistries.DEFAULT_BLOCK.contains(key));
+                    this.openBlockScreen((str, factory) -> factory.defaultBlock = str, this.settings.defaultBlock, NbtTags.DEFAULT_BLOCK, key -> ModernBetaRegistries.DEFAULT_BLOCK.contains(key));
                     break;
                 case GuiIdentifiers.PG0_B_FLUID:
-                    this.openFluidScreen((str, factory) -> factory.defaultFluid = str, settings.defaultFluid, NbtTags.DEFAULT_FLUID, key -> true);
+                    this.openFluidScreen((str, factory) -> factory.defaultFluid = str, this.settings.defaultFluid, NbtTags.DEFAULT_FLUID, key -> true);
                     break;
                     
                 case GuiIdentifiers.PG6_DSRT_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.desertBiomeBase = str, settings.desertBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.desertBiomeBase = str, this.settings.desertBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_DSRT_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.desertBiomeOcean = str, settings.desertBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.desertBiomeOcean = str, this.settings.desertBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_DSRT_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.desertBiomeBeach = str, settings.desertBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.desertBiomeBeach = str, this.settings.desertBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_FRST_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.forestBiomeBase = str, settings.forestBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.forestBiomeBase = str, this.settings.forestBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_FRST_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.forestBiomeOcean = str, settings.forestBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.forestBiomeOcean = str, this.settings.forestBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_FRST_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.forestBiomeBeach = str, settings.forestBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.forestBiomeBeach = str, this.settings.forestBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_ICED_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeBase = str, settings.iceDesertBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeBase = str, this.settings.iceDesertBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_ICED_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeOcean = str, settings.iceDesertBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeOcean = str, this.settings.iceDesertBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_ICED_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeBeach = str, settings.iceDesertBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.iceDesertBiomeBeach = str, this.settings.iceDesertBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_PLNS_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeBase = str, settings.plainsBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeBase = str, this.settings.plainsBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_PLNS_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeOcean = str, settings.plainsBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeOcean = str, this.settings.plainsBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_PLNS_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeBeach = str, settings.plainsBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.plainsBiomeBeach = str, this.settings.plainsBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_RAIN_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeBase = str, settings.rainforestBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeBase = str, this.settings.rainforestBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_RAIN_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeOcean = str, settings.rainforestBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeOcean = str, this.settings.rainforestBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_RAIN_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeBeach = str, settings.rainforestBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.rainforestBiomeBeach = str, this.settings.rainforestBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_SAVA_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeBase = str, settings.savannaBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeBase = str, this.settings.savannaBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_SAVA_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeOcean = str, settings.savannaBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeOcean = str, this.settings.savannaBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_SAVA_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeBeach = str, settings.savannaBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.savannaBiomeBeach = str, this.settings.savannaBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_SHRB_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeBase = str, settings.shrublandBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeBase = str, this.settings.shrublandBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_SHRB_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeOcean = str, settings.shrublandBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeOcean = str, this.settings.shrublandBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_SHRB_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeBeach = str, settings.shrublandBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.shrublandBiomeBeach = str, this.settings.shrublandBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_SEAS_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeBase = str, settings.seasonalForestBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeBase = str, this.settings.seasonalForestBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_SEAS_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeOcean = str, settings.seasonalForestBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeOcean = str, this.settings.seasonalForestBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_SEAS_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeBeach = str, settings.seasonalForestBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.seasonalForestBiomeBeach = str, this.settings.seasonalForestBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_SWMP_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeBase = str, settings.swamplandBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeBase = str, this.settings.swamplandBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_SWMP_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeOcean = str, settings.swamplandBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeOcean = str, this.settings.swamplandBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_SWMP_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeBeach = str, settings.swamplandBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.swamplandBiomeBeach = str, this.settings.swamplandBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_TAIG_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeBase = str, settings.taigaBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeBase = str, this.settings.taigaBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_TAIG_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeOcean = str, settings.taigaBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeOcean = str, this.settings.taigaBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_TAIG_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeBeach = str, settings.taigaBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.taigaBiomeBeach = str, this.settings.taigaBiomeBeach);
                     break;
                     
                 case GuiIdentifiers.PG6_TUND_LAND:
-                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeBase = str, settings.tundraBiomeBase);
+                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeBase = str, this.settings.tundraBiomeBase);
                     break;
                 case GuiIdentifiers.PG6_TUND_OCEAN:
-                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeOcean = str, settings.tundraBiomeOcean);
+                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeOcean = str, this.settings.tundraBiomeOcean);
                     break;
                 case GuiIdentifiers.PG6_TUND_BEACH:
-                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeBeach = str, settings.tundraBiomeBeach);
+                    this.openBiomeScreen((str, factory) -> factory.tundraBiomeBeach = str, this.settings.tundraBiomeBeach);
                     break;
             
                 case GuiIdentifiers.PG0_B_USE_OCEAN:
@@ -2785,7 +2786,11 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     
     private void openBiomeScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.BIOMES.getValue(key).getBiomeName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES, predicate)));
+        BiConsumer<String, GuiScreen> registryConsumer = (str, screen) -> {
+            consumer.accept(str, this.settings);
+        };
+        
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, registryConsumer, nameFormatter, initial, "biome", ForgeRegistryUtil.getKeys(ForgeRegistries.BIOMES, predicate)));
     }
 
     private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
@@ -2795,28 +2800,39 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
     private void openBlockScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> {
             Block block = ForgeRegistryUtil.get(key, ForgeRegistries.BLOCKS);
-            
             return ForgeRegistryUtil.isForgeFluid(block) ? 
                 ForgeRegistryUtil.getFluidLocalizedName(key) :
                 ForgeRegistries.BLOCKS.getValue(key).getLocalizedName();
         };
+        BiConsumer<String, GuiScreen> registryConsumer = (str, screen) -> {
+            consumer.accept(str, this.settings);
+        };
         
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, registryConsumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getKeys(ForgeRegistries.BLOCKS, predicate)));
     }
     
     private void openFluidScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistryUtil.getFluidLocalizedName(key);
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getFluidBlockRegistryNames()));
+        BiConsumer<String, GuiScreen> registryConsumer = (str, screen) -> {
+            consumer.accept(str, this.settings);
+        };
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, registryConsumer, nameFormatter, initial, nbtTag, ForgeRegistryUtil.getFluidBlockRegistryNames()));
     }
     
     private void openEntityScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, Predicate<ResourceLocation> predicate) {
         Function<ResourceLocation, String> nameFormatter = key -> ForgeRegistries.ENTITIES.getValue(key).getName();
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, "entity", ForgeRegistryUtil.getKeys(ForgeRegistries.ENTITIES, predicate)));
+        BiConsumer<String, GuiScreen> registryConsumer = (str, screen) -> {
+            consumer.accept(str, this.settings);
+        };
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, registryConsumer, nameFormatter, initial, "entity", ForgeRegistryUtil.getKeys(ForgeRegistries.ENTITIES, predicate)));
     }
     
     private void openRegistryScreen(BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer, String initial, String nbtTag, List<ResourceLocation> registryKeys) {
         Function<ResourceLocation, String> nameFormatter = key -> I18n.format(String.format("%s%s.%s.%s", PREFIX, nbtTag, key.getNamespace(), key.getPath()));
-        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, consumer, nameFormatter, initial, nbtTag, registryKeys));
+        BiConsumer<String, GuiScreen> registryConsumer = (str, screen) -> {
+            consumer.accept(str, this.settings);
+        };
+        this.mc.displayGuiScreen(new GuiScreenCustomizeRegistry(this, registryConsumer, nameFormatter, initial, nbtTag, registryKeys));
     }
     
     private GuiPageButtonList.GuiLabelEntry createGuiLabel(int id,Function<Integer, Integer> trimFunc, String... tags) {

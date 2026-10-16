@@ -12,7 +12,6 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiButtonIcon;
 import mod.bespectacled.modernbetaforge.util.SoundUtil;
-import mod.bespectacled.modernbetaforge.world.setting.ModernBetaGeneratorSettings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
@@ -42,8 +41,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private static final int GUI_ID_SEARCH = 2;
     private static final int GUI_ID_RESET = 3;
     
-    private final GuiScreenCustomizeWorld parent;
-    private final BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer;
+    private final GuiScreen parent;
+    private final BiConsumer<String, GuiScreen> consumer;
     private final Function<ResourceLocation, String> nameFormatter;
     private final int slotHeight;
     private final boolean displayIcons;
@@ -57,7 +56,6 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     
     protected String title;
 
-    private ModernBetaGeneratorSettings.Factory settings;
     private ListPreset list;
     private GuiTextField fieldSearch;
     private GuiButton buttonSelect;
@@ -73,8 +71,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
     private boolean initialOpen;
     
     public GuiScreenCustomizeRegistry(
-        GuiScreenCustomizeWorld parent,
-        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+        GuiScreen parent,
+        BiConsumer<String, GuiScreen> consumer,
         Function<ResourceLocation, String> nameFormatter,
         String initialEntry,
         String langName,
@@ -83,9 +81,9 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this(parent, consumer, nameFormatter, DEFAULT_SLOT_HEIGHT, false, initialEntry, initialEntry, "", false, langName, registryKeys, 0);
     }
     
-    public GuiScreenCustomizeRegistry(
-        GuiScreenCustomizeWorld parent,
-        BiConsumer<String, ModernBetaGeneratorSettings.Factory> consumer,
+    private GuiScreenCustomizeRegistry(
+        GuiScreen parent,
+        BiConsumer<String, GuiScreen> consumer,
         Function<ResourceLocation, String> nameFormatter,
         int slotHeight,
         boolean displayIcons,
@@ -126,8 +124,8 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         int centerX = this.width / 2;
         int buttonWidth = GuiUtil.getButtonWidth(120, 160, this.width);
-        int selectX = centerX - GuiUtil.BUTTON_SPACE / 2 - buttonWidth;
-        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        int buttonSelectX = centerX - GuiUtil.BUTTON_SPACE / 2 - buttonWidth;
+        int buttonCancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
         
         int fieldSearchW = MathHelper.clamp((int)(this.width * 0.8), SEARCH_BAR_LENGTH - 120, SEARCH_BAR_LENGTH);
         int fieldSearchH = 20;
@@ -135,12 +133,10 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         int fieldSearchY = 40;
         
         this.buttonList.clear();
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
-        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, buttonSelectX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX_REGISTRY + "select") + " " + I18n.format(PREFIX_SETTINGS + langName)));
+        this.buttonList.add(new GuiButton(GUI_ID_CANCEL, buttonCancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
         
         this.searchText = I18n.format(PREFIX_REGISTRY + "search.info");
-        
-        this.settings = ModernBetaGeneratorSettings.Factory.jsonToFactory(this.parent.getSettingsString());
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialEntry);
         
         int slotHeight = this.slotHeight;
@@ -163,13 +159,13 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         this.fieldSearch.setText(this.searchEntry);
         this.fieldSearch.setFocused(this.startSearchFocused);
         
-        int searchX = this.fieldSearch.x + this.fieldSearch.width + GuiUtil.BUTTON_SPACE;
-        int searchY = fieldSearchY;
-        int resetX = searchX + 20 + GuiUtil.BUTTON_SPACE / 2;
-        int resetY = searchY;
+        int buttonSearchX = this.fieldSearch.x + this.fieldSearch.width + GuiUtil.BUTTON_SPACE;
+        int buttonSearchY = fieldSearchY;
+        int buttonResetX = buttonSearchX + 20 + GuiUtil.BUTTON_SPACE / 2;
+        int buttonResetY = buttonSearchY;
         
-        this.buttonSearch = this.addButton(new GuiButtonIcon(GUI_ID_SEARCH, searchX, searchY, "\u1C04", false));
-        this.buttonReset = this.addButton(new GuiButtonIcon(GUI_ID_RESET, resetX, resetY, "\u21BA"));
+        this.buttonSearch = this.addButton(new GuiButtonIcon(GUI_ID_SEARCH, buttonSearchX, buttonSearchY, "\u1C04", false));
+        this.buttonReset = this.addButton(new GuiButtonIcon(GUI_ID_RESET, buttonResetX, buttonResetY, "\u21BA"));
         
         this.updateButtonValidity();
     }
@@ -273,9 +269,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
         
         switch (guiButton.id) {
             case GUI_ID_SELECT:
-                this.consumer.accept(this.entries.get(this.list.selected).registryName, this.settings);
-                this.parent.loadValues(this.settings.toString());
-                this.parent.setSettingsModified(!this.settings.equals(this.parent.getDefaultSettings()));
+                this.consumer.accept(this.entries.get(this.list.selected).registryName, this.parent);
                 this.mc.displayGuiScreen(this.parent);
                 break;
             case GUI_ID_CANCEL:
@@ -437,9 +431,7 @@ public class GuiScreenCustomizeRegistry extends GuiScreen {
             if (doubleClicked) {
                 SoundUtil.playClickSound(this.mc.getSoundHandler());
 
-                this.parent.consumer.accept(this.parent.entries.get(this.parent.list.selected).registryName, this.parent.settings);
-                this.parent.parent.loadValues(this.parent.settings.toString());
-                this.parent.parent.setSettingsModified(!this.parent.settings.equals(this.parent.parent.getDefaultSettings()));
+                this.parent.consumer.accept(this.parent.entries.get(this.parent.list.selected).registryName, this.parent);
                 this.parent.mc.displayGuiScreen(this.parent.parent);
             } 
         }

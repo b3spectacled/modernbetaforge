@@ -128,20 +128,23 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         int fieldExportW = this.width - fieldExportPadding;
         int fieldExportH = 20;
         
-        int selectX = centerX + GuiUtil.BUTTON_SPACE / 2;
-        int filterX = selectX;
-        int cancelX = selectX + wideButtonWidth - buttonWidth;
-        int saveX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
-        int editX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
-        int deleteX = centerX - buttonWidth - GuiUtil.BUTTON_SPACE / 2;
+        int buttonSelectX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        int buttonFilterX = buttonSelectX;
+        int buttonCancelX = buttonSelectX + wideButtonWidth - buttonWidth;
+        int buttonSaveX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
+        int buttonEditX = centerX - wideButtonWidth - GuiUtil.BUTTON_SPACE / 2;
+        int buttonDeleteX = centerX - buttonWidth - GuiUtil.BUTTON_SPACE / 2;
+        
+        int buttonR0Y = this.height - 27;
+        int buttonR1Y = this.height - 50;
         
         this.buttonList.clear();
-        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, selectX, this.height - 50, wideButtonWidth, 20, I18n.format(PREFIX + "select")));
-        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, filterX, this.height - 27, buttonWidth, 20, this.getFilterText()));
-        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, buttonWidth, 20, I18n.format("gui.cancel")));
-        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, saveX, this.height - 50, wideButtonWidth, 20, I18n.format(PREFIX + "save")));
-        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, editX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX + "edit")));
-        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, deleteX, this.height - 27, buttonWidth, 20, I18n.format(PREFIX + "delete")));
+        this.buttonSelect = this.addButton(new GuiButton(GUI_ID_SELECT, buttonSelectX, buttonR1Y, wideButtonWidth, 20, I18n.format(PREFIX + "select")));
+        this.buttonFilter = this.addButton(new GuiButton(GUI_ID_FILTER, buttonFilterX, buttonR0Y, buttonWidth, 20, this.getFilterText()));
+        this.buttonCancel = this.addButton(new GuiButton(GUI_ID_CANCEL, buttonCancelX, buttonR0Y, buttonWidth, 20, I18n.format("gui.cancel")));
+        this.buttonSave = this.addButton(new GuiButton(GUI_ID_SAVE, buttonSaveX, buttonR1Y, wideButtonWidth, 20, I18n.format(PREFIX + "save")));
+        this.buttonEdit = this.addButton(new GuiButton(GUI_ID_EDIT, buttonEditX, buttonR0Y, buttonWidth, 20, I18n.format(PREFIX + "edit")));
+        this.buttonDelete = this.addButton(new GuiButton(GUI_ID_DELETE, buttonDeleteX, buttonR0Y, buttonWidth, 20, I18n.format(PREFIX + "delete")));
         
         this.shareText = I18n.format(PREFIX + "share");
         this.list = this.list != null ? new ListPreset(this, this.list.selected) : new ListPreset(this, this.initialPreset);
@@ -149,13 +152,13 @@ public class GuiScreenCustomizePresets extends GuiScreen {
 
         this.fieldExport = this.createInitialField(fieldExportX, fieldExportY, fieldExportW, fieldExportH);
         
-        int copyX = this.fieldExport.x + this.fieldExport.width + GuiUtil.BUTTON_SPACE;
-        int copyY = fieldExportY;
-        int pasteX = copyX + 20 + GuiUtil.BUTTON_SPACE / 2;
-        int pasteY = copyY;
+        int buttonCopyX = this.fieldExport.x + this.fieldExport.width + GuiUtil.BUTTON_SPACE;
+        int buttonCopyY = fieldExportY;
+        int buttonPasteX = buttonCopyX + 20 + GuiUtil.BUTTON_SPACE / 2;
+        int buttonPasteY = buttonCopyY;
         
-        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, copyX, copyY, "\u29C9"));
-        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, pasteX, pasteY, "\u29C8"));
+        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, buttonCopyX, buttonCopyY, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, buttonPasteX, buttonPasteY, "\u29C8"));
         
         this.updateButtonValidity();
     }
@@ -314,7 +317,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
                 };
                 
                 this.isFocused = false;
-                this.mc.displayGuiScreen(new GuiModalPreset(this, onConfirmEdit, modal -> isFocused = true, State.EDIT));
+                this.mc.displayGuiScreen(new GuiModalPreset(this, onConfirmEdit, modal -> this.isFocused = true, State.EDIT));
                 break;
             case GUI_ID_DELETE:
                 Consumer<GuiModalPresetConfirm> onConfirmDelete = modal -> {

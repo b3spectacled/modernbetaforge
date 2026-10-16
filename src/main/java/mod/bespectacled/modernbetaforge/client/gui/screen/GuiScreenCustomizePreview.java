@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,7 @@ import mod.bespectacled.modernbetaforge.client.color.BetaColorSampler;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
+import mod.bespectacled.modernbetaforge.client.gui.modal.GuiModalLocateBiome;
 import mod.bespectacled.modernbetaforge.compat.ModCompat;
 import mod.bespectacled.modernbetaforge.compat.bettermineshafts.CompatBetterMineshafts;
 import mod.bespectacled.modernbetaforge.config.ModernBetaConfig;
@@ -68,6 +70,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -109,7 +112,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int CENTERED_BOX_B_PADDING = 8;
     private static final int PROGRESS_BAR_W_PADDING = 10;
     private static final int PROGRESS_TEXT_OFFSET = 13;
-    private static final int BUTTON_LARGE_WIDTH = 164;
+    private static final int BUTTON_WIDTH = 120;
     private static final int TEXT_BOX_PADDING = 4;
     
     private static final int GUI_ID_BIOME_COLORS = 0;
@@ -118,6 +121,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private static final int GUI_ID_CANCEL = 3;
     private static final int GUI_ID_STRUCTURES = 4;
     private static final int GUI_ID_SCREENSHOT = 5;
+    private static final int GUI_ID_LOCATE_BIOME = 6;
     
     private static final long COPIED_SEED_DISPLAY_TIME = 1000L;
     private static final long GENERATION_DISPLAY_TIME = 5000L;
@@ -129,7 +133,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private final GuiBoundsChecker mapBounds;
     private final GuiBoundsChecker seedFieldBounds;
     private final GuiBoundsChecker useSeedLabelBounds;
-    private final GuiBoundsChecker structureButtonBounds;
     private final Map<Long, StructureInfo> structureMap;
     private final Map<Long, GuiBoundsChecker> structureBounds;
     
@@ -148,25 +151,28 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private GuiButton buttonGenerate;
     private GuiButton buttonCancel;
     private GuiButton buttonScreenshot;
+    private GuiButton buttonLocateBiome;
     private EmptyListPreset list;
     @SuppressWarnings("unused")
     private ProgressState prevState;
     private ProgressState state;
     private PreviewSettings previewSettings;
     private PreviewSettings selectedPreviewSettings;
-    private float progress;
-    private double progressLen;
     private MapTexture prevMapTexture;
     private MapTexture mapTexture;
     private CopyState copyState;
-    private long copiedTime;
     private Supplier<String> tpCallback;
+    private Biome searchBiome;
+    private float progress;
+    private double progressLen;
+    private long copiedTime;
     private boolean haltGeneration;
     private long hoveredStructurePos;
     private boolean hoveredStructure;
     private boolean savingScreenshot;
     private float generationTime;
     private long generationDisplayTime;
+    private boolean isFocused;
     
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, PreviewSettings previewSettings) {
         this.title = I18n.format(PREFIX + "title");
@@ -177,7 +183,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.mapBounds = new GuiBoundsChecker();
         this.seedFieldBounds = new GuiBoundsChecker();
         this.useSeedLabelBounds = new GuiBoundsChecker();
-        this.structureButtonBounds = new GuiBoundsChecker();
         this.structureMap = new Long2ObjectOpenHashMap<>();
         this.structureBounds = new Long2ObjectOpenHashMap<>();
 
@@ -186,8 +191,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.state = ProgressState.NOT_STARTED;
         this.previewSettings = new PreviewSettings(previewSettings);
-        this.progress = 0.0f;
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
+        this.searchBiome = Biomes.PLAINS;
+        this.progress = 0.0f;
+        this.isFocused = true;
     }
     
     @Override
@@ -196,44 +203,42 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         int zoomNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
         
-        int minWideButtonWidth = BUTTON_LARGE_WIDTH - 20;
-        int maxWideButtonWidth = BUTTON_LARGE_WIDTH + 80;
-        
-        int wideButtonWidth = GuiUtil.getButtonWidth(BUTTON_LARGE_WIDTH, minWideButtonWidth, maxWideButtonWidth, this.width);
-        int buttonWidth = (wideButtonWidth * 2 - GuiUtil.BUTTON_SPACE) / 3;
-        
-        int totalR0Width = buttonWidth * 3 + GuiUtil.BUTTON_SPACE * 2;
-        int totalR1Width = wideButtonWidth * 2 + GuiUtil.BUTTON_SPACE;
-        int buttonOffset = totalR1Width - totalR0Width;
-        int blendWidth = totalR0Width == totalR1Width ? buttonWidth : buttonWidth + buttonOffset;
+        int minButtonWidth = BUTTON_WIDTH - 20;
+        int maxButtonWidth = BUTTON_WIDTH + 80;
+        int buttonWidth = GuiUtil.getButtonWidth(BUTTON_WIDTH, minButtonWidth, maxButtonWidth, this.width);
         
         int centerX = this.width / 2;
         int viewportSize = this.getViewportSize();
         int viewportX = this.getViewportX();
         int viewportY = this.getViewportY();
         
-        int generateX = centerX - GuiUtil.BUTTON_SPACE / 2 - wideButtonWidth;
-        int cancelX = centerX + GuiUtil.BUTTON_SPACE / 2;
+        int buttonLocateX = centerX - buttonWidth / 2 - GuiUtil.BUTTON_SPACE - buttonWidth;
+        int buttonGenerateX = centerX - buttonWidth / 2;
+        int buttonCancelX = centerX + buttonWidth / 2 + GuiUtil.BUTTON_SPACE;
         
-        int zoomX = generateX;
-        int biomeX = centerX - blendWidth / 2;
-        int structureX = biomeX + blendWidth + GuiUtil.BUTTON_SPACE;
+        int buttonZoomX = buttonLocateX;
+        int buttonBiomeX = buttonGenerateX;
+        int buttonStructureX = buttonCancelX;
         
-        int screenshotX = viewportX + viewportSize + GuiUtil.BUTTON_SPACE / 2;
-        int screenshotY = viewportY - GuiUtil.BUTTON_SPACE / 2;
+        int buttonR0Y = this.height - 27;
+        int buttonR1Y = this.height - 50;
+        
+        int buttonScreenshotX = viewportX + viewportSize + GuiUtil.BUTTON_SPACE / 2;
+        int buttonScreenshotY = viewportY - GuiUtil.BUTTON_SPACE / 2;
         
         this.buttonList.clear();
-        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, generateX, this.height - 27, wideButtonWidth, 20, I18n.format(PREFIX + "generate")));
-        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, cancelX, this.height - 27, wideButtonWidth, 20, I18n.format("gui.cancel")));
+        this.buttonLocateBiome = this.addButton(new GuiButton(GUI_ID_LOCATE_BIOME, buttonLocateX, buttonR0Y, buttonWidth, 20, I18n.format(PREFIX + "locateBiome")));
+        this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, buttonGenerateX, buttonR0Y, buttonWidth, 20, I18n.format(PREFIX + "generate")));
+        this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, buttonCancelX, buttonR0Y, buttonWidth, 20, I18n.format("gui.cancel")));
         
-        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, zoomX, this.height - 50, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdx, this));
-        this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, biomeX, this.height - 50, I18n.format(PREFIX + "biomeBlend"), true));
-        this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, structureX, this.height - 50, I18n.format(PREFIX + "structures"), true));
+        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, buttonZoomX, buttonR1Y, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdx, this));
+        this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, buttonBiomeX, buttonR1Y, I18n.format(PREFIX + "biomeBlend"), true));
+        this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, buttonStructureX, buttonR1Y, I18n.format(PREFIX + "structures"), true));
         
-        this.buttonScreenshot = this.addButton(new GuiButton(GUI_ID_SCREENSHOT, screenshotX, screenshotY, 20, 20, "\u2399"));
+        this.buttonScreenshot = this.addButton(new GuiButton(GUI_ID_SCREENSHOT, buttonScreenshotX, buttonScreenshotY, 20, 20, "\u2399"));
 
         this.sliderZoom.width = buttonWidth;
-        this.buttonBiomeBlend.width = blendWidth;
+        this.buttonBiomeBlend.width = buttonWidth;
         this.buttonStructures.width = buttonWidth;
         this.buttonBiomeBlend.setValue(this.previewSettings.useBiomeBlend);
         this.buttonStructures.setValue(this.previewSettings.useStructures);
@@ -241,7 +246,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.mapBounds.updateBounds(viewportX, viewportY, viewportSize, viewportSize);
         this.seedFieldBounds.updateBounds(this.getSeedFieldX(), this.getSeedFieldY(), this.getSeedFieldWidth(), this.fontRenderer.FONT_HEIGHT);
         this.useSeedLabelBounds.updateBounds(this.getUseSeedLabelX(), this.getUseSeedLabelY(), this.getUseSeedLabelWidth(), this.fontRenderer.FONT_HEIGHT);
-        this.structureButtonBounds.updateBounds(structureX, this.height - 50, buttonWidth, 20);
         this.updateButtonValidity();
     }
     
@@ -252,7 +256,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
         
-        this.structureButtonBounds.updateHovered(mouseX, mouseY);
         this.seedFieldBounds.updateHovered(mouseX, mouseY);
         this.useSeedLabelBounds.updateHovered(mouseX, mouseY);
         this.mapBounds.updateHovered(mouseX, mouseY);
@@ -431,7 +434,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             default:
         }
         
-        if (this.structureButtonBounds.isHovered() && this.copyState == CopyState.HOVERING && this.buttonStructures.enabled) {
+        if (this.buttonStructures.isMouseOver() && this.copyState == CopyState.HOVERING && this.buttonStructures.enabled) {
             String structureNote = I18n.format(PREFIX + "structuresNote");
             
             this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(structureNote, STRUCTURE_NOTE_ROW_LEN), mouseX, mouseY);
@@ -440,7 +443,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.hoveredStructure = false;
         this.hoveredStructurePos = Long.MIN_VALUE;
         
-        if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY)) {
+        if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY) && this.isFocused) {
             int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedPreviewSettings.zoom);
             int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedPreviewSettings.zoom);
 
@@ -581,12 +584,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     ((FiniteChunkSource)this.chunkSource).haltGeneration();
                 }
                 
-                if (this.state != ProgressState.STARTED) {
-                    this.updateState(ProgressState.CANCELED);
-                } else {
-                    this.updateState(ProgressState.CANCELING);
-                }
-                
+                this.updateState(this.state != ProgressState.STARTED ? ProgressState.CANCELED : ProgressState.CANCELING);
                 break;
             case GUI_ID_SCREENSHOT:
                 if (this.state != ProgressState.LOADED) {
@@ -612,6 +610,21 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     }
                 });
 
+                break;
+            case GUI_ID_LOCATE_BIOME:
+                Consumer<GuiModalLocateBiome> onCancel = modal -> {
+                    this.searchBiome = modal.getBiome();
+                    this.isFocused = true;
+                };
+                this.isFocused = false;
+                this.mc.displayGuiScreen(new GuiModalLocateBiome(
+                    this,
+                    I18n.format(PREFIX + "locateBiome"),
+                    modal -> this.isFocused = true,
+                    onCancel,
+                    this::sampleInjectedBiome,
+                    this.searchBiome
+                ));
                 break;
         }
 
@@ -644,6 +657,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progressLen = 0.0;
         this.progress = 0.0f;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
+        this.haltGeneration = false;
         this.updateState(ProgressState.STARTED);
         this.updateButtonValidity();
         this.unloadMapTexture(this.prevMapTexture);
@@ -848,7 +862,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
 
     private void drawScreenshotTooltip(int viewportX, int viewportY, int viewportSize, int mouseX, int mouseY) {
-        if (this.buttonScreenshot.visible && this.buttonScreenshot.isMouseOver()) {
+        if (this.buttonScreenshot.visible && this.buttonScreenshot.isMouseOver() && this.isFocused) {
             String text = I18n.format(PREFIX + "screenshot");
             int textWidth = this.fontRenderer.getStringWidth(text);
             
@@ -920,14 +934,15 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     
     private void updateButtonValidity() {
         boolean notCanceled = this.state != ProgressState.CANCELING && this.state != ProgressState.CANCELED;
-        boolean enabled = this.state != ProgressState.STARTED && notCanceled;
+        boolean previewIdle = this.state != ProgressState.STARTED && notCanceled;
 
-        this.sliderZoom.enabled = enabled;
-        this.buttonBiomeBlend.enabled = enabled;
-        this.buttonStructures.enabled = enabled;
-        this.buttonGenerate.enabled = enabled && (!this.previewSettings.equals(this.selectedPreviewSettings) || this.worldSeed.isEmpty());
-        this.buttonCancel.enabled = notCanceled;
-        this.buttonScreenshot.enabled = !this.savingScreenshot && this.state == ProgressState.LOADED;
+        this.sliderZoom.enabled = previewIdle && this.isFocused;
+        this.buttonBiomeBlend.enabled = previewIdle && this.isFocused;
+        this.buttonStructures.enabled = previewIdle && this.isFocused;
+        this.buttonGenerate.enabled = previewIdle && (!this.previewSettings.equals(this.selectedPreviewSettings) || this.worldSeed.isEmpty()) && this.isFocused;
+        this.buttonCancel.enabled = notCanceled && this.isFocused;
+        this.buttonScreenshot.enabled = !this.savingScreenshot && this.state == ProgressState.LOADED && this.isFocused;
+        this.buttonLocateBiome.enabled = previewIdle && (!this.worldSeed.isEmpty() || this.seed != 0L) && this.isFocused;
     }
     
     private void initSources(long seed, ModernBetaGeneratorSettings settings) {
@@ -1066,7 +1081,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private static long parseSeed(String seedString) {
-        long seed = new Random().nextLong();
+        long seed = 0L;
         
         if (!seedString.isEmpty()) {
             try {

@@ -153,8 +153,8 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         int boxB = centerY - this.modalHeight / 2 + ICON_SIZE + 1 + ICON_PADDING_T;
         int boxC = boxL + ICON_SIZE / 2;
         
-        int prevX = boxC - 20;
-        int nextX = boxC + BUTTON_PADDING;
+        int buttonPrevX = boxC - 20;
+        int buttonNextX = boxC + BUTTON_PADDING;
         
         int fieldX = centerX - this.modalWidth / 2 + 10;
         int fieldNameY = centerY - 50;
@@ -164,20 +164,20 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         String initialModalDescText = this.fieldDesc != null ? this.fieldDesc.getText() : this.initialDescText;
         String intialModalSettingsText = this.fieldSettings != null ? this.fieldSettings.getText() : this.initialExportText;
         
-        this.buttonPrev = this.addButton(new GuiButtonIcon(GUI_ID_PREV, prevX, boxB + 4, "<"));
-        this.buttonNext = this.addButton(new GuiButtonIcon(GUI_ID_NEXT, nextX, boxB + 4, ">"));
+        this.buttonPrev = this.addButton(new GuiButtonIcon(GUI_ID_PREV, buttonPrevX, boxB + 4, "<"));
+        this.buttonNext = this.addButton(new GuiButtonIcon(GUI_ID_NEXT, buttonNextX, boxB + 4, ">"));
         
         this.fieldName = this.createInitialField(this.fieldName, GUI_ID_NAME, fieldX, fieldNameY, NAME_FIELD_LENGTH, 20, initialModalNameText, MAX_PRESET_NAME_LENGTH);
         this.fieldDesc = this.createInitialField(this.fieldDesc, GUI_ID_DESC, fieldX, fieldDescY, DESC_FIELD_LENGTH, 20, initialModalDescText, MAX_PRESET_DESC_LENGTH);
         this.fieldSettings = this.createInitialField(this.fieldSettings, GUI_ID_SETTINGS, fieldX, fieldSettingsY, SETTINGS_FIELD_LENGTH, 20, intialModalSettingsText, ModernBetaGeneratorSettings.MAX_PRESET_LENGTH);
         
-        int copyX = this.fieldSettings.x + this.fieldSettings.width + GuiUtil.BUTTON_SPACE;
-        int copyY = fieldSettingsY;
-        int pasteX = copyX + 20 + GuiUtil.BUTTON_SPACE / 2;
-        int pasteY = copyY;
+        int buttonCopyX = this.fieldSettings.x + this.fieldSettings.width + GuiUtil.BUTTON_SPACE;
+        int buttonCopyY = fieldSettingsY;
+        int buttonPasteX = buttonCopyX + 20 + GuiUtil.BUTTON_SPACE / 2;
+        int buttonPasteY = buttonCopyY;
         
-        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, copyX, copyY, "\u29C9"));
-        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, pasteX, pasteY, "\u29C8"));
+        this.buttonCopy = this.addButton(new GuiButtonIcon(GUI_ID_COPY, buttonCopyX, buttonCopyY, "\u29C9"));
+        this.buttonPaste = this.addButton(new GuiButtonIcon(GUI_ID_PASTE, buttonPasteX, buttonPasteY, "\u29C8"));
         
         this.iconBounds.updateBounds(boxL + 1, boxT + 1, ICON_SIZE, ICON_SIZE);
         
