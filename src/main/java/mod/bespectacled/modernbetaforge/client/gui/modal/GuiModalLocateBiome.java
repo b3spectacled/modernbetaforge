@@ -190,7 +190,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         
         switch (this.state) {
             case STARTED:
-                info = I18n.format(PREFIX + "success", getFormattedValue("[...]", TextFormatting.YELLOW, TextFormatting.OBFUSCATED));
+                info = I18n.format(PREFIX + "success", getFormattedValue("123", TextFormatting.YELLOW, TextFormatting.OBFUSCATED));
                 break;
             case FAILED:
                 info = I18n.format(PREFIX + "failure");
