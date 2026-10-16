@@ -160,12 +160,16 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
             
             BlockPos closestPos = ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths[levelWidths.length - 1], steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
             
-            if (closestPos != null) {
-                this.distance = (int)MathUtil.distance(0, 0, closestPos.getX(), closestPos.getZ());
-                this.state = ProgressState.SUCCEEDED;
+            if (this.haltSearch) {
+                this.state = ProgressState.NOT_STARTED;
             } else {
-                this.distance = -1;
-                this.state = ProgressState.FAILED;
+                if (closestPos != null) {
+                    this.distance = (int)MathUtil.distance(0, 0, closestPos.getX(), closestPos.getZ());
+                    this.state = ProgressState.SUCCEEDED;
+                } else {
+                    this.distance = -1;
+                    this.state = ProgressState.FAILED;
+                }
             }
             
             this.infoString = this.getInfoString();
