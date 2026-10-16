@@ -1,6 +1,8 @@
 package mod.bespectacled.modernbetaforge.client.gui.modal;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -41,6 +43,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
     
     private final ExecutorWrapper executor;
     private final BiFunction<Integer, Integer, Biome> biomeLocator;
+    private final Map<Biome, BlockPos> posCache;
     
     private GuiButton buttonLocate;
     private GuiButton buttonBiome;
@@ -63,6 +66,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         
         this.executor = new ExecutorWrapper(1, "locate_biome");
         this.biomeLocator = biomeLocator;
+        this.posCache = new HashMap<>();
         
         this.biome = biome;
         this.state = ProgressState.NOT_STARTED;
@@ -158,7 +162,9 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
             int[] levelWidths = ModernBetaGeneratorSettings.LEVEL_WIDTHS;
             int steps = 16;
             
-            BlockPos closestPos = ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths[levelWidths.length - 1], steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
+            BlockPos closestPos = this.posCache.containsKey(this.biome) ?
+                this.posCache.get(this.biome) :
+                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths[levelWidths.length - 1], steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
             
             if (this.haltSearch) {
                 this.state = ProgressState.NOT_STARTED;
@@ -166,6 +172,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
                 if (closestPos != null) {
                     this.distance = (int)MathUtil.distance(0, 0, closestPos.getX(), closestPos.getZ());
                     this.state = ProgressState.SUCCEEDED;
+                    this.posCache.put(this.biome, closestPos);
                 } else {
                     this.distance = -1;
                     this.state = ProgressState.FAILED;
