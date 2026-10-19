@@ -2,12 +2,14 @@ package mod.bespectacled.modernbetaforge.world.setting;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,8 +63,8 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModernBetaGeneratorSettings {
-    public static final int[] LEVEL_WIDTHS = { 64, 128, 256, 512, 768, 1024, 1536, 2048, 2560 };
-    public static final int[] LEVEL_HEIGHTS = { 64, 96, 128, 160, 192, 224, 256 };
+    public static final List<Integer> LEVEL_WIDTHS = ImmutableList.<Integer>builder().add(64, 128, 256, 512, 768, 1024, 1536, 2048, 2560).build();
+    public static final List<Integer> LEVEL_HEIGHTS = ImmutableList.<Integer>builder().add(64, 96, 128, 160, 192, 224, 256).build();
     
     public static final int MAX_PRESET_LENGTH = 100000;
     
@@ -2145,9 +2147,9 @@ public class ModernBetaGeneratorSettings {
                 factory.waterLakeChance = MathHelper.clamp(factory.waterLakeChance, MIN_WATER_LAKE_CHANCE, MAX_WATER_LAKE_CHANCE);
                 factory.lavaLakeChance = MathHelper.clamp(factory.lavaLakeChance, MIN_LAVA_LAKE_CHANCE, MAX_LAVA_LAKE_CHANCE);
 
-                factory.levelWidth = MathHelper.clamp(factory.levelWidth, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
-                factory.levelLength = MathHelper.clamp(factory.levelLength, LEVEL_WIDTHS[0], LEVEL_WIDTHS[LEVEL_WIDTHS.length - 1]);
-                factory.levelHeight = MathHelper.clamp(factory.levelHeight, LEVEL_HEIGHTS[0], LEVEL_HEIGHTS[LEVEL_HEIGHTS.length - 1]);
+                factory.levelWidth = MathHelper.clamp(factory.levelWidth, LEVEL_WIDTHS.get(0), LEVEL_WIDTHS.get(LEVEL_WIDTHS.size() - 1));
+                factory.levelLength = MathHelper.clamp(factory.levelLength, LEVEL_WIDTHS.get(0), LEVEL_WIDTHS.get(LEVEL_WIDTHS.size() - 1));
+                factory.levelHeight = MathHelper.clamp(factory.levelHeight, LEVEL_HEIGHTS.get(0), LEVEL_HEIGHTS.get(LEVEL_HEIGHTS.size() - 1));
                 factory.levelCaveWidth = MathHelper.clamp(factory.levelCaveWidth, MIN_LEVEL_CAVE_WIDTH, MAX_LEVEL_CAVE_WIDTH);
                 
                 factory.claySize = MathHelper.clamp(factory.claySize, MIN_ORE_SIZE, MAX_ORE_SIZE);

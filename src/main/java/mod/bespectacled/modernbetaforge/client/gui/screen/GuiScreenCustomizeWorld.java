@@ -960,13 +960,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                     this.settings.levelType = IndevType.values()[(int)entryValue].id;
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_WIDTH:
-                    this.settings.levelWidth = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue];
+                    this.settings.levelWidth = ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)entryValue);
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_LENGTH:
-                    this.settings.levelLength = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue];
+                    this.settings.levelLength = ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)entryValue);
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_HEIGHT:
-                    this.settings.levelHeight = ModernBetaGeneratorSettings.LEVEL_HEIGHTS[(int)entryValue];
+                    this.settings.levelHeight = ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get((int)entryValue);
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_HOUSE:
                     this.settings.levelHouse = IndevHouse.values()[(int)entryValue].id;
@@ -1438,9 +1438,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         
         int levelThemeId = IndevTheme.fromId(this.settings.levelTheme).ordinal();
         int levelTypeId = IndevType.fromId(this.settings.levelType).ordinal();
-        int levelWidth = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.settings.levelWidth);
-        int levelLength = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.settings.levelLength);
-        int levelHeight = getNdx(ModernBetaGeneratorSettings.LEVEL_HEIGHTS, this.settings.levelHeight);
+        int levelWidth = ModernBetaGeneratorSettings.LEVEL_WIDTHS.indexOf(this.settings.levelWidth);
+        int levelLength = ModernBetaGeneratorSettings.LEVEL_WIDTHS.indexOf(this.settings.levelLength);
+        int levelHeight = ModernBetaGeneratorSettings.LEVEL_HEIGHTS.indexOf(this.settings.levelHeight);
         int levelHouseId = IndevHouse.fromId(this.settings.levelHouse).ordinal();
         int levelSeaLevel = this.getLevelSeaLevel();
         String levelSeaLevelStr = levelSeaLevel == -1 ? "" : Integer.toString(levelSeaLevel);
@@ -1535,9 +1535,9 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
             null,
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_THEME, NbtTags.LEVEL_THEME, 0f, IndevTheme.values().length - 1, levelThemeId, this),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_TYPE, NbtTags.LEVEL_TYPE, 0f, IndevType.values().length - 1, levelTypeId, this),
-            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_WIDTH, NbtTags.LEVEL_WIDTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, levelWidth, this),
-            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_LENGTH, NbtTags.LEVEL_LENGTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, levelLength, this),
-            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, NbtTags.LEVEL_HEIGHT, 0f, ModernBetaGeneratorSettings.LEVEL_HEIGHTS.length - 1, levelHeight, this),
+            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_WIDTH, NbtTags.LEVEL_WIDTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1, levelWidth, this),
+            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_LENGTH, NbtTags.LEVEL_LENGTH, 0f, ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1, levelLength, this),
+            this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, NbtTags.LEVEL_HEIGHT, 0f, ModernBetaGeneratorSettings.LEVEL_HEIGHTS.size() - 1, levelHeight, this),
             this.createGuiLabelNoPrefix(GuiIdentifiers.PG0_L_INDEV_SEA_LEVEL,  ": " + levelSeaLevelStr, GuiPageButtonListExtended::getEntryLabelTrimWidth, false, PREFIX + "seaLevel"),
             this.createGuiSlider(GuiIdentifiers.PG1_S_LEVEL_HOUSE, NbtTags.LEVEL_HOUSE, 0f, IndevHouse.values().length - 1, levelHouseId, this),
             this.createGuiButton(GuiIdentifiers.PG1_B_USE_INDEV_CAVES, NbtTags.USE_INDEV_CAVES, this.settings.useIndevCaves),
@@ -2372,13 +2372,13 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
                 }
                 
                 case GuiIdentifiers.PG1_S_LEVEL_WIDTH:
-                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)entryValue));
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_LENGTH:
-                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue]);
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)entryValue));
                     break;
                 case GuiIdentifiers.PG1_S_LEVEL_HEIGHT:
-                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_HEIGHTS[(int)entryValue]);
+                    formattedString = String.format("%d", ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get((int)entryValue));
                     break;
                 
                 default: formattedString = String.format("%d", (int)entryValue);
@@ -2962,15 +2962,6 @@ public class GuiScreenCustomizeWorld extends GuiScreen implements GuiSlider.Form
         }
         
         return string;
-    }
-
-    private static int getNdx(int[] arr, int val) {
-        for (int i = 0; i < arr.length; ++i) {
-            if (val == arr[i])
-                return i;
-        }
-        
-        return 0;
     }
     
     private static float roundToThreeDec(float entryValue) {

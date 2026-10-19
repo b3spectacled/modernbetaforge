@@ -2,6 +2,7 @@ package mod.bespectacled.modernbetaforge.client.gui.modal;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -159,12 +160,12 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         this.haltSearch = false;
         
         this.executor.queueRunnable(() -> {
-            int[] levelWidths = ModernBetaGeneratorSettings.LEVEL_WIDTHS;
+            List<Integer> levelWidths = ModernBetaGeneratorSettings.LEVEL_WIDTHS;
             int steps = 16;
             
             BlockPos closestPos = this.posCache.containsKey(this.biome) ?
                 this.posCache.get(this.biome) :
-                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths[levelWidths.length - 1], steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
+                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths.get(levelWidths.size() - 1), steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
             
             if (this.haltSearch) {
                 this.state = ProgressState.NOT_STARTED;

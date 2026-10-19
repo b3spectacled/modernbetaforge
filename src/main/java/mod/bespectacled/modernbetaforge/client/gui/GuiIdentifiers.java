@@ -582,9 +582,9 @@ public class GuiIdentifiers {
             .put(GuiIdentifiers.PG0_S_LAVA_LAKE_CHANCE, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LAVA_LAKE_CHANCE, () -> ModernBetaGeneratorSettings.MAX_LAVA_LAKE_CHANCE))
              
             // Page 2 - Chunk
-            .put(GuiIdentifiers.PG1_S_LEVEL_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[0], () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1]))
-            .put(GuiIdentifiers.PG1_S_LEVEL_LENGTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[0], () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS[ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1]))
-            .put(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS[0], () -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS[ModernBetaGeneratorSettings.LEVEL_HEIGHTS.length - 1]))
+            .put(GuiIdentifiers.PG1_S_LEVEL_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1)))
+            .put(GuiIdentifiers.PG1_S_LEVEL_LENGTH, new Tuple<>(() ->ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1)))
+            .put(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get(ModernBetaGeneratorSettings.LEVEL_HEIGHTS.size() - 1)))
             .put(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, () -> ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH))
             
             .put(GuiIdentifiers.PG1_S_LAYER_SZ, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_BIOME_SIZE, () -> ModernBetaGeneratorSettings.MAX_BIOME_SIZE))

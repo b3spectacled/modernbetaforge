@@ -201,7 +201,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     public void initGui() {
         this.list = new EmptyListPreset(this);
         
-        int zoomNdx = getNdx(ModernBetaGeneratorSettings.LEVEL_WIDTHS, this.previewSettings.zoom);
+        int zoomNdx = ModernBetaGeneratorSettings.LEVEL_WIDTHS.indexOf(this.previewSettings.zoom);
         
         int minButtonWidth = BUTTON_WIDTH - 20;
         int maxButtonWidth = BUTTON_WIDTH + 80;
@@ -231,7 +231,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.buttonGenerate = this.addButton(new GuiButton(GUI_ID_GENERATE, buttonGenerateX, buttonR0Y, buttonWidth, 20, I18n.format(PREFIX + "generate")));
         this.buttonCancel =  this.addButton(new GuiButton(GUI_ID_CANCEL, buttonCancelX, buttonR0Y, buttonWidth, 20, I18n.format("gui.cancel")));
         
-        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, buttonZoomX, buttonR1Y, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.length - 1, zoomNdx, this));
+        this.sliderZoom = this.addButton(new GuiSlider(this, GUI_ID_ZOOM, buttonZoomX, buttonR1Y, PREFIX + "zoom", 2, ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1, zoomNdx, this));
         this.buttonBiomeBlend = this.addButton(new GuiListButton(this, GUI_ID_BIOME_COLORS, buttonBiomeX, buttonR1Y, I18n.format(PREFIX + "biomeBlend"), true));
         this.buttonStructures = this.addButton(new GuiListButton(this, GUI_ID_STRUCTURES, buttonStructureX, buttonR1Y, I18n.format(PREFIX + "structures"), true));
         
@@ -500,7 +500,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             return String.format(
                 "%s: %d %s",
                 entryString,
-                ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)entryValue],
+                ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)entryValue),
                 I18n.format(PREFIX + "blocks")
             );
         }
@@ -522,7 +522,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     @Override
     public void setEntryValue(int id, float value) {
         if (id == GUI_ID_ZOOM) {
-            this.previewSettings.zoom = ModernBetaGeneratorSettings.LEVEL_WIDTHS[(int)value];
+            this.previewSettings.zoom = ModernBetaGeneratorSettings.LEVEL_WIDTHS.get((int)value);
         }
         
         this.updateButtonValidity();
@@ -1092,15 +1092,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
         
         return seed;
-    }
-    
-    private static int getNdx(int[] arr, int val) {
-        for (int i = 0; i < arr.length; ++i) {
-            if (val == arr[i])
-                return i;
-        }
-        
-        return 0;
     }
 
     @SideOnly(Side.CLIENT)
