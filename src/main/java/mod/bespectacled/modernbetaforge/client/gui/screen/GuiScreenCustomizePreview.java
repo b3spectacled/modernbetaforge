@@ -163,6 +163,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private CopyState copyState;
     private Supplier<String> tpCallback;
     private Biome searchBiome;
+    private int searchSteps;
     private float progress;
     private double progressLen;
     private long copiedTime;
@@ -193,6 +194,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.previewSettings = new PreviewSettings(previewSettings);
         this.mapTexture = new MapTexture(this, ModernBeta.createRegistryKey("map_preview"));
         this.searchBiome = Biomes.PLAINS;
+        this.searchSteps = 64;
         this.progress = 0.0f;
         this.isFocused = true;
     }
@@ -614,6 +616,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             case GUI_ID_LOCATE_BIOME:
                 Consumer<GuiModalLocateBiome> onCancel = modal -> {
                     this.searchBiome = modal.getBiome();
+                    this.searchSteps = modal.getSteps();
                     this.isFocused = true;
                 };
                 this.isFocused = false;
@@ -623,7 +626,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     modal -> this.isFocused = true,
                     onCancel,
                     this::sampleInjectedBiome,
-                    this.searchBiome
+                    this.searchBiome,
+                    this.searchSteps
                 ));
                 break;
         }

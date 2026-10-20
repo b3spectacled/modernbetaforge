@@ -10,6 +10,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.Level;
+
+import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
@@ -49,6 +52,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
     private GuiButton buttonLocate;
     private GuiButton buttonBiome;
     private Biome biome;
+    private int steps;
     private ProgressState state;
     private String infoString;
     private int infoColor;
@@ -61,7 +65,8 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         Consumer<GuiModalLocateBiome> onConfirm,
         Consumer<GuiModalLocateBiome> onCancel,
         BiFunction<Integer, Integer, Biome> biomeLocator,
-        Biome biome
+        Biome biome,
+        int steps
     ) {
         super(parent, title, MODAL_WIDTH, MODAL_HEIGHT, onConfirm, onCancel);
         
@@ -70,6 +75,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         this.posCache = new HashMap<>();
         
         this.biome = biome;
+        this.steps = steps;
         this.state = ProgressState.NOT_STARTED;
         
         this.infoString = this.getInfoString();
@@ -122,6 +128,10 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         return this.biome;
     }
     
+    public int getSteps() {
+        return this.steps;
+    }
+    
     @Override
     protected void actionPerformed(GuiButton guiButton) throws IOException {
         switch (guiButton.id) {
@@ -161,11 +171,10 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         
         this.executor.queueRunnable(() -> {
             List<Integer> levelWidths = ModernBetaGeneratorSettings.LEVEL_WIDTHS;
-            int steps = 16;
             
             BlockPos closestPos = this.posCache.containsKey(this.biome) ?
                 this.posCache.get(this.biome) :
-                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths.get(levelWidths.size() - 1), steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
+                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths.get(levelWidths.size() - 1), this.steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
             
             if (this.haltSearch) {
                 this.state = ProgressState.NOT_STARTED;
@@ -174,6 +183,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
                     this.distance = (int)MathUtil.distance(0, 0, closestPos.getX(), closestPos.getZ());
                     this.state = ProgressState.SUCCEEDED;
                     this.posCache.put(this.biome, closestPos);
+                    ModernBeta.log(Level.DEBUG, String.format("/tp %d %d %d", closestPos.getX(), 255, closestPos.getZ()));
                 } else {
                     this.distance = -1;
                     this.state = ProgressState.FAILED;
