@@ -583,7 +583,7 @@ public class GuiIdentifiers {
              
             // Page 2 - Chunk
             .put(GuiIdentifiers.PG1_S_LEVEL_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1)))
-            .put(GuiIdentifiers.PG1_S_LEVEL_LENGTH, new Tuple<>(() ->ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1)))
+            .put(GuiIdentifiers.PG1_S_LEVEL_LENGTH, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_WIDTHS.get(ModernBetaGeneratorSettings.LEVEL_WIDTHS.size() - 1)))
             .put(GuiIdentifiers.PG1_S_LEVEL_HEIGHT, new Tuple<>(() -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get(0), () -> ModernBetaGeneratorSettings.LEVEL_HEIGHTS.get(ModernBetaGeneratorSettings.LEVEL_HEIGHTS.size() - 1)))
             .put(GuiIdentifiers.PG1_S_LEVEL_CAVE_WIDTH, new Tuple<>(() -> ModernBetaGeneratorSettings.MIN_LEVEL_CAVE_WIDTH, () -> ModernBetaGeneratorSettings.MAX_LEVEL_CAVE_WIDTH))
             

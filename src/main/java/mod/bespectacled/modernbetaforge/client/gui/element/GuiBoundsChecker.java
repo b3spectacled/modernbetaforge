@@ -10,12 +10,14 @@ public class GuiBoundsChecker {
     private int width;
     private int height;
     private boolean hovered;
+    private boolean enabled;
     
     public GuiBoundsChecker() {
         this.x = 0;
         this.y = 0;
         this.width = 0;
         this.height = 0;
+        this.enabled = true;
     }
     
     public void updateBounds(int x, int y, int width, int height) {
@@ -35,7 +37,11 @@ public class GuiBoundsChecker {
         int top = this.y;
         int bottom = this.y + this.height;
         
-        return mouseX >= left && mouseX < right && mouseY >= top && mouseY < bottom;
+        return this.enabled && mouseX >= left && mouseX < right && mouseY >= top && mouseY < bottom;
+    }
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
     public int getRelativeX(int mouseX) {

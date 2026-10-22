@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Level;
 import mod.bespectacled.modernbetaforge.ModernBeta;
 import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
+import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
@@ -48,6 +49,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
     private final ExecutorWrapper executor;
     private final BiFunction<Integer, Integer, Biome> biomeLocator;
     private final Map<Biome, BlockPos> posCache;
+    private final GuiBoundsChecker distBounds;
     
     private GuiButton buttonLocate;
     private GuiButton buttonBiome;
@@ -73,6 +75,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         this.executor = new ExecutorWrapper(1, "locate_biome");
         this.biomeLocator = biomeLocator;
         this.posCache = new HashMap<>();
+        this.distBounds = new GuiBoundsChecker();
         
         this.biome = biome;
         this.steps = steps;
@@ -181,8 +184,17 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
             } else {
                 if (closestPos != null) {
                     this.distance = (int)MathUtil.distance(0, 0, closestPos.getX(), closestPos.getZ());
-                    this.state = ProgressState.SUCCEEDED;
                     this.posCache.put(this.biome, closestPos);
+                    
+                    // Update distance bounds
+                    String info = I18n.format(PREFIX + "success", new Integer(this.distance).toString());
+                    int infoW = this.fontRenderer.getStringWidth(info);
+                    int infoH = this.fontRenderer.FONT_HEIGHT;
+                    int infoX = this.width / 2 - infoW / 2;
+                    int infoY = this.buttonBiome.y + this.buttonBiome.height + 6;
+                    this.distBounds.updateBounds(infoX, infoY, infoW, infoH);
+                    
+                    this.state = ProgressState.SUCCEEDED;
                     ModernBeta.log(Level.DEBUG, String.format("/tp %d %d %d", closestPos.getX(), 255, closestPos.getZ()));
                 } else {
                     this.distance = -1;
@@ -205,6 +217,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         this.buttonBiome.enabled = enabled;
         this.buttonLocate.enabled = enabled;
         this.buttonCancel.enabled = this.state != ProgressState.CANCELING;
+        this.distBounds.setEnabled(enabled && this.state == ProgressState.SUCCEEDED);
     }
     
     private String getInfoString() {

@@ -49,6 +49,7 @@ createWorld.customize.preview.modernbetaforge.copySeed=Copy to clipboard
 createWorld.customize.preview.modernbetaforge.copiedSeed=Copied to clipboard!
 createWorld.customize.preview.modernbetaforge.copyUseSeed=Copy to world seed field
 createWorld.customize.preview.modernbetaforge.copiedUseSeed=Copied to world seed field!
+createWorld.customize.preview.modernbetaforge.copyTp=Copy /tp command to clipboard
 createWorld.customize.preview.modernbetaforge.copiedTp=Copied /tp command to clipboard!
 createWorld.customize.preview.modernbetaforge.structuresNote=Vanilla structures only. Positions may be inaccurate if another installed mod changes structure placement.
 createWorld.customize.preview.modernbetaforge.screenshot=Save Screenshot
