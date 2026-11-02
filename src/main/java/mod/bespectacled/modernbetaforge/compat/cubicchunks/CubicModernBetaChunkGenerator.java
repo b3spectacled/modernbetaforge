@@ -38,8 +38,7 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
     
     private final ModernBetaChunkGenerator chunkGenerator;
     private final World world;
-    private final ChunkCache<ChunkPrimerExtended> chunkPrimerCache;;
-    @SuppressWarnings("unused") private final int cubeSizeY;
+    private final ChunkCache<ChunkPrimerExtended> chunkPrimerCache;
     private final int cubeMinY;
     private final int cubeTopY;
     
@@ -51,7 +50,6 @@ public class CubicModernBetaChunkGenerator extends VanillaCompatibilityGenerator
         this.chunkGenerator = chunkGenerator;
         this.world = world;
         this.chunkPrimerCache = new ChunkCache<>("initial_chunk", INITIAL_CHUNK_CAPACITY, this::generateChunkPrimer);
-        this.cubeSizeY = Math.floorDiv(chunkGenerator.getChunkSource().getWorldHeight() - chunkGenerator.getChunkSource().getWorldFloor(), Cube.SIZE);
         this.cubeMinY = Math.floorDiv(chunkGenerator.getChunkSource().getWorldFloor(), Cube.SIZE);
         this.cubeTopY = Math.floorDiv(chunkGenerator.getChunkSource().getWorldHeight(), Cube.SIZE);
     }
