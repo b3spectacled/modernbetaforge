@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -135,7 +136,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
      * Used for /locatebiome command
      */
     public BlockPos locateBiome(int startX, int startZ, int range, int steps, Biome biomeToSearch, Random random) {
-        return locateBiome(startX, startZ, range, steps, biomeToSearch, random, this::getBiome, () -> false);
+        return locateBiome(startX, startZ, range, steps, biomeToSearch, random, this::getBiome);
     }
 
     public BiomeSource getBiomeSource() {
@@ -178,10 +179,23 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
         int startZ,
         int range,
         int steps,
-        Biome biomeToSearch,
+        Biome searchBiome,
+        Random random,
+        BiFunction<Integer, Integer, Biome> biomeLocator
+    ) {
+        return locateBiome(startX, startZ, range, steps, searchBiome, random, biomeLocator, () -> false, progress -> {});
+    }
+    
+    public static BlockPos locateBiome(
+        int startX,
+        int startZ,
+        int range,
+        int steps,
+        Biome searchBiome,
         Random random,
         BiFunction<Integer, Integer, Biome> biomeLocator,
-        Supplier<Boolean> haltCallback
+        Supplier<Boolean> haltCallback,
+        Consumer<Float> progressCallback
     ) {
         BlockPos blockPos = null;
         int chance = 0;
@@ -191,6 +205,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                 return null;
             }
             
+            progressCallback.accept(size / (float)range);
             for (int localX = -size; localX <= size; localX += steps) {
                 boolean atEdgeX = Math.abs(localX) == size;
                 
@@ -204,7 +219,7 @@ public class ModernBetaBiomeProvider extends BiomeProvider {
                     int x = startX + localX;
                     int z = startZ + localZ;
                     
-                    if (biomeLocator.apply(x, z) == biomeToSearch && (blockPos == null || random.nextInt(chance + 1) == 0)) {
+                    if (biomeLocator.apply(x, z) == searchBiome && (blockPos == null || random.nextInt(chance + 1) == 0)) {
                         return new BlockPos(x, 0, z);
                     }
                     

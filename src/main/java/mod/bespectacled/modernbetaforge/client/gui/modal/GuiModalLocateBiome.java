@@ -17,6 +17,7 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
+import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -60,6 +61,8 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
     private int infoColor;
     private int distance;
     private boolean haltSearch;
+    private float targetProgress;
+    private float progress;
     
     public GuiModalLocateBiome(
         GuiScreen parent,
@@ -116,6 +119,10 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         int infoY = this.buttonBiome.y + this.buttonBiome.height + 6;
         
         this.drawCenteredString(this.fontRenderer, this.infoString, infoX, infoY, this.infoColor);
+        
+        if (this.state == ProgressState.STARTED) {
+            this.drawProgressBar(partialTicks);
+        }
     }
     
     @Override
@@ -162,6 +169,16 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         this.updateButtonValidity();
     }
     
+    private void drawProgressBar(float partialTicks) {
+        this.progress = MathUtil.clampedLerp(this.progress, this.targetProgress, partialTicks);
+        
+        double progressLen = (this.buttonBiome.width - 2) * this.progress;
+        double progressBarL = this.buttonBiome.x + 1;
+        double progressBarT = this.buttonBiome.y + this.buttonBiome.height - 1;
+
+        DrawUtil.drawRect(progressBarL, progressBarT, progressBarL + progressLen, progressBarT + 1, GuiColors.ARGB_TRANS_GREEN);
+    }
+    
     private void exit() {
         this.onCancel.accept(this);
         this.executor.shutdown();
@@ -171,13 +188,25 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
     private void locateBiome() {
         this.state = ProgressState.STARTED;
         this.haltSearch = false;
+        this.targetProgress = 0.0f;
+        this.progress = 0.0f;
         
         this.executor.queueRunnable(() -> {
             List<Integer> levelWidths = ModernBetaGeneratorSettings.LEVEL_WIDTHS;
             
             BlockPos closestPos = this.posCache.containsKey(this.biome) ?
                 this.posCache.get(this.biome) :
-                ModernBetaBiomeProvider.locateBiome(0, 0, levelWidths.get(levelWidths.size() - 1), this.steps, this.biome, new Random(), this.biomeLocator, () -> this.haltSearch);
+                ModernBetaBiomeProvider.locateBiome(
+                    0,
+                    0,
+                    levelWidths.get(levelWidths.size() - 1),
+                    this.steps,
+                    this.biome,
+                    new Random(),
+                    this.biomeLocator,
+                    () -> this.haltSearch,
+                    progress -> this.targetProgress = progress
+                );
             
             if (this.haltSearch) {
                 this.state = ProgressState.NOT_STARTED;
