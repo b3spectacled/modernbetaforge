@@ -58,10 +58,10 @@ public class FiniteDataHandler {
         boolean saved = false;
         
         this.finiteData.setLevelData(levelData, levelMap);
-        try(FileOutputStream fos = new FileOutputStream(new File(this.worldDirectory, FILE_NAME));
+        try (FileOutputStream fos = new FileOutputStream(new File(this.worldDirectory, FILE_NAME));
             GZIPOutputStream gos = new GZIPOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(gos)
-        ) {
+            ObjectOutputStream oos = new ObjectOutputStream(gos)) {
+            
             oos.writeObject(this.finiteData);
             saved = true;
             
@@ -86,10 +86,10 @@ public class FiniteDataHandler {
     public LevelDataContainer readLevelData(int levelWidth, int levelHeight, int levelLength) {
         LevelDataContainer levelDataContainer;
         
-        try(FileInputStream fis = new FileInputStream(new File(this.worldDirectory, FILE_NAME));
+        try (FileInputStream fis = new FileInputStream(new File(this.worldDirectory, FILE_NAME));
             GZIPInputStream gis = new GZIPInputStream(fis);
-            ObjectInputStream ois = new ObjectInputStream(gis)
-        ) {
+            ObjectInputStream ois = new ObjectInputStream(gis)) {
+            
             this.finiteData = (FiniteData)ois.readObject();
             levelDataContainer = this.finiteData.getLevelData(levelWidth, levelHeight, levelLength);
             
