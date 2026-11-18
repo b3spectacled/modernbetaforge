@@ -175,8 +175,9 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         double progressLen = (this.buttonBiome.width - 2) * this.progress;
         double progressBarL = this.buttonBiome.x + 1;
         double progressBarT = this.buttonBiome.y + this.buttonBiome.height - 1;
-
-        DrawUtil.drawRect(progressBarL, progressBarT, progressBarL + progressLen, progressBarT + 1, GuiColors.ARGB_TRANS_GREEN);
+        int progressColor = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_GREEN, GuiColors.ARGB_TRANS_RED, this.progress);
+        
+        DrawUtil.drawRect(progressBarL, progressBarT, progressBarL + progressLen, progressBarT + 1, progressColor);
     }
     
     private void exit() {

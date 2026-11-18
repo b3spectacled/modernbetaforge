@@ -28,4 +28,5 @@ public class GuiColors {
     public static final int ARGB_TRANS_GREY_200_064 = -935313344; // 200, 64, 64, 64
     public static final int ARGB_TRANS_GREY_200_096 = -933207968; // 200, 96, 96, 96
     public static final int ARGB_TRANS_GREEN = -1602158720;       // 160, 128, 255, 128
+    public static final int ARGB_TRANS_RED = -1593868160;         // 160, 255, 128, 128
 }
