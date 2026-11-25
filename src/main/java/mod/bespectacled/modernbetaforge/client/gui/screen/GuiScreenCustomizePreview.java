@@ -902,8 +902,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int worldHeight = this.chunkSource.getWorldHeight();
         int worldFloor = this.chunkSource.getWorldFloor();
         int seaLevel = this.chunkSource.getSeaLevel();
-        int relWorldHeight = worldHeight - worldFloor;
-        int relSeaLevel = seaLevel - worldFloor;
+        int absWorldHeight = worldHeight - worldFloor;
+        int absSeaLevel = seaLevel - worldFloor;
+        float absElevation = this.elevation - worldFloor;
         
         int barW = 5;
         int barL = viewportX - barW - GuiUtil.BUTTON_SPACE;
@@ -912,7 +913,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int barB = viewportY + viewportSize + 1;
         int barH = barT - barB;
         
-        float seaLevelP = seaLevel / (float)(worldHeight - worldFloor);
+        float seaLevelP = absSeaLevel / (float)absWorldHeight;
         int seaLevelL = barL;
         int seaLevelR = barR;
         int seaLevelT = barB + (int)(barH * seaLevelP) - 1;
@@ -924,7 +925,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         String elevationText = String.format("%d", (int)this.targetElevation);
         int elevationTextX = barR - this.fontRenderer.getStringWidth(elevationText) + 1;
-        int elevationTextY;
+        int elevationTextY = seaLevelT - this.fontRenderer.FONT_HEIGHT;
         
         if (this.state == ProgressState.LOADED) {
             this.elevation = MathUtil.clampedLerp(this.elevation, this.targetElevation, partialTicks * 0.5f);
@@ -933,40 +934,35 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             int elevationB;
             
             if (Math.abs(this.elevation - seaLevel) > 1.0f) {
+                int barColor;
+                
                 if (this.elevation > seaLevel) {
-                    elevationP = (this.elevation - worldFloor - relSeaLevel) / (float)(relWorldHeight - relSeaLevel);
+                    elevationP = (absElevation - absSeaLevel) / (float)(absWorldHeight - absSeaLevel);
                     elevationT = seaLevelT + (int)((barT - seaLevelT) * elevationP);
                     elevationB = seaLevelT - 1;
                     elevationTextY = elevationT - this.fontRenderer.FONT_HEIGHT;
-                    
-                    GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
-                    GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_GRASS);
-                    
-                    GuiUtil.drawRect(barL, elevationT, barL + 1, elevationB, GuiColors.ARGB_TRANS_WHITE_120);
-                    GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
-                    GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
-                    GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
-                    
-                    this.drawString(this.fontRenderer, elevationText, elevationTextX, elevationTextY, GuiColors.RGB_WHITE);
+                    barColor = GuiColors.ARGB_GRASS;
                     
                 } else {
-                    elevationP = Math.abs((this.elevation - worldFloor - relSeaLevel) / (float)(relSeaLevel));
+                    elevationP = Math.abs((absElevation - absSeaLevel) / (float)absSeaLevel);
                     elevationT = seaLevelB + 1;
                     elevationB = seaLevelB + (int)((barB - seaLevelB) * elevationP);
                     elevationTextY = elevationB + 2;
+                    barColor = GuiColors.ARGB_WATER_LIGHT;
                     
-                    GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
-                    GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_WATER_LIGHT);
-                    
-                    GuiUtil.drawRect(barL, elevationT, barL + 1, elevationB, GuiColors.ARGB_TRANS_WHITE_120);
-                    GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
-                    GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
-                    GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
-                    
-                    this.drawString(this.fontRenderer, elevationText, elevationTextX, elevationTextY, GuiColors.RGB_WHITE);
                 }
+                
+                GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
+                GuiUtil.drawRect(barL, elevationT, barR, elevationB, barColor);
+                
+                GuiUtil.drawRect(barL, elevationT, barL + 1, elevationB, GuiColors.ARGB_TRANS_WHITE_120);
+                GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
+                GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
+                GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
             }
         }
+
+        this.drawString(this.fontRenderer, elevationText, elevationTextX, elevationTextY, GuiColors.RGB_WHITE);
     }
 
     private void drawGenerationTime(int viewportX, int viewportY, int viewportSize, float partialTicks) {
