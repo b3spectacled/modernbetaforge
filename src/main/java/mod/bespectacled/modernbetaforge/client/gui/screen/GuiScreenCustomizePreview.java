@@ -922,10 +922,9 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         GuiUtil.drawRect(seaLevelL + 1, seaLevelT + 1, seaLevelR + 1, seaLevelB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
         GuiUtil.drawRect(seaLevelL, seaLevelT, seaLevelR, seaLevelB, GuiColors.ARGB_WHITE);
         
-        String seaLevelText = I18n.format("createWorld.customize.custom.modernbetaforge.seaLevel");
-        int seaLevelTextX = seaLevelL - this.fontRenderer.getStringWidth(seaLevelText) - GuiUtil.BUTTON_SPACE / 2;
-        int seaLevelTextY = seaLevelT - this.fontRenderer.FONT_HEIGHT / 2;
-        this.drawString(this.fontRenderer, seaLevelText, seaLevelTextX, seaLevelTextY, GuiColors.RGB_WHITE);
+        String elevationText = String.format("%d", (int)this.targetElevation);
+        int elevationTextX = barR - this.fontRenderer.getStringWidth(elevationText) + 1;
+        int elevationTextY;
         
         if (this.state == ProgressState.LOADED) {
             this.elevation = MathUtil.clampedLerp(this.elevation, this.targetElevation, partialTicks * 0.5f);
@@ -938,6 +937,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     elevationP = (this.elevation - worldFloor - relSeaLevel) / (float)(relWorldHeight - relSeaLevel);
                     elevationT = seaLevelT + (int)((barT - seaLevelT) * elevationP);
                     elevationB = seaLevelT - 1;
+                    elevationTextY = elevationT - this.fontRenderer.FONT_HEIGHT;
                     
                     GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
                     GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_GRASS);
@@ -947,10 +947,13 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
                     GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
                     
+                    this.drawString(this.fontRenderer, elevationText, elevationTextX, elevationTextY, GuiColors.RGB_WHITE);
+                    
                 } else {
                     elevationP = Math.abs((this.elevation - worldFloor - relSeaLevel) / (float)(relSeaLevel));
                     elevationT = seaLevelB + 1;
                     elevationB = seaLevelB + (int)((barB - seaLevelB) * elevationP);
+                    elevationTextY = elevationB + 2;
                     
                     GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
                     GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_WATER_LIGHT);
@@ -959,6 +962,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                     GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
                     GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
                     GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
+                    
+                    this.drawString(this.fontRenderer, elevationText, elevationTextX, elevationTextY, GuiColors.RGB_WHITE);
                 }
             }
         }
