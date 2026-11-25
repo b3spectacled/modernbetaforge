@@ -21,7 +21,8 @@ public class GuiColors {
     public static final int ARGB_GREY_032 = -14671840;            // 255, 32, 32, 32
     public static final int ARGB_GREEN = -10439584;               // 255, 96, 180, 96
     public static final int ARGB_LIGHT_GREEN = -10431392;         // 255, 96, 212, 96
-    
+
+    public static final int ARGB_WHITE = -1;
     public static final int ARGB_TRANSPARENT = 0;
     public static final int ARGB_TRANS_GREY_050_000 = 838860800;  // 50, 0, 0, 0
     public static final int ARGB_TRANS_GREY_200_000 = -939524096; // 200, 0, 0, 0
@@ -30,4 +31,12 @@ public class GuiColors {
     public static final int ARGB_TRANS_GREEN = -1602158720;       // 160, 128, 255, 128
     public static final int ARGB_TRANS_RED_128 = -1593868160;     // 160, 255, 128, 128
     public static final int ARGB_TRANS_RED_160 = -1593859936;     // 160, 255, 160, 160
+    public static final int ARGB_TRANS_WHITE_200 = -922746881;    // 200, 255, 255, 255
+    public static final int ARGB_TRANS_WHITE_160 = -1593835521;   // 160, 255, 255, 255
+    public static final int ARGB_TRANS_WHITE_120 = 2030043135;    // 120, 255, 255, 255
+    
+    public static final int ARGB_WATER = -12566273;       // 255, 64, 64, 255
+    public static final int ARGB_GRASS = -8408520;        // 255, 127, 178, 56
+    public static final int ARGB_STONE = -9408400;        // 255, 112, 112, 112
+    public static final int ARGB_WATER_LIGHT = -10460929; // 255, 96, 96, 255
 }

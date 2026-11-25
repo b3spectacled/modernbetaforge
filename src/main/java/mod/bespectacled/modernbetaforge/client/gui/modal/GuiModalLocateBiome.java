@@ -17,7 +17,6 @@ import mod.bespectacled.modernbetaforge.client.gui.GuiColors;
 import mod.bespectacled.modernbetaforge.client.gui.GuiUtil;
 import mod.bespectacled.modernbetaforge.client.gui.element.GuiBoundsChecker;
 import mod.bespectacled.modernbetaforge.client.gui.screen.GuiScreenCustomizeRegistry;
-import mod.bespectacled.modernbetaforge.util.DrawUtil;
 import mod.bespectacled.modernbetaforge.util.ExecutorWrapper;
 import mod.bespectacled.modernbetaforge.util.ForgeRegistryUtil;
 import mod.bespectacled.modernbetaforge.util.MathUtil;
@@ -177,7 +176,7 @@ public class GuiModalLocateBiome extends GuiModal<GuiModalLocateBiome> {
         double progressBarT = this.buttonBiome.y + this.buttonBiome.height - 1;
         int progressColor = MathUtil.lerpARGBColor(GuiColors.ARGB_TRANS_GREEN, GuiColors.ARGB_TRANS_RED_160, this.progress);
         
-        DrawUtil.drawRect(progressBarL, progressBarT, progressBarL + progressLen, progressBarT + 1, progressColor);
+        GuiUtil.drawRect(progressBarL, progressBarT, progressBarL + progressLen, progressBarT + 1, progressColor);
     }
     
     private void exit() {

@@ -173,6 +173,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private boolean savingScreenshot;
     private float generationTime;
     private long generationDisplayTime;
+    private float targetElevation;
+    private float elevation;
     private boolean isFocused;
     
     public GuiScreenCustomizePreview(GuiScreenCustomizeWorld parent, String worldSeed, ModernBetaGeneratorSettings settings, PreviewSettings previewSettings) {
@@ -333,7 +335,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 break;
                 
             case STARTED:
-                this.drawPreviousTerrainMap(viewportX, viewportY, partialTicks);
+                this.drawPreviousTerrainMap(viewportX, viewportY, viewportSize, partialTicks);
                 this.drawProgressBox(boxL, boxR, boxT, boxB);
                 this.drawCenteredString(this.fontRenderer, I18n.format(PREFIX + "progress"), centerX, centerY - HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
                 
@@ -344,7 +346,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                         this.drawCenteredString(this.fontRenderer, levelProgressText + "..", centerX, progressHeight, GuiColors.RGB_WHITE);
                     }
                 } else {
-                    DrawUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, GuiColors.ARGB_TRANS_GREEN);
+                    GuiUtil.drawRect(progressBarL, progressHeight + 9, progressBarL + progressLen, progressHeight - 2, GuiColors.ARGB_TRANS_GREEN);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight - 4, GuiColors.ARGB_GREY_224);
                     this.drawHorizontalLine(progressBarL - 2, progressBarR + 1, progressHeight + 10, GuiColors.ARGB_GREY_160);
                     this.drawVerticalLine(progressBarL - 2, progressHeight + 10, progressHeight - 4, GuiColors.ARGB_GREY_224);
@@ -369,122 +371,30 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 centeredBoxL = centerX - textLen / 2 - 8;
                 centeredBoxR = centerX + textLen / 2 + 8;
                 
-                this.drawPreviousTerrainMap(viewportX, viewportY, partialTicks);
+                this.drawPreviousTerrainMap(viewportX, viewportY, viewportSize, partialTicks);
                 this.drawProgressBox(centeredBoxL, centeredBoxR, centeredBoxT, centeredBoxB);
                 this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
                 break;
                 
             case CANCELED:
-                this.drawPreviousTerrainMap(viewportX, viewportY, partialTicks);
+                this.drawPreviousTerrainMap(viewportX, viewportY, viewportSize, partialTicks);
                 break;
                 
             default:
                 text = I18n.format(PREFIX + "hint");
                 this.drawCenteredString(this.fontRenderer, text, centerX, centerY - CENTERED_HINT_TEXT_OFFSET, GuiColors.RGB_WHITE);
         }
+        
+        this.drawElevationBar(viewportX, viewportY, viewportSize, partialTicks);
+        this.drawSeedText(mouseX, mouseY);
+        this.drawMapTooltip(viewportSize, mouseX, mouseY);
 
-        String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
-        String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
-        String seedField = this.getFormattedSeed();
-        String useSeedLabel = this.getFormattedUseSeedLabel();
-        
-        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField + useSeedLabel);
-        int seedFieldLen = this.getSeedFieldWidth();
-        int seedFieldX = this.getSeedFieldX();
-        int seedFieldHeight = this.getSeedFieldY();
-        int useSeedLabelX = this.getUseSeedLabelX();
-        int useSeedLableY = this.getUseSeedLabelY();
-        
-        boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
-        int seedColor = this.seedFieldBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
-            GuiColors.RGB_WHITE;
-        int useSeedColor = this.useSeedLabelBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
-            GuiColors.RGB_WHITE;
-        
-        this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, GuiColors.RGB_WHITE);
-        this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
-        this.drawString(this.fontRenderer, useSeedLabel, useSeedLabelX, useSeedLableY, useSeedColor);
-        
-        int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
-        int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
-        
-        if (!seedField.isEmpty()) {
-            this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
-            this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen - 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
-        }
-        
-        if (this.seedFieldBounds.isHovered() && this.copyState == CopyState.HOVERING) {
-            this.drawHoveringText(I18n.format(PREFIX + "copySeed"), mouseX, mouseY);
-        }
-        
-        if (this.useSeedLabelBounds.isHovered() && this.copyState == CopyState.HOVERING) {
-            this.drawHoveringText(I18n.format(PREFIX + "copyUseSeed"), mouseX, mouseY);
-        }
-        
-        switch (this.copyState) {
-            case SEED:
-                this.drawHoveringText(I18n.format(PREFIX + "copiedSeed"), mouseX, mouseY);
-                break;
-            case USE_SEED:
-                this.drawHoveringText(I18n.format(PREFIX + "copiedUseSeed"), mouseX, mouseY);
-                break;
-            case TELEPORT:
-                this.drawHoveringText(I18n.format(PREFIX + "copiedTp"), mouseX, mouseY);
-                break;
-            default:
-        }
-        
         if (this.buttonStructures.isMouseOver() && this.copyState == CopyState.HOVERING && this.buttonStructures.enabled) {
             String structureNote = I18n.format(PREFIX + "structuresNote");
-            
             this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(structureNote, STRUCTURE_NOTE_ROW_LEN), mouseX, mouseY);
         }
-
         this.hoveredStructure = false;
         this.hoveredStructurePos = Long.MIN_VALUE;
-        
-        if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY) && this.isFocused) {
-            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedPreviewSettings.zoom);
-            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedPreviewSettings.zoom);
-
-            x -= this.selectedPreviewSettings.zoom / 2f;
-            y -= this.selectedPreviewSettings.zoom / 2f;
-            
-            int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
-            Biome biome = this.sampleInjectedBiome(x, y);
-            
-            String coordinateText = String.format("%d, %d, %d", x, height, y);
-            String biomeText = biome.getBiomeName();
-            
-            for (Entry<Long, GuiBoundsChecker> entry : this.structureBounds.entrySet()) {
-                if (entry.getValue().inBounds(mouseX, mouseY)) {
-                    this.hoveredStructure = true;
-                    this.hoveredStructurePos = entry.getKey();
-                }
-            }
-            
-            int tpX = x;
-            int tpZ = y;
-            int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height + 1;
-            this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
-            
-            if (this.copyState == CopyState.HOVERING) {
-                List<String> tooltips = new ArrayList<>();
-                tooltips.add(coordinateText);
-                tooltips.add(biomeText);
-                
-                if (this.hoveredStructure && this.previewSettings.useStructures) {
-                    String structure = this.structureMap.get(this.hoveredStructurePos).structure.getPath().toLowerCase();
-                    structure = structure.substring(0, 1).toUpperCase() + structure.substring(1);
-                    
-                    tooltips.add(structure);
-                }
-
-                this.drawHoveringText(tooltips, mouseX, mouseY);
-            }
-        }
     }
     
     @Override
@@ -660,6 +570,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.progressLen = 0.0;
         this.progress = 0.0f;
+        this.elevation = this.chunkSource.getSeaLevel();
+        this.targetElevation = this.elevation;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.haltGeneration = false;
         this.updateState(ProgressState.STARTED);
@@ -729,6 +641,61 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.executor.queueRunnable(runnable);
     }
     
+    private void drawSeedText(int mouseX, int mouseY) {
+        String seedPrefix = this.worldSeed.isEmpty() ? "Random " : "";
+        String seedLabel = String.format("%s%s: ", seedPrefix, I18n.format(PREFIX + "seed"));
+        String seedField = this.getFormattedSeed();
+        String useSeedLabel = this.getFormattedUseSeedLabel();
+        
+        int seedTextLen = this.fontRenderer.getStringWidth(seedLabel + seedField + useSeedLabel);
+        int seedFieldLen = this.getSeedFieldWidth();
+        int seedFieldX = this.getSeedFieldX();
+        int seedFieldHeight = this.getSeedFieldY();
+        int useSeedLabelX = this.getUseSeedLabelX();
+        int useSeedLableY = this.getUseSeedLabelY();
+        
+        boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
+        int seedColor = this.seedFieldBounds.isHovered() ?
+            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
+            GuiColors.RGB_WHITE;
+        int useSeedColor = this.useSeedLabelBounds.isHovered() ?
+            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
+            GuiColors.RGB_WHITE;
+        
+        this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, GuiColors.RGB_WHITE);
+        this.drawString(this.fontRenderer, seedField, seedFieldX, seedFieldHeight, seedColor);
+        this.drawString(this.fontRenderer, useSeedLabel, useSeedLabelX, useSeedLableY, useSeedColor);
+        
+        int seedUnderlineShadow = MathUtil.convertRGBtoARGB(4144959);
+        int seedUnderline = MathUtil.convertRGBtoARGB(seedColor);
+        
+        if (!seedField.isEmpty()) {
+            this.drawHorizontalLine(seedFieldX + 1, seedFieldX + seedFieldLen, seedFieldHeight + this.fontRenderer.FONT_HEIGHT + 1, seedUnderlineShadow);
+            this.drawHorizontalLine(seedFieldX, seedFieldX + seedFieldLen - 1, seedFieldHeight + this.fontRenderer.FONT_HEIGHT, seedUnderline);
+        }
+        
+        if (this.seedFieldBounds.isHovered() && this.copyState == CopyState.HOVERING) {
+            this.drawHoveringText(I18n.format(PREFIX + "copySeed"), mouseX, mouseY);
+        }
+        
+        if (this.useSeedLabelBounds.isHovered() && this.copyState == CopyState.HOVERING) {
+            this.drawHoveringText(I18n.format(PREFIX + "copyUseSeed"), mouseX, mouseY);
+        }
+        
+        switch (this.copyState) {
+            case SEED:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedSeed"), mouseX, mouseY);
+                break;
+            case USE_SEED:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedUseSeed"), mouseX, mouseY);
+                break;
+            case TELEPORT:
+                this.drawHoveringText(I18n.format(PREFIX + "copiedTp"), mouseX, mouseY);
+                break;
+            default:
+        }
+    }
+
     private void drawCardinalDirections(int viewportX, int viewportY, int viewportSize) {
         int fontHeight = this.fontRenderer.FONT_HEIGHT;
         int centerV = viewportSize / 2;
@@ -856,9 +823,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         }
     }
     
-    private void drawPreviousTerrainMap(int viewportX, int viewportY, float partialTicks) {
-        int viewportSize = this.getViewportSize();
-
+    private void drawPreviousTerrainMap(int viewportX, int viewportY, int viewportSize, float partialTicks) {
         if (this.prevMapTexture != null && this.prevMapTexture.mapTexture != null) {
             this.prevMapTexture.drawMapTexture(viewportX, viewportY, viewportSize);
             this.drawCardinalDirections(viewportX, viewportY, viewportSize);
@@ -885,6 +850,119 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             this.fontRenderer.drawStringWithShadow(text, textX, textY, GuiColors.RGB_WHITE);
         }
     }
+    
+    private void drawMapTooltip(int viewportSize, int mouseX, int mouseY) {
+        this.targetElevation = this.chunkSource.getSeaLevel();
+        
+        if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY) && this.isFocused) {
+            int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedPreviewSettings.zoom);
+            int y = (int)(this.mapBounds.getRelativeY(mouseY) / (float)viewportSize * this.selectedPreviewSettings.zoom);
+
+            x -= this.selectedPreviewSettings.zoom / 2f;
+            y -= this.selectedPreviewSettings.zoom / 2f;
+            
+            int height = this.chunkSource.getHeight(x, y, HeightmapChunk.Type.SURFACE);
+            Biome biome = this.sampleInjectedBiome(x, y);
+            
+            String coordinateText = String.format("%d, %d, %d", x, height, y);
+            String biomeText = biome.getBiomeName();
+            
+            for (Entry<Long, GuiBoundsChecker> entry : this.structureBounds.entrySet()) {
+                if (entry.getValue().inBounds(mouseX, mouseY)) {
+                    this.hoveredStructure = true;
+                    this.hoveredStructurePos = entry.getKey();
+                }
+            }
+            
+            int tpX = x;
+            int tpZ = y;
+            int tpHeight = height < this.chunkSource.getSeaLevel() ? this.chunkSource.getSeaLevel() : height + 1;
+            this.tpCallback = () -> String.format("/tp %d %d %d", tpX, tpHeight, tpZ);
+            
+            if (this.copyState == CopyState.HOVERING) {
+                List<String> tooltips = new ArrayList<>();
+                tooltips.add(coordinateText);
+                tooltips.add(biomeText);
+                
+                if (this.hoveredStructure && this.previewSettings.useStructures) {
+                    String structure = this.structureMap.get(this.hoveredStructurePos).structure.getPath().toLowerCase();
+                    structure = structure.substring(0, 1).toUpperCase() + structure.substring(1);
+                    
+                    tooltips.add(structure);
+                }
+
+                this.drawHoveringText(tooltips, mouseX, mouseY);
+            }
+            
+            this.targetElevation = height;
+        }
+    }
+
+    private void drawElevationBar(int viewportX, int viewportY, int viewportSize, float partialTicks) {
+        int worldHeight = this.chunkSource.getWorldHeight();
+        int worldFloor = this.chunkSource.getWorldFloor();
+        int seaLevel = this.chunkSource.getSeaLevel();
+        int relWorldHeight = worldHeight - worldFloor;
+        int relSeaLevel = seaLevel - worldFloor;
+        
+        int barW = 5;
+        int barL = viewportX - barW - GuiUtil.BUTTON_SPACE;
+        int barR = barL + barW;
+        int barT = viewportY;
+        int barB = viewportY + viewportSize + 1;
+        int barH = barT - barB;
+        
+        float seaLevelP = seaLevel / (float)(worldHeight - worldFloor);
+        int seaLevelL = barL;
+        int seaLevelR = barR;
+        int seaLevelT = barB + (int)(barH * seaLevelP) - 1;
+        int seaLevelB = seaLevelT + 1;
+        
+        // Draw sea level bar
+        GuiUtil.drawRect(seaLevelL + 1, seaLevelT + 1, seaLevelR + 1, seaLevelB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
+        GuiUtil.drawRect(seaLevelL, seaLevelT, seaLevelR, seaLevelB, GuiColors.ARGB_WHITE);
+        
+        String seaLevelText = I18n.format("createWorld.customize.custom.modernbetaforge.seaLevel");
+        int seaLevelTextX = seaLevelL - this.fontRenderer.getStringWidth(seaLevelText) - GuiUtil.BUTTON_SPACE / 2;
+        int seaLevelTextY = seaLevelT - this.fontRenderer.FONT_HEIGHT / 2;
+        this.drawString(this.fontRenderer, seaLevelText, seaLevelTextX, seaLevelTextY, GuiColors.RGB_WHITE);
+        
+        if (this.state == ProgressState.LOADED) {
+            this.elevation = MathUtil.clampedLerp(this.elevation, this.targetElevation, partialTicks * 0.5f);
+            float elevationP;
+            int elevationT;
+            int elevationB;
+            
+            if (Math.abs(this.elevation - seaLevel) > 1.0f) {
+                if (this.elevation > seaLevel) {
+                    elevationP = (this.elevation - worldFloor - relSeaLevel) / (float)(relWorldHeight - relSeaLevel);
+                    elevationT = seaLevelT + (int)((barT - seaLevelT) * elevationP);
+                    elevationB = seaLevelT - 1;
+                    
+                    GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
+                    GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_GRASS);
+                    
+                    GuiUtil.drawRect(barL, elevationT, barL + 1, elevationB, GuiColors.ARGB_TRANS_WHITE_120);
+                    GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
+                    GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
+                    GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
+                    
+                } else {
+                    elevationP = Math.abs((this.elevation - worldFloor - relSeaLevel) / (float)(relSeaLevel));
+                    elevationT = seaLevelB + 1;
+                    elevationB = seaLevelB + (int)((barB - seaLevelB) * elevationP);
+                    
+                    GuiUtil.drawRect(barL + 1, elevationT + 1, barR + 1, elevationB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
+                    GuiUtil.drawRect(barL, elevationT, barR, elevationB, GuiColors.ARGB_WATER_LIGHT);
+                    
+                    GuiUtil.drawRect(barL, elevationT, barL + 1, elevationB, GuiColors.ARGB_TRANS_WHITE_120);
+                    GuiUtil.drawRect(barL, elevationT, barR, elevationT + 1, GuiColors.ARGB_TRANS_WHITE_120);
+                    GuiUtil.drawRect(barR, elevationT, barR - 1, elevationB, GuiColors.ARGB_TRANS_GREY_050_000);
+                    GuiUtil.drawRect(barL, elevationB, barR, elevationB - 1, GuiColors.ARGB_TRANS_GREY_050_000);
+                }
+            }
+        }
+    }
 
     private void drawGenerationTime(int viewportX, int viewportY, int viewportSize, float partialTicks) {
         long elapsed = System.currentTimeMillis() - this.generationDisplayTime;
@@ -892,7 +970,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         if (elapsed > GENERATION_DISPLAY_TIME || !ModernBetaConfig.debugOptions.displayPreviewGenerationInfo) {
             return;
         }
-
+    
         int chunkWidth = this.selectedPreviewSettings.zoom >> 4;
         float generationTimePerChunk = this.generationTime / (chunkWidth * chunkWidth);
         generationTimePerChunk *= 1000f;
@@ -916,7 +994,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int textX = rectL + paddingX;
         int textY0 = rectT + paddingY + 1;
         int textY1 = textY0 + this.fontRenderer.FONT_HEIGHT + 3;
-
+    
         drawRect(rectL, rectT, rectR, rectB, GuiColors.ARGB_TRANS_GREY_200_000);
         this.drawString(this.fontRenderer, text0, textX, textY0, GuiColors.RGB_WHITE);
         this.drawString(this.fontRenderer, text1, textX, textY1, GuiColors.RGB_WHITE);
