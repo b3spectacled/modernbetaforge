@@ -906,7 +906,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int absSeaLevel = seaLevel - worldFloor;
         float absElevation = this.elevation - worldFloor;
         
-        int barW = 5;
+        int barW = this.fontRenderer.getStringWidth("00") - 1;
         int barL = viewportX - barW - GuiUtil.BUTTON_SPACE;
         int barR = barL + barW;
         int barT = viewportY;
