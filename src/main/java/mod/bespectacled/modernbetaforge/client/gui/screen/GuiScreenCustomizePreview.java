@@ -393,8 +393,6 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
             String structureNote = I18n.format(PREFIX + "structuresNote");
             this.drawHoveringText(this.fontRenderer.listFormattedStringToWidth(structureNote, STRUCTURE_NOTE_ROW_LEN), mouseX, mouseY);
         }
-        this.hoveredStructure = false;
-        this.hoveredStructurePos = Long.MIN_VALUE;
     }
     
     @Override
@@ -852,6 +850,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     }
     
     private void drawMapTooltip(int viewportSize, int mouseX, int mouseY) {
+        this.hoveredStructure = false;
+        this.hoveredStructurePos = Long.MIN_VALUE;
         this.targetElevation = this.chunkSource.getSeaLevel();
         
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY) && this.isFocused) {
