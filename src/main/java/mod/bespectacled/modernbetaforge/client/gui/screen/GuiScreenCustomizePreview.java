@@ -656,10 +656,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         boolean clicked = System.currentTimeMillis() - this.copiedTime < 100L;
         int seedColor = this.seedFieldBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
+            clicked ? GuiColors.RGB_GREY_160 : GuiColors.RGB_LIGHT_YELLOW :
             GuiColors.RGB_WHITE;
         int useSeedColor = this.useSeedLabelBounds.isHovered() ?
-            clicked ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_YELLOW :
+            clicked ? GuiColors.RGB_GREY_160 : GuiColors.RGB_LIGHT_YELLOW :
             GuiColors.RGB_WHITE;
         
         this.drawString(this.fontRenderer, seedLabel, this.width / 2 - seedTextLen / 2, seedFieldHeight, GuiColors.RGB_WHITE);
@@ -909,8 +909,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int barW = this.fontRenderer.getStringWidth("00") - 1;
         int barL = viewportX - barW - GuiUtil.BUTTON_SPACE;
         int barR = barL + barW;
-        int barT = viewportY;
-        int barB = viewportY + viewportSize + 1;
+        int barT = viewportY - 1 + this.fontRenderer.FONT_HEIGHT;
+        int barB = viewportY + viewportSize + 1 - this.fontRenderer.FONT_HEIGHT;
         int barH = barT - barB;
         
         float seaLevelP = absSeaLevel / (float)absWorldHeight;
@@ -921,7 +921,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         // Draw sea level bar
         GuiUtil.drawRect(seaLevelL + 1, seaLevelT + 1, seaLevelR + 1, seaLevelB + 1, GuiColors.ARGB_TRANS_GREY_200_064);
-        GuiUtil.drawRect(seaLevelL, seaLevelT, seaLevelR, seaLevelB, GuiColors.ARGB_WHITE);
+        GuiUtil.drawRect(seaLevelL, seaLevelT, seaLevelR, seaLevelB, GuiColors.ARGB_GREY_160);
         
         String elevationText = String.format("%d", (int)this.targetElevation);
         int elevationTextX = barR - this.fontRenderer.getStringWidth(elevationText) + 1;

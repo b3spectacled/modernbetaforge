@@ -60,7 +60,7 @@ public class GuiHoverableText extends Gui {
             boolean isHovered = this.enabled && this.bounds.isHovered();
             int textColor = isHovered ?
                 GuiColors.RGB_LIGHT_YELLOW :
-                (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_GREY;
+                (System.currentTimeMillis() / 500) % 2 == 0 || hoveredOnce ? GuiColors.RGB_GREY_160 : GuiColors.RGB_GREY_224;
             
             if (isHovered) {
                 if (!lastHovered) {

@@ -323,9 +323,9 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         IconTexture icon = ICON_TEXTURES[this.selectedIcon];
         int textStartX = centerX - this.modalWidth / 2 + 10;
         
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, GuiColors.RGB_GREY);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, GuiColors.RGB_GREY);
-        this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), textStartX, centerY + 20, GuiColors.RGB_GREY);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "name"), textStartX, centerY - 60, GuiColors.RGB_GREY_160);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "desc"), textStartX, centerY - 20, GuiColors.RGB_GREY_160);
+        this.drawString(this.fontRenderer, I18n.format(PREFIX + "settings"), textStartX, centerY + 20, GuiColors.RGB_GREY_160);
         this.fieldName.drawTextBox();
         this.fieldDesc.drawTextBox();
         this.fieldSettings.drawTextBox();
@@ -338,9 +338,9 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
         int descLenWidth = this.fontRenderer.getStringWidth(descLen);
         int settingsLenWidth = this.fontRenderer.getStringWidth(settingsLen);
         
-        int nameLenCol = MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length() > 4 ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_RED;
-        int descLenCol = MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length() > 4 ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_RED;
-        int settingsLenCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length() > 100 ? GuiColors.RGB_GREY : GuiColors.RGB_LIGHT_RED;
+        int nameLenCol = MAX_PRESET_NAME_LENGTH - this.fieldName.getText().length() > 4 ? GuiColors.RGB_GREY_160 : GuiColors.RGB_LIGHT_RED;
+        int descLenCol = MAX_PRESET_DESC_LENGTH - this.fieldDesc.getText().length() > 4 ? GuiColors.RGB_GREY_160 : GuiColors.RGB_LIGHT_RED;
+        int settingsLenCol = ModernBetaGeneratorSettings.MAX_PRESET_LENGTH - this.fieldSettings.getText().length() > 100 ? GuiColors.RGB_GREY_160 : GuiColors.RGB_LIGHT_RED;
         
         this.drawString(this.fontRenderer, nameLen, textStartX + NAME_FIELD_LENGTH - nameLenWidth, centerY - 60, nameLenCol);
         this.drawString(this.fontRenderer, descLen, textStartX + DESC_FIELD_LENGTH - descLenWidth, centerY - 20, descLenCol);
@@ -353,7 +353,7 @@ public class GuiModalPreset extends GuiModal<GuiModalPreset> {
 
         String iconText = String.format("%d/%d", this.selectedIcon + 1, ICON_TEXTURES.length);
         
-        this.drawCenteredString(this.fontRenderer, iconText, boxL + ICON_SIZE / 2 + 1, boxT - 10, GuiColors.RGB_GREY);
+        this.drawCenteredString(this.fontRenderer, iconText, boxL + ICON_SIZE / 2 + 1, boxT - 10, GuiColors.RGB_GREY_160);
         this.drawHorizontalLine(boxL, boxR, boxT, GuiColors.ARGB_GREY_224);
         this.drawHorizontalLine(boxL, boxR, boxB, GuiColors.ARGB_GREY_160);
         this.drawVerticalLine(boxL, boxT, boxB, GuiColors.ARGB_GREY_224);

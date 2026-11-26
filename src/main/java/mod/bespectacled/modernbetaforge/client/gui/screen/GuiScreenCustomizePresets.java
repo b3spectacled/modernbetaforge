@@ -186,7 +186,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         
         this.drawCenteredString(this.fontRenderer, this.title, this.width / 2, 12, GuiColors.RGB_WHITE);
-        this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, GuiColors.RGB_GREY);
+        this.drawString(this.fontRenderer, this.shareText, TEXTBOX_PADDING / 2, 30, GuiColors.RGB_GREY_160);
         this.fieldExport.drawTextBox();
         
         if (this.buttonCopy.isMouseOver()) {
@@ -609,7 +609,7 @@ public class GuiScreenCustomizePresets extends GuiScreen {
             
             boolean hovered = this.parent.hoveredElement == preset;
             int nameColor = hovered ? GuiColors.RGB_LIGHT_YELLOW : GuiColors.RGB_WHITE;
-            int descColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GREY;
+            int descColor = hovered ? GuiColors.RGB_DARK_YELLOW : GuiColors.RGB_GREY_160;
             
             int iconX = x + SLOT_PADDING_X;
             int iconY = y + SLOT_PADDING_Y;
