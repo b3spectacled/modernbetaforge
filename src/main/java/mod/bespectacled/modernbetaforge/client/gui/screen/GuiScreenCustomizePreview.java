@@ -568,8 +568,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         
         this.progressLen = 0.0;
         this.progress = 0.0f;
-        this.elevation = this.chunkSource.getSeaLevel();
-        this.targetElevation = this.elevation;
+        this.setTargetElevation(this.chunkSource.getSeaLevel());
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.haltGeneration = false;
         this.updateState(ProgressState.STARTED);
@@ -852,7 +851,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
     private void drawMapTooltip(int viewportSize, int mouseX, int mouseY) {
         this.hoveredStructure = false;
         this.hoveredStructurePos = Long.MIN_VALUE;
-        this.targetElevation = this.chunkSource.getSeaLevel();
+        this.setTargetElevation(this.chunkSource.getSeaLevel());
         
         if (this.state == ProgressState.LOADED && this.mapBounds.inBounds(mouseX, mouseY) && this.isFocused) {
             int x = (int)(this.mapBounds.getRelativeX(mouseX) / (float)viewportSize * this.selectedPreviewSettings.zoom);
@@ -894,14 +893,14 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 this.drawHoveringText(tooltips, mouseX, mouseY);
             }
             
-            this.targetElevation = height;
+            this.setTargetElevation(height);
         }
     }
 
     private void drawElevationBar(int viewportX, int viewportY, int viewportSize, float partialTicks) {
         int worldHeight = this.chunkSource.getWorldHeight();
         int worldFloor = this.chunkSource.getWorldFloor();
-        int seaLevel = this.chunkSource.getSeaLevel();
+        int seaLevel = MathHelper.clamp(this.chunkSource.getSeaLevel(), worldFloor, worldHeight);
         int absWorldHeight = worldHeight - worldFloor;
         int absSeaLevel = seaLevel - worldFloor;
         float absElevation = this.elevation - worldFloor;
@@ -909,8 +908,8 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         int barW = this.fontRenderer.getStringWidth("00") - 1;
         int barL = viewportX - barW - GuiUtil.BUTTON_SPACE;
         int barR = barL + barW;
-        int barT = viewportY - 1 + this.fontRenderer.FONT_HEIGHT;
-        int barB = viewportY + viewportSize + 1 - this.fontRenderer.FONT_HEIGHT;
+        int barT = viewportY + this.fontRenderer.FONT_HEIGHT;
+        int barB = viewportY + viewportSize + 1 - (seaLevel > worldFloor ? this.fontRenderer.FONT_HEIGHT : 0);
         int barH = barT - barB;
         
         float seaLevelP = absSeaLevel / (float)absWorldHeight;
@@ -1124,6 +1123,10 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
                 }
             }
         }
+    }
+    
+    private void setTargetElevation(int height) {
+        this.targetElevation = MathHelper.clamp(height, this.chunkSource.getWorldFloor(), this.chunkSource.getWorldHeight());
     }
     
     private void sampleStructure(int chunkX, int chunkZ, Entry<ResourceLocation, StructureSim> entry) {
