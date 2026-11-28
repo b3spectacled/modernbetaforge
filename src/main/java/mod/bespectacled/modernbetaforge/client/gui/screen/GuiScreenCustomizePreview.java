@@ -569,6 +569,7 @@ public class GuiScreenCustomizePreview extends GuiScreen implements GuiResponder
         this.progressLen = 0.0;
         this.progress = 0.0f;
         this.setTargetElevation(this.chunkSource.getSeaLevel());
+        this.elevation = this.targetElevation;
         this.selectedPreviewSettings = new PreviewSettings(this.previewSettings);
         this.haltGeneration = false;
         this.updateState(ProgressState.STARTED);
